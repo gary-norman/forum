@@ -11,7 +11,7 @@ func main() {
 		Handler: routes(),
 	}
 
-	log.Println("Listening on :8989")
+	log.Printf("Listening on %v", srv.Addr)
 	err := srv.ListenAndServe()
 	if err != nil {
 		return

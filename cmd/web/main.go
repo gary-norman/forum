@@ -2,6 +2,8 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
+	"github.com/gary-norman/forum/internal/models"
 	"github.com/gary-norman/forum/internal/sqlite"
 	"log"
 	"net/http"
@@ -14,8 +16,11 @@ type app struct {
 }
 
 func main() {
+	ErrorMsgs := models.CreateErrorMessages()
+
 	db, err := sql.Open("sqlite3", "./forum_database.db")
 	if err != nil {
+		fmt.Printf(ErrorMsgs.Open, "./forum_database.db", "sql.Open")
 		log.Fatal(err)
 	}
 
@@ -33,6 +38,7 @@ func main() {
 	log.Printf("Listening on %v", srv.Addr)
 	err = srv.ListenAndServe()
 	if err != nil {
+		fmt.Printf(ErrorMsgs.ConnInit, srv.Addr, "srv.ListenAndServe")
 		return
 	}
 }

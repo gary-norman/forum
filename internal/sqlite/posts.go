@@ -16,7 +16,7 @@ func (m *PostModel) All() ([]models.Post, error) {
 		return nil, err
 	}
 
-	posts := []models.Post{}
+	var posts []models.Post
 	for rows.Next() {
 		p := models.Post{}
 		err := rows.Scan(&p.ID, &p.Title, &p.Content, &p.CreatedAt)

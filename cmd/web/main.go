@@ -2,20 +2,32 @@ package main
 
 import (
 	"database/sql"
+	"github.com/gary-norman/forum/internal/sqlite"
 	"log"
 	"net/http"
+
+	_ "github.com/mattn/go-sqlite3"
 )
+
+type app struct {
+	posts *sqlite.PostModel
+}
 
 func main() {
 	db, err := sql.Open("sqlite3", "./forum_database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(db)
+
+	app := app{
+		posts: &sqlite.PostModel{
+			DB: db,
+		},
+	}
 
 	srv := http.Server{
 		Addr:    ":8989",
-		Handler: routes(),
+		Handler: app.routes(),
 	}
 
 	log.Printf("Listening on %v", srv.Addr)

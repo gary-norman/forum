@@ -1,11 +1,11 @@
 package main
 
 import (
-  "net/http"
+	"net/http"
 )
 
-func routes() http.Handler {
-  mux := http.NewServeMux()
-  mux.HandleFunc("GET /", getHome)
-  return mux
+func (app *app) routes() http.Handler {
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /", app.getHome)
+	return mux
 }

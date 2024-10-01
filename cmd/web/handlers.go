@@ -18,7 +18,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("./assets/templates/index.html")
 	if err != nil {
 		http.Error(w, err.Error(), 500)
-		log.Print(ErrorMsgs.Parse, "./assets/templates/index.html", "getHome", err)
+		log.Printf(ErrorMsgs.Parse, "./assets/templates/index.html", "getHome", err)
 		return
 	}
 

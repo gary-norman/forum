@@ -10,6 +10,7 @@ type Errors struct {
 	ConnClose string
 	Parse     string
 	Execute   string
+	Post      string
 }
 
 func CreateErrorMessages() *Errors {
@@ -23,6 +24,7 @@ func CreateErrorMessages() *Errors {
 		ConnClose: "Unable to close connection to %v called by %v\n",
 		Parse:     "Unable to parse %v called by %v with error: %v\n",
 		Execute:   "Unable to execute template with error: %v\n",
+		Post:      "Unable to post with error: %v\n",
 	}
 	return errors
 }

@@ -9,12 +9,42 @@
 <body>
     <form action="/posts/create" method="POST">
         <div>
+            <label for="author">Choose a user:</label>
+            <select id="author" name="author">
+                <option value="">--Choose a user--</option>
+                <option value="1001">Lore</option>
+                <option value="1002">Kamil</option>
+                <option value="1003">Munky</option>
+                <option value="1004">Bob</option>
+                <option value="1005">Shazam!</option>
+            </select>
+        </div>
+        <div>
             <label for="title">Title</label>
             <input type="text" id="title" name="title" />
         </div>
         <div>
-            <label for="content">Title</label>
+            <label for="content">Post</label>
             <textarea id="content" name="content"></textarea>
+        </div>
+        <div>
+            <label for="images">Upload an image (optional)</label>
+            <input type="text" id="images" name="images" />
+        </div>
+        <div>
+            <label for="channel">Choose a channel:</label>
+            <select id="channel" name="channel">
+                <option value="">--Choose a channel--</option>
+                <option value="2001">User's lounge</option>
+                <option value="2002">CSS</option>
+                <option value="2003">JS</option>
+                <option value="2004">Golang</option>
+                <option value="2005">SQLite</option>
+            </select>
+        </div>
+        <div>
+            <label for="commentable">Allow comments</label>
+            <input type="checkbox" id="commentable" name="commentable" checked>
         </div>
         <div>
             <button>Create Post</button>

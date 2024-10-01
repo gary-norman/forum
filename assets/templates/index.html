@@ -10,11 +10,13 @@
     <div class="container">
         <h1 class="title">01F Forum</h1>
         {{range .Posts}}
-            <h2>{{.Title}}</h2>
-            <time datetime="{{.Created}}">{{.Created}}</time>
-            <div>
-                {{.Content}}
-            </div>
+        <h2>{{.Title}}</h2>
+        <h3>Channel: {{.ChannelID}}</h3>
+        <h3>Author: {{.AuthorID}}</h3>
+        <time datetime="{{.Created}}">{{.Created}}</time>
+        <div>
+            {{.Content}}
+        </div>
         {{end}}
     </div>
 </body>

@@ -2,97 +2,107 @@ package models
 
 import "time"
 
-type Posts struct {
-	ID                *int      `db:"Posts.post_id"`
-	Title             string    `db:"Posts.title"`
-	Content           string    `db:"Posts.content"`
-	Images            []string  `db:"Posts.images"`
-	Created           time.Time `db:"Posts.created_at"`
-	Commentable       bool      `db:"Posts.Commentable"`
-	AuthorID          *int
-	Reactions         string
-	Comments          string
-	ChannelID         *int
-	IsFlagged         string
-	IsFlaggedApproved string
+type User struct {
+	ID          int       `json:"id"`
+	Username    string    `json:"username"`
+	Password    string    `json:"password"`
+	Email       string    `json:"email_address"`
+	Avatar      string    `json:"avatar,omitempty"` // Store UUID as string
+	Banner      string    `json:"banner,omitempty"` // Store UUID as string
+	Description string    `json:"description,omitempty"`
+	Usertype    string    `json:"usertype"`
+	Created     time.Time `json:"created"`
+	IsFlagged   bool      `json:"is_flagged,omitempty"`
 }
 
-type Users struct {
-	ID                int       `db:"Users.ID"`
-	Username          string    `db:"Users.Username"`
-	Password          string    `db:"Users.Password"`
-	EmailAddress      string    `db:"Users.Email_address"`
-	Avatar            string    `db:"Users.Avatar"`
-	Banner            string    `db:"Users.Banner"`
-	Desc              string    `db:"Users.Description"`
-	UserType          string    `db:"Users.Type"`
-	Created           time.Time `db:"Users.Created"`
-	Membership        string    `db:"Users.Membership"`
-	Followers         []string  `db:"Users.Followers"`
-	Following         []string  `db:"Users.Following"`
-	BookmarksUser     []string  `db:"Users.Bookmarks_user"`
-	BookmarksChannel  []string  `db:"Users.Bookmarks_channel"`
-	BookmarksPost     []string  `db:"Users.Bookmarks_post"`
-	BookmarksComment  []string  `db:"Users.Bookmarks_Comment"`
-	Posts             []string  `db:"Users.Posts"`
-	Comments          []string  `db:"Users.Comments"`
-	FlaggedUsers      []string  `db:"Users.Flagged_users"`
-	FlaggedPosts      []string  `db:"Users.Flagged_posts"`
-	FlaggedComments   []string  `db:"Users.Flagged_comments"`
-	ModOf             []string  `db:"Users.Mod_of"`
-	Reactions         []string  `db:"Users.Reactions"`
-	IsFlagged         []string  `db:"Users.Is_flagged"`
-	IsFlaggedApproved []string  `db:"Users.Is_flagged_approved"`
+type Bookmark struct {
+	ID        int       `json:"id"`
+	PostID    *int      `json:"post_id,omitempty"`
+	CommentID *int      `json:"comment_id,omitempty"`
+	ChannelID *int      `json:"channel_id,omitempty"`
+	Created   time.Time `json:"created"`
 }
 
-type Comments struct {
-	ID                 int       `db:"Comments.ID"`
-	Content            string    `db:"Comments.Content"`
-	Images             []string  `db:"Comments.Images"`
-	Created            time.Time `db:"Comments.Created"`
-	AuthorID           int
-	Reactions          string
-	Replies            string
-	ChannelID          int
-	IsFlagged          []string `db:"Comments.Is_flagged"`
-	IsFlaggedApproved  []string `db:"Comments.Is_flagged_approved"`
-	CommentedPostID    int
-	CommentedCommentID int
+type Loyalty struct {
+	ID       int `json:"id"`
+	Follower int `json:"follower"`
+	Followee int `json:"followee"`
 }
 
-type Reactions struct {
-	ID               int       `db:"Reactions.ID"`
-	Liked            bool      `db:"Reactions.Liked"`
-	Disliked         bool      `db:"Reactions.Disliked"`
-	Created          time.Time `db:"Reactions.Created"`
-	ParentId         int       `db:"Reactions.ParentID"`
-	AuthorID         int
-	ChannelID        int
-	ReactedPostID    int
-	ReactedCommentID int
+type Channel struct {
+	ID          int       `json:"id"`
+	Name        string    `json:"name"`
+	Avatar      string    `json:"avatar,omitempty"` // Store UUID as string
+	Description string    `json:"description"`
+	Created     time.Time `json:"created"`
+	Rules       string    `json:"rules,omitempty"`
+	Privacy     bool      `json:"privacy"`
 }
 
-type Channels struct {
-	ID      int
-	Name    string
-	Avatar  string
-	Desc    string
-	Created time.Time
-	Rules   string
-	Privacy bool
-	Members string
-	Mods    string
-	Posts   string
+type Membership struct {
+	ID        int       `json:"id"`
+	UserID    int       `json:"user_id"`
+	ChannelID int       `json:"channel_id"`
+	Created   time.Time `json:"created"`
 }
 
-type Flags struct {
-	ID               int
-	FlagType         string
-	Content          string
-	Created          time.Time
-	Approved         bool
-	AuthorID         int
-	FlaggedUserID    int
-	FlaggedPostID    int
-	FlaggedCommentID int
+type Mod struct {
+	ID        int `json:"id"`
+	UserID    int `json:"user_id"`
+	ChannelID int `json:"channel_id"`
+}
+
+type Post struct {
+	ID          int       `json:"id"`
+	Title       string    `json:"title"`
+	Content     string    `json:"content"`
+	Images      string    `json:"images,omitempty"` // Store JSON as string
+	Created     time.Time `json:"created"`
+	Commentable bool      `json:"commentable"`
+	AuthorID    int       `json:"author_id"`
+	ChannelID   int       `json:"channel_id"`
+	IsFlagged   bool      `json:"is_flagged,omitempty"`
+}
+
+type Image struct {
+	ID       string    `json:"id"` // UUID
+	Created  time.Time `json:"created"`
+	AuthorID int       `json:"author_id"`
+	PostID   int       `json:"post_id"`
+}
+
+type Comment struct {
+	ID                 int       `json:"id"`
+	Content            string    `json:"content"`
+	Created            time.Time `json:"created"`
+	AuthorID           int       `json:"author_id"`
+	ChannelID          int       `json:"channel_id"`
+	IsReply            bool      `json:"is_reply"`
+	CommentedPostID    *int      `json:"commented_post_id,omitempty"`
+	CommentedCommentID *int      `json:"commented_comment_id,omitempty"`
+	IsFlagged          bool      `json:"is_flagged,omitempty"`
+}
+
+type Reaction struct {
+	ID               int       `json:"id"`
+	Liked            bool      `json:"liked"`
+	Disliked         bool      `json:"disliked"`
+	Created          time.Time `json:"created"`
+	AuthorID         int       `json:"author_id"`
+	ChannelID        int       `json:"channel_id"`
+	ReactedPostID    *int      `json:"reacted_post_id,omitempty"`
+	ReactedCommentID *int      `json:"reacted_comment_id,omitempty"`
+}
+
+type Flag struct {
+	ID               int       `json:"id"`
+	FlagType         string    `json:"flag_type"`
+	Content          string    `json:"content,omitempty"`
+	Created          time.Time `json:"created"`
+	Approved         bool      `json:"approved"`
+	AuthorID         int       `json:"author_id"`
+	ChannelID        int       `json:"channel_id"`
+	FlaggedUserID    *int      `json:"flagged_user_id,omitempty"`
+	FlaggedPostID    *int      `json:"flagged_post_id,omitempty"`
+	FlaggedCommentID *int      `json:"flagged_comment_id,omitempty"`
 }

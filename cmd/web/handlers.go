@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
@@ -53,10 +54,50 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs.Parse, "./assets/templates/posts.create.html", "storePost", err)
 		return
 	}
+
+	// Get the 'channel' value as a string
+	channelStr := r.PostForm.Get("channel")
+	// Convert the string to an integer
+	channel, err := strconv.Atoi(channelStr)
+	if err != nil {
+		http.Error(w, "Invalid channel value", http.StatusBadRequest)
+		return
+	}
+
+	// Get the 'channel' value as a string
+	authorStr := r.PostForm.Get("author")
+	// Convert the string to an integer
+	author, err := strconv.Atoi(authorStr)
+	if err != nil {
+		http.Error(w, "Invalid channel value", http.StatusBadRequest)
+		return
+	}
+
+	type FormData struct {
+		commentable bool
+		images      string
+	}
+	formData := FormData{
+		commentable: false,
+		images:      "noimage",
+	}
+	if r.PostForm.Get("commentable") != "" {
+		formData.commentable = true
+	}
+	images := r.PostForm.Get("images")
+	if images != "" {
+		formData.images = images
+	}
+
 	err = app.posts.Insert(
 		r.PostForm.Get("title"),
 		r.PostForm.Get("content"),
+		formData.images,
+		channel,
+		author,
+		formData.commentable,
 	)
+
 	if err != nil {
 		log.Printf(ErrorMsgs.Post, err)
 		http.Error(w, err.Error(), 500)

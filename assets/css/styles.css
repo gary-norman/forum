@@ -1,0 +1,53 @@
+/* custom properties */
+@property --color-bg-dark {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #262A2F;
+}
+
+@property --color-hl-pink {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #EA4F92;
+}
+
+@property --color-hl-green {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #8AD47F;
+}
+
+@property --color-hl-orange {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #D56F3E;
+}
+
+@property --color-hl-yellow {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #E2C044;
+}
+
+/* this is an example of their implementation, as well as a
+nice neat way of getting an accent colour */
+/* edit: I got carried away and ended up doing loads of styling because, well, it's fun isn't it? :D */
+body {
+    max-width: 95%;
+    margin-inline: auto;
+}
+.wrapper {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(15rem, 1fr);
+    gap: 1rem;
+}
+
+.card {
+    color: color-mix(in hsl, #fff, #000 15%);
+    background: var(--color-bg-dark);
+    border: 1px solid color-mix(in hsl, hsl(100 0 100), var(--color-bg-dark) 80%);
+    border-radius: .3rem;
+    padding: 1rem;
+}
+

@@ -3,21 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/css-reset_kevin-powell.css">
+    <link rel="stylesheet" href="/assets/css/css-reset_kevin-powell.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
     <title>01F Forum</title>
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">01F Forum</h1>
-        {{range .Posts}}
-        <h2>{{.Title}}</h2>
-        <h3>Channel: {{.ChannelID}}</h3>
-        <h3>Author: {{.AuthorID}}</h3>
-        <time datetime="{{.Created}}">{{.Created}}</time>
-        <div>
-            {{.Content}}
+    <h1 class="title">01F Forum</h1>
+        <div class="wrapper">
+            {{range .Posts}}
+            <div class="card">
+                <h2>{{.Title}}</h2>
+                <h3>Channel: {{.ChannelID}}</h3>
+                <h3>Author: {{.AuthorID}}</h3>
+                <time datetime="{{.Created}}">{{.Created}}</time>
+                <div>
+                    {{.Content}}
+                </div>
+            </div>
+            {{end}}
         </div>
-        {{end}}
-    </div>
+<a href="posts/create">create post</a>
 </body>
 </html>

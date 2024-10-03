@@ -9,19 +9,19 @@
 </head>
 <body>
     <h1 class="title">01F Forum</h1>
-        <div class="wrapper">
+        <div class="grid-container-auto15rem">
             {{range .Posts}}
             <div class="card">
-                <h2>{{.Title}}</h2>
-                <h3>Channel: {{.ChannelID}}</h3>
-                <h3>Author: {{.AuthorID}}</h3>
-                <time datetime="{{.Created}}">{{.Created}}</time>
-                <div>
+                <h2 class="cardTitle">{{.Title}}</h2>
+                <h3 class="cardAuthor">{{.AuthorID}}</h3>
+                <h3 class="cardChannel">/{{.ChannelID}}</h3>
+                <time datetime="DD-MM-YYThh:mm:ss"  class="cardDate">{{.Created}}</time>
+                <div  class="cardContent">
                     {{.Content}}
                 </div>
             </div>
             {{end}}
         </div>
-<a href="posts/create">create post</a>
+<a href="posts/create" class="button" style="position: absolute; top: .5rem; left: 2rem;">create post</a>
 </body>
 </html>

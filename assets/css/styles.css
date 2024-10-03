@@ -1,34 +1,76 @@
-/* custom properties */
-@property --color-bg-dark {
+/* -- custom properties -- */
+/* ----------------------- */
+/* ---- custom colours ---- */
+    @property --color-bg-dark {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #262A2F;
+    }
+
+@property --color-text-dark {
     syntax: "<color>";
     inherits: true;
-    initial-value: #262A2F;
+    initial-value: #dddddd;
 }
 
-@property --color-hl-pink {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: #EA4F92;
-}
+    @property --color-hl-pink {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: #EA4F92;
+    }
 
-@property --color-hl-green {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: #8AD47F;
-}
+    @property --color-hl-green {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: #8AD47F;
+    }
 
-@property --color-hl-orange {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: #D56F3E;
-}
+    @property --color-hl-orange {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: #D56F3E;
+    }
 
-@property --color-hl-yellow {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: #E2C044;
-}
+    @property --color-hl-yellow {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: #E2C044;
+    }
 
+    @property --font-h1 {
+        syntax: "<length>";
+        inherits: true;
+        initial-value: 2ch;
+    }
+    @property --font-h2 {
+        syntax: "<length>";
+        inherits: true;
+        initial-value: 1.3ch;
+    }
+    @property --font-h3 {
+        syntax: "<length>";
+        inherits: true;
+        initial-value: 1ch;
+    }
+    @property --font-h4 {
+        syntax: "<length>";
+        inherits: true;
+        initial-value: 1.3ch;
+    }
+    @property --font-h5 {
+        syntax: "<length>";
+        inherits: true;
+        initial-value: .3ch;
+    }
+
+html {
+    font-family: system-ui;
+}
+a, a:visited, a:link, a:active {
+    text-decoration: none;
+    cursor: pointer;
+    color: inherit;
+}
 /* this is an example of their implementation, as well as a
 nice neat way of getting an accent colour */
 /* edit: I got carried away and ended up doing loads of styling because, well, it's fun isn't it? :D */
@@ -36,18 +78,115 @@ body {
     max-width: 95%;
     margin-inline: auto;
 }
-.wrapper {
+
+
+/* ---- grid containers ---- */
+.grid-container-auto15rem {
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(15rem, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    column-gap: 1rem;
+    row-gap: .3rem;
+}
+
+/* ---- flex containers ---- */
+.flex-container-row {
+    display: flex;
+}
+.flex-container-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------------------------------------- */
+
+/* prevent special form element styling  */
+legend,
+fieldset,
+select,
+textarea,
+input,
+button {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    /*-webkit-appearance: none;*/
+    /*-moz-appearance: none;*/
+    /*appearance: none;*/
+    border: none;
+}
+
+textarea,
+input {
+    border: 1px solid color-mix(in hsl, hsl(100 0 100), var(--color-bg-dark) 90%);
+    border-radius: .25rem;
+}
+
+select {
+    background: url("assets/images/down-arrow.svg") no-repeat center right 0.75rem;
+}
+
+input[type="checkbox"]:checked {
+    background: url('assets/images/check.svg') no-repeat center / 75% auto;
+}
+
+.wrapper-form {
+    background: var(--color-bg-dark);
+    color: var(--color-text-dark);
+    max-width: 20rem;
+    padding: .6rem;
+    margin: 1rem auto;
+    border: 1px solid color-mix(in hsl, hsl(100 0 100), var(--color-bg-dark) 80%);
+    border-radius: 1rem;
+}
+
+.noborder {
+    border: none
 }
 
 .card {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 5;
     color: color-mix(in hsl, #fff, #000 15%);
     background: var(--color-bg-dark);
     border: 1px solid color-mix(in hsl, hsl(100 0 100), var(--color-bg-dark) 80%);
     border-radius: .3rem;
     padding: 1rem;
 }
+
+.title {
+    font-size: 3ch;
+    margin: .5ch;
+    text-align: center;
+}
+
+.button {
+    background: var(--color-hl-orange);
+    border: 1px solid color-mix(in hsl, hsl(100 0 0), var(--color-hl-orange) 80%);
+    border-radius: 1rem;
+    padding: 0 .5rem;
+    margin: .6rem 0;
+    cursor: pointer;
+}
+
+.cardTitle {
+    font-size: 2ch;
+}
+.cardAuthor {
+    font-size: 1.3ch;
+}
+.cardChannel {
+    font-size: 1.3ch;
+}
+.cardDate {
+    font-size: .8ch;
+}
+.cardContent {
+    font-size: 1.5ch;
+    height: 3.8ch;
+    overflow: clip;
+    text-overflow: ellipsis;
+}
+
+
 

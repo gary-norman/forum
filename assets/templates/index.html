@@ -15,7 +15,8 @@
                 <h2 class="cardTitle">{{.Title}}</h2>
                 <h3 class="cardAuthor">{{.AuthorID}}</h3>
                 <h3 class="cardChannel">/{{.ChannelID}}</h3>
-                <time datetime="DD-MM-YYThh:mm:ss"  class="cardDate">{{.Created}}</time>
+                <time datetime="DD-MM-YYThh:mm:ss"  class="cardDate">{{.Created.Format "Jan 02, 2006"}}
+                    @ {{.Created.Format "15:04:05 UTC"}}</time>
                 <div  class="cardContent">
                     {{.Content}}
                 </div>

@@ -199,6 +199,73 @@ input[type="checkbox"]:checked {
     inherits: false;
     initial-value: 0%;
 }
+/* ------------- light beams ------------ */
+@property --beam-1-start {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-1-centre {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-1-fade {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-1-end {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-2-start {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-2-fade {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-2-end {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-3-start {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-3-fade {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-3-end {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-4-start {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-4-fade {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-4-end {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
 .card:nth-child(2):hover::before {
     content: "";
     position: absolute;
@@ -219,6 +286,7 @@ input[type="checkbox"]:checked {
             color-mix(in srgb, var(--color-hl-pink), var(--color-bg-dark)85%) 92%,
             color-mix(in srgb, var(--color-hl-pink), var(--color-bg-dark)85%) 98%,
             var(--color-hl-pink) 100%);
+
     border-radius: .3rem;
     animation: gradient 1.6s linear infinite;
     z-index: -1000;
@@ -254,7 +322,7 @@ input[type="checkbox"]:checked {
         --color-ratio: 70%;
     }
 }
-.card:nth-child(3)::after {
+.card:nth-child(3)::before {
     content: "";
     position: absolute;
     width: 100%;
@@ -262,6 +330,111 @@ input[type="checkbox"]:checked {
     border: 1px outset color-mix(in srgb, var(--color-hl-pink), var(--color-bg-dark) 85%);
     border-radius: .3rem;
     background: transparent;
+}
+.card:nth-child(3):hover::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    border-radius: .3rem;
+    background: conic-gradient(
+    from var(--grad-from),
+    var(--color-hl-pink) var(--beam-1-start),
+    transparent var(--beam-1-start),
+    transparent var(--beam-2-end),
+    transparent var(--beam-2-fade),
+    var(--color-hl-pink) var(--beam-2-start),
+    transparent var(--beam-2-start),
+    transparent var(--beam-3-end),
+    transparent var(--beam-3-fade),
+    var(--color-hl-pink) var(--beam-3-start),
+    transparent var(--beam-3-start),
+    transparent var(--beam-4-end),
+    transparent var(--beam-4-fade),
+    var(--color-hl-pink) var(--beam-4-start),
+    transparent var(--beam-4-start),
+    transparent var(--beam-1-end),
+    transparent var(--beam-1-fade),
+    var(--color-hl-pink) var(--beam-1-centre)
+    );
+    --grad-from: 90deg;
+    --beam-4-end: 270deg;
+    --beam-4-fade: 270deg;
+    --beam-4-start: 270deg;
+    --beam-3-end: 180deg;
+    --beam-3-fade: 180deg;
+    --beam-3-start: 180deg;
+    --beam-2-end: 90deg;
+    --beam-2-fade: 90deg;
+    --beam-2-start: 90deg;
+    --beam-1-end: 270deg;
+    --beam-1-fade: 360deg;
+    --beam-1-centre: 360deg;
+    --beam-1-start: 0deg;
+    animation: rotate-and-spread 3s ease-in infinite;
+    z-index: -1000;
+}
+@keyframes rotate-and-spread {
+    10% {
+        /*--grad-from: 135deg;*/
+        --beam-4-end: 180deg;
+        --beam-4-fade: 225deg;
+        --beam-4-start: 270deg;
+        --beam-3-end: 180deg;
+        --beam-3-fade: 180deg;
+        --beam-3-start: 180deg;
+        --beam-1-end: 270deg;
+        --beam-1-fade: 360deg;
+    }
+    20% {
+        /*--grad-from: 225deg;*/
+        --beam-3-end: 90deg;
+        --beam-3-fade: 135deg;
+        --beam-3-start: 180deg;
+        --beam-2-end: 90deg;
+        --beam-2-fade: 90deg;
+        --beam-2-start: 90deg;
+    }
+    30% {
+        /*--grad-from: 315deg;*/
+        --beam-2-end: 5deg;
+        --beam-2-fade: 45deg;
+        --beam-2-start: 90deg;
+        --beam-1-end: 270deg;
+        --beam-1-fade: 360deg;
+        --beam-1-centre: 360deg;
+        --beam-1-start: 0deg;
+    }
+    40% {
+        /*--grad-from: 405deg;*/
+        --beam-1-end: 270deg;
+        --beam-1-fade: 315deg;
+    }
+    75% {
+        /*--grad-from: 750deg;*/
+        --beam-4-end: 180deg;
+        --beam-4-fade: 225deg;
+        --beam-4-start: 270deg;
+        --beam-3-end: 90deg;
+        --beam-3-fade: 135deg;
+        --beam-3-start: 180deg;
+        --beam-2-end: 5deg;
+        --beam-2-fade: 45deg;
+        --beam-2-start: 90deg;
+        --beam-1-end: 270deg;
+        --beam-1-fade: 315deg;
+        --beam-1-centre: 360deg;
+        --beam-1-start: 0deg;
+    }
+    100% {
+        --grad-from: 450deg;
+        --beam-4-fade: 270deg;
+        --beam-3-fade: 180deg;
+        --beam-2-fade: 90deg;
+        --beam-1-fade: 360deg;
+    }
 }
 .card:nth-child(4) {
     position: relative;
@@ -302,19 +475,19 @@ input[type="checkbox"]:checked {
         --pink-start: 0%;
         --trans-start: 0%;
     }
-    50% {
+    30% {
         --pink-start: 14%;
         --trans-start: 14%;
         --pink-end: 60%;
         --trans-end: 60%;
     }
-    65% {
+    45% {
         --pink-start: 34%;
         --trans-start: 34%;
         --pink-end: 80%;
         --trans-end: 80%;
     }
-    90% {
+    70% {
         --pink-end: 100%;
         --trans-end: 100%;
     }

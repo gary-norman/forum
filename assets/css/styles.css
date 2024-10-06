@@ -1,87 +1,115 @@
 /* -- custom properties -- */
 /* ----------------------- */
 /* ---- custom colours ---- */
-    @property --color-bg-dark {
-        syntax: "<color>";
-        inherits: true;
-        initial-value: #262A2F;
-    }
-
-@property --color-text-dark {
-    syntax: "<color>";
-    inherits: true;
-    initial-value: #dddddd;
+:root {
+    /* box shadows */
+    --box-shadow: 0 0.25 1rem rgb(0 0 0 / .5);
+    --main-shadow: 0 5px 25px rgba(0 0 0 / 0.4);
+    --card-shadow:
+            1px 0.6px 4.1px rgba(0 0 0 / 0.018),
+            2.4px 1.5px 10px rgba(0 0 0 / 0.027),
+            4.3px 2.7px 19px rgba(0 0 0 / 0.034),
+            7.4px 4.6px 33.3px rgba(0 0 0 / 0.041),
+            14px 8.7px 59px rgba(0 0 0 / 0.05),
+            37px 23px 126px rgba(0 0 0 / 0.07);
+    --icon-shadow: inset 0 1px 1px rgba(0 0 0 / .2), inset 0 3px 5px rgba(0 0 0 / .1), inset 0 -1px 1px rgba(225 225 225 / .3);
+    --toggle-shadow: inset 0 5px 15px rgba(0 0 0 / .4), inset 0 -1px 1px rgba(255 255 255 / .4);
+    --button-shadow: 1px 1px 1px rgba(74, 74, 74, 0.3), -1px -1px 1px 0 rgba(255 2552 255 / .18);
+    --button-hover-shadow: 4px 4px 5px -1px rgba(0,0,0,0.45);
+    --button-pressed-shadow: inset 0 3px 5px -1px rgba(0 0 0 / .3), inset 0 -1px 2px -1px rgba(200 200 200   / .6);
+    --button-pressed-shadow2: inset 0 1px 2px rgba(0 0 0 / .7), inset 0 3px 5px rgba(0 0 0 / .3), inset 0 -1px 2px rgba(225 225 225 / .5);
 }
-
-    @property --color-hl-pink {
-        syntax: "<color>";
-        inherits: false;
-        initial-value: #EA4F92;
-    }
-
-    @property --color-hl-green {
-        syntax: "<color>";
-        inherits: false;
-        initial-value: #8AD47F;
-    }
-
-    @property --color-hl-orange {
-        syntax: "<color>";
-        inherits: false;
-        initial-value: #D56F3E;
-    }
-
-    @property --color-hl-yellow {
-        syntax: "<color>";
-        inherits: false;
-        initial-value: #E2C044;
-    }
-
-    @property --font-h1 {
-        syntax: "<length>";
-        inherits: true;
-        initial-value: 2ch;
-    }
-    @property --font-h2 {
-        syntax: "<length>";
-        inherits: true;
-        initial-value: 1.3ch;
-    }
-    @property --font-h3 {
-        syntax: "<length>";
-        inherits: true;
-        initial-value: 1ch;
-    }
-    @property --font-h4 {
-        syntax: "<length>";
-        inherits: true;
-        initial-value: 1.3ch;
-    }
-    @property --font-h5 {
-        syntax: "<length>";
-        inherits: true;
-        initial-value: .3ch;
-    }
 
 html {
     font-family: system-ui;
 }
-a, a:visited, a:link, a:active {
-    text-decoration: none;
-    cursor: pointer;
-    color: inherit;
-}
-/* this is an example of their implementation, as well as a
-nice neat way of getting an accent colour */
-/* edit: I got carried away and ended up doing loads of styling because, well, it's fun isn't it? :D */
 body {
     max-width: 95%;
     margin-inline: auto;
 }
 
+/* text elements and classes */
+h1 {
+    font-family: SpaceMono, system-ui;
+    font-size: 5rem;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+}
+h2 {
+    font-family: SpaceMono, system-ui;
+    font-size: 3.2rem;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+}
+h3 {
+    font-family: SpaceMono, system-ui;
+    font-size: 2rem;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+}
+h4 {
+    font-family: SpaceMono, system-ui;
+    font-size: 1.6rem;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+}
+p {
+    font-family: SpaceGrotesk, system-ui;
+    font-size: 1.6rem;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+}
+.p-bold {
+    font-family: SpaceGrotesk, system-ui;
+    font-size: 1.6rem;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+}
+small {
+    font-family: SpaceGrotesk, system-ui;
+    font-size: 1.2rem;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+}
+.small-bold {
+    font-family: SpaceGrotesk, system-ui;
+    font-size: 1.2rem;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+}
 
+a, a:visited, a:link, a:active {
+    text-decoration: none;
+    cursor: pointer;
+    color: inherit;
+}
+/* ---- containers ---- */
 /* ---- grid containers ---- */
-.grid-container-auto15rem {
+.cont-grid-auto15rem {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
     column-gap: 1rem;
@@ -89,10 +117,10 @@ body {
 }
 
 /* ---- flex containers ---- */
-.flex-container-row {
+.cont-flex-row {
     display: flex;
 }
-.flex-container-column {
+.cont-flex-column {
     display: flex;
     flex-direction: column;
 }
@@ -117,25 +145,25 @@ button {
 
 textarea,
 input {
-    border: 1px solid color-mix(in hsl, hsl(100 0 100), var(--color-bg-dark) 90%);
+    border: 1px solid var(--color-bg-3);
     border-radius: .25rem;
 }
 
 select {
-    background: url("assets/images/down-arrow.svg") no-repeat center right 0.75rem;
+    background: url("/assets/images/down-arrow.svg") no-repeat center right 0.75rem;
 }
 
 input[type="checkbox"]:checked {
-    background: url('assets/images/check.svg') no-repeat center / 75% auto;
+    background: url('/assets/images/check.svg') no-repeat center / 75% auto;
 }
 
 .wrapper-form {
-    background: var(--color-bg-dark);
-    color: var(--color-text-dark);
+    background: var(--color-bg-1);
+    color: var(--color-fg-2);
     max-width: 20rem;
     padding: .6rem;
     margin: 1rem auto;
-    border: 1px solid color-mix(in hsl, hsl(100 0 100), var(--color-bg-dark) 80%);
+    border: 1px solid var(--color-bg-3);
     border-radius: 1rem;
     box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
 }
@@ -149,32 +177,14 @@ input[type="checkbox"]:checked {
     grid-template-rows: subgrid;
     grid-row: span 5;
     color: color-mix(in hsl, #fff, #000 15%);
-    background: var(--color-bg-dark);
-    border: 1px solid color-mix(in hsl, hsl(100 0 100), var(--color-bg-dark) 80%);
+    background: var(--color-bg-2);
+    border: 1px solid color-mix(in hsl, hsl(100 0 100), var(--color-bg-2) 80%);
     border-radius: .3rem;
     padding: 1rem;
     box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
 }
-
-
-
-.title {
-    font-size: 3ch;
-    margin: .5ch;
-    text-align: center;
-}
-
-.button {
-    background: var(--color-hl-orange);
-    border: 1px solid color-mix(in hsl, hsl(100 0 0), var(--color-hl-orange) 80%);
-    border-radius: 1rem;
-    padding: 0 .5rem;
-    margin: .6rem 0;
-    cursor: pointer;
-}
-
 .cardTitle {
-    font-size: 2ch;
+     font-size: 2ch;
 }
 .cardAuthor {
     font-size: 1.3ch;
@@ -191,6 +201,22 @@ input[type="checkbox"]:checked {
     overflow: clip;
     text-overflow: ellipsis;
 }
+.title {
+    font-size: 3ch;
+    margin: .5ch;
+    text-align: center;
+}
+
+.button {
+    background: transparent;
+    border: 1px solid var(--color-bg-3);
+    border-radius: 1rem;
+    padding: 0 .5rem;
+    margin: .6rem 0;
+    cursor: pointer;
+}
+
+
 
 
 

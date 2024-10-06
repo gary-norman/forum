@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/css-reset_kevin-powell.css">
     <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/fonts.css">
+    <link rel="stylesheet" href="/assets/css/colors.css">
     <title>01F Forum</title>
 </head>
 <body>
+    <div class="header">
+        <div class="flex-align-l"><p>&#60;</p><p>codex</p><p>&#62;</p></div>
+        <div class="wrapper-search">
+
+        </div>
+        <div class="flex-align-c"></div>
+    </div>
     <h1 class="title">01F Forum</h1>
-        <div class="grid-container-auto15rem">
+        <div class="cont-grid-auto15rem">
             {{range .Posts}}
             <div class="card">
                 <h2 class="cardTitle">{{.Title}}</h2>

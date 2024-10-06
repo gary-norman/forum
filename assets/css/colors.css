@@ -1,148 +1,48 @@
-/* --- lights --- */
-@property --color-light-1 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #fff;
-}
-@property --color-light-2 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #f1f1f1;
-}
-@property --color-light-3 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #ddd;
-}
-@property --color-light-4 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #d3d3d3;
-}
-@property --color-light-5 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #bebebe;
-}
-/* --- darks --- */
-@property --color-dark-1 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #262a2f;
-}
-@property --color-dark-2 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #2e3238;
-}
-@property --color-dark-3 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #444c55;
-}
-@property --color-dark-4 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #525b66;
-}
-@property --color-dark-5 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #71767c;
-}
-/* --- highlight colours --- */
-@property --color-hl-blue {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #609cd0;
-}
-@property --color-hl-green {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #8AD47F;
-}
-@property --color-hl-orange {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #D56F3E;
-}
-@property --color-hl-pink {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #EA4F92;
-}
-@property --color-hl-yellow {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #E2C044;
-}
-@property --color-hl-red {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #f94243;
-}
-/* ------------------------ */
-/* dark / light mode colours */
-/* --- dark mode (default) --- */
-/* --- bg colours --- */
-@property --color-bg-1 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: var(--color-dark-1);
-}
-@property --color-bg-2 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: var(--color-dark-2);
-}
-@property --color-bg-3 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: var(--color-dark-3);
-}
-@property --color-bg-4 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: var(--color-dark-4);
-}
-@property --color-bg-5 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: var(--color-dark-5);
-}
-/* --- text colours --- */
-@property --color-fg-1 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: var(--color-light-1);
-}
-@property --color-fg-2 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: var(--color-light-2);
-}
-@property --color-fg-3 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: var(--color-light-3);
-}
-@property --color-fg-4 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: var(--color-light-4);
-}
-@property --color-fg-5 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: var(--color-light-5);
+:root {
+  /* --- lights --- */
+  --color-light-1: #fff;
+  --color-light-2: #f1f1f1;
+  --color-light-3: #ddd;
+  --color-light-4: #d3d3d3;
+  --color-light-5: #bebebe;
+  /* --- darks --- */
+  --color-dark-1: #262a2f;
+  --color-dark-2: #2e3238;
+  --color-dark-3: #444c55;
+  --color-dark-4: #525b66;
+  --color-dark-5: #71767c;
+  /* --- highlight colours --- */
+  --color-hl-blue: #609cd0;
+  --color-hl-green: #8AD47F;
+  --color-hl-orange: #D56F3E;
+  --color-hl-pink: #EA4F92;
+  --color-hl-yellow: #E2C044;
+  --color-hl-red: #f94243;
+  /* ------------------------ */
+  /* dark / light mode colours */
+  /* --- dark mode (default) --- */
+  /* --- bg colours --- */
+  --color-bg-1: var(--color-dark-1);
+  --color-bg-2: var(--color-dark-2);
+  --color-bg-3: var(--color-dark-3);
+  --color-bg-4: var(--color-dark-4);
+  --color-bg-5: var(--color-dark-5);
+  /* --- text colours --- */
+  --color-fg-1: var(--color-light-1);
+  --color-fg-2: var(--color-light-2);
+  --color-fg-3: var(--color-light-3);
+  --color-fg-4: var(--color-light-4);
+  --color-fg-5: var(--color-light-5);
 }
 /* --- light mode --- */
 @media (prefers-color-scheme: light) {
+  /* --- bg colours --- */
   --color-bg-1: var(--color-light-1);
   --color-bg-2: var(--color-light-2);
   --color-bg-3: var(--color-light-3);
   --color-bg-4: var(--color-light-4);
   --color-bg-5: var(--color-light-5);
+  /* --- text colours --- */
   --color-fg-1: var(--color-dark-1);
   --color-fg-2: var(--color-dark-2);
   --color-fg-3: var(--color-dark-3);

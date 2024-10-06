@@ -4,34 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/css-reset_kevin-powell.css">
-    <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="/assets/css/fonts.css">
     <link rel="stylesheet" href="/assets/css/colors.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
     <title>01F Forum</title>
 </head>
 <body>
     <div class="header">
-        <div class="flex-align-l"><p>&#60;</p><p>codex</p><p>&#62;</p></div>
-        <div class="wrapper-search">
-
+        <div class="cont-flex-row" style="flex-grow: 1">
+            <p style="letter-spacing: .2em; color: var(--color-hl-pink)">&#60;</p>
+            <p style="letter-spacing: .2em; color: var(--color-hl-green)">codex</p>
+            <p style="letter-spacing: .2em; color: var(--color-hl-pink)">&#62;</p>
         </div>
-        <div class="flex-align-c"></div>
-    </div>
-    <h1 class="title">01F Forum</h1>
-        <div class="cont-grid-auto15rem">
-            {{range .Posts}}
-            <div class="card">
-                <h2 class="cardTitle">{{.Title}}</h2>
-                <h3 class="cardAuthor">{{.AuthorID}}</h3>
-                <h3 class="cardChannel">/{{.ChannelID}}</h3>
-                <time datetime="DD-MM-YYThh:mm:ss"  class="cardDate">{{.Created.Format "Jan 02, 2006"}}
-                    @ {{.Created.Format "15:04:05 UTC"}}</time>
-                <div  class="cardContent">
-                    {{.Content}}
-                </div>
+        <form class="wrapper-search">
+            <div>
+                <label for="search"></label>
+                <input type="text" class="searchbar" id="search" name="search" placeholder="Search" />
             </div>
-            {{end}}
+        </form>
+        <div class="flex-align-c">
+            <button class="button btn-primary btn-icotext-l"><img src="/assets/icons/post.svg" alt="plus symbol">Post</button>
+            <button class="button btn-secondary btn-icotext-l btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">Notifications</button>
         </div>
-<a href="posts/create" class="button" style="position: absolute; top: .5rem; left: 2rem;">create post</a>
+    </div>
+<!--        <div class="cont-grid-auto15rem">-->
+<!--            {{range .Posts}}-->
+<!--            <div class="card">-->
+<!--                <h2 class="cardTitle">{{.Title}}</h2>-->
+<!--                <h3 class="cardAuthor">{{.AuthorID}}</h3>-->
+<!--                <h3 class="cardChannel">/{{.ChannelID}}</h3>-->
+<!--                <time datetime="DD-MM-YYThh:mm:ss"  class="cardDate">{{.Created.Format "Jan 02, 2006"}}-->
+<!--                    @ {{.Created.Format "15:04:05 UTC"}}</time>-->
+<!--                <div  class="cardContent">-->
+<!--                    {{.Content}}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            {{end}}-->
+<!--        </div>-->
+<!--<a href="posts/create" class="button" style="position: absolute; top: .5rem; left: 2rem;">create post</a>-->
 </body>
 </html>

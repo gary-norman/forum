@@ -22,10 +22,10 @@
 
 html {
     font-family: system-ui;
+    font-size: 62.5%;
 }
 body {
-    max-width: 95%;
-    margin-inline: auto;
+    width: 100%;
 }
 
 /* text elements and classes */
@@ -108,6 +108,15 @@ a, a:visited, a:link, a:active {
     color: inherit;
 }
 /* ---- containers ---- */
+.header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: .9rem 1.5rem;
+    background: var(--color-bg-2);
+    border-bottom: 1px solid var(--color-bg-3);
+}
 /* ---- grid containers ---- */
 .cont-grid-auto15rem {
     display: grid;
@@ -123,6 +132,11 @@ a, a:visited, a:link, a:active {
 .cont-flex-column {
     display: flex;
     flex-direction: column;
+}
+.flex-align-c {
+    display: flex;
+    justify-content: center;
+    column-gap: 1rem;
 }
 
 /* ---------------------------------------- */
@@ -144,9 +158,15 @@ button {
 }
 
 textarea,
-input {
+input[type="text"] {
     border: 1px solid var(--color-bg-3);
-    border-radius: .25rem;
+}
+
+.searchbar {
+    height: 3rem;
+    width: calc(100vw / 4);
+    padding: 1rem;
+    border-radius: 5rem;
 }
 
 select {
@@ -166,6 +186,11 @@ input[type="checkbox"]:checked {
     border: 1px solid var(--color-bg-3);
     border-radius: 1rem;
     box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
+}
+.wrapper-search {
+    display: flex;
+    flex-grow: 2;
+    justify-content: center;
 }
 
 .noborder {
@@ -206,14 +231,36 @@ input[type="checkbox"]:checked {
     margin: .5ch;
     text-align: center;
 }
-
+/* -------- buttons -------- */
 .button {
+    border-radius: 5rem;
+    padding: .6rem 1rem;
+    /*margin: .6rem 0;*/
+    cursor: pointer;
+}
+.btn-primary {
+    background: var(--color-hl-green);
+    border: 1px solid var(--color-hl-green);
+    color: var(--color-bg-1);
+    font-size: 1.2rem;
+}
+.btn-secondary {
     background: transparent;
     border: 1px solid var(--color-bg-3);
-    border-radius: 1rem;
-    padding: 0 .5rem;
-    margin: .6rem 0;
-    cursor: pointer;
+    color: var(--color-fg-1);
+    font-size: 1.2rem;
+}
+.btn-icotext-l {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: .3rem;
+    width: fit-content;
+    position: relative;
+}
+.btn-filled {
+    background: var(--color-bg-3);
+    border: 1px solid var(--color-bg-3);
 }
 
 

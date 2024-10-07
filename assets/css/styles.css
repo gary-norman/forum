@@ -202,12 +202,20 @@ input[type="checkbox"]:checked {
 }
 .sidebar {
     display: flex;
+    flex-direction: column;
     width: 32rem;
     height: calc(100vh - 4.9rem);
     padding: 2.4rem 1.2rem;
     gap: 1.2rem;
     background: var(--color-bg-2);
 }
+.sidebar-profile-pic {
+     width: 60px;
+     height: 60px;
+     flex-shrink: 0;
+     border-radius: 60px;
+     background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;
+ }
 .main-window {
     display: flex;
     flex-direction: column;
@@ -248,10 +256,10 @@ input[type="checkbox"]:checked {
     box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
 }
 .card-profile-pic {
-    width: 60px;
-    height: 60px;
+    width: 24px;
+    height: 24px;
     flex-shrink: 0;
-    border-radius: 60px;
+    border-radius: 24px;
     background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;
 }
 .cardTitle {
@@ -317,6 +325,34 @@ input[type="checkbox"]:checked {
 .btn-filled {
     background: var(--color-bg-3);
     border: 1px solid var(--color-bg-3);
+}
+
+/* ----- borders ----- */
+/* Dashed border */
+hr.dashed {
+    width: 70%;
+    align-self: center;
+    border-top: .1rem dashed var(--color-bg-3);
+}
+
+/* Dotted border */
+hr.dotted {
+    width: 70%;
+    align-self: center;
+    border-top: .1rem dotted var(--color-bg-3);
+}
+
+/* Solid border */
+hr.solid {
+    width: 90%;
+    align-self: center;
+    border-top: .1rem solid var(--color-bg-3);
+}
+
+/* Rounded border */
+hr.rounded {
+    border-top: 8px solid var(--color-bg-3);
+    border-radius: 5rem;
 }
 
 

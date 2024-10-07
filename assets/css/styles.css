@@ -67,7 +67,7 @@ h4 {
     letter-spacing: normal;
 }
 p {
-    font-family: SpaceGrotesk, system-ui;
+    font-family: SpaceGrotesk-Regular, system-ui;
     font-size: 1.6rem;
     font-weight: normal;
     font-stretch: normal;
@@ -76,7 +76,7 @@ p {
     letter-spacing: normal;
 }
 .p-bold {
-    font-family: SpaceGrotesk, system-ui;
+    font-family: SpaceGrotesk-Medium, system-ui;
     font-size: 1.6rem;
     font-weight: 500;
     font-stretch: normal;
@@ -85,7 +85,7 @@ p {
     letter-spacing: normal;
 }
 small {
-    font-family: SpaceGrotesk, system-ui;
+    font-family: SpaceGrotesk-Regular, system-ui;
     font-size: 1.2rem;
     font-weight: normal;
     font-stretch: normal;
@@ -94,7 +94,7 @@ small {
     letter-spacing: normal;
 }
 .small-bold {
-    font-family: SpaceGrotesk, system-ui;
+    font-family: SpaceGrotesk-Medium, system-ui;
     font-size: 1.2rem;
     font-weight: 500;
     font-stretch: normal;
@@ -106,7 +106,7 @@ small {
 a, a:visited, a:link, a:active {
     text-decoration: none;
     cursor: pointer;
-    color: inherit;
+    /*color: inherit;*/
 }
 /* ---- containers ---- */
 .header {
@@ -212,7 +212,7 @@ input[type="checkbox"]:checked {
     display: flex;
     flex-direction: column;
     /*flex-grow: 1;*/
-    margin-inline: 3rem;
+    margin-inline: 2.4rem;
     max-width: calc(100vw - 32rem);
     max-height: calc(100vh - 4.9rem);
     overflow-y: auto;
@@ -243,6 +243,8 @@ input[type="checkbox"]:checked {
     border: 1px solid var(--color-bg-3);
     border-radius: .6rem;
     padding: 1rem;
+    margin: .6rem;
+    /*box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);*/
     box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
 }
 .card-profile-pic {

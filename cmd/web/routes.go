@@ -14,7 +14,7 @@ func (app *app) routes() http.Handler {
 	mux.Handle("/assets/icons/", http.StripPrefix("/assets/icons", iconServer))
 	imageServer := http.FileServer(http.Dir("./assets/images"))
 	mux.Handle("/assets/images/", http.StripPrefix("/assets/images", imageServer))
-	fontServer := http.FileServer(http.Dir("./assets/images"))
+	fontServer := http.FileServer(http.Dir("./assets/fonts"))
 	mux.Handle("/assets/fonts/", http.StripPrefix("/assets/fonts", fontServer))
 	mux.HandleFunc("/", app.getHome)
 	// Use a single route for /posts/create and distinguish based on HTTP method

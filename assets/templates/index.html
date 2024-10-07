@@ -10,21 +10,65 @@
     <title>01F Forum</title>
 </head>
 <body>
-    <div class="header">
-        <div class="cont-flex-row" style="flex-grow: 1">
-            <p style="letter-spacing: .2em; color: var(--color-hl-pink)">&#60;</p>
-            <p style="letter-spacing: .2em; color: var(--color-hl-green)">codex</p>
-            <p style="letter-spacing: .2em; color: var(--color-hl-pink)">&#62;</p>
-        </div>
-        <form class="wrapper-search">
-            <div>
-                <label for="search"></label>
-                <input type="text" class="searchbar" id="search" name="search" placeholder="Search" />
+    <div class="wrapper-main">
+        <div class="header">
+            <div class="cont-flex-row" style="flex-grow: 1">
+                <p style="letter-spacing: .2em; color: var(--color-hl-pink)">&#60;</p>
+                <p style="letter-spacing: .2em; color: var(--color-hl-green)">codex</p>
+                <p style="letter-spacing: .2em; color: var(--color-hl-pink)">&#62;</p>
             </div>
-        </form>
-        <div class="flex-align-c">
-            <button class="button btn-primary btn-icotext-l"><img src="/assets/icons/post.svg" alt="plus symbol">Post</button>
-            <button class="button btn-secondary btn-icotext-l btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">Notifications</button>
+            <form class="wrapper-search">
+                <div>
+                    <label for="search"></label>
+                    <input type="text" class="searchbar" id="search" name="search" placeholder="Search" />
+                </div>
+            </form>
+            <div class="flex-align-c">
+                <a href="posts/create" class="button btn-primary btn-icotext"><img src="/assets/icons/post.svg" alt="plus symbol">Post</a>
+<!--                <button class="button btn-primary btn-icotext"><img src="/assets/icons/post.svg" alt="plus symbol">Post</button>-->
+                <button class="button btn-secondary btn-icotext btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">Notifications</button>
+            </div>
+        </div>
+        <div class="cont-flex-row" style="flex-grow: 1">
+            <div class="sidebar">
+
+            </div>
+            <div class="main-window">
+                <div class="button-row above-posts">
+                    <button class="button btn-secondary btn-icotext btn-filled">Sort<img src="/assets/icons/post.svg"
+                                                                                         alt="plus symbol"></button>
+                    <button class="button btn-secondary btn-icotext btn-filled">Filters<img src="/assets/icons/post.svg"
+                                                                                         alt="plus symbol"></button>
+                </div>
+                <div class="posts">
+                    {{range .Posts}}
+                        <div class="card">
+                            <div class="cont-flex-row" style="align-items: center">
+                                <div class="card-profile-pic"></div>
+                                <div class="cont-flex-column" style="gap: .3rem">
+                                    <small class="small-bold">{{.AuthorID}}</small>
+                                    <div class="cont-flex-row" style="gap: .3rem">
+                                        <img src="/assets/icons/reply.svg" alt="plus symbol">
+                                        <small>{{.ChannelID}}</small>
+                                        <small>-</small>
+                                        <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
+                                            @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4>{{.Title}}</h4>
+                            <p class="cardContent">{{.Content}}</p>
+                            <div class="button-row">
+                                <button class="button btn-secondary btn-icotext btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">100</button>
+                                <button class="button btn-secondary btn-icotext btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">24</button>
+                                <button class="button btn-secondary btn-icotext btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">Reply</button>
+                                <button class="button btn-secondary btn-icotext btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">Share</button>
+                                <button class="button btn-secondary btn-icotext btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">Report</button>
+                            </div>
+                        </div>
+                    {{end}}
+                </div>
+            </div>
         </div>
     </div>
 <!--        <div class="cont-grid-auto15rem">-->

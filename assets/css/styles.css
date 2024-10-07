@@ -26,6 +26,7 @@ html {
 }
 body {
     width: 100%;
+    background: var(--color-bg-1);
 }
 
 /* text elements and classes */
@@ -128,10 +129,12 @@ a, a:visited, a:link, a:active {
 /* ---- flex containers ---- */
 .cont-flex-row {
     display: flex;
+    gap: 1.2rem;
 }
 .cont-flex-column {
     display: flex;
     flex-direction: column;
+    gap: 1.2rem;
 }
 .flex-align-c {
     display: flex;
@@ -177,6 +180,11 @@ input[type="checkbox"]:checked {
     background: url('/assets/images/check.svg') no-repeat center / 75% auto;
 }
 
+.wrapper-main {
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+}
 .wrapper-form {
     background: var(--color-bg-1);
     color: var(--color-fg-2);
@@ -192,21 +200,57 @@ input[type="checkbox"]:checked {
     flex-grow: 2;
     justify-content: center;
 }
+.sidebar {
+    display: flex;
+    width: 32rem;
+    height: calc(100vh - 4.9rem);
+    padding: 2.4rem 1.2rem;
+    gap: 1.2rem;
+    background: var(--color-bg-2);
+}
+.main-window {
+    display: flex;
+    flex-direction: column;
+    /*flex-grow: 1;*/
+    margin-inline: 3rem;
+    max-width: calc(100vw - 32rem);
+    max-height: calc(100vh - 4.9rem);
+    overflow-y: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.main-window::-webkit-scrollbar {
+    display: none;
+}
+.posts {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.2rem;
+    margin: 6rem 0;
+}
 
 .noborder {
     border: none
 }
 
 .card {
-    display: grid;
-    grid-template-rows: subgrid;
-    grid-row: span 5;
-    color: color-mix(in hsl, #fff, #000 15%);
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    color: var(--color-fg-1);
     background: var(--color-bg-2);
-    border: 1px solid color-mix(in hsl, hsl(100 0 100), var(--color-bg-2) 80%);
-    border-radius: .3rem;
+    border: 1px solid var(--color-bg-3);
+    border-radius: .6rem;
     padding: 1rem;
     box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
+}
+.card-profile-pic {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 60px;
+    background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;
 }
 .cardTitle {
      font-size: 2ch;
@@ -221,8 +265,10 @@ input[type="checkbox"]:checked {
     font-size: .8ch;
 }
 .cardContent {
-    font-size: 1.5ch;
-    height: 3.8ch;
+    font-family: SpaceGrotesk-Variable, system-ui;
+    font-size: 1.6rem;
+    font-weight: 500;
+    max-height: 7rem;
     overflow: clip;
     text-overflow: ellipsis;
 }
@@ -232,6 +278,15 @@ input[type="checkbox"]:checked {
     text-align: center;
 }
 /* -------- buttons -------- */
+.button-row {
+    display: flex;
+    padding: 1.2rem 0;
+    column-gap: 1.2rem;
+}
+.above-posts {
+    position: absolute;
+    background: var(--color-bg-1);
+    width: calc(100vw - 3rem - 1.2rem - 32rem)}
 .button {
     border-radius: 5rem;
     padding: .6rem 1rem;
@@ -250,13 +305,12 @@ input[type="checkbox"]:checked {
     color: var(--color-fg-1);
     font-size: 1.2rem;
 }
-.btn-icotext-l {
+.btn-icotext {
     display: flex;
     align-items: center;
     justify-content: center;
     column-gap: .3rem;
     width: fit-content;
-    position: relative;
 }
 .btn-filled {
     background: var(--color-bg-3);

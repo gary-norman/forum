@@ -2,6 +2,10 @@
 /* ----------------------- */
 /* ---- custom colours ---- */
 :root {
+    /* fonts */
+    --font-sz-title: clamp(1.8rem, 2rem + 0.65vw, 2.2rem);
+    --font-sz-main: clamp(1rem, 1.2rem + 0.65vw, 1.6rem);
+    --font-sz-cards: clamp(.8rem, 1rem + 0.65vw, 1.2rem);
     /* box shadows */
     --box-shadow: 0 0.25 1rem rgb(0 0 0 / .5);
     --main-shadow: 0 5px 25px rgba(0 0 0 / 0.4);

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1366"
+   height="768"
+   viewBox="0 0 1366 768"
+   version="1.1"
+   id="svg1"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient1">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop1" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient1"
+       id="linearGradient2"
+       x1="55.543801"
+       y1="357.59988"
+       x2="1318.7817"
+       y2="357.59988"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:200px;line-height:0.8;font-family:'MesloLGS Nerd Font Mono';-inkscape-font-specification:'MesloLGS Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#ea4f92;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       x="687.16278"
+       y="461.9393"
+       id="text1"><tspan
+         id="tspan1"
+         x="687.16278"
+         y="461.9393"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:200px;font-family:'MesloLGS Nerd Font Mono';-inkscape-font-specification:'MesloLGS Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ea4f92;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-dasharray:none;stroke-opacity:1">&lt;<tspan
+   style="fill:#8ad47f;fill-opacity:1;-inkscape-font-specification:'MesloLGS Nerd Font Mono, Normal';font-family:'MesloLGS Nerd Font Mono';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:200px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
+   id="tspan2">CODEX</tspan>&gt;</tspan></text>
+  </g>
+</svg>

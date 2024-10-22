@@ -12,10 +12,10 @@
 <body>
     <div class="wrapper-main">
         <div class="header">
-            <div class="cont-flex-row" style="flex-grow: 1; gap: unset">
-                <p style="letter-spacing: .2em; color: var(--color-hl-pink)">&#60;</p>
-                <p style="letter-spacing: .2em; color: var(--color-hl-green)">codex</p>
-                <p style="letter-spacing: .2em; color: var(--color-hl-pink)">&#62;</p>
+            <div class="branding">
+                <p>&#60;</p>
+                <p>codex</p>
+                <p>&#62;</p>
             </div>
             <form class="wrapper-search">
                 <div>
@@ -36,9 +36,9 @@
                     <div>
                         <h3>Eyesome578</h3>
                         <div>
-                            <button class="button btn-icotext">
+                            <button class="button btn-icotext" style="padding: .6rem 1rem .6rem 0">
                                 <img src="/assets/icons/following.svg" alt="following symbol">72</button>
-                            <button class="button btn-icotext">
+                            <button class="button btn-icotext" style="padding: .6rem 1rem .6rem 0">
                                 <img src="/assets/icons/followers.svg" alt="followers symbol">64</button>
                         </div>
                     </div>
@@ -73,12 +73,11 @@
                 <div class="posts">
                     {{range .Posts}}
                         <div class="card">
-                            <div>
+                            <div class="post-info-container">
                                 <img class="card-profile-pic" alt="profile picture">
                                 <div>
                                     <small class="small-bold">{{.AuthorID}}</small>
                                     <div>
-                                        <img src="/assets/icons/reply.svg" alt="plus symbol">
                                         <small>{{.ChannelID}}</small>
                                         <small>-</small>
                                         <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}

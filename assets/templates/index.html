@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/assets/css/css-reset_kevin-powell.css">
     <link rel="stylesheet" href="/assets/css/fonts.css">
     <link rel="stylesheet" href="/assets/css/colors.css">
-    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
     <title>01F Forum</title>
 </head>
 <body>
@@ -70,11 +70,11 @@
                 <div class="posts">
                     {{range .Posts}}
                         <div class="card">
-                            <div class="cont-flex-row" style="align-items: center">
-                                <div class="card-profile-pic"></div>
-                                <div class="cont-flex-column" style="gap: .3rem">
+                            <div>
+                                <img class="card-profile-pic" alt="profile picture">
+                                <div>
                                     <small class="small-bold">{{.AuthorID}}</small>
-                                    <div class="cont-flex-row" style="gap: .3rem">
+                                    <div>
                                         <img src="/assets/icons/reply.svg" alt="plus symbol">
                                         <small>{{.ChannelID}}</small>
                                         <small>-</small>

@@ -22,6 +22,10 @@
     --shadow-button-hover: 4px 4px 5px -1px rgba(0,0,0,0.45);
     --shadow-button-pressed: inset 0 3px 5px -1px rgba(0 0 0 / .3), inset 0 -1px 2px -1px rgba(200 200 200   / .6);
     --shadow-button-pressed-2: inset 0 1px 2px rgba(0 0 0 / .7), inset 0 3px 5px rgba(0 0 0 / .3), inset 0 -1px 2px rgba(225 225 225 / .5);
+
+    /* --- transitions --- */
+    --transition-dur-hover: 200ms;
+    --transition-type-hover: ease-in-out;
 }
 svg {
     stroke: var(--color-fg-1);
@@ -277,6 +281,7 @@ hr.solid {
 .sidebar-option {
     font-size: 1.6rem;
     padding-left: 4.8rem;
+    transition: background var(--transition-dur-hover) var(--transition-type-hover) 0s;
     &:hover, &:active {
         background: var(--color-bg-3);
         border-radius: .8rem;
@@ -333,6 +338,7 @@ hr.solid {
 .sidebar-channel {
     border-radius: .8rem;
     margin: .8rem 0;
+    transition: background var(--transition-dur-hover) var(--transition-type-hover) 0s;
     &:hover, &:active {
         background: var(--color-bg-2);
     }
@@ -530,6 +536,12 @@ hr.solid {
 .btn-filled {
     background: var(--color-bg-3);
     border: 1px solid var(--color-bg-3);
+}
+
+/* ---- animations ---- */
+
+@keyframes fadeIn {
+
 }
 
 

@@ -31,33 +31,36 @@
         </div>
         <div class="cont-flex-row" style="flex-grow: 1">
             <div class="sidebar">
-                <div class="cont-flex-row">
+                <div class="sidebarProfile">
                     <div class="sidebar-profile-pic"></div>
-                    <div class="cont-flex-column" style="gap: unset">
+                    <div>
                         <h3>Eyesome578</h3>
-                        <div class="cont-flex-row" style="gap: unset">
-                            <button class="button btn-icotext"><img src="/assets/icons/following.svg"
-                                                        alt="following symbol">72</button>
-                            <button class="button btn-icotext"><img src="/assets/icons/followers.svg"
-                                                        alt="followers symbol">64</button>
+                        <div>
+                            <button class="button btn-icotext">
+                                <img src="/assets/icons/following.svg" alt="following symbol">72</button>
+                            <button class="button btn-icotext">
+                                <img src="/assets/icons/followers.svg" alt="followers symbol">64</button>
                         </div>
                     </div>
                 </div>
                 <hr class="solid">
-                <div class="cont-flex-column">
-                    <small style="padding: 0 1rem">Dashboard</small>
-                    <div class="sidepanel-option"></div>
-                    <div class="sidepanel-option"></div>
-                    <div class="sidepanel-option"></div>
-                    <div class="sidepanel-option"></div>
+                <div class="sidebar-block sidebar-dashboard">
+                    <small>Dashboard</small>
+                    <div class="sidebar-option">Home</div>
+                    <div class="sidebar-option-btn">
+                        <div>Dark Mode</div>
+                        <div><button class="button btn-primary"></button></div>
+                    </div>
+                    <div class="sidebar-option">Settings</div>
+                    <div class="sidebar-option">Log Out</div>
                 </div>
                 <hr class="solid">
-                <div class="cont-flex-column">
-                    <small style="padding: 0 1rem">Your Channels</small>
-                    <div class="sidepanel-channel"></div>
-                    <div class="sidepanel-channel"></div>
-                    <div class="sidepanel-channel"></div>
-                    <div class="sidepanel-channel"></div>
+                <div class="sidebar-block sidebar-channels">
+                    <small>Your Channels</small>
+                    <div class="sidebar-channel"><div>banana</div></div>
+                    <div class="sidebar-channel"></div>
+                    <div class="sidebar-channel"></div>
+                    <div class="sidebar-channel"></div>
                 </div>
             </div>
             <div class="main-window">
@@ -86,11 +89,26 @@
                             <h4>{{.Title}}</h4>
                             <p class="cardContent">{{.Content}}</p>
                             <div class="button-row">
-                                <button class="button btn-secondary btn-icotext btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">100</button>
-                                <button class="button btn-secondary btn-icotext btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">24</button>
-                                <button class="button btn-secondary btn-icotext btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">Reply</button>
-                                <button class="button btn-secondary btn-icotext btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">Share</button>
-                                <button class="button btn-secondary btn-icotext btn-filled"><img src="/assets/icons/notification.svg" alt="bell symbol">Report</button>
+                                <button class="button btn-secondary btn-icotext btn-filled">
+                                    <img src="/assets/icons/notification.svg" alt="bell symbol">
+                                    100
+                                </button>
+                                <button class="button btn-secondary btn-icotext btn-filled">
+                                    <img src="/assets/icons/notification.svg" alt="bell symbol">
+                                    24
+                                </button>
+                                <button class="button btn-secondary btn-icotext btn-filled">
+                                    <img src="/assets/icons/notification.svg" alt="bell symbol">
+                                    Reply
+                                </button>
+                                <button class="button btn-secondary btn-icotext btn-filled">
+                                    <img src="/assets/icons/notification.svg" alt="bell symbol">
+                                    Share
+                                </button>
+                                <button class="button btn-secondary btn-icotext btn-filled">
+                                    <img src="/assets/icons/notification.svg" alt="bell symbol">
+                                    Report
+                                </button>
                             </div>
                         </div>
                     {{end}}

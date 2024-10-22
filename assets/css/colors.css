@@ -33,19 +33,20 @@
   --color-fg-3: var(--color-light-3);
   --color-fg-4: var(--color-light-4);
   --color-fg-5: var(--color-light-5);
-}
+
 /* --- light mode --- */
 @media (prefers-color-scheme: light) {
-  /* --- bg colours --- */
-  --color-bg-1: var(--color-light-1);
-  --color-bg-2: var(--color-light-2);
-  --color-bg-3: var(--color-light-3);
-  --color-bg-4: var(--color-light-4);
-  --color-bg-5: var(--color-light-5);
-  /* --- text colours --- */
-  --color-fg-1: var(--color-dark-1);
-  --color-fg-2: var(--color-dark-2);
-  --color-fg-3: var(--color-dark-3);
-  --color-fg-4: var(--color-dark-4);
-  --color-fg-5: var(--color-dark-5);
+    /* --- bg colours --- */
+    --color-bg-1 : var(--color-light-5);
+    --color-bg-2 : var(--color-light-4);
+    --color-bg-3 : var(--color-light-3);
+    --color-bg-4 : var(--color-light-2);
+    --color-bg-5 : var(--color-light-1);
+    /* --- text colours --- */
+    --color-fg-1 : var(--color-dark-1);
+    --color-fg-2 : var(--color-dark-2);
+    --color-fg-3 : var(--color-dark-3);
+    --color-fg-4 : var(--color-dark-4);
+    --color-fg-5 : var(--color-dark-5);
+  }
 }

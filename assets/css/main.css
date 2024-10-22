@@ -1,6 +1,5 @@
 /* -- custom properties -- */
 /* ----------------------- */
-/* ---- custom colours ---- */
 :root {
     /* fonts */
     --font-sz-title: clamp(1.8rem, 2rem + 0.65vw, 2.2rem);
@@ -204,6 +203,7 @@ input[type="checkbox"]:checked {
     flex-grow: 2;
     justify-content: center;
 }
+/* --- Sidebar.--- */
 .sidebar {
     display: flex;
     flex-direction: column;
@@ -213,6 +213,30 @@ input[type="checkbox"]:checked {
     gap: 1.2rem;
     background: var(--color-bg-2);
 }
+/* sidebar separators */
+hr.solid {
+    width: calc(100% - 2.4rem);
+    align-self: center;
+    border: none;
+    background: var(--color-bg-5);
+    height: 0.2rem;
+    border-radius: 0.3rem;
+}
+.sidebarProfile {
+    display: flex;
+    padding: 0 1.2rem;
+    & > div:nth-child(2) {
+        display    : flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 0 0 1rem;
+        & > div {
+            display: flex;
+            flex-direction: row;
+            gap        : unset;
+        }
+    }
+}
 .sidebar-profile-pic {
      width: 60px;
      height: 60px;
@@ -220,6 +244,26 @@ input[type="checkbox"]:checked {
      border-radius: 60px;
      background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;
  }
+.sidebar-block {
+    display: flex;
+    flex-direction: column;
+    row-gap: .8rem;
+    & > * {
+        padding: .8rem 1.2rem;
+    }
+    & div {
+        font-size: 1.6rem;
+        &:hover, &:active {
+            background: var(--color-bg-3);
+            border-radius: 1.2rem;
+        }
+    }
+}
+.sidebar-option-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .main-window {
     display: flex;
     flex-direction: column;
@@ -247,33 +291,37 @@ input[type="checkbox"]:checked {
 }
 
 .card {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-    color: var(--color-fg-1);
-    background: var(--color-bg-2);
-    border: 1px solid var(--color-bg-3);
-    border-radius: .6rem;
-    padding: 1rem;
-    margin: .6rem;
+    display        : flex;
+    flex-direction : column;
+    gap            : 1.2rem;
+    color          : var(--color-fg-1);
+    background     : var(--color-bg-2);
+    border         : 1px solid var(--color-bg-3);
+    border-radius  : .6rem;
+    padding        : 1rem;
+    margin         : .6rem;
     /*box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);*/
-    box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
-}
-/* post top container */
-.card > div {
-    display: flex;
-    align-items: center;
-}
-/* post inner container */
-.card > div > div {
-    display: flex;
-    flex-direction: column;
-    gap: .3rem
-}
-/* post below-author container */
-.card > div > div > div {
-    display: flex;
-    gap: .3rem;
+    box-shadow     : rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
+    /* post top container */
+
+    & div:nth-child(1) {
+        display     : flex;
+        align-items : center;
+        /* post inner container */
+
+        & div {
+            display        : flex;
+            flex-direction : column;
+            gap            : .3rem;
+            /* post below-author container */
+
+            & div {
+                display : flex;
+                flex-direction: unset;
+                gap     : .3rem;
+            }
+        }
+    }
 }
 .card-profile-pic {
     width: 24px;
@@ -296,11 +344,14 @@ input[type="checkbox"]:checked {
 }
 .cardContent {
     font-family: SpaceGrotesk-Variable, system-ui;
-    font-size: 1.6rem;
-    font-weight: 500;
-    max-height: 7rem;
-    overflow: clip;
-    text-overflow: ellipsis;
+    font-size: 1.2rem;
+    display: -webkit-box;        /* Required for the ellipsis */
+    -webkit-box-orient: vertical; /* Specify vertical orientation */
+    overflow: hidden;            /* Hide the overflowing text */
+    text-overflow: ellipsis;     /* Add the ellipsis */
+    -webkit-line-clamp: 3;       /* Limit to 3 visible lines */
+    line-height: 1.5;            /* Adjust the line height */
+    max-height: calc(1.5em * 3); /* Set max height to match 3 lines */
 }
 .title {
     font-size: 3ch;
@@ -347,33 +398,6 @@ input[type="checkbox"]:checked {
     border: 1px solid var(--color-bg-3);
 }
 
-/* ----- borders ----- */
-/* Dashed border */
-hr.dashed {
-    width: 70%;
-    align-self: center;
-    border-top: .1rem dashed var(--color-bg-3);
-}
-
-/* Dotted border */
-hr.dotted {
-    width: 70%;
-    align-self: center;
-    border-top: .1rem dotted var(--color-bg-3);
-}
-
-/* Solid border */
-hr.solid {
-    width: 90%;
-    align-self: center;
-    border-top: .1rem solid var(--color-bg-3);
-}
-
-/* Rounded border */
-hr.rounded {
-    border-top: 8px solid var(--color-bg-3);
-    border-radius: 5rem;
-}
 
 
 

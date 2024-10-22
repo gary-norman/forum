@@ -344,7 +344,7 @@ hr.solid {
                     position: absolute;
                     top: -0.3rem;
                     left: 0;
-                    content: url('/assets/icons/reply.svg');
+                    content: url('/assets/icons/reply_16.svg');
                 }
             }
         }

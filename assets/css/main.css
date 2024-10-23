@@ -37,6 +37,16 @@
         --switch-darkLight: url('/assets/icons/switch-off.svg');
     }
 }
+
+/* --- functional classes --- */
+.switch {
+    background: var(--switch-darkLight);
+    height: 3rem;
+    width: 5.5rem;
+}
+.invert-off {
+    filter: invert(0);
+}
 svg {
     stroke: var(--color-fg-1);
     fill: var(--color-fg-1);
@@ -533,7 +543,6 @@ hr.solid {
     border-radius: 5rem;
     padding: .6rem 1rem;
     /*margin: .6rem 0;*/
-    cursor: pointer;
 }
 .btn-primary {
     background: var(--color-hl-green);
@@ -561,15 +570,15 @@ hr.solid {
     background: var(--color-bg-3);
     border: 1px solid var(--color-bg-3);
 }
-/* --- functional elements --- */
-.switch {
-    background: var(--switch-darkLight);
-    height: 3rem;
-    width: 5.5rem;
+.btn-action {
+    &:hover, &:active {
+        background: var(--color-bg-4);
+        transition: background var(--transition-dur-hover) var(--transition-type-hover) 0s;
+        cursor: pointer;
+    }
 }
 
 /* ---- animations ---- */
-
 @keyframes fadeIn {
 
 }

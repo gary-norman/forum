@@ -161,7 +161,7 @@
 }
 @keyframes fade-out {
     65% {
-        background: var(--color-bg-dark);
+        background: var(--color-bg-1);
     }
     100% {
         background: transparent;

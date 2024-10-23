@@ -10,8 +10,9 @@
     <title>Create post</title>
 </head>
 <body>
+<div class="wrapper-main gradient">
     <form class="wrapper-form" action="/posts/create" method="POST">
-        <div >
+        <div>
             <label for="author">User:</label>
             <select id="author" name="author">
                 <option selected disabled hidden>Choose from below</option>
@@ -24,13 +25,13 @@
         </div>
         <div class="cont-flex-column">
             <label for="title">Title</label>
-            <input type="text" id="title" name="title" />
+            <input type="text" id="title" name="title"/>
             <label for="content">Post</label>
             <textarea id="content" name="content"></textarea>
         </div>
         <div>
             <label for="images"></label>
-            <input type="text" class="noborder" id="images" name="images" placeholder="Upload an image (optional)" />
+            <input type="text" class="noborder" id="images" name="images" placeholder="Upload an image (optional)"/>
         </div>
         <div>
             <label for="channel">Channel</label>
@@ -52,5 +53,20 @@
             <a href="/" class="button btn-secondary btn-action btn-filled">cancel</a>
         </div>
     </form>
+    <div class="cont-grid-4x-10rem">
+        <div class="grid-cell hexGRN">#8AD47F</div>
+        <div class="grid-cell labGRN">lab(78.47 -39.34 34.94)</div>
+        <div class="grid-cell hexPINK">#EA4F92</div>
+        <div class="grid-cell labPINK">lab(57.24 64.92 -3.64)</div>
+        <div class="grid-cell hexInRGB">hex in rgb</div>
+        <div class="grid-cell hexInHSL">hex in hsl</div>
+        <div class="grid-cell hexInLCH">hex in lch</div>
+        <div class="grid-cell hexInLAB">hex in lab</div>
+        <div class="grid-cell labInRGB">lab in rgb</div>
+        <div class="grid-cell labInHSL">lab in hsl</div>
+        <div class="grid-cell labInLCH">lab in lch</div>
+        <div class="grid-cell labInLAB">lab in lab</div>
+    </div>
+</div>
 </body>
 </html>

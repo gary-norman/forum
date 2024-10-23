@@ -60,7 +60,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	// Convert the string to an integer
 	channel, err := strconv.Atoi(channelStr)
 	if err != nil {
-		http.Error(w, "Invalid channel value", http.StatusBadRequest)
+		http.Error(w, "You must be a member of this channel to do that.", http.StatusBadRequest)
 		return
 	}
 
@@ -69,7 +69,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	// Convert the string to an integer
 	author, err := strconv.Atoi(authorStr)
 	if err != nil {
-		http.Error(w, "Invalid channel value", http.StatusBadRequest)
+		http.Error(w, "You must be logged in to do that.", http.StatusBadRequest)
 		return
 	}
 

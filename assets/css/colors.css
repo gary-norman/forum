@@ -1,38 +1,68 @@
 :root {
   /* --- lights --- */
   --color-light-1: #fff;
+  --color-light-1-lab: lab(100 0 0);
   --color-light-2: #f1f1f1;
+  --color-light-2-lab: lab(95.65 0 0);
   --color-light-3: #ddd;
+  --color-light-3-lab: lab(86.35 0 0);
   --color-light-4: #d3d3d3;
+  --color-light-4-lab: lab(83.35 0 0);
   --color-light-5: #bebebe;
+  --color-light-5-lab: lab(76.35 0 0);
   /* --- darks --- */
   --color-dark-1: #262a2f;
+  --color-dark-1-lab: lab(15.02 -0.95 -7.36);
   --color-dark-2: #2e3238;
+  --color-dark-2-lab: lab(20.23 -1.95 -9.54);
   --color-dark-3: #444c55;
+  --color-dark-3-lab: lab(31.27 -1.78 -7.79);
   --color-dark-4: #525b66;
+  --color-dark-4-lab: lab(37.58 -1.96 -8.63);
   --color-dark-5: #71767c;
+  --color-dark-5-lab: lab(46.31 -0.73 -5.33);
   /* --- highlight colours --- */
   --color-hl-blue: #609cd0;
+  --color-hl-blue-lab: lab(62.35 -4.66 -32.56);
   --color-hl-green: #8AD47F;
+  --color-hl-green-lab: lab(78.47 -39.34 34.94);
+  --color-hl-green-bg: color-mix(in rgb, var(--color-hl-green) 30%, var(--color-bg-1));
+  --color-hl-green-bg-lab: color-mix(in lab, var(--color-hl-green-lab) 30%, var(--color-bg-1-lab));
   --color-hl-orange: #D56F3E;
+  --color-hl-orange-lab: lab(62.29 34.31 54.48);
   --color-hl-pink: #EA4F92;
+  --color-hl-pink-lab: lab(57.24 64.92 -3.64);
+  --color-hl-pink-bg: color-mix(in rgb, var(--color-hl-pink) 30%, var(--color-bg-1));
+  --color-hl-pink-bg-lab: color-mix(in lab, var(--color-hl-pink-lab) 30%, var(--color-bg-1-lab));
   --color-hl-yellow: #E2C044;
+  --color-hl-yellow-lab: lab(84.51 5.57 76.51);
   --color-hl-red: #f94243;
+  --color-hl-red-lab: lab(51.65 83.45 51.15);
   /* ------------------------ */
   /* dark / light mode colours */
   /* --- dark mode (default) --- */
   /* --- bg colours --- */
   --color-bg-1: var(--color-dark-1);
+  --color-bg-1-lab: var(--color-dark-1-lab);
   --color-bg-2: var(--color-dark-2);
+  --color-bg-2-lab: var(--color-dark-2-lab);
   --color-bg-3: var(--color-dark-3);
+  --color-bg-3-lab: var(--color-dark-3-lab);
   --color-bg-4: var(--color-dark-4);
+  --color-bg-4-lab: var(--color-dark-4-lab);
   --color-bg-5: var(--color-dark-5);
+  --color-bg-5-lab: var(--color-dark-5-lab);
   /* --- text colours --- */
   --color-fg-1: var(--color-light-1);
+  --color-fg-1-lab: var(--color-light-1-lab);
   --color-fg-2: var(--color-light-2);
+  --color-fg-2-lab: var(--color-light-2-lab);
   --color-fg-3: var(--color-light-3);
+  --color-fg-3-lab: var(--color-light-3-lab);
   --color-fg-4: var(--color-light-4);
+  --color-fg-4-lab: var(--color-light-4-lab);
   --color-fg-5: var(--color-light-5);
+  --color-fg-5-lab: var(--color-light-5-lab);
 
 /* --- light mode --- */
 @media (prefers-color-scheme: light) {
@@ -49,4 +79,23 @@
     --color-fg-4 : var(--color-dark-4);
     --color-fg-5 : var(--color-dark-5);
   }
+/* --- gradients --- */
+--grad-main:  linear-gradient(0deg,
+hsl(112deg 50% 66%) 0%,
+hsl(102deg 42% 65%) 12%,
+hsl(90deg 34% 64%) 24%,
+hsl(74deg 27% 62%) 36%,
+hsl(52deg 25% 62%) 48%,
+hsl(33deg 30% 64%) 61%,
+hsl(19deg 35% 66%) 69%,
+hsl(6deg 40% 68%) 74%,
+hsl(355deg 47% 68%) 79%,
+hsl(348deg 56% 67%) 84%,
+hsl(342deg 64% 65%) 89%,
+hsl(338deg 72% 64%) 95%,
+hsl(334deg 79% 61%) 100%
+);
+--grad-main-rad: radial-gradient(
+in lab ellipse at 40% 80%, var(--color-hl-green-bg-lab) 30%, var(--color-hl-pink-bg-lab)
+)
 }

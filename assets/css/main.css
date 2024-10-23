@@ -29,9 +29,12 @@
     /* --- filters --- */
     --filter-invert-on: invert(1);
     --filter-invert-off: invert(0);
+    /* --- switches --- */
+    --switch-darkLight: url('/assets/icons/switch-on.svg');
     @media (prefers-color-scheme: light) {
         --filter-invert-on: invert(0);
         --filter-invert-off: invert(1);
+        --switch-darkLight: url('/assets/icons/switch-off.svg');
     }
 }
 svg {
@@ -557,6 +560,12 @@ hr.solid {
 .btn-filled {
     background: var(--color-bg-3);
     border: 1px solid var(--color-bg-3);
+}
+/* --- functional elements --- */
+.switch {
+    background: var(--switch-darkLight);
+    height: 3rem;
+    width: 5.5rem;
 }
 
 /* ---- animations ---- */

@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/css-reset_kevin-powell.css">
+    <link rel="stylesheet" href="/assets/css/fonts.css">
+    <link rel="stylesheet" href="/assets/css/colors.css">
     <link rel="stylesheet" href="/assets/css/main.css">
     <title>Create post</title>
 </head>
 <body>
     <form class="wrapper-form" action="/posts/create" method="POST">
         <div >
-            <label for="author"></label>
+            <label for="author">User:</label>
             <select id="author" name="author">
-                <option value="">Select a user</option>
+                <option selected disabled hidden>Choose from below</option>
                 <option value="1001">Lore</option>
                 <option value="1002">Kamil</option>
                 <option value="1003">Munky</option>
@@ -20,11 +22,9 @@
                 <option value="1005">Shazam!</option>
             </select>
         </div>
-        <div class="flex-container-column">
+        <div class="cont-flex-column">
             <label for="title">Title</label>
             <input type="text" id="title" name="title" />
-        </div>
-        <div class="flex-container-column">
             <label for="content">Post</label>
             <textarea id="content" name="content"></textarea>
         </div>
@@ -33,9 +33,9 @@
             <input type="text" class="noborder" id="images" name="images" placeholder="Upload an image (optional)" />
         </div>
         <div>
-            <label for="channel"></label>
+            <label for="channel">Channel</label>
             <select id="channel" name="channel">
-                <option value="">Select a channel</option>
+                <option selected disabled hidden>Select a channel</option>
                 <option value="2001">User's lounge</option>
                 <option value="2002">CSS</option>
                 <option value="2003">JS</option>
@@ -48,8 +48,8 @@
             <input type="checkbox" id="commentable" name="commentable" checked>
         </div>
         <div class="flex-container-row" style="justify-content: space-around">
-            <button class="button">create post</button>
-            <a href="/" class="button">cancel</a>
+            <button class="button btn-primary btn-action">create post</button>
+            <a href="/" class="button btn-secondary btn-action">cancel</a>
         </div>
     </form>
 </body>

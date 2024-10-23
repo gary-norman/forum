@@ -59,6 +59,9 @@ html {
 body {
     width: 100%;
     background: var(--color-bg-1);
+    color: var(--color-fg-1);
+    font-family: SpaceGrotesk-Regular;
+    font-size: 2rem;
     overflow: hidden;
 }
 
@@ -187,15 +190,16 @@ button {
     background: transparent;
     padding: 0;
     margin: 0;
-    /*-webkit-appearance: none;*/
-    /*-moz-appearance: none;*/
-    /*appearance: none;*/
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     border: none;
 }
 
 textarea,
 input[type="text"] {
     border: 1px solid var(--color-bg-4);
+    border-radius: 1rem;
 }
 
 .searchbar {
@@ -205,9 +209,9 @@ input[type="text"] {
     border-radius: 5rem;
 }
 
-select {
-    background: url("/assets/images/down-arrow.svg") no-repeat center right 0.75rem;
-}
+/*select {*/
+/*    background: url("/assets/images/down-arrow.svg") no-repeat center right 0.75rem;*/
+/*}*/
 
 input[type="checkbox"]:checked {
     background: url('/assets/images/check.svg') no-repeat center / 75% auto;
@@ -219,14 +223,17 @@ input[type="checkbox"]:checked {
     max-height: 100%;
 }
 .wrapper-form {
-    background: var(--color-bg-1);
+    background: var(--color-bg-2);
     color: var(--color-fg-2);
-    max-width: 20rem;
+    max-width: 40%;
     padding: .6rem;
     margin: 1rem auto;
     border: 1px solid var(--color-bg-3);
     border-radius: 1rem;
     box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
+    & * {
+        margin: .4rem;
+    }
 }
 .wrapper-search {
     display: flex;
@@ -572,8 +579,8 @@ hr.solid {
 }
 .btn-action {
     &:hover, &:active {
-        background: var(--color-bg-4);
-        transition: background var(--transition-dur-hover) var(--transition-type-hover) 0s;
+        filter: invert(1) brightness(2) drop-shadow(0 0 .35rem);
+        transition: filter var(--transition-dur-hover) var(--transition-type-hover) 0s;
         cursor: pointer;
     }
 }

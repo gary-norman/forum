@@ -26,6 +26,13 @@
     /* --- transitions --- */
     --transition-dur-hover: 200ms;
     --transition-type-hover: ease-in-out;
+    /* --- filters --- */
+    --filter-invert-on: invert(1);
+    --filter-invert-off: invert(0);
+    @media (prefers-color-scheme: light) {
+        --filter-invert-on: invert(0);
+        --filter-invert-off: invert(1);
+    }
 }
 svg {
     stroke: var(--color-fg-1);
@@ -286,6 +293,9 @@ hr.solid {
         background: var(--color-bg-3);
         border-radius: .8rem;
     }
+    &::before {
+        filter: var(--filter-invert-off);
+    }
 }
 .sidebar-option-btn {
     display: flex;
@@ -458,6 +468,7 @@ hr.solid {
                     top: -0.3rem;
                     left: 0;
                     content: url('/assets/icons/reply_16.svg');
+                    filter: var(--filter-invert-off);
                 }
             }
         }
@@ -525,6 +536,9 @@ hr.solid {
     border: 1px solid var(--color-bg-3);
     color: var(--color-fg-1);
     font-size: 1.2rem;
+    & img {
+        filter: var(--filter-invert-off);
+    }
 }
 .btn-icotext {
     display: flex;

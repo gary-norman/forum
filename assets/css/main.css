@@ -46,6 +46,7 @@ html {
 body {
     width: 100%;
     background: var(--color-bg-1);
+    overflow: hidden;
 }
 
 /* text elements and classes */
@@ -181,7 +182,7 @@ button {
 
 textarea,
 input[type="text"] {
-    border: 1px solid var(--color-bg-3);
+    border: 1px solid var(--color-bg-4);
 }
 
 .searchbar {
@@ -221,18 +222,21 @@ input[type="checkbox"]:checked {
 }
 /* --- Codex branding --- */
 .branding {
-    display: flex;
-    flex-grow: 1;
-    & p {
-        letter-spacing: .4em;
-        text-shadow: var(--shadow-text);
-    }
-    & p:nth-child(odd) {
-        color: var(--color-hl-pink);
-    }
-    & p:nth-child(even) {
-        color: var(--color-hl-green);
-    }
+    /*display: flex;*/
+    /*flex-grow: 1;*/
+    /*& p {*/
+    /*    letter-spacing: .4em;*/
+    /*    text-shadow: var(--shadow-text);*/
+    /*}*/
+    /*& p:nth-child(odd) {*/
+    /*    color: var(--color-hl-pink);*/
+    /*}*/
+    /*& p:nth-child(even) {*/
+    /*    color: var(--color-hl-green);*/
+    /*}*/
+    background: url('/assets/icons/codex-logo-green.svg') no-repeat;
+    width: 10.4rem;
+    height: 3.5rem;
 }
 /* --- Sidebar.--- */
 .sidebar {
@@ -411,7 +415,7 @@ hr.solid {
     margin-inline: 2.4rem;
     max-width: calc(100vw - 32rem);
     max-height: calc(100vh - 4.9rem);
-    overflow-y: auto;
+    overflow: auto;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
@@ -518,7 +522,10 @@ hr.solid {
 .above-posts {
     position: absolute;
     background: var(--color-bg-1);
-    width: calc(100vw - 3rem - 1.2rem - 32rem)}
+    width: calc(100vw - 3rem - 1.2rem - 32rem);
+    z-index: 100;
+}
+
 .button {
     border-radius: 5rem;
     padding: .6rem 1rem;

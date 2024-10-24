@@ -139,7 +139,7 @@
             transparent var(--beam-2-start)
     );
     --grad-from: 0deg;
-    border-radius: .3rem;
+    border-radius: .6rem;
     animation: orbit .4s ease-in 1 forwards;
     z-index: -1000;
 }
@@ -152,7 +152,7 @@
     width: var(--beam-linear-w);
     height: var(--beam-linear-h);
     background: var(--color-hl-pink);
-    border-radius: .3rem;
+    border-radius: .6rem;
     animation: linear .4s linear 1 forwards;
     z-index: -1;
 }
@@ -182,7 +182,7 @@
         --beam-2-start: 360deg;
     }
     90%, 100% {
-        filter: blur(8px);
+        filter: blur(2px);
     }
 }
 @keyframes linear {
@@ -245,17 +245,6 @@
     /*border: 1px inset color-mix(in hsl, hsl(100 0 100), var(--color-bg-dark) 80%);*/
     position: relative;
 }
-@keyframes glow-breathe {
-    0%, 100% {
-        --color-ratio: 0%;
-    }
-    4%, 90% {
-        --color-ratio: 100%;
-    }
-    50% {
-        --color-ratio: 70%;
-    }
-}
 .card:nth-child(3):hover::before {
     content: "";
     position: absolute;
@@ -299,7 +288,7 @@
     --beam-1-fade: 360deg;
     --beam-1-centre: 360deg;
     --beam-1-start: 0deg;
-    animation: rotate-and-spread 3s linear infinite;
+    animation: rotate-and-spread 5s linear infinite;
     z-index: -500;
 }
 .card:nth-child(3):hover::after {
@@ -344,11 +333,11 @@
     --beam-1-fade: 360deg;
     --beam-1-centre: 360deg;
     --beam-1-start: 0deg;
-    animation: rotate-and-spread 3s linear infinite;
+    animation: rotate-and-spread 5s linear infinite;
     z-index: -1000;
 }
 @keyframes rotate-and-spread {
-    10%, 25% {
+    6.25%, 50% {
         /*--grad-from: 135deg;*/
         --beam-4-end: 180deg;
         --beam-4-fade: 225deg;
@@ -360,9 +349,9 @@
         --beam-1-fade: 360deg;
     }
     25% {
-        --grad-from: 180deg
+        --grad-from: 450deg
     }
-    35%, 50% {
+    12.5%, 55% {
         /*--grad-from: 225deg;*/
         --beam-3-end: 90deg;
         --beam-3-fade: 135deg;
@@ -372,9 +361,9 @@
         --beam-2-start: 90deg;
     }
     50% {
-        --grad-from: 270deg
+        --grad-from: 810deg
     }
-    60%, 75% {
+    18.75%, 60% {
         /*--grad-from: 315deg;*/
         --beam-2-end: 5deg;
         --beam-2-fade: 45deg;
@@ -385,35 +374,35 @@
         --beam-1-start: 0deg;
     }
     75% {
-        --grad-from: 360deg
+        --grad-from: 1170deg
     }
-    85% {
+    25%, 65% {
         /*--grad-from: 405deg;*/
         --beam-1-end: 270deg;
         --beam-1-fade: 315deg;
     }
-    95% {
-        /*--grad-from: 450deg;*/
-        --beam-4-end: 270deg;
-        --beam-4-fade: 315deg;
-        --beam-4-start: 360deg;
-        --beam-3-end: 270deg;
-        --beam-3-fade: 315deg;
-        --beam-3-start: 360deg;
-        --beam-2-end: 270deg;
-        --beam-2-fade: 315deg;
-        --beam-2-start: 360deg;
-        --beam-1-end: 270deg;
-        --beam-1-fade: 315deg;
-        --beam-1-centre: 360deg;
-        --beam-1-start: 0deg;
-    }
+    /*95% {*/
+    /*    !*--grad-from: 450deg;*!*/
+    /*    --beam-4-end: 270deg;*/
+    /*    --beam-4-fade: 315deg;*/
+    /*    --beam-4-start: 360deg;*/
+    /*    --beam-3-end: 270deg;*/
+    /*    --beam-3-fade: 315deg;*/
+    /*    --beam-3-start: 360deg;*/
+    /*    --beam-2-end: 270deg;*/
+    /*    --beam-2-fade: 315deg;*/
+    /*    --beam-2-start: 360deg;*/
+    /*    --beam-1-end: 270deg;*/
+    /*    --beam-1-fade: 315deg;*/
+    /*    --beam-1-centre: 360deg;*/
+    /*    --beam-1-start: 0deg;*/
+    /*}*/
     100% {
-        --grad-from: 360deg;
-        --beam-4-fade: 360deg;
-        --beam-3-fade: 360deg;
-        --beam-2-fade: 360deg;
-        --beam-1-fade: 360deg;
+        --grad-from: 1530deg;
+    /*    --beam-4-fade: 360deg;*/
+    /*    --beam-3-fade: 360deg;*/
+    /*    --beam-2-fade: 360deg;*/
+    /*    --beam-1-fade: 360deg;*/
     }
 }
 .card:nth-child(4) {
@@ -427,8 +416,8 @@
     width: calc(100% + 2px);
     height: calc(100% + 2px);
     background: transparent;
-    border: 1px solid color-mix(in srgb, var(--color-hl-pink) var(--color-ratio), var(--color-bg-dark));
-    animation: glow-breathe 15s ease-in-out .45s 1;
+    border: 1px solid color-mix(in srgb, var(--color-hl-pink) var(--color-ratio), var(--color-bg-1));
+    animation: glow-breathe 3s ease-in-out infinite;
     border-radius: .3rem;
     z-index: 1000;
     --color-hl-pink: var(--color-hl-green);
@@ -447,37 +436,49 @@
             var(--color-hl-pink) var(--pink-end),
             transparent var(--trans-end)
     );
-    border-radius: .3rem;
+    --grad-from: 0deg;
+    border-radius: .6rem;
     z-index: -1000;
-    animation: dash .65s linear 1;
+    animation: dash 3s linear infinite;
 }
 @keyframes dash {
-    15% {
+    0% {
         --pink-start: 0%;
         --trans-start: 0%;
     }
-    30% {
-        --pink-start: 14%;
-        --trans-start: 14%;
+    10% {
+        /*--pink-start: 14%;*/
+        /*--trans-start: 14%;*/
         --pink-end: 60%;
         --trans-end: 60%;
         --color-hl-pink: var(--color-hl-green);
     }
-    45% {
+    15% {
         --pink-start: 34%;
         --trans-start: 34%;
         --pink-end: 80%;
         --trans-end: 80%;
         --color-hl-pink: var(--color-hl-pink);
     }
-    70% {
+    25%, 100% {
         --pink-end: 100%;
         --trans-end: 100%;
         --color-hl-pink: var(--color-hl-green);
     }
-    100% {
+    35%, 100% {
         --pink-start: 100%;
         --trans-start: 100%;
         --color-hl-pink: var(--color-hl-green);
+    }
+    100% {
+        --grad-from: 180deg;
+    }
+}
+@keyframes glow-breathe {
+    0%, 25%, 100% {
+        --color-ratio: 0%;
+    }
+    35%, 75% {
+        --color-ratio: 100%;
     }
 }

@@ -11,6 +11,8 @@
   --color-light-5: #bebebe;
   --color-light-5-lab: lab(76.35 0 0);
   /* --- darks --- */
+  --color-black: #000;
+  --color-black-lab: lab(0 0 0);
   --color-dark-1: #262a2f;
   --color-dark-1-lab: lab(15.02 -0.95 -7.36);
   --color-dark-2: #2e3238;
@@ -98,4 +100,14 @@ hsl(334deg 79% 61%) 100%
 --grad-main-rad: radial-gradient(
 in lab ellipse at 40% 80%, var(--color-hl-green-bg-lab) 30%, var(--color-hl-pink-bg-lab)
 )
+}
+
+/* --- codex colors --- */
+.codex-green {
+  color: var(--color-hl-green-lab);
+  text-shadow: var(--text-3d-green);
+}
+.codex-pink {
+  color: var(--color-hl-pink-lab);
+  text-shadow: var(--text-3d-pink);
 }

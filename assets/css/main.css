@@ -228,11 +228,12 @@ a:active {
   position: absolute;
   grid-column: 4 / 5;
   grid-row: 2;
+  border
   min-height: 100%;
   min-width: 100%;
-  border-radius: 2.4rem;
+/*   border-radius: 2.4rem; */
   background: var(--color-bg-4);
-  z-index: -100;
+  z-index: -2;
 }
 .grid-welcome-access {
   grid-column: 4 / 5;
@@ -240,6 +241,10 @@ a:active {
   position: relative;
   background: transparent;
   border-radius: 2.4rem;
+  & > * {
+    height: 100%;
+    width: 100%;
+  }
 }
 .grid-welcome-access-mask {
   position: absolute;
@@ -254,16 +259,41 @@ a:active {
   z-index: 20;
 }
 .grid-welcome-access-door {
+  @property --door-y {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0rem;
+  }
+  @property --door-inset-y {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0rem;
+  }
+  @property --door-inset-z {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0rem;
+  }
+  @property --door-shadow-z {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0rem;
+  }
+  --door-y: 0rem;
+  --door-inset-y: 0rem;
+  --door-inset-z: .5rem;
+  --door-shadow-z: 1.6rem;
   grid-column: 4 / 5;
   grid-row: 2;
   position: absolute;
-  top: 13rem;
+  top: var(--door-y);
   min-height: 100%;
   min-width: 100%;
-  background: var(--color-bg-1);
+  background: hotpink;
+/*   background: var(--color-bg-1); */
   border-radius: 2.4rem;
-/*   box-shadow: 0 -5px 15px -4px rgba(0, 0, 0, 0.6); */
-  z-index: -10;
+  box-shadow: inset 0 var(--door-inset-y) 2.0rem var(--door-inset-z) rgba(0 0 0 / 0.4),0 .5rem var(--door-shadow-z) .11rem rgba(0 0 0 / 0.6);
+  z-index: -1;
 }
 .grid-welcome-access-wall {
   grid-column: 4 / 5;
@@ -271,11 +301,16 @@ a:active {
   position: absolute;
   min-height: 100%;
   min-width: 100%;
-  clip-path: inset(0 0 0 0 round 10%);
-  background: var(--color-bg-1);
+  clip-path: url(#roundedSquare);
+  background: limegreen;
+/*   background: var(--color-bg-1); */
  /* box-shadow: 0 -5px 15px -4px rgba(0, 0, 0, 0.6); */
-  z-index: 10;
+  z-index: 0;
 }
+.grid-welcome-access.svg {
+  z-index: 20;
+}
+
 .grid-welcome-cutaway-4 {
   grid-column: 5 / 6;
   grid-row: 2;
@@ -312,6 +347,7 @@ a:active {
 /*}*/
 [class^="grid-welcome-cutaway"] {
   background: var(--color-bg-1);
+/*   box-shadow: 0 0 46px -3px rgba(0, 0, 0, 0.4); */
 }
 [class^="grid-welcome-logo"] {
   display: flex;

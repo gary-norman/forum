@@ -209,15 +209,19 @@ a:active {
   grid-row: 1;
 }
 .grid-welcome-cutaway-1 {
-  grid-column: 3 / 5;
+  grid-column: 2 / 4;
   grid-row: 1;
 }
 .grid-welcome-cutaway-2 {
-  grid-column: 5 / 6;
+  grid-column: 4 / 6;
   grid-row: 1;
 }
-.grid-welcome-cutaway-1 {
+.grid-welcome-cutaway-3 {
   grid-column: 1 / 4;
+  grid-row: 2;
+}
+.grid-welcome-cutaway-4 {
+  grid-column: 5 / 6;
   grid-row: 2;
 }
 .grid-welcome-access-login {
@@ -269,7 +273,12 @@ a:active {
     inherits: false;
     initial-value: 0rem;
   }
-  @property --door-inset-z {
+  @property --door-inset-blur {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0rem;
+  }
+  @property --door-inset-spread {
     syntax: "<length>";
     inherits: false;
     initial-value: 0rem;
@@ -277,12 +286,13 @@ a:active {
   @property --door-shadow-z {
     syntax: "<length>";
     inherits: false;
-    initial-value: 0rem;
+    initial-value: -0.4remrem;
   }
-  --door-y: 0rem;
-  --door-inset-y: 0rem;
-  --door-inset-z: .5rem;
-  --door-shadow-z: 1.6rem;
+/*   --door-y: 0rem; */
+/*   --door-inset-y: 0rem; */
+/*   --door-inset-blur: 0rem; */
+/*   --door-inset-spread: 0rem; */
+  --door-shadow-z: -0.4rem;
   grid-column: 4 / 5;
   grid-row: 2;
   position: absolute;
@@ -290,10 +300,26 @@ a:active {
   min-height: 100%;
   min-width: 100%;
   background: hotpink;
+  animation: door-open 2s linear 1 forwards;
 /*   background: var(--color-bg-1); */
   border-radius: 2.4rem;
-  box-shadow: inset 0 var(--door-inset-y) 2.0rem var(--door-inset-z) rgba(0 0 0 / 0.4),0 .5rem var(--door-shadow-z) .11rem rgba(0 0 0 / 0.6);
+  box-shadow: inset 0 var(--door-inset-y) var(--door-inset-blur) var(--door-inset-spread) rgba(0 0 0 / 0.4),
+  0 var(--door-shadow-z) 1.8rem rgba(0 0 0 / 0.4);
   z-index: -1;
+}
+@keyframes door-open {
+  25% {
+    --door-y: 0rem;
+    --door-inset-y: 0rem;
+    --door-inset-blur: 1rem;
+    --door-inset-spread: .7rem;
+  }
+  100% {
+    --door-y: 28rem;
+    --door-inset-y: 0rem;
+    --door-inset-blur: 1rem;
+    --door-inset-spread: .7rem;
+  }
 }
 .grid-welcome-access-wall {
   grid-column: 4 / 5;
@@ -347,6 +373,8 @@ a:active {
 /*}*/
 [class^="grid-welcome-cutaway"] {
   background: var(--color-bg-1);
+  text-align: center;
+/*   outline: 1px dashed hotpink; */
 /*   box-shadow: 0 0 46px -3px rgba(0, 0, 0, 0.4); */
 }
 [class^="grid-welcome-logo"] {

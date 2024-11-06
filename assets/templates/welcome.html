@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/assets/css/main.css" />
     <link rel="stylesheet" href="/assets/css/hover_effects.css" />
     <link rel="stylesheet" href="/assets/css/text_effects.css" />
+    <script src="/assets/js/welcome.js" defer></script>
     <title><codex></title>
   </head>
   <body>
@@ -24,13 +25,13 @@
       <!--            <div class="led-off"></div>-->
       <!--        </div></div>-->
       <div class="grid-welcome-options">
-        <div class="button-3d">
+        <div class="button-3d" id="btn_login">
           <span>login</span>
         </div>
-        <div class="button-3d">
+        <div class="button-3d" id="btn_register">
           <span>register</span>
         </div>
-        <div class="button-3d">
+        <div class="button-3d" id="btn_guest">
           <span>guest</span>
         </div>
       </div>
@@ -55,11 +56,13 @@
           />
           <button class="button btn-login">submit</button>
         </form>
-        <svg>
+        <div class="grid-welcome-access-wall"></div>
+        <div class="grid-welcome-access-door" id="access-door"></div>
+        <svg style="position: absolute">
           <defs>
-            <clipPath id="roundedSquare">
+            <clipPath id="rounded-rect">
               <rect
-                id="rounded-rectangle"
+                id="svg-mask-rounded-rectangle"
                 x="0"
                 y="0"
                 height="100%"
@@ -72,8 +75,20 @@
             </clipPath>
           </defs>
         </svg>
-        <div class="grid-welcome-access-wall"></div>
-        <div class="grid-welcome-access-door"></div>
+        <svg style="z-index: 100">
+          <defs>
+            <rect
+              id="svg-mask-rectangle"
+              x="0"
+              y="0"
+              height="100%"
+              width="100%"
+              stroke="red"
+              stroke-width="1rem"
+              fill="red"
+            />
+          </defs>
+        </svg>
       </div>
       <div class="grid-welcome-cutaway-4">4</div>
       <div class="grid-welcome-logo-c">

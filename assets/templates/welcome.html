@@ -60,33 +60,30 @@
         <div class="grid-welcome-access-door" id="access-door"></div>
         <svg style="position: absolute">
           <defs>
-            <clipPath id="rounded-rect">
+            <mask id="rounded-rect">
               <rect
                 id="svg-mask-rounded-rectangle"
                 x="0"
                 y="0"
                 height="100%"
                 width="100%"
-                stroke="red"
                 rx="2.4rem"
-                stroke-width="0"
-                fill="red"
+                fill="white"
               />
-            </clipPath>
+            </mask>
           </defs>
         </svg>
         <svg style="z-index: 100">
           <defs>
-            <rect
-              id="svg-mask-rectangle"
-              x="0"
-              y="0"
-              height="100%"
-              width="100%"
-              stroke="red"
-              stroke-width="1rem"
-              fill="red"
-            />
+            <clipPath id="rect">
+              <rect
+                id="svg-mask-rectangle"
+                x="2.4rem"
+                y="0"
+                height="50%"
+                width="100%"
+              />
+            </clipPath>
           </defs>
         </svg>
       </div>

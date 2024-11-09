@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/assets/css/main.css" />
     <link rel="stylesheet" href="/assets/css/hover_effects.css" />
     <link rel="stylesheet" href="/assets/css/text_effects.css" />
+    <link rel="stylesheet" href="/assets/css/welcome.css" />
     <script src="/assets/js/welcome.js" defer></script>
     <title><codex></title>
   </head>
@@ -60,17 +61,37 @@
         <div class="grid-welcome-access-door" id="access-door"></div>
         <svg style="position: absolute">
           <defs>
-            <mask id="rounded-rect">
-              <rect
-                id="svg-mask-rounded-rectangle"
-                x="0"
-                y="0"
-                height="100%"
-                width="100%"
-                rx="2.4rem"
-                fill="white"
+            <style>
+              .nonzero {
+                clip-rule: nonzero;
+              }
+
+              .evenodd {
+                clip-rule: evenodd;
+              }
+            </style>
+            <clipPath id="rounded-rect">
+              <use
+                class="nonzero"
+                xlink:href="#svg-mask-rounded-rectangle"
+                xlink:href="#svg-mask-rectangle"
               />
-            </mask>
+            </clipPath>
+            <rect
+              id="svg-mask-rounded-rectangle"
+              x="0"
+              y="0"
+              height="100%"
+              width="100%"
+              rx="2.4rem"
+            />
+            <rect
+              id="svg-mask-rectangle"
+              x="0"
+              y="0"
+              height="100%"
+              width="100%"
+            />
           </defs>
         </svg>
         <svg style="z-index: 100">

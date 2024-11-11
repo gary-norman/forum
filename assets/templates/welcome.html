@@ -15,16 +15,6 @@
   </head>
   <body>
     <div class="grid-welcome">
-      <!--    <div class="grid-welcome-lights">-->
-      <!--        <div class="led-box" id="ind_register">-->
-      <!--            <div class="led-green"></div>-->
-      <!--        </div>-->
-      <!--        <div class="led-box" id="ind_login">-->
-      <!--            <div class="led-green"></div>-->
-      <!--        </div>-->
-      <!--        <div class="led-box" id="ind_guest">-->
-      <!--            <div class="led-off"></div>-->
-      <!--        </div></div>-->
       <div class="grid-welcome-options">
         <div class="button-3d" id="btn_login">
           <span>login</span>
@@ -55,17 +45,23 @@
             name="login_password"
             placeholder="password"
           />
-          <button class="button-md btn-login">submit</button>
+          <button class="button-lg btn-secondary btn-action" type="submit">submit</button>
         </form>
-        <div class="grid-welcome-access-wall"></div>
         <div class="grid-welcome-access-door" id="access-door"></div>
-
+        <div class="grid-welcome-access-door-shadow" id="access-door-shadow"></div>
+<!--        <svg id="shadow-clip">-->
+<!--          <defs>-->
+<!--            <clipPath id="rect">-->
+<!--              <rect y="0" x="0" width="100%" height="100%" />-->
+<!--            </clipPath>-->
+<!--          </defs>-->
+<!--        </svg>-->
         <svg class="grid-welcome-access-wall">
           <defs>
             <!-- Define a mask where the inner rectangle is transparent (black), and everything else is visible (white) -->
             <mask id="mask">
               <!-- Background is white (opaque) -->
-              <rect width="110%" height="110%" fill="white" />
+              <rect x="0" y="0" width="110%" height="110%" fill="white" />
               <!-- Inner rounded rectangle is black (transparent) -->
               <rect x="0" y="0" width="100%" height="100%" rx="2.4rem" fill="black" />
             </mask>
@@ -73,19 +69,6 @@
           <!-- grey background -->
           <rect width="100%" height="100%" fill="var(--color-bg-1)" mask="url(#mask)" />
         </svg>
-<!--        <svg style="z-index: 100">-->
-<!--          <defs>-->
-<!--            <clipPath id="rect">-->
-<!--              <rect-->
-<!--                id="svg-mask-rectangle"-->
-<!--                x="2.4rem"-->
-<!--                y="0"-->
-<!--                height="50%"-->
-<!--                width="100%"-->
-<!--              />-->
-<!--            </clipPath>-->
-<!--          </defs>-->
-<!--        </svg>-->
       </div>
       <div class="grid-welcome-cutaway-4"></div>
       <div class="grid-welcome-logo-c">

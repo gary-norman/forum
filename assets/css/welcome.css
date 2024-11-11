@@ -144,8 +144,82 @@
         }
     }
 }
+.button-3d-pressed {
+    display               : inline-block;
+    margin                : 0;
+    -webkit-border-radius : 0.4rem;
+    -webkit-box-shadow    : /* gradient effects */ 0 2px lab(52 0 0),
+    0 3px lab(47 0 0),
+    0 4px lab(42 0 0),
+    0 5px lab(37 0 0),
+    0 14px 6px -1px rgba(0 0 0 / 0.2); /* shadow */
+    -webkit-transition    : -webkit-box-shadow 0.1s ease-in-out;
 
-.button-3d:active span {
+    & span {
+        background-color      : rgb(150 150 150);
+        position              : relative;
+        width                 : 100%;
+        background-image      : /* gloss gradient */ -webkit-gradient(
+                linear,
+                left bottom,
+                left top,
+                color-stop(50%, rgba(220 220 220 / 0.1)),
+                color-stop(50%, rgba(220 220 220 / 0.5)),
+                color-stop(100%, rgba(255 255 255 / 1))
+        ),
+            /* dark outside gradient */ -webkit-gradient(
+                linear, left top, right top,
+                color-stop(0%, rgba(210 210 210 / 0.3)),
+                color-stop(20%, rgba(210 210 210 / 0)),
+                color-stop(80%, rgba(210 210 210 / 0)),
+                color-stop(100%, rgba(210 210 210 / 0.3))),
+            /* light inner gradient */ -webkit-gradient(
+                linear, left top, right top,
+                color-stop(0%, rgba(0 0 0 / 0)),
+                color-stop(20%, rgba(255 255 255 / 0.5)),
+                color-stop(80%, rgba(255 255 255 / 0.5)),
+                color-stop(100%, rgba(0 0 0 / 0)));
+        -webkit-box-shadow    : /* top highlight */ 0 -0.1rem lab(138 0 0),
+            /* bottom edge */ 0 0.03rem 0.06rem lab(108 0 0);
+        /*-webkit-background-size: 100%, 100%, 100%, 4px 4px;*/
+        -webkit-border-radius : 0.4rem;
+        -webkit-transition    : -webkit-transform 0.1s ease-in-out;
+        display               : inline-block;
+        padding               : .2rem 2.6rem .2rem .4rem;
+        color                 : #3a474d;
+        text-transform        : uppercase;
+        font-family           : futura, serif;
+        font-weight           : 400;
+        font-size             : 1rem;
+        &:after {
+                background       : lab(50 -110 50);
+                background-image : linear-gradient(
+                        to bottom,
+                        rgba(200 200 200 / 0.1),
+                        rgba(200 200 200 / 0.1) 50%,
+                        rgba(100 100 100 / 0.2) 50%,
+                        rgba(100 100 100 / 0.2)
+                ),
+                radial-gradient(
+                        0.5rem 0.5rem at -6% 100%,
+                        rgba(0 0 0 /0.2) 25%,
+                        rgba(0 0 0 / 0) 100%
+                ),
+                radial-gradient(
+                        0.5rem 0.5rem at 106% 100%,
+                        rgba(0 0 0 /0.2) 25%,
+                        rgba(0 0 0 / 0) 100%
+                ),
+                radial-gradient(
+                        75% 58% at 50% 30%,
+                        rgba(255 255 255 / 0.6) 0%,
+                        rgba(30 230 30) 100%
+                );
+                filter           : brightness(115%);
+            }
+        }
+}
+.button-3d:active span, .button-3d-pressed span {
     -webkit-transform  : translate(0, 0.3rem);
     -webkit-box-shadow : /* top highlight */ 0 -0.1rem lab(138 0 0),
         /* bottom edge */ 0 0.03rem 0.06rem lab(108 0 0);
@@ -204,10 +278,10 @@
     position: relative;
     background: transparent;
     border-radius: 2.4rem;
-    & > * {
-        height: 100%;
-        width: 100%;
-    }
+    /*& > * {*/
+    /*    height: 100%;*/
+    /*    width: 100%;*/
+    /*}*/
 }
 .grid-welcome-access-mask {
     position: absolute;
@@ -222,6 +296,15 @@
     z-index: 20;
 }
 .grid-welcome-access-door {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: var(--color-bg-1);
+    border-radius: 2.4rem;
+    z-index: -2;
+}
+.grid-welcome-access-door-shadow {
     @property --door-y {
         syntax: "<length>";
         inherits: false;
@@ -252,7 +335,7 @@
         inherits: false;
         initial-value: -0.4rem;
     }
-    --door-shadow-z: -0.4rem;
+    --door-shadow-z: -0.2rem;
     --door-inset-x: 0;
     --door-inset-y: 0;
     --door-inset-blur: 0;
@@ -260,12 +343,11 @@
     /*  display: none; */
     position: absolute;
     top: 0;
-    height: calc(100%);
-    width: calc(100%);
-    /*background: hotpink;*/
-    /*background: var(--color-bg-1);*/
-    /*border: 1px solid hotpink;*/
+    height: 100%;
+    width: 100%;
+    background: transparent;
     border-radius: 2.4rem;
+    clip-path: url(#rect);
     &::after {
         content: "";
         position: absolute;
@@ -273,10 +355,9 @@
         left: 0;
         height: 100%;
         width: 100%;
-        box-shadow: inset var(--door-inset-x) var(--door-inset-y) var(--door-inset-blur) var(--door-inset-spread) rgba(0 0 0 / 0.4),
-        0 var(--door-shadow-z) 1.8rem rgba(0 0 0 / 0.4);
-        background: var(--color-bg-1);
-        /*background: hotpink;*/
+        box-shadow: inset var(--door-inset-x) var(--door-inset-y) var(--door-inset-blur) var(--door-inset-spread) rgba(0 0 0 / 0.3),
+        0 var(--door-shadow-z) .6rem rgba(0 0 0 / 0.2);
+        background: transparent;
         border-radius: 2.4rem;
     }
     /*&::before {*/
@@ -307,60 +388,62 @@
 .grid-welcome-access-door-close {
     animation: door-close 1s linear 1 forwards;
 }
-@keyframes door-open {
+.grid-welcome-access-door-push-open {
+    animation: door-push-open 1s linear 1 forwards;
+}
+.grid-welcome-access-door-push-close {
+    animation: door-push-close 1s linear 1 forwards;
+}
+@keyframes door-push-open {
     0% {
         --door-inset-x: 0rem;
         --door-inset-y: 0rem;
         --door-inset-blur: 0rem;
         --door-inset-spread: 0rem;
     }
-    50% {
-        top: 0;
+    50%, 100% {
         --door-inset-x: 0;
-        --door-inset-y: .4rem;
-        --door-inset-blur: 2rem;
-        --door-inset-spread: .2rem;
+        --door-inset-y: .6rem;
+        --door-inset-blur: 1rem;
+        --door-inset-spread: .1rem;
+    }
+}
+@keyframes door-open {
+    0%, 50% {
+        top: 0;
     }
      100% {
      top: 28rem;
-     --door-inset-x: 0;
-     --door-inset-y: .4rem;
-     --door-inset-blur: 2rem;
-     --door-inset-spread: .2rem;
    }
 }
-@keyframes door-close {
+@keyframes door-push-close {
     100% {
         --door-inset-x: 0rem;
         --door-inset-y: 0rem;
         --door-inset-blur: 0rem;
         --door-inset-spread: 0rem;
     }
-    50% {
+    0%, 50% {
         top: 0;
         --door-inset-x: .0;
         --door-inset-y: .4rem;
         --door-inset-blur: 2rem;
         --door-inset-spread: .2rem;
     }
-    0% {
-        top: 28rem;
-        --door-inset-x: 0;
-        --door-inset-y: .4rem;
-        --door-inset-blur: 2rem;
-        --door-inset-spread: .2rem;
-    }
 }
+@keyframes door-close {
+     50%, 100% {
+         top: 0;
+     }
+     0% {
+         top: 28rem;
+     }
+ }
 .grid-welcome-access-wall {
     position: absolute;
     height: 100%;
     width: 100%;
     pointer-events: none;
-    /*-webkit-clip-path: url(#rounded-rect);*/
-    /*clip-path: url(#rounded-rect);*/
-    /*background: rgba(0 240 100 / .6);*/
-    /*   background: var(--color-bg-1); */
-    /* box-shadow: 0 -5px 15px -4px rgba(0, 0, 0, 0.6); */
     z-index: 0;
 }
 .grid-welcome-access.svg {

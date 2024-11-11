@@ -1,0 +1,100 @@
+/*@media (prefers-color-scheme: dark) {*/
+/*    --banner-gradient-light: linear-gradient(#e66465, #9198e5);*/
+/*}*/
+:root {
+    --banner-gradient-dark: linear-gradient(0deg, rgba(38, 42, 47, 1) 0%, rgba(38, 42, 47, 0.98) 10%, rgba(38, 42, 47, 0.9) 20%, rgba(38, 42, 47, 0.7) 30%, rgba(38, 42, 47, 0.5) 50%, rgba(38, 42, 47, 0.00) 71.6%), rgba(38, 42, 47, 0.00) 90% / cover no-repeat;
+}
+
+#user-page {
+    /*total width - sidebar*/
+    width: 100%;
+    display: flex;
+    padding: 10rem 0 12.4rem 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.4rem;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+
+.banner {
+    position: absolute;
+    right: 0;
+    top: 8rem;
+    width: calc(100vw - 32rem);
+    height: 20rem;
+    overflow: hidden;
+    z-index: 0;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--banner-gradient-dark);
+        z-index: 1;
+    }
+
+    & .user-banner {
+        width: calc(100vw - 32rem);
+        height: 20rem;
+        position: absolute;
+        right: 0;
+        object-fit: cover;
+    }
+}
+
+
+
+.user-page-profile {
+    z-index: 1;
+
+    & .user-page-profile-pic {
+        width         : 8rem;
+        height        : 8rem;
+        flex-shrink   : 0;
+        border-radius : 8rem;
+        background    : url(/assets/images/profile.png) lightgray 50% / cover no-repeat;
+    }
+
+    & h2 {
+        overflow: hidden;
+        color: var(--color-light-1);
+        text-overflow: ellipsis;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+}
+
+.user-page-controls, .channel-page-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    z-index: 5;
+
+    & .user-page-buttons {
+        display: flex;
+        width: 100%;
+        justify-content: right;
+        align-items: center;
+    }
+}
+
+.main-window {
+    width: 100%;
+}
+
+.user-follow {
+
+    /*& img {*/
+    /*    filter   : var(--filter-invert-off);*/
+    /*}*/
+}
+
+.user-share {
+
+}

@@ -113,7 +113,7 @@ p {
   line-height: normal;
   letter-spacing: normal;
 }
-.p-bold {
+.p-bold, .btn-primary{
   font-family: SpaceGrotesk-Medium, system-ui;
   font-size: 1.6rem;
   font-weight: 500;
@@ -158,6 +158,8 @@ a:active {
   padding: 0.9rem 1.5rem;
   background: var(--color-bg-2);
   border-bottom: 1px solid var(--color-bg-3);
+  height: 8rem;
+  z-index: 2;
 }
 /* ---- grid containers ---- */
 .cont-grid-auto15rem {
@@ -396,7 +398,8 @@ a:active {
   .sidebar {
     display        : flex;
     flex-direction : column;
-    width          : 32rem;
+    max-width          : 32rem;
+    min-width          : 32rem;
     height         : calc(100vh - 4.9rem);
     padding        : 2.4rem 1.2rem;
     gap            : 1.2rem;
@@ -415,7 +418,7 @@ a:active {
     border-radius : 0.3rem;
   }
 
-  .sidebarProfile {
+  .sidebarProfile, .user-page-profile {
     display : flex;
     padding : 0 1.2rem;
 
@@ -453,8 +456,11 @@ a:active {
   }
 
   .sidebar-option {
+    display: flex;
     font-size    : 1.6rem;
     padding-left : 4.8rem;
+    height: 4.8rem;
+    align-items: center;
     transition   : background var(--transition-dur-hover) var(--transition-type-hover) 0s;
 
     &:hover,
@@ -465,6 +471,12 @@ a:active {
 
     &::before {
       filter : var(--filter-invert-off) !important;
+      position  : absolute;
+      left      : 1.2rem;
+      top       : 50%;
+      transform : translate(0, -45%);
+      height: 2.4rem;
+      width: 2.4rem;
     }
   }
 
@@ -478,10 +490,6 @@ a:active {
     position : relative;
 
     &::before {
-      position  : absolute;
-      left      : 1.2rem;
-      top       : 50%;
-      transform : translate(0, -45%);
       content   : url("/assets/icons/home_24.svg");
     }
   }
@@ -490,10 +498,6 @@ a:active {
     position : relative;
 
     &::before {
-      position  : absolute;
-      left      : 1.2rem;
-      top       : 50%;
-      transform : translate(0, -45%);
       content   : url("/assets/icons/moon_24.svg");
     }
   }
@@ -502,10 +506,7 @@ a:active {
     position : relative;
 
     &::before {
-      position  : absolute;
-      left      : 1.2rem;
-      top       : 50%;
-      transform : translate(0, -45%);
+
       content   : url("/assets/icons/settings_24.svg");
     }
   }
@@ -514,10 +515,6 @@ a:active {
     position : relative;
 
     &::before {
-      position  : absolute;
-      left      : 1.2rem;
-      top       : 50%;
-      transform : translate(0, -45%);
       content   : url("/assets/icons/logout_24.svg");
     }
   }
@@ -725,7 +722,7 @@ a:active {
 
   /* -------- buttons -------- */
 
-  .button-row {
+  .button-row, .user-page-buttons{
     display    : flex;
     padding    : 1.2rem 0;
     column-gap : 1.2rem;
@@ -738,24 +735,47 @@ a:active {
     z-index    : 100;
   }
 
-  .button {
+  .button-sm {
     border-radius : 5rem;
-    padding       : 0.6rem 1rem;
+    padding       : 0.4rem 0.8rem;
+    font-size  : 1.2rem;
+    height: 3.2rem;
+  }
+
+  .button-md {
+    border-radius : 5rem;
+    padding       : 0.8rem 2rem 0.8rem 1.6rem;
+    font-size  : 1.2rem;
+    height: 3.6rem;
     /*margin: .6rem 0;*/
+    & img {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+  }
+
+  .button-lg {
+    border-radius : 5rem;
+    padding       : 1.2rem 2.4rem 1.2rem 2rem;
+    font-size  : 1.6rem;
+    height: 4rem;
+
+    & img {
+      width: 2.4rem;
+      height: 2.4rem;
+    }
   }
 
   .btn-primary {
     background : var(--color-hl-green);
     border     : 1px solid var(--color-hl-green);
     color      : var(--color-dark-1);
-    font-size  : 1.2rem;
   }
 
   .btn-secondary {
     background : transparent;
-    border     : 1px solid var(--color-bg-3);
+    border     : 1px solid var(--color-dark-3);
     color      : var(--color-fg-1);
-    font-size  : 1.2rem;
 
     & img {
       filter : var(--filter-invert-off);
@@ -766,9 +786,17 @@ a:active {
     display         : flex;
     align-items     : center;
     justify-content : center;
-    column-gap      : 0.3rem;
+    column-gap      : 0.4rem;
     width           : fit-content;
   }
+
+.btn-icoonly{
+  display         : flex;
+  align-items     : center;
+  justify-content : center;
+  width           : fit-content;
+  padding: 1.2rem 1rem;
+}
 
   .btn-filled {
     background : var(--color-bg-3);
@@ -778,7 +806,7 @@ a:active {
   .btn-action {
     &:hover,
     &:active {
-      filter     : invert(1) brightness(2) drop-shadow(0 0 0.35rem);
+      filter     : invert(1) brightness(1.4) drop-shadow(0 0 0.35rem);
       transition : filter var(--transition-dur-hover) var(--transition-type-hover) 0s;
       cursor     : pointer;
     }

@@ -36,9 +36,9 @@
           <span>guest</span>
         </div>
       </div>
-      <div class="grid-welcome-cutaway-1">1</div>
-      <div class="grid-welcome-cutaway-2">2</div>
-      <div class="grid-welcome-cutaway-3">3</div>
+      <div class="grid-welcome-cutaway-1"></div>
+      <div class="grid-welcome-cutaway-2"></div>
+      <div class="grid-welcome-cutaway-3"></div>
       <div class="grid-welcome-access">
         <form class="grid-welcome-access-login">
           <label for="login_username"></label>
@@ -59,56 +59,35 @@
         </form>
         <div class="grid-welcome-access-wall"></div>
         <div class="grid-welcome-access-door" id="access-door"></div>
-        <svg style="position: absolute">
-          <defs>
-            <style>
-              .nonzero {
-                clip-rule: nonzero;
-              }
 
-              .evenodd {
-                clip-rule: evenodd;
-              }
-            </style>
-            <clipPath id="rounded-rect">
-              <use
-                class="nonzero"
-                xlink:href="#svg-mask-rounded-rectangle"
-                xlink:href="#svg-mask-rectangle"
-              />
-            </clipPath>
-            <rect
-              id="svg-mask-rounded-rectangle"
-              x="0"
-              y="0"
-              height="100%"
-              width="100%"
-              rx="2.4rem"
-            />
-            <rect
-              id="svg-mask-rectangle"
-              x="0"
-              y="0"
-              height="100%"
-              width="100%"
-            />
-          </defs>
-        </svg>
-        <svg style="z-index: 100">
+        <svg class="grid-welcome-access-wall">
           <defs>
-            <clipPath id="rect">
-              <rect
-                id="svg-mask-rectangle"
-                x="2.4rem"
-                y="0"
-                height="50%"
-                width="100%"
-              />
-            </clipPath>
+            <!-- Define a mask where the inner rectangle is transparent (black), and everything else is visible (white) -->
+            <mask id="mask">
+              <!-- Background is white (opaque) -->
+              <rect width="110%" height="110%" fill="white" />
+              <!-- Inner rounded rectangle is black (transparent) -->
+              <rect x="0" y="0" width="100%" height="100%" rx="2.4rem" fill="black" />
+            </mask>
           </defs>
+          <!-- grey background -->
+          <rect width="100%" height="100%" fill="var(--color-bg-1)" mask="url(#mask)" />
         </svg>
+<!--        <svg style="z-index: 100">-->
+<!--          <defs>-->
+<!--            <clipPath id="rect">-->
+<!--              <rect-->
+<!--                id="svg-mask-rectangle"-->
+<!--                x="2.4rem"-->
+<!--                y="0"-->
+<!--                height="50%"-->
+<!--                width="100%"-->
+<!--              />-->
+<!--            </clipPath>-->
+<!--          </defs>-->
+<!--        </svg>-->
       </div>
-      <div class="grid-welcome-cutaway-4">4</div>
+      <div class="grid-welcome-cutaway-4"></div>
       <div class="grid-welcome-logo-c">
         <div class="codex-pink">&lt;</div>
         <div class="codex-green">c</div>

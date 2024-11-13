@@ -380,10 +380,10 @@
     z-index: -1;
 }
 .grid-welcome-access-door-open {
-    animation: door-open 1s linear 1 forwards;
+    animation: door-open 1s linear-fill 1 forwards;
 }
 .grid-welcome-access-door-close {
-    animation: door-close 1s linear 1 forwards;
+    animation: door-close 1s linear-fill 1 forwards;
 }
 .grid-welcome-access-door-push-open {
     animation: door-push-open 1s linear 1 forwards;

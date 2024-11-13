@@ -461,12 +461,12 @@ a:active {
     padding-left : 4.8rem;
     height: 4.8rem;
     align-items: center;
+    border-radius : 0.8rem;
     transition   : background var(--transition-dur-hover) var(--transition-type-hover) 0s;
 
     &:hover,
     &:active {
       background    : var(--color-bg-3);
-      border-radius : 0.8rem;
     }
 
     &::before {
@@ -735,18 +735,30 @@ a:active {
     z-index    : 100;
   }
 
+.above-activity {
+  position   : sticky;
+  background : var(--color-bg-1);
+  width      : calc(100vw - 3rem - 1.2rem - 32rem);
+  z-index    : 100;
+}
+
   .button-sm {
+    display: flex;
     border-radius : 5rem;
     padding       : 0.4rem 0.8rem;
     font-size  : 1.2rem;
     height: 3.2rem;
+    gap: 0.4rem;
   }
 
   .button-md {
+    display: flex;
     border-radius : 5rem;
     padding       : 0.8rem 2rem 0.8rem 1.6rem;
     font-size  : 1.2rem;
     height: 3.6rem;
+
+    gap: 0.8rem;
     /*margin: .6rem 0;*/
     & img {
       width: 1.6rem;
@@ -755,9 +767,11 @@ a:active {
   }
 
   .button-lg {
+    display: flex;
     border-radius : 5rem;
     padding       : 1.2rem 2.4rem 1.2rem 2rem;
     font-size  : 1.6rem;
+    gap: 1.2rem;
     height: 4rem;
 
     & img {
@@ -768,17 +782,26 @@ a:active {
 
   .btn-primary {
     background : var(--color-hl-green);
-    border     : 1px solid var(--color-hl-green);
+    border     : 0.15rem solid transparent;
     color      : var(--color-dark-1);
+    &:hover {
+      color: var(--color-light-1);
+      & img {
+        filter: invert(1) brightness(1.2);
+      }
+    }
   }
 
   .btn-secondary {
     background : transparent;
-    border     : 1px solid var(--color-dark-3);
+    border     : 0.15rem solid var(--color-bg-4);
     color      : var(--color-fg-1);
 
     & img {
       filter : var(--filter-invert-off);
+    }
+    &:hover {
+      border: 0.15rem solid transparent ;
     }
   }
 
@@ -786,9 +809,13 @@ a:active {
     display         : flex;
     align-items     : center;
     justify-content : center;
-    column-gap      : 0.4rem;
+    /*column-gap      : 0.4rem;*/
     width           : fit-content;
-  }
+
+    & img {
+      color: hotpink;
+    }
+      }
 
 .btn-icoonly{
   display         : flex;
@@ -800,16 +827,94 @@ a:active {
 
   .btn-filled {
     background : var(--color-bg-3);
-    border     : 1px solid var(--color-bg-3);
+    border     : 0.15rem solid var(--color-bg-4);
   }
 
   .btn-action {
-    &:hover,
-    &:active {
-      filter     : invert(1) brightness(1.4) drop-shadow(0 0 0.35rem);
-      transition : filter var(--transition-dur-hover) var(--transition-type-hover) 0s;
-      cursor     : pointer;
+    position: relative;
+
+    &:hover {
+      background: var(--color-hl-pink);
+      animation: fade-out .4s linear 1 forwards;
+    }
+
+    &:hover::before {
+      content: "";
+      position: absolute;
+      top: -0.2rem;
+      left: -0.2rem;
+      width: calc(100% + 0.4rem);
+      height: calc(100% + 0.4rem);
+      /*filter: blur(0);*/
+      background: conic-gradient(
+              from var(--grad-from),
+              transparent var(--beam-1-end),
+              var(--color-hl-pink) var(--beam-1-end),
+              var(--color-hl-pink) var(--beam-1-start),
+              transparent var(--beam-1-start),
+              transparent var(--beam-2-end),
+              var(--color-hl-pink) var(--beam-2-end),
+              var(--color-hl-pink) var(--beam-2-start),
+              transparent var(--beam-2-start)
+      );
+      --grad-from: 0deg;
+      border-radius: 2.4rem;
+      animation: orbit .4s ease-in 1 forwards;
+      z-index: -1000;
+    }
+
+    &:hover::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: var(--beam-linear-w);
+      height: var(--beam-linear-h);
+      background: var(--color-hl-pink);
+      border-radius: 2.4rem;
+      animation: linear-fill .4s linear 1 forwards;
+      z-index: -100;
+
+
+      @keyframes fade-out {
+        65% {
+          background: var(--color-bg-1);
+        }
+        100% {
+          background: transparent;
+        }
+      }
+      @keyframes orbit {
+        0% {
+          /*--grad-from: 90deg;*/
+          --beam-1-end: 90deg;
+          --beam-1-start: 90deg;
+          --beam-2-end: 270deg;
+          --beam-2-start: 270deg;
+        }
+        65%, 100% {
+          --beam-1-end: 0deg;
+          --beam-1-start: 180deg;
+          --beam-2-end: 180deg;
+          --beam-2-start: 360deg;
+        }
+        90%, 100% {
+          /*filter: blur(2px);*/
+        }
+      }
+      @keyframes linear-fill {
+        66% {
+          --beam-linear-h: 100%;
+          --beam-linear-w: 0%;
+        }
+        100% {
+          --beam-linear-h: 100%;
+          --beam-linear-w: 100%;
+        }
+      }
     }
   }
+
 
   /* ---- animations ---- */

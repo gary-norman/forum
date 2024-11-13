@@ -461,7 +461,6 @@ a:active {
     padding-left : 4.8rem;
     height: 4.8rem;
     align-items: center;
-    border-radius : 0.8rem;
     transition   : background var(--transition-dur-hover) var(--transition-type-hover) 0s;
 
     &:hover,
@@ -785,23 +784,12 @@ a:active {
     background : var(--color-hl-green);
     border     : 0.15rem solid transparent;
     color      : var(--color-dark-1);
-    & span {
-      color: var(--color-dark-1);
-      transition: color .45s
-    }
-    & img {
-      filter: invert(0);
-      transition: filter .45s
-    }
     &:hover {
+      color: var(--color-light-1);
       & img {
-        filter: invert(1);
-      }
-      & span {
-        color: var(--color-light-1);
+        filter: invert(1) brightness(1.2);
       }
     }
-
   }
 
   .btn-secondary {
@@ -823,15 +811,11 @@ a:active {
     justify-content : center;
     /*column-gap      : 0.4rem;*/
     width           : fit-content;
-    /*&:hover {*/
-    /*  & img {*/
-    /*    animation: text-refresh .5s ease-in-out 1 forwards;*/
-    /*  }*/
-    /*  & span {*/
-    /*    animation: text-refresh .5s ease-in-out 1 forwards;*/
-    /*  }*/
-    /*}*/
-  }
+
+    & img {
+      color: hotpink;
+    }
+      }
 
 .btn-icoonly{
   display         : flex;
@@ -850,8 +834,8 @@ a:active {
     position: relative;
 
     &:hover {
-      /*background: var(--color-hl-pink);*/
-      animation: border-fade .8s linear .3s 1 forwards;
+      background: var(--color-hl-pink);
+      animation: fade-out .4s linear 1 forwards;
     }
 
     &:hover::before {
@@ -887,83 +871,50 @@ a:active {
       transform: translate(-50%, -50%);
       width: var(--beam-linear-w);
       height: var(--beam-linear-h);
-      background: var(--color-hl-green);
+      background: var(--color-hl-pink);
       border-radius: 2.4rem;
-      animation: linear-fill-button .1s linear .3s 1 forwards;
-      z-index: 10;
+      animation: linear-fill .4s linear 1 forwards;
+      z-index: -100;
+
+
+      @keyframes fade-out {
+        65% {
+          background: var(--color-bg-1);
+        }
+        100% {
+          background: transparent;
+        }
+      }
+      @keyframes orbit {
+        0% {
+          /*--grad-from: 90deg;*/
+          --beam-1-end: 90deg;
+          --beam-1-start: 90deg;
+          --beam-2-end: 270deg;
+          --beam-2-start: 270deg;
+        }
+        65%, 100% {
+          --beam-1-end: 0deg;
+          --beam-1-start: 180deg;
+          --beam-2-end: 180deg;
+          --beam-2-start: 360deg;
+        }
+        90%, 100% {
+          /*filter: blur(2px);*/
+        }
+      }
+      @keyframes linear-fill {
+        66% {
+          --beam-linear-h: 100%;
+          --beam-linear-w: 0%;
+        }
+        100% {
+          --beam-linear-h: 100%;
+          --beam-linear-w: 100%;
+        }
+      }
     }
   }
 
 
   /* ---- animations ---- */
-@keyframes border-fade {
-  15%, 100% {
-    border: .15rem solid transparent;
-    background: var(--color-hl-pink);
-  }
-}
-@keyframes orbit {
-  0% {
-    /*--grad-from: 90deg;*/
-    --beam-1-end: 90deg;
-    --beam-1-start: 90deg;
-    --beam-2-end: 270deg;
-    --beam-2-start: 270deg;
-  }
-  65%, 100% {
-    --beam-1-end: 0deg;
-    --beam-1-start: 180deg;
-    --beam-2-end: 180deg;
-    --beam-2-start: 360deg;
-  }
-  90%, 100% {
-    /*filter: blur(2px);*/
-  }
-}
-@keyframes linear-fill-button {
-  5% {
-    --beam-linear-w: 2%;
-  }
-  20% {
-    --beam-linear-h: 100%;
-    --beam-linear-w: 2%;
-  }
-  80% {
-    --beam-linear-h: 100%;
-    --beam-linear-w: 100%;
-    background: var(--color-hl-pink);
-  }
-}
-@keyframes text-refresh {
-  20%, 80% {
-    transform: rotate3d(-1, 0,  0, 90deg);
-  }
-  60% {
-    filter: invert(1) brightness(1.2);
-    color: var(--color-light-1);
-  }
-}
-@keyframes fill-fade {
-  80% {
-    filter: opacity(100%);
-  }
-  100% {
-    filter: opacity(0%);
-  }
-}
-@keyframes image-invert {
-  45% {
-    filter: invert(0);
-  }
-  50% {
-    filter: invert(1);
-  }
-}
-@keyframes text-invert {
-  45% {
-    color: var(--color-dark-1)
-  }
-  50% {
-    color: var(--color-light-1)
-  }
-}

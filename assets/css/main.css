@@ -467,6 +467,7 @@ a:active {
     &:hover,
     &:active {
       background    : var(--color-bg-3);
+      border-radius : 0.8rem;
     }
 
     &::before {

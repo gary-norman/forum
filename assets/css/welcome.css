@@ -383,6 +383,7 @@
     animation: door-open 1s linear-fill 1 forwards;
 }
 .grid-welcome-access-door-close {
+<<<<<<< HEAD
     animation: door-close 1s linear-fill 1 forwards;
 }
 .grid-welcome-access-door-push-open {
@@ -404,6 +405,11 @@
         --door-inset-blur: 1rem;
         --door-inset-spread: .1rem;
     }
+||||||| parent of f1a908b (feat: added activity buttons on user page; reworked some hovers for buttons, using the pink animation hover)
+    animation: door-close 1s linear 1 forwards;
+=======
+    animation: door-close 1s linear-fill 1 forwards;
+>>>>>>> f1a908b (feat: added activity buttons on user page; reworked some hovers for buttons, using the pink animation hover)
 }
 @keyframes door-open {
     0%, 50% {

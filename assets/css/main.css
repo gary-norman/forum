@@ -37,11 +37,14 @@
     --filter-invert-on: invert(0);
     --filter-invert-off: invert(1);
     --switch-darkLight: url("/assets/icons/switch-off.svg");
+    body {
+      background: var(--color-bg-4);
+    }
   }
 }
 
 /* --- functional classes --- */
-.switch {
+#switch-dl {
   background: var(--switch-darkLight);
   height: 3rem;
   width: 5.5rem;
@@ -173,12 +176,12 @@ a:active {
   grid-template-columns: repeat(4, minmax(10rem, 1fr));
   column-gap: 1rem;
   row-gap: 0.3rem;
-  & *:hover {
-    filter: invert(1) drop-shadow(0 0 0.35rem);
-    transition: filter var(--transition-dur-hover) var(--transition-type-hover)
-      0s;
-    cursor: alias;
-  }
+  /*& *:hover {*/
+  /*  filter: invert(1) drop-shadow(0 0 0.35rem);*/
+  /*  transition: filter var(--transition-dur-hover) var(--transition-type-hover)*/
+  /*    0s;*/
+  /*  cursor: alias;*/
+  /*}*/
 }
 .grid-wrapper {
   columns: 4;
@@ -192,6 +195,10 @@ a:active {
   /*margin-block: 1.2rem;*/
   border: 3px dotted var(--color-bg-3);
   border-radius: 1.2rem;
+}
+.grid-bullseye {
+  justify-self: center;
+  align-self: center;
 }
 
 
@@ -413,7 +420,7 @@ a:active {
     width         : calc(100% - 2.4rem);
     align-self    : center;
     border        : none;
-    background    : var(--color-dark-5);
+    background    : var(--color-dark-5); /* hardcoded as works for both */
     height        : 0.2rem;
     border-radius : 0.3rem;
   }
@@ -786,11 +793,13 @@ a:active {
     color      : var(--color-dark-1);
     & span {
       color: var(--color-dark-1);
-      transition: color .45s
+      transition: color .45s;
+      z-index: 11;
     }
     & img {
       filter: invert(0);
-      transition: filter .45s
+      transition: filter .45s;
+      z-index: 11;
     }
     &:hover {
       & img {
@@ -810,6 +819,10 @@ a:active {
 
     & img {
       filter : var(--filter-invert-off);
+      z-index: 11;
+    }
+    & span {
+      z-index: 11;
     }
     &:hover {
       border: 0.15rem solid transparent ;
@@ -845,14 +858,8 @@ a:active {
     border     : 0.15rem solid var(--color-bg-4);
   }
 
-  .btn-action {
+  .btn-action-primary, .btn-action-secondary {
     position: relative;
-
-    &:hover {
-      /*background: var(--color-hl-pink);*/
-      animation: border-fade .8s linear .3s 1 forwards;
-    }
-
     &:hover::before {
       content: "";
       position: absolute;
@@ -860,7 +867,29 @@ a:active {
       left: -0.2rem;
       width: calc(100% + 0.4rem);
       height: calc(100% + 0.4rem);
-      /*filter: blur(0);*/
+      --grad-from: 0deg;
+      border-radius: 2.4rem;
+      animation: orbit-btn .3s ease-in 1 forwards;
+      z-index: -10;
+    }
+
+    &:hover::after {
+      content: ''attr(data-btn-text)'';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      color: var(--color-fg-1);
+      transform: translate(-50%, -50%);
+      width: var(--beam-linear-w);
+      height: var(--beam-linear-h);
+      border-radius: 2.4rem;
+      animation: linear-fill-button .05s linear .2s 1 forwards;
+      z-index: 10;
+    }
+  }
+
+  .btn-action-primary {
+    &:hover::before {
       background: conic-gradient(
               from var(--grad-from),
               transparent var(--beam-1-end),
@@ -872,36 +901,39 @@ a:active {
               var(--color-hl-pink) var(--beam-2-start),
               transparent var(--beam-2-start)
       );
-      --grad-from: 0deg;
-      border-radius: 2.4rem;
-      animation: orbit .4s ease-in 1 forwards;
-      z-index: -1000;
     }
-
     &:hover::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: var(--beam-linear-w);
-      height: var(--beam-linear-h);
-      background: var(--color-hl-green);
-      border-radius: 2.4rem;
-      animation: linear-fill-button .1s linear .3s 1 forwards;
-      z-index: 10;
+      background: var(--color-hl-pink);
     }
   }
+.btn-action-secondary {
+  &:hover::before {
+    background: conic-gradient(
+            from var(--grad-from),
+            transparent var(--beam-1-end),
+            var(--color-bg-5) var(--beam-1-end),
+            var(--color-bg-5) var(--beam-1-start),
+            transparent var(--beam-1-start),
+            transparent var(--beam-2-end),
+            var(--color-bg-5) var(--beam-2-end),
+            var(--color-bg-5) var(--beam-2-start),
+            transparent var(--beam-2-start)
+    );
+  }
+  &:hover::after {
+    background: var(--color-bg-5);
+  }
+}
 
 
   /* ---- animations ---- */
 @keyframes border-fade {
-  15%, 100% {
-    border: .15rem solid transparent;
+  100% {
+    /*border: .15rem solid transparent;*/
     background: var(--color-hl-pink);
   }
 }
-@keyframes orbit {
+@keyframes orbit-btn {
   0% {
     /*--grad-from: 90deg;*/
     --beam-1-end: 90deg;
@@ -924,13 +956,12 @@ a:active {
     --beam-linear-w: 2%;
   }
   20% {
-    --beam-linear-h: 100%;
+    --beam-linear-h: 106%;
     --beam-linear-w: 2%;
   }
-  80% {
-    --beam-linear-h: 100%;
-    --beam-linear-w: 100%;
-    background: var(--color-hl-pink);
+  80%, 100% {
+    --beam-linear-h: 106%;
+    --beam-linear-w: 103%;
   }
 }
 @keyframes text-refresh {

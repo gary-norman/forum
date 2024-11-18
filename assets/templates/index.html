@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/assets/css/hover_effects.css">
     <link rel="stylesheet" href="/assets/css/text_effects.css">
     <link rel="stylesheet" href="/assets/css/user-page.css">
+    <script src="/assets/js/main.js" defer></script>
     <title>01F Forum</title>
 </head>
 <body>
@@ -27,9 +28,9 @@
                 </div>
             </form>
             <div class="flex-align-c">
-                <a href="posts/create" class="button-md btn-primary btn-icotext btn-action"><img class="SVG-std" src="/assets/icons/post-black_16.svg" alt="plus symbol"><span>Post</span></a>
+                <a href="posts/create" class="button-md btn-primary btn-icotext btn-action-primary"><img class="SVG-std" src="/assets/icons/post-black_16.svg" alt="plus symbol" data-btn-text="Post"><span>Post</span></a>
 <!--                <button class="button-md btn-primary btn-icotext"><img src="/assets/icons/post.svg" alt="plus symbol">Post</button>-->
-                <button class="button-md btn-secondary btn-icotext btn-filled btn-action"><img src="/assets/icons/notification_16.svg" alt="bell symbol"><span>Notifications</span></button>
+                <button class="button-md btn-secondary btn-icotext btn-filled btn-action-secondary"><img src="/assets/icons/notification_16.svg" alt="bell symbol"><span>Notifications</span></button>
             </div>
         </div>
         <div class="cont-flex-row" style="flex-grow: 1">
@@ -52,7 +53,7 @@
                     <div class="sidebar-option home">Home</div>
                     <div class="sidebar-option sidebar-option-btn darkMode">
                         <div>Dark Mode</div>
-                        <div class="switch"></div>
+                        <button id="switch-dl"></button>
                     </div>
                     <div class="sidebar-option settings">Settings</div>
                     <div class="sidebar-option logout">Log Out</div>

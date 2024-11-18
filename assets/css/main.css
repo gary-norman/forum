@@ -744,7 +744,6 @@ a:active {
 
 .above-activity {
   position   : sticky;
-  background : var(--color-bg-1);
   width      : calc(100vw - 3rem - 1.2rem - 32rem);
   z-index    : 100;
 }
@@ -824,26 +823,21 @@ a:active {
     & span {
       z-index: 11;
     }
-    &:hover {
-      border: 0.15rem solid transparent ;
-    }
   }
 
   .btn-icotext {
     display         : flex;
     align-items     : center;
     justify-content : center;
-    /*column-gap      : 0.4rem;*/
     width           : fit-content;
-    /*&:hover {*/
-    /*  & img {*/
-    /*    animation: text-refresh .5s ease-in-out 1 forwards;*/
-    /*  }*/
-    /*  & span {*/
-    /*    animation: text-refresh .5s ease-in-out 1 forwards;*/
-    /*  }*/
-    /*}*/
   }
+.btn-activity {
+  border: 2px solid transparent;
+  transition: border .45s;
+  &:hover {
+    border: 2px solid var(--color-fg-3);
+  }
+}
 
 .btn-icoonly{
   display         : flex;
@@ -869,6 +863,7 @@ a:active {
       height: calc(100% + 0.4rem);
       --grad-from: 0deg;
       border-radius: 2.4rem;
+      border: 0.15rem solid transparent;
       animation: orbit-btn .3s ease-in 1 forwards;
       z-index: -10;
     }

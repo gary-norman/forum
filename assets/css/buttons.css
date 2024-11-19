@@ -1,15 +1,23 @@
+.darklight input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
 .darklight {
-    width: 7rem;
-    height: 3.4rem;
-    border-radius: 2.4rem;
-    border: 2px solid var(--color-bg-3);
-    position: relative;
-    cursor: pointer;
-    clip-path: margin-box;
-    &:hover::before {
+    width         : 7rem;
+    height        : 3.4rem;
+    border-radius : 2.4rem;
+    border        : 2px solid var(--color-bg-3);
+    position      : relative;
+    cursor        : pointer;
+    clip-path     : margin-box;
+    z-index       : 10;
+}
+.darklight-fx {
+    &:active::before {
         left: 3.7rem
     }
-    &:hover::after {
+    &:active::after {
         transform: rotate(90deg);
         left: calc(50% - 3.8rem);
     }
@@ -33,7 +41,15 @@
         height: 11rem;
         aspect-ratio: 1 / 1;
         transition: all .45s;
+        z-index: -10;
     }
+}
+input:checked + .darklight-fx:before {
+    left: 3.7rem;
+}
+input:checked + .darklight-fx:after {
+    transform: rotate(90deg);
+    left: calc(50% - 3.8rem);
 }
 @keyframes darklight {
     100% {

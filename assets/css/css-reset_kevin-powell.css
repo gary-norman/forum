@@ -2,7 +2,7 @@
 *,
 *::before,
 *::after {
-  outline: hotpink 2px;
+  /*outline: hotpink solid 2px;*/
   box-sizing: border-box;
 }
 

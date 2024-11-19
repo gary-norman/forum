@@ -72,6 +72,7 @@
   --color-fg-5: light-dark( var(--color-dark-5), var(--color-light-5) );
   --color-fg-5-lab: var(--color-light-5-lab);
   /* --- buttons etc -- */
+  --color-secondary-border: light-dark( var(--color-bg-1), var(--color-bg-5) );
   --color-btn-hlt: light-dark( var(--color-btn-hlL), var(--color-btn-hlD) );
   --color-btn-shd: light-dark( var(--color-btn-shdL), var(--color-btn-shdD));
 /* --- light mode --- */
@@ -109,8 +110,11 @@ hsl(338deg 72% 64%) 95%,
 hsl(334deg 79% 61%) 100%
 );
 --grad-main-rad: radial-gradient(
-in lab ellipse at 40% 80%, var(--color-hl-green-bg-lab) 30%, var(--color-hl-pink-bg-lab)
-)
+    in lab ellipse at 40% 80%,
+    var(--color-hl-green-bg-lab) 30%,
+    var(--color-hl-pink-bg-lab)
+  )
+
 }
 
 /* --- codex colors --- */

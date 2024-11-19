@@ -1,8 +1,177 @@
-.darklight input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+.button {
+    & span, & img {
+        z-index: 11;
+        cursor: pointer;
+    }
 }
+.button-sm {
+    display: flex;
+    border-radius : 5rem;
+    padding       : 0.4rem 0.8rem;
+    font-size  : 1.2rem;
+    height: 3.2rem;
+    gap: 0.4rem;
+}
+
+.button-md {
+    display: flex;
+    border-radius : 5rem;
+    padding       : 0.8rem 2rem 0.8rem 1.6rem;
+    font-size  : 1.2rem;
+    height: 3.6rem;
+    gap: 0.8rem;
+    /*margin: .6rem 0;*/
+    & img {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+}
+
+.button-lg {
+    display: flex;
+    border-radius : 5rem;
+    padding       : 1.2rem 2.4rem 1.2rem 2rem;
+    font-size  : 1.6rem;
+    gap: 1.2rem;
+    height: 4rem;
+
+    & img {
+        width: 2.4rem;
+        height: 2.4rem;
+    }
+}
+.btn-primary {
+    background : var(--color-hl-green);
+    border     : 0.15rem solid transparent;
+    color      : var(--color-dark-1);
+    & span {
+        color: var(--color-dark-1);
+        transition: color .45s;
+    }
+    & img {
+        filter: invert(0);
+        transition: filter .45s;
+    }
+    &:hover {
+        & img {
+            filter: invert(1);
+        }
+        & span {
+            color: var(--color-light-1);
+        }
+    }
+}
+
+.btn-secondary {
+    background : transparent;
+    border     : 0.15rem solid var(--color-secondary-border);
+    color      : var(--color-fg-1);
+
+    & img {
+        filter : var(--filter-invert-off);
+    }
+    & span {
+    }
+}
+
+.btn-icotext {
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    width           : fit-content;
+}
+.btn-activity {
+    border: 2px solid transparent;
+    transition: border .45s;
+    &:hover {
+        border: 2px solid var(--color-fg-3);
+    }
+}
+.active {
+    border: 2px solid var(--color-fg-5);
+}
+
+.btn-icoonly{
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    width           : fit-content;
+    padding: 1.2rem 1rem;
+}
+
+.btn-filled {
+    background : var(--color-bg-3);
+    border     : 0.15rem solid var(--color-bg-4);
+}
+
+.btn-action-primary, .btn-action-secondary {
+    position: relative;
+    &:hover::before {
+        content: "";
+        position: absolute;
+        top: -0.2rem;
+        left: -0.2rem;
+        width: calc(100% + 0.4rem);
+        height: calc(100% + 0.4rem);
+        --grad-from: 0deg;
+        border-radius: 2.4rem;
+        border: 0.15rem solid transparent;
+        animation: orbit-btn .3s ease-in 1 forwards;
+        z-index: -10;
+    }
+
+    &:hover::after {
+        content: ''attr(data-btn-text)'';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        color: var(--color-fg-1);
+        transform: translate(-50%, -50%);
+        width: var(--beam-linear-w);
+        height: var(--beam-linear-h);
+        border-radius: 2.4rem;
+        animation: linear-fill-button .2s ease-in .1s 1 forwards;
+        z-index: 10;
+    }
+}
+
+.btn-action-primary {
+    &:hover::before {
+        background: conic-gradient(
+                from var(--grad-from),
+                transparent var(--beam-1-end),
+                var(--color-hl-pink) var(--beam-1-end),
+                var(--color-hl-pink) var(--beam-1-start),
+                transparent var(--beam-1-start),
+                transparent var(--beam-2-end),
+                var(--color-hl-pink) var(--beam-2-end),
+                var(--color-hl-pink) var(--beam-2-start),
+                transparent var(--beam-2-start)
+        );
+    }
+    &:hover::after {
+        background: var(--color-hl-pink);
+    }
+}
+.btn-action-secondary {
+    &:hover::before {
+        background: conic-gradient(
+                from var(--grad-from),
+                transparent var(--beam-1-end),
+                var(--color-bg-5) var(--beam-1-end),
+                var(--color-bg-5) var(--beam-1-start),
+                transparent var(--beam-1-start),
+                transparent var(--beam-2-end),
+                var(--color-bg-5) var(--beam-2-end),
+                var(--color-bg-5) var(--beam-2-start),
+                transparent var(--beam-2-start)
+        );
+    }
+    &:hover::after {
+        background: var(--color-bg-5);
+    }
+}
+/* -- dark light toggle --- */
 .darklight {
     width         : 7rem;
     height        : 3.4rem;
@@ -10,17 +179,25 @@
     border        : 2px solid var(--color-bg-3);
     position      : relative;
     cursor        : pointer;
-    clip-path     : margin-box;
     z-index       : 10;
+    clip-path     : stroke-box;
+    & input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+}
+.darklight-border {
+    width         : 7rem;
+    height        : 3.4rem;
+    border-radius : 2.4rem;
+    border        : 2px solid var(--color-bg-3);
+    position      : absolute;
+    top: 0;
+    left: 0;
+    z-index       : 11;
 }
 .darklight-fx {
-    &:active::before {
-        left: 3.7rem
-    }
-    &:active::after {
-        transform: rotate(90deg);
-        left: calc(50% - 3.8rem);
-    }
     &::before {
         content       : '';
         position      : absolute;
@@ -45,31 +222,18 @@
     }
 }
 input:checked + .darklight-fx:before {
-    left: 3.7rem;
+    left: 3.8rem;
 }
 input:checked + .darklight-fx:after {
     transform: rotate(90deg);
     left: calc(50% - 3.8rem);
+    animation: fade-out-in .45s linear 1 forwards;
 }
-@keyframes darklight {
-    100% {
-        left: 3.7rem;
+@keyframes fade-out-in {
+    0%, 100% {
+        opacity: 1;
     }
-}
-@keyframes darklight-img {
-    100% {
-        transform: rotate(90deg);
-        left: calc(50% - 3.8rem);
-    }
-}
-@keyframes darklight-back {
-    100% {
-        left: .2rem;
-    }
-}
-@keyframes darklight-img-back {
-    100% {
-        transform: rotate(0deg);
-        left: calc(50% - 7.3rem);
+    50% {
+        opacity: 0;
     }
 }

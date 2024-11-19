@@ -16,14 +16,18 @@
 .button-md {
     display: flex;
     border-radius : 5rem;
-    padding       : 0.8rem 2rem 0.8rem 1.6rem;
+    padding       : 0.8rem 1.6rem 0.8rem 1.6rem;
     font-size  : 1.2rem;
     height: 3.6rem;
     gap: 0.8rem;
-    /*margin: .6rem 0;*/
     & img {
         width: 1.6rem;
         height: 1.6rem;
+    }
+    & span {
+        background-size: 1.6rem;
+        height: 2.4rem;
+        padding: 0 0 0 2rem;
     }
 }
 
@@ -34,10 +38,15 @@
     font-size  : 1.6rem;
     gap: 1.2rem;
     height: 4rem;
-
     & img {
         width: 2.4rem;
         height: 2.4rem;
+    }
+    & span {
+        background-size: 2.4rem;
+        height: 4rem;
+        width: fit-content;
+        padding: 0 0 0 2.8rem;
     }
 }
 .btn-primary {
@@ -79,6 +88,27 @@
     align-items     : center;
     justify-content : center;
     width           : fit-content;
+    & span {
+        background-position: left;
+        align-content: center;
+        text-align: right;
+        width: fit-content;
+    }
+}
+.btn-following {
+    background: url('/assets/icons/following_24.svg') no-repeat center;
+}
+.btn-followers {
+    background: url('/assets/icons/followers_24.svg') no-repeat center;
+}
+.btn-posts {
+    background: url('/assets/icons/post-black_16.svg') no-repeat center;
+}
+.btn-notifications {
+    background: url('/assets/icons/notification_16.svg') no-repeat center;
+}
+.btn-follow {
+    background: url('/assets/icons/arrow-right-grey_24.svg') no-repeat center;
 }
 .btn-activity {
     border: 2px solid transparent;
@@ -88,8 +118,9 @@
     }
 }
 .active {
-    border: 1px solid var(--color-fg-5);
-    /* TODO fix the transition and size disparity */
+    border: 2px solid var(--color-secondary-active);
+    pointer-events: none;
+    /* TODO use Kamils lab mixes */
 }
 
 .btn-icoonly{
@@ -159,17 +190,17 @@
         background: conic-gradient(
                 from var(--grad-from),
                 transparent var(--beam-1-end),
-                var(--color-bg-5) var(--beam-1-end),
-                var(--color-bg-5) var(--beam-1-start),
+                var(--color-secondary-hover) var(--beam-1-end),
+                var(--color-secondary-hover) var(--beam-1-start),
                 transparent var(--beam-1-start),
                 transparent var(--beam-2-end),
-                var(--color-bg-5) var(--beam-2-end),
-                var(--color-bg-5) var(--beam-2-start),
+                var(--color-secondary-hover) var(--beam-2-end),
+                var(--color-secondary-hover) var(--beam-2-start),
                 transparent var(--beam-2-start)
         );
     }
     &:hover::after {
-        background: var(--color-bg-5);
+        background: var(--color-secondary-hover);
     }
 }
 /* -- dark light toggle --- */

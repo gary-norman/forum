@@ -29,8 +29,12 @@
                 </div>
             </form>
             <div class="flex-align-c">
-                <a href="posts/create" class="button button-md btn-primary btn-icotext btn-action-primary"><img class="SVG-std" src="/assets/icons/post-black_16.svg" alt="plus symbol" data-btn-text="Post"><span>Post</span></a>
-                <button class="button button-md btn-secondary btn-icotext btn-filled btn-action-secondary"><img src="/assets/icons/notification_16.svg" alt="bell symbol"><span>Notifications</span></button>
+                <a href="posts/create" class="button button-md btn-primary btn-icotext btn-action-primary">
+                    <span class="btn-posts">Post</span>
+                </a>
+                <button class="button button-md btn-secondary btn-icotext btn-filled btn-action-secondary">
+                    <span class="btn-notifications" role="contentinfo" aria-description="Notifications, with a bell icon">Notifications</span>
+                </button>
             </div>
         </div>
         <div class="cont-flex-row" style="flex-grow: 1">
@@ -41,9 +45,11 @@
                         <h3>Eyesome578</h3>
                         <div>
                             <button class="button-md btn-icotext" style="padding: .6rem 1rem .6rem 0">
-                                <img src="/assets/icons/following_24.svg" alt="following symbol">72</button>
+                                <span class="btn-following">72</span>
+                            </button>
                             <button class="button-md btn-icotext" style="padding: .6rem 1rem .6rem 0">
-                                <img src="/assets/icons/followers_24.svg" alt="followers symbol">64</button>
+                                <span class="btn-followers">64</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -139,16 +145,17 @@
                                 <h2>Eyesome578</h2>
                                 <div>
                                     <button class="button-md btn-icotext" style="padding: .6rem 1rem .6rem 0">
-                                        <img src="/assets/icons/following_24.svg" alt="following symbol">72</button>
+                                        <span class="btn-following">72</span>
+                                    </button>
                                     <button class="button-md btn-icotext" style="padding: .6rem 1rem .6rem 0">
-                                        <img src="/assets/icons/followers_24.svg" alt="followers symbol">64</button>
+                                        <span class="btn-followers">64</span>
+                                    </button>
                                 </div>
                             </div>
                     </div>
                         <div class="user-page-buttons">
                             <button class="button button-lg btn-primary btn-icotext btn-action-primary">
-                                <img class="SVG-std" src="/assets/icons/arrow-right-grey_24.svg" alt="follow user button">
-                                <span>Follow</span>
+                                <span class="btn-follow">Follow</span>
                             </button>
                             <div class="user-following"></div>
                             <button class="button button-md btn-secondary btn-filled btn-icoonly btn-action-secondary">

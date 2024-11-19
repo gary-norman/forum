@@ -24,6 +24,7 @@
   --color-dark-4-lab: lab(37.58 -1.96 -8.63);
   --color-dark-5: #71767c;
   --color-dark-5-lab: lab(46.31 -0.73 -5.33);
+  --color-dark-6: #93a1a4;
   /* --- highlight colours --- */
   --color-hl-blue: #609cd0;
   --color-hl-blue-lab: lab(62.35 -4.66 -32.56);
@@ -72,12 +73,20 @@
   --color-fg-5: light-dark( var(--color-dark-5), var(--color-light-5) );
   --color-fg-5-lab: var(--color-light-5-lab);
   /* --- buttons etc -- */
+  --color-secondary-active: light-dark( rgb(113 118 124 / .6), rgb(190 190 190 / .6) );
+  --color-secondary-hover: light-dark( var(--color-light-2), var(--color-dark-6) );
   --color-secondary-border: light-dark( var(--color-dark-5), var(--color-dark-3) );
   --color-secondary-border-hover: light-dark( var(--color-dark-3), var(--color-dark-4));
   --color-btn-hlt: light-dark( var(--color-btn-hlL), var(--color-btn-hlD) );
   --color-btn-shd: light-dark( var(--color-btn-shdL), var(--color-btn-shdD));
 /* --- light mode --- */
 @media (prefers-color-scheme: light) {
+  .branding {
+    background : url("/assets/icons/codex-logo-blue.svg") no-repeat;
+  }
+  .following {
+    background: url('/assets/icons/following-blue_24.svg') no-repeat center;
+  }
     /* --- bg colours --- *!
     --color-bg-1 : var(--color-light-5);
     --color-bg-2 : var(--color-light-4);
@@ -90,9 +99,6 @@
     --color-fg-3 : var(--color-dark-3);
     --color-fg-4 : var(--color-dark-4);
     --color-fg-5 : var(--color-dark-5); */
-  .branding {
-    background : url("/assets/icons/codex-logo-blue.svg") no-repeat;
-  }
   }
 /* --- gradients --- */
 --grad-main:  linear-gradient(0deg,

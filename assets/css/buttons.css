@@ -46,11 +46,11 @@
     color      : var(--color-dark-1);
     & span {
         color: var(--color-dark-1);
-        transition: color .45s;
+        transition: color var(--transition-dur-hover);
     }
     & img {
         filter: invert(0);
-        transition: filter .45s;
+        transition: filter var(--transition-dur-hover);
     }
     &:hover {
         & img {
@@ -82,13 +82,14 @@
 }
 .btn-activity {
     border: 2px solid transparent;
-    transition: border .45s;
+    transition: border var(--transition-dur-hover);
     &:hover {
         border: 2px solid var(--color-fg-3);
     }
 }
 .active {
-    border: 2px solid var(--color-fg-5);
+    border: 1px solid var(--color-fg-5);
+    /* TODO fix the transition and size disparity */
 }
 
 .btn-icoonly{
@@ -176,7 +177,7 @@
     width         : 7rem;
     height        : 3.4rem;
     border-radius : 2.4rem;
-    border        : 2px solid var(--color-bg-3);
+    border        : 2px solid var(--color-secondary-border);
     position      : relative;
     cursor        : pointer;
     z-index       : 10;
@@ -191,7 +192,7 @@
     width         : 7rem;
     height        : 3.4rem;
     border-radius : 2.4rem;
-    border        : 2px solid var(--color-bg-3);
+    border        : 2px solid var(--color-secondary-border);
     position      : absolute;
     top: 0;
     left: 0;
@@ -208,16 +209,17 @@
         border-radius : 2.4rem;
         border: .2rem solid color-mix(in lab, var(--color-hl-green-lab) 70%, var(--color-black-lab));
         background    : var(--color-hl-green);
-        transition: left .45s;
+        transition: left var(--transition-dur-hover-darklight);
     }
     &::after {
         content: url('/assets/icons/darklight.svg');
+        filter : var(--filter-invert-off);
         position: absolute;
         top: calc(50% - 5.5rem);
         left: calc(50% - 7.3rem);
         height: 11rem;
         aspect-ratio: 1 / 1;
-        transition: all .45s;
+        transition: all var(--transition-dur-hover-darklight);
         z-index: -10;
     }
 }
@@ -227,7 +229,7 @@ input:checked + .darklight-fx:before {
 input:checked + .darklight-fx:after {
     transform: rotate(90deg);
     left: calc(50% - 3.8rem);
-    animation: fade-out-in .45s linear 1 forwards;
+    animation: fade-out-in var(--transition-dur-hover-darklight) linear 1 forwards;
 }
 @keyframes fade-out-in {
     0%, 100% {

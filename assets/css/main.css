@@ -27,6 +27,7 @@
 
   /* --- transitions --- */
   --transition-dur-hover: 200ms;
+  --transition-dur-hover-darklight: 500ms;
   --transition-type-hover: ease-in-out;
   /* --- filters --- */
   --filter-invert-on: invert(1);
@@ -475,7 +476,7 @@ a:active {
     &:active {
       background    : var(--color-bg-3);
       & > label {
-        border: 2px solid var(--color-bg-5);
+        border: 2px solid var(--color-secondary-border-hover);
       }
     }
 

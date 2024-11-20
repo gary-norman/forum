@@ -64,7 +64,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Get the 'channel' value as a string
+	// Get the 'author' value as a string
 	authorStr := r.PostForm.Get("author")
 	// Convert the string to an integer
 	author, err := strconv.Atoi(authorStr)

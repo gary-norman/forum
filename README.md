@@ -79,7 +79,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Codex screenshot][product-screenshot]](https://example.com)
 
 ### This project consists of a web forum that allows :
 <ul>

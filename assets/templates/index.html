@@ -37,7 +37,7 @@
                 </button>
             </div>
         </div>
-        <div class="cont-flex-row" style="flex-grow: 1">
+        <div class="main-content" >
             <div class="sidebar">
                 <div class="sidebarProfile">
                     <div class="sidebar-profile-pic"></div>
@@ -171,6 +171,14 @@
                             <img src="/assets/icons/clock_16.svg" alt="activity symbol">
                             Activity
                         </button>
+                    <div class="content">
+                        <div id="activity-bar" class="button-row above-activity">
+                            <button class="button-lg btn-secondary btn-icotext btn-action">
+                                <img src="/assets/icons/clock_16.svg" alt="activity symbol">
+                                <span>
+                                Activity
+                            </span>
+                            </button>
 
                         <button class="button button-lg btn-secondary btn-icotext btn-activity">
                             <img src="/assets/icons/post_16.svg" alt="posts symbol">
@@ -193,6 +201,95 @@
                             Reactions
                         </button>
                     </div>
+
+                        <div id="activity-all">
+                            <div class="filters-row button-row ">
+                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                            </div>
+                            <div class="posts">
+                                {{range .Posts}}
+                                <div class="card">
+                                    <div class="post-info-container">
+                                        <span class="card-profile-pic"></span>
+                                        <div>
+                                            <small class="small-bold">{{.AuthorID}}</small>
+                                            <div>
+                                                <small>{{.ChannelID}}</small>
+                                                <small>-</small>
+                                                <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
+                                                    @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4>{{.Title}}</h4>
+                                    <p class="cardContent">{{.Content}}</p>
+                                    <div class="button-row">
+                                        <button class="button-md btn-secondary btn-icotext btn-filled">
+                                            <img class="invert-off" src="/assets/icons/followers_16.svg" alt="followers symbol">
+                                            100
+                                        </button>
+                                        <button class="button-md btn-secondary btn-icotext btn-filled">
+                                            <img class="invert-off" src="/assets/icons/following_16.svg" alt="following symbol">
+                                            24:
+                                        </button>
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                            <img src="/assets/icons/reply_16.svg" alt="reply symbol">
+                                            Reply
+                                        </button>
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                            <img src="/assets/icons/share_16.svg" alt="share symbol">
+                                            Share
+                                        </button>
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                            <img src="/assets/icons/report_16.svg" alt="report symbol">
+                                            Report
+                                        </button>
+                                    </div>
+                                </div>
+                                {{end}}
+                            </div>
+                        </div>
+                        <!--                    <div id="activity-posts">-->
+                        <!--                        <div class="button-row above-posts">-->
+                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>-->
+                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>-->
+                        <!--                        </div>-->
+
+                        <!--                    </div>-->
+                        <!--                    <div id="activity-comments">-->
+                        <!--                        <div class="button-row above-posts">-->
+                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>-->
+                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>-->
+                        <!--                        </div>-->
+
+                        <!--                    </div>-->
+                        <!--                    <div id="activity-saved">-->
+                        <!--                        <div class="button-row above-posts">-->
+                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>-->
+                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>-->
+                        <!--                        </div>-->
+
+                        <!--                    </div>-->
+                        <!--                    <div id="activity-muted">-->
+                        <!--                        <div class="button-row above-posts">-->
+                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>-->
+                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>-->
+                        <!--                        </div>-->
+
+                        <!--                    </div>-->
+                        <!--                    <div id="activity-reactions">-->
+                        <!--                        <div class="button-row above-posts">-->
+                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>-->
+                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>-->
+                        <!--                        </div>-->
+
+                        <!--                    </div>-->
+                    </div>
+
+
+
+
 
 
                 </div>
@@ -244,6 +341,54 @@
                         </div>
                     {{end}}
                 </div>
+<!--                <div class="button-row above-posts">-->
+<!--                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg"-->
+<!--                                                                                         alt="plus symbol"></button>-->
+<!--                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg"-->
+<!--                                                                                         alt="plus symbol"></button>-->
+<!--                </div>-->
+<!--                <div class="posts">-->
+<!--                    {{range .Posts}}-->
+<!--                        <div class="card">-->
+<!--                            <div class="post-info-container">-->
+<!--                                <span class="card-profile-pic"></span>-->
+<!--                                <div>-->
+<!--                                    <small class="small-bold">{{.AuthorID}}</small>-->
+<!--                                    <div>-->
+<!--                                        <small>{{.ChannelID}}</small>-->
+<!--                                        <small>-</small>-->
+<!--                                        <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}-->
+<!--                                            @ {{.Created.Format "15:04:05 UTC"}}</time>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <h4>{{.Title}}</h4>-->
+<!--                            <p class="cardContent">{{.Content}}</p>-->
+<!--                            <div class="button-row">-->
+<!--                                <button class="button-md btn-secondary btn-icotext btn-filled">-->
+<!--                                    <img class="invert-off" src="/assets/icons/followers_16.svg" alt="followers symbol">-->
+<!--                                    100-->
+<!--                                </button>-->
+<!--                                <button class="button-md btn-secondary btn-icotext btn-filled">-->
+<!--                                    <img class="invert-off" src="/assets/icons/following_16.svg" alt="following symbol">-->
+<!--                                    24:-->
+<!--                                </button>-->
+<!--                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">-->
+<!--                                    <img src="/assets/icons/reply_16.svg" alt="reply symbol">-->
+<!--                                    Reply-->
+<!--                                </button>-->
+<!--                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">-->
+<!--                                    <img src="/assets/icons/share_16.svg" alt="share symbol">-->
+<!--                                    Share-->
+<!--                                </button>-->
+<!--                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">-->
+<!--                                    <img src="/assets/icons/report_16.svg" alt="report symbol">-->
+<!--                                    Report-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    {{end}}-->
+<!--                </div>-->
             </div>
         </div>
     </div>

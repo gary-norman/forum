@@ -296,6 +296,20 @@ a:active {
     gap     : 1.2rem;
   }
 
+.main-content {
+  display : flex;
+  flex-grow: 1;
+  /*gap     : 1.2rem;*/
+}
+
+.content {
+  position   : sticky;
+  width      : 100%;
+  z-index    : 100;
+  top: 10rem;
+  padding: 0 2.4rem ;
+}
+
   .cont-flex-column {
     display        : flex;
     flex-direction : column;
@@ -613,8 +627,7 @@ a:active {
     display            : flex;
     flex-direction     : column;
     /*flex-grow: 1;*/
-    margin-inline      : 2.4rem;
-    max-width          : calc(100vw - 32rem);
+    width          : 100%;
     max-height         : calc(100vh - 4.9rem);
     overflow           : auto;
     -ms-overflow-style : none; /* IE and Edge */
@@ -645,9 +658,9 @@ a:active {
     color          : var(--color-fg-1);
     background     : var(--color-bg-2);
     border         : 1px solid var(--color-bg-3);
-    border-radius  : 0.6rem;
-    padding        : 1rem;
-    margin         : 0.6rem;
+    border-radius  : 0.8rem;
+    padding        : 1.2rem;
+    margin         : 0.8rem;
     /*box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);*/
     box-shadow     : rgba(0, 0, 0, 0.16) 0 3px 6px,
     rgba(0, 0, 0, 0.23) 0 3px 6px;
@@ -737,6 +750,10 @@ a:active {
     display    : flex;
     padding    : 1.2rem 0;
     column-gap : 1.2rem;
+  }
+
+  .filters-row {
+    margin: 0 1.2rem;
   }
 
   .above-posts {

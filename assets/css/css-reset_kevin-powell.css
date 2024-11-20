@@ -2,9 +2,10 @@
 *,
 *::before,
 *::after {
-  outline: hotpink 2px;
-  box-sizing: border-box;
+  outline: #b1b1b1 solid 0.05rem !important;
+  box-sizing: border-box !important;
 }
+
 
 /* remove default spacing */
 /* force styling of type through styling, rather than elements */

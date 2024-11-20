@@ -1,12 +1,15 @@
+:root {
+    --btn-radius: 2.4rem;
+}
 .button {
+    cursor: pointer;
     & span, & img {
         z-index: 11;
-        cursor: pointer;
     }
 }
 .button-sm {
     display: flex;
-    border-radius : 5rem;
+    border-radius : var(--btn-radius);
     padding       : 0.4rem 0.8rem;
     font-size  : 1.2rem;
     height: 3.2rem;
@@ -15,7 +18,7 @@
 
 .button-md {
     display: flex;
-    border-radius : 5rem;
+    border-radius : var(--btn-radius);
     padding       : 0.8rem 1.6rem 0.8rem 1.6rem;
     font-size  : 1.2rem;
     height: 3.6rem;
@@ -33,7 +36,7 @@
 
 .button-lg {
     display: flex;
-    border-radius : 5rem;
+    border-radius : var(--btn-radius);
     padding       : 1.2rem 2.4rem 1.2rem 2rem;
     font-size  : 1.6rem;
     gap: 1.2rem;
@@ -53,20 +56,22 @@
     background : var(--color-hl-green);
     border     : 0.15rem solid transparent;
     color      : var(--color-dark-1);
+    transition: all var(--transition-dur-hover);
     & span {
+        filter: invert(0);
         color: var(--color-dark-1);
         transition: color var(--transition-dur-hover);
     }
     & img {
-        filter: invert(0);
         transition: filter var(--transition-dur-hover);
     }
     &:hover {
+        border     : 0.15rem solid var(--color-hl-pink);
         & img {
-            filter: invert(1);
         }
         & span {
-            color: var(--color-light-1);
+            filter: invert(1);
+            /*color: var(--color-light-1);*/
         }
     }
 }
@@ -75,7 +80,10 @@
     background : transparent;
     border     : 0.15rem solid var(--color-secondary-border);
     color      : var(--color-fg-1);
-
+    transition: all var(--transition-dur-hover);
+    &:hover {
+        border: 0.15rem solid var(--color-secondary-hover);
+    }
     & img {
         filter : var(--filter-invert-off);
     }
@@ -117,10 +125,15 @@
         border: 2px solid var(--color-fg-3);
     }
 }
-.active {
+.btn-active {
     border: 2px solid var(--color-secondary-active);
     pointer-events: none;
     /* TODO use Kamils lab mixes */
+}
+.btn-noinvert {
+    & img {
+        filter : invert(0);
+    }
 }
 
 .btn-icoonly{
@@ -146,14 +159,13 @@
         width: calc(100% + 0.4rem);
         height: calc(100% + 0.4rem);
         --grad-from: 0deg;
-        border-radius: 2.4rem;
-        border: 0.15rem solid transparent;
+        border-radius: var(--btn-radius);
         animation: orbit-btn .3s ease-in 1 forwards;
         z-index: -10;
     }
 
     &:hover::after {
-        content: ''attr(data-btn-text)'';
+        content: attr(data-btn-text);
         position: absolute;
         top: 50%;
         left: 50%;
@@ -161,7 +173,7 @@
         transform: translate(-50%, -50%);
         width: var(--beam-linear-w);
         height: var(--beam-linear-h);
-        border-radius: 2.4rem;
+        border-radius: var(--btn-radius);
         animation: linear-fill-button .2s ease-in .1s 1 forwards;
         z-index: 10;
     }
@@ -207,7 +219,7 @@
 .darklight {
     width         : 7rem;
     height        : 3.4rem;
-    border-radius : 2.4rem;
+    border-radius : var(--btn-radius);
     border        : 2px solid var(--color-secondary-border);
     position      : relative;
     cursor        : pointer;
@@ -222,7 +234,7 @@
 .darklight-border {
     width         : 7rem;
     height        : 3.4rem;
-    border-radius : 2.4rem;
+    border-radius : var(--btn-radius);
     border        : 2px solid var(--color-secondary-border);
     position      : absolute;
     top: 0;
@@ -237,7 +249,7 @@
         left          : .2rem;
         width         : 2.6rem;
         height        : 2.6rem;
-        border-radius : 2.4rem;
+        border-radius : var(--btn-radius);
         border: .2rem solid color-mix(in lab, var(--color-hl-green-lab) 70%, var(--color-black-lab));
         background    : var(--color-hl-green);
         transition: left var(--transition-dur-hover-darklight);
@@ -268,5 +280,36 @@ input:checked + .darklight-fx:after {
     }
     50% {
         opacity: 0;
+    }
+}
+@keyframes orbit-btn {
+    0% {
+        /*--grad-from: 90deg;*/
+        --beam-1-end: 90deg;
+        --beam-1-start: 90deg;
+        --beam-2-end: 270deg;
+        --beam-2-start: 270deg;
+    }
+    65%, 100% {
+        --beam-1-end: 0deg;
+        --beam-1-start: 180deg;
+        --beam-2-end: 180deg;
+        --beam-2-start: 360deg;
+    }
+    90%, 100% {
+        /*filter: blur(2px);*/
+    }
+}
+@keyframes linear-fill-button {
+    5% {
+        --beam-linear-w: 2%;
+    }
+    20% {
+        --beam-linear-h: 100%;
+        --beam-linear-w: 2%;
+    }
+    80%, 100% {
+        --beam-linear-h: 100%;
+        --beam-linear-w: 102%;
     }
 }

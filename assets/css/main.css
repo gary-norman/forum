@@ -35,6 +35,15 @@
   /* --- switches --- */
   --switch-darkLight: url("/assets/icons/switch-on.svg");
   @media (prefers-color-scheme: light) {
+    .branding {
+      background : url("/assets/icons/codex-logo-blue.svg") no-repeat;
+    }
+    .btn-following {
+      background: url('/assets/icons/following-blue_24.svg') no-repeat center;
+    }
+    .btn-notifications {
+      background: url('/assets/icons/notification-black_16.svg') no-repeat center;
+    }
     --filter-invert-on: invert(0);
     --filter-invert-off: invert(1);
     --switch-darkLight: url("/assets/icons/switch-off.svg");

@@ -82,7 +82,7 @@
 
     & h2 {
         overflow: hidden;
-        color: var(--color-light-1);
+        color: var(--color-fg-1);
         text-overflow: ellipsis;
         font-style: normal;
         font-weight: 700;

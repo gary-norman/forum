@@ -86,12 +86,6 @@
   --color-btn-shd: light-dark( var(--color-btn-shdL), var(--color-btn-shdD));
 /* --- light mode --- */
 @media (prefers-color-scheme: light) {
-  .branding {
-    background : url("/assets/icons/codex-logo-blue.svg") no-repeat;
-  }
-  .btn-following {
-    background: url('/assets/icons/following-blue_24.svg') no-repeat center;
-  }
     /* --- bg colours --- *!
     --color-bg-1 : var(--color-light-5);
     --color-bg-2 : var(--color-light-4);

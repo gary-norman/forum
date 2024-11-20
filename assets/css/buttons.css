@@ -119,14 +119,14 @@
     background: url('/assets/icons/arrow-right-grey_24.svg') no-repeat center;
 }
 .btn-activity {
-    border: 2px solid transparent;
+    border: 0.15rem solid transparent;
     transition: border var(--transition-dur-hover);
     &:hover {
-        border: 2px solid var(--color-fg-3);
+        border: 0.15rem solid var(--color-fg-3);
     }
 }
 .btn-active {
-    border: 2px solid var(--color-secondary-active);
+    border: 0.15rem solid var(--color-secondary-active);
     pointer-events: none;
     /* TODO use Kamils lab mixes */
 }
@@ -220,7 +220,7 @@
     width         : 7rem;
     height        : 3.4rem;
     border-radius : var(--btn-radius);
-    border        : 2px solid var(--color-secondary-border);
+    border        : 0.15rem solid var(--color-secondary-border);
     position      : relative;
     cursor        : pointer;
     z-index       : 10;
@@ -235,7 +235,7 @@
     width         : 7rem;
     height        : 3.4rem;
     border-radius : var(--btn-radius);
-    border        : 2px solid var(--color-secondary-border);
+    border        : 0.15rem solid var(--color-secondary-border);
     position      : absolute;
     top: 0;
     left: 0;

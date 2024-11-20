@@ -27,6 +27,8 @@
   --color-dark-4-lab: 37.58% -1.96 -8.63;
   --color-dark-5: rgb(113 118 124);
   --color-dark-5-lab: 46.31% -0.73 -5.33;
+  --color-dark-6: rgb(147 161 164);
+  /*--color-dark-6-lab: 46.31% -0.73 -5.33;*/
   /* --- highlight colours --- */
   --color-hl-blue: rgb(96 156 208);
   --color-hl-blue-lab: lab(62.35 -4.66 -32.56);

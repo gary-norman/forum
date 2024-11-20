@@ -47,10 +47,6 @@
   --color-hl-red: #f94243;
   --color-hl-red-lab: lab(51.65 83.45 51.15);
   /* --- btn etc --- */
-  --color-btn-hlL: red;
-  --color-btn-hlD: blue;
-  --color-btn-shdL: green;
-  --color-btn-shdD: yellow;
 
   /* ------------------------ */
   /* dark / light mode colours */
@@ -77,6 +73,11 @@
   --color-fg-5: light-dark( var(--color-dark-5), var(--color-light-5) );
   --color-fg-5-lab: var(--color-light-5-lab);
   /* --- buttons etc -- */
+  --color-btn-hlL: red;
+  --color-btn-hlD: blue;
+  --color-btn-shdL: green;
+  --color-btn-shdD: yellow;
+  --color-hl-primary: light-dark( var(--color-hl-blue), var(--color-hl-green) );
   --color-secondary-active: light-dark( rgb(113 118 124 / .6), rgb(190 190 190 / .6) );
   --color-secondary-hover: light-dark( var(--color-light-2), var(--color-dark-6) );
   --color-secondary-border: light-dark( var(--color-dark-5), var(--color-dark-3) );

@@ -2,7 +2,7 @@
 *,
 *::before,
 *::after {
-  outline: #b1b1b1 solid 0.05rem !important;
+  /*outline: #b1b1b1 solid 0.05rem !important;*/
   box-sizing: border-box !important;
 }
 

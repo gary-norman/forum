@@ -490,7 +490,7 @@ a:active {
     &:active {
       background    : var(--color-bg-3);
       & > label {
-        border: 2px solid var(--color-secondary-border-hover);
+        border: .2rem solid var(--color-secondary-border-hover);
       }
     }
 

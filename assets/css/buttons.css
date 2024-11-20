@@ -1,7 +1,7 @@
 :root {
     --btn-radius: 2.4rem;
 }
-.button {
+button, .button {
     cursor: pointer;
     & span, & img {
         z-index: 11;
@@ -53,7 +53,7 @@
     }
 }
 .btn-primary {
-    background : var(--color-hl-green);
+    background : var(--color-hl-primary);
     border     : 0.15rem solid transparent;
     color      : var(--color-dark-1);
     transition: all var(--transition-dur-hover);
@@ -165,7 +165,7 @@
     }
 
     &:hover::after {
-        content: attr(data-btn-text);
+        content: '';
         position: absolute;
         top: 50%;
         left: 50%;
@@ -220,11 +220,11 @@
     width         : 7rem;
     height        : 3.4rem;
     border-radius : var(--btn-radius);
-    border        : 0.15rem solid var(--color-secondary-border);
+    border        : 0.2rem solid var(--color-secondary-border);
     position      : relative;
     cursor        : pointer;
     z-index       : 10;
-    clip-path     : stroke-box;
+    clip-path     : border-box;
     & input {
         opacity: 0;
         width: 0;
@@ -235,7 +235,7 @@
     width         : 7rem;
     height        : 3.4rem;
     border-radius : var(--btn-radius);
-    border        : 0.15rem solid var(--color-secondary-border);
+    border        : 0.2rem solid var(--color-secondary-border);
     position      : absolute;
     top: 0;
     left: 0;
@@ -250,8 +250,9 @@
         width         : 2.6rem;
         height        : 2.6rem;
         border-radius : var(--btn-radius);
+        /*TODO fix this border*/
         border: .2rem solid color-mix(in lab, var(--color-hl-green-lab) 70%, var(--color-black-lab));
-        background    : var(--color-hl-green);
+        background    : var(--color-hl-primary);
         transition: left var(--transition-dur-hover-darklight);
     }
     &::after {
@@ -274,6 +275,38 @@ input:checked + .darklight-fx:after {
     left: calc(50% - 3.8rem);
     animation: fade-out-in var(--transition-dur-hover-darklight) linear 1 forwards;
 }
+/*--- properties ---*/
+@property --beam-1-start {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-1-end {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-2-start {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-2-end {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --beam-linear-h {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 0%;
+}
+@property --beam-linear-w {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 0%;
+}
+/*--- keyframes ---*/
 @keyframes fade-out-in {
     0%, 100% {
         opacity: 1;

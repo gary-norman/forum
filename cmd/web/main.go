@@ -1,4 +1,4 @@
-    package main
+package main
 
 import (
 	"database/sql"
@@ -35,10 +35,11 @@ func main() {
 		Handler: app.routes(),
 	}
 
-	log.Printf("Listening on %v", srv.Addr)
 	err = srv.ListenAndServe()
 	if err != nil {
 		fmt.Printf(ErrorMsgs.ConnInit, srv.Addr, "srv.ListenAndServe")
 		return
+	} else {
+		log.Printf("Listening on %v", srv.Addr)
 	}
 }

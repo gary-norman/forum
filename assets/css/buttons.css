@@ -5,7 +5,9 @@ button, .button {
     cursor: pointer;
     & span, & img {
         z-index: 11;
+        pointer-events: none;
     }
+
 }
 .button-sm {
     display: flex;
@@ -90,7 +92,7 @@ button, .button {
     color      : var(--color-fg-1);
     transition: all var(--transition-dur-hover);
     &:hover {
-        border: 0.15rem solid var(--color-secondary-hover);
+        /*border: 0.15rem solid var(--color-secondary-hover);*/
     }
 }
 
@@ -128,7 +130,7 @@ button, .button {
     border: 0.15rem solid transparent;
     transition: border var(--transition-dur-hover);
     &:hover {
-        border: 0.15rem solid var(--color-fg-3);
+        border: 0.15rem solid var(--color-secondary-hover);
     }
 }
 .btn-active {

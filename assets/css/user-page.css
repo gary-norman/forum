@@ -39,6 +39,14 @@
     align-self: stretch;
 }
 
+.collapsible-collapsed {
+    height: 0;
+    overflow: hidden;
+    transition: height 1s ease-in-out;
+}
+.collapsible-expanded {
+    height: calc-size(auto);
+}
 
 .banner {
     position: relative;

@@ -168,117 +168,211 @@
 
                     <div class="content">
                         <div id="activity-bar" class="button-row above-activity">
-                            <button class="button-lg btn-secondary btn-icotext btn-activity btn-active">
+                            <button id="activity" class="button-lg btn-secondary btn-icotext btn-activity">
                                 <img src="/assets/icons/clock_16.svg" alt="activity symbol">
                                 Activity
                             </button>
-
-                        <button class="button-lg btn-secondary btn-icotext btn-activity">
-                            <img src="/assets/icons/post_16.svg" alt="posts symbol">
-                            Posts
-                        </button>
-                        <button class="button-lg btn-secondary btn-icotext btn-activity">
-                            <img src="/assets/icons/comment_16.svg" alt="comments symbol">
-                            Comments
-                        </button>
-                        <button class="button-lg btn-secondary btn-noinvert btn-icotext btn-activity">
-                            <img src="/assets/icons/heart-empty_24.svg" alt="comments symbol">
-                            Saved
-                        </button>
-                        <button class="button-lg btn-secondary btn-icotext btn-activity">
-                            <img src="/assets/icons/mute_16.svg" alt="comments symbol">
-                            Muted
-                        </button>
-                        <button class="button-lg btn-secondary btn-noinvert btn-icotext btn-activity">
-                            <img src="/assets/icons/likes_16.svg" alt="comments symbol">
-                            Reactions
-                        </button>
-                    </div>
-
-                        <div id="activity-all">
-                            <div class="filters-row button-row ">
-                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
-                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
-                            </div>
-                            <div class="posts">
-                                {{range .Posts}}
-                                <div class="card">
-                                    <div class="post-info-container">
-                                        <span class="card-profile-pic"></span>
-                                        <div>
-                                            <small class="small-bold">{{.AuthorID}}</small>
+                            <button id="posts" class="button-lg btn-secondary btn-icotext btn-activity">
+                                <img src="/assets/icons/post_16.svg" alt="posts symbol">
+                                Posts
+                            </button>
+                            <button id="comments" class="button-lg btn-secondary btn-icotext btn-activity">
+                                <img src="/assets/icons/comment_16.svg" alt="comments symbol">
+                                Comments
+                            </button>
+                            <button id="saved" class="button-lg btn-secondary btn-noinvert btn-icotext btn-activity">
+                                <img src="/assets/icons/heart-empty_24.svg" alt="comments symbol">
+                                Saved
+                            </button>
+                            <button id="muted" class="button-lg btn-secondary btn-icotext btn-activity">
+                                <img src="/assets/icons/mute_16.svg" alt="comments symbol">
+                                Muted
+                            </button>
+                            <button id="kamil" class="button-lg btn-secondary btn-noinvert btn-icotext btn-activity">
+                                <img src="/assets/icons/likes_16.svg" alt="comments symbol">
+                                Reactions
+                            </button>
+                        </div>
+                        <div id="activity-feeds">
+                            <div id="activity-activity" class="collapsible-collapsed">
+                                <div class="filters-row button-row ">
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                </div>
+                                <div class="posts">
+                                    {{range .Posts}}
+                                    <div class="activity-items activity">Something happened!</div>
+                                    <div class="card">
+                                        <div class="post-info-container">
+                                            <span class="card-profile-pic"></span>
                                             <div>
-                                                <small>{{.ChannelID}}</small>
-                                                <small>-</small>
-                                                <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
-                                                    @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                                <small class="small-bold">{{.AuthorID}}</small>
+                                                <div>
+                                                    <small>{{.ChannelID}}</small>
+                                                    <small>-</small>
+                                                    <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
+                                                        @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                                </div>
                                             </div>
                                         </div>
+                                        <h4>{{.Title}}</h4>
+                                        <p class="cardContent">{{.Content}}</p>
+                                        <div class="button-row">
+                                            <button class="button-md btn-secondary btn-icotext btn-filled">
+                                                <img class="invert-off" src="/assets/icons/likes_16.svg" alt="like symbol">
+                                                100
+                                            </button>
+                                            <button class="button-md btn-secondary btn-icotext btn-filled">
+                                                <img class="invert-off" src="/assets/icons/dislikes_16.svg" alt="dislike symbol">
+                                                24:
+                                            </button>
+                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <img src="/assets/icons/reply_16.svg" alt="reply symbol">
+                                                Reply
+                                            </button>
+                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <img src="/assets/icons/share_16.svg" alt="share symbol">
+                                                Share
+                                            </button>
+                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <img src="/assets/icons/report_16.svg" alt="report symbol">
+                                                Report
+                                            </button>
+                                        </div>
                                     </div>
-                                    <h4>{{.Title}}</h4>
-                                    <p class="cardContent">{{.Content}}</p>
-                                    <div class="button-row">
-                                        <button class="button-md btn-secondary btn-icotext btn-filled">
-                                            <img class="invert-off" src="/assets/icons/likes_16.svg" alt="like symbol">
-                                            100
-                                        </button>
-                                        <button class="button-md btn-secondary btn-icotext btn-filled">
-                                            <img class="invert-off" src="/assets/icons/dislikes_16.svg" alt="dislike symbol">
-                                            24:
-                                        </button>
-                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                            <img src="/assets/icons/reply_16.svg" alt="reply symbol">
-                                            Reply
-                                        </button>
-                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                            <img src="/assets/icons/share_16.svg" alt="share symbol">
-                                            Share
-                                        </button>
-                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                            <img src="/assets/icons/report_16.svg" alt="report symbol">
-                                            Report
-                                        </button>
-                                    </div>
+                                    {{end}}
                                 </div>
-                                {{end}}
                             </div>
+                            <div id="activity-posts" class="collapsible-collapsed">
+                                <div class="button-row above-posts">
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                </div>
+                                <div class="posts">
+                                    {{range .Posts}}
+                                    <div class="card">
+                                        <div class="post-info-container">
+                                            <span class="card-profile-pic"></span>
+                                            <div>
+                                                <small class="small-bold">{{.AuthorID}}</small>
+                                                <div>
+                                                    <small>{{.ChannelID}}</small>
+                                                    <small>-</small>
+                                                    <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
+                                                        @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h4>{{.Title}}</h4>
+                                        <p class="cardContent">{{.Content}}</p>
+                                        <div class="button-row">
+                                            <button class="button-md btn-secondary btn-icotext btn-filled">
+                                                <img class="invert-off" src="/assets/icons/likes_16.svg" alt="like symbol">
+                                                100
+                                            </button>
+                                            <button class="button-md btn-secondary btn-icotext btn-filled">
+                                                <img class="invert-off" src="/assets/icons/dislikes_16.svg" alt="dislike symbol">
+                                                24:
+                                            </button>
+                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <img src="/assets/icons/reply_16.svg" alt="reply symbol">
+                                                Reply
+                                            </button>
+                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <img src="/assets/icons/share_16.svg" alt="share symbol">
+                                                Share
+                                            </button>
+                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <img src="/assets/icons/report_16.svg" alt="report symbol">
+                                                Report
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {{end}}
+                                </div>
+
+                            </div>
+                            <div id="activity-comments"  class="collapsible-collapsed">
+                                <div class="button-row above-posts">
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                </div>
+                                <div class="activity-items comments">Yo mama so fat</div>
+                                <div class="activity-items comments">Yo how fat is she?</div>
+                                <div class="activity-items comments">Yo mama so fat</div>
+                                <div class="activity-items comments">Yo how fat is she?</div>
+                                <div class="activity-items comments">Yo mama so fat</div>
+                                <div class="activity-items comments">Yo how fat is she?</div>
+                                <div class="activity-items comments">Yo mama</div>
+                                <div class="activity-items comments">Yo mama</div>
+                                <div class="activity-items comments">Yo mama</div>
+
+                            </div>
+                            <div id="activity-saved"  class="collapsible-collapsed">
+                                <div class="button-row above-posts">
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                </div>
+                                <div class="activity-items saved">You saved this post</div>
+                                <div class="activity-items saved">You saved this post</div>
+                                <div class="activity-items saved">You saved this post</div>
+                                <div class="activity-items saved">You saved this post</div>
+                                <div class="activity-items saved">You saved this post</div>
+                                <div class="activity-items saved">You saved this post</div>
+
+                            </div>
+                            <div id="activity-muted" class="collapsible-collapsed">
+                                <div class="button-row above-posts">
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                </div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+
+                            </div>
+                            <div id="activity-kamil" class="collapsible-collapsed">
+                                <div class="button-row above-posts">
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                </div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+                                <div class="activity-items muted">You muted this post</div>
+
+                            </div>
+
+<!--                            <div id="activity-actReactions" class="collapsible">-->
+<!--                                <div class="button-row above-posts">-->
+<!--                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>-->
+<!--                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>-->
+<!--                                </div>-->
+<!--                                <div class="activity-items reactions">You liked this post</div>-->
+<!--                                <div class="activity-items reactions">You liked this post</div>-->
+<!--                                <div class="activity-items reactions">You liked this post</div>-->
+<!--                                <div class="activity-items reactions">You liked this post</div>-->
+<!--                                <div class="activity-items reactions">You liked this post</div>-->
+<!--                                <div class="activity-items reactions">You liked this post</div>-->
+<!--                                <div class="activity-items reactions">You liked this post</div>-->
+<!--                                <div class="activity-items reactions">You liked this post</div>-->
+<!--                                <div class="activity-items reactions">You liked this post</div>-->
+<!--                                <div class="activity-items reactions">You liked this post</div>-->
+<!--                            </div>-->
                         </div>
-                        <!--                    <div id="activity-posts">-->
-                        <!--                        <div class="button-row above-posts">-->
-                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>-->
-                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>-->
-                        <!--                        </div>-->
-
-                        <!--                    </div>-->
-                        <!--                    <div id="activity-comments">-->
-                        <!--                        <div class="button-row above-posts">-->
-                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>-->
-                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>-->
-                        <!--                        </div>-->
-
-                        <!--                    </div>-->
-                        <!--                    <div id="activity-saved">-->
-                        <!--                        <div class="button-row above-posts">-->
-                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>-->
-                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>-->
-                        <!--                        </div>-->
-
-                        <!--                    </div>-->
-                        <!--                    <div id="activity-muted">-->
-                        <!--                        <div class="button-row above-posts">-->
-                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>-->
-                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>-->
-                        <!--                        </div>-->
-
-                        <!--                    </div>-->
-                        <!--                    <div id="activity-reactions">-->
-                        <!--                        <div class="button-row above-posts">-->
-                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>-->
-                        <!--                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>-->
-                        <!--                        </div>-->
-
-                        <!--                    </div>-->
-                    </div>
 
 
 
@@ -400,5 +494,6 @@
 <!--            {{end}}-->
 <!--        </div>-->
 <!--<a href="posts/create" class="button" style="position: absolute; top: .5rem; left: 2rem;">create post</a>-->
+    </div>
 </body>
 </html>

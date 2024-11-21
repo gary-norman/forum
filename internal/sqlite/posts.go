@@ -11,14 +11,14 @@ type PostModel struct {
 }
 
 func (m *PostModel) Insert(title, content, images string, channel, author int, commentable bool) error {
-	stmt := "INSERT INTO posts (Title, Content, Images, Created, ChannelID, AuthorID, Commentable, Is_flagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, 0)"
+	stmt := "INSERT INTO Posts (Title, Content, Images, Created, ChannelID, AuthorID, Commentable, Is_flagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, 0)"
 	_, err := m.DB.Exec(stmt, title, content, images, channel, author, commentable)
 	return err
 }
 
 func (m *PostModel) All() ([]models.Post, error) {
 	ErrorMsgs := models.CreateErrorMessages()
-	stmt := "SELECT ID, Title, Content, Images, Created, Commentable, AuthorID, ChannelID, Is_flagged FROM posts ORDER BY ID DESC"
+	stmt := "SELECT ID, Title, Content, Images, Created, Commentable, AuthorID, ChannelID, Is_flagged FROM Posts ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
 		return nil, err

@@ -648,6 +648,28 @@ a:active {
   .main-window::-webkit-scrollbar {
     display : none;
   }
+  .activity-items {
+    color: var(--color-light-1-lab);
+    border-radius: 2.4rem;
+    margin: 1.2rem 0;
+    padding: .8rem;
+  }
+.activity {
+  background: red;
+}
+.comments {
+  background: var(--color-hl-blue);
+}
+.saved {
+  background: var(--color-hl-orange);
+}
+.muted {
+  background: var(--color-hl-yellow);
+  color: var(--color-dark-1);
+}
+.reactions {
+  background: var(--color-hl-pink);
+}
 
   .posts {
     display        : flex;
@@ -766,7 +788,7 @@ a:active {
   }
 
   .above-posts {
-    position   : absolute;
+    /*position   : absolute;*/
     background : var(--color-bg-1);
     width      : calc(100vw - 3rem - 1.2rem - 32rem);
     z-index    : 100;

@@ -1,14 +1,28 @@
 // variables
 const switchDl = document.getElementById('switch-dl');
 const darkSwitch = document.getElementById('sidebar-option-darkmode');
+// activity buttons
+const actButtonContainer = document.querySelector('#activity-bar')
+const actButtonsAll = actButtonContainer.querySelectorAll('button')
+const actActivity = document.getElementById('act-activity');
+const actPosts = document.getElementById('act-posts');
+const actComments = document.getElementById('act-comments');
+const actSaved = document.getElementById('act-saved');
+const actMuted  = document.getElementById('act-muted');
+const actReactions = document.getElementById('act-reactions');
+// activity feeds
+const activityFeeds = document.querySelector('#activity-feeds')
+const activityFeedsAll = activityFeeds.querySelectorAll('[id^="activity"]')
+const activityActivity = document.getElementById('activity-all');
+const activityPosts = document.getElementById('activity-posts');
+const activityComments = document.getElementById('activity-comments');
+
 // functions
 function toggleColorScheme() {
     // Get the current color scheme
     const currentScheme = document.documentElement.getAttribute('color-scheme');
-
     // Toggle between light and dark
     const newScheme = currentScheme === 'light' ? 'dark' : 'light';
-
     // Set the new color scheme
     document.documentElement.setAttribute('color-scheme', newScheme);
 }
@@ -18,6 +32,34 @@ function toggleDarkMode() {
     console.log("toggle dark mode")
 }
 
+function toggleFeed(targetFeed, targetButton) {
+    actButtonsAll.forEach( button => button.classList.remove('btn-active') );
+    activityFeedsAll.forEach(feed => {
+        feed.classList.remove('collapsible-expanded');
+        feed.classList.add('collapsible-collapsed');
+    });
+    setTimeout(() => { targetFeed.classList.remove('collapsible-collapsed'); }, 500);
+    targetFeed.classList.add('collapsible-expanded');
+    targetButton.classList.toggle('btn-active');
+}
+
 // event listeners
 // switchDl.addEventListener('click', toggleColorScheme);
 darkSwitch.addEventListener('click', toggleDarkMode);
+// actActivity.addEventListener( 'click' , () => {
+//     actButtonsAll.forEach( button => button.classList.remove('btn-active') );
+//     activityFeedsAll.forEach(feed => {
+//         feed.classList.remove('collapsible.expanded');
+//         feed.classList.add('collapsible');
+//     });
+//     setTimeout(() => { activityAll.classList.remove('collapsible'); }, 500);
+//     activityAll.classList.add('collapsible.expanded');
+//     actActivity.classList.toggle('btn-active');
+// })
+// actPosts.addEventListener( 'click' , () => toggleFeed(activityPosts, actPosts) );
+// // actActivity.addEventListener( 'click', toggleFeed(activityAll, actActivity) );
+// actComments.addEventListener('click', (e) => toggleFeed(activityComments, e.target));
+actButtonsAll.forEach( button => button.addEventListener('click', (e) => {
+    toggleFeed(document.getElementById("activity-" + e.target.id), e.target);
+    console.log('activity-' + e.target.id);
+}) );

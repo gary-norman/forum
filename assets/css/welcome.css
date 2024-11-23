@@ -288,7 +288,7 @@
         --door-inset-spread: 0rem;
     }
     100% {
-        top: 0rem;
+        top: 0;
         --door-inset-x: .2rem;
         --door-inset-y: -.2rem;
         --door-inset-blur: 1rem;

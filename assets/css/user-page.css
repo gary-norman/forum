@@ -28,7 +28,7 @@
 
 #user-page {
     /*total width - sidebar*/
-    position: relative;
+    /*position: relative;*/
     width: 100%;
     display: flex;
     padding: 0 0 12.4rem 0;
@@ -41,12 +41,14 @@
 }
 
 .collapsible-collapsed {
-    height: 0;
+    /*height: 0;*/
+    display: none;
     overflow: hidden;
-    transition: height 1s ease-in-out;
+    transition: display 1s ease-in-out;
 }
 .collapsible-expanded {
-    height: calc-size(auto);
+    /*height: calc-size(auto);*/
+    display: block;
 }
 
 .banner {

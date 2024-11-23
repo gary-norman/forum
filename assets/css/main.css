@@ -312,10 +312,8 @@ a:active {
 }
 
 .content {
-  position   : relative;
   width      : 100%;
   z-index    : 100;
-  /*top: 10rem;*/
   padding: 0 2.4rem ;
 }
 
@@ -642,7 +640,11 @@ a:active {
     overflow           : hidden;
   }
 
-
+.feeds-wrapper {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
 
   .activity-items {
     color: var(--color-light-1-lab);
@@ -667,6 +669,8 @@ a:active {
     background: var(--color-hl-pink);
   }
 #home-page {
+  /*display: none;*/
+  margin: 1rem 0 0 .8rem;
 }
   .feed-content {
     display        : flex;
@@ -698,16 +702,24 @@ a:active {
     width: 100%;
     height: 100%;
     overflow-y: scroll;
-    mask-image: url(#homepage-feed-mask); /* For modern browsers */
-    -webkit-mask-image: url(#homepage-feed-mask); /* For WebKit browsers */
     mask-size: cover;
     -webkit-mask-size: cover;
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
     mask-position: top;
     -webkit-mask-position: top;
-    padding: 6.2rem 0 0 0;
-    margin: 1rem 0 0 0;
+    /*padding: 6.2rem 0 0 0;*/
+    /*margin: 1rem 0 0 0;*/
+  }
+  .scrollable-home {
+    mask-image: url(#homepage-feed-mask); /* For modern browsers */
+    -webkit-mask-image: url(#homepage-feed-mask); /* For WebKit browsers */
+    padding: 0 1.2rem;
+    margin: 6rem 0 0 0;
+  }
+  .scrollable-user {
+    mask-image: url(#userpage-feed-mask); /* For modern browsers */
+    -webkit-mask-image: url(#userpage-feed-mask); /* For WebKit browsers */
   }
 
   .noborder {

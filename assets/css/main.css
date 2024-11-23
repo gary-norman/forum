@@ -640,15 +640,10 @@ a:active {
     width          : 100%;
     max-height         : calc(100vh - 4.9rem);
     overflow           : hidden;
-    -ms-overflow-style : none; /* IE and Edge */
-    scrollbar-width    : none; /* Firefox */
   }
 
-  /* Hide scrollbar for Chrome, Safari and Opera */
 
-  .main-window::-webkit-scrollbar {
-    display : none;
-  }
+
   .activity-items {
     color: var(--color-light-1-lab);
     border-radius: 2.4rem;

@@ -135,19 +135,28 @@
                 <div class="homepage-feed-mask-container" style="min-height: 100% !important;">
                 <svg height="100%" width="100%" preserveAspectRatio="none">
                     <defs>
-                        <linearGradient id="mask-gradient" x1="0" x2="0" y1="0" y2="1">
+                        <linearGradient id="home-mask-gradient" x1="0" x2="0" y1="0" y2="1">
                             <stop offset="0%" stop-color="black" />
-                            <stop offset="6%" stop-color="black" />
-                            <stop offset="10%" stop-color="white" />
+<!--                            <stop offset="6%" stop-color="black" />-->
+                            <stop offset="2%" stop-color="white" />
+                            <stop offset="100%" stop-color="white" />
+                        </linearGradient>
+                        <linearGradient id="user-mask-gradient" x1="0" x2="0" y1="0" y2="1">
+                            <stop offset="0%" stop-color="black" />
+<!--                            <stop offset="1%" stop-color="black" />-->
+                            <stop offset="4%" stop-color="white" />
                             <stop offset="100%" stop-color="white" />
                         </linearGradient>
                     </defs>
                     <mask id="homepage-feed-mask">
-                    <rect width="100%" height="100%" fill="url(#mask-gradient)" />
+                    <rect width="100%" height="100%" fill="url(#home-mask-gradient)" />
+                    </mask>
+                    <mask id="userpage-feed-mask">
+                        <rect width="100%" height="100%" fill="url(#user-mask-gradient)" />
                     </mask>
                 </svg>
                 </div>
-                <div id="user-page">
+                <div id="user-page" class="feeds-wrapper">
                     <div class="banner">
                         <img class="user-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
                         <div class="user-page-controls">
@@ -206,13 +215,13 @@
                                 Reactions
                             </button>
                         </div>
-                        <div id="activity-feeds">
+                        <div id="activity-feeds" style="position: absolute; width: 100%; height: 100%    ">
                             <div id="activity-activity" class="collapsible-collapsed">
                                 <div class="filters-row button-row ">
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
                                 </div>
-                                <div class="feed-content">
+                                <div class="feed-content scrollable-user scrollable no-scrollbar">
                                     {{range .Posts}}
                                     <div class="activity-items activity">Something happened!</div>
                                     <div class="card">
@@ -261,7 +270,7 @@
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
                                 </div>
-                                <div class="feed-content">
+                                <div class="feed-content scrollable-user scrollable no-scrollbar">
                                     {{range .Posts}}
                                     <div class="card">
                                         <div class="post-info-container">
@@ -303,81 +312,86 @@
                                     </div>
                                     {{end}}
                                 </div>
-
                             </div>
                             <div id="activity-comments"  class="collapsible-collapsed">
                                 <div class="filters-row button-row">
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
                                 </div>
-                                <div class="activity-items comments">Yo mama so fat</div>
-                                <div class="activity-items comments">Yo how fat is she?</div>
-                                <div class="activity-items comments">Yo mama so fat</div>
-                                <div class="activity-items comments">Yo how fat is she?</div>
-                                <div class="activity-items comments">Yo mama so fat</div>
-                                <div class="activity-items comments">Yo how fat is she?</div>
-                                <div class="activity-items comments">Yo mama</div>
-                                <div class="activity-items comments">Yo mama</div>
-                                <div class="activity-items comments">Yo mama</div>
-
+                                <div class="feed-content scrollable-user scrollable no-scrollbar">
+                                    <div class="activity-items comments">Yo mama so fat</div>
+                                    <div class="activity-items comments">Yo how fat is she?</div>
+                                    <div class="activity-items comments">Yo mama so fat</div>
+                                    <div class="activity-items comments">Yo how fat is she?</div>
+                                    <div class="activity-items comments">Yo mama so fat</div>
+                                    <div class="activity-items comments">Yo how fat is she?</div>
+                                    <div class="activity-items comments">Yo mama</div>
+                                    <div class="activity-items comments">Yo mama</div>
+                                    <div class="activity-items comments">Yo mama</div>
+                                </div>
                             </div>
                             <div id="activity-saved"  class="collapsible-collapsed">
                                 <div class="filters-row button-row">
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
                                 </div>
-                                <div class="activity-items saved">You saved this post</div>
-                                <div class="activity-items saved">You saved this post</div>
-                                <div class="activity-items saved">You saved this post</div>
-                                <div class="activity-items saved">You saved this post</div>
-                                <div class="activity-items saved">You saved this post</div>
-                                <div class="activity-items saved">You saved this post</div>
-
+                                <div class="feed-content scrollable-user scrollable no-scrollbar">
+                                    <div class="activity-items saved">You saved this post</div>
+                                    <div class="activity-items saved">You saved this post</div>
+                                    <div class="activity-items saved">You saved this post</div>
+                                    <div class="activity-items saved">You saved this post</div>
+                                    <div class="activity-items saved">You saved this post</div>
+                                    <div class="activity-items saved">You saved this post</div>
+                                </div>
                             </div>
                             <div id="activity-muted" class="collapsible-collapsed">
                                 <div class="filters-row button-row">
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
                                 </div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-
+                                <div class="feed-content scrollable-user scrollable no-scrollbar">
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                </div>
                             </div>
                             <div id="activity-reactions" class="collapsible-collapsed">
                                 <div class="filters-row button-row">
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
                                 </div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
+                                <div class="feed-content scrollable-user scrollable no-scrollbar">
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                    <div class="activity-items muted">You muted this post</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 <!---- homepage ------>
+                <div id="home-page" class="feeds-wrapper">
                 <div class="button-row above-posts button-row-homepage">
                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort
                         <img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters
                         <img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
                 </div>
-                <div id="home-page" class="scrollable no-scrollbar">
+                <div class="scrollable-home scrollable no-scrollbar">
                 <div class="feed-content feed-content-homepage">
                     {{range .Posts}}
                         <div class="card">
@@ -419,6 +433,7 @@
                             </div>
                         </div>
                     {{end}}
+                </div>
                 </div>
                 </div>
             </div>

@@ -6,7 +6,7 @@ const actButtonContainer = document.querySelector('#activity-bar')
 const actButtonsAll = actButtonContainer.querySelectorAll('button')
 // activity feeds
 const activityFeeds = document.querySelector('#activity-feeds')
-const activityFeedsAll = activityFeeds.querySelectorAll('[id^="activity"]')
+const filterButtonsContainer = activityFeeds.querySelectorAll('.button-row')
 const activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]')
 
 // functions
@@ -25,11 +25,8 @@ function toggleDarkMode() {
 }
 
 function toggleFeed(targetFeed, targetFeedContent, targetButton) {
+    const timeOut = 400;
     actButtonsAll.forEach( button => button.classList.remove('btn-active') );
-    // activityFeedsAll.forEach(feed => {
-    //     feed.classList.remove('collapsible-expanded');
-    //     feed.classList.add('collapsible-collapsed');
-    // });
     activityFeedsContentAll.forEach(feed => {
         feed.classList.remove('collapsible-expanded');
         feed.classList.add('collapsible-collapsed');
@@ -39,7 +36,16 @@ function toggleFeed(targetFeed, targetFeedContent, targetButton) {
         targetFeedContent.classList.remove('collapsible-collapsed');
         // targetFeed.classList.add('collapsible-expanded');
         targetFeedContent.classList.add('collapsible-expanded');
-        targetButton.classList.toggle('btn-active'); }, 1000);
+        targetButton.classList.toggle('btn-active'); }, timeOut);
+    setTimeout(() => {
+        filterButtonsContainer.forEach(feed => {
+        // const currentButtonDisplay = feed.getAttribute('display');
+        // const newButtonDisplay = currentButtonDisplay === 'none' ? 'flex' : 'none';
+        // feed.setAttribute('display', newButtonDisplay);
+        feed.classList.add('hide-feed');
+        });
+        targetFeed.querySelector('.button-row').classList.remove('hide-feed');}, timeOut)
+
 }
 
 // event listeners

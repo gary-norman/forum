@@ -10,9 +10,9 @@ type ImageModel struct {
 	DB *sql.DB
 }
 
-func (m *ImageModel) Insert(authotID, postID int) error {
+func (m *ImageModel) Insert(authorID, postID int) error {
 	stmt := "INSERT INTO Images (Created, AuthorID, PostID) VALUES (DateTime('now'), ?, ?)"
-	_, err := m.DB.Exec(stmt, authotID, postID)
+	_, err := m.DB.Exec(stmt, authorID, postID)
 	return err
 }
 

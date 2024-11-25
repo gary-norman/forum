@@ -39,6 +39,13 @@ type Channel struct {
 	Privacy     bool      `json:"privacy"`
 }
 
+type MutedChannel struct {
+	ID        int       `json:"id"`
+	UserID    int       `json:"user_id"`
+	ChannelID int       `json:"channel_id"`
+	Created   time.Time `json:"created"`
+}
+
 type Membership struct {
 	ID        int       `json:"id"`
 	UserID    int       `json:"user_id"`

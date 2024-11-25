@@ -37,18 +37,18 @@
     gap: 2.4rem;
     flex: 1 0 0;
     align-self: stretch;
-    display: none;
+    /*display: none;*/
 }
 
 .collapsible-collapsed {
-    /*height: 0;*/
-    display: none;
+    height: 0;
+    /*display: none;*/
     overflow: hidden;
-    transition: display 1s ease-in-out;
+    transition: height var(--transition-dur-feeds) ease-in-out;
 }
 .collapsible-expanded {
-    /*height: calc-size(auto);*/
-    display: block;
+    height: 100%;
+    /*display: block;*/
 }
 
 .banner {

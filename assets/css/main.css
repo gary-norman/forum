@@ -26,7 +26,9 @@
     inset 0 3px 5px rgba(0 0 0 / 0.3), inset 0 -1px 2px rgba(225 225 225 / 0.5);
 
   /* --- transitions --- */
+  interpolate-size: allow-keywords; /* allow animations between intrinsic sizes */
   --transition-dur-hover: 200ms;
+  --transition-dur-feeds: 500ms;
   --transition-dur-hover-darklight: 500ms;
   --transition-type-hover: ease-in-out;
   /* --- filters --- */
@@ -669,7 +671,7 @@ a:active {
     background: var(--color-hl-pink);
   }
 #home-page {
-  /*display: none;*/
+  display: none;
   margin: 1rem 0 0 .8rem;
 }
   .feed-content {

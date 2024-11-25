@@ -132,7 +132,7 @@
                 </div>
             </div>
             <div class="main-window">
-                <div class="homepage-feed-mask-container" style="min-height: 100% !important;">
+                <div class="homepage-feed-mask-container" style="z-index: 0; min-height: 100% !important;">
                 <svg height="100%" width="100%" preserveAspectRatio="none">
                     <defs>
                         <linearGradient id="home-mask-gradient" x1="0" x2="0" y1="0" y2="1">
@@ -216,7 +216,7 @@
                             </button>
                         </div>
                         <div id="activity-feeds" style="position: absolute; width: 100%; height: 100%    ">
-                            <div id="activity-activity" class="collapsible-collapsed">
+                            <div id="activity-activity">
                                 <div class="filters-row button-row ">
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
@@ -265,7 +265,7 @@
                                     {{end}}
                                 </div>
                             </div>
-                            <div id="activity-posts" class="collapsible-collapsed">
+                            <div id="activity-posts">
                                 <div class="filters-row button-row">
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
@@ -313,7 +313,7 @@
                                     {{end}}
                                 </div>
                             </div>
-                            <div id="activity-comments"  class="collapsible-collapsed">
+                            <div id="activity-comments" >
                                 <div class="filters-row button-row">
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
@@ -330,7 +330,7 @@
                                     <div class="activity-items comments">Yo mama</div>
                                 </div>
                             </div>
-                            <div id="activity-saved"  class="collapsible-collapsed">
+                            <div id="activity-saved" >
                                 <div class="filters-row button-row">
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
@@ -344,7 +344,7 @@
                                     <div class="activity-items saved">You saved this post</div>
                                 </div>
                             </div>
-                            <div id="activity-muted" class="collapsible-collapsed">
+                            <div id="activity-muted">
                                 <div class="filters-row button-row">
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
@@ -362,7 +362,7 @@
                                     <div class="activity-items muted">You muted this post</div>
                                 </div>
                             </div>
-                            <div id="activity-reactions" class="collapsible-collapsed">
+                            <div id="activity-reactions">
                                 <div class="filters-row button-row">
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
                                     <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>

@@ -44,7 +44,7 @@
     height: 0;
     /*display: none;*/
     overflow: hidden;
-    transition: height var(--transition-dur-feeds) ease-in-out;
+    transition: height 1000ms ease-in-out;
 }
 .collapsible-expanded {
     height: 100%;

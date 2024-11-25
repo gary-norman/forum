@@ -26,20 +26,20 @@ function toggleDarkMode() {
 
 function toggleFeed(targetFeed, targetFeedContent, targetButton) {
     actButtonsAll.forEach( button => button.classList.remove('btn-active') );
-    activityFeedsAll.forEach(feed => {
-        feed.classList.remove('collapsible-expanded');
-        feed.classList.add('collapsible-collapsed');
-    });
+    // activityFeedsAll.forEach(feed => {
+    //     feed.classList.remove('collapsible-expanded');
+    //     feed.classList.add('collapsible-collapsed');
+    // });
     activityFeedsContentAll.forEach(feed => {
         feed.classList.remove('collapsible-expanded');
         feed.classList.add('collapsible-collapsed');
     });
     setTimeout(() => {
-        targetFeed.classList.remove('collapsible-collapsed');
+        // targetFeed.classList.remove('collapsible-collapsed');
         targetFeedContent.classList.remove('collapsible-collapsed');
-        targetFeed.classList.add('collapsible-expanded');
+        // targetFeed.classList.add('collapsible-expanded');
         targetFeedContent.classList.add('collapsible-expanded');
-        targetButton.classList.toggle('btn-active'); }, 500);
+        targetButton.classList.toggle('btn-active'); }, 1000);
 }
 
 // event listeners

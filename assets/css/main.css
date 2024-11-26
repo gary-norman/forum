@@ -398,8 +398,15 @@ a:active {
     margin-block-start: .8rem;
     max-width:  70rem;
     max-height: 70rem;
+    opacity: 0;
+    transition: display var(--transition-dur-feeds), opacity var(--transition-dur-feeds);
+    transition-behavior: allow-discrete;
     &:popover-open {
       display: flex;
+      opacity: 1;
+      @starting-style {
+        opacity: 0;
+      }
     }
   }
 

@@ -32,16 +32,11 @@ function toggleFeed(targetFeed, targetFeedContent, targetButton) {
         feed.classList.add('collapsible-collapsed');
     });
     setTimeout(() => {
-        // targetFeed.classList.remove('collapsible-collapsed');
         targetFeedContent.classList.remove('collapsible-collapsed');
-        // targetFeed.classList.add('collapsible-expanded');
         targetFeedContent.classList.add('collapsible-expanded');
         targetButton.classList.toggle('btn-active'); }, timeOut);
     setTimeout(() => {
         filterButtonsContainer.forEach(feed => {
-        // const currentButtonDisplay = feed.getAttribute('display');
-        // const newButtonDisplay = currentButtonDisplay === 'none' ? 'flex' : 'none';
-        // feed.setAttribute('display', newButtonDisplay);
         feed.classList.add('hide-feed');
         });
         targetFeed.querySelector('.button-row').classList.remove('hide-feed');}, timeOut)

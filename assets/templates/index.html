@@ -28,13 +28,54 @@
                 </div>
             </form>
             <div class="flex-align-c">
-                <a href="posts/create" class="button button-md btn-primary btn-icotext btn-action-primary">
+                <button popovertarget="form-post" class="btn-post button-md btn-primary btn-icotext btn-action-primary">
                     <span class="btn-posts">Post</span>
-                </a>
+                </button>
                 <button class="button-md btn-secondary btn-icotext btn-filled btn-action-secondary">
                     <span class="btn-notifications" role="contentinfo" aria-description="Notifications, with a bell icon">Notifications</span>
                 </button>
             </div>
+        </div>
+        <div popover id="form-post">
+            <form class="wrapper-form" action="/posts/create" method="POST">
+                <label class="hide-feed" for="author">User:</label>
+<!--                INFO this will not be in the final form as mit will be determined by the logged in user -->
+                <select id="author" name="author" style="justify-self: center">
+                    <option selected disabled hidden>Select a user</option>
+                    <option value="1001">Lore</option>
+                    <option value="1002">Kamil</option>
+                    <option value="1003">Munky</option>
+                    <option value="1004">Bob</option>
+                    <option value="1005">Shazam!</option>
+                </select>
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title"/>
+                    <label for="content">Post</label>
+                    <textarea id="content" name="content"></textarea>
+                    <label for="images"></label>
+                    <input type="text" class="noborder" id="images" name="images" placeholder="Upload an image (optional)"/>
+                    <label class="hide-feed" for="channel">Channel</label>
+                    <select id="channel" name="channel" style="justify-self: center">
+                        <option selected disabled hidden>Select a channel</option>
+                        <option value="2001">User's lounge</option>
+                        <option value="2002">CSS</option>
+                        <option value="2003">JS</option>
+                        <option value="2004">Golang</option>
+                        <option value="2005">SQLite</option>
+                    </select>
+                    <div class="cont-flex-row" style="justify-content: center; align-items: center">
+                        <label for="allow-comments-checkbox">Allow comments</label>
+                        <label class="allow-comments">
+                            <input type="checkbox" id="allow-comments-checkbox">
+                            <span class="allow-comments-fx"></span>
+                            <!--                            <span class="darklight-border"></span>-->
+                        </label>
+                    </div>
+                <div class="cont-flex-row" style="justify-content: space-around">
+                    <button class="button-md btn-primary btn-action">create post</button>
+                    <a href="/" class="button button-md btn-secondary btn-action btn-filled">cancel</a>
+                </div>
+            </form>
         </div>
         <div class="main-content" >
             <div class="sidebar">
@@ -156,6 +197,60 @@
                     </mask>
                 </svg>
                 </div>
+                <!---- homepage ------>
+                <div id="home-page" class="feeds-wrapper">
+                    <div class="button-row above-posts button-row-homepage">
+                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort
+                            <img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters
+                            <img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                    </div>
+                    <div class="scrollable-home scrollable no-scrollbar">
+                        <div class="feed-content feed-content-homepage">
+                            {{range .Posts}}
+                            <div class="card">
+                                <div class="post-info-container">
+                                    <span class="card-profile-pic"></span>
+                                    <div>
+                                        <small class="small-bold">{{.AuthorID}}</small>
+                                        <div>
+                                            <small>{{.ChannelID}}</small>
+                                            <small>-</small>
+                                            <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
+                                                @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4>{{.Title}}</h4>
+                                <p class="cardContent">{{.Content}}</p>
+                                <div class="button-row">
+                                    <button class="button-md btn-secondary btn-icotext btn-filled">
+                                        <img class="invert-off" src="/assets/icons/likes_16.svg" alt="likes symbol">
+                                        100
+                                    </button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled">
+                                        <img class="invert-off" src="/assets/icons/dislikes_16.svg" alt="dislikes symbol">
+                                        24
+                                    </button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                        <img src="/assets/icons/reply_16.svg" alt="reply symbol">
+                                        Reply
+                                    </button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                        <img src="/assets/icons/share_16.svg" alt="share symbol">
+                                        Share
+                                    </button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                        <img src="/assets/icons/report_16.svg" alt="report symbol">
+                                        Report
+                                    </button>
+                                </div>
+                            </div>
+                            {{end}}
+                        </div>
+                    </div>
+                </div>
+<!--                --- user page --- -->
                 <div id="user-page" class="feeds-wrapper">
                     <div class="banner">
                         <img class="user-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
@@ -382,59 +477,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-<!---- homepage ------>
-                <div id="home-page" class="feeds-wrapper">
-                <div class="button-row above-posts button-row-homepage">
-                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort
-                        <img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
-                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters
-                        <img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
-                </div>
-                <div class="scrollable-home scrollable no-scrollbar">
-                <div class="feed-content feed-content-homepage">
-                    {{range .Posts}}
-                        <div class="card">
-                            <div class="post-info-container">
-                                <span class="card-profile-pic"></span>
-                                <div>
-                                    <small class="small-bold">{{.AuthorID}}</small>
-                                    <div>
-                                        <small>{{.ChannelID}}</small>
-                                        <small>-</small>
-                                        <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
-                                            @ {{.Created.Format "15:04:05 UTC"}}</time>
-                                    </div>
-                                </div>
-                            </div>
-                            <h4>{{.Title}}</h4>
-                            <p class="cardContent">{{.Content}}</p>
-                            <div class="button-row">
-                                <button class="button-md btn-secondary btn-icotext btn-filled">
-                                    <img class="invert-off" src="/assets/icons/likes_16.svg" alt="likes symbol">
-                                    100
-                                </button>
-                                <button class="button-md btn-secondary btn-icotext btn-filled">
-                                    <img class="invert-off" src="/assets/icons/dislikes_16.svg" alt="dislikes symbol">
-                                    24
-                                </button>
-                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <img src="/assets/icons/reply_16.svg" alt="reply symbol">
-                                    Reply
-                                </button>
-                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <img src="/assets/icons/share_16.svg" alt="share symbol">
-                                    Share
-                                </button>
-                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <img src="/assets/icons/report_16.svg" alt="report symbol">
-                                    Report
-                                </button>
-                            </div>
-                        </div>
-                    {{end}}
-                </div>
-                </div>
                 </div>
             </div>
         </div>

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/text_effects.css">
     <link rel="stylesheet" href="/assets/css/user-page.css">
+    <link rel="stylesheet" href="/assets/css/channel-page.css">
     <link rel="stylesheet" href="/assets/css/buttons.css">
     <script src="/assets/js/main.js" defer></script>
     <title>01F Forum</title>
@@ -250,7 +251,7 @@
                         </div>
                     </div>
                 </div>
-<!--                --- user page --- -->
+                <!----- user page --- -->
                 <div id="user-page" class="feeds-wrapper">
                     <div class="banner">
                         <img class="user-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
@@ -283,201 +284,303 @@
                         </div>
                     </div>
                     </div>
-                    <div class="content">
-                        <div id="activity-bar" class="button-row above-activity">
-                            <button id="activity" class="button-lg btn-secondary btn-icotext btn-activity">
-                                <img src="/assets/icons/clock_16.svg" alt="activity symbol">
-                                Activity
-                            </button>
-                            <button id="posts" class="button-lg btn-secondary btn-icotext btn-activity">
-                                <img src="/assets/icons/post_16.svg" alt="posts symbol">
-                                Posts
-                            </button>
-                            <button id="comments" class="button-lg btn-secondary btn-icotext btn-activity">
-                                <img src="/assets/icons/comment_16.svg" alt="comments symbol">
-                                Comments
-                            </button>
-                            <button id="saved" class="button-lg btn-secondary btn-noinvert btn-icotext btn-activity">
-                                <img src="/assets/icons/heart-empty_24.svg" alt="comments symbol">
-                                Saved
-                            </button>
-                            <button id="muted" class="button-lg btn-secondary btn-icotext btn-activity">
-                                <img src="/assets/icons/mute_16.svg" alt="comments symbol">
-                                Muted
-                            </button>
-                            <button id="reactions" class="button-lg btn-secondary btn-noinvert btn-icotext btn-activity">
-                                <img src="/assets/icons/likes_16.svg" alt="comments symbol">
-                                Reactions
-                            </button>
+                    <div class="content-container">
+                        <div class="content">
+                            <div id="activity-bar" class="button-row above-activity">
+                                <button id="activity" class="button-lg btn-secondary btn-icotext btn-activity btn-active" >
+                                    <img src="/assets/icons/clock_16.svg" alt="activity symbol">
+                                    Activity
+                                </button>
+                                <button id="posts" class="button-lg btn-secondary btn-icotext btn-activity">
+                                    <img src="/assets/icons/post_16.svg" alt="posts symbol">
+                                    Posts
+                                </button>
+                                <button id="comments" class="button-lg btn-secondary btn-icotext btn-activity">
+                                    <img src="/assets/icons/comment_16.svg" alt="comments symbol">
+                                    Comments
+                                </button>
+                                <button id="saved" class="button-lg btn-secondary btn-noinvert btn-icotext btn-activity">
+                                    <img src="/assets/icons/heart-empty_24.svg" alt="comments symbol">
+                                    Saved
+                                </button>
+                                <button id="muted" class="button-lg btn-secondary btn-icotext btn-activity">
+                                    <img src="/assets/icons/mute_16.svg" alt="comments symbol">
+                                    Muted
+                                </button>
+                                <button id="reactions" class="button-lg btn-secondary btn-noinvert btn-icotext btn-activity">
+                                    <img src="/assets/icons/likes_16.svg" alt="comments symbol">
+                                    Reactions
+                                </button>
+                            </div>
+                            <div id="activity-feeds" style="position: absolute; width: 100%; height: 100%    ">
+                                <div id="activity-activity">
+                                    <div class="filters-row button-row">
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                    </div>
+                                    <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+                                        {{range .Posts}}
+                                        <div class="activity-items activity">Something happened!</div>
+                                        <div class="card">
+                                            <div class="post-info-container">
+                                                <span class="card-profile-pic"></span>
+                                                <div>
+                                                    <small class="small-bold">{{.AuthorID}}</small>
+                                                    <div>
+                                                        <small>{{.ChannelID}}</small>
+                                                        <small>-</small>
+                                                        <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
+                                                            @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h4>{{.Title}}</h4>
+                                            <p class="cardContent">{{.Content}}</p>
+                                            <div class="button-row">
+                                                <button class="button-md btn-secondary btn-icotext btn-filled">
+                                                    <img class="invert-off" src="/assets/icons/likes_16.svg" alt="like symbol">
+                                                    100
+                                                </button>
+                                                <button class="button-md btn-secondary btn-icotext btn-filled">
+                                                    <img class="invert-off" src="/assets/icons/dislikes_16.svg" alt="dislike symbol">
+                                                    24:
+                                                </button>
+                                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                    <img src="/assets/icons/reply_16.svg" alt="reply symbol">
+                                                    Reply
+                                                </button>
+                                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                    <img src="/assets/icons/share_16.svg" alt="share symbol">
+                                                    Share
+                                                </button>
+                                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                    <img src="/assets/icons/report_16.svg" alt="report symbol">
+                                                    Report
+                                                </button>
+                                            </div>
+                                        </div>
+                                        {{end}}
+                                    </div>
+                                </div>
+                                <div id="activity-posts">
+                                    <div class="filters-row button-row hide-feed">
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                    </div>
+                                    <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                                        {{range .Posts}}
+                                        <div class="card">
+                                            <div class="post-info-container">
+                                                <span class="card-profile-pic"></span>
+                                                <div>
+                                                    <small class="small-bold">{{.AuthorID}}</small>
+                                                    <div>
+                                                        <small>{{.ChannelID}}</small>
+                                                        <small>-</small>
+                                                        <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
+                                                            @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h4>{{.Title}}</h4>
+                                            <p class="cardContent">{{.Content}}</p>
+                                            <div class="button-row">
+                                                <button class="button-md btn-secondary btn-icotext btn-filled">
+                                                    <img class="invert-off" src="/assets/icons/likes_16.svg" alt="like symbol">
+                                                    100
+                                                </button>
+                                                <button class="button-md btn-secondary btn-icotext btn-filled">
+                                                    <img class="invert-off" src="/assets/icons/dislikes_16.svg" alt="dislike symbol">
+                                                    24:
+                                                </button>
+                                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                    <img src="/assets/icons/reply_16.svg" alt="reply symbol">
+                                                    Reply
+                                                </button>
+                                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                    <img src="/assets/icons/share_16.svg" alt="share symbol">
+                                                    Share
+                                                </button>
+                                                <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                                    <img src="/assets/icons/report_16.svg" alt="report symbol">
+                                                    Report
+                                                </button>
+                                            </div>
+                                        </div>
+                                        {{end}}
+                                    </div>
+                                </div>
+                                <div id="activity-comments" >
+                                    <div class="filters-row button-row hide-feed">
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                    </div>
+                                    <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                                        <div class="activity-items comments">Yo mama so fat</div>
+                                        <div class="activity-items comments">Yo how fat is she?</div>
+                                        <div class="activity-items comments">Yo mama so fat</div>
+                                        <div class="activity-items comments">Yo how fat is she?</div>
+                                        <div class="activity-items comments">Yo mama so fat</div>
+                                        <div class="activity-items comments">Yo how fat is she?</div>
+                                        <div class="activity-items comments">Yo mama</div>
+                                        <div class="activity-items comments">Yo mama</div>
+                                        <div class="activity-items comments">Yo mama</div>
+                                    </div>
+                                </div>
+                                <div id="activity-saved" >
+                                    <div class="filters-row button-row hide-feed">
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                    </div>
+                                    <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                                        <div class="activity-items saved">You saved this post</div>
+                                        <div class="activity-items saved">You saved this post</div>
+                                        <div class="activity-items saved">You saved this post</div>
+                                        <div class="activity-items saved">You saved this post</div>
+                                        <div class="activity-items saved">You saved this post</div>
+                                        <div class="activity-items saved">You saved this post</div>
+                                    </div>
+                                </div>
+                                <div id="activity-muted">
+                                    <div class="filters-row button-row hide-feed">
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                    </div>
+                                    <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                                        <div class="activity-items muted">You muted this post</div>
+                                        <div class="activity-items muted">You muted this post</div>
+                                        <div class="activity-items muted">You muted this post</div>
+                                        <div class="activity-items muted">You muted this post</div>
+                                        <div class="activity-items muted">You muted this post</div>
+                                        <div class="activity-items muted">You muted this post</div>
+                                        <div class="activity-items muted">You muted this post</div>
+                                        <div class="activity-items muted">You muted this post</div>
+                                        <div class="activity-items muted">You muted this post</div>
+                                        <div class="activity-items muted">You muted this post</div>
+                                    </div>
+                                </div>
+                                <div id="activity-reactions">
+                                    <div class="filters-row button-row hide-feed">
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
+                                        <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                    </div>
+                                    <div id="activity-feed-reactions" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                                        <div class="activity-items reactions">You liked this post</div>
+                                        <div class="activity-items reactions">You liked this post</div>
+                                        <div class="activity-items reactions">You liked this post</div>
+                                        <div class="activity-items reactions">You liked this post</div>
+                                        <div class="activity-items reactions">You liked this post</div>
+                                        <div class="activity-items reactions">You liked this post</div>
+                                        <div class="activity-items reactions">You liked this post</div>
+                                        <div class="activity-items reactions">You liked this post</div>
+                                        <div class="activity-items reactions">You liked this post</div>
+                                        <div class="activity-items reactions">You liked this post</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div id="activity-feeds" style="position: absolute; width: 100%; height: 100%    ">
-                            <div id="activity-activity">
-                                <div class="filters-row button-row">
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+
+                        <div class="right-panel">
+                            <div class="right-panel-content">
+                                <div class="right-panel-name-container sidebar-option-btn">
+                                    <h4 class="right-panel-name">Eyesome578</h4>
+                                    <button class="button-md btn-icoonly">
+                                        <span class="btn-edit" role="contentinfo" aria-description="Edit profile name"></span>
+                                    </button>
                                 </div>
-                                <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                                    {{range .Posts}}
-                                    <div class="activity-items activity">Something happened!</div>
-                                    <div class="card">
-                                        <div class="post-info-container">
-                                            <span class="card-profile-pic"></span>
-                                            <div>
-                                                <small class="small-bold">{{.AuthorID}}</small>
-                                                <div>
-                                                    <small>{{.ChannelID}}</small>
-                                                    <small>-</small>
-                                                    <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
-                                                        @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                <div class="right-panel-pic-container sidebar-option-btn">
+                                    <div class="right-panel-pic-container">
+                                        <img src="" alt="">
+                                        <small>Edit your avatar picture</small>
+                                    </div>
+                                    <button class="button-md btn-icoonly">
+                                        <span class="btn-edit" role="contentinfo" aria-description="Edit your avatar picture"></span>
+                                    </button>
+                                </div>
+                                <div class="right-panel-bio-container ">
+                                    <div class="right-panel-bio sidebar-option-btn">
+                                        <small>Edit your bio</small>
+                                        <button class="button-md btn-icoonly">
+                                            <span class="btn-edit" role="contentinfo" aria-description="Edit profile name"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="right-panel-moderators-container">
+
+                                </div>
+                                <div class="right-panel-modded-channels-container">
+                                    <div class="sidebar-block sidebar-channels">
+                                        <small>Modded Channels</small>
+                                        <div class="sidebar-channel-block">
+                                            <div class="sidebar-channel">
+                                                <div></div>
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>/Interesting_Things</div>
+                                                        <div>
+                                                            <div class="channel-users">5.6k</div>
+                                                            <div class="channel-green-dot">36</div>
+                                                        </div>
+                                                    </div>
+                                                    <button class="button-md btn-icoonly">
+                                                        <span class="btn-settings" role="contentinfo" aria-description="Edit profile name"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="sidebar-channel">
+                                                <div></div>
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>/CSS_Help</div>
+                                                        <div>
+                                                            <div class="channel-users">5.6k</div>
+                                                            <div class="channel-green-dot">36</div>
+                                                        </div>
+                                                    </div>
+                                                    <button class="button-md btn-icoonly">
+                                                        <span class="btn-settings" role="contentinfo" aria-description="Edit profile name"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="sidebar-channel">
+                                                <div></div>
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>/Golang#Discussion</div>
+                                                        <div>
+                                                            <div class="channel-users">5.6k</div>
+                                                            <div class="channel-green-dot">36</div>
+                                                        </div>
+                                                    </div>
+                                                    <button class="button-md btn-icoonly">
+                                                        <span class="btn-settings" role="contentinfo" aria-description="Edit profile name"></span>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <h4>{{.Title}}</h4>
-                                        <p class="cardContent">{{.Content}}</p>
-                                        <div class="button-row">
-                                            <button class="button-md btn-secondary btn-icotext btn-filled">
-                                                <img class="invert-off" src="/assets/icons/likes_16.svg" alt="like symbol">
-                                                100
-                                            </button>
-                                            <button class="button-md btn-secondary btn-icotext btn-filled">
-                                                <img class="invert-off" src="/assets/icons/dislikes_16.svg" alt="dislike symbol">
-                                                24:
-                                            </button>
-                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                                <img src="/assets/icons/reply_16.svg" alt="reply symbol">
-                                                Reply
-                                            </button>
-                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                                <img src="/assets/icons/share_16.svg" alt="share symbol">
-                                                Share
-                                            </button>
-                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                                <img src="/assets/icons/report_16.svg" alt="report symbol">
-                                                Report
-                                            </button>
-                                        </div>
+
                                     </div>
-                                    {{end}}
+
                                 </div>
-                            </div>
-                            <div id="activity-posts">
-                                <div class="filters-row button-row hide-feed">
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
+                                <div class="right-panel-rules-container">
+
                                 </div>
-                                <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                                    {{range .Posts}}
-                                    <div class="card">
-                                        <div class="post-info-container">
-                                            <span class="card-profile-pic"></span>
-                                            <div>
-                                                <small class="small-bold">{{.AuthorID}}</small>
-                                                <div>
-                                                    <small>{{.ChannelID}}</small>
-                                                    <small>-</small>
-                                                    <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
-                                                        @ {{.Created.Format "15:04:05 UTC"}}</time>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4>{{.Title}}</h4>
-                                        <p class="cardContent">{{.Content}}</p>
-                                        <div class="button-row">
-                                            <button class="button-md btn-secondary btn-icotext btn-filled">
-                                                <img class="invert-off" src="/assets/icons/likes_16.svg" alt="like symbol">
-                                                100
-                                            </button>
-                                            <button class="button-md btn-secondary btn-icotext btn-filled">
-                                                <img class="invert-off" src="/assets/icons/dislikes_16.svg" alt="dislike symbol">
-                                                24:
-                                            </button>
-                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                                <img src="/assets/icons/reply_16.svg" alt="reply symbol">
-                                                Reply
-                                            </button>
-                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                                <img src="/assets/icons/share_16.svg" alt="share symbol">
-                                                Share
-                                            </button>
-                                            <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
-                                                <img src="/assets/icons/report_16.svg" alt="report symbol">
-                                                Report
-                                            </button>
-                                        </div>
-                                    </div>
-                                    {{end}}
-                                </div>
-                            </div>
-                            <div id="activity-comments" >
-                                <div class="filters-row button-row hide-feed">
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
-                                </div>
-                                <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                                    <div class="activity-items comments">Yo mama so fat</div>
-                                    <div class="activity-items comments">Yo how fat is she?</div>
-                                    <div class="activity-items comments">Yo mama so fat</div>
-                                    <div class="activity-items comments">Yo how fat is she?</div>
-                                    <div class="activity-items comments">Yo mama so fat</div>
-                                    <div class="activity-items comments">Yo how fat is she?</div>
-                                    <div class="activity-items comments">Yo mama</div>
-                                    <div class="activity-items comments">Yo mama</div>
-                                    <div class="activity-items comments">Yo mama</div>
-                                </div>
-                            </div>
-                            <div id="activity-saved" >
-                                <div class="filters-row button-row hide-feed">
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
-                                </div>
-                                <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                                    <div class="activity-items saved">You saved this post</div>
-                                    <div class="activity-items saved">You saved this post</div>
-                                    <div class="activity-items saved">You saved this post</div>
-                                    <div class="activity-items saved">You saved this post</div>
-                                    <div class="activity-items saved">You saved this post</div>
-                                    <div class="activity-items saved">You saved this post</div>
-                                </div>
-                            </div>
-                            <div id="activity-muted">
-                                <div class="filters-row button-row hide-feed">
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
-                                </div>
-                                <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                                    <div class="activity-items muted">You muted this post</div>
-                                    <div class="activity-items muted">You muted this post</div>
-                                    <div class="activity-items muted">You muted this post</div>
-                                    <div class="activity-items muted">You muted this post</div>
-                                    <div class="activity-items muted">You muted this post</div>
-                                    <div class="activity-items muted">You muted this post</div>
-                                    <div class="activity-items muted">You muted this post</div>
-                                    <div class="activity-items muted">You muted this post</div>
-                                    <div class="activity-items muted">You muted this post</div>
-                                    <div class="activity-items muted">You muted this post</div>
-                                </div>
-                            </div>
-                            <div id="activity-reactions">
-                                <div class="filters-row button-row hide-feed">
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Sort<img src="/assets/icons/sort_16.svg" alt="plus symbol"></button>
-                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">Filters<img src="/assets/icons/filters_16.svg" alt="plus symbol"></button>
-                                </div>
-                                <div id="activity-feed-reactions" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                                    <div class="activity-items reactions">You liked this post</div>
-                                    <div class="activity-items reactions">You liked this post</div>
-                                    <div class="activity-items reactions">You liked this post</div>
-                                    <div class="activity-items reactions">You liked this post</div>
-                                    <div class="activity-items reactions">You liked this post</div>
-                                    <div class="activity-items reactions">You liked this post</div>
-                                    <div class="activity-items reactions">You liked this post</div>
-                                    <div class="activity-items reactions">You liked this post</div>
-                                    <div class="activity-items reactions">You liked this post</div>
-                                    <div class="activity-items reactions">You liked this post</div>
+                                <div class="button-row">
+
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
                 </div>
+                <!----- channel page --- -->
+
+
+
             </div>
         </div>
     </div>

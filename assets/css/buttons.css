@@ -126,6 +126,15 @@ button, .button {
 .btn-follow {
     background: url('/assets/icons/arrow-right-grey_24.svg') no-repeat center;
 }
+
+.btn-edit {
+    background: url('/assets/icons/edit_16.svg') no-repeat center;
+}
+
+.btn-settings {
+    background: url('/assets/icons/settings_24.svg') no-repeat center;
+    justify-self: flex-end;
+}
 .btn-activity {
     border: 0.15rem solid transparent;
     transition: border var(--transition-dur-hover);

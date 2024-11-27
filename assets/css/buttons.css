@@ -40,8 +40,14 @@ button, .button {
     }
     & span {
         background-size: 1.6rem !important;
-        height: 2.4rem;
+        height: 1.6rem;
         padding: 0 0 0 2rem;
+    }
+
+    & span.btn-edit {
+        width: 1.6rem;
+        height: 1.6rem;
+        padding: 0;
     }
 }
 
@@ -131,6 +137,18 @@ button, .button {
     background: url('/assets/icons/edit_16.svg') no-repeat center;
 }
 
+.btn-save-empty {
+    background    : url("/assets/icons/heart-empty_24.svg") no-repeat;
+    margin-inline : auto 0;
+
+}
+
+.btn-save-active {
+    background    : url("/assets/icons/heart-full_24.svg") no-repeat;
+}
+
+
+
 .btn-settings {
     background: url('/assets/icons/settings_24.svg') no-repeat center;
     justify-self: flex-end;
@@ -155,6 +173,9 @@ button, .button {
     padding: 1.2rem 1rem;
     & img {
         filter: var(--filter-invert-off);
+    }
+    &:has(.btn-settings), &:has(.btn-save-active), &:has(.btn-save-empty) {
+        padding: 0;
     }
 }
 .btn-noinvert {

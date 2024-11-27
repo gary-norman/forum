@@ -145,6 +145,9 @@ small {
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
+  &.padded {
+    padding: 0 1.2rem;
+  }
 }
 .small-bold {
   font-family: SpaceGrotesk-Medium, system-ui;
@@ -471,11 +474,12 @@ a:active {
     flex-direction : column;
     max-width          : 32rem;
     min-width          : 32rem;
-    height         : calc(100vh - 4.9rem);
-    padding        : 2.4rem 1.2rem;
+    height         : calc(100vh - 8rem);
+    padding        : 2.4rem 0;
     gap            : 1.2rem;
     background     : var(--color-bg-2);
     font-family    : SpaceGrotesk-Regular, system-ui;
+    border-right: 1px solid var(--color-bg-3);
   }
 
   /* sidebar separators */
@@ -485,7 +489,7 @@ a:active {
     align-self    : center;
     border        : none;
     background    : var(--color-dark-5); /* hardcoded as works for both */
-    height        : 0.2rem;
+    height        : 0.1rem;
     border-radius : 0.3rem;
   }
 
@@ -516,20 +520,26 @@ a:active {
     background    : url(/assets/images/profile.png) lightgray 50% / cover no-repeat;
   }
 
+
+
   .sidebar-block {
     display        : flex;
     flex-direction : column;
     row-gap        : 0.8rem;
-
+    padding : 1.8rem 0;
     & > * {
-      padding : 0.8rem 1.2rem;
+      /*padding : 0.8rem 1.2rem;*/
     }
+  }
+
+  .sidebar-scroll {
+    padding: 0 1.2rem;
   }
 
   .sidebar-option {
     display: flex;
     font-size    : 1.6rem;
-    padding-left : 4.8rem;
+    padding : 0.8rem 1.2rem 0.8rem 4.8rem;
     height: 4.8rem;
     align-items: center;
     border-radius : 0.8rem;
@@ -554,11 +564,19 @@ a:active {
     }
   }
 
-  .sidebar-option-btn {
+  .flex-space-between {
     display         : flex;
     justify-content : space-between !important;
     align-items     : center;
   }
+
+  .margin-auto-0 {
+    margin-inline: auto 0;
+  }
+
+.margin-0-auto {
+  margin-inline: 0 auto;
+}
 
   .home {
     position : relative;
@@ -596,13 +614,14 @@ a:active {
   .sidebar-channel-block {
     font-size     : 1.6rem;
     padding       : 0 1.2rem;
+    gap       : 1.2rem;
     background    : var(--color-bg-1);
     border-radius : 0.8rem;
   }
 
   .sidebar-channel {
     border-radius : 0.8rem;
-    margin        : 0.8rem 0;
+    margin        : 1.2rem 0;
     transition    : background var(--transition-dur-hover) var(--transition-type-hover) 0s;
 
     &:hover,
@@ -659,19 +678,7 @@ a:active {
     }
   }
 
-  .heart-empty {
-    background    : url("/assets/icons/heart-empty_24.svg") no-repeat;
-    height        : 2.4rem;
-    width         : 2.4rem;
-    margin-inline : auto 0;
-  }
 
-  .heart-full {
-    background    : url("/assets/icons/heart-full_24.svg") no-repeat;
-    height        : 2.4rem;
-    width         : 2.4rem;
-    margin-inline : auto 0;
-  }
 
   .main-window {
     position: relative;
@@ -907,17 +914,18 @@ a:active {
 
 .right-panel {
   position: relative;
-  /*left: 0;*/
-  /*width: 27.2rem ;*/
-  height: 100%;
-  /*border: 3px solid red;*/
+  /* Height of right panel equal to the sreen size - 9.6rem padding (4.8rem top and bottom) */
+  height: calc(100dvh - 9.6rem);
+
+
 
   .right-panel-content{
+
     position: sticky;
     top: 0;
     left: 0;
     width: 28rem;
-    height: fit-content;
+    height: calc(100dvh - 20rem - 9.6rem - 2.4rem);
     background: var(--color-bg-2);
     border: 1px solid var(--color-bg-3);
     border-radius: 0.8rem;
@@ -927,14 +935,18 @@ a:active {
     display: flex;
     padding: 0.8rem 1.2rem;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 16px;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1.2rem;
     align-self: stretch;
+
+
 
     & > * {
         width: 100%;
     }
+
+
 
     & .right-panel-name-container {
 
@@ -949,6 +961,45 @@ a:active {
 
     }
 
+    & .right-panel-pic-container {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+
+      & .right-panel-profile-pic {
+        width         : 24px;
+        height        : 24px;
+        flex-shrink   : 0;
+        border-radius : 60px;
+        background    : url(/assets/images/profile.png) lightgray 50% / cover no-repeat;
+      }
+    }
+
+  }
+}
+
+.scroll-down {
+  overflow-y: auto;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+  &::-webkit-scrollbar-track {
+    margin: 0.4rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    background: var(--color-bg-1);
+    border-radius: 2.4rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-bg-3);
+    border-radius: 2.4rem;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--color-bg-4);
   }
 }
   /* ---- animations ---- */

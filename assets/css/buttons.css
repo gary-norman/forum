@@ -330,13 +330,12 @@ button, .button {
         background: var(--color-secondary-hover);
     }
 }
-/* INFO the invert buttons determine whether the color of the background image
-     is inverted in normal/hover and dark/light. The syntax is btn-invert-light_dark.
-     always-on & always-off speak for themselves.
-      1 word either side of _ means that is the case for normal & hover.
+/* INFO the invert buttons determine whether the color of the background image is inverted in normal/hover and dark/light.
+    The syntax is btn-invert-light_dark.
+    Always-on & always-off speak for themselves.
+      1 word on either side of _ denotes the case for normal & hover.
       2 words on either side denotes the invert status for normal, then hover.
-      eg. onon_offon means inverted for both normal and hover in light mode,
-      but only on hover in dark mode */
+      eg. onon_offon means inverted for both normal and hover in light mode, but only on hover in dark mode */
 .btn-invert-never {
     & img {
         filter : var(--filter-invert-always_off);
@@ -361,15 +360,12 @@ button, .button {
     & img {
         filter : var(--filter-invert-off_on);
     }
-    &:hover img {
-        filter : var(--filter-invert-off_on);
-    }
     & span {
         &::before {
             filter : var(--filter-invert-off_on);
         }
     }
-    &:hover span {
+    &:hover span, &:hover img {
         &::before {
             filter : var(--filter-invert-off_on);
         }
@@ -379,15 +375,12 @@ button, .button {
     & img {
         filter : var(--filter-invert-on_off);
     }
-    &:hover img {
-        filter : var(--filter-invert-on_off);
-    }
     & span {
         &::before {
             filter : var(--filter-invert-on_off);
         }
     }
-    &:hover span {
+    &:hover span, &:hover img {
         &::before {
             filter : var(--filter-invert-on_off);
         }
@@ -397,15 +390,12 @@ button, .button {
     & img {
         filter : var(--filter-invert-on_off);
     }
-    &:hover img {
-        filter : var(--filter-invert-always_off);
-    }
     & span {
         &::before {
             filter : var(--filter-invert-on_off);
         }
     }
-    &:hover span {
+    &:hover span, &:hover img {
         color: var(--color-light-1);
         &::before {
             filter : var(--filter-invert-always_off);
@@ -416,15 +406,12 @@ button, .button {
     & img {
         filter : var(--filter-invert-always_on);
     }
-    &:hover img {
-        filter : var(--filter-invert-always_off);
-    }
     & span {
         &::before {
             filter : var(--filter-invert-always_on);
         }
     }
-    &:hover span {
+    &:hover span, &:hover img {
         color: var(--color-light-1);
         &::before {
             filter : var(--filter-invert-always_off);
@@ -435,15 +422,12 @@ button, .button {
     & img {
         filter : var(--filter-invert-on_off);
     }
-    &:hover img {
-        filter : var(--filter-invert-on_off);
-    }
     & span {
         &::before {
             filter : var(--filter-invert-on_off);
         }
     }
-    &:hover span {
+    &:hover span, &:hover img {
         color: var(--color-light-1);
         &::before {
             filter : var(--filter-invert-on_off);
@@ -454,15 +438,12 @@ button, .button {
     & img {
         filter : var(--filter-invert-always_off);
     }
-    &:hover img {
-        filter : var(--filter-invert-on_off);
-    }
     & span {
         &::before {
             filter : var(--filter-invert-always_off);
         }
     }
-    &:hover span {
+    &:hover span, &:hover img {
         color: var(--color-light-1);
         &::before {
             filter : var(--filter-invert-on_off);

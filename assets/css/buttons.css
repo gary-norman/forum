@@ -330,6 +330,13 @@ button, .button {
         background: var(--color-secondary-hover);
     }
 }
+/* INFO the invert buttons determine whether the color of the background image
+     is inverted in normal/hover and dark/light. The syntax is btn-invert-light_dark.
+     always-on & always-off speak for themselves.
+      1 word either side of _ means that is the case for normal & hover.
+      2 words on either side denotes the invert status for normal, then hover.
+      eg. onon_offon means inverted for both normal and hover in light mode,
+      but only on hover in dark mode */
 .btn-invert-never {
     & img {
         filter : var(--filter-invert-always_off);

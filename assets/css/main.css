@@ -32,8 +32,10 @@
   --transition-dur-hover-darklight: 500ms;
   --transition-type-hover: ease-in-out;
   /* --- filters --- */
-  --filter-invert-on: invert(1);
-  --filter-invert-off: invert(0);
+  --filter-invert-on_off: invert(0);
+  --filter-invert-off_on: invert(1);
+  --filter-invert-always_on: invert(1);
+  --filter-invert-always_off: invert(0);
   /* --- switches --- */
   --switch-darkLight: url("/assets/icons/switch-on.svg");
   @media (prefers-color-scheme: light) {
@@ -41,13 +43,19 @@
       background : url("/assets/icons/codex-logo-blue.svg") no-repeat;
     }
     .btn-following {
-      background: url('/assets/icons/following-blue_24.svg') no-repeat center;
+      &::before {
+        background: url('/assets/icons/following-blue_24.svg') no-repeat center;
+      }
     }
-    .btn-notifications {
-      background: url('/assets/icons/notification-black_16.svg') no-repeat center;
-    }
-    --filter-invert-on: invert(0);
-    --filter-invert-off: invert(1);
+    /*.btn-notifications {*/
+    /*  &::before {*/
+    /*    background: url('/assets/icons/notification-black_16.svg') no-repeat center;*/
+    /*  }*/
+    /*}*/
+    --filter-invert-on_off: invert(1);
+    --filter-invert-off_on: invert(0);
+    --filter-invert-always_on: invert(1);
+    --filter-invert-always_off: invert(0);
     --switch-darkLight: url("/assets/icons/switch-off.svg");
     body {
       background: var(--color-bg-4);
@@ -174,6 +182,7 @@ a:active {
   justify-content: space-between;
   align-items: center;
   padding: 0.9rem 1.5rem;
+  margin: 0.6rem 0 0 0;
   background: var(--color-bg-2);
   border-bottom: 1px solid var(--color-bg-3);
   height: 8rem;
@@ -400,7 +409,7 @@ input[type="text"].inactive-input {
   .wrapper-main {
     display        : flex;
     flex-direction : column;
-    max-height     : 100%;
+    height: 100dvh;
   }
 
   .gradient {
@@ -422,9 +431,10 @@ input[type="text"].inactive-input {
     border: none;
     background: transparent;
     margin-block-start: .8rem;
-    max-width:  70rem;
-    max-height: 70rem;
+    max-width: 75dvw;
+    max-height: 75dvh;
     opacity: 0;
+    overflow: hidden;
     transition: display var(--transition-dur-feeds), opacity var(--transition-dur-feeds);
     transition-behavior: allow-discrete;
     &:popover-open {
@@ -434,9 +444,15 @@ input[type="text"].inactive-input {
         opacity: 0;
       }
     }
+    & textarea {
+      overflow: visible;
+      margin: .4rem;
+      padding: 2rem;
+      resize: both;
+      max-width: calc(75dvw - .8rem);
+    }
   }
-
-  .wrapper-form{
+  .wrapper-form {
     display: flex;
     flex-direction: column;
     background    : var(--color-bg-2);
@@ -535,8 +551,6 @@ input[type="text"].inactive-input {
     background    : url(/assets/images/profile.png) lightgray 50% / cover no-repeat;
   }
 
-
-
   .sidebar-block {
     display        : flex;
     flex-direction : column;
@@ -569,7 +583,7 @@ input[type="text"].inactive-input {
     }
 
     &::before {
-      filter : var(--filter-invert-off) !important;
+      filter: var(--filter-invert-on_off) !important;
       position  : absolute;
       left      : 1.2rem;
       top       : 50%;
@@ -681,10 +695,9 @@ input[type="text"].inactive-input {
   .channel-green-dot {
     position     : relative;
     padding-left : 2.8rem;
-
     &::before {
       content   : "•";
-      color     : var(--color-hl-green);
+      color     : var(--color-hl-primary);
       font-size : 2.8rem;
       position  : absolute;
       left      : 1.6rem;
@@ -695,7 +708,7 @@ input[type="text"].inactive-input {
 
 
 
-  .main-window {
+  main {
     position: relative;
     display            : flex;
     flex-direction     : row;
@@ -712,29 +725,29 @@ input[type="text"].inactive-input {
   width: 100%;
 }
 
-  .activity-items {
-    color: var(--color-light-1-lab);
-    border-radius: 1.1rem;
-    margin: 1.2rem 0 0 0.8rem;
-    padding: 0.2rem .8rem;
-    width: fit-content;
-  }
-  .activity {
-    background: red;
-  }
-  .comments {
-    background: var(--color-hl-blue);
-  }
-  .saved {
-    background: var(--color-hl-orange);
-  }
-  .muted {
-    background: var(--color-hl-yellow);
-    color: var(--color-dark-1);
-  }
-  .reactions {
-    background: var(--color-hl-pink);
-  }
+.activity-items {
+  color: var(--color-light-1-lab);
+  border-radius: 1.1rem;
+  margin: 1.2rem 0 0 0.8rem;
+  padding: 0.2rem .8rem;
+  width: fit-content;
+}
+.activity {
+  background: red;
+}
+.comments {
+  background: var(--color-hl-blue);
+}
+.saved {
+  background: var(--color-hl-orange);
+}
+.muted {
+  background: var(--color-hl-yellow);
+  color: var(--color-dark-1);
+}
+.reactions {
+  background: var(--color-hl-pink);
+}
 #home-page {
   display: none;
   margin: 1rem 0 0 .8rem;
@@ -797,14 +810,14 @@ input[type="text"].inactive-input {
     display        : flex;
     flex-direction : column;
     gap            : 1.2rem;
-    width: max-content;
+    width: min-content;
     color          : var(--color-fg-1);
     background     : var(--color-bg-2);
     border         : 1px solid var(--color-bg-3);
     border-radius  : 0.8rem;
     padding        : 1.2rem;
     margin         : 0.8rem;
-    /*box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);*/
+    /* box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20); */
     box-shadow     : rgba(0, 0, 0, 0.16) 0 3px 6px,
     rgba(0, 0, 0, 0.23) 0 3px 6px;
     z-index: 5;
@@ -838,7 +851,7 @@ input[type="text"].inactive-input {
             top      : -0.3rem;
             left     : 0;
             content  : url("/assets/icons/reply_16.svg");
-            filter   : var(--filter-invert-off);
+            filter: var(--filter-invert-on_off);
           }
         }
       }

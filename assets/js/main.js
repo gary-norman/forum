@@ -6,7 +6,6 @@ const actButtonContainer = document.querySelector('#activity-bar')
 const actButtonsAll = actButtonContainer.querySelectorAll('button')
 // activity feeds
 const activityFeeds = document.querySelector('#activity-feeds')
-const filterButtonsContainer = activityFeeds.querySelectorAll('.button-row')
 const activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]')
 
 // functions
@@ -36,7 +35,7 @@ function toggleFeed(targetFeed, targetFeedContent, targetButton) {
         targetFeedContent.classList.add('collapsible-expanded');
         targetButton.classList.toggle('btn-active'); }, timeOut);
     setTimeout(() => {
-        filterButtonsContainer.forEach(feed => {
+        targetFeed.querySelector('.button-row').forEach(feed => {
         feed.classList.add('hide-feed');
         });
         targetFeed.querySelector('.button-row').classList.remove('hide-feed');}, timeOut)

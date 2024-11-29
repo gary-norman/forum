@@ -38,6 +38,8 @@
   --filter-invert-always_off: invert(0);
   /* --- switches --- */
   --switch-darkLight: url("/assets/icons/switch-on.svg");
+  /*--- icons --- */
+  --svg-upload: url('/assets/icons/upload_24.svg');
   @media (prefers-color-scheme: light) {
     .branding {
       background : url("/assets/icons/codex-logo-blue.svg") no-repeat;
@@ -390,6 +392,7 @@ a:active {
     min-height : 100svh;
     background : var(--grad-main-rad);
   }
+  /*--- post popover and buttons --- */
   .btn-post {
     anchor-name: --post-button;
   }
@@ -440,6 +443,55 @@ a:active {
       margin : 0.4rem;
     }
   }
+  /*--- drag and drop file --- */
+#drop_zone {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 10.5rem;
+  font-size: var(--font-sz-cards);
+  background: var(--color-bg-3) var(--svg-upload) no-repeat center;
+  border: 2px dashed var(--color-bg-5);
+  border-radius: .8rem;
+  z-index: 999;
+}
+#drop_zone.active {
+  border: 0;
+  background: rgba(255, 127, 127, 0.51);
+}
+#drop_zone.dropped {
+  background: var(--color-bg-2-lab);
+}
+#drop_zone span {
+  padding: .5rem 0;
+  color: var(--color-fg-1-lab);
+}
+#drop_zone .button {
+  padding: .5rem .5rem;
+  color: #5074b5;
+  cursor: pointer;
+}
+#drop_zone p a:hover {
+  color: var(--color-secondary-hover);
+}
+#drop_zone input {
+  cursor: pointer;
+}
+.dragText {
+  justify-self: center;
+}
+#uploadedFile {
+  display: grid;
+  color: var(--color-fg-1-lab);
+}
+.uploadedFile {
+  font-size: var(--font-sz-main);
+  padding: .5rem 2rem;
+  color: var(--color-bg-2-lab);
+  background: var(--color-hl-green);
+  border: 1px dashed var(--color-hl-pink);
+}
 
   .wrapper-search {
     display         : flex;

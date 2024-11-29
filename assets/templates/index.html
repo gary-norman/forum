@@ -53,8 +53,16 @@
                     <label for="content">Post</label>
                 <!-- FIXME fix resize issue -->
                     <textarea id="content" name="content"></textarea>
-                    <label for="images"></label>
-                    <input type="text" class="noborder" id="images" name="images" placeholder="Upload an image (optional)"/>
+                    <div id="drop_zone">
+                        <div id="uploadedFile"></div>
+                        <div style="display: flex">
+                            <span class="dragText">drag and drop your file, or</span>
+<!--                            <span class="button">browse</span>-->
+                            <input type="file" id="browse" name="file-drop" />
+                        </div>
+                    </div>
+<!--                    <label for="images"></label>-->
+<!--                    <input type="text" class="noborder" id="images" name="images" placeholder="Upload an image (optional)"/>-->
                     <label for="channel">Channel</label>
                     <input type="text" list="channels" id="channel" name="channel">
                         <datalist id="channels">

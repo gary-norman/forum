@@ -2,8 +2,8 @@
 *,
 *::before,
 *::after {
-  /*outline: #b1b1b1 solid 0.05rem !important;*/
-  box-sizing: border-box !important;
+  /* outline: #b1b1b1 solid 0.05rem !important; */
+  box-sizing: border-box !important
 }
 
 /* remove default spacing */
@@ -40,7 +40,7 @@ picture,
 svg,
 video {
   display: block;
-  max-width: 100%;
+  /* max-width: 100%; */
 }
 
 /* Improved heading in supported browsers */

@@ -175,7 +175,7 @@
 .user-follow {
 
     /*& img {*/
-    /*    filter   : var(--filter-invert-off);*/
+    /*    filter   : var(--filter-invert-off_on);*/
     /*}*/
 }
 

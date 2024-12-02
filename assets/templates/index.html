@@ -49,21 +49,22 @@
                     <option value="1004">Bob</option>
                     <option value="1005">Shazam!</option>
                 </select>
+                <label class="hide-feed" for="channel">Channel</label>
+                <select id="channel" name="channel" style="justify-self: center">
+                    <option selected disabled hidden>Select a channel</option>
+                    <option value="2001">User's lounge</option>
+                    <option value="2002">CSS</option>
+                    <option value="2003">JS</option>
+                    <option value="2004">Golang</option>
+                    <option value="2005">SQLite</option>
+                </select>
                     <label for="title">Title</label>
                     <input type="text" id="title" name="title"/>
                     <label for="content">Post</label>
                     <textarea id="content" name="content"></textarea>
                     <label for="images"></label>
                     <input type="text" class="noborder" id="images" name="images" placeholder="Upload an image (optional)"/>
-                    <label class="hide-feed" for="channel">Channel</label>
-                    <select id="channel" name="channel" style="justify-self: center">
-                        <option selected disabled hidden>Select a channel</option>
-                        <option value="2001">User's lounge</option>
-                        <option value="2002">CSS</option>
-                        <option value="2003">JS</option>
-                        <option value="2004">Golang</option>
-                        <option value="2005">SQLite</option>
-                    </select>
+
                     <div class="cont-flex-row flex-space-between">
                         <label for="allow-comments-checkbox">Allow comments</label>
                         <label class="allow-comments">

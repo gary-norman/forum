@@ -41,6 +41,50 @@ function toggleFeed(targetFeed, targetFeedContent, targetButton) {
         targetFeed.querySelector('.button-row').classList.remove('hide-feed');}, timeOut)
 
 }
+// drag and drop
+// adapted from https://medium.com/@cwrworksite/drag-and-drop-file-upload-with-preview-using-javascript-cd85524e4a63
+const dropArea = document.querySelector("#drop_zone");
+const dragText = document.querySelector(".dragText");
+const dragButton = document.querySelector(".button");
+
+let button = dropArea.querySelector(".button");
+let input = dropArea.querySelector("input");
+let file;
+let filename
+button.onclick = () => {
+    input.click();
+};
+
+// when browse
+input.addEventListener("change", function () {
+    file = this.files[0];
+    dropArea.classList.add("active");
+});
+
+// when file is inside drag area
+dropArea.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    dropArea.classList.add("active");
+    dragText.textContent = "Release to Upload";
+    dragButton.style.display = "none";
+    // console.log('File is inside the drag area');
+});
+
+// when file leaves the drag area
+dropArea.addEventListener("dragleave", () => {
+    dropArea.classList.remove("active");
+    // console.log('File left the drag area');
+    dragText.textContent = "Drag your file here";
+});
+
+// when file is dropped
+dropArea.addEventListener("drop", (event) => {
+    event.preventDefault();
+    dropArea.classList.add("dropped");
+    // console.log('File is dropped in drag area');
+    file = event.dataTransfer.files[0]; // grab single file even if user selects multiple files
+    // console.log(file);
+});
 
 // event listeners
 // switchDl.addEventListener('click', toggleColorScheme);

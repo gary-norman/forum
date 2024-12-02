@@ -330,7 +330,7 @@ a:active {
   z-index    : 100;
   padding: 0 2.4rem ;
   /*border: 3px cornflowerblue solid;*/
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
   .cont-flex-column {
@@ -366,10 +366,21 @@ a:active {
   textarea,
   input[type="text"] {
     border        : 1px solid var(--color-bg-4);
-
+    font-size: 1.6rem;
     border-radius: 0.8rem;
     padding: 0.4rem;
+    width: 100%;
+    height: auto;
+    color: var(--color-fg-2)
   }
+
+
+textarea.inactive-input,
+input[type="text"].inactive-input {
+  pointer-events: none;
+  color: var(--color-fg-4)
+
+}
 
   .searchbar {
     height        : 3rem;
@@ -425,20 +436,24 @@ a:active {
     }
   }
 
-  .wrapper-form {
+  .wrapper-form{
     display: flex;
     flex-direction: column;
     background    : var(--color-bg-2);
     color         : var(--color-fg-2);
-    padding       : 0.6rem;
+    padding       : 0.8rem;
+    gap: 1.2rem;
     border        : 1px solid var(--color-bg-3);
     border-radius : 1rem;
     box-shadow    : rgba(0, 0, 0, 0.16) 0 3px 6px,
     rgba(0, 0, 0, 0.23) 0 3px 6px;
 
-    & * {
-      margin : 0.4rem;
+    & > label {
+      margin-bottom: -0.8rem;
     }
+    /*& * {*/
+    /*  margin : 0.4rem;*/
+    /*}*/
   }
 
   .wrapper-search {
@@ -485,7 +500,7 @@ a:active {
   /* sidebar separators */
 
   hr.solid {
-    width         : calc(100% - 2.4rem);
+    /*width         : calc(100% - 2.4rem);*/
     align-self    : center;
     border        : none;
     background    : var(--color-dark-5); /* hardcoded as works for both */
@@ -878,6 +893,8 @@ a:active {
     display    : flex;
     padding    : 1.2rem 0;
     column-gap : 1.2rem;
+    row-gap: 0.8rem;
+    flex-wrap: wrap;
   }
 
   .filters-row {
@@ -944,6 +961,10 @@ a:active {
 
     & > * {
         width: 100%;
+
+      & > .sidebar-block {
+        padding: 0.4rem 0;
+      }
     }
 
 
@@ -957,7 +978,19 @@ a:active {
       }
     }
 
-    & .right-panel-bio-container {
+    & .right-panel-bio-container, & .right-panel-rules-container {
+      & label {
+        font-family: SpaceGrotesk-Regular, system-ui;
+        font-size: 1.2rem;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        &.padded {
+          padding: 0 1.2rem;
+        }
+      }
 
     }
 

@@ -510,14 +510,53 @@
                                 </div>
                                 <div class="right-panel-bio-container ">
                                     <div class="right-panel-bio flex-space-between">
-                                        <small class="padded">Edit your bio</small>
+                                        <label for="bio-content" class="padded">Edit your bio</label>
                                         <button class="button-md btn-icoonly">
                                             <span class="btn-edit" role="contentinfo" aria-description="Edit profile name"></span>
                                         </button>
                                     </div>
+                                    <textarea id="bio-content" class="inactive-input" name="content">Placeholder text... Placeholder text...</textarea>
                                 </div>
                                 <div class="right-panel-moderators-container">
+                                    <div class="sidebar-block sidebar-channels">
+                                        <small class="padded">Moderators</small>
+                                        <div class="sidebar-channel-block">
+                                            <div class="sidebar-channel">
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>User_Other112</div>
+                                                    </div>
+                                                    <button class="button-md btn-icoonly margin-auto-0">
+                                                        <span class="btn-save-empty" role="contentinfo" aria-description="Edit profile name"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="sidebar-channel">
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>Other_one55</div>
+                                                    </div>
+                                                    <button class="button-md btn-icoonly margin-auto-0">
+                                                        <span class="btn-save-empty" role="contentinfo" aria-description="Edit profile name"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="sidebar-channel">
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>User_Other112</div>
+                                                    </div>
+                                                    <button class="button-md btn-icoonly margin-auto-0">
+                                                        <span class="btn-save-empty" role="contentinfo" aria-description="Edit profile name"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                    </div>
                                 </div>
                                 <div class="right-panel-modded-channels-container">
                                     <div class="sidebar-block sidebar-channels">
@@ -578,14 +617,26 @@
                                 </div>
                                 <div class="right-panel-rules-container">
                                     <div class="right-panel-bio flex-space-between ">
-                                        <small class="padded">Edit channel rules</small>
+                                        <label class="padded" for="rules-content">Edit channel rules</label>
                                         <button class="button-md btn-icoonly">
                                             <span class="btn-edit" role="contentinfo" aria-description="Edit channel rules"></span>
                                         </button>
                                     </div>
+                                    <textarea id="rules-content" class="inactive-input" name="content">Placeholder text... Placeholder text...</textarea>
                                 </div>
                                 <div class="button-row">
-
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                        <img src="/assets/icons/share_16.svg" alt="share symbol">
+                                        Share
+                                    </button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                        <img src="/assets/icons/mute_16.svg" alt="mute symbol">
+                                        Mute
+                                    </button>
+                                    <button class="button-md btn-secondary btn-icotext btn-filled btn-action">
+                                        <img src="/assets/icons/report_16.svg" alt="report symbol">
+                                        Report
+                                    </button>
                                 </div>
                             </div>
                         </div>

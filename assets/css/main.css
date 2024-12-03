@@ -968,13 +968,16 @@ input[type="text"].inactive-input {
 
   /* -------- buttons -------- */
 
-  .button-row, .user-page-buttons{
+  .button-row, .button-row-wrap, .user-page-buttons{
     display    : flex;
     padding    : 1.2rem 0;
     column-gap : 1.2rem;
     row-gap: 0.8rem;
-    flex-wrap: wrap;
   }
+
+.button-row-wrap {
+  flex-wrap: wrap;
+}
 
   .filters-row {
     margin: 0 1.2rem;

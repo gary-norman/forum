@@ -154,7 +154,9 @@ button, .button {
 }
 
 .btn-edit {
-    background: url('/assets/icons/edit_16.svg') no-repeat center;
+    &::before {
+        background: url('/assets/icons/edit_16.svg') no-repeat center;
+    }
 }
 
 .btn-save-empty {

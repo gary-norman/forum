@@ -16,18 +16,9 @@
                                 var(--gradient-5) 50%,
                                 var(--gradient-6) 71.6%),
                                 var(--gradient-6) 90% / cover no-repeat;
-    /*--banner-gradient: linear-gradient(0deg,*/
-    /*                            rgba(38, 42, 47, 1) 0%,*/
-    /*                            rgba(38, 42, 47, 0.98) 10%,*/
-    /*                            rgba(38, 42, 47, 0.9) 20%,*/
-    /*                            rgba(38, 42, 47, 0.7) 30%,*/
-    /*                            rgba(38, 42, 47, 0.5) 50%,*/
-    /*                            rgba(38, 42, 47, 0.00) 71.6%),*/
-    /*                            rgba(38, 42, 47, 0.00) 90% / cover no-repeat;*/
 }
 
 #user-page {
-    /*total width - sidebar*/
     /*position: relative;*/
     width: 100%;
     display: flex;
@@ -37,7 +28,6 @@
     gap: 2.4rem;
     flex: 1 0 0;
     align-self: stretch;
-    /*display: none;*/
 }
 
 .collapsible-collapsed {
@@ -54,7 +44,7 @@
 .banner {
     position: relative;
     width: 100%;
-    height: 20rem;
+    min-height: 20rem;
     overflow: hidden;
     z-index: 0;
 

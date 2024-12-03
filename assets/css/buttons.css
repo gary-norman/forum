@@ -1,5 +1,5 @@
 :root {
-     --btn-radius: 2.4rem;
+    --btn-radius: 2.4rem;
 }
 /* TODO unify buttons (no img, span only),
 remove img from button css,
@@ -35,14 +35,20 @@ button, .button {
     font-size  : 1.2rem;
     height: 3.6rem;
     gap: 0.8rem;
-    
-    
+
+
     & span {
         &::before {
             background-size: 1.6rem !important;
         }
         padding: 0 0 0 2rem;
         height: 2.4rem;
+    }
+
+    & span.btn-edit {
+        width: 1.6rem;
+        height: 1.6rem;
+        padding: 0;
     }
 }
 
@@ -146,6 +152,8 @@ button, .button {
         background : url('/assets/icons/notification_16.svg') no-repeat center;
     }
 }
+
+
 .btn-filters {
     &::before {
         background : url('/assets/icons/filters_16.svg') no-repeat center;
@@ -244,12 +252,42 @@ button, .button {
     & img {
         filter: var(--filter-invert-on_off);
     }
+    &:has(.btn-settings), &:has(.btn-save-active), &:has(.btn-save-empty) {
+        padding: 0;
+    }
 }
+
+
+.btn-sm .btn-save-active, .btn-sm .btn-save-empty, .btn-sm .btn-edit, .btn-sm .btn-settings {
+    background-size: 1.6rem;
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.btn-edit {
+    background: url('/assets/icons/edit_16.svg') no-repeat center;
+}
+
+.btn-save-empty {
+    background    : url("/assets/icons/heart-empty_24.svg") no-repeat center;
+    margin-inline : auto 0;
+
+}
+
+.btn-save-active {
+    background    : url("/assets/icons/heart-full_24.svg") no-repeat center;
+}
+
+.btn-settings {
+    background: url('/assets/icons/settings_24.svg') no-repeat center;
+    justify-self: flex-end;
+}
+
 .btn-filled, .btn-filled-fancy {
     background : var(--color-bg-3);
     /* transition: border 300ms cubic-bezier(1, 0.02, 1, -0.27); */
     border     : 0.15rem solid var(--color-bg-4);
-    
+
     &:hover {
         /* background: var(--color-secondary-hover); */
         border: .15rem solid var(--color-secondary-hover);
@@ -622,5 +660,5 @@ input:checked + .allow-comments-fx:before {
     100% {
         background: var(--color-secondary-hover);
     }
-    
+
 }

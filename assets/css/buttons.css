@@ -153,28 +153,7 @@ button, .button {
     }
 }
 
-.btn-edit {
-    &::before {
-        background: url('/assets/icons/edit_16.svg') no-repeat center;
-    }
-}
 
-.btn-save-empty {
-    background    : url("/assets/icons/heart-empty_24.svg") no-repeat;
-    margin-inline : auto 0;
-
-}
-
-.btn-save-active {
-    background    : url("/assets/icons/heart-full_24.svg") no-repeat;
-}
-
-
-
-.btn-settings {
-    background: url('/assets/icons/settings_24.svg') no-repeat center;
-    justify-self: flex-end;
-}
 .btn-filters {
     &::before {
         background : url('/assets/icons/filters_16.svg') no-repeat center;
@@ -277,6 +256,33 @@ button, .button {
         padding: 0;
     }
 }
+
+
+.btn-sm .btn-save-active, .btn-sm .btn-save-empty, .btn-sm .btn-edit, .btn-sm .btn-settings {
+    background-size: 1.6rem;
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.btn-edit {
+    background: url('/assets/icons/edit_16.svg') no-repeat center;
+}
+
+.btn-save-empty {
+    background    : url("/assets/icons/heart-empty_24.svg") no-repeat center;
+    margin-inline : auto 0;
+
+}
+
+.btn-save-active {
+    background    : url("/assets/icons/heart-full_24.svg") no-repeat center;
+}
+
+.btn-settings {
+    background: url('/assets/icons/settings_24.svg') no-repeat center;
+    justify-self: flex-end;
+}
+
 .btn-filled, .btn-filled-fancy {
     background : var(--color-bg-3);
     /* transition: border 300ms cubic-bezier(1, 0.02, 1, -0.27); */

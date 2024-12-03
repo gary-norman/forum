@@ -258,7 +258,7 @@ button, .button {
 }
 
 
-.btn-sm .btn-save-active, .btn-sm .btn-save-empty, .btn-sm .btn-edit, .btn-sm .btn-settings {
+.btn-sm span{
     background-size: 1.6rem;
     width: 1.6rem;
     height: 1.6rem;
@@ -270,8 +270,6 @@ button, .button {
 
 .btn-save-empty {
     background    : url("/assets/icons/heart-empty_24.svg") no-repeat center;
-    margin-inline : auto 0;
-
 }
 
 .btn-save-active {

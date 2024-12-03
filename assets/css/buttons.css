@@ -252,7 +252,7 @@ button, .button {
     & img {
         filter: var(--filter-invert-on_off);
     }
-    &:has(.btn-settings), &:has(.btn-save-active), &:has(.btn-save-empty) {
+    &:has(.btn-settings), &:has(.btn-save-active), &:has(.btn-save-empty), &:has(.btn-edit) {
         padding: 0;
     }
 }

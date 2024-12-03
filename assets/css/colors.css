@@ -139,11 +139,12 @@ hsl(334deg 79% 61%) 100%
 }
 
 /* --- codex colors --- */
-.codex-green {
+.grid-welcome-logo-green {
   color: var(--color-hl-green-lab);
   text-shadow: var(--text-3d-green);
+  width: 9.2rem;
 }
-.codex-pink {
+.grid-welcome-logo-pink {
   color: var(--color-hl-pink-lab);
   text-shadow: var(--text-3d-pink);
 }

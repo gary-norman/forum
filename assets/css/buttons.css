@@ -72,6 +72,8 @@ button, .button {
     /* border     : 0.15rem solid transparent; */
     color      : var(--color-light-1);
     transition: all var(--transition-dur-hover);
+    
+    
     & span {
         color: var(--color-dark-1);
         /*&::before {*/

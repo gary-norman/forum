@@ -335,7 +335,7 @@ a:active {
   display        : flex;
   flex-direction : row;
   gap: 4.8rem;
-  width: 100dvh;
+  width: calc(100dvw - 32rem);
   height: 20dvh;
   /*border: 2px hotpink solid;*/
 }

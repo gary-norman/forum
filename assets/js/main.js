@@ -2,11 +2,28 @@
 const switchDl = document.getElementById('switch-dl');
 const darkSwitch = document.getElementById('sidebar-option-darkmode');
 // activity buttons
-const actButtonContainer = document.querySelector('#activity-bar')
-const actButtonsAll = actButtonContainer.querySelectorAll('button')
+let actButtonContainer;
+let actButtonsAll;
 // activity feeds
-const activityFeeds = document.querySelector('#activity-feeds')
-const activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]')
+let activityFeeds;
+let activityFeedsContentAll;
+
+document.addEventListener('DOMContentLoaded', function () {
+    actButtonContainer = document.querySelector('#activity-bar');
+    actButtonsAll = actButtonContainer.querySelectorAll('button');
+    activityFeeds = document.querySelector('#activity-feeds');
+    activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]');
+    // console.log(actButtonsAll);
+
+
+    // event listeners
+// switchDl.addEventListener('click', toggleColorScheme);
+    darkSwitch.addEventListener('click', toggleDarkMode);
+    actButtonsAll.forEach( button => button.addEventListener('click', (e) => {
+        toggleFeed(document.getElementById("activity-" + e.target.id),document.getElementById("activity-feed-" + e.target.id),  e.target);
+        console.log('activity-' + e.target.id);
+    }) );
+});
 
 // functions
 function toggleColorScheme() {
@@ -86,10 +103,3 @@ dropArea.addEventListener("drop", (event) => {
     // console.log(file);
 });
 
-// event listeners
-// switchDl.addEventListener('click', toggleColorScheme);
-darkSwitch.addEventListener('click', toggleDarkMode);
-actButtonsAll.forEach( button => button.addEventListener('click', (e) => {
-    toggleFeed(document.getElementById("activity-" + e.target.id),document.getElementById("activity-feed-" + e.target.id),  e.target);
-    console.log('activity-' + e.target.id);
-}) );

@@ -823,7 +823,7 @@ input[type="text"].inactive-input {
   background: var(--color-hl-pink);
 }
 #home-page {
-  display: none;
+   display: none;
   margin: 1rem 0 0 .8rem;
 }
   .feed-content {

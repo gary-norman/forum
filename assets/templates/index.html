@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/assets/css/channel-page.css">
     <link rel="stylesheet" href="/assets/css/buttons.css">
     <script src="/assets/js/main.js" defer></script>
+    <script src="/assets/js/reactions.js" defer></script>
     <title>01F Forum</title>
 </head>
 <body>
@@ -251,12 +252,10 @@
                                 <h4>{{.Title}}</h4>
                                 <article class="cardContent">{{.Content}}</article>
                                 <div class="button-row">
-<!--                                  --- TODO invertoff -->
-                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action btn-invert-never">
                                         <span class="btn-likes">100</span>
                                     </button>
-                                    <!-- --- TODO invertoff -->
-                                    <button class="btn-md btn-secondary btn-icotext btn-filled">
+                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action btn-invert-never">
                                         <span class="btn-dislikes">24</span>
                                     </button>
                                     <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -274,7 +273,7 @@
                         </div>
                     </div>
                 </div>
-                <!----- user page --- -->
+                <!----- user page ----->
                 <div id="user-page" class="feeds-wrapper">
                     <div class="banner">
                         <img class="user-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
@@ -342,7 +341,7 @@
                                     <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
                                         {{range .Posts}}
                                         <div class="activity-items activity">Something happened!</div>
-                                        <div class="card">
+                                        <div class="card" data-post-id="{{.ID}}">
                                             <div class="post-info-container">
                                                 <span class="card-profile-pic"></span>
                                                 <div>
@@ -358,11 +357,12 @@
                                             <h4>{{.Title}}</h4>
                                             <article class="cardContent">{{.Content}}</article>
                                             <div class="button-row">
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action btn-invert-never">
-                                                    <span class="btn-likes">100</span>
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                                    <span class="btn-likes">{{.Likes}}</span>
                                                 </button>
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action btn-invert-never">
-                                                    <span class="btn-dislikes">24</span>
+                                                <!-- --- TODO invertoff -->
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled">
+                                                    <span class="btn-dislikes">{{.Dislikes}}</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-reply">reply</span>
@@ -389,7 +389,7 @@
                                     </div>
                                     <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                                         {{range .Posts}}
-                                        <div class="card">
+                                        <div class="card" >
                                             <div class="post-info-container">
                                                 <span class="card-profile-pic"></span>
                                                 <div>
@@ -405,11 +405,13 @@
                                             <h4>{{.Title}}</h4>
                                             <article class="cardContent">{{.Content}}</article>
                                             <div class="button-row">
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action btn-invert-never">
-                                                    <span class="btn-likes">100</span>
+                                                <!--                                  --- TODO invertoff -->
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                                    <span class="btn-likes">{{.Likes}}</span>
                                                 </button>
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action btn-invert-never">
-                                                    <span class="btn-dislikes">24</span>
+                                                <!-- --- TODO invertoff -->
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled">
+                                                    <span class="btn-dislikes">{{.Dislikes}}</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-reply">reply</span>

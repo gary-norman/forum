@@ -83,7 +83,7 @@ CREATE TABLE Posts (
   Commentable BOOLEAN NOT NULL,
   AuthorID INTEGER NOT NULL,
   ChannelID INTEGER NOT NULL,
-  Is_flagged BOOLEAN, 
+  Is_flagged BOOLEAN,
   FOREIGN KEY (AuthorID) REFERENCES Users(ID),
   FOREIGN KEY (ChannelID) REFERENCES Channels(ID)
 );

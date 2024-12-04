@@ -69,6 +69,8 @@ type Post struct {
 	AuthorID    int       `json:"author_id"`
 	ChannelID   int       `json:"channel_id"`
 	IsFlagged   bool      `json:"is_flagged,omitempty"`
+	Likes       int       `json:"likes"`
+	Dislikes    int       `json:"dislikes"`
 }
 
 type Image struct {

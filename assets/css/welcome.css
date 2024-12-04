@@ -1,6 +1,7 @@
 .button-3d {
     display               : inline-block;
     margin                : 0;
+    width: 7.8rem;
     -webkit-border-radius : 0.4rem;
     -webkit-box-shadow    : /* gradient effects */ 0 2px lab(52 0 0),
     0 3px lab(47 0 0),
@@ -243,9 +244,8 @@
     flex-direction : column;
     gap            : 1.6rem;
     position       : relative;
-    width          : max-content;
     padding        : 2.8rem;
-    justify-items: stretch;
+    justify-items: center;
 }
 .grid-welcome-option {
     background         : var(--color-fg-5);
@@ -358,13 +358,10 @@
     grid-area: g;
 }
 .grid-welcome-access-login {
-    pointer-events: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    font-family: SpaceGrotesk-Regular, system-ui;
+    font-size:clamp(1.2rem, 2.4rem + -.3dvw, 2.4rem);
     position: absolute;
-    row-gap: 1.2rem;
+    padding: 7rem;
     min-height: 100%;
     min-width: 100%;
     border-radius: 2.4rem;
@@ -372,6 +369,17 @@
     0 -.4rem 1.8rem rgba(0 0 0 / 0.4);
     background: var(--color-bg-4);
     z-index: -2;
+    & form {
+        pointer-events: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        row-gap: 1.2rem;
+    }
+}
+.form-title {
+    font-size: clamp(1.2rem, 2rem + -.4dvw, 2.4rem);
 }
 .grid-welcome-access {
     grid-area: win;

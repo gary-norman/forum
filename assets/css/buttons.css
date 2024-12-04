@@ -1,16 +1,12 @@
 :root {
     --btn-radius: 2.4rem;
 }
-/* TODO unify buttons (no img, span only),
-remove img from button css,
-add fill and animation to secondary, keeping it separate from .btn-filled  */
 button, .button {
     cursor: pointer;
     & span, & img {
         z-index: 11;
         pointer-events: none;
     }
-
 }
 .btn-sm {
     display: flex;
@@ -23,8 +19,12 @@ button, .button {
         &::before {
             background-size: .8rem !important;
         }
-        padding: 0 0 0 2rem;
         height: 1.6rem;
+    }
+}
+.btn-sm.btn-icotext {
+    & span {
+        padding: 0 0 0 2rem;
     }
 }
 
@@ -35,23 +35,29 @@ button, .button {
     font-size  : 1.2rem;
     height: 3.6rem;
     gap: 0.8rem;
-
-
+    
+    
+    
+    
+    
+    
     & span {
         &::before {
             background-size: 1.6rem !important;
         }
-        padding: 0 0 0 2rem;
         height: 2.4rem;
     }
-
     & span.btn-edit {
         width: 1.6rem;
         height: 1.6rem;
         padding: 0;
     }
 }
-
+.btn-md.btn-icotext {
+    & span {
+        padding: 0 0 0 2rem;
+    }
+}
 .btn-lg {
     display: flex;
     border-radius : var(--btn-radius);
@@ -63,8 +69,12 @@ button, .button {
         &::before {
             background-size: 2.4rem !important;
         }
-        padding: 0 0 0 2.4rem;
         height: 3.2rem;
+    }
+}
+.btn-lg.btn-icotext {
+    & span {
+        padding: 0 0 0 2.4rem;
     }
 }
 .btn-primary {
@@ -77,7 +87,7 @@ button, .button {
     & span {
         color: var(--color-dark-1);
         /*&::before {*/
-        /*    filter: var(--filter-invert-always_on) !important;*/
+        /* filter: var(--filter-invert-always_on) !important; */
         /*    !*background: rgb(255 255 255 / .3);*!*/
         /*    !*filter: invert(1);*!*/
         /*}*/
@@ -116,6 +126,7 @@ button, .button {
         align-content: center;
         text-align: right;
         width: fit-content;
+        z-index: 10000;
         &::before {
             filter: var(--filter-invert-on_off);
             background-position: left !important;
@@ -129,6 +140,8 @@ button, .button {
     }
 }
 /* --- button icon span classes --- */
+/*TODO embed svg's*/
+/*url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' style='pointer-events:none;display:block;width:100%25;height:100%25;fill:%23757575'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61.0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E") no-repeat 4px center/20px 20px;*/
 .btn-following {
     &::before {
         background : url('/assets/icons/following_24.svg') no-repeat center;
@@ -154,8 +167,6 @@ button, .button {
         background : url('/assets/icons/notification_16.svg') no-repeat center;
     }
 }
-
-
 .btn-filters {
     &::before {
         background : url('/assets/icons/filters_16.svg') no-repeat center;
@@ -216,20 +227,19 @@ button, .button {
         background : url('/assets/icons/mute_16.svg') no-repeat center;
         }
 }
-
-.btn- {
+.btn-submit {
     &::before {
-        background : url('') no-repeat center;
+        background : url('/assets/icons/send_16.svg') no-repeat center;
         }
 }
 .btn- {
     &::before {
-        background : url('') no-repeat center;
+        background : url('/assets/icons/') no-repeat center;
         }
 }
 .btn- {
     &::before {
-        background : url('') no-repeat center;
+        background : url('/assets/icons/') no-repeat center;
         }
 }
 
@@ -243,7 +253,6 @@ button, .button {
 .btn-active {
     border: 0.15rem solid var(--color-secondary-active);
     pointer-events: none;
-    /* TODO use Kamils lab mixes */
 }
 .btn-icoonly{
     display         : flex;

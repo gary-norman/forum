@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/assets/css/fonts.css" />
     <link rel="stylesheet" href="/assets/css/colors.css" />
     <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="/assets/css/buttons.css" />
     <link rel="stylesheet" href="/assets/css/hover_effects.css" />
     <link rel="stylesheet" href="/assets/css/text_effects.css" />
     <link rel="stylesheet" href="/assets/css/welcome.css" />
@@ -30,7 +31,9 @@
       <div class="grid-welcome-cutaway-2"></div>
       <div class="grid-welcome-cutaway-3"></div>
       <div class="grid-welcome-access">
-        <form class="grid-welcome-access-login">
+        <div class="grid-welcome-access-login">
+          <form id="form-login" class="display-off">
+            <h5 class="form-title">enter your details to log in to codex</h5>
           <label for="login_username"></label>
           <input
             type="text"
@@ -47,8 +50,33 @@
             name="login_password"
             placeholder="password"
           />
-          <button class="button-3d" type="submit"><span>submit</span></button>
-        </form>
+          <button class="btn-md btn-primary btn-action" type="submit">
+            <span>submit</span>
+          </button>
+          </form>
+          <form id="form-register" class="display-off">
+            <h5 class="form-title">enter your details to register for codex</h5>
+            <label for="register_email"></label>
+            <input
+                    type="text"
+                    class="input-3d"
+                    id="register_email"
+                    name="register_email"
+                    placeholder="email address"
+            />
+            <label for="register_password"></label>
+            <input
+                    type="password"
+                    class="input-3d"
+                    id="register_password"
+                    name="register_password"
+                    placeholder="password"
+            />
+            <button class="btn-md btn-primary btn-action" type="submit">
+              <span>submit</span>
+            </button>
+          </form>
+        </div>
 
 <!--        <div class="form-container">-->
 <!--          <p class="title">Login</p>-->

@@ -2,8 +2,8 @@
 const switchDl = document.querySelector('#switch-dl');
 const darkSwitch = document.querySelector('#sidebar-option-darkmode');
 // activity buttons
-const actButtonContainer = document.querySelector('#activity-bar')
-const actButtonsAll = actButtonContainer.querySelectorAll('button')
+let actButtonContainer;
+let actButtonsAll;
 // activity feeds
 const activityFeeds = document.querySelector('#activity-feeds')
 const activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]')

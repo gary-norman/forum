@@ -346,3 +346,86 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
 }
+
+func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
+	// Using custom error messages
+	ErrorMsgs := models.CreateErrorMessages()
+
+	// Check if the method is POST, otherwise return Method Not Allowed
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Variable to hold the decoded data
+	var reactionData models.Reaction
+
+	// Decode the JSON request body into the reactionData variable
+	err := json.NewDecoder(r.Body).Decode(&reactionData)
+	if err != nil {
+		// Use the error message from the Errors struct for decoding errors
+		http.Error(w, fmt.Sprintf(ErrorMsgs.Parse, "storeReaction", err), http.StatusBadRequest)
+		log.Printf("Error decoding JSON: %v", err)
+		return
+	}
+
+	// Validate that at least one of reactedPostID or reactedCommentID is non-zero
+	if (reactionData.ReactedPostID == nil || *reactionData.ReactedPostID == 0) && (reactionData.ReactedCommentID == nil || *reactionData.ReactedCommentID == 0) {
+		http.Error(w, "You must react to either a post or a comment", http.StatusBadRequest)
+		return
+	}
+
+	// Check if the user already reacted (like/dislike) and update or delete the reaction if needed
+	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.AuthorID, reactionData.ChannelID, *reactionData.ReactedPostID, *reactionData.ReactedCommentID)
+	if err != nil {
+		// Use your custom error message for fetching errors
+		http.Error(w, fmt.Sprintf(ErrorMsgs.Read, "storeReaction", err), http.StatusInternalServerError)
+		log.Printf("Error fetching existing reaction: %v", err)
+		return
+	}
+
+	// If there is an existing reaction, toggle it (i.e., remove it if the user reacts again to the same thing)
+	if existingReaction != nil {
+		// If the user likes a post or comment again, remove the like/dislike (toggle behavior)
+		if existingReaction.Liked == reactionData.Liked && existingReaction.Disliked == reactionData.Disliked {
+			// Reaction is the same, so remove it
+			err := app.reactions.Delete(existingReaction.ID)
+			if err != nil {
+				// Use your custom error message for deletion errors
+				http.Error(w, fmt.Sprintf(ErrorMsgs.Delete, "storeReaction", err), http.StatusInternalServerError)
+				log.Printf("Error deleting reaction: %v", err)
+				return
+			}
+			// Send response back after successful deletion
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(map[string]string{"message": "Reaction removed"})
+			return
+		}
+
+		// Otherwise, update the existing reaction
+		err := app.reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, reactionData.ChannelID, *reactionData.ReactedPostID, *reactionData.ReactedCommentID)
+		if err != nil {
+			// Use your custom error message for update errors
+			http.Error(w, fmt.Sprintf(ErrorMsgs.Update, "storeReaction", err), http.StatusInternalServerError)
+			log.Printf("Error updating reaction: %v", err)
+			return
+		}
+		// Send response back after successful update
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Reaction updated"})
+		return
+	}
+
+	// If no existing reaction, insert a new reaction
+	err = app.reactions.Insert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, reactionData.ChannelID, *reactionData.ReactedPostID, *reactionData.ReactedCommentID)
+	if err != nil {
+		// Use your custom error message for insertion errors
+		http.Error(w, fmt.Sprintf(ErrorMsgs.Insert, "storeReaction", err), http.StatusInternalServerError)
+		log.Printf("Error inserting reaction: %v", err)
+		return
+	}
+
+	// Send a response indicating success
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Reaction added"})
+}

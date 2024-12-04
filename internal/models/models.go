@@ -86,6 +86,8 @@ type Post struct {
 	ChannelID   int       `json:"channel_id"`
 	ChannelName string    `json:"channel_name"`
 	IsFlagged   bool      `json:"is_flagged,omitempty"`
+	Likes       int       `json:"likes"`
+	Dislikes    int       `json:"dislikes"`
 }
 
 type PostWithDaysAgo struct {

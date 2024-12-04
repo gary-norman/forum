@@ -225,7 +225,7 @@
 .grid-welcome {
     display: grid;
     grid-template-columns: 2fr repeat(7, 1fr) 2fr;
-    grid-template-rows: 1fr 2fr 1fr 2fr;
+    grid-template-rows: .8fr 2fr 1fr 1fr;
     grid-template-areas:
         "opt one one one one two two two two"
         "three three win win win win win four four"
@@ -361,7 +361,7 @@
     font-family: SpaceGrotesk-Regular, system-ui;
     font-size:clamp(1.2rem, 2.4rem + -.3dvw, 2.4rem);
     position: absolute;
-    padding: 7rem;
+    padding: 3rem;
     min-height: 100%;
     min-width: 100%;
     border-radius: 2.4rem;
@@ -369,8 +369,12 @@
     0 -.4rem 1.8rem rgba(0 0 0 / 0.4);
     background: var(--color-bg-4);
     z-index: -2;
+    
+    
+    
+    
     & form {
-        pointer-events: auto;
+        pointer-events: auto !important;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -382,6 +386,7 @@
     font-size: clamp(1.2rem, 2rem + -.4dvw, 2.4rem);
 }
 .grid-welcome-access {
+    pointer-events: none;
     grid-area: win;
     position: relative;
     background: transparent;
@@ -523,7 +528,7 @@
         top: 0;
     }
     100% {
-        top: 30rem;
+        top: 38rem;
     }
 }
 @keyframes door-push-close {

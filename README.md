@@ -18,8 +18,9 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+
+[//]: # ([![Forks][forks-shield]][forks-url])
 [![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
@@ -31,7 +32,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/gary.norman/forum">
-    <img src="assets/images/logo.svg" alt="Logo" width=350" height="200">
+    <img src="assets/icons/codex-logo-green.svg" alt="Logo" width=350" height="200">
   </a>
   <p align="center">
     A forum for finding all the help you need with code.
@@ -95,14 +96,21 @@ Do a search and replace with your text editor for the following: `gary.norman`, 
 
 
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+[//]: # (* [![Next][Next.js]][Next-url])
+
+[//]: # (* [![React][React.js]][React-url])
+
+[//]: # (* [![Vue][Vue.js]][Vue-url])
+
+[//]: # (* [![Angular][Angular.io]][Angular-url])
+
+[//]: # (* [![Svelte][Svelte.dev]][Svelte-url])
+
+[//]: # (* [![Laravel][Laravel.com]][Laravel-url])
+
+[//]: # (* [![Bootstrap][Bootstrap.com]][Bootstrap-url])
+
+[//]: # (* [![JQuery][JQuery.com]][JQuery-url])
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -219,19 +227,19 @@ Project Link: [https://github.com/gary.norman/forum](https://github.com/gary.nor
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/gary.norman/forum.svg?style=for-the-badge
-[contributors-url]: https://github.com/gary.norman/forum/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/gary.norman/forum.svg?style=for-the-badge
-[forks-url]: https://github.com/gary.norman/forum/network/members
-[stars-shield]: https://img.shields.io/github/stars/gary.norman/forum.svg?style=for-the-badge
-[stars-url]: https://github.com/gary.norman/forum/stargazers
-[issues-shield]: https://img.shields.io/github/issues/gary.norman/forum.svg?style=for-the-badge
-[issues-url]: https://github.com/gary.norman/forum/issues
-[license-shield]: https://img.shields.io/github/license/gary.norman/forum.svg?style=for-the-badge
-[license-url]: https://github.com/gary.norman/forum/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/gary-norman/forum.svg?style=for-the-badge
+[contributors-url]: https://github.com/gary-norman/forum/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/gary-norman/forum.svg?style=for-the-badge
+[forks-url]: https://github.com/gary-norman/forum/network/members
+[stars-shield]: https://img.shields.io/github/stars/gary-norman/forum.svg?style=for-the-badge
+[stars-url]: https://github.com/gary-norman/forum/stargazers
+[issues-shield]: https://img.shields.io/github/issues/gary-norman/forum.svg?style=for-the-badge
+[issues-url]: https://github.com/gary-norman/forum/issues
+[license-shield]: https://img.shields.io/github/license/gary-norman/forum.svg?style=for-the-badge
+[license-url]: https://github.com/gary-norman/forum/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
+[linkedin-url]: https://www.linkedin.com/in/gary-norman/
+[product-screenshot]: /assets/images/screenshot.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB

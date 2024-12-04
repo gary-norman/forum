@@ -228,7 +228,7 @@
     grid-template-rows: .8fr 2fr 1fr 1fr;
     grid-template-areas:
         "opt one one one one two two two two"
-        "three three win win win win win four four"
+        "three three three win win win four four four"
         "five l c o d e x g six"
         "seven seven seven seven eight eight eight eight eight";
     height: 100vh;

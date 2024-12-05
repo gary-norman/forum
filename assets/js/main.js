@@ -22,6 +22,15 @@ const modal = document.querySelector('#form-login-container');
 const openLoginModal = document.querySelector('#btn-open-login-modal');
 // Get the <span> element that closes the modal
 const closeLoginModal = document.getElementsByClassName("close")[0];
+// registration form
+const regForm = document.querySelector('#form-register');
+const regFormInputs = regForm.querySelectorAll('input');
+const regFormSpans = regForm.querySelectorAll('span');
+const regFormIcons = regForm.querySelectorAll('.validation-icon');
+const regFormTooltips = regForm.querySelectorAll('.validation-tooltip');
+const regPass = document.querySelector('#register_password');
+const regPassRpt = document.querySelector('#register_password-rpt');
+const validList = regForm.querySelector('ul');
 // drag and drop
 // adapted from https://medium.com/@cwrworksite/drag-and-drop-file-upload-with-preview-using-javascript-cd85524e4a63
 const dropArea = document.querySelector('#drop_zone');
@@ -46,7 +55,7 @@ function toggleDarkMode() {
     checkbox.checked = !checkbox.checked;
     console.log('toggle dark mode')
 }
-
+// toggle the various feeds on user-page
 function toggleFeed(targetFeed, targetFeedContent, targetButton) {
     const timeOut = 400;
     actButtonsAll.forEach( button => button.classList.remove('btn-active') );
@@ -64,7 +73,7 @@ function toggleFeed(targetFeed, targetFeedContent, targetButton) {
         });
         targetFeed.querySelector('.button-row').classList.remove('hide-feed');}, timeOut)
 }
-
+// toggle login and register forms
 function logReg(target) {
     if (target === 'btn_login-2') {
         console.log('btn-log-2');
@@ -82,12 +91,19 @@ function logReg(target) {
         formRegister.classList.toggle('display-off');
     }
 }
-
+// toggle forgot password form
 function forgot() {
     formLogin.classList.add('display-off');
     formRegister.classList.add('display-off');
     formForgot.classList.remove('display-off');
     forgotVisible = true;
+}
+// confirm password validation
+function confirmPass() {
+    if (regPassRpt.value !== regPass.value || regPassRpt.value === "") {
+        return regPassRpt.classList.add("pass-nomatch");
+    }
+    regPassRpt.classList.remove("pass-nomatch");
 }
 
 // ---- event listeners -----
@@ -134,6 +150,7 @@ window.addEventListener('click', ({ target }) => {
         modal.style.display = 'none';
     }
 });
+// login / register / forgot
 btnLogin.forEach(button =>
     button.addEventListener('click', (e) => logReg(e.target.id))
 );
@@ -141,3 +158,18 @@ btnRegister.forEach(button =>
     button.addEventListener('click', (e) => logReg(e.target.id))
 );
 btnForgot.addEventListener('click', forgot);
+// check passwords match
+regPassRpt.addEventListener('focusout', confirmPass);
+// reverse the order of the password validation list delay
+regPass.addEventListener('focusin', () => {
+    setTimeout(() => {
+        validList.classList.remove('ul-forwards');
+        validList.classList.add('ul-reverse');
+    }, 1000)
+});
+regPass.addEventListener('focusout', () => {
+    setTimeout(() => {
+        validList.classList.remove('ul-reverse');
+        validList.classList.add('ul-forwards');
+    }, 1000);
+});

@@ -97,6 +97,7 @@
                 <div id="form-register" class="display-off">
                     <form>
                         <p class="form-title">enter your details to register for codex</p>
+                        <!--  username  -->
                         <label for="register_user"></label>
                         <input
                                 type="text"
@@ -106,6 +107,9 @@
                                 pattern="\w{5,16}"
                                 required
                         />
+                        <span class="validation-icon"></span>
+                        <span class="validation-tooltip"></span>
+                        <!--  email  -->
                         <label for="register_email"></label>
                         <input
                                 type="email"
@@ -114,6 +118,8 @@
                                 placeholder="email address"
                                 required
                         />
+                        <span></span>
+                        <!-- password  -->
 <!--                        TODO tooltip Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters-->
                         <label for="register_password"></label>
                         <input
@@ -122,16 +128,27 @@
                                 name="register_password"
                                 placeholder="password"
                                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                required
                         />
-                        <span style="height: 0"></span>
+                        <span class="validation-icon"></span>
+                        <ul class="validation-list ul-forwards">
+                            <li>1 number</li>
+                            <li>1 uppercase letter</li>
+                            <li>1 lowercase letter</li>
+                            <li>8 or more characters</li>
+                        </ul>
+                        <!--  repeat password  -->
                         <label for="register_password-rpt"></label>
                         <input
                                 type="password"
-                                class="input-3d"
                                 id="register_password-rpt"
                                 name="register_password-rpt"
                                 placeholder="repeat password"
+                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                required
                         />
+                        <span class="validation-icon"></span>
+                        <span class="validation-tooltip"></span>
                         <button class="btn-md btn-primary btn-action" type="submit">
                             <span>register</span>
                         </button>

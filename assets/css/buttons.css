@@ -8,6 +8,12 @@ button, .button {
         pointer-events: none;
     }
 }
+.btn-pill {
+    display: flex;
+    border-radius : var(--btn-radius);
+    height: fit-content;
+    padding: 0.4rem;
+}
 .btn-sm {
     display: flex;
     border-radius : var(--btn-radius);
@@ -22,6 +28,12 @@ button, .button {
         height: 1.6rem;
     }
 }
+.btn-sm span {
+    background-size: 1.6rem;
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
 .btn-sm.btn-icotext {
     & span {
         padding: 0 0 0 2rem;
@@ -37,20 +49,6 @@ button, .button {
     gap: 0.8rem;
     align-content: center;
     align-items: center;
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     & span {
         &::before {
             background-size: 1.6rem !important;
@@ -278,30 +276,19 @@ button, .button {
     }
 }
 
-
-.btn-sm span{
-    background-size: 1.6rem;
-    width: 1.6rem;
-    height: 1.6rem;
-}
-
 .btn-edit {
     background: url('/assets/icons/edit_16.svg') no-repeat center;
 }
-
 .btn-save-empty {
     background    : url("/assets/icons/heart-empty_24.svg") no-repeat center;
 }
-
 .btn-save-active {
     background    : url("/assets/icons/heart-full_24.svg") no-repeat center;
 }
-
 .btn-settings {
     background: url('/assets/icons/settings_24.svg') no-repeat center;
     justify-self: flex-end;
 }
-
 .btn-filled, .btn-filled-fancy {
     background : var(--color-bg-3);
     /* transition: border 300ms cubic-bezier(1, 0.02, 1, -0.27); */
@@ -316,6 +303,19 @@ button, .button {
     &:hover{
         animation: btn-fill var(--transition-dur-hover) 1 forwards;
     }
+}
+.btn-filled-firebrick {
+    background: firebrick;
+    border: 0.15rem solid lab(from firebrick calc(l - 20) calc(a - 0) calc(b - 0));
+}
+.btn-filled-orange {
+    background: var(--color-hl-orange);
+    border: 0.15rem solid lab(from var(--color-hl-orange) calc(l - 20) calc(a - 0) calc(b - 0));
+}
+.btn-filled-white_orange {
+    background: var(--color-fg-1);
+    border: 0.15rem solid var(--color-hl-orange);
+    color: lab(from var(--color-hl-orange) calc(l - 20) calc(a - 0) calc(b - 0));
 }
 .btn-action {
     &:hover {
@@ -559,7 +559,7 @@ button, .button {
         width         : 2.6rem;
         height        : 2.6rem;
         border-radius : var(--btn-radius);
-        /* border: .2rem solid lab(from var(--color-hl-green-lab) calc(l - 20) calc(a - 0) calc(b - 0)); */
+        border: .2rem solid lab(from var(--color-hl-green-lab) calc(l - 20) calc(a - 0) calc(b - 0));
         background    : var(--color-hl-primary);
         transition: left ease-in-out var(--transition-dur-hover-darklight);
     }

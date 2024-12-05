@@ -276,20 +276,23 @@ a:active {
 }
 /* The Close Button */
 .close {
-  color: #aaa;
+  color: var(--color-fg-4);
   float: right;
   font-size: 2.8rem;
   font-weight: bold;
+  transition: color var(--transition-dur-hover) ease-in-out;
 }
 .close:hover,
 .close:focus {
-  color: black;
+  color: firebrick;
   text-decoration: none;
   cursor: pointer;
 }
 
 .form-title {
   font-size: clamp(1.2rem, 2rem + -.4dvw, 2.4rem);
+  /* margin-inline: auto; */
+  text-align: center;
 }
 .form-container {
   width: 320px;
@@ -333,7 +336,7 @@ a:active {
 .forgot {
   display: flex;
   justify-content: flex-end;
-  font-size: 0.75rem;
+  font-size: 1.2rem;
   line-height: 1rem;
   color: rgba(156, 163, 175,1);
   margin: 8px 0 14px 0;
@@ -364,31 +367,31 @@ a:active {
 }
 .line {
   height: 1px;
-  flex: 1 1 0%;
-  background-color: rgba(55, 65, 81, 1);
+  flex: 1 1 0;
+  background-color: lab(from var(--color-fg-3) calc(l - 0) calc(a - 0) calc(b - 0) / .4);
 }
 .social-message .message {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: rgba(156, 163, 175, 1);
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  color: var(--color-fg-3);
 }
 .social-icons {
   display: flex;
   justify-content: center;
 }
 .social-icons .icon {
-  border-radius: 0.125rem;
-  padding: 0.75rem;
+  border-radius: 0.12rem;
+  padding: 0.8rem;
   border: none;
   background-color: transparent;
-  margin-left: 8px;
+  margin-left: .8rem;
 }
 .social-icons .icon svg {
   height: 1.2rem;
   width: 1.2rem;
-  fill: #fff;
+  fill: var(--color-fg-1);
 }
 .reg-log {
   padding: .8rem 0 0 0;
@@ -399,6 +402,9 @@ a:active {
   color: rgba(156, 163, 175, 1);
   justify-content: space-between;
   align-items: center;
+  & small {
+    padding: 0 0 .8rem 0;
+  }
 }
   /* ---- lab test colors ---- */
 
@@ -545,7 +551,8 @@ a:active {
   }
 
   textarea,
-  input[type="text"], input[type="password"] {
+  input[type="text"], input[type="password"] , input[type="email"] {
+    position: relative;
     border        : 1px solid var(--color-bg-4);
     font-size: 1.6rem;
     border-radius: 0.8rem;
@@ -553,9 +560,35 @@ a:active {
     height: auto;
     color: var(--color-fg-2)
   }
-  textarea {
-    min-width: 100%;
+  /*textarea {*/
+  /*  min-width: 100%;*/
+  /*}*/
+input:user-valid, input:not(:placeholder-shown):valid {
+  color: var(--color-hl-green);
+}
+input:user-invalid, input:not(:placeholder-shown):invalid {
+  color: firebrick;
+  & + span::before {
+    display: flex;
+    content: '';
+    position: relative;
+    background: url('/assets/icons/form-error.svg') no-repeat;
+    left: 11rem;
+    top: -3.6rem;
+    height: 5rem;
+    width: 5rem;
   }
+}
+input[type="password"]:user-invalid {
+  &:after {
+    content: 'Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: fit-content;
+    width: fit-content;
+  }
+}
 
 
 textarea.inactive-input,

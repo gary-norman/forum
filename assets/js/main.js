@@ -29,6 +29,10 @@ const regFormSpans = regForm.querySelectorAll('span');
 const regFormIcons = regForm.querySelectorAll('.validation-icon');
 const regFormTooltips = regForm.querySelectorAll('.validation-tooltip');
 const regPass = document.querySelector('#register_password');
+const liValidNum = document.querySelector('#li-valid-num');
+const liValidUpper = document.querySelector('#li-valid-upper');
+const liValidLower = document.querySelector('#li-valid-lower');
+const liValid8 = document.querySelector('#li-valid-8');
 const regPassRpt = document.querySelector('#register_password-rpt');
 const validList = regForm.querySelector('ul');
 // drag and drop
@@ -98,6 +102,33 @@ function forgot() {
     formForgot.classList.remove('display-off');
     forgotVisible = true;
 }
+// validate each requirement of the password
+function validatePass() {
+    if (regPass.value.match(/[0-9]/g)) {
+        liValidNum.classList.add('li-valid');
+    }
+    if (regPass.value.match(/[A-Z]/g)) {
+        liValidUpper.classList.add('li-valid');
+    }
+    if (regPass.value.match(/[a-z]/g)) {
+        liValidLower.classList.add('li-valid');
+    }
+    if (regPass.value.length >= 8) {
+        liValid8.classList.add('li-valid');
+    }
+    if (!regPass.value.match(/[0-9]/g)) {
+        liValidNum.classList.remove('li-valid');
+    }
+    if (!regPass.value.match(/[A-Z]/g)) {
+        liValidUpper.classList.remove('li-valid');
+    }
+    if (!regPass.value.match(/[a-z]/g)) {
+        liValidLower.classList.remove('li-valid');
+    }
+    if (regPass.value.length < 8) {
+        liValid8.classList.remove('li-valid');
+    }
+}
 // confirm password validation
 function confirmPass() {
     if (regPassRpt.value !== regPass.value || regPassRpt.value === "") {
@@ -158,6 +189,8 @@ btnRegister.forEach(button =>
     button.addEventListener('click', (e) => logReg(e.target.id))
 );
 btnForgot.addEventListener('click', forgot);
+// validate password
+regPass.addEventListener('input', validatePass);
 // check passwords match
 regPassRpt.addEventListener('focusout', confirmPass);
 // reverse the order of the password validation list delay

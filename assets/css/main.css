@@ -638,15 +638,23 @@ input:user-invalid, input:not(:placeholder-shown):invalid, .pass-nomatch {
 .validation-list {
   pointer-events: none;
   position: relative;
-  left: 1.8rem;
+  left: 2.8rem;
   height: 0;
   width: 21rem;
   z-index: 1;
   font-size: var(--font-sz-main);
   transition: height 1s ease-in-out;
   transition-behavior: allow-discrete;
+  list-style-image: url('/assets/icons/form-grey.svg');
+  .li-valid {
+    list-style-image: url('/assets/icons/form-success.svg');
+  }
+  .li-invalid {
+    list-style-image: url('/assets/icons/form-error.svg');
+  }
   & li {
     opacity: 0;
+    line-height: 1.6rem;
   }
   & li:nth-of-type(1) {
     transition-delay: var(--delay-1);

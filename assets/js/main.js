@@ -8,7 +8,7 @@ const actButtonsAll = actButtonContainer.querySelectorAll('button')
 const activityFeeds = document.querySelector('#activity-feeds')
 const activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]')
 // login/register butons
-const btnLogin = document.querySelectorAll('[id^="btn_login"]');
+const btnLogin = document.querySelectorAll('[id^="btn_login-"]');
 const btnRegister = document.querySelectorAll('[id^="btn_register-"]');
 const btnForgot = document.querySelector('#btn_forgot');
 // login/register forms
@@ -48,30 +48,45 @@ function toggleDarkMode() {
 }
 
 function toggleFeed(targetFeed, targetFeedContent, targetButton) {
-    actButtonsAll.forEach(button => button.classList.remove('btn-active'));
-    activityFeedsContentAll.forEach(feed => feed.classList.replace('collapsible-expanded', 'collapsible-collapsed'));
-    targetFeedContent.classList.replace('collapsible-collapsed', 'collapsible-expanded');
-    targetButton.classList.toggle('btn-active');
-    targetFeed.querySelector('.button-row').classList.toggle('hide-feed', false);
+    const timeOut = 400;
+    actButtonsAll.forEach( button => button.classList.remove('btn-active') );
+    activityFeedsContentAll.forEach(feed => {
+        feed.classList.remove('collapsible-expanded');
+        feed.classList.add('collapsible-collapsed');
+    });
+    setTimeout(() => {
+        targetFeedContent.classList.remove('collapsible-collapsed');
+        targetFeedContent.classList.add('collapsible-expanded');
+        targetButton.classList.toggle('btn-active'); }, timeOut);
+    setTimeout(() => {
+        targetFeed.querySelector('.button-row').forEach(feed => {
+            feed.classList.add('hide-feed');
+        });
+        targetFeed.querySelector('.button-row').classList.remove('hide-feed');}, timeOut)
 }
 
-function logReg() {
-    console.log('Toggling login and register forms');
-    formLogin.classList.toggle('display-off');
-    formRegister.classList.toggle('display-off');
-
-    if (forgotVisible === true) {
-        console.log('Form was visible, hiding it now');
-        formForgot.classList.remove('display-off');
+function logReg(target) {
+    if (target === 'btn_login-2') {
+        console.log('btn-log-2');
+        formLogin.classList.remove('display-off');
+        formForgot.classList.add('display-off');
+        forgotVisible = false;
+    } else if (target === 'btn_register-2') {
+        console.log('btn-reg-2');
+        formRegister.classList.remove('display-off');
+        formForgot.classList.add('display-off');
         forgotVisible = false;
     } else {
-        console.log('Form was not visible');
+        console.log('Toggling login and register forms');
+        formLogin.classList.toggle('display-off');
+        formRegister.classList.toggle('display-off');
     }
 }
+
 function forgot() {
     formLogin.classList.add('display-off');
     formRegister.classList.add('display-off');
-    formForgot.classList.toggle('display-off');
+    formForgot.classList.remove('display-off');
     forgotVisible = true;
 }
 
@@ -119,6 +134,10 @@ window.addEventListener('click', ({ target }) => {
         modal.style.display = 'none';
     }
 });
-btnLogin.forEach(button => button.addEventListener('click', () => logReg));
-btnRegister.forEach(button => button.addEventListener('click', () => logReg));
+btnLogin.forEach(button =>
+    button.addEventListener('click', (e) => logReg(e.target.id))
+);
+btnRegister.forEach(button =>
+    button.addEventListener('click', (e) => logReg(e.target.id))
+);
 btnForgot.addEventListener('click', forgot);

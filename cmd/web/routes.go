@@ -28,5 +28,10 @@ func (app *app) routes() http.Handler {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
 	})
+	mux.HandleFunc("/register", app.register)
+	mux.HandleFunc("/login", app.login)
+	mux.HandleFunc("/logout", app.logout)
+	mux.HandleFunc("/protected", app.protected)
+
 	return mux
 }

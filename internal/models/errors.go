@@ -11,6 +11,7 @@ type Errors struct {
 	Parse     string
 	Execute   string
 	Post      string
+	Register  string
 }
 
 func CreateErrorMessages() *Errors {
@@ -25,6 +26,7 @@ func CreateErrorMessages() *Errors {
 		Parse:     "Unable to parse %v called by %v with error: %v\n",
 		Execute:   "Unable to execute template with error: %v\n",
 		Post:      "Unable to post with error: %v\n",
+		Register:  "Unable to register with error: %v\n",
 	}
 	return errors
 }

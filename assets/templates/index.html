@@ -159,7 +159,7 @@
                     </div>
                 </div>
                 <div id="form-forgot" class="display-off">
-                    <form>
+                    <form action="/register" method="POST">
                         <p class="form-title">enter your username or email address to reset your password</p>
                         <label for="forgot_pass"></label>
                         <input
@@ -388,9 +388,8 @@
                                         <div>
                                             <small>{{.ChannelID}}</small>
                                             <small>-</small>
-                                            <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
-                                                @ {{.Created.Format "15:04:05 UTC"}}</time>
-                                        </div>
+                                            <small>{{.TimeSince}}</small>
+                                            </div>
                                     </div>
                                 </div>
                                 <h4>{{.Title}}</h4>
@@ -495,8 +494,9 @@
                                                     <div>
                                                         <small>{{.ChannelID}}</small>
                                                         <small>-</small>
-                                                        <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
-                                                            @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                                        <small>{{.TimeSince}}</small>
+<!--                                                        <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}-->
+<!--                                                            @ {{.Created.Format "15:04:05 UTC"}}</time>-->
                                                     </div>
                                                 </div>
                                             </div>

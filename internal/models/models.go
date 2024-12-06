@@ -12,6 +12,7 @@ type User struct {
 	Description string    `json:"description,omitempty"`
 	Usertype    string    `json:"usertype"`
 	Created     time.Time `json:"created"`
+	TimeSince   string    `json:"time_since"`
 	IsFlagged   bool      `json:"is_flagged,omitempty"`
 }
 
@@ -65,10 +66,16 @@ type Post struct {
 	Content     string    `json:"content"`
 	Images      string    `json:"images,omitempty"` // Store JSON as string
 	Created     time.Time `json:"created"`
+	TimeSince   string    `json:"time_since"`
 	Commentable bool      `json:"commentable"`
 	AuthorID    int       `json:"author_id"`
 	ChannelID   int       `json:"channel_id"`
 	IsFlagged   bool      `json:"is_flagged,omitempty"`
+}
+
+type PostWithDaysAgo struct {
+	Post
+	TimeSince string
 }
 
 type Image struct {

@@ -7,7 +7,7 @@ const actButtonsAll = actButtonContainer.querySelectorAll('button')
 // activity feeds
 const activityFeeds = document.querySelector('#activity-feeds')
 const activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]')
-// login/register butons
+// login/register buttons
 const btnLogin = document.querySelectorAll('[id^="btn_login-"]');
 const btnRegister = document.querySelectorAll('[id^="btn_register-"]');
 const btnForgot = document.querySelector('#btn_forgot');

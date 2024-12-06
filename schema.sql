@@ -16,6 +16,7 @@ CREATE TABLE Users (
     Description TEXT,
     Usertype TEXT NOT NULL,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    Time_since TEXT,
     Is_flagged BOOLEAN 
 );
 

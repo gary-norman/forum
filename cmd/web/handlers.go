@@ -55,7 +55,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("index: %v, post: %v\n", index, post.Created)
 		now := time.Now()
 		hours := now.Sub(post.Created).Hours()
-		TimeSince := ""
+		var TimeSince string
 		if hours > 24 {
 			TimeSince = fmt.Sprintf("%.0f days ago.", hours/24)
 			fmt.Printf("Hours: %v, days: %v\n", hours, hours/24)

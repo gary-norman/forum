@@ -205,35 +205,33 @@
                     <option value="2004">Golang</option>
                     <option value="2005">SQLite</option>
                 </datalist>
-                <label for="title">Title</label>
+                <label for="title">title</label>
                 <input type="text" id="title" name="title"/>
-                <label for="content">Post</label>
+                <label for="content">post</label>
             <!-- FIXME fix resize issue -->
                 <textarea id="content" name="content"></textarea>
-                <label for="images"></label>
-                <input type="text" class="noborder" id="images" name="images" placeholder="Upload an image (optional)"/>
-                    <div id="drop_zone">
-                        <div id="uploadedFile"></div>
-                        <div class="cont-flex-column">
-                            <span class="dragText">drag and drop your file, or</span>
-                            <span class="button">browse</span>
-                            <input type="file" id="browse" name="file-drop" />
-                        </div>
-                    </div>
-<!--                    <label for="images"></label>-->
-<!--                    <input type="text" class="noborder" id="images" name="images" placeholder="Upload an image (optional)"/>-->
-
-                    <div class="cont-flex-row flex-space-between" >
-                        <label for="allow-comments-checkbox">Allow comments</label>
-                        <label class="allow-comments">
-                            <input type="checkbox" id="allow-comments-checkbox">
-                            <span class="allow-comments-fx"></span>
-                            <!--                            <span class="darklight-border"></span>-->
-                        </label>
-                    </div>
+                <p>upload an image (optional)</p>
+                <div id="drop_zone">
+                <div id="uploadedFile"></div>
+                <div class="cont-flex-column">
+                    <span class="dragText">drag and drop your file, or</span>
+<!--                    <span class="button">browse</span>-->
+                    <input type="file" id="browse" name="file-drop" />
+                </div>
+                </div>
+                <div class="cont-flex-row flex-center">
+                    <label for="allow-comments-checkbox">Allow comments</label>
+                    <label class="allow-comments">
+                        <input type="checkbox" id="allow-comments-checkbox">
+                        <span class="allow-comments-fx"></span>
+                        <!--                            <span class="darklight-border"></span>-->
+                    </label>
+                </div>
                 <!-- FIXME fix these buttons -->
-                <div class="cont-flex-row" style="justify-content: space-around">
-                    <button class="btn-md btn-primary btn-action">create post</button>
+                <div class="cont-flex-row flex-center">
+                    <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
+                        <span>create post</span>
+                    </button>
                     <a href="/" class="button btn-md btn-secondary btn-action btn-filled">cancel</a>
                 </div>
             </form>
@@ -380,7 +378,7 @@
                     <div class="scrollable-home scrollable no-scrollbar">
                         <div class="feed-content feed-content-homepage">
                             {{range .Posts}}
-                            <div class="card">
+                            <div class="card" id="{{.ID}}">
                                 <div class="post-info-container">
                                     <span class="card-profile-pic"></span>
                                     <div>
@@ -486,7 +484,7 @@
                                     <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
                                         {{range .Posts}}
                                         <div class="activity-items activity">Something happened!</div>
-                                        <div class="card">
+                                        <div class="card" id="{{.ID}}">
                                             <div class="post-info-container">
                                                 <span class="card-profile-pic"></span>
                                                 <div>

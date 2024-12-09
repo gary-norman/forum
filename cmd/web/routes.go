@@ -30,7 +30,7 @@ func (app *app) routes() http.Handler {
 		}
 	})
 
-	//mux.HandleFunc("/store-reaction", app.storeReaction)
+	mux.HandleFunc("/store-reaction", app.storeReaction)
 
 	return mux
 }

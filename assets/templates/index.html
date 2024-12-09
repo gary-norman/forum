@@ -341,7 +341,7 @@
                                     <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
                                         {{range .Posts}}
                                         <div class="activity-items activity">Something happened!</div>
-                                        <div class="card" data-post-id="{{.ID}}">
+                                        <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                                             <div class="post-info-container">
                                                 <span class="card-profile-pic"></span>
                                                 <div>
@@ -356,13 +356,13 @@
                                             </div>
                                             <h4>{{.Title}}</h4>
                                             <article class="cardContent">{{.Content}}</article>
-                                            <div class="button-row">
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                                    <span class="btn-likes">{{.Likes}}</span>
+                                            <div class="button-row post-controls" >
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+                                                    <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                                                 </button>
                                                 <!-- --- TODO invertoff -->
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled">
-                                                    <span class="btn-dislikes">{{.Dislikes}}</span>
+                                                    <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-reply">reply</span>

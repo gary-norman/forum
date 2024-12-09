@@ -311,6 +311,9 @@ button, .button {
     &:hover {
         border: .15rem solid var(--color-secondary-hover);
     }
+    &.liked{
+        border: .15rem solid var(--color-secondary-active);
+    }
 }
 .btn-action-primary, .btn-action-secondary {
     position: relative;

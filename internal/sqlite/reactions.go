@@ -12,8 +12,8 @@ type ReactionModel struct {
 	DB *sql.DB
 }
 
-func (m *ReactionModel) Insert(liked, disliked bool, authorID, channelID, reactedPostID, reactedCommentID int) error {
-	if !isValidParent(reactedPostID, reactedCommentID) {
+func (m *ReactionModel) Insert(liked, disliked bool, authorID, channelID int, reactedPostID, reactedCommentID *int) error {
+	if !isValidParent(*reactedPostID, *reactedCommentID) {
 		return fmt.Errorf("only one of Reacted_postID, or Reacted_commentID must be non-zero")
 	}
 
@@ -45,17 +45,23 @@ func (m *ReactionModel) Upsert(liked, disliked bool, authorID, channelID, reacte
 	// Check if the reaction exists
 	exists, err := m.Exists(authorID, channelID, reactedPostID, reactedCommentID)
 	if err != nil {
-		return err
+		return fmt.Errorf(err.Error())
 	}
 
 	if exists {
+		// If the reaction exists, update it
+		fmt.Println("Updating a reaction which already exists (reactions.go :53 -> Upsert)")
 		return m.Update(liked, disliked, authorID, channelID, reactedPostID, reactedCommentID)
 	}
-	return m.Insert(liked, disliked, authorID, channelID, reactedPostID, reactedCommentID)
+	fmt.Println("Inserting a reaction (reactions.go :56 -> Upsert)")
+
+	return m.Insert(liked, disliked, authorID, channelID, &reactedPostID, &reactedCommentID)
 }
 
 // Exists helps avoid creating duplicate reactions by determining whether a reaction for the specific combination of AuthorID and the parent fields (ChannelID, Reacted_postID, Reacted_commentID).
 func (m *ReactionModel) Exists(authorID, channelID, reactedPostID, reactedCommentID int) (bool, error) {
+	fmt.Printf("Reaction already exists (reactions.go :63 -> Exists) for\nauthorID: %v,\nchannelID: %v,\nreactedPostID: %v,\nreactedCommentID: %v\n", authorID, channelID, reactedPostID, reactedCommentID)
+
 	stmt := `SELECT EXISTS(
                 SELECT 1 FROM Reactions
                 WHERE AuthorID = ? AND ChannelID = ? AND Reacted_postID = ? AND Reacted_commentID = ?

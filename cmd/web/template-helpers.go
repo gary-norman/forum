@@ -10,43 +10,45 @@ import (
 var Tpl *template.Template
 
 // init Function to initialise the custom template functions
-func init() {
-	IsLiked := (*app).IsLiked
+func (app *app) init() {
+
 	Tpl = template.Must(template.New("").Funcs(template.FuncMap{
 		"random":    RandomInt,
 		"increment": Increment,
 		"decrement": Decrement,
 		"same":      CheckSameName,
-		"isLiked":   IsLiked,
+		//Wrap the Method in a Standalone Function
+		//Create a wrapper function that calls the method and pass the required arguments
+		//without the receiver
+		"isReacted": func(channelID, reactionAuthorID, passedPostID, passedCommentID int) (bool, error) {
+			return app.IsReacted(channelID, reactionAuthorID, &passedPostID, &passedCommentID)
+		},
 	}).ParseGlob("./assets/templates/*.html"))
 }
 
-// IsLiked Function to check if the user has liked the post, for go templates
-func (app *app) IsLiked(channelID, authorID, userID int, passedPostID, passedCommentID *int) (bool, error) {
+// IsReacted Function to check if the user has liked the post or comment, for go templates
+func (app *app) IsReacted(channelID, reactionAuthorID int, passedPostID, passedCommentID *int) (bool, error) {
 	postID, commentID := 0, 0
 
 	if passedPostID != nil {
-		//log.Println("ReactedPostID:", *reactionData.ReactedPostID)
 		postID = *passedPostID
 	}
 
 	if passedCommentID != nil {
-		//log.Printf("ReactedCommentID: %d", *reactionData.ReactedPostID)
 		commentID = *passedCommentID
 	}
 
-	// Check if the user already reacted (like/dislike) and update or delete the reaction if needed
-	existingReaction, err := app.reactions.CheckExistingReaction(authorID, channelID, postID, commentID)
+	// Check if the reaction exists
+	exists, err := app.reactions.Exists(reactionAuthorID, channelID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for fetching errors
 		log.Printf("Error fetching existing reaction: %v", err)
 		return false, err
 	}
-
-	if existingReaction != nil {
-		log.Printf("Existing Reaction: %+v", existingReaction)
-		return true, nil
+	if exists {
+		return exists, nil
 	}
+
 	return false, nil
 }
 

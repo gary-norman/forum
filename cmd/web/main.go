@@ -50,6 +50,9 @@ func main() {
 		},
 	}
 
+	// Initialise templates
+	app.init()
+
 	srv := http.Server{
 		Addr:    ":8989",
 		Handler: app.routes(),

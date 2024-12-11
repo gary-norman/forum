@@ -27,12 +27,18 @@ document.addEventListener('DOMContentLoaded', function () {
         likeButton.addEventListener('click', function(event) {
             let likeCount = parseInt(likeCountElement.textContent, 10);
 
-            // Toggle the like button
-            likeButton.classList.toggle('liked');
-            likeButton.classList.toggle('unliked');
+            if (likeButton.classList.contains('reacted')) {
+                // Decrement the like count
+                likeCountElement.textContent = `${likeCount - 1}`;
+                // Remove the 'reacted' class to the like button
+                likeButton.classList.remove('reacted');
+            } else {
+                // Increment the like count
+                likeCountElement.textContent = `${likeCount + 1}`;
+                // Add the 'reacted' class from the like button
+                likeButton.classList.add('reacted');
+            }
 
-            // Increment the like count
-            likeCountElement.textContent = `${likeCount + 1}`;
 
             // Send the updated like to the backend via POST request
         const postData = {

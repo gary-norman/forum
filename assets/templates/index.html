@@ -357,7 +357,7 @@
                                             <h4>{{.Title}}</h4>
                                             <article class="cardContent">{{.Content}}</article>
                                             <div class="button-row post-controls" >
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if isReacted .ChannelID .AuthorID .ID 0}}reacted{{end}}" >
                                                     <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                                                 </button>
                                                 <!-- --- TODO invertoff -->

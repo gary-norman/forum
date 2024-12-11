@@ -72,7 +72,7 @@ func (m *ReactionModel) Exists(authorID, channelID, reactedPostID, reactedCommen
 }
 
 // CheckExistingReaction checks if the user has already reacted to a post or comment. For purposes of reactions, the user can only react once to a post or comment.
-func (m *ReactionModel) CheckExistingReaction(authorID, channelID, reactedPostID, reactedCommentID int) (*models.Reaction, error) {
+func (m *ReactionModel) CheckExistingReaction(reactionAuthorID, channelID, reactedPostID, reactedCommentID int) (*models.Reaction, error) {
 	var reaction models.Reaction
 
 	// Query to find if there's a reaction by the same user for the same post or comment
@@ -82,7 +82,7 @@ func (m *ReactionModel) CheckExistingReaction(authorID, channelID, reactedPostID
 			AND ChannelID = ? 
 			AND (Reacted_postID = ? OR Reacted_commentID = ?)`
 
-	err := m.DB.QueryRow(stmt, authorID, channelID, reactedPostID, reactedCommentID).Scan(
+	err := m.DB.QueryRow(stmt, reactionAuthorID, channelID, reactedPostID, reactedCommentID).Scan(
 		&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.ChannelID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID,
 	)
 

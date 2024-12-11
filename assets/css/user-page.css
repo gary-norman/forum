@@ -37,8 +37,8 @@
     transition: height 400ms ease-in-out;
 }
 .collapsible-expanded {
-    height: 100%;
-    /*display: block;*/
+    height: calc(100% - 30rem - 4.8rem);
+    padding-bottom: 3.2rem;
 }
 
 .banner {

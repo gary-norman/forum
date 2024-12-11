@@ -630,8 +630,8 @@ input[type="text"].inactive-input {
     flex-direction : column;
     row-gap        : 0.8rem;
     padding : 1.8rem 0;
-    & > * {
-      /*padding : 0.8rem 1.2rem;*/
+    &:last-of-type {
+      padding-bottom: 5.2rem;
     }
   }
 
@@ -1017,6 +1017,7 @@ input[type="text"].inactive-input {
   width      : calc(100vw - 3rem - 1.2rem - 32rem);
   z-index    : 100;
 }
+
 
 
 .right-panel {

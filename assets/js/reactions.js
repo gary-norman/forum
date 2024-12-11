@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
             liked: true,
             disliked: false,
             reacted_post_id: parseInt(postID, 10),
-            author_id: parseInt(authorID, 10),  // Example: Replace with actual author ID
-            channel_id: parseInt(channelID, 10), // Example: Replace with actual channel ID
+            author_id: parseInt(authorID, 10),
+            channel_id: parseInt(channelID, 10),
         };
 
         // console.log("postID",postData.reacted_post_id);

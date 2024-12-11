@@ -234,7 +234,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	t, err := template.ParseFiles("./assets/templates/index.html")
+	tpl, err := GetTemplate()
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		log.Printf(ErrorMsgs().Parse, "./assets/templates/index.html", "getHome", err)
@@ -395,7 +395,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		//log.Println("ReactedCommentID is nil")
 	}
 
-	//// Check if the user already reacted (like/dislike) and update or delete the reaction if needed
+	// Check if the user already reacted (like/dislike) and update or delete the reaction if needed
 	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.AuthorID, reactionData.ChannelID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for fetching errors

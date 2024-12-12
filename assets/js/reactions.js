@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         likeButton.addEventListener('click', function(event) {
             let likeCount = parseInt(likeCountElement.textContent, 10);
+            let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
 
             if (likeButton.classList.contains('reacted')) {
                 // Decrement the like count
@@ -29,6 +30,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 likeCountElement.textContent = `${likeCount + 1}`;
                 // Add the 'reacted' class from the like button
                 likeButton.classList.add('reacted');
+
+                if (dislikeButton.classList.contains('reacted')) {
+                    // Decrement the like count
+                    dislikeCountElement.textContent = `${dislikeCount - 1}`;
+                    // Remove the 'reacted' class to the like button
+                    dislikeButton.classList.remove('reacted');
+                }
             }
             // Send the updated like to the backend via POST request
             const postData = {
@@ -43,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         dislikeButton.addEventListener('click', function(event) {
+            let likeCount = parseInt(likeCountElement.textContent, 10);
             let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
 
             if (dislikeButton.classList.contains('reacted')) {
@@ -55,6 +64,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 dislikeCountElement.textContent = `${dislikeCount + 1}`;
                 // Add the 'reacted' class from the like button
                 dislikeButton.classList.add('reacted');
+
+                if (likeButton.classList.contains('reacted')) {
+                    // Decrement the like count
+                    likeCountElement.textContent = `${likeCount - 1}`;
+                    // Remove the 'reacted' class to the like button
+                    likeButton.classList.remove('reacted');
+                }
             }
 
             // Send the updated like to the backend via POST request

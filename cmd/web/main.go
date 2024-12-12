@@ -50,7 +50,8 @@ func main() {
 		},
 	}
 
-	// Initialise templates
+	// Initialise templates if (app *app) is a receiver for
+	//the init() function that sets up custom go template functions
 	app.init()
 
 	srv := http.Server{

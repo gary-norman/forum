@@ -471,28 +471,3 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 
 	//http.Redirect(w, r, "/", http.StatusFound)
 }
-
-//func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
-//	log.Printf("using storeReaction()")
-//
-//	if r.Method != http.MethodPost {
-//		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-//		return
-//	}
-//
-//	var reactionData models.Reaction
-//	err := json.NewDecoder(r.Body).Decode(&reactionData)
-//	if err != nil {
-//		http.Error(w, "Error decoding JSON", http.StatusBadRequest)
-//		return
-//	}
-//
-//	// Check reaction and store it in the database, or handle errors
-//	// Respond with a JSON response
-//	w.Header().Set("Content-Type", "application/json")
-//	w.WriteHeader(http.StatusOK)
-//	err = json.NewEncoder(w).Encode(map[string]string{"message": "Reaction updated (in go)"})
-//	if err != nil {
-//		return
-//	}
-//}

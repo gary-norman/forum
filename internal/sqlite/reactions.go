@@ -12,6 +12,43 @@ type ReactionModel struct {
 	DB *sql.DB
 }
 
+type ReactionStatus struct {
+	Liked    bool
+	Disliked bool
+}
+
+// WhichReaction checks if a reaction exists and returns whether it is Liked or Disliked.
+func (m *ReactionModel) WhichReaction(authorID, channelID, reactedPostID, reactedCommentID int) (bool, bool, error) {
+	fmt.Printf("WhichReaction:\nChecking reaction (reactions.go :22 -> WhichReaction) for\nauthorID: %v,\nchannelID: %v,\nreactedPostID: %v,\nreactedCommentID: %v\n", authorID, channelID, reactedPostID, reactedCommentID)
+
+	stmt := `SELECT Liked, Disliked FROM Reactions
+             WHERE AuthorID = ? AND ChannelID = ? AND Reacted_postID = ? AND Reacted_commentID = ?`
+
+	var liked, disliked bool
+	err := m.DB.QueryRow(stmt, authorID, channelID, reactedPostID, reactedCommentID).Scan(&liked, &disliked)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			// No matching reaction found, return default values
+			return false, false, nil
+		}
+		// Return other errors as is
+		return false, false, err
+	}
+
+	return liked, disliked, nil
+}
+
+func (m *ReactionModel) GetReactionStatus(authorID, channelID, reactedPostID, reactedCommentID int) (ReactionStatus, error) {
+	if m == nil || m.DB == nil {
+		return ReactionStatus{}, fmt.Errorf("reaction model or database is nil")
+	}
+	liked, disliked, err := m.WhichReaction(authorID, channelID, reactedPostID, reactedCommentID)
+	if err != nil {
+		return ReactionStatus{}, err
+	}
+	return ReactionStatus{Liked: liked, Disliked: disliked}, nil
+}
+
 func (m *ReactionModel) Insert(liked, disliked bool, authorID, channelID int, reactedPostID, reactedCommentID *int) error {
 	if !isValidParent(*reactedPostID, *reactedCommentID) {
 		return fmt.Errorf("only one of Reacted_postID, or Reacted_commentID must be non-zero")

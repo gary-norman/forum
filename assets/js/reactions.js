@@ -16,14 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const channelID = singlePostControl.closest('.card').getAttribute('data-channel-id');
         const authorID = singlePostControl.closest('.card').getAttribute('data-author-id');
 
-        // console.log("likeID",likeID);
-        // console.log("likeButton",likeButton, "\n")
-        //
-        // console.log("dislikeID",dislikeID)
-        // console.log("dislike Button",dislikeButton, "\n")
-        //
-        // console.log("postID (js)",postID)
-
         likeButton.addEventListener('click', function(event) {
             let likeCount = parseInt(likeCountElement.textContent, 10);
 
@@ -38,56 +30,71 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Add the 'reacted' class from the like button
                 likeButton.classList.add('reacted');
             }
-
-
             // Send the updated like to the backend via POST request
-        const postData = {
-            liked: true,
-            disliked: false,
-            reacted_post_id: parseInt(postID, 10),
-            author_id: parseInt(authorID, 10),
-            channel_id: parseInt(channelID, 10),
-        };
+            const postData = {
+                liked: true,
+                disliked: false,
+                reacted_post_id: parseInt(postID, 10),
+                author_id: parseInt(authorID, 10),
+                channel_id: parseInt(channelID, 10),
+            };
 
-        // console.log("postID",postData.reacted_post_id);
-        // console.log("authorID",postData.author_id);
-        // console.log("channelID",postData.channel_id);
-
-        fetch('http://localhost:8989/store-reaction', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(postData)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => {
-                        throw new Error(`HTTP Error: ${response.status} ${response.statusText}. Response: ${text}`);
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Like updated (in js):', data);
-            })
-            .catch(error => {
-                console.error('Error updating like:', error);
-            });
+            fetchData(postData, "like");
         });
 
         dislikeButton.addEventListener('click', function(event) {
-            // console.log("clicked the dislike button");
-
             let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
 
-            // Decrement the like count
-            dislikeCountElement.textContent = `${dislikeCount + 1}`;
+            if (dislikeButton.classList.contains('reacted')) {
+                // Decrement the like count
+                dislikeCountElement.textContent = `${dislikeCount - 1}`;
+                // Remove the 'reacted' class to the like button
+                dislikeButton.classList.remove('reacted');
+            } else {
+                // Increment the like count
+                dislikeCountElement.textContent = `${dislikeCount + 1}`;
+                // Add the 'reacted' class from the like button
+                dislikeButton.classList.add('reacted');
+            }
+
+            // Send the updated like to the backend via POST request
+            const postData = {
+                liked: false,
+                disliked: true,
+                reacted_post_id: parseInt(postID, 10),
+                author_id: parseInt(authorID, 10),
+                channel_id: parseInt(channelID, 10),
+            };
+
+            fetchData(postData, "dislike");
         });
     });
 
 });
 
+function fetchData(postData, likeString) {
+    fetch('http://localhost:8989/store-reaction', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`HTTP Error: ${response.status} ${response.statusText}. Response: ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(`${likeString} updated (in js):`, data);
+        })
+        .catch(error => {
+            console.error('Error updating like:', error);
+        });
+}
 
 
 

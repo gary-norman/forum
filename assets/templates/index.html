@@ -357,11 +357,12 @@
                                             <h4>{{.Title}}</h4>
                                             <article class="cardContent">{{.Content}}</article>
                                             <div class="button-row post-controls" >
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if isReacted .ChannelID .AuthorID .ID 0}}reacted{{end}}" >
+                                                {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}reacted{{end}}" >
                                                     <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                                                 </button>
                                                 <!-- --- TODO invertoff -->
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled">
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}reacted{{end}}">
                                                     <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/assets/css/buttons.css">
     <script src="/assets/js/main.js" defer></script>
     <script src="/assets/js/reactions.js" defer></script>
+    <script src="/assets/js/share.js" defer></script>
     <title>01F Forum</title>
 </head>
 <body>
@@ -368,12 +369,22 @@
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-reply">reply</span>
                                                 </button>
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <button id="share-button-{{.ID}}" popovertarget="share-container-{{.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-share">share</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-report">report</span>
                                                 </button>
+                                                <div popover id="share-container-{{.ID}}">
+                                                    <div class="share-container">
+                                                        <a href="/" class="share-logo facebook"></a>
+                                                        <a href="/" class="share-logo twitter"></a>
+                                                        <a href="/" class="share-logo linkedin"></a>
+                                                        <a href="/" class="share-logo reddit"></a>
+                                                        <a href="/" class="share-logo whatsapp"></a>
+                                                        <a href="/" class="share-logo telegram"></a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         {{end}}

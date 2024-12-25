@@ -350,48 +350,48 @@ a:active {
   /*overflow: hidden;*/
 }
 
-  .cont-flex-column {
-    display        : flex;
-    flex-direction : column;
-  }
+.cont-flex-column {
+  display        : flex;
+  flex-direction : column;
+}
 
-  .flex-align-c {
-    display         : flex;
-    justify-content : center;
-    column-gap      : 1.2rem;
-  }
+.flex-align-c {
+  display         : flex;
+  justify-content : center;
+  column-gap      : 1.2rem;
+}
 
-  /* ---------------------------------------- */
+/* ---------------------------------------- */
 
-  /* prevent special form element styling  */
+/* prevent special form element styling  */
 
-  legend,
-  fieldset,
-  select,
-  textarea,
-  input,
-  button {
-    background         : transparent;
-    padding            : 0;
-    margin             : 0;
-    -webkit-appearance : none;
-    -moz-appearance    : none;
-    appearance         : none;
-    border             : none;
-  }
+legend,
+fieldset,
+select,
+textarea,
+input,
+button {
+  background         : transparent;
+  padding            : 0;
+  margin             : 0;
+  -webkit-appearance : none;
+  -moz-appearance    : none;
+  appearance         : none;
+  border             : none;
+}
 
-  textarea,
-  input[type="text"], input[type="password"] {
-    border        : 1px solid var(--color-bg-4);
-    font-size: 1.6rem;
-    border-radius: 0.8rem;
-    padding: 0.4rem;
-    height: auto;
-    color: var(--color-fg-2)
-  }
-  textarea {
-    min-width: 100%;
-  }
+textarea,
+input[type="text"], input[type="password"] {
+  border        : 1px solid var(--color-bg-4);
+  font-size: 1.6rem;
+  border-radius: 0.8rem;
+  padding: 0.4rem;
+  height: auto;
+  color: var(--color-fg-2)
+}
+textarea {
+  min-width: 100%;
+}
 
 
 textarea.inactive-input,
@@ -463,7 +463,8 @@ input[type="text"].inactive-input {
       max-width: calc(75dvw - .8rem);
     }
   }
-  .wrapper-form {
+
+  .wrapper-form, .share-container {
     display: flex;
     flex-direction: column;
     background    : var(--color-bg-2);
@@ -481,7 +482,22 @@ input[type="text"].inactive-input {
     /*& * {*/
     /*  margin : 0.4rem;*/
     /*}*/
-  }
+}
+
+.share-container {
+  flex-direction: row;
+  padding       : 1.6rem;
+}
+
+[id^="share-button-"] {
+}
+
+[id^="share-container-"] {
+  background: none;
+  border: none;
+  padding: 2.4rem;
+}
+
   /*--- drag and drop file --- */
 #drop_zone {
   position: relative;
@@ -1017,6 +1033,11 @@ input[type="text"].inactive-input {
   width      : calc(100vw - 3rem - 1.2rem - 32rem);
   z-index    : 100;
 }
+
+.post-controls {
+  position: relative;
+}
+
 
 
 

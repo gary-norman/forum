@@ -19,3 +19,4 @@ go.work
 # intellij files
 .idea/
 .DS_Store
+*.db-wal

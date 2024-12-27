@@ -967,6 +967,23 @@ input[type="checkbox"]:checked {
   background: none;
   border: none;
   padding: 2.4rem;
+  z-index: 0;
+
+  & label {
+    transition: all var(--transition-dur-hover) ease-in-out;
+    cursor: pointer;
+  }
+
+  & input {
+    transition: all var(--transition-dur-hover) ease-in-out;
+    margin-top: -1rem;
+  }
+  &:popover-open {
+    z-index: -1000;
+  }
+  &::backdrop {
+    z-index: -1;
+  }
 }
 
   /*--- drag and drop file --- */

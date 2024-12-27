@@ -241,6 +241,9 @@
                                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                             <span class="btn-filters">filter</span>
                                         </button>
+                                        <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                            <span class="btn-sort">scroll</span>
+                                        </button>
                                     </div>
                                     <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
                                         {{range .Posts}}
@@ -280,12 +283,22 @@
                                                 </button>
                                                 <div popover id="share-container-{{.ID}}">
                                                     <div class="share-container">
-                                                        <a href="/" class="share-logo facebook"></a>
-                                                        <a href="/" class="share-logo twitter"></a>
-                                                        <a href="/" class="share-logo linkedin"></a>
-                                                        <a href="/" class="share-logo reddit"></a>
-                                                        <a href="/" class="share-logo whatsapp"></a>
-                                                        <a href="/" class="share-logo telegram"></a>
+                                                        <div class="button-row">
+                                                            <a href="/" target="_blank" class="share-logo facebook"></a>
+                                                            <a href="/" target="_blank" class="share-logo twitter"></a>
+                                                            <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                                            <a href="/" target="_blank" class="share-logo reddit"></a>
+                                                            <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                                            <a href="/" target="_blank" class="share-logo telegram"></a>
+                                                        </div>
+                                                        <div class="flex-space-between">
+                                                            <label class="padded" for="copy-url-{{.ID}}">Copy URL link</label>
+                                                            <button class="btn-sm btn-icoonly">
+                                                                <span class="btn-copy" aria-label="Copy URL link"></span>
+                                                            </button>
+                                                        </div>
+
+                                                        <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}" name="copy-url-{{.ID}}"/>
                                                     </div>
                                                 </div>
                                             </div>

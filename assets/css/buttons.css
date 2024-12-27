@@ -279,6 +279,10 @@ button, .button {
     background: url('/assets/icons/edit_16.svg') no-repeat center;
 }
 
+.btn-copy {
+    background: url('/assets/icons/copy_16.svg') no-repeat center;
+}
+
 .btn-save-empty {
     background    : url("/assets/icons/heart-empty_24.svg") no-repeat center;
 }
@@ -311,7 +315,7 @@ button, .button {
     &:hover {
         border: .15rem solid var(--color-secondary-hover);
     }
-    &.reacted{
+    &.active{
         border: .15rem solid var(--color-secondary-active);
     }
 }

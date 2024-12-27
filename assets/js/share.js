@@ -10,12 +10,8 @@ const scrollWindow = document.getElementById("activity-feed-activity");
 
 
 document.addEventListener('DOMContentLoaded', function () {
-
     let postID;
     let commentID;
-
-
-
     const postControls = document.querySelectorAll(`.post-controls`);
 
     postControls.forEach(singlePostControl => {
@@ -30,14 +26,20 @@ document.addEventListener('DOMContentLoaded', function () {
             getModalPos(shareButton, shareModal, window)
         });
 
+        // Listen for the 'toggle' event on the modal (native popover event)
+        shareModal.addEventListener('toggle', () => {
+            if (shareModal.matches(':popover-open')) {
+                shareButton.classList.add('active');
+            } else {
+                shareButton.classList.remove('active');
+            }
+        });
+
         scrollWindow.addEventListener('scroll', (e) => {
             getModalPos(shareButton, shareModal, scrollWindow)
         });
 
-
-
-
-            //if postID present, make msg = postMsg, if commentID present, make msg = commentMsg
+        //if postID present, make msg = postMsg, if commentID present, make msg = commentMsg
         if (postID !== 0 && commentID === 0) {
             msg = postMsg;
             title = postTitle;
@@ -45,24 +47,23 @@ document.addEventListener('DOMContentLoaded', function () {
             msg = commentMsg;
             title = commentTitle;
         }
+
         const fb = singlePostControl.querySelector('.facebook');
-
-
         fb.href = `https://www.facebook.com/share.php?u=${link}`;
+
         const twitter = singlePostControl.querySelector('.twitter');
-
         twitter.href = `http://twitter.com/share?&url=${link}&text=${msg}&hashtags=javascript,programming`;
+
         const linkedIn = singlePostControl.querySelector('.linkedin');
-
         linkedIn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${link}`;
+
         const reddit = singlePostControl.querySelector('.reddit');
-
         reddit.href = `http://www.reddit.com/submit?url=${link}&title=${title}`;
+
         const whatsapp = singlePostControl.querySelector('.whatsapp');
-
         whatsapp.href = `https://api.whatsapp.com/send?text=${msg}: ${link}`;
-        const telegram = singlePostControl.querySelector('.telegram');
 
+        const telegram = singlePostControl.querySelector('.telegram');
         telegram.href = `https://telegram.me/share/url?url=${link}&text=${msg}`;
     });
 });
@@ -77,5 +78,4 @@ function getModalPos(shareButton, shareModal, windowPos) {
     shareModal.style.top = `${buttonPos.bottom - 16}px`;
     shareModal.style.left = `${buttonPos.left  - 20}px`;
 }
-
 

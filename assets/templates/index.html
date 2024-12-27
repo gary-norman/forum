@@ -359,11 +359,11 @@
                                             <article class="cardContent">{{.Content}}</article>
                                             <div class="button-row post-controls" >
                                                 {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}reacted{{end}}" >
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
                                                     <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                                                 </button>
                                                 <!-- --- TODO invertoff -->
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}reacted{{end}}">
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
                                                     <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -375,14 +375,24 @@
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-report">report</span>
                                                 </button>
-                                                <div popover id="share-container-{{.ID}}">
+                                                <div popover anchor="share-button-{{.ID}}" id="share-container-{{.ID}}" class="scrollable-user">
                                                     <div class="share-container">
-                                                        <a href="/" class="share-logo facebook"></a>
-                                                        <a href="/" class="share-logo twitter"></a>
-                                                        <a href="/" class="share-logo linkedin"></a>
-                                                        <a href="/" class="share-logo reddit"></a>
-                                                        <a href="/" class="share-logo whatsapp"></a>
-                                                        <a href="/" class="share-logo telegram"></a>
+                                                        <div class="button-row">
+                                                            <a href="/" target="_blank" class="share-logo facebook"></a>
+                                                            <a href="/" target="_blank" class="share-logo twitter"></a>
+                                                            <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                                            <a href="/" target="_blank" class="share-logo reddit"></a>
+                                                            <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                                            <a href="/" target="_blank" class="share-logo telegram"></a>
+                                                        </div>
+                                                        <div class="flex-space-between">
+                                                            <label class="padded" for="copy-url-{{.ID}}">Copy URL link</label>
+                                                            <button class="btn-sm btn-icoonly">
+                                                                <span class="btn-copy" aria-label="Copy URL link"></span>
+                                                            </button>
+                                                        </div>
+
+                                                        <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}" name="copy-url-{{.ID}}"/>
                                                     </div>
                                                 </div>
                                             </div>

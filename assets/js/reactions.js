@@ -20,22 +20,22 @@ document.addEventListener('DOMContentLoaded', function () {
             let likeCount = parseInt(likeCountElement.textContent, 10);
             let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
 
-            if (likeButton.classList.contains('reacted')) {
+            if (likeButton.classList.contains('active')) {
                 // Decrement the like count
                 likeCountElement.textContent = `${likeCount - 1}`;
-                // Remove the 'reacted' class to the like button
-                likeButton.classList.remove('reacted');
+                // Remove the 'active' class to the like button
+                likeButton.classList.remove('active');
             } else {
                 // Increment the like count
                 likeCountElement.textContent = `${likeCount + 1}`;
-                // Add the 'reacted' class from the like button
-                likeButton.classList.add('reacted');
+                // Add the 'active' class from the like button
+                likeButton.classList.add('active');
 
-                if (dislikeButton.classList.contains('reacted')) {
+                if (dislikeButton.classList.contains('active')) {
                     // Decrement the like count
                     dislikeCountElement.textContent = `${dislikeCount - 1}`;
-                    // Remove the 'reacted' class to the like button
-                    dislikeButton.classList.remove('reacted');
+                    // Remove the 'active' class to the like button
+                    dislikeButton.classList.remove('active');
                 }
             }
             // Send the updated like to the backend via POST request
@@ -54,22 +54,22 @@ document.addEventListener('DOMContentLoaded', function () {
             let likeCount = parseInt(likeCountElement.textContent, 10);
             let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
 
-            if (dislikeButton.classList.contains('reacted')) {
+            if (dislikeButton.classList.contains('active')) {
                 // Decrement the like count
                 dislikeCountElement.textContent = `${dislikeCount - 1}`;
-                // Remove the 'reacted' class to the like button
-                dislikeButton.classList.remove('reacted');
+                // Remove the 'active' class to the like button
+                dislikeButton.classList.remove('active');
             } else {
                 // Increment the like count
                 dislikeCountElement.textContent = `${dislikeCount + 1}`;
-                // Add the 'reacted' class from the like button
-                dislikeButton.classList.add('reacted');
+                // Add the 'active' class from the like button
+                dislikeButton.classList.add('active');
 
-                if (likeButton.classList.contains('reacted')) {
+                if (likeButton.classList.contains('active')) {
                     // Decrement the like count
                     likeCountElement.textContent = `${likeCount - 1}`;
-                    // Remove the 'reacted' class to the like button
-                    likeButton.classList.remove('reacted');
+                    // Remove the 'active' class to the like button
+                    likeButton.classList.remove('active');
                 }
             }
 

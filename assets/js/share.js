@@ -8,7 +8,6 @@ const  commentTitle = encodeURIComponent('Comment from User ??? Here');
 const postTitle = encodeURIComponent('Post Title Here');
 const scrollWindow = document.getElementById("activity-feed-activity");
 
-
 document.addEventListener('DOMContentLoaded', function () {
     let postID;
     let commentID;
@@ -21,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
         //get all components needed
         const shareModal = singlePostControl.querySelector(`#share-container-`+ postID);
         const shareButton = singlePostControl.querySelector(`#share-button-`+ postID);
+        const label = shareModal.querySelector('label');
+        const icon = shareModal.querySelector('button');
+        const input = shareModal.querySelector('input');
 
         shareButton.addEventListener('click', (e) => {
             getModalPos(shareButton, shareModal, window)
@@ -28,16 +30,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Listen for the 'toggle' event on the modal (native popover event)
         shareModal.addEventListener('toggle', () => {
-            if (shareModal.matches(':popover-open')) {
-                shareButton.classList.add('active');
-            } else {
-                shareButton.classList.remove('active');
-            }
+            toggleButtonActive(shareModal, shareButton);
         });
 
         scrollWindow.addEventListener('scroll', (e) => {
             getModalPos(shareButton, shareModal, scrollWindow)
+
+            // Parse the 'top' value and compare it with top of the mask / botton of screen
+            const modalTop = parseInt(shareModal.style.top, 10); // Convert 'top' to a number
+
+            if (modalTop <= 400 || modalTop >= window.innerHeight - 72) {
+                // Close the popover
+                shareModal.hidePopover();
+            }
         });
+
+        label.addEventListener('click', async () => {
+            try {
+                await updateCopyStatus(input, label, icon);
+                console.log('Copy operation completed');
+            } catch (err) {
+                console.error('Error during copy operation:', err);
+            }
+        });
+
+
+        icon.addEventListener('click', async () => {
+            try {
+                await updateCopyStatus(input, label, icon);
+                console.log('Copy operation completed');
+            } catch (err) {
+                console.error('Error during copy operation:', err);
+            }
+        });
+
 
         //if postID present, make msg = postMsg, if commentID present, make msg = commentMsg
         if (postID !== 0 && commentID === 0) {
@@ -68,10 +94,29 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function scrollToPost(postId) {
+    const container = scrollWindow;
+    const post = document.querySelector(`[data-post-id="${postId}"]`)
+
+    if (post) {
+        post.scrollIntoView({
+            behavior: 'smooth', // Smooth scrolling animation
+            block: 'start', // Align to the top of the container
+        });
+    } else {
+        console.error('Post not found:', postId);
+    }
+}
+const scrollButton = document.getElementById(`scroll-test`);
+scrollButton.addEventListener('click', () => {
+    // Example: Scroll to post 3
+    scrollToPost('3');
+})
+
+
 function getModalPos(shareButton, shareModal, windowPos) {
     //get button position
     const buttonPos = shareButton.getBoundingClientRect();
-
 
     //set modal styling
     shareModal.style.position = 'absolute';
@@ -79,3 +124,72 @@ function getModalPos(shareButton, shareModal, windowPos) {
     shareModal.style.left = `${buttonPos.left  - 20}px`;
 }
 
+function toggleButtonActive(shareModal, shareButton) {
+    if (shareModal.matches(':popover-open')) {
+        shareButton.classList.add('active');
+    } else {
+        shareButton.classList.remove('active');
+    }
+}
+
+function copyToClipboard(input) {
+    input.focus();
+    input.select();
+
+    // Modern Clipboard API (recommended)
+    if (navigator.clipboard) {
+        return navigator.clipboard.writeText(input.value)
+            .then(() => console.log('Text copied to clipboard!'))
+            .catch(err => {
+                console.error('Failed to copy text:', err);
+                throw err; // Ensure errors are propagated to the caller
+            });
+    } else {
+        // Fallback for unsupported browsers
+        console.warn('Clipboard API not supported, using execCommand as fallback');
+        try {
+            const success = document.execCommand('copy');
+            if (!success) {
+                throw new Error('Fallback copy failed');
+            }
+            console.log('Text copied to clipboard (fallback method)!');
+            return Promise.resolve(); // ✅ Return a resolved Promise
+        } catch (err) {
+            console.error('Fallback copy failed:', err);
+            return Promise.reject(err); // ✅ Return a rejected Promise
+        }
+    }
+}
+
+async function updateCopyStatus(input, label, icon) {
+    const iconSpan = icon.querySelector(`span`);
+    try {
+        await copyToClipboard(input);
+
+        // Update label text and styles
+        label.textContent = 'Copied!';
+        label.style.color = "var(--color-hl-primary)";
+        iconSpan.classList.remove("btn-copy");
+        iconSpan.classList.add("btn-success");
+
+        setTimeout(() => {
+            label.textContent = 'Copy URL link';
+            label.style.color = "var(--color-fg-2)";
+            iconSpan.classList.add("btn-copy");
+            iconSpan.classList.remove("btn-success");
+        }, 2000);
+    } catch (err) {
+        console.error('Failed to copy text:', err);
+        label.textContent = 'Failed to Copy';
+        label.style.color = "var(--color-hl-red)";
+        iconSpan.classList.remove("btn-copy");
+        iconSpan.classList.add("btn-warning");
+
+        setTimeout(() => {
+            label.textContent = 'Copy URL';
+            label.style.color = "var(--color-fg-2)";
+            iconSpan.classList.add("btn-copy");
+            iconSpan.classList.remove("btn-warning");
+        }, 2000);
+    }
+}

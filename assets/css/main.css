@@ -499,10 +499,12 @@ input[type="text"].inactive-input {
   z-index: 0;
 
   & label {
+    transition: all var(--transition-dur-hover) ease-in-out;
     cursor: pointer;
   }
 
   & input {
+    transition: all var(--transition-dur-hover) ease-in-out;
     margin-top: -1rem;
   }
   &:popover-open {

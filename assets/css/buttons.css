@@ -177,6 +177,9 @@ button, .button {
         background : url('/assets/icons/sort_16.svg') no-repeat center;
     }
 }
+
+
+
 .btn-likes {
     &::before {
         background : url('/assets/icons/likes_16.svg') no-repeat center;
@@ -280,7 +283,18 @@ button, .button {
 }
 
 .btn-copy {
+    transition: all var(--transition-dur-hover) ease-in-out;
     background: url('/assets/icons/copy_16.svg') no-repeat center;
+}
+
+.btn-success {
+    transition: all var(--transition-dur-hover) ease-in-out;
+    background : url('/assets/icons/success_16.svg') no-repeat center;
+}
+
+.btn-warning {
+    transition: all var(--transition-dur-hover) ease-in-out;
+    background : url('/assets/icons/warning_16.svg') no-repeat center;
 }
 
 .btn-save-empty {

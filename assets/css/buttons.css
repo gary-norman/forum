@@ -598,8 +598,14 @@ input:checked + .darklight-fx:before {
 input:checked + .darklight-fx:after {
   transform: rotate(90deg);
   left: calc(50% - 3.8rem);
-  animation: fade-out-in ease-in-out var(--transition-dur-hover-darklight) 1
-    backwards;
+  animation: light-to-dark ease-in-out var(--transition-dur-hover-darklight) 1
+    forwards;
+}
+input:not(:checked) + .darklight-fx:after {
+  transform: rotate(0deg);
+  left: calc(50% - 7.3rem);
+  animation: dark-to-light ease-in-out var(--transition-dur-hover-darklight) 1
+    forwards;
 }
 /* -- allow comments toggle --- */
 .allow-comments {
@@ -666,6 +672,26 @@ input:checked + .allow-comments-fx {
   }
   30%,
   70% {
+    opacity: 0;
+  }
+}
+@keyframes light-to-dark {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  40%,
+  60% {
+    opacity: 0;
+  }
+}
+@keyframes dark-to-light {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  40%,
+  60% {
     opacity: 0;
   }
 }

@@ -26,6 +26,7 @@
     inset 0 3px 5px rgba(0 0 0 / 0.3), inset 0 -1px 2px rgba(225 225 225 / 0.5);
 
   /* --- transitions --- */
+  transition-behavior: allow-discrete;
   interpolate-size: allow-keywords; /* allow animations between intrinsic sizes */
   --transition-dur-hover: 200ms;
   --transition-dur-feeds: 500ms;
@@ -729,7 +730,6 @@ input[type="email"] {
   z-index: 1;
   font-size: var(--font-sz-main);
   transition: height 1s ease-in-out;
-  transition-behavior: allow-discrete;
   list-style-image: url("/assets/icons/form-grey.svg");
   .li-valid {
     list-style-image: url("/assets/icons/form-success.svg");
@@ -848,8 +848,9 @@ input[type="checkbox"]:checked {
   anchor-name: --post-button;
 }
 #form-post {
-  position-anchor: --post-button;
   position: absolute;
+  left: 50dvw;
+  position-anchor: --post-button;
   margin: 0;
   padding: 2rem;
   font-size: 1.5rem;
@@ -866,7 +867,6 @@ input[type="checkbox"]:checked {
   transition:
     display var(--transition-dur-feeds),
     opacity var(--transition-dur-feeds);
-  transition-behavior: allow-discrete;
   &:popover-open {
     display: flex;
     opacity: 1;
@@ -1333,7 +1333,84 @@ main {
   box-shadow:
     rgba(0, 0, 0, 0.16) 0 3px 6px,
     rgba(0, 0, 0, 0.23) 0 3px 6px;
-  z-index: 100;
+  /* z-index: 100; a positive z-index breaks the before */
+}
+.card-selected {
+  position : relative;
+  &::before {
+    content       : "";
+    position      : absolute;
+    top           : -2px;
+    left          : -2px;
+    width         : calc(100% + 4px);
+    height        : calc(100% + 4px);
+    background    : conic-gradient(
+            from var(--grad-from),
+            transparent var(--trans-start),
+            var(--color-hl-pink) var(--pink-start),
+            var(--color-hl-pink) var(--pink-end),
+            transparent var(--trans-end)
+    );
+    --grad-from   : 0deg;
+    border-radius : .8rem;
+    z-index       : -1;
+    animation     : dash 3s linear 1;
+  }
+  &::after {
+    content         : "";
+    position        : absolute;
+    top             : -1px;
+    left            : -1px;
+    width           : calc(100% + 2px);
+    height          : calc(100% + 2px);
+    background      : transparent;
+    border          : 1px solid color-mix(in srgb, var(--color-hl-pink) var(--color-ratio), var(--color-bg-1));
+    animation       : glow-breathe 3s ease-in-out 1;
+    border-radius   : .8rem;
+    z-index         : 1;
+    --color-hl-pink : var(--color-hl-green);
+  }
+}
+@keyframes dash {
+  0% {
+    --pink-start: 0%;
+    --trans-start: 0%;
+  }
+  10% {
+    /*--pink-start: 14%;*/
+    /*--trans-start: 14%;*/
+    --pink-end: 60%;
+    --trans-end: 60%;
+    --color-hl-pink: var(--color-hl-green);
+  }
+  15% {
+    --pink-start: 34%;
+    --trans-start: 34%;
+    --pink-end: 80%;
+    --trans-end: 80%;
+    --color-hl-pink: var(--color-hl-pink);
+  }
+  25%, 100% {
+    --pink-end: 100%;
+    --trans-end: 100%;
+    --color-hl-pink: var(--color-hl-green);
+  }
+  35%, 100% {
+    --pink-start: 100%;
+    --trans-start: 100%;
+    --color-hl-pink: var(--color-hl-green);
+  }
+  100% {
+    --grad-from: 180deg;
+  }
+}
+@keyframes glow-breathe {
+  0%, 25%, 100% {
+    --color-ratio: 0%;
+  }
+  35%, 75% {
+    --color-ratio: 100%;
+  }
 }
 
 .post-info-container {

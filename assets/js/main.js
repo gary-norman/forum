@@ -139,7 +139,7 @@ function confirmPass() {
 
 // ---- event listeners -----
 // drag and drop
-dropButton.addEventListener('click', input.click.bind(input), false);
+// dropButton.addEventListener('click', input.click.bind(input), false);
 // when browse
 input.addEventListener('change', function () {
     file = this.files[0];

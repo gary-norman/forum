@@ -98,15 +98,29 @@ function scrollToPost(postId) {
     const container = scrollWindow;
     const post = document.querySelector(`[data-post-id="${postId}"]`)
 
-    if (post) {
-        post.scrollIntoView({
+
+    if (post && container) {
+        const containerRect = container.getBoundingClientRect();
+        const postRect = post.getBoundingClientRect();
+
+        // Calculate the position relative to the container
+        const scrollOffset = postRect.top - containerRect.top + container.scrollTop;
+
+        container.scrollTo({
+            top: scrollOffset,
             behavior: 'smooth', // Smooth scrolling animation
-            block: 'start', // Align to the top of the container
         });
+
+        post.classList.add('card-selected');
+
+        setTimeout(() => {
+            post.classList.remove('card-selected');
+            }, 3000);
     } else {
-        console.error('Post not found:', postId);
+        console.error('Post or container not found:', postId);
     }
 }
+
 const scrollButton = document.getElementById(`scroll-test`);
 scrollButton.addEventListener('click', () => {
     // Example: Scroll to post 3

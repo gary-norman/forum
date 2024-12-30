@@ -1471,28 +1471,7 @@ main {
   box-shadow:
     rgba(0, 0, 0, 0.16) 0 3px 6px,
     rgba(0, 0, 0, 0.23) 0 3px 6px;
-  /* z-index: 100; a positive z-index breaks the before */
-}
-.card-selected {
-  position : relative;
-  &::before {
-    content       : "";
-    position      : absolute;
-    top           : -2px;
-    left          : -2px;
-    width         : calc(100% + 4px);
-    height        : calc(100% + 4px);
-    background    : conic-gradient(
-            from var(--grad-from),
-            transparent var(--trans-start),
-            var(--color-hl-pink) var(--pink-start),
-            var(--color-hl-pink) var(--pink-end),
-            transparent var(--trans-end)
-    );
-    --grad-from   : 0deg;
-    border-radius : .8rem;
-    z-index       : -1;
-    animation     : dash 3s linear 1;
+    /*z-index: 5;*/
   }
   &::after {
     content         : "";

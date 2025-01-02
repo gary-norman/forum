@@ -3,10 +3,9 @@ package models
 import "time"
 
 type User struct {
-	ID          int       `json:"id"`
-	Username    string    `json:"username"`
-	Password    string    `json:"password"`
-	Email       string    `json:"email_address"`
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Login
 	Avatar      string    `json:"avatar,omitempty"` // Store UUID as string
 	Banner      string    `json:"banner,omitempty"` // Store UUID as string
 	Description string    `json:"description,omitempty"`
@@ -14,6 +13,12 @@ type User struct {
 	Created     time.Time `json:"created"`
 	TimeSince   string    `json:"time_since"`
 	IsFlagged   bool      `json:"is_flagged,omitempty"`
+}
+type Login struct {
+	Email          string
+	HashedPassword string
+	SessionToken   string
+	CSRFToken      string
 }
 
 type Bookmark struct {

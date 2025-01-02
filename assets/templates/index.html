@@ -64,7 +64,7 @@
         <div class="modal-content">
           <span class="close">&times;</span>
           <div id="form-login">
-            <form>
+            <form action="/login" method="POST">
               <h5 class="form-title">enter your details to sign in to codex</h5>
               <div style="position: relative">
                 <input
@@ -171,6 +171,7 @@
                   id="register_email"
                   name="register_email"
                   placeholder="email address"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                   required
                 />
                 <label for="register_email" class="user-label">email</label>
@@ -178,8 +179,7 @@
                 <span class="validation-tooltip"></span>
               </div>
               <!-- password  -->
-              <!--                        TODO tooltip Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters-->
-              <label for="register_password"></label>
+              <div style="position: relative">
               <input
                 type="password"
                 id="register_password"
@@ -188,6 +188,7 @@
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 required
               />
+              <label for="register_password" class="user-label">password</label>
               <span class="validation-icon"></span>
               <ul class="validation-list ul-forwards">
                 <li id="li-valid-num">1 number</li>
@@ -195,8 +196,9 @@
                 <li id="li-valid-lower">1 lowercase letter</li>
                 <li id="li-valid-8">8 or more characters</li>
               </ul>
+              </div>
               <!--  repeat password  -->
-              <label for="register_password-rpt"></label>
+              <div style="position: relative">
               <input
                 type="password"
                 id="register_password-rpt"
@@ -205,8 +207,10 @@
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 required
               />
+                <label for="register_password-rpt" class="user-label">repeat password</label>
               <span class="validation-icon"></span>
               <span class="validation-tooltip"></span>
+              </div>
               <button class="btn-md btn-primary btn-action" type="submit">
                 <span>register</span>
               </button>

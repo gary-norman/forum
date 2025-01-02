@@ -14,7 +14,7 @@ button,
   display: flex;
   border-radius: var(--btn-radius);
   height: fit-content;
-  padding: 0.4rem;
+  padding: 0.6rem;
 }
 .btn-sm {
   display: flex;

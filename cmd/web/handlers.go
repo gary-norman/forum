@@ -6,28 +6,87 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"regexp"
 	"strconv"
 	"time"
 )
 
+func isValidPassword(password string) bool {
+	// At least 8 characters
+	if len(password) < 8 {
+		return false
+	}
+
+	// At least one digit
+	hasDigit, _ := regexp.MatchString(`[0-9]`, password)
+	if !hasDigit {
+		return false
+	}
+
+	// At least one lowercase letter
+	hasLower, _ := regexp.MatchString(`[a-z]`, password)
+	if !hasLower {
+		return false
+	}
+
+	// At least one uppercase letter
+	hasUpper, _ := regexp.MatchString(`[A-Z]`, password)
+	if !hasUpper {
+		return false
+	}
+
+	return true
+}
+
 func (app *app) register(w http.ResponseWriter, r *http.Request) {
 	ErrorMsgs := models.CreateErrorMessages()
-	username := r.FormValue("username")
-	//email := r.FormValue("email")
-	password := r.FormValue("password")
-	if len(username) < 5 || len(password) < 8 {
+	username := r.FormValue("register_user")
+	email := r.FormValue("register_email")
+	validEmail, _ := regexp.MatchString(`[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$`, email)
+	password := r.FormValue("register_password")
+	if len(username) < 5 || len(username) > 16 {
 		er := http.StatusNotAcceptable
-		http.Error(w, "invalid username or password", er)
+		http.Error(w, "username must be between 5 and 16 characters", er)
 	}
-	if _, ok := models.Users[username]; ok {
+	if isValidPassword(password) != true {
+		er := http.StatusNotAcceptable
+		http.Error(w, "password must contain at least one number and one uppercase and lowercase letter,"+
+			"and at least 8 or more characters", er)
+	}
+	if validEmail != true {
+		er := http.StatusNotAcceptable
+		http.Error(w, "please enter a valid email address", er)
+	}
+	exists := app.users.QueryUserEmailExists(email)
+	if exists == true {
+		er := http.StatusConflict
+		http.Error(w, "an account is already registered to that email address", er)
+		return
+	}
+
+	if app.users.QueryUserNameExists(username) {
 		er := http.StatusConflict
 		http.Error(w, "username already exists", er)
 		return
 	}
 	hashedPassword, _ := models.HashPassword(password)
-	models.Users[username] = models.Login{
-		HashedPassword: hashedPassword,
+	err := app.users.Insert(
+		username,
+		email,
+		hashedPassword,
+		"",
+		"",
+		"",
+		"",
+		"")
+
+	if err != nil {
+		log.Printf(ErrorMsgs.Register, err)
+		http.Error(w, err.Error(), 500)
+		return
 	}
+	http.Redirect(w, r, "/", http.StatusFound)
+
 	fprintln, err := fmt.Fprintln(w, "Registration successful")
 	if err != nil {
 		log.Print(ErrorMsgs.Register, err)
@@ -36,7 +95,75 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 	log.Println(fprintln)
 }
 
-func (app *app) login(w http.ResponseWriter, r *http.Request) {}
+func (app *app) login(w http.ResponseWriter, r *http.Request) {
+	username := r.FormValue("login_username")
+	email := r.FormValue("login_username")
+	password := r.FormValue("login_password")
+	if app.users.QueryUserNameExists(username) == true {
+		user, _ := app.users.GetUserByUsername(username)
+		if !models.CheckPasswordHash(password, user.HashedPassword) {
+			http.Error(w, "incorrect password", http.StatusUnauthorized)
+			return
+		}
+	}
+
+	if app.users.QueryUserEmailExists(email) == true {
+		user, _ := app.users.GetUserByEmail(email)
+		if !models.CheckPasswordHash(password, user.HashedPassword) {
+			http.Error(w, "incorrect password", http.StatusUnauthorized)
+			return
+		}
+	}
+
+	if app.users.QueryUserNameExists(username) == false && app.users.QueryUserEmailExists(email) == false {
+		http.Error(w, "username or email not found", http.StatusUnauthorized)
+		return
+	}
+
+	sessionToken := models.GenerateToken(32)
+	csrfToken := models.GenerateToken(32)
+
+	// Set Session Token and CSRF Token cookies
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_token",
+		Value:    sessionToken,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HttpOnly: true,
+	})
+	http.SetCookie(w, &http.Cookie{
+		Name:     "csrf_token",
+		Value:    csrfToken,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HttpOnly: false,
+	})
+
+	// Store tokens in the database
+	err := app.users.Insert(
+		"",
+		"",
+		"",
+		sessionToken,
+		csrfToken,
+		"",
+		"",
+		"")
+
+	ErrorMsgs := models.CreateErrorMessages()
+
+	if err != nil {
+		log.Printf(ErrorMsgs.Login, err)
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
+
+	fprintln, err := fmt.Fprintln(w, "Logged in successfully!")
+	if err != nil {
+		log.Print(ErrorMsgs.Login, err)
+		return
+	}
+	log.Println(fprintln)
+}
 
 func (app *app) logout(w http.ResponseWriter, r *http.Request) {}
 
@@ -122,7 +249,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, err.Error(), 400)
-		log.Printf(ErrorMsgs.Parse, "./assets/templates/posts.create.html", "storePost", err)
+		log.Printf(ErrorMsgs.Parse, "storePost", err)
 		return
 	}
 

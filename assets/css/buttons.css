@@ -35,12 +35,12 @@ button, .button {
     font-size  : 1.2rem;
     height: 3.6rem;
     gap: 0.8rem;
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     & span {
         &::before {
             background-size: 1.6rem !important;
@@ -82,8 +82,8 @@ button, .button {
     /* border     : 0.15rem solid transparent; */
     color      : var(--color-light-1);
     transition: all var(--transition-dur-hover);
-    
-    
+
+
     & span {
         color: var(--color-dark-1);
         /*&::before {*/
@@ -218,7 +218,7 @@ button, .button {
 .btn-report {
     &::before {
         background : url('/assets/icons/report_16.svg') no-repeat center;
-        }
+    }
 }
 .btn-comment {
     &::before {
@@ -228,22 +228,22 @@ button, .button {
 .btn-mute {
     &::before {
         background : url('/assets/icons/mute_16.svg') no-repeat center;
-        }
+    }
 }
 .btn-submit {
     &::before {
         background : url('/assets/icons/send_16.svg') no-repeat center;
-        }
+    }
 }
 .btn- {
     &::before {
         background : url('/assets/icons/') no-repeat center;
-        }
+    }
 }
 .btn- {
     &::before {
         background : url('/assets/icons/') no-repeat center;
-        }
+    }
 }
 
 .btn-activity {
@@ -612,6 +612,36 @@ input:checked + .darklight-fx:after {
 input:checked + .allow-comments-fx:before {
     left: 1.8rem;
 }
+
+.share-logo {
+    display: flex;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+
+
+
+    &.facebook {
+        background: url("/assets/images/Facebook_logo.svg") lightgray 50% / cover no-repeat ;
+    }
+    &.twitter {
+        background: url("/assets/images/twitter_x_logo.svg") lightgray 50% / cover no-repeat ;
+    }
+    &.linkedin {
+        background: url("/assets/images/LinkedIn_logo.svg") lightgray 50% / cover no-repeat ;
+    }
+    &.reddit {
+        background: url("/assets/images/reddit_logo.svg") lightgray 50% / cover no-repeat ;
+    }
+    &.whatsapp {
+        border-radius: 0;
+        background: url("/assets/images/WhatsApp_logo.svg") no-repeat ;
+    }
+    &.telegram {
+        background: url("/assets/images/Telegram_logo.svg") lightgray 50% / cover no-repeat ;
+    }
+}
+
 /*--- properties ---*/
 @property --beam-1-start {
     syntax: "<angle>";

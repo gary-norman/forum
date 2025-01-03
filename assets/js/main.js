@@ -1,3 +1,5 @@
+import {selectActiveFeed} from "./share.js";
+
 // variables
 const switchDl = document.getElementById('switch-dl');
 const darkSwitch = document.getElementById('sidebar-option-darkmode');
@@ -11,7 +13,7 @@ let activityFeedsContentAll;
 document.addEventListener('DOMContentLoaded', function () {
     actButtonContainer = document.querySelector('#activity-bar');
     actButtonsAll = actButtonContainer.querySelectorAll('button');
-    activityFeeds = document.querySelector('#activity-feeds');
+    activityFeeds = document.querySelector('#user-activity-feeds');
     activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]');
     // console.log(actButtonsAll);
 
@@ -20,8 +22,11 @@ document.addEventListener('DOMContentLoaded', function () {
 // switchDl.addEventListener('click', toggleColorScheme);
     darkSwitch.addEventListener('click', toggleDarkMode);
     actButtonsAll.forEach( button => button.addEventListener('click', (e) => {
-        toggleFeed(document.getElementById("activity-" + e.target.id),document.getElementById("activity-feed-" + e.target.id),  e.target);
-        console.log('activity-' + e.target.id);
+        toggleFeed( document.getElementById("activity-" + e.target.id),
+                    document.getElementById("activity-feed-" + e.target.id),
+                    e.target);
+
+        // console.log('activity-' + e.target.id);
     }) );
 });
 
@@ -42,6 +47,8 @@ function toggleDarkMode() {
 
 function toggleFeed(targetFeed, targetFeedContent, targetButton) {
     const timeOut = 400;
+    const allFeedsExceptTarget = Array.from(activityFeedsContentAll).filter(feed => feed.id !== targetFeedContent.id);
+
     actButtonsAll.forEach( button => button.classList.remove('btn-active') );
     activityFeedsContentAll.forEach(feed => {
         feed.classList.remove('collapsible-expanded');
@@ -50,12 +57,16 @@ function toggleFeed(targetFeed, targetFeedContent, targetButton) {
     setTimeout(() => {
         targetFeedContent.classList.remove('collapsible-collapsed');
         targetFeedContent.classList.add('collapsible-expanded');
+        selectActiveFeed();
         targetButton.classList.toggle('btn-active'); }, timeOut);
     setTimeout(() => {
-        targetFeed.querySelector('.button-row').forEach(feed => {
-        feed.classList.add('hide-feed');
+        Array.from(activityFeedsContentAll).forEach(feed => {
+            const filtersRow = feed.parentElement.querySelector('.filters-row');
+            if (filtersRow) {
+                filtersRow.classList.add('hide-feed');
+            }
         });
-        targetFeed.querySelector('.button-row').classList.remove('hide-feed');}, timeOut)
+        targetFeed.querySelector('.button-row').classList.remove('hide-feed');}, timeOut);
 
 }
 // drag and drop

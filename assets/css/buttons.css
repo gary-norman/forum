@@ -167,6 +167,11 @@ button, .button {
         background : url('/assets/icons/notification_16.svg') no-repeat center;
     }
 }
+.btn-add {
+    &::before {
+        background : url('/assets/icons/add_circle_16.svg') no-repeat center;
+    }
+}
 .btn-filters {
     &::before {
         background : url('/assets/icons/filters_16.svg') no-repeat center;

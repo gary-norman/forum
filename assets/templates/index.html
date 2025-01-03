@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="/assets/css/channel-page.css">
     <link rel="stylesheet" href="/assets/css/buttons.css">
     <link rel="stylesheet" href="/assets/css/main_effects.css">
-    <script src="/assets/js/main.js" defer></script>
+    <script type="module" src="/assets/js/main.js" defer></script>
     <script src="/assets/js/reactions.js" defer></script>
-    <script src="/assets/js/share.js" defer></script>
+    <script type="module" src="/assets/js/share.js" defer></script>
     <title>01F Forum</title>
 </head>
 <body>
@@ -130,7 +130,12 @@
                     </div>
                     <hr class="solid">
                     <div class="sidebar-block sidebar-channels">
-                        <small class="padded">Your Channels</small>
+                        <div class="flex-space-between">
+                            <small class="padded">Your Channels</small>
+                            <button class="btn-md btn-secondary btn-icoonly btn-filled btn-filled-fancy btn-action-secondary btn-invert-onoff_offoff">
+                                <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
+                            </button>
+                        </div>
                         <div class="sidebar-channel-block">
                             <div class="sidebar-channel">
                                 <div></div>
@@ -225,6 +230,7 @@
                     </mask>
                 </svg>
                 </div>
+
                 <!---- homepage ------>
                 <div id="home-page" class="feeds-wrapper">
                     <div class="button-row above-posts button-row-homepage">
@@ -236,7 +242,7 @@
                         </button>
                     </div>
                     <div class="scrollable-home scrollable no-scrollbar">
-                        <div class="home-feed ">
+                        <div id="home-feed ">
                             {{range .Posts}}
                             <div class="card">
                                 <div class="post-info-container">
@@ -277,10 +283,10 @@
                 </div>
 
                 <!----- user page ----->
-                <div id="user-page" class="feeds-wrapper">
+                <div id="user-page" class="active-feed feeds-wrapper">
                     <div class="banner">
                         <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
-                        <div class="page-controls">
+                        <div class="page-control">
                             <div class="page-profile">
                                 <div class="page-profile-pic"></div>
                             <div>
@@ -338,7 +344,7 @@
                                             <span class="btn-sort">sort</span>
                                         </button>
                                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                            <span class="btn-filters">filter</span>
+                                            <span class="btn-filters">filters</span>
                                         </button>
                                         <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                             <span class="btn-sort">scroll</span>
@@ -374,13 +380,13 @@
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-reply">reply</span>
                                                 </button>
-                                                <button id="share-button-{{.ID}}" popovertarget="share-container-{{.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <button id="share-button-{{.ID}}-activity" popovertarget="share-container-{{.ID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-share">share</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-report">report</span>
                                                 </button>
-                                                <div popover anchor="share-button-{{.ID}}" id="share-container-{{.ID}}" class="scrollable-user">
+                                                <div popover id="share-container-{{.ID}}-activity" class="scrollable-user">
                                                     <div class="share-container">
                                                         <div class="button-row">
                                                             <a href="/" target="_blank" class="share-logo facebook"></a>
@@ -391,13 +397,13 @@
                                                             <a href="/" target="_blank" class="share-logo telegram"></a>
                                                         </div>
                                                         <div class="flex-space-between">
-                                                            <label class="padded" for="copy-url-{{.ID}}">Copy URL link</label>
+                                                            <label class="padded" for="copy-url-{{.ID}}-activity">Copy URL link</label>
                                                             <button class="btn-sm btn-icoonly">
                                                                 <span class="btn-copy" aria-label="Copy URL link"></span>
                                                             </button>
                                                         </div>
 
-                                                        <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}" name="copy-url-{{.ID}}"/>
+                                                        <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-activity" name="copy-url-{{.ID}}-activity"/>
 
                                                     </div>
                                                 </div>
@@ -417,7 +423,7 @@
                                     </div>
                                     <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                                         {{range .Posts}}
-                                        <div class="card" >
+                                        <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                                             <div class="post-info-container">
                                                 <span class="card-profile-pic"></span>
                                                 <div>
@@ -432,25 +438,47 @@
                                             </div>
                                             <h4>{{.Title}}</h4>
                                             <article class="cardContent">{{.Content}}</article>
-                                            <div class="button-row">
-                                                <!--                                  --- TODO invertoff -->
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                                    <span class="btn-likes">{{.Likes}}</span>
+                                            <div class="button-row post-controls" >
+                                                {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+                                                    <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                                                 </button>
                                                 <!-- --- TODO invertoff -->
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled">
-                                                    <span class="btn-dislikes">{{.Dislikes}}</span>
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+                                                    <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-reply">reply</span>
                                                 </button>
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <button id="share-button-{{.ID}}-post" popovertarget="share-container-{{.ID}}-post" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-share">share</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-report">report</span>
                                                 </button>
+                                                <div popover id="share-container-{{.ID}}-post" class="scrollable-user">
+                                                    <div class="share-container">
+                                                        <div class="button-row">
+                                                            <a href="/" target="_blank" class="share-logo facebook"></a>
+                                                            <a href="/" target="_blank" class="share-logo twitter"></a>
+                                                            <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                                            <a href="/" target="_blank" class="share-logo reddit"></a>
+                                                            <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                                            <a href="/" target="_blank" class="share-logo telegram"></a>
+                                                        </div>
+                                                        <div class="flex-space-between">
+                                                            <label class="padded" for="copy-url-{{.ID}}-post">Copy URL link</label>
+                                                            <button class="btn-sm btn-icoonly">
+                                                                <span class="btn-copy" aria-label="Copy URL link"></span>
+                                                            </button>
+                                                        </div>
+
+                                                        <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-post" name="copy-url-{{.ID}}-post"/>
+
+                                                    </div>
+                                                </div>
                                             </div>
+
                                         </div>
                                         {{end}}
                                     </div>
@@ -465,15 +493,27 @@
                                         </button>
                                     </div>
                                     <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                                        <div class="activity-items comments">Yo mama so fat</div>
-                                        <div class="activity-items comments">Yo how fat is she?</div>
-                                        <div class="activity-items comments">Yo mama so fat</div>
-                                        <div class="activity-items comments">Yo how fat is she?</div>
-                                        <div class="activity-items comments">Yo mama so fat</div>
-                                        <div class="activity-items comments">Yo how fat is she?</div>
-                                        <div class="activity-items comments">Yo mama</div>
-                                        <div class="activity-items comments">Yo mama</div>
-                                        <div class="activity-items comments">Yo mama</div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo mama so fat
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo how fat is she?
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo mama so fat
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo how fat is she?
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo mama so fat
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo mama
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo mama so fat
+                                        </div>
                                     </div>
                                 </div>
                                 <div id="activity-saved" >
@@ -640,7 +680,7 @@
                 <div id="channel-page" class="feeds-wrapper">
                     <div class="banner">
                         <div class="page-banner" ></div>
-                        <div class="page-controls">
+                        <div class="page-control">
                             <div class="page-profile">
                                 <div class="page-profile-pic"></div>
                                 <div>
@@ -710,6 +750,27 @@
                                             <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                 <span class="btn-report">report</span>
                                             </button>
+                                            <div popover id="share-container-{{.ID}}-channel-post" class="scrollable-user">
+                                                <div class="share-container">
+                                                    <div class="button-row">
+                                                        <a href="/" target="_blank" class="share-logo facebook"></a>
+                                                        <a href="/" target="_blank" class="share-logo twitter"></a>
+                                                        <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                                        <a href="/" target="_blank" class="share-logo reddit"></a>
+                                                        <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                                        <a href="/" target="_blank" class="share-logo telegram"></a>
+                                                    </div>
+                                                    <div class="flex-space-between">
+                                                        <label class="padded" for="copy-url-{{.ID}}-channel-post">Copy URL link</label>
+                                                        <button class="btn-sm btn-icoonly">
+                                                            <span class="btn-copy" aria-label="Copy URL link"></span>
+                                                        </button>
+                                                    </div>
+
+                                                    <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-channel-post" name="copy-url-{{.ID}}-channel-post"/>
+
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     {{end}}

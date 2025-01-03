@@ -870,10 +870,14 @@ hr.solid {
   background: var(--color-hl-pink);
 }
 #home-page {
-   display: none;
+  display: none;
   margin: 1rem 0 0 .8rem;
+
+  &.active-feed {
+    display: flex;
+  }
 }
-  .home-feed {
+  #home-feed {
     display        : flex;
     flex-direction : column;
     row-gap        : 1.2rem;

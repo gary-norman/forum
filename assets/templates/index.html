@@ -134,7 +134,7 @@
                         </button>
                     </div>
                     <div class="scrollable-home scrollable no-scrollbar">
-                        <div class="feed-content feed-content-homepage">
+                        <div class="home-feed ">
                             {{range .Posts}}
                             <div class="card">
                                 <div class="post-info-container">
@@ -173,13 +173,14 @@
                         </div>
                     </div>
                 </div>
+
                 <!----- user page ----->
                 <div id="user-page" class="feeds-wrapper">
                     <div class="banner">
-                        <img class="user-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
-                        <div class="user-page-controls">
-                            <div class="user-page-profile">
-                                <div class="user-page-profile-pic"></div>
+                        <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
+                        <div class="page-controls">
+                            <div class="page-profile">
+                                <div class="page-profile-pic"></div>
                             <div>
                                 <h2>Eyesome578</h2>
                                 <div>
@@ -192,7 +193,7 @@
                                 </div>
                             </div>
                             </div>
-                        <div class="user-page-buttons">
+                        <div class="page-buttons">
                             <button class="btn-lg btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
                                 <span class="btn-follow">follow</span>
                             </button>
@@ -228,7 +229,7 @@
                                     <span class="btn-likes">reactions</span>
                                 </button>
                             </div>
-                            <div id="activity-feeds" style="position: absolute; width: 100%; height: 100%    ">
+                            <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%    ">
                                 <div id="activity-activity">
                                     <div class="filters-row button-row">
                                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -436,155 +437,274 @@
                                 </div>
                             </div>
                         </div>
-
-                            <div class="right-panel ">
-                                <div class="right-panel-content scroll-down">
-                                    <div class="right-panel-name-container flex-space-between">
-                                        <h4 class="right-panel-name">Eyesome578</h4>
+                        <div class="right-panel ">
+                            <div class="right-panel-content scroll-down">
+                                <div class="right-panel-name-container flex-space-between">
+                                    <h4 class="right-panel-name">Eyesome578</h4>
+                                    <button class="btn-md btn-icoonly">
+                                        <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
+                                    </button>
+                                </div>
+                                <div class="right-panel-pic-container flex-space-between">
+                                    <div class="right-panel-pic-container">
+                                        <div class="right-panel-profile-pic"></div>
+                                        <small>Edit your avatar picture</small>
+                                    </div>
+                                    <button class="btn-md btn-icoonly">
+                                        <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
+                                    </button>
+                                </div>
+                                <div class="right-panel-bio-container ">
+                                    <div class="right-panel-bio flex-space-between">
+                                        <label for="user-bio-content" class="padded">Edit your bio</label>
                                         <button class="btn-md btn-icoonly">
                                             <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                                         </button>
                                     </div>
-                                    <div class="right-panel-pic-container flex-space-between">
-                                        <div class="right-panel-pic-container">
-                                            <div class="right-panel-profile-pic"></div>
-                                            <small>Edit your avatar picture</small>
+                                    <textarea id="user-bio-content" class="inactive-input" name="content">Placeholder text... Placeholder text...</textarea>
+                                </div>
+                                <div class="right-panel-modded-channels-container">
+                                    <div class="sidebar-block sidebar-channels">
+                                        <small class="padded">Modded Channels</small>
+                                        <div class="sidebar-channel-block">
+                                            <div class="sidebar-channel">
+                                                <div></div>
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>/Interesting_Things</div>
+                                                        <div>
+                                                            <div class="channel-users">5.6k</div>
+                                                            <div class="channel-green-dot">36</div>
+                                                        </div>
+                                                    </div>
+                                                    <button class="btn-sm btn-icoonly margin-auto-0">
+                                                        <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="sidebar-channel">
+                                                <div></div>
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>/CSS_Help</div>
+                                                        <div>
+                                                            <div class="channel-users">5.6k</div>
+                                                            <div class="channel-green-dot">36</div>
+                                                        </div>
+                                                    </div>
+                                                    <button class="btn-sm btn-icoonly margin-auto-0">
+                                                        <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="sidebar-channel">
+                                                <div></div>
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>/Golang#Discussion</div>
+                                                        <div>
+                                                            <div class="channel-users">5.6k</div>
+                                                            <div class="channel-green-dot">36</div>
+                                                        </div>
+                                                    </div>
+                                                    <button class="btn-sm btn-icoonly margin-auto-0">
+                                                        <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="button-row-wrap">
+                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                        <span class="btn-share">share</span>
+                                    </button>
+                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                        <span class="btn-report">report</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                <!----- channel page ----->
+                <div id="channel-page" class="feeds-wrapper">
+                    <div class="banner">
+                        <div class="page-banner" ></div>
+                        <div class="page-controls">
+                            <div class="page-profile">
+                                <div class="page-profile-pic"></div>
+                                <div>
+                                    <h2>/Interesting_Things</h2>
+                                    <div>
+                                        <div class="channel-users">13.8k</div>
+                                        <div class="channel-green-dot">37</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="page-buttons">
+                                <button class="btn-lg btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+                                    <span class="btn-follow">follow</span>
+                                </button>
+                                <div class="user-following"></div>
+                                <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
+                                    <img src="/assets/icons/share_16.svg" alt="share button">
+                                </button>
+                                <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
+                                    <img src="/assets/icons/heart-empty_24.svg" alt="like button">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-container">
+                        <div class="content">
+                            <div class="filters-row button-row">
+                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                    <span class="btn-sort">sort</span>
+                                </button>
+                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                    <span class="btn-filters">filters</span>
+                                </button>
+                            </div>
+                            <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+                                    {{range .Posts}}
+                                    <div class="card" >
+                                        <div class="post-info-container">
+                                            <span class="card-profile-pic"></span>
+                                            <div>
+                                                <small class="small-bold">{{.AuthorID}}</small>
+                                                <div>
+                                                    <small>{{.ChannelID}}</small>
+                                                    <small>-</small>
+                                                    <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
+                                                        @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h4>{{.Title}}</h4>
+                                        <article class="cardContent">{{.Content}}</article>
+                                        <div class="button-row">
+                                            <!--                                  --- TODO invertoff -->
+                                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <span class="btn-likes">{{.Likes}}</span>
+                                            </button>
+                                            <!-- --- TODO invertoff -->
+                                            <button class="btn-md btn-secondary btn-icotext btn-filled">
+                                                <span class="btn-dislikes">{{.Dislikes}}</span>
+                                            </button>
+                                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <span class="btn-reply">reply</span>
+                                            </button>
+                                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <span class="btn-share">share</span>
+                                            </button>
+                                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <span class="btn-report">report</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {{end}}
+                                </div>
+                        </div>
+
+                        <div class="right-panel ">
+                            <div class="right-panel-content scroll-down">
+                                <div class="right-panel-name-container flex-space-between">
+                                    <h4 class="right-panel-name">/Interesting_Things</h4>
+                                    <button class="btn-md btn-icoonly">
+                                        <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
+                                    </button>
+                                </div>
+                                <div class="right-panel-pic-container flex-space-between">
+                                    <div class="right-panel-pic-container">
+                                        <div class="right-panel-profile-pic"></div>
+                                        <small>Edit channel picture</small>
+                                    </div>
+                                    <button class="btn-md btn-icoonly">
+                                        <span class="btn-edit" role="contentinfo" aria-label="Edit channel picture"></span>
+                                    </button>
+                                </div>
+                                <div class="right-panel-bio-container ">
+                                    <div class="right-panel-bio flex-space-between">
+                                        <label for="channel-bio-content" class="padded">Edit channel bio</label>
                                         <button class="btn-md btn-icoonly">
-                                            <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
+                                            <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
                                         </button>
                                     </div>
-                                    <div class="right-panel-bio-container ">
-                                        <div class="right-panel-bio flex-space-between">
-                                            <label for="bio-content" class="padded">Edit your bio</label>
-                                            <button class="btn-md btn-icoonly">
-                                                <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
-                                            </button>
-                                        </div>
-                                        <textarea id="bio-content" class="inactive-input" name="content">Placeholder text... Placeholder text...</textarea>
-                                    </div>
-                                    <div class="right-panel-moderators-container">
-                                        <div class="sidebar-block sidebar-channels">
-                                            <small class="padded">Moderators</small>
-                                            <div class="sidebar-channel-block">
-                                                <div class="sidebar-channel">
-                                                    <div class="channel_info-container">
-                                                        <span class="card-profile-pic"></span>
-                                                        <div>
-                                                            <div>User_Other112</div>
-                                                        </div>
-                                                        <button class="btn-sm btn-icoonly margin-auto-0">
-                                                            <span class="btn-save-active" role="contentinfo" aria-label="Edit profile name"></span>
-                                                        </button>
+                                    <textarea id="channel-bio-content" class="inactive-input" name="content">Placeholder text... Placeholder text...</textarea>
+                                </div>
+                                <div class="right-panel-moderators-container">
+                                    <div class="sidebar-block sidebar-channels">
+                                        <small class="padded">Moderators</small>
+                                        <div class="sidebar-channel-block">
+                                            <div class="sidebar-channel">
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>User_Other112</div>
                                                     </div>
-                                                </div>
-                                                <div class="sidebar-channel">
-                                                    <div class="channel_info-container">
-                                                        <span class="card-profile-pic"></span>
-                                                        <div>
-                                                            <div>Other_one55</div>
-                                                        </div>
-                                                        <button class="btn-sm btn-icoonly margin-auto-0">
-                                                            <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div class="sidebar-channel">
-                                                    <div class="channel_info-container">
-                                                        <span class="card-profile-pic"></span>
-                                                        <div>
-                                                            <div>User_Other112</div>
-                                                        </div>
-                                                        <button class="btn-sm btn-icoonly margin-auto-0">
-                                                            <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
-                                                        </button>
-                                                    </div>
+                                                    <button class="btn-sm btn-icoonly margin-auto-0">
+                                                        <span class="btn-save-active" role="contentinfo" aria-label="Edit profile name"></span>
+                                                    </button>
                                                 </div>
                                             </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="right-panel-modded-channels-container">
-                                        <div class="sidebar-block sidebar-channels">
-                                            <small class="padded">Modded Channels</small>
-                                            <div class="sidebar-channel-block">
-                                                <div class="sidebar-channel">
-                                                    <div></div>
-                                                    <div class="channel_info-container">
-                                                        <span class="card-profile-pic"></span>
-                                                        <div>
-                                                            <div>/Interesting_Things</div>
-                                                            <div>
-                                                                <div class="channel-users">5.6k</div>
-                                                                <div class="channel-green-dot">36</div>
-                                                            </div>
-                                                        </div>
-                                                        <button class="btn-sm btn-icoonly margin-auto-0">
-                                                            <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                                                        </button>
+                                            <div class="sidebar-channel">
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>Other_one55</div>
                                                     </div>
-                                                </div>
-                                                <div class="sidebar-channel">
-                                                    <div></div>
-                                                    <div class="channel_info-container">
-                                                        <span class="card-profile-pic"></span>
-                                                        <div>
-                                                            <div>/CSS_Help</div>
-                                                            <div>
-                                                                <div class="channel-users">5.6k</div>
-                                                                <div class="channel-green-dot">36</div>
-                                                            </div>
-                                                        </div>
-                                                        <button class="btn-sm btn-icoonly margin-auto-0">
-                                                            <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div class="sidebar-channel">
-                                                    <div></div>
-                                                    <div class="channel_info-container">
-                                                        <span class="card-profile-pic"></span>
-                                                        <div>
-                                                            <div>/Golang#Discussion</div>
-                                                            <div>
-                                                                <div class="channel-users">5.6k</div>
-                                                                <div class="channel-green-dot">36</div>
-                                                            </div>
-                                                        </div>
-                                                        <button class="btn-sm btn-icoonly margin-auto-0">
-                                                            <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                                                        </button>
-                                                    </div>
+                                                    <button class="btn-sm btn-icoonly margin-auto-0">
+                                                        <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
+                                                    </button>
                                                 </div>
                                             </div>
-
+                                            <div class="sidebar-channel">
+                                                <div class="channel_info-container">
+                                                    <span class="card-profile-pic"></span>
+                                                    <div>
+                                                        <div>User_Other112</div>
+                                                    </div>
+                                                    <button class="btn-sm btn-icoonly margin-auto-0">
+                                                        <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>
-                                    <div class="right-panel-rules-container">
-                                        <div class="right-panel-bio flex-space-between ">
-                                            <label class="padded" for="rules-content">Edit channel rules</label>
-                                            <button class="button-md btn-icoonly">
-                                                <span class="btn-edit" role="contentinfo" aria-label="Edit channel rules"></span>
-                                            </button>
-                                        </div>
-                                        <textarea id="rules-content" class="inactive-input" name="content">Placeholder text... Placeholder text...</textarea>
-                                    </div>
-                                    <div class="button-row-wrap">
-                                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                            <span class="btn-share">share</span>
-                                        </button>
-                                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                            <span class="btn-mute">mute</span>
-                                        </button>
-                                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                            <span class="btn-report">report</span>
+                                </div>
+                                <div class="right-panel-rules-container">
+                                    <div class="right-panel-bio flex-space-between ">
+                                        <label class="padded" for="rules-content">Edit channel rules</label>
+                                        <button class="button-md btn-icoonly">
+                                            <span class="btn-edit" role="contentinfo" aria-label="Edit channel rules"></span>
                                         </button>
                                     </div>
+                                    <textarea id="rules-content" class="inactive-input" name="content">Placeholder text... Placeholder text...</textarea>
+                                </div>
+                                <div class="button-row-wrap">
+                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                        <span class="btn-share">share</span>
+                                    </button>
+                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                        <span class="btn-mute">mute</span>
+                                    </button>
+                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                        <span class="btn-report">report</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+
             </main>
         </div>
       </div>

@@ -652,6 +652,36 @@ input:checked + .allow-comments-fx {
     left: 1.8rem;
   }
 }
+
+.share-logo {
+    display: flex;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+
+
+
+    &.facebook {
+        background: url("/assets/images/Facebook_logo.svg") lightgray 50% / cover no-repeat ;
+    }
+    &.twitter {
+        background: url("/assets/images/twitter_x_logo.svg") lightgray 50% / cover no-repeat ;
+    }
+    &.linkedin {
+        background: url("/assets/images/LinkedIn_logo.svg") lightgray 50% / cover no-repeat ;
+    }
+    &.reddit {
+        background: url("/assets/images/reddit_logo.svg") lightgray 50% / cover no-repeat ;
+    }
+    &.whatsapp {
+        border-radius: 0;
+        background: url("/assets/images/WhatsApp_logo.svg") no-repeat ;
+    }
+    &.telegram {
+        background: url("/assets/images/Telegram_logo.svg") lightgray 50% / cover no-repeat ;
+    }
+}
+
 /*--- properties ---*/
 @property --beam-1-start {
   syntax: "<angle>";

@@ -1106,7 +1106,7 @@ hr.solid {
   border-radius : 0.3rem;
 }
 
-.sidebarProfile, .page-profile {
+.sidebarProfile, .user-page-profile {
   display : flex;
   padding : 0 1.2rem;
 

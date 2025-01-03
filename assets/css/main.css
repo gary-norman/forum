@@ -322,9 +322,9 @@ a:active {
 
   /* ---- flex containers ---- */
 
-  .cont-flex-row {
-    display : flex;
-  }
+.cont-flex-row {
+  display : flex;
+}
 
 .main-content {
   display : flex;
@@ -346,8 +346,8 @@ a:active {
   height: 100%;
   z-index    : 100;
   padding: 0 2.4rem ;
+  overflow: hidden;
   /*border: 3px cornflowerblue solid;*/
-  /*overflow: hidden;*/
 }
 
 .cont-flex-column {
@@ -631,7 +631,7 @@ hr.solid {
   border-radius : 0.3rem;
 }
 
-.sidebarProfile, .user-page-profile {
+.sidebarProfile, .page-profile {
   display : flex;
   padding : 0 1.2rem;
 
@@ -873,7 +873,7 @@ hr.solid {
    display: none;
   margin: 1rem 0 0 .8rem;
 }
-  .feed-content {
+  .home-feed {
     display        : flex;
     flex-direction : column;
     row-gap        : 1.2rem;

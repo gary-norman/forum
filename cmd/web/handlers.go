@@ -104,6 +104,7 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	emailExists := app.users.QueryUserEmailExists(email)
 	fmt.Printf("Email exists: %v\n", emailExists)
 	password := r.FormValue("login_password")
+	var loginType string
 
 	if usernameExists == true {
 		user, _ := app.users.GetUserByUsername(username)
@@ -111,7 +112,8 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "incorrect password", http.StatusUnauthorized)
 			return
 		}
-		fmt.Printf("Passwords for %v match (username)\n", user.Username)
+		fmt.Printf("Passwords for %v match\n", user.Username)
+		loginType = "username"
 	}
 
 	if emailExists == true {
@@ -120,7 +122,8 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "incorrect password", http.StatusUnauthorized)
 			return
 		}
-		fmt.Printf("Passwords for %v match (email)\n", user.Email)
+		fmt.Printf("Passwords for %v match\n", user.Email)
+		loginType = "email"
 	}
 
 	if usernameExists == false && emailExists == false {
@@ -146,21 +149,23 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	// Store tokens in the database
-	err := app.users.Insert(
-		"",
-		"",
-		"",
-		sessionToken,
-		csrfToken,
-		"",
-		"",
-		"")
-
-	if err != nil {
-		log.Printf(ErrorMsgs.Login, err)
-		http.Error(w, err.Error(), 500)
-		return
+	if loginType == "username" {
+		err := app.users.UpdateCookies(username, loginType, sessionToken, csrfToken)
+		if err != nil {
+			log.Printf(ErrorMsgs.Cookies, err)
+		}
 	}
+	if loginType == "email" {
+		err := app.users.UpdateCookies(email, loginType, sessionToken, csrfToken)
+		if err != nil {
+			log.Printf(ErrorMsgs.Cookies, err)
+		}i
+
+	//if err != nil {
+	//	log.Printf(ErrorMsgs.Login, err)
+	//	http.Error(w, err.Error(), 500)
+	//	return
+	//}
 	http.Redirect(w, r, "/", http.StatusFound)
 
 	fprintln, err := fmt.Fprintln(w, "Logged in successfully!")
@@ -185,25 +190,17 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
 
 	for index, post := range posts {
-		fmt.Printf("index: %v, post: %v\n", index, post.Created)
 		now := time.Now()
 		hours := now.Sub(post.Created).Hours()
 		var TimeSince string
 		if hours > 24 {
 			TimeSince = fmt.Sprintf("%.0f days ago.", hours/24)
-			fmt.Printf("Hours: %v, days: %v\n", hours, hours/24)
-			fmt.Printf("Timesince: %v\n", post.TimeSince)
 		} else if hours > 1 {
 			TimeSince = fmt.Sprintf("%.0f hours ago.", hours)
-			fmt.Printf("Hours: %v\n", hours)
-			fmt.Printf("Timesince: %v\n", post.TimeSince)
 		} else if minutes := now.Sub(post.Created).Minutes(); minutes > 1 {
 			TimeSince = fmt.Sprintf("%.0f minutes ago.", minutes)
-			fmt.Printf("Minutes: %v\n", minutes)
-			fmt.Printf("Timesince: %v\n", post.TimeSince)
 		} else {
 			TimeSince = "just now"
-			fmt.Printf("Timesince: %v\n", post.TimeSince)
 		}
 		postsWithDaysAgo[index] = models.PostWithDaysAgo{
 			Post:      post,
@@ -228,9 +225,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Print(ErrorMsgs.Execute, err)
 		return
-	}
-	for _, post := range posts {
-		fmt.Printf("Timesince 2: %v\n", post.TimeSince)
 	}
 }
 

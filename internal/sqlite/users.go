@@ -26,17 +26,12 @@ func (m *UserModel) QueryUserNameExists(username string) bool {
 	}
 	var count int
 	err := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Username = ?", username).Scan(&count)
-	switch {
-	case err != nil:
+	if err != nil {
 		log.Fatal(err)
-	default:
-		fmt.Printf("Number of rows are %v\n", count)
 	}
 	if count > 0 {
-		fmt.Println("username return true")
 		return true
 	}
-	fmt.Println("username return false")
 	return false
 }
 func (m *UserModel) QueryUserEmailExists(email string) bool {
@@ -47,17 +42,12 @@ func (m *UserModel) QueryUserEmailExists(email string) bool {
 	var count int
 	//ErrorMsgs := models.CreateErrorMessages()
 	err := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Email_address = ?", email).Scan(&count)
-	switch {
-	case err != nil:
+	if err != nil {
 		log.Fatal(err)
-	default:
-		fmt.Printf("Number of rows are %v\n", count)
 	}
 	if count > 0 {
-		fmt.Println("username return true")
 		return true
 	}
-	fmt.Println("username return false")
 	return false
 }
 
@@ -119,6 +109,21 @@ func (m *UserModel) GetUserByEmail(email string) (*models.User, error) {
 	}
 
 	return &user, nil
+}
+
+func (m *UserModel) UpdateCookies(login, loginType, sessionToken, csrfToken string) error {
+	var stmt string
+	if loginType == "email" {
+		fmt.Printf("cookies: %v\n", login)
+		stmt = "UPDATE Users SET SessionToken = ?, Csrf_token = ? WHERE Email_address = ?"
+	}
+	if loginType == "username" {
+		fmt.Printf("cookies: %v\n", login)
+		stmt = "UPDATE Users SET SessionToken = ?, Csrf_token = ? WHERE Username = ?"
+	}
+	result, err := m.DB.Exec(stmt, sessionToken, csrfToken, login)
+	fmt.Printf("result: %v\n", result)
+	return err
 }
 
 func (m *UserModel) All() ([]models.User, error) {

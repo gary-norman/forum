@@ -5,6 +5,7 @@ type Errors struct {
 	ConnClose string
 	ConnInit  string
 	ConnConn  string
+	Cookies   string
 	Execute   string
 	Login     string
 	NoRows    string
@@ -23,6 +24,7 @@ func CreateErrorMessages() *Errors {
 		ConnConn:  "Unable to connect to %v called by %v\n",
 		ConnClose: "Unable to close connection to %v called by %v\n",
 		ConnInit:  "Unable to initialise connection %v called by %v\n",
+		Cookies:   "Unable to set cookies with error: %v\n",
 		Execute:   "Unable to execute template with error: %v\n",
 		Login:     "Unable to login with error: %v\n",
 		NoRows:    "No rows returned for %v called by %v\n",

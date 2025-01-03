@@ -1401,7 +1401,7 @@ main {
   /* mask-image: url(#userpage-feed-mask); */ /* For modern browsers */
   /* -webkit-mask-image: url(#userpage-feed-mask); */ /* For WebKit browsers */
 }
-  .home-feed {
+  #home-feed {
     display        : flex;
     flex-direction : column;
     row-gap        : 1.2rem;

@@ -1,3 +1,5 @@
+import {selectActiveFeed} from "./share.js";
+
 // variables
 const switchDl = document.querySelector('#switch-dl');
 const darkSwitch = document.querySelector('#sidebar-option-darkmode');
@@ -66,6 +68,8 @@ function toggleDarkMode() {
 // toggle the various feeds on user-page
 function toggleFeed(targetFeed, targetFeedContent, targetButton) {
     const timeOut = 400;
+    const allFeedsExceptTarget = Array.from(activityFeedsContentAll).filter(feed => feed.id !== targetFeedContent.id);
+
     actButtonsAll.forEach( button => button.classList.remove('btn-active') );
     activityFeedsContentAll.forEach(feed => {
         feed.classList.remove('collapsible-expanded');
@@ -74,12 +78,14 @@ function toggleFeed(targetFeed, targetFeedContent, targetButton) {
     setTimeout(() => {
         targetFeedContent.classList.remove('collapsible-collapsed');
         targetFeedContent.classList.add('collapsible-expanded');
+        selectActiveFeed();
         targetButton.classList.toggle('btn-active'); }, timeOut);
     setTimeout(() => {
         targetFeed.querySelector('.button-row').forEach(feed => {
-            feed.classList.add('hide-feed');
+        feed.classList.add('hide-feed');
         });
         targetFeed.querySelector('.button-row').classList.remove('hide-feed');}, timeOut)
+
 }
 // toggle login and register forms
 function logReg(target) {

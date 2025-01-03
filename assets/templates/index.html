@@ -12,10 +12,13 @@
     <link rel="stylesheet" href="/assets/css/user-page.css">
     <link rel="stylesheet" href="/assets/css/channel-page.css">
     <link rel="stylesheet" href="/assets/css/buttons.css">
-    <script src="/assets/js/main.js" defer></script>
-    <title>&lt; codex &gt;</title>
-  </head>
-  <body>
+    <link rel="stylesheet" href="/assets/css/main_effects.css">
+    <script type="module" src="/assets/js/main.js" defer></script>
+    <script src="/assets/js/reactions.js" defer></script>
+    <script type="module" src="/assets/js/share.js" defer></script>
+    <title>01F Forum</title>
+</head>
+<body>
     <div class="wrapper-main">
       <header class="header">
         <div class="branding"></div>
@@ -63,66 +66,136 @@
             >
           </button>
         </div>
-      </header>
-      <div aria-modal="true" id="form-login-container" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <div id="form-login">
-            <form action="/login" method="POST">
-              <h5 id="login-title" class="form-title">sign in to codex</h5>
-              <div class="input-wrapper">
-                <input
-                  type="text"
-                  class="input-3d"
-                  id="login_username"
-                  name="username"
-                  placeholder="username/email"
-                  required
-                />
-                <label for="login_username" class="user-label">username</label>
-              </div>
-              <div class="input-wrapper">
-                <input
-                  type="password"
-                  class="input-3d"
-                  id="login_password"
-                  name="login_password"
-                  placeholder="password"
-                  required
-                />
-                <label for="login_password" class="user-label">password</label>
-              </div>
-              <div id="login-notify">
-                <span></span>
-              </div>
-              <div class="forgot">
-                <span
-                  id="btn_forgot"
-                  class="button btn-filled btn-filled-firebrick btn-secondary btn-pill"
-                  >forgot password?</span
-                >
-              </div>
-              <button id = "login" class="btn-md btn-primary btn-action" type="submit">
-                <span>sign in</span>
-              </button>
-            </form>
-            <div class="social-message">
-              <div class="line"></div>
-              <p class="message">sign in with social accounts</p>
-              <div class="line"></div>
-            </div>
-            <div class="social-icons">
-              <button aria-label="Log in with Google" class="icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 32 32"
-                  class="w-5 h-5 fill-current"
-                >
-                  <path
-                    d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"
-                  ></path>
+        <div class="main-content" >
+            <aside class="sidebar">
+                <div class="sidebarProfile">
+                    <div class="sidebar-profile-pic"></div>
+                    <div>
+                        <h3>Eyesome578</h3>
+                        <div>
+                            <button class="btn-md btn-icotext btn-follows btn-invert-never">
+                                <span class="btn-following">72</span>
+                            </button>
+                            <button class="btn-md btn-icotext btn-follows btn-invert-never">
+                                <span class="btn-followers">64</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-scroll scroll-down">
+                    <hr class="solid">
+                    <div class="sidebar-block sidebar-dashboard">
+                        <small class="padded">Dashboard</small>
+                        <div class="sidebar-option home">Home</div>
+                        <div class="sidebar-option flex-space-between darkMode" id="sidebar-option-darkmode">
+                            <div>Colour Scheme</div>
+                            <label for="darkmode-checkbox" class="darklight">
+                                <input type="checkbox" id="darkmode-checkbox">
+                                <span class="darklight-fx"></span>
+                                <!--                            <span class="darklight-border"></span>-->
+                            </label>
+                        </div>
+                        <div class="sidebar-option settings">Settings</div>
+                        <div class="sidebar-option logout">Log Out</div>
+                    </div>
+                    <hr class="solid">
+                    <div class="sidebar-block sidebar-channels">
+                        <small class="padded">Your Channels</small>
+                        <div class="sidebar-channel-block">
+                            <div class="sidebar-channel">
+                                <div></div>
+                                <div class="channel_info-container">
+                                    <span class="card-profile-pic"></span>
+                                    <div>
+                                        <div>/CSS_Help</div>
+                                        <div>
+                                            <div class="channel-users">9.3k</div>
+                                            <div class="channel-green-dot">15</div>
+                                        </div>
+                                    </div>
+                                    <button class="btn-sm btn-icoonly margin-auto-0">
+                                        <span class="btn-save-active" role="contentinfo" aria-label="Edit profile name"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="sidebar-channel">
+                                <div></div>
+                                <div class="channel_info-container">
+                                    <span class="card-profile-pic"></span>
+                                    <div>
+                                        <div>/CSS_Playground</div>
+                                        <div>
+                                            <div class="channel-users">13.8k</div>
+                                            <div class="channel-green-dot">37</div>
+                                        </div>
+                                    </div>
+                                    <button class="btn-sm btn-icoonly margin-auto-0">
+                                        <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="sidebar-channel">
+                                <div></div>
+                                <div class="channel_info-container">
+                                    <span class="card-profile-pic"></span>
+                                    <div>
+                                        <div>/Golang#Discussion</div>
+                                        <div>
+                                            <div class="channel-users">9.4k</div>
+                                            <div class="channel-green-dot">112</div>
+                                        </div>
+                                    </div>
+                                    <button class="btn-sm btn-icoonly margin-auto-0">
+                                        <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="sidebar-channel">
+                                <div></div>
+                                <div class="channel_info-container">
+                                    <span class="card-profile-pic"></span>
+                                    <div>
+                                        <div>/Interesting_Things</div>
+                                        <div>
+                                            <div class="channel-users">5.6k</div>
+                                            <div class="channel-green-dot">36</div>
+                                        </div>
+                                    </div>
+                                    <button class="btn-sm btn-icoonly margin-auto-0">
+                                        <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            <main>
+                <div class="homepage-feed-mask-container" style="z-index: 0; min-height: 100% !important;">
+                <svg height="100dvh" width="100dvw" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="home-mask-gradient" x1="0" x2="0" y1="0" y2="1">
+                            <stop offset="0%" stop-color="black" />
+<!--                            <stop offset="6%" stop-color="black" />-->
+                            <stop offset="2%" stop-color="white" />
+                            <stop offset="100%" stop-color="white" />
+                        </linearGradient>
+                        <linearGradient id="user-mask-gradient" x1="0" x2="0" y1="0" y2="1">
+                            <stop offset="0%" stop-color="black" />
+<!--                            <stop offset="1%" stop-color="black" />-->
+                            <stop offset="2%" stop-color="white" />
+                            <stop offset="100%" stop-color="white" />
+                        </linearGradient>
+                    </defs>
+                    <mask id="homepage-feed-mask">
+                    <rect width="100%" height="100%" fill="url(#home-mask-gradient)" />
+                    </mask>
+                    <mask id="userpage-feed-mask">
+                        <rect width="100%" height="100%" fill="url(#user-mask-gradient)" />
+                    </mask>
                 </svg>
                 </div>
+
                 <!---- homepage ------>
                 <div id="home-page" class="feeds-wrapper">
                     <div class="button-row above-posts button-row-homepage">
@@ -134,7 +207,7 @@
                         </button>
                     </div>
                     <div class="scrollable-home scrollable no-scrollbar">
-                        <div class="home-feed ">
+                        <div id="home-feed ">
                             {{range .Posts}}
                             <div class="card">
                                 <div class="post-info-container">
@@ -175,10 +248,10 @@
                 </div>
 
                 <!----- user page ----->
-                <div id="user-page" class="feeds-wrapper">
+                <div id="user-page" class="active-feed feeds-wrapper">
                     <div class="banner">
                         <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
-                        <div class="page-controls">
+                        <div class="page-control">
                             <div class="page-profile">
                                 <div class="page-profile-pic"></div>
                             <div>
@@ -236,7 +309,7 @@
                                             <span class="btn-sort">sort</span>
                                         </button>
                                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                            <span class="btn-filters">filter</span>
+                                            <span class="btn-filters">filters</span>
                                         </button>
                                         <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                             <span class="btn-sort">scroll</span>
@@ -272,13 +345,13 @@
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-reply">reply</span>
                                                 </button>
-                                                <button id="share-button-{{.ID}}" popovertarget="share-container-{{.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <button id="share-button-{{.ID}}-activity" popovertarget="share-container-{{.ID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-share">share</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-report">report</span>
                                                 </button>
-                                                <div popover id="share-container-{{.ID}}">
+                                                <div popover anchor="share-button-{{.ID}}" id="share-container-{{.ID}}" class="scrollable-user">
                                                     <div class="share-container">
                                                         <div class="button-row">
                                                             <a href="/" target="_blank" class="share-logo facebook"></a>
@@ -289,13 +362,14 @@
                                                             <a href="/" target="_blank" class="share-logo telegram"></a>
                                                         </div>
                                                         <div class="flex-space-between">
-                                                            <label class="padded" for="copy-url-{{.ID}}">Copy URL link</label>
+                                                            <label class="padded" for="copy-url-{{.ID}}-activity">Copy URL link</label>
                                                             <button class="btn-sm btn-icoonly">
                                                                 <span class="btn-copy" aria-label="Copy URL link"></span>
                                                             </button>
                                                         </div>
 
-                                                        <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}" name="copy-url-{{.ID}}"/>
+                                                        <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-activity" name="copy-url-{{.ID}}-activity"/>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -314,7 +388,7 @@
                                     </div>
                                     <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                                         {{range .Posts}}
-                                        <div class="card" >
+                                        <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                                             <div class="post-info-container">
                                                 <span class="card-profile-pic"></span>
                                                 <div>
@@ -329,25 +403,47 @@
                                             </div>
                                             <h4>{{.Title}}</h4>
                                             <article class="cardContent">{{.Content}}</article>
-                                            <div class="button-row">
-                                                <!--                                  --- TODO invertoff -->
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                                    <span class="btn-likes">{{.Likes}}</span>
+                                            <div class="button-row post-controls" >
+                                                {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+                                                    <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                                                 </button>
                                                 <!-- --- TODO invertoff -->
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled">
-                                                    <span class="btn-dislikes">{{.Dislikes}}</span>
+                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+                                                    <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-reply">reply</span>
                                                 </button>
-                                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                                <button id="share-button-{{.ID}}-post" popovertarget="share-container-{{.ID}}-post" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-share">share</span>
                                                 </button>
                                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                     <span class="btn-report">report</span>
                                                 </button>
+                                                <div popover id="share-container-{{.ID}}-post" class="scrollable-user">
+                                                    <div class="share-container">
+                                                        <div class="button-row">
+                                                            <a href="/" target="_blank" class="share-logo facebook"></a>
+                                                            <a href="/" target="_blank" class="share-logo twitter"></a>
+                                                            <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                                            <a href="/" target="_blank" class="share-logo reddit"></a>
+                                                            <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                                            <a href="/" target="_blank" class="share-logo telegram"></a>
+                                                        </div>
+                                                        <div class="flex-space-between">
+                                                            <label class="padded" for="copy-url-{{.ID}}-post">Copy URL link</label>
+                                                            <button class="btn-sm btn-icoonly">
+                                                                <span class="btn-copy" aria-label="Copy URL link"></span>
+                                                            </button>
+                                                        </div>
+
+                                                        <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-post" name="copy-url-{{.ID}}-post"/>
+
+                                                    </div>
+                                                </div>
                                             </div>
+
                                         </div>
                                         {{end}}
                                     </div>
@@ -362,15 +458,27 @@
                                         </button>
                                     </div>
                                     <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                                        <div class="activity-items comments">Yo mama so fat</div>
-                                        <div class="activity-items comments">Yo how fat is she?</div>
-                                        <div class="activity-items comments">Yo mama so fat</div>
-                                        <div class="activity-items comments">Yo how fat is she?</div>
-                                        <div class="activity-items comments">Yo mama so fat</div>
-                                        <div class="activity-items comments">Yo how fat is she?</div>
-                                        <div class="activity-items comments">Yo mama</div>
-                                        <div class="activity-items comments">Yo mama</div>
-                                        <div class="activity-items comments">Yo mama</div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo mama so fat
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo how fat is she?
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo mama so fat
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo how fat is she?
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo mama so fat
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo mama
+                                        </div>
+                                        <div class="activity-items comments cont-flex-column">
+                                            Yo mama so fat
+                                        </div>
                                     </div>
                                 </div>
                                 <div id="activity-saved" >
@@ -537,7 +645,7 @@
                 <div id="channel-page" class="feeds-wrapper">
                     <div class="banner">
                         <div class="page-banner" ></div>
-                        <div class="page-controls">
+                        <div class="page-control">
                             <div class="page-profile">
                                 <div class="page-profile-pic"></div>
                                 <div>
@@ -607,6 +715,27 @@
                                             <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                                 <span class="btn-report">report</span>
                                             </button>
+                                            <div popover id="share-container-{{.ID}}-channel-post" class="scrollable-user">
+                                                <div class="share-container">
+                                                    <div class="button-row">
+                                                        <a href="/" target="_blank" class="share-logo facebook"></a>
+                                                        <a href="/" target="_blank" class="share-logo twitter"></a>
+                                                        <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                                        <a href="/" target="_blank" class="share-logo reddit"></a>
+                                                        <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                                        <a href="/" target="_blank" class="share-logo telegram"></a>
+                                                    </div>
+                                                    <div class="flex-space-between">
+                                                        <label class="padded" for="copy-url-{{.ID}}-channel-post">Copy URL link</label>
+                                                        <button class="btn-sm btn-icoonly">
+                                                            <span class="btn-copy" aria-label="Copy URL link"></span>
+                                                        </button>
+                                                    </div>
+
+                                                    <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-channel-post" name="copy-url-{{.ID}}-channel-post"/>
+
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     {{end}}

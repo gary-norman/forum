@@ -6,26 +6,72 @@ const commentMsg = encodeURIComponent('Hey, I found this comment, you need to se
 const postMsg = encodeURIComponent('Hey, I found this post. I think you may like it?');
 const  commentTitle = encodeURIComponent('Comment from User ??? Here');
 const postTitle = encodeURIComponent('Post Title Here');
-const scrollWindow = document.getElementById("activity-feed-activity");
+ let scrollWindow;
+ const activityBar = document.getElementById('activity-bar');
+ const activityButtons = activityBar.querySelectorAll('button');
+
+export function selectActiveFeed() {
+    const homePage = document.getElementById('home-page');
+    const userPage = document.getElementById('user-page');
+    const channelPage = document.getElementById('channel-page');
+
+    const pages = [homePage, userPage, channelPage];
+    const activePage = pages.find(page => page.classList.contains('active-feed'));
+    let activeScrollWindow;
+
+    switch (activePage) {
+        case homePage:
+            activeScrollWindow = document.getElementById(`home-feed`);
+
+            scrollWindow = activeScrollWindow;
+            // console.log(scrollWindow)
+            break;
+        case userPage:
+            const userFeeds = Array.from(document.querySelectorAll('[id^="activity-feed-"]'));
+            const activeFeed = userFeeds.find(feed => feed.classList.contains('collapsible-expanded'));
+
+            scrollWindow = activeFeed;
+            // console.log(scrollWindow)
+            break;
+        case channelPage:
+            activeScrollWindow = document.getElementById(`channel-feed`);
+
+            scrollWindow = activeScrollWindow;
+            // console.log(scrollWindow)
+            break;
+        default:
+            console.log(`No active feed.`);
+            break;
+    }
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     let postID;
     let commentID;
-    const postControls = document.querySelectorAll(`.post-controls`);
+    selectActiveFeed();
+    const buttonControls = document.querySelectorAll('[class$="-controls"]');
 
-    postControls.forEach(singlePostControl => {
-        postID = singlePostControl.closest('.card').getAttribute('data-post-id');
-        commentID = singlePostControl.closest('.card').getAttribute('data-comment-id');
+    buttonControls.forEach(singleControl => {
+        postID = singleControl.closest('.card').getAttribute('data-post-id');
+        commentID = singleControl.closest('.card').getAttribute('data-comment-id');
 
         //get all components needed
-        const shareModal = singlePostControl.querySelector(`#share-container-`+ postID);
-        const shareButton = singlePostControl.querySelector(`#share-button-`+ postID);
+        const shareModal = singleControl.querySelector(`[id^="share-container-${postID}"]`);
+        const shareButton = singleControl.querySelector(`[id^="share-button-${postID}"]`);
         const label = shareModal.querySelector('label');
         const icon = shareModal.querySelector('button');
         const input = shareModal.querySelector('input');
 
+        activityButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                selectActiveFeed();
+                attachScrollListener();
+            });
+        });
+
         shareButton.addEventListener('click', (e) => {
             getModalPos(shareButton, shareModal, window)
+
         });
 
         // Listen for the 'toggle' event on the modal (native popover event)
@@ -33,17 +79,31 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleButtonActive(shareModal, shareButton);
         });
 
-        scrollWindow.addEventListener('scroll', (e) => {
-            getModalPos(shareButton, shareModal, scrollWindow)
+        function attachScrollListener() {
+            console.log("attaching Scroll Listener to ", scrollWindow)
 
-            // Parse the 'top' value and compare it with top of the mask / botton of screen
-            const modalTop = parseInt(shareModal.style.top, 10); // Convert 'top' to a number
 
-            if (modalTop <= 400 || modalTop >= window.innerHeight - 72) {
-                // Close the popover
-                shareModal.hidePopover();
-            }
-        });
+            scrollWindow.addEventListener('scroll', (e) => {
+                // console.log(scrollWindow)
+                scrollWindow.hasScrollListener = true; // Mark as attached
+                getModalPos(shareButton, shareModal, scrollWindow)
+
+                // Parse the 'top' value and compare it with top of the mask / botton of screen
+                const modalTop = parseInt(shareModal.style.top, 10); // Convert 'top' to a number
+
+                if (modalTop <= 400 || modalTop >= window.innerHeight - 72) {
+                    // Close the popover
+                    shareModal.hidePopover();
+                }
+            });
+        }
+
+        if (!scrollWindow.hasScrollListener) {
+            attachScrollListener();
+        }
+
+
+
 
         label.addEventListener('click', async () => {
             try {
@@ -74,25 +134,26 @@ document.addEventListener('DOMContentLoaded', function () {
             title = commentTitle;
         }
 
-        const fb = singlePostControl.querySelector('.facebook');
+        const fb = singleControl.querySelector('.facebook');
         fb.href = `https://www.facebook.com/share.php?u=${link}`;
 
-        const twitter = singlePostControl.querySelector('.twitter');
+        const twitter = singleControl.querySelector('.twitter');
         twitter.href = `http://twitter.com/share?&url=${link}&text=${msg}&hashtags=javascript,programming`;
 
-        const linkedIn = singlePostControl.querySelector('.linkedin');
+        const linkedIn = singleControl.querySelector('.linkedin');
         linkedIn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${link}`;
 
-        const reddit = singlePostControl.querySelector('.reddit');
+        const reddit = singleControl.querySelector('.reddit');
         reddit.href = `http://www.reddit.com/submit?url=${link}&title=${title}`;
 
-        const whatsapp = singlePostControl.querySelector('.whatsapp');
+        const whatsapp = singleControl.querySelector('.whatsapp');
         whatsapp.href = `https://api.whatsapp.com/send?text=${msg}: ${link}`;
 
-        const telegram = singlePostControl.querySelector('.telegram');
+        const telegram = singleControl.querySelector('.telegram');
         telegram.href = `https://telegram.me/share/url?url=${link}&text=${msg}`;
     });
 });
+
 
 function scrollToPost(postId) {
     const container = scrollWindow;

@@ -28,6 +28,10 @@
     gap: 2.4rem;
     flex: 1 0 0;
     align-self: stretch;
+
+    &.active-feed {
+        display: flex;
+    }
 }
 
 .collapsible-collapsed {
@@ -91,7 +95,7 @@
     }
 }
 
-.page-controls {
+.page-control {
     display: flex;
     justify-content: space-between;
     width: calc(100% - 4.8rem);

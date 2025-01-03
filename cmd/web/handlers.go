@@ -96,26 +96,34 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) login(w http.ResponseWriter, r *http.Request) {
+	ErrorMsgs := models.CreateErrorMessages()
 	username := r.FormValue("login_username")
+	usernameExists := app.users.QueryUserNameExists(username)
+	fmt.Printf("Username exists: %v\n", usernameExists)
 	email := r.FormValue("login_username")
+	emailExists := app.users.QueryUserEmailExists(email)
+	fmt.Printf("Email exists: %v\n", emailExists)
 	password := r.FormValue("login_password")
-	if app.users.QueryUserNameExists(username) == true {
+
+	if usernameExists == true {
 		user, _ := app.users.GetUserByUsername(username)
 		if !models.CheckPasswordHash(password, user.HashedPassword) {
 			http.Error(w, "incorrect password", http.StatusUnauthorized)
 			return
 		}
+		fmt.Printf("Passwords for %v match (username)\n", user.Username)
 	}
 
-	if app.users.QueryUserEmailExists(email) == true {
+	if emailExists == true {
 		user, _ := app.users.GetUserByEmail(email)
 		if !models.CheckPasswordHash(password, user.HashedPassword) {
 			http.Error(w, "incorrect password", http.StatusUnauthorized)
 			return
 		}
+		fmt.Printf("Passwords for %v match (email)\n", user.Email)
 	}
 
-	if app.users.QueryUserNameExists(username) == false && app.users.QueryUserEmailExists(email) == false {
+	if usernameExists == false && emailExists == false {
 		http.Error(w, "username or email not found", http.StatusUnauthorized)
 		return
 	}
@@ -147,8 +155,6 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 		"",
 		"",
 		"")
-
-	ErrorMsgs := models.CreateErrorMessages()
 
 	if err != nil {
 		log.Printf(ErrorMsgs.Login, err)

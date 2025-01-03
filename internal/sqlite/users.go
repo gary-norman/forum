@@ -19,71 +19,70 @@ func (m *UserModel) Insert(username, email, password, sessionToken, csrfToken, a
 	return err
 }
 
-func (m *UserModel) QueryUserEmailExists(email string) bool {
-	if m == nil || m.DB == nil {
-		log.Printf("UserModel or DB is nil")
-		return false
-	}
-	ErrorMsgs := models.CreateErrorMessages()
-	query := "SELECT 1 FROM Users WHERE Email_address = ? LIMIT 1"
-	var exists int
-	err := m.DB.QueryRow(query, email).Scan(&exists)
-
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			// No rows returned means the user doesn't exist
-			log.Printf(ErrorMsgs.NoRows, email, "QueryUserEmailExists")
-			return false
-		}
-		// Return other errors
-		log.Printf(ErrorMsgs.Query, email, err)
-		return false
-	}
-
-	// User exists
-	return true
-}
 func (m *UserModel) QueryUserNameExists(username string) bool {
 	if m == nil || m.DB == nil {
 		log.Printf("UserModel or DB is nil")
 		return false
 	}
-	query := "SELECT 1 FROM Users WHERE Username = ? LIMIT 1"
-	var exists int
-	err := m.DB.QueryRow(query, username).Scan(&exists)
-
-	ErrorMsgs := models.CreateErrorMessages()
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			// No rows returned means the user doesn't exist
-			log.Printf(ErrorMsgs.NoRows, username, "QueryUserNameExists")
-			return false
-		}
-		// Return other errors
-		log.Printf(ErrorMsgs.Query, username, err)
+	var count int
+	err := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Username = ?", username).Scan(&count)
+	switch {
+	case err != nil:
+		log.Fatal(err)
+	default:
+		fmt.Printf("Number of rows are %v\n", count)
+	}
+	if count > 0 {
+		fmt.Println("username return true")
+		return true
+	}
+	fmt.Println("username return false")
+	return false
+}
+func (m *UserModel) QueryUserEmailExists(email string) bool {
+	if m == nil || m.DB == nil {
+		log.Printf("UserModel or DB is nil")
 		return false
 	}
-
-	// User exists
-	return true
+	var count int
+	//ErrorMsgs := models.CreateErrorMessages()
+	err := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Email_address = ?", email).Scan(&count)
+	switch {
+	case err != nil:
+		log.Fatal(err)
+	default:
+		fmt.Printf("Number of rows are %v\n", count)
+	}
+	if count > 0 {
+		fmt.Println("username return true")
+		return true
+	}
+	fmt.Println("username return false")
+	return false
 }
 
-func (m *UserModel) GetUserByEmail(email string) (*models.User, error) {
+func (m *UserModel) GetUserByUsername(username string) (*models.User, error) {
+	username = strings.TrimSpace(username)
 	if m == nil || m.DB == nil {
 		log.Printf("UserModel or DB is nil")
 	}
-	// Query to fetch user data by email
-	query := "SELECT * FROM Users WHERE Email_address = ? LIMIT 1"
-	row := m.DB.QueryRow(query, email)
-
+	// Query to fetch user data by username
+	stmt, err := m.DB.Prepare("SELECT ID, Username, HashedPassword FROM Users WHERE Username = ? LIMIT 1")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close() // Prepared statements take up server resources and should be closed after use.
 	// Create a User instance to store the result
 	var user models.User
-	err := row.Scan(&user.ID, &user.Username, &user.Login.Email, &user.Login.HashedPassword)
+	err = stmt.QueryRow(username).Scan(
+		&user.ID,
+		&user.Username,
+		&user.Login.HashedPassword)
+	ErrorMsgs := models.CreateErrorMessages()
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			// No user found
-			ErrorMsgs := models.CreateErrorMessages()
-			log.Printf(ErrorMsgs.NoRows, email, "getUserByEmail")
+			log.Printf(ErrorMsgs.NoRows, username, "getUserByUsername")
 			return nil, nil
 		}
 		return nil, fmt.Errorf("query failed: %w", err)
@@ -91,23 +90,29 @@ func (m *UserModel) GetUserByEmail(email string) (*models.User, error) {
 
 	return &user, nil
 }
-func (m *UserModel) GetUserByUsername(username string) (*models.User, error) {
+func (m *UserModel) GetUserByEmail(email string) (*models.User, error) {
+	email = strings.TrimSpace(email)
 	if m == nil || m.DB == nil {
 		log.Printf("UserModel or DB is nil")
 	}
 	// Query to fetch user data by username
-	query := "SELECT * FROM Users WHERE Username = ? LIMIT 1"
-	username = strings.TrimSpace(strings.ToLower(username))
-	row := m.DB.QueryRow(query, username)
-	fmt.Printf("query: %s\nrow: %v\n", username, row)
+	stmt, err := m.DB.Prepare("SELECT ID, HashedPassword, Email_address FROM Users WHERE Email_address = ? LIMIT 1")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close() // Prepared statements take up server resources and should be closed after use.
 	// Create a User instance to store the result
 	var user models.User
-	err := row.Scan(&user.ID, &user.Username, &user.Login.Email, &user.Login.HashedPassword)
+	err = stmt.QueryRow(email).Scan(
+		&user.ID,
+		&user.Login.HashedPassword,
+		&user.Login.Email)
+	fmt.Printf("err: %v\n", err)
 	ErrorMsgs := models.CreateErrorMessages()
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			// No user found
-			log.Printf(ErrorMsgs.NoRows, username, "getUserByUsername")
+			log.Printf(ErrorMsgs.NoRows, email, "getUserByUsername")
 			return nil, nil
 		}
 		return nil, fmt.Errorf("query failed: %w", err)

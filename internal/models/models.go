@@ -14,6 +14,12 @@ type User struct {
 	TimeSince   string    `json:"time_since"`
 	IsFlagged   bool      `json:"is_flagged,omitempty"`
 }
+type UserCheck struct {
+	ID             int    `json:"id"`
+	Username       string `json:"username"`
+	Email          string
+	HashedPassword string
+}
 type Login struct {
 	Email          string
 	HashedPassword string

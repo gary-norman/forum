@@ -64,14 +64,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         activityButtons.forEach(button => {
             button.addEventListener('click', () => {
-                selectActiveFeed();
-                attachScrollListener();
+                //set timeout due to the animation timeout when switching between activity feeds in main.js
+                setTimeout(() => {
+                    // console.log('Before selectActiveFeed:', scrollWindow);
+                    selectActiveFeed();
+                    // console.log('After selectActiveFeed:', scrollWindow);
+                    attachScrollListener();
+                }, 500);
             });
         });
 
         shareButton.addEventListener('click', (e) => {
             getModalPos(shareButton, shareModal, window)
-
         });
 
         // Listen for the 'toggle' event on the modal (native popover event)
@@ -80,11 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         function attachScrollListener() {
-            console.log("attaching Scroll Listener to ", scrollWindow)
-
-
             scrollWindow.addEventListener('scroll', (e) => {
-                // console.log(scrollWindow)
                 scrollWindow.hasScrollListener = true; // Mark as attached
                 getModalPos(shareButton, shareModal, scrollWindow)
 

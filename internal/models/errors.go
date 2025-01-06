@@ -12,6 +12,7 @@ type Errors struct {
 	Open      string
 	Parse     string
 	Post      string
+	Protected string
 	Query     string
 	Read      string
 	Register  string
@@ -31,6 +32,7 @@ func CreateErrorMessages() *Errors {
 		Open:      "Unable to open %v called by %v\n",
 		Parse:     "Unable to parse %v called by %v with error: %v\n",
 		Post:      "Unable to post with error: %v\n",
+		Protected: "CSRF validation failed for user %v with error: %v\n",
 		Query:     "Unable to query %v with error: %v\n",
 		Read:      "Unable to read %v called by %v\n",
 		Register:  "Unable to register with error: %v\n",

@@ -43,7 +43,6 @@ func main() {
 	if err != nil {
 		fmt.Printf(ErrorMsgs.ConnInit, srv.Addr, "srv.ListenAndServe")
 		return
-	} else {
-		log.Printf("Listening on %v", srv.Addr)
 	}
+	log.Printf("Listening on %v", srv.Addr)
 }

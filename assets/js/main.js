@@ -137,6 +137,29 @@ function confirmPass() {
     regPassRpt.classList.remove("pass-nomatch");
 }
 
+// retrieve the csrf_token cookie and explicitly set the X-CSRF-Token header in requests
+const csrfToken = document.cookie
+    // .split('; ')[0]
+    // .split('=')[1]
+    .split('; ')
+    .find((row) => row.startsWith('csrf_token'))
+    ?.split('=')[1];
+console.log("csrfToken: ", csrfToken);
+fetch('/logout', {
+    method: 'POST',
+    headers: {
+        'X-CSRF-Token': csrfToken,
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({foo: 'bar'}),
+}).then(r =>{
+    console.log("r: ", r, "csrfToken: ", csrfToken);
+    if (!r.ok) {
+        throw new Error(`HTTP error! Status: ${r.status}`);
+    }
+    return r.blob();
+});
+
 // ---- event listeners -----
 // drag and drop
 // dropButton.addEventListener('click', input.click.bind(input), false);

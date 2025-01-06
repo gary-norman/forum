@@ -131,3 +131,30 @@ type Flag struct {
 	FlaggedPostID    *int      `json:"flagged_post_id,omitempty"`
 	FlaggedCommentID *int      `json:"flagged_comment_id,omitempty"`
 }
+
+type Notify struct {
+	BadPass      string
+	RegisterOk   string
+	RegisterFail string
+	BadLogin     string
+	LoginOk      string
+	LoginFail    string
+}
+
+type NotifyPlaceholder struct {
+	Register string
+	Login    string
+}
+
+type TemplateData struct {
+	Posts             []PostWithDaysAgo `json:"posts"`
+	Images            []Image           `json:"images"`
+	Comments          []Comment         `json:"comments"`
+	Reactions         []Reaction        `json:"reactions"`
+	NotifyPlaceholder `json:"notifyPlaceholder"`
+}
+
+type Session struct {
+	Username string
+	Expires  time.Time
+}

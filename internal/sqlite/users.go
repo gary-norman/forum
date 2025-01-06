@@ -14,15 +14,45 @@ type UserModel struct {
 }
 
 func (m *UserModel) Insert(username, email, password, sessionToken, csrfToken, avatar, banner, description string) error {
-	stmt := "INSERT INTO Users (Username, Email_address, HashedPassword, SessionToken, Csrf_token, Avatar, Banner, Description, UserType, Created, Is_flagged) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, DateTime('now'), 0)"
+	stmt := "INSERT INTO Users (Username, Email_address, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, Is_flagged) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, DateTime('now'), 0)"
 	_, err := m.DB.Exec(stmt, username, email, password, sessionToken, csrfToken, avatar, banner, description)
 	return err
 }
 
-func (m *UserModel) QueryUserNameExists(username string) bool {
+func (m *UserModel) GetUserFromLogin(login string) (*models.User, error) {
 	if m == nil || m.DB == nil {
-		log.Printf("UserModel or DB is nil")
-		return false
+		return nil, errors.New("UserModel or DB is nil")
+	}
+	username, email := login, login
+	fmt.Printf("username: %v\n", username)
+	usernameExists, err := m.QueryUserNameExists(username)
+	if err != nil {
+		log.Printf("username: %v not found", username)
+	}
+	fmt.Printf("usernameExists: %v\n", usernameExists)
+	emailExists, err := m.QueryUserEmailExists(email)
+	if err != nil {
+		log.Printf("email: %v not found", email)
+	}
+	var user *models.User
+	if usernameExists != true && emailExists != true {
+		return nil, errors.New("username or email not found")
+	}
+
+	if usernameExists == true {
+		user, _ = m.GetUserByUsername(username)
+	}
+
+	if emailExists == true {
+		user, _ = m.GetUserByEmail(email)
+	}
+
+	return user, nil
+}
+
+func (m *UserModel) QueryUserNameExists(username string) (bool, error) {
+	if m == nil || m.DB == nil {
+		return false, errors.New("UserModel or DB is nil")
 	}
 	var count int
 	err := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Username = ?", username).Scan(&count)
@@ -30,14 +60,13 @@ func (m *UserModel) QueryUserNameExists(username string) bool {
 		log.Fatal(err)
 	}
 	if count > 0 {
-		return true
+		return true, nil
 	}
-	return false
+	return false, errors.New("username not found")
 }
-func (m *UserModel) QueryUserEmailExists(email string) bool {
+func (m *UserModel) QueryUserEmailExists(email string) (bool, error) {
 	if m == nil || m.DB == nil {
-		log.Printf("UserModel or DB is nil")
-		return false
+		return false, errors.New("UserModel or DB is nil")
 	}
 	var count int
 	//ErrorMsgs := models.CreateErrorMessages()
@@ -46,9 +75,9 @@ func (m *UserModel) QueryUserEmailExists(email string) bool {
 		log.Fatal(err)
 	}
 	if count > 0 {
-		return true
+		return true, nil
 	}
-	return false
+	return false, errors.New("email not found")
 }
 
 func (m *UserModel) GetUserByUsername(username string) (*models.User, error) {
@@ -57,7 +86,7 @@ func (m *UserModel) GetUserByUsername(username string) (*models.User, error) {
 		log.Printf("UserModel or DB is nil")
 	}
 	// Query to fetch user data by username
-	stmt, err := m.DB.Prepare("SELECT ID, Username, HashedPassword FROM Users WHERE Username = ? LIMIT 1")
+	stmt, err := m.DB.Prepare("SELECT ID, Username, HashedPassword, SessionToken, CsrfToken FROM Users WHERE Username = ? LIMIT 1")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,7 +96,9 @@ func (m *UserModel) GetUserByUsername(username string) (*models.User, error) {
 	err = stmt.QueryRow(username).Scan(
 		&user.ID,
 		&user.Username,
-		&user.Login.HashedPassword)
+		&user.HashedPassword,
+		&user.SessionToken,
+		&user.CSRFToken)
 	ErrorMsgs := models.CreateErrorMessages()
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -111,24 +142,19 @@ func (m *UserModel) GetUserByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
-func (m *UserModel) UpdateCookies(login, loginType, sessionToken, csrfToken string) error {
+func (m *UserModel) UpdateCookies(user *models.User, sessionToken, csrfToken string) error {
 	var stmt string
-	if loginType == "email" {
-		fmt.Printf("cookies: %v\n", login)
-		stmt = "UPDATE Users SET SessionToken = ?, Csrf_token = ? WHERE Email_address = ?"
-	}
-	if loginType == "username" {
-		fmt.Printf("cookies: %v\n", login)
-		stmt = "UPDATE Users SET SessionToken = ?, Csrf_token = ? WHERE Username = ?"
-	}
-	result, err := m.DB.Exec(stmt, sessionToken, csrfToken, login)
-	fmt.Printf("result: %v\n", result)
+	fmt.Printf("Updating DB Cookies for: %v\n", user.Username)
+	stmt = "UPDATE Users SET SessionToken = ?, CsrfToken = ? WHERE Username = ?"
+	result, err := m.DB.Exec(stmt, sessionToken, csrfToken, user.Username)
+	rows, _ := result.RowsAffected()
+	fmt.Printf("result.RowsAffected: %v\n", rows)
 	return err
 }
 
 func (m *UserModel) All() ([]models.User, error) {
 	ErrorMsgs := models.CreateErrorMessages()
-	stmt := "SELECT ID, Username, Email_address, HashedPassword, SessionToken, Csrf_token, Avatar, Banner, Description, UserType, Created, Is_flagged FROM Users ORDER BY ID DESC"
+	stmt := "SELECT ID, Username, Email_address, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, Is_flagged FROM Users ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
 		return nil, err

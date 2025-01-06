@@ -57,20 +57,20 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		er := http.StatusNotAcceptable
 		http.Error(w, "please enter a valid email address", er)
 	}
-	exists := app.users.QueryUserEmailExists(email)
-	if exists == true {
+	emailExists, err := app.users.QueryUserEmailExists(email)
+	if emailExists == true {
 		er := http.StatusConflict
 		http.Error(w, "an account is already registered to that email address", er)
 		return
 	}
-
-	if app.users.QueryUserNameExists(username) {
+	userExists, err := app.users.QueryUserNameExists(username)
+	if userExists == true {
 		er := http.StatusConflict
-		http.Error(w, "username already exists", er)
+		http.Error(w, "an account is already registered to that username", er)
 		return
 	}
 	hashedPassword, _ := models.HashPassword(password)
-	err := app.users.Insert(
+	err = app.users.Insert(
 		username,
 		email,
 		hashedPassword,
@@ -97,39 +97,27 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 
 func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	ErrorMsgs := models.CreateErrorMessages()
-	username := r.FormValue("login_username")
-	usernameExists := app.users.QueryUserNameExists(username)
-	fmt.Printf("Username exists: %v\n", usernameExists)
-	email := r.FormValue("login_username")
-	emailExists := app.users.QueryUserEmailExists(email)
-	fmt.Printf("Email exists: %v\n", emailExists)
+	login := r.FormValue("username")
 	password := r.FormValue("login_password")
-	var loginType string
-
-	if usernameExists == true {
-		user, _ := app.users.GetUserByUsername(username)
-		if !models.CheckPasswordHash(password, user.HashedPassword) {
-			http.Error(w, "incorrect password", http.StatusUnauthorized)
-			return
-		}
-		fmt.Printf("Passwords for %v match\n", user.Username)
-		loginType = "username"
+	var user *models.User
+	user, err := app.users.GetUserFromLogin(login)
+	if err != nil {
+		log.Printf("GetUserFromLogin for %v failed with error: %v", login, err)
 	}
+	//Notify := models.Notify{
+	//	BadPass:      "The passwords do not match.",
+	//	RegisterOk:   "Registration successful.",
+	//	RegisterFail: "Registration failed.",
+	//	BadLogin:     "Username or email address not found",
+	//	LoginOk:      "Logged in successfully!",
+	//	LoginFail:    "Unable to log in.",
+	//}
 
-	if emailExists == true {
-		user, _ := app.users.GetUserByEmail(email)
-		if !models.CheckPasswordHash(password, user.HashedPassword) {
-			http.Error(w, "incorrect password", http.StatusUnauthorized)
-			return
-		}
-		fmt.Printf("Passwords for %v match\n", user.Email)
-		loginType = "email"
-	}
-
-	if usernameExists == false && emailExists == false {
-		http.Error(w, "username or email not found", http.StatusUnauthorized)
+	if !models.CheckPasswordHash(password, user.HashedPassword) {
+		http.Error(w, "incorrect password", http.StatusUnauthorized)
 		return
 	}
+	fmt.Printf("Passwords for %v match\n", user.Username)
 
 	sessionToken := models.GenerateToken(32)
 	csrfToken := models.GenerateToken(32)
@@ -149,23 +137,11 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	// Store tokens in the database
-	if loginType == "username" {
-		err := app.users.UpdateCookies(username, loginType, sessionToken, csrfToken)
-		if err != nil {
-			log.Printf(ErrorMsgs.Cookies, err)
-		}
+	err = app.users.UpdateCookies(user, sessionToken, csrfToken)
+	if err != nil {
+		log.Printf(ErrorMsgs.Cookies, err)
 	}
-	if loginType == "email" {
-		err := app.users.UpdateCookies(email, loginType, sessionToken, csrfToken)
-		if err != nil {
-			log.Printf(ErrorMsgs.Cookies, err)
-		}i
 
-	//if err != nil {
-	//	log.Printf(ErrorMsgs.Login, err)
-	//	http.Error(w, err.Error(), 500)
-	//	return
-	//}
 	http.Redirect(w, r, "/", http.StatusFound)
 
 	fprintln, err := fmt.Fprintln(w, "Logged in successfully!")
@@ -176,9 +152,68 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	log.Println(fprintln)
 }
 
-func (app *app) logout(w http.ResponseWriter, r *http.Request) {}
+func (app *app) logout(w http.ResponseWriter, r *http.Request) {
+	ErrorMsgs := models.CreateErrorMessages()
+	login := r.FormValue("username")
+	var user *models.User
+	user, err := app.users.GetUserFromLogin(login)
+	if err != nil {
+		log.Printf("GetUserFromLogin for %v failed with error: %v", login, err)
+	}
+	if err = app.isAuthenticated(r); err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
 
-func (app *app) protected(w http.ResponseWriter, r *http.Request) {}
+	// Delete Session Token and CSRF Token cookies
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_token",
+		Value:    "",
+		Expires:  time.Unix(0, 0),
+		HttpOnly: true,
+	})
+	http.SetCookie(w, &http.Cookie{
+		Name:     "csrf_token",
+		Value:    "",
+		Expires:  time.Unix(0, 0),
+		HttpOnly: false,
+	})
+	// Delete tokens from the database
+	err = app.users.UpdateCookies(user, "username", "")
+	if err != nil {
+		log.Printf(ErrorMsgs.Cookies, err)
+	}
+
+	fmt.Fprintln(w, "Logged out successfully!")
+}
+
+func (app *app) protected(w http.ResponseWriter, r *http.Request) {
+	ErrorMsgs := models.CreateErrorMessages()
+	login := r.FormValue("username")
+	var user *models.User
+	user, err := app.users.GetUserFromLogin(login)
+	if err != nil {
+		log.Printf("protected route for %v failed with error: %v", login, err)
+	}
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	if err = app.isAuthenticated(r); err != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+	fprintf, err := fmt.Fprintf(w, "CSRF Valildation successful! Welcome, %s", user.Username)
+	if err != nil {
+		log.Print(ErrorMsgs.Protected, user.Username, err)
+		return
+	}
+	log.Println(fprintf)
+}
+func (app *app) loginAndProtected(w http.ResponseWriter, r *http.Request) {
+	app.login(w, r)
+	app.protected(w, r)
+}
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	ErrorMsgs := models.CreateErrorMessages()
@@ -208,10 +243,15 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	data := struct {
-		Posts []models.PostWithDaysAgo
-	}{
-		Posts: postsWithDaysAgo,
+	templateData := models.TemplateData{
+		Posts:     postsWithDaysAgo,
+		Images:    nil,
+		Comments:  nil,
+		Reactions: nil,
+		NotifyPlaceholder: models.NotifyPlaceholder{
+			Register: "",
+			Login:    "",
+		},
 	}
 
 	t, err := template.ParseFiles("./assets/templates/index.html")
@@ -221,7 +261,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = t.Execute(w, data)
+	err = t.Execute(w, templateData)
 	if err != nil {
 		log.Print(ErrorMsgs.Execute, err)
 		return

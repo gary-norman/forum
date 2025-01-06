@@ -36,6 +36,14 @@
           </search>
         </form>
         <div class="flex-align-c">
+          <form action="/logout" method="POST">
+            <input type="hidden" name="username" value="loreforum">
+          <button id="logout"
+                  class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff"
+          >
+            <span class="btn-posts">logout</span>
+          </button>
+          </form>
           <button
             id="btn-open-login-modal"
             class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff"
@@ -71,7 +79,7 @@
                   type="text"
                   class="input-3d"
                   id="login_username"
-                  name="login_username"
+                  name="username"
                   placeholder="username/email"
                 />
                 <label for="login_username" class="user-label">username</label>
@@ -85,6 +93,9 @@
                   placeholder="password"
                 />
                 <label for="login_password" class="user-label">password</label>
+              </div>
+              <div id="login-notify">
+                <span></span>
               </div>
               <div class="forgot">
                 <span

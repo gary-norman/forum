@@ -8,6 +8,9 @@ const actButtonsAll = actButtonContainer.querySelectorAll('button')
 const activityFeeds = document.querySelector('#activity-feeds')
 const activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]')
 // login/register buttons
+// TODO overhaul the naming of these buttons
+const loginFormButton = document.querySelector('#login');
+const logoutFormButton = document.querySelector('#logout');
 const btnLogin = document.querySelectorAll('[id^="btn_login-"]');
 const btnRegister = document.querySelectorAll('[id^="btn_register-"]');
 const btnForgot = document.querySelector('#btn_forgot');
@@ -138,32 +141,62 @@ function confirmPass() {
 }
 
 // retrieve the csrf_token cookie and explicitly set the X-CSRF-Token header in requests
-const csrfToken = document.cookie
-    // .split('; ')[0]
-    // .split('=')[1]
+function getCSRFToken() {
+
+    return document.cookie
     .split('; ')
     .find((row) => row.startsWith('csrf_token'))
     ?.split('=')[1];
-console.log("csrfToken: ", csrfToken);
-fetch('/logout', {
-    method: 'POST',
-    headers: {
-        'X-CSRF-Token': csrfToken,
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({foo: 'bar'}),
-}).then(r =>{
-    console.log("r: ", r, "csrfToken: ", csrfToken);
-    if (!r.ok) {
-        throw new Error(`HTTP error! Status: ${r.status}`);
+}
+
+async function sendRequest(endpoint, method) {
+    const csrfToken = getCSRFToken();
+    console.log('csrfToken', csrfToken);
+    if (!csrfToken) {
+        console.error('CSRF token is missing. Cannot make requests.');
+        return;
     }
-    return r.blob();
-});
+    fetch(endpoint, {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.error(error));
+}
 
 // ---- event listeners -----
 // drag and drop
 // dropButton.addEventListener('click', input.click.bind(input), false);
 // when browse
+loginFormButton.addEventListener('click', () => {
+    sendRequest('/login', 'POST')
+        .then((response) => {
+            console.log('Login successful:', response);
+        })
+        .catch((error) => {
+            console.error('Login failed:', error);
+        });
+})
+logoutFormButton.addEventListener('click', () => {
+    sendRequest('/logout', 'POST')
+        .then((response) => {
+            console.log('Logout successful:', response);
+        })
+        .catch((error) => {
+            console.error('Logout failed:', error);
+        });
+})
+
+// sendRequest('/protected', 'GET').then((response) => {
+//     console.log('Use of protected route successful:', response);
+//     })
+//     .catch((error) => {
+//         console.error('Use of protected route failed:', error);
+// });
 input.addEventListener('change', function () {
     file = this.files[0];
     dropArea.classList.add('active');

@@ -19,6 +19,9 @@ func (app *app) isAuthenticated(r *http.Request) error {
 
 	// Get the Session Token from the request cookie
 	st, err := r.Cookie("session_token")
+	if st == nil {
+		return errors.New("no session token")
+	}
 	if err != nil || st.Value == "" || st.Value != user.SessionToken {
 		fmt.Printf("st.Value: %v\nerr: %v\nuser SessionToken: %v\n", st.Value, err, user.SessionToken)
 		return AuthErr

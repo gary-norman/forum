@@ -63,14 +63,19 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "an account is already registered to that email address", er)
 		return
 	}
-	userExists, err := app.users.QueryUserNameExists(username)
+	userExists, existsErr := app.users.QueryUserNameExists(username)
 	if userExists == true {
 		er := http.StatusConflict
 		http.Error(w, "an account is already registered to that username", er)
 		return
 	}
+	if existsErr != nil {
+		log.Printf(ErrorMsgs.Register, existsErr)
+		http.Error(w, fmt.Sprintf(ErrorMsgs.Register, existsErr), 500)
+		return
+	}
 	hashedPassword, _ := models.HashPassword(password)
-	err = app.users.Insert(
+	insertErr := app.users.Insert(
 		username,
 		email,
 		hashedPassword,
@@ -80,9 +85,9 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		"",
 		"")
 
-	if err != nil {
-		log.Printf(ErrorMsgs.Register, err)
-		http.Error(w, err.Error(), 500)
+	if insertErr != nil {
+		log.Printf(ErrorMsgs.Register, insertErr)
+		http.Error(w, fmt.Sprintf(ErrorMsgs.Register, insertErr), 500)
 		return
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
@@ -119,29 +124,8 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("Passwords for %v match\n", user.Username)
 
-	sessionToken := models.GenerateToken(32)
-	csrfToken := models.GenerateToken(32)
-
 	// Set Session Token and CSRF Token cookies
-	http.SetCookie(w, &http.Cookie{
-		Name:     "session_token",
-		Value:    sessionToken,
-		Expires:  time.Now().Add(time.Hour * 24),
-		HttpOnly: true,
-	})
-	http.SetCookie(w, &http.Cookie{
-		Name:     "csrf_token",
-		Value:    csrfToken,
-		Expires:  time.Now().Add(time.Hour * 24),
-		HttpOnly: false,
-	})
-
-	// Store tokens in the database
-	err = app.users.UpdateCookies(user, sessionToken, csrfToken)
-	if err != nil {
-		log.Printf(ErrorMsgs.Cookies, err)
-	}
-
+	app.cookies.CreateCookies(w, user)
 	http.Redirect(w, r, "/", http.StatusFound)
 
 	fprintln, err := fmt.Fprintln(w, "Logged in successfully!")
@@ -165,26 +149,30 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Delete Session Token and CSRF Token cookies
-	http.SetCookie(w, &http.Cookie{
-		Name:     "session_token",
-		Value:    "",
-		Expires:  time.Unix(0, 0),
-		HttpOnly: true,
-	})
-	http.SetCookie(w, &http.Cookie{
-		Name:     "csrf_token",
-		Value:    "",
-		Expires:  time.Unix(0, 0),
-		HttpOnly: false,
-	})
+	//// Delete Session Token and CSRF Token cookies
+	//http.SetCookie(w, &http.Cookie{
+	//	Name:     "session_token",
+	//	Value:    "",
+	//	Expires:  time.Unix(0, 0),
+	//	HttpOnly: true,
+	//})
+	//http.SetCookie(w, &http.Cookie{
+	//	Name:     "csrf_token",
+	//	Value:    "",
+	//	Expires:  time.Unix(0, 0),
+	//	HttpOnly: false,
+	//})
 	// Delete tokens from the database
-	err = app.users.UpdateCookies(user, "username", "")
+	err = app.cookies.DeleteCookies(user)
 	if err != nil {
 		log.Printf(ErrorMsgs.Cookies, err)
 	}
 
-	fmt.Fprintln(w, "Logged out successfully!")
+	fprintln, err := fmt.Fprintln(w, "Logged out successfully!")
+	if err != nil {
+		return
+	}
+	log.Println(fprintln)
 }
 
 func (app *app) protected(w http.ResponseWriter, r *http.Request) {

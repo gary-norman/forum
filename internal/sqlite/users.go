@@ -20,18 +20,20 @@ func (m *UserModel) Insert(username, email, password, sessionToken, csrfToken, a
 }
 
 func (m *UserModel) GetUserFromLogin(login string) (*models.User, error) {
+	ErrorMsgs := models.CreateErrorMessages()
+
 	if m == nil || m.DB == nil {
-		return nil, errors.New("UserModel or DB is nil")
+		return nil, errors.New(fmt.Sprintf(ErrorMsgs.UserModel, "GetUserFromLogin", login))
 	}
 	username, email := login, login
 	fmt.Printf("username: %v\n", username)
-	usernameExists, err := m.QueryUserNameExists(username)
-	if err != nil {
+	usernameExists, queryUserErr := m.QueryUserNameExists(username)
+	if queryUserErr != nil {
 		log.Printf("username: %v not found", username)
 	}
 	fmt.Printf("usernameExists: %v\n", usernameExists)
-	emailExists, err := m.QueryUserEmailExists(email)
-	if err != nil {
+	emailExists, queryEmailErr := m.QueryUserEmailExists(email)
+	if queryEmailErr != nil {
 		log.Printf("email: %v not found", email)
 	}
 	var user *models.User
@@ -51,7 +53,9 @@ func (m *UserModel) GetUserFromLogin(login string) (*models.User, error) {
 }
 
 func (m *UserModel) QueryUserNameExists(username string) (bool, error) {
+	ErrorMsgs := models.CreateErrorMessages()
 	if m == nil || m.DB == nil {
+		fmt.Printf(ErrorMsgs.UserModel, "QueryUserNameExists", username)
 		return false, errors.New("UserModel or DB is nil")
 	}
 	var count int
@@ -65,7 +69,9 @@ func (m *UserModel) QueryUserNameExists(username string) (bool, error) {
 	return false, errors.New("username not found")
 }
 func (m *UserModel) QueryUserEmailExists(email string) (bool, error) {
+	ErrorMsgs := models.CreateErrorMessages()
 	if m == nil || m.DB == nil {
+		fmt.Printf(ErrorMsgs.UserModel, "QueryUserEmailExists", email)
 		return false, errors.New("UserModel or DB is nil")
 	}
 	var count int
@@ -81,8 +87,10 @@ func (m *UserModel) QueryUserEmailExists(email string) (bool, error) {
 }
 
 func (m *UserModel) GetUserByUsername(username string) (*models.User, error) {
+	ErrorMsgs := models.CreateErrorMessages()
 	username = strings.TrimSpace(username)
 	if m == nil || m.DB == nil {
+		fmt.Printf(ErrorMsgs.UserModel, "GetUserByUsername", username)
 		log.Printf("UserModel or DB is nil")
 	}
 	// Query to fetch user data by username
@@ -90,7 +98,12 @@ func (m *UserModel) GetUserByUsername(username string) (*models.User, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer stmt.Close() // Prepared statements take up server resources and should be closed after use.
+	defer func(stmt *sql.Stmt) {
+		closErr := stmt.Close()
+		if closErr != nil {
+			log.Printf(ErrorMsgs.Close, "stmt", "getUserByUsername")
+		}
+	}(stmt) // Prepared statements take up server resources and should be closed after use.
 	// Create a User instance to store the result
 	var user models.User
 	err = stmt.QueryRow(username).Scan(
@@ -99,7 +112,6 @@ func (m *UserModel) GetUserByUsername(username string) (*models.User, error) {
 		&user.HashedPassword,
 		&user.SessionToken,
 		&user.CSRFToken)
-	ErrorMsgs := models.CreateErrorMessages()
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			// No user found
@@ -112,8 +124,10 @@ func (m *UserModel) GetUserByUsername(username string) (*models.User, error) {
 	return &user, nil
 }
 func (m *UserModel) GetUserByEmail(email string) (*models.User, error) {
+	ErrorMsgs := models.CreateErrorMessages()
 	email = strings.TrimSpace(email)
 	if m == nil || m.DB == nil {
+		fmt.Printf(ErrorMsgs.UserModel, "GetUserByEmail", email)
 		log.Printf("UserModel or DB is nil")
 	}
 	// Query to fetch user data by username
@@ -121,7 +135,12 @@ func (m *UserModel) GetUserByEmail(email string) (*models.User, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer stmt.Close() // Prepared statements take up server resources and should be closed after use.
+	defer func(stmt *sql.Stmt) {
+		closErr := stmt.Close()
+		if closErr != nil {
+			log.Printf(ErrorMsgs.Close, "stmt", "getUserByUsername")
+		}
+	}(stmt) // Prepared statements take up server resources and should be closed after use.
 	// Create a User instance to store the result
 	var user models.User
 	err = stmt.QueryRow(email).Scan(
@@ -129,7 +148,6 @@ func (m *UserModel) GetUserByEmail(email string) (*models.User, error) {
 		&user.Login.HashedPassword,
 		&user.Login.Email)
 	fmt.Printf("err: %v\n", err)
-	ErrorMsgs := models.CreateErrorMessages()
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			// No user found
@@ -140,16 +158,6 @@ func (m *UserModel) GetUserByEmail(email string) (*models.User, error) {
 	}
 
 	return &user, nil
-}
-
-func (m *UserModel) UpdateCookies(user *models.User, sessionToken, csrfToken string) error {
-	var stmt string
-	fmt.Printf("Updating DB Cookies for: %v\n", user.Username)
-	stmt = "UPDATE Users SET SessionToken = ?, CsrfToken = ? WHERE Username = ?"
-	result, err := m.DB.Exec(stmt, sessionToken, csrfToken, user.Username)
-	rows, _ := result.RowsAffected()
-	fmt.Printf("result.RowsAffected: %v\n", rows)
-	return err
 }
 
 func (m *UserModel) All() ([]models.User, error) {

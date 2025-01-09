@@ -16,6 +16,7 @@ type Errors struct {
 	Query     string
 	Read      string
 	Register  string
+	UserModel string
 	Write     string
 }
 
@@ -36,6 +37,7 @@ func CreateErrorMessages() *Errors {
 		Query:     "Unable to query %v with error: %v\n",
 		Read:      "Unable to read %v called by %v\n",
 		Register:  "Unable to register with error: %v\n",
+		UserModel: "Usermodel or DB called in %v for %v is nil\n",
 		Write:     "Unable to write to %v called by %v\n",
 	}
 	return errors

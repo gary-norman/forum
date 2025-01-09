@@ -12,8 +12,9 @@ import (
 )
 
 type app struct {
-	posts *sqlite.PostModel
-	users *sqlite.UserModel
+	posts   *sqlite.PostModel
+	users   *sqlite.UserModel
+	cookies *CookieModel
 }
 
 func main() {
@@ -30,6 +31,9 @@ func main() {
 			DB: db,
 		},
 		users: &sqlite.UserModel{
+			DB: db,
+		},
+		cookies: &CookieModel{
 			DB: db,
 		},
 	}

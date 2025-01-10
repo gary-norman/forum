@@ -9,6 +9,7 @@ const activityFeeds = document.querySelector('#activity-feeds')
 const activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]')
 // login/register buttons
 // TODO overhaul the naming of these buttons
+const loginTitle = document.querySelector('#login-title');
 const loginFormButton = document.querySelector('#login');
 const logoutFormButton = document.querySelector('#logout');
 const btnLogin = document.querySelectorAll('[id^="btn_login-"]');
@@ -149,47 +150,102 @@ function getCSRFToken() {
     ?.split('=')[1];
 }
 
-async function sendRequest(endpoint, method) {
+loginFormButton.addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const form = event.target;
+    const formData = new FormData(form); // Collect form data
     const csrfToken = getCSRFToken();
-    console.log('csrfToken', csrfToken);
-    if (!csrfToken) {
-        console.error('CSRF token is missing. Cannot make requests.');
-        return;
-    }
-    fetch(endpoint, {
-        method,
+    console.log("csrfToken: ", csrfToken)
+
+    fetch('/login', {
+        method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-Token': csrfToken,
+            'x-csrf-token': csrfToken
         },
+        body: formData // Send the form data
     })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((error) => console.error(error));
-}
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // Or response.text() if the response isn't JSON
+        })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+
+logoutFormButton.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const csrfToken = getCSRFToken();
+    console.log("csrfToken: ", csrfToken)
+
+    fetch('/logout', {
+        method: 'POST',
+        headers: {
+            'x-csrf-token': csrfToken
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // or response.text()
+        })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+})
+
+// async function sendRequest(endpoint, method) {
+//     const csrfToken = getCSRFToken();
+//     console.log('csrfToken', csrfToken);
+//     if (!csrfToken) {
+//         console.error('CSRF token is missing. Cannot make requests.');
+//         return;
+//     }
+//     fetch(endpoint, {
+//         method,
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRF-Token': csrfToken,
+//         },
+//     })
+//         .then((response) => response.json())
+//         .then((data) => console.log(data))
+//         .catch((error) => console.error(error));
+// }
 
 // ---- event listeners -----
 // drag and drop
 // dropButton.addEventListener('click', input.click.bind(input), false);
 // when browse
-loginFormButton.addEventListener('click', () => {
-    sendRequest('/login', 'POST')
-        .then((response) => {
-            console.log('Login successful:', response);
-        })
-        .catch((error) => {
-            console.error('Login failed:', error);
-        });
-})
-logoutFormButton.addEventListener('click', () => {
-    sendRequest('/logout', 'POST')
-        .then((response) => {
-            console.log('Logout successful:', response);
-        })
-        .catch((error) => {
-            console.error('Logout failed:', error);
-        });
-})
+// loginFormButton.addEventListener('click', () => {
+//     sendRequest('/login', 'POST')
+//         .then((response) => {
+//             console.log('Login successful:', response);
+//         })
+//         .catch((error) => {
+//             console.error('Login failed:', error);
+//         });
+// })
+// logoutFormButton.addEventListener('click', () => {
+//     sendRequest('/logout', 'POST')
+//         .then((response) => {
+//             console.log('Logout successful:', response);
+//         })
+//         .catch((error) => {
+//             console.error('Logout failed:', error);
+//         });
+// })
 
 // sendRequest('/protected', 'GET').then((response) => {
 //     console.log('Use of protected route successful:', response);

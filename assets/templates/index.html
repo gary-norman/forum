@@ -37,7 +37,7 @@
         </form>
         <div class="flex-align-c">
           <form action="/logout" method="POST">
-            <input type="hidden" name="username" value="loreforum">
+<!--            <input type="hidden" name="username" value="loreforum">-->
           <button id="logout"
                   class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff"
           >
@@ -73,7 +73,7 @@
           <span class="close">&times;</span>
           <div id="form-login">
             <form action="/login" method="POST">
-              <h5 class="form-title">enter your details to sign in to codex</h5>
+              <h5 id="login-title" class="form-title">enter your details to sign in to codex</h5>
               <div style="position: relative">
                 <input
                   type="text"
@@ -81,6 +81,7 @@
                   id="login_username"
                   name="username"
                   placeholder="username/email"
+                  required
                 />
                 <label for="login_username" class="user-label">username</label>
               </div>
@@ -91,6 +92,7 @@
                   id="login_password"
                   name="login_password"
                   placeholder="password"
+                  required
                 />
                 <label for="login_password" class="user-label">password</label>
               </div>
@@ -367,7 +369,9 @@
               </div>
               <div class="sidebar-option settings">Settings</div>
               <!-- TODO make this the logout button -->
-              <div id="logout-" class="sidebar-option logout">Log Out</div>
+              <form action="/logout" method="POST">
+                <div id="logout-" class="sidebar-option logout">Log Out</div>
+              </form>
             </div>
             <hr class="solid" />
             <div class="sidebar-block sidebar-channels">

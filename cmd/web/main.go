@@ -22,8 +22,7 @@ func main() {
 
 	db, err := sql.Open("sqlite3", "./forum_database.db")
 	if err != nil {
-		fmt.Printf(ErrorMsgs.Open, "./forum_database.db", "sql.Open")
-		log.Fatal(err)
+		log.Fatal(ErrorMsgs.Open, "./forum_database.db", "sql.Open", err)
 	}
 
 	app := app{

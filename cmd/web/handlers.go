@@ -94,7 +94,7 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 
 	fprintln, err := fmt.Fprintln(w, "Registration successful")
 	if err != nil {
-		log.Print(ErrorMsgs.Register, err)
+		log.Printf(ErrorMsgs.Register, err)
 		return
 	}
 	log.Println(fprintln)
@@ -102,12 +102,15 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 
 func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	ErrorMsgs := models.CreateErrorMessages()
+	Colors := models.CreateColors()
 	login := r.FormValue("username")
+	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n----------------------------------------------\n"+
+		Colors.Reset, login)
 	password := r.FormValue("login_password")
 	var user *models.User
-	user, err := app.users.GetUserFromLogin(login)
-	if err != nil {
-		log.Printf("GetUserFromLogin for %v failed with error: %v", login, err)
+	user, getUserErr := app.users.GetUserFromLogin(login, "login")
+	if getUserErr != nil {
+		log.Printf(ErrorMsgs.NotFound, "either", login, "login > GetUserFromLogin", getUserErr)
 	}
 	//Notify := models.Notify{
 	//	BadPass:      "The passwords do not match.",
@@ -122,30 +125,48 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "incorrect password", http.StatusUnauthorized)
 		return
 	}
-	fmt.Printf("Passwords for %v match\n", user.Username)
+	fmt.Printf(Colors.Green+"Passwords for %v match\n"+Colors.Reset, user.Username)
 
 	// Set Session Token and CSRF Token cookies
-	app.cookies.CreateCookies(w, user)
-	http.Redirect(w, r, "/", http.StatusFound)
-
-	fprintln, err := fmt.Fprintln(w, "Logged in successfully!")
-	if err != nil {
-		log.Print(ErrorMsgs.Login, err)
+	createCookiErr := app.cookies.CreateCookies(w, user)
+	if createCookiErr != nil {
+		log.Printf(ErrorMsgs.Cookies, "create", createCookiErr)
+		http.Error(w, "Failed to create cookies", http.StatusInternalServerError)
 		return
 	}
-	log.Println(fprintln)
+	// wait for cookies to be set
+
+	log.Printf(Colors.Green+"Login Successful! Welcome, %v!\n"+Colors.Reset, user.Username)
+
+	//fprintln, err := fmt.Fprintf(w, "Welcome, %v!", user.Username)
+	//if err != nil {
+	//	log.Print(ErrorMsgs.Login, err)
+	//	return
+	//}
+	//log.Println(fprintln)
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	ErrorMsgs := models.CreateErrorMessages()
-	login := r.FormValue("username")
-	var user *models.User
-	user, err := app.users.GetUserFromLogin(login)
-	if err != nil {
-		log.Printf("GetUserFromLogin for %v failed with error: %v", login, err)
+	Colors := models.CreateColors()
+	// Retrieve the cookie
+	cookie, cookiErr := r.Cookie("username")
+	if cookiErr != nil {
+		http.Error(w, "User not logged in", http.StatusUnauthorized)
+		return
 	}
-	if err = app.isAuthenticated(r); err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+	username := cookie.Value
+
+	fmt.Printf(Colors.Orange+"Attempting logout for "+Colors.White+"%v\n----------------------------------------------\n"+
+		Colors.Reset, username)
+	var user *models.User
+	user, getUserErr := app.users.GetUserByUsername(username, "logout")
+	if getUserErr != nil {
+		log.Printf("GetUserByUsername for %v failed with error: %v", username, getUserErr)
+	}
+	if authErr := app.isAuthenticated(r, username); authErr != nil {
+		http.Error(w, authErr.Error(), http.StatusUnauthorized)
 		return
 	}
 
@@ -163,9 +184,9 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	//	HttpOnly: false,
 	//})
 	// Delete tokens from the database
-	err = app.cookies.DeleteCookies(user)
-	if err != nil {
-		log.Printf(ErrorMsgs.Cookies, err)
+	delCookiErr := app.cookies.DeleteCookies(user)
+	if delCookiErr != nil {
+		log.Printf(ErrorMsgs.Cookies, "delete", delCookiErr)
 	}
 
 	fprintln, err := fmt.Fprintln(w, "Logged out successfully!")
@@ -179,15 +200,15 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 	ErrorMsgs := models.CreateErrorMessages()
 	login := r.FormValue("username")
 	var user *models.User
-	user, err := app.users.GetUserFromLogin(login)
-	if err != nil {
-		log.Printf("protected route for %v failed with error: %v", login, err)
+	user, getUserErr := app.users.GetUserFromLogin(login, "protected")
+	if getUserErr != nil {
+		log.Printf("protected route for %v failed with error: %v", login, getUserErr)
 	}
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	if err = app.isAuthenticated(r); err != nil {
+	if authErr := app.isAuthenticated(r, user.Username); authErr != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
@@ -197,10 +218,6 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(fprintf)
-}
-func (app *app) loginAndProtected(w http.ResponseWriter, r *http.Request) {
-	app.login(w, r)
-	app.protected(w, r)
 }
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {

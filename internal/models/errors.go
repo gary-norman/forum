@@ -9,6 +9,7 @@ type Errors struct {
 	Execute   string
 	Login     string
 	NoRows    string
+	NotFound  string
 	Open      string
 	Parse     string
 	Post      string
@@ -20,25 +21,56 @@ type Errors struct {
 	Write     string
 }
 
+type Colors struct {
+	Reset  string
+	Red    string
+	Green  string
+	Yellow string
+	Orange string
+	Blue   string
+	Purple string
+	Cyan   string
+	Grey   string
+	White  string
+}
+
+func CreateColors() *Colors {
+	colors := &Colors{
+		Reset:  "\033[0m",
+		Red:    "\033[31m",
+		Green:  "\033[32m",
+		Yellow: "\033[33m",
+		Orange: "\033[38;5;208m",
+		Blue:   "\033[34m",
+		Purple: "\033[35m",
+		Cyan:   "\033[36m",
+		Grey:   "\033[37m",
+		White:  "\033[97m",
+	}
+	return colors
+}
+
 func CreateErrorMessages() *Errors {
+	Colors := CreateColors()
 	errors := &Errors{
-		Close:     "Unable to close %v called by %v\n",
-		ConnConn:  "Unable to connect to %v called by %v\n",
-		ConnClose: "Unable to close connection to %v called by %v\n",
-		ConnInit:  "Unable to initialise connection %v called by %v\n",
-		Cookies:   "Unable to set cookies with error: %v\n",
-		Execute:   "Unable to execute template with error: %v\n",
-		Login:     "Unable to login with error: %v\n",
-		NoRows:    "No rows returned for %v called by %v\n",
-		Open:      "Unable to open %v called by %v\n",
-		Parse:     "Unable to parse %v called by %v with error: %v\n",
-		Post:      "Unable to post with error: %v\n",
-		Protected: "CSRF validation failed for user %v with error: %v\n",
-		Query:     "Unable to query %v with error: %v\n",
-		Read:      "Unable to read %v called by %v\n",
-		Register:  "Unable to register with error: %v\n",
-		UserModel: "Usermodel or DB called in %v for %v is nil\n",
-		Write:     "Unable to write to %v called by %v\n",
+		Close:     Colors.Blue + "Unable to close " + Colors.White + "%v" + Colors.Blue + "called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		ConnConn:  Colors.Blue + "Unable to connect to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
+		ConnClose: Colors.Blue + "Unable to close connection to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
+		ConnInit:  Colors.Blue + "Unable to initialise connection " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
+		Cookies:   Colors.Blue + "Unable to " + Colors.White + "%v cookies with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Execute:   Colors.Blue + "Unable to execute template with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Login:     Colors.Blue + "Unable to login " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		NoRows:    Colors.Blue + "No rows returned for " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
+		NotFound:  Colors.Blue + "Unable to find %v: " + Colors.White + "%v " + Colors.Blue + "called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Open:      Colors.Blue + "Unable to open " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error " + Colors.Red + "%v\n" + Colors.Reset,
+		Parse:     Colors.Blue + "Unable to parse " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Post:      Colors.Blue + "Unable to post with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Protected: Colors.Blue + "CSRF validation failed for user " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Query:     Colors.Blue + "Unable to query " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Read:      Colors.Blue + "Unable to read " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Register:  Colors.Blue + "Unable to register with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		UserModel: Colors.Blue + "Usermodel or DB called in " + Colors.White + "%v" + Colors.Blue + " for " + Colors.White + "%v" + Colors.Blue + " is nil\n" + Colors.Reset,
+		Write:     Colors.Blue + "Unable to write to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
 	}
 	return errors
 }

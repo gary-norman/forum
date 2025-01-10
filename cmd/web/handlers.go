@@ -63,15 +63,10 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "an account is already registered to that email address", er)
 		return
 	}
-	userExists, existsErr := app.users.QueryUserNameExists(username)
+	userExists, _ := app.users.QueryUserNameExists(username)
 	if userExists == true {
 		er := http.StatusConflict
 		http.Error(w, "an account is already registered to that username", er)
-		return
-	}
-	if existsErr != nil {
-		log.Printf(ErrorMsgs.Register, existsErr)
-		http.Error(w, fmt.Sprintf(ErrorMsgs.Register, existsErr), 500)
 		return
 	}
 	hashedPassword, _ := models.HashPassword(password)
@@ -94,7 +89,7 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 
 	fprintln, err := fmt.Fprintln(w, "Registration successful")
 	if err != nil {
-		log.Printf(ErrorMsgs.Register, err)
+		log.Printf(ErrorMsgs.Printf, err)
 		return
 	}
 	log.Println(fprintln)
@@ -291,6 +286,12 @@ func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
 
 func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	ErrorMsgs := models.CreateErrorMessages()
+	user, getUserErr := app.GetLoggedInUser(r)
+	if getUserErr != nil {
+		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, err.Error(), 400)
@@ -308,13 +309,13 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get the 'author' value as a string
-	authorStr := r.PostForm.Get("author")
-	// Convert the string to an integer
-	author, err := strconv.Atoi(authorStr)
-	if err != nil {
-		http.Error(w, "You must be logged in to do that.", http.StatusBadRequest)
-		return
-	}
+	//authorStr := r.PostForm.Get("author")
+	//// Convert the string to an integer
+	//author, err := strconv.Atoi(authorStr)
+	//if err != nil {
+	//	http.Error(w, "You must be logged in to do that.", http.StatusBadRequest)
+	//	return
+	//}
 
 	type FormData struct {
 		commentable bool
@@ -335,10 +336,12 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	err = app.posts.Insert(
 		r.PostForm.Get("title"),
 		r.PostForm.Get("content"),
-		formData.images,
+		images,
+		user.Username,
 		channel,
-		author,
+		user.ID,
 		formData.commentable,
+		false,
 	)
 
 	if err != nil {

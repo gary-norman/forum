@@ -54,7 +54,7 @@ func (app *app) GetLoggedInUser(r *http.Request) (*models.User, error) {
 	// Get the username from the request cookie
 	username, err := r.Cookie("username")
 	if err != nil {
-		return nil, errors.New("no username")
+		return nil, errors.New("user is not logged in")
 	}
 	user, getUserErr := app.users.GetUserByUsername(username.Value, "GetLoggedInUser")
 	if getUserErr != nil {

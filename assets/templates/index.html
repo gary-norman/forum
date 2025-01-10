@@ -277,17 +277,17 @@
       </div>
       <div popover id="form-post">
         <form class="wrapper-form" action="/posts/create" method="POST">
-          <label class="hide-feed" for="author">User:</label>
+<!--          <label class="hide-feed" for="author">User:</label>-->
           <!--                INFO this will not be in the final form as it will be determined by the logged in user -->
           <!-- FIXME the input labels need to follow the model of the login form -->
-          <select id="author" name="author" style="justify-self: center">
-            <option selected disabled hidden>Select a user</option>
-            <option value="1001">Lore</option>
-            <option value="1002">Kamil</option>
-            <option value="1003">Munky</option>
-            <option value="1004">Bob</option>
-            <option value="1005">Shazam!</option>
-          </select>
+<!--          <select id="author" name="author" style="justify-self: center">-->
+<!--            <option selected disabled hidden>Select a user</option>-->
+<!--            <option value="1001">Lore</option>-->
+<!--            <option value="1002">Kamil</option>-->
+<!--            <option value="1003">Munky</option>-->
+<!--            <option value="1004">Bob</option>-->
+<!--            <option value="1005">Shazam!</option>-->
+<!--          </select>-->
           <label for="channel">channel</label>
           <input type="text" list="channels" id="channel" name="channel" />
           <datalist id="channels">
@@ -530,7 +530,7 @@
                   <div class="post-info-container">
                     <span class="card-profile-pic"></span>
                     <div>
-                      <small class="small-bold">{{.AuthorID}}</small>
+                      <small class="small-bold">{{.Author}}</small>
                       <div>
                         <small>{{.ChannelID}}</small>
                         <small>-</small>
@@ -691,7 +691,7 @@
                         <div class="post-info-container">
                           <span class="card-profile-pic"></span>
                           <div>
-                            <small class="small-bold">{{.AuthorID}}</small>
+                            <small class="small-bold">{{.Author}}</small>
                             <div>
                               <small>{{.ChannelID}}</small>
                               <small>-</small>
@@ -756,7 +756,7 @@
                         <div class="post-info-container">
                           <span class="card-profile-pic"></span>
                           <div>
-                            <small class="small-bold">{{.AuthorID}}</small>
+                            <small class="small-bold">{{.Author}}</small>
                             <div>
                               <small>{{.ChannelID}}</small>
                               <small>-</small>

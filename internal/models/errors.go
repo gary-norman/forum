@@ -13,6 +13,7 @@ type Errors struct {
 	Open      string
 	Parse     string
 	Post      string
+	Printf    string
 	Protected string
 	Query     string
 	Read      string
@@ -65,6 +66,7 @@ func CreateErrorMessages() *Errors {
 		Open:      Colors.Blue + "Unable to open " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error " + Colors.Red + "%v\n" + Colors.Reset,
 		Parse:     Colors.Blue + "Unable to parse " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Post:      Colors.Blue + "Unable to post with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Printf:    Colors.Blue + "Unable to print with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Protected: Colors.Blue + "CSRF validation failed for user " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Query:     Colors.Blue + "Unable to query " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Read:      Colors.Blue + "Unable to read " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,

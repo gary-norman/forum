@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type User struct {
 	ID       int    `json:"id"`
@@ -79,6 +81,7 @@ type Post struct {
 	Created     time.Time `json:"created"`
 	TimeSince   string    `json:"time_since"`
 	Commentable bool      `json:"commentable"`
+	Author      string    `json:"author"`
 	AuthorID    int       `json:"author_id"`
 	ChannelID   int       `json:"channel_id"`
 	IsFlagged   bool      `json:"is_flagged,omitempty"`

@@ -99,8 +99,8 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	ErrorMsgs := models.CreateErrorMessages()
 	Colors := models.CreateColors()
 	login := r.FormValue("username")
-	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n----------------------------------------------\n"+
-		Colors.Reset, login)
+	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n"+Colors.Reset, login)
+	fmt.Printf(ErrorMsgs.Divider)
 	password := r.FormValue("login_password")
 	var user *models.User
 	user, getUserErr := app.users.GetUserFromLogin(login, "login")
@@ -152,9 +152,8 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	username := cookie.Value
-
-	fmt.Printf(Colors.Orange+"Attempting logout for "+Colors.White+"%v\n----------------------------------------------\n"+
-		Colors.Reset, username)
+	fmt.Printf(Colors.Orange+"Attempting logout for "+Colors.White+"%v\n"+Colors.Reset, username)
+	fmt.Printf(ErrorMsgs.Divider)
 	var user *models.User
 	user, getUserErr := app.users.GetUserByUsername(username, "logout")
 	if getUserErr != nil {
@@ -164,26 +163,11 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, authErr.Error(), http.StatusUnauthorized)
 		return
 	}
-
-	//// Delete Session Token and CSRF Token cookies
-	//http.SetCookie(w, &http.Cookie{
-	//	Name:     "session_token",
-	//	Value:    "",
-	//	Expires:  time.Unix(0, 0),
-	//	HttpOnly: true,
-	//})
-	//http.SetCookie(w, &http.Cookie{
-	//	Name:     "csrf_token",
-	//	Value:    "",
-	//	Expires:  time.Unix(0, 0),
-	//	HttpOnly: false,
-	//})
-	// Delete tokens from the database
+	// Delete the Session Token and CSRF Token cookies
 	delCookiErr := app.cookies.DeleteCookies(user)
 	if delCookiErr != nil {
 		log.Printf(ErrorMsgs.Cookies, "delete", delCookiErr)
 	}
-
 	fprintln, err := fmt.Fprintln(w, "Logged out successfully!")
 	if err != nil {
 		return

@@ -144,10 +144,10 @@ function confirmPass() {
 // retrieve the csrf_token cookie and explicitly set the X-CSRF-Token header in requests
 function getCSRFToken() {
 
-    return document.cookie
+    const match = document.cookie
     .split('; ')
     .find((row) => row.startsWith('csrf_token'))
-    ?.split('=')[1];
+    return match ? match.substring('csrf_token='.length) : null;
 }
 
 loginFormButton.addEventListener('submit', function (event) {
@@ -169,7 +169,7 @@ loginFormButton.addEventListener('submit', function (event) {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.json(); // Or response.text() if the response isn't JSON
+            return response.text(); // Or response.text() if the response isn't JSON
         })
         .then(data => {
             console.log('Success:', data);
@@ -179,7 +179,7 @@ loginFormButton.addEventListener('submit', function (event) {
         });
 });
 
-logoutFormButton.addEventListener('submit', function (event) {
+logoutFormButton.addEventListener('click', function (event) {
     event.preventDefault();
 
     const csrfToken = getCSRFToken();
@@ -188,14 +188,17 @@ logoutFormButton.addEventListener('submit', function (event) {
     fetch('/logout', {
         method: 'POST',
         headers: {
+            'Content-Type': 'application/json',
+            'TEST': 'TEST',
             'x-csrf-token': csrfToken
-        }
+        },
+        body: JSON.stringify({})
     })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.json(); // or response.text()
+            return response.text(); // or response.text()
         })
         .then(data => {
             console.log('Success:', data);

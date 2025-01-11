@@ -17,7 +17,6 @@ func (m *ReactionModel) Insert(liked, disliked bool, authorID, channelID, reacte
 }
 
 func (m *ReactionModel) All() ([]models.Reaction, error) {
-	ErrorMsgs := models.CreateErrorMessages()
 	stmt := "SELECT ID, Liked, Disliked, AuthorID, ChannelID, Created, Reacted_postID, Reacted_commentID FROM Reactions ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -26,7 +25,7 @@ func (m *ReactionModel) All() ([]models.Reaction, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs.Close, "rows", "All")
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
 

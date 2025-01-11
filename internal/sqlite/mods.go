@@ -17,7 +17,6 @@ func (m *ModModel) Insert(userID, channelID int) error {
 }
 
 func (m *ModModel) All() ([]models.Mod, error) {
-	ErrorMsgs := models.CreateErrorMessages()
 	stmt := "SELECT ID, UserID, ChannelID FROM Mods ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -26,7 +25,7 @@ func (m *ModModel) All() ([]models.Mod, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs.Close, "rows", "All")
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
 

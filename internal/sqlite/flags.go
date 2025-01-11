@@ -17,7 +17,6 @@ func (m *FlagModel) Insert(flagType, content string, approved bool, authorID, ch
 }
 
 func (m *FlagModel) All() ([]models.Flag, error) {
-	ErrorMsgs := models.CreateErrorMessages()
 	stmt := "SELECT ID, Flag_type, Content, Created, Approved, AuthorID, ChannelID, Flagged_userID, Flagged_postID, Flagged_commentID FROM Flags ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -26,7 +25,7 @@ func (m *FlagModel) All() ([]models.Flag, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs.Close, "rows", "All")
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
 

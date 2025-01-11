@@ -39,7 +39,6 @@ func isValidPassword(password string) bool {
 }
 
 func (app *app) register(w http.ResponseWriter, r *http.Request) {
-	ErrorMsgs := models.CreateErrorMessages()
 	username := r.FormValue("register_user")
 	email := r.FormValue("register_email")
 	validEmail, _ := regexp.MatchString(`[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$`, email)
@@ -81,31 +80,30 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		"")
 
 	if insertErr != nil {
-		log.Printf(ErrorMsgs.Register, insertErr)
-		http.Error(w, fmt.Sprintf(ErrorMsgs.Register, insertErr), 500)
+		log.Printf(ErrorMsgs().Register, insertErr)
+		http.Error(w, fmt.Sprintf(ErrorMsgs().Register, insertErr), 500)
 		return
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
 
 	fprintln, err := fmt.Fprintln(w, "Registration successful")
 	if err != nil {
-		log.Printf(ErrorMsgs.Printf, err)
+		log.Printf(ErrorMsgs().Printf, err)
 		return
 	}
 	log.Println(fprintln)
 }
 
 func (app *app) login(w http.ResponseWriter, r *http.Request) {
-	ErrorMsgs := models.CreateErrorMessages()
 	Colors := models.CreateColors()
 	login := r.FormValue("username")
 	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n"+Colors.Reset, login)
-	fmt.Printf(ErrorMsgs.Divider)
+	fmt.Printf(ErrorMsgs().Divider)
 	password := r.FormValue("login_password")
 	var user *models.User
 	user, getUserErr := app.users.GetUserFromLogin(login, "login")
 	if getUserErr != nil {
-		log.Printf(ErrorMsgs.NotFound, "either", login, "login > GetUserFromLogin", getUserErr)
+		log.Printf(ErrorMsgs().NotFound, "either", login, "login > GetUserFromLogin", getUserErr)
 	}
 	//Notify := models.Notify{
 	//	BadPass:      "The passwords do not match.",
@@ -125,7 +123,7 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	// Set Session Token and CSRF Token cookies
 	createCookiErr := app.cookies.CreateCookies(w, user)
 	if createCookiErr != nil {
-		log.Printf(ErrorMsgs.Cookies, "create", createCookiErr)
+		log.Printf(ErrorMsgs().Cookies, "create", createCookiErr)
 		http.Error(w, "Failed to create cookies", http.StatusInternalServerError)
 		return
 	}
@@ -143,7 +141,6 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) logout(w http.ResponseWriter, r *http.Request) {
-	ErrorMsgs := models.CreateErrorMessages()
 	Colors := models.CreateColors()
 	// Retrieve the cookie
 	cookie, cookiErr := r.Cookie("username")
@@ -153,7 +150,7 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	}
 	username := cookie.Value
 	fmt.Printf(Colors.Orange+"Attempting logout for "+Colors.White+"%v\n"+Colors.Reset, username)
-	fmt.Printf(ErrorMsgs.Divider)
+	fmt.Printf(ErrorMsgs().Divider)
 	var user *models.User
 	user, getUserErr := app.users.GetUserByUsername(username, "logout")
 	if getUserErr != nil {
@@ -166,7 +163,7 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	// Delete the Session Token and CSRF Token cookies
 	delCookiErr := app.cookies.DeleteCookies(user)
 	if delCookiErr != nil {
-		log.Printf(ErrorMsgs.Cookies, "delete", delCookiErr)
+		log.Printf(ErrorMsgs().Cookies, "delete", delCookiErr)
 	}
 	fprintln, err := fmt.Fprintln(w, "Logged out successfully!")
 	if err != nil {
@@ -176,7 +173,6 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) protected(w http.ResponseWriter, r *http.Request) {
-	ErrorMsgs := models.CreateErrorMessages()
 	login := r.FormValue("username")
 	var user *models.User
 	user, getUserErr := app.users.GetUserFromLogin(login, "protected")
@@ -193,14 +189,13 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 	}
 	fprintf, err := fmt.Fprintf(w, "CSRF Valildation successful! Welcome, %s", user.Username)
 	if err != nil {
-		log.Print(ErrorMsgs.Protected, user.Username, err)
+		log.Print(ErrorMsgs().Protected, user.Username, err)
 		return
 	}
 	log.Println(fprintf)
 }
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
-	ErrorMsgs := models.CreateErrorMessages()
 	posts, err := app.posts.All()
 	if err != nil {
 		http.Error(w, err.Error(), 500)
@@ -241,35 +236,33 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("./assets/templates/index.html")
 	if err != nil {
 		http.Error(w, err.Error(), 500)
-		log.Printf(ErrorMsgs.Parse, "./assets/templates/index.html", "getHome", err)
+		log.Printf(ErrorMsgs().Parse, "./assets/templates/index.html", "getHome", err)
 		return
 	}
 
 	err = t.Execute(w, templateData)
 	if err != nil {
-		log.Print(ErrorMsgs.Execute, err)
+		log.Print(ErrorMsgs().Execute, err)
 		return
 	}
 }
 
 func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
-	ErrorMsgs := models.CreateErrorMessages()
 	t, err := template.ParseFiles("./assets/templates/posts.create.html")
 	if err != nil {
 		http.Error(w, err.Error(), 500)
-		log.Printf(ErrorMsgs.Parse, "./assets/templates/posts.create.html", "createPost", err)
+		log.Printf(ErrorMsgs().Parse, "./assets/templates/posts.create.html", "createPost", err)
 		return
 	}
 
 	err = t.Execute(w, nil)
 	if err != nil {
-		log.Printf(ErrorMsgs.Execute, err)
+		log.Printf(ErrorMsgs().Execute, err)
 		return
 	}
 }
 
 func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
-	ErrorMsgs := models.CreateErrorMessages()
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
 		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
@@ -279,7 +272,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, err.Error(), 400)
-		log.Printf(ErrorMsgs.Parse, "storePost", err)
+		log.Printf(ErrorMsgs().Parse, "storePost", err)
 		return
 	}
 
@@ -329,7 +322,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err != nil {
-		log.Printf(ErrorMsgs.Post, err)
+		log.Printf(ErrorMsgs().Post, err)
 		http.Error(w, err.Error(), 500)
 		return
 	}

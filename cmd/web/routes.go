@@ -17,23 +17,11 @@ func (app *app) routes() http.Handler {
 	fontServer := http.FileServer(http.Dir("./assets/fonts"))
 	mux.Handle("/assets/fonts/", http.StripPrefix("/assets/fonts", fontServer))
 	mux.HandleFunc("/", app.getHome)
-	// TODO Try to get the new routing methods to work
 	mux.HandleFunc("GET /posts/create", app.createPost)
 	mux.HandleFunc("POST /posts/create", app.storePost)
 	mux.HandleFunc("/posts.create", func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	})
-	// Use a single route for /posts/create and distinguish based on HTTP method
-	//mux.HandleFunc("/posts/create", func(w http.ResponseWriter, r *http.Request) {
-	//	switch r.Method {
-	//	case http.MethodGet:
-	//		app.createPost(w, r) // Handle GET requests
-	//	case http.MethodPost:
-	//		app.storePost(w, r) // Handle POST requests
-	//	default:
-	//		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-	//	}
-	//})
 	mux.HandleFunc("/register", app.register)
 	mux.HandleFunc("/login", app.login)
 	mux.HandleFunc("/logout", app.logout)

@@ -17,7 +17,6 @@ func (m *LoyaltyModel) Insert(follower, folowee int) error {
 }
 
 func (m *LoyaltyModel) All() ([]models.Loyalty, error) {
-	ErrorMsgs := models.CreateErrorMessages()
 	stmt := "SELECT ID, Follower, Followee FROM Loyalty ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -26,7 +25,7 @@ func (m *LoyaltyModel) All() ([]models.Loyalty, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs.Close, "rows", "All")
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
 

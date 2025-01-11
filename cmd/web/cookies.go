@@ -15,7 +15,6 @@ type CookieModel struct {
 }
 
 func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) error {
-	ErrorMsgs := models.CreateErrorMessages()
 	sessionToken := models.GenerateToken(32)
 	csrfToken := models.GenerateToken(32)
 	expires := time.Now().Add(time.Hour * 24)
@@ -42,15 +41,14 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 	// Store tokens in the database
 	err := m.UpdateCookies(user, sessionToken, csrfToken)
 	if err != nil {
-		log.Printf(ErrorMsgs.Cookies, "update", err)
+		log.Printf(ErrorMsgs().
+			Cookies, "update", err)
 		return err
 	}
 	return nil
 }
 
 func (app *app) GetLoggedInUser(r *http.Request) (*models.User, error) {
-	ErrorMsgs := models.CreateErrorMessages()
-
 	// Get the username from the request cookie
 	username, err := r.Cookie("username")
 	if err != nil {
@@ -58,19 +56,20 @@ func (app *app) GetLoggedInUser(r *http.Request) (*models.User, error) {
 	}
 	user, getUserErr := app.users.GetUserByUsername(username.Value, "GetLoggedInUser")
 	if getUserErr != nil {
-		log.Printf(ErrorMsgs.NotFound, "user", username.Value, "GetLoggedInUser", getUserErr)
+		log.Printf(ErrorMsgs().
+			NotFound, "user", username.Value, "GetLoggedInUser", getUserErr)
 	}
 	return user, nil
 }
 
 func (m *CookieModel) QueryCookies(r *http.Request, user *models.User) {
-	ErrorMsgs := models.CreateErrorMessages()
 	Colors := models.CreateColors()
 
 	// Get the Session Token from the request cookie
 	st, err := r.Cookie("session_token")
 	if err != nil {
-		log.Printf(ErrorMsgs.Cookies, "query", err)
+		log.Printf(ErrorMsgs().
+			Cookies, "query", err)
 	}
 	csrf, _ := r.Cookie("csrf_token")
 
@@ -84,6 +83,12 @@ func (m *CookieModel) QueryCookies(r *http.Request, user *models.User) {
 	if csrf.Value == csrfToken && csrfToken == user.CSRFToken {
 		csrfColor = Colors.Green
 	}
+	log.Printf(ErrorMsgs().KeyValuePair, "Cookie SessionToken", st.Value)
+	log.Printf(ErrorMsgs().KeyValuePair, "User SessionToken", user.SessionToken)
+	fmt.Printf(ErrorMsgs().Divider)
+	log.Printf(ErrorMsgs().KeyValuePair, "Cookie csrfToken", csrf.Value)
+	log.Printf(ErrorMsgs().KeyValuePair, "Header csrfToken", csrfToken)
+	log.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)
 	log.Printf(
 		Colors.Blue+"\ncookie SessionToken:\t"+Colors.White+"%v\n"+Colors.Blue+"user SessionToken:\t"+Colors.White+"%v\n"+Colors.Blue+"match:\t"+stColor+"%v\n"+Colors.Reset+
 			Colors.Yellow+"---------------------------------------------------\n"+Colors.Reset+
@@ -94,10 +99,9 @@ func (m *CookieModel) QueryCookies(r *http.Request, user *models.User) {
 }
 
 func (m *CookieModel) UpdateCookies(user *models.User, sessionToken, csrfToken string) error {
-	ErrorMsgs := models.CreateErrorMessages()
 	Colors := models.CreateColors()
 	if m == nil || m.DB == nil {
-		fmt.Printf(ErrorMsgs.UserModel, "UpdateCookies", user.Username)
+		fmt.Printf(ErrorMsgs().UserModel, "UpdateCookies", user.Username)
 		return errors.New("UserModel or DB is nil")
 	}
 	var stmt string

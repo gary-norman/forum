@@ -17,7 +17,6 @@ func (m *PostModel) Insert(title, content, images, author string, channel, autho
 }
 
 func (m *PostModel) All() ([]models.Post, error) {
-	ErrorMsgs := models.CreateErrorMessages()
 	stmt := "SELECT ID, Title, Content, Images, Created, Author, Commentable, AuthorID, ChannelID, Is_flagged FROM Posts ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -26,7 +25,7 @@ func (m *PostModel) All() ([]models.Post, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs.Close, "rows", "All")
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
 

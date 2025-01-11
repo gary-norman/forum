@@ -17,12 +17,15 @@ type app struct {
 	cookies *CookieModel
 }
 
+func ErrorMsgs() *models.Errors {
+	return models.CreateErrorMessages()
+}
+
 func main() {
-	ErrorMsgs := models.CreateErrorMessages()
 
 	db, err := sql.Open("sqlite3", "./forum_database.db")
 	if err != nil {
-		log.Fatal(ErrorMsgs.Open, "./forum_database.db", "sql.Open", err)
+		log.Fatal(ErrorMsgs().Open, "./forum_database.db", "sql.Open", err)
 	}
 
 	app := app{
@@ -44,7 +47,7 @@ func main() {
 
 	err = srv.ListenAndServe()
 	if err != nil {
-		fmt.Printf(ErrorMsgs.ConnInit, srv.Addr, "srv.ListenAndServe")
+		fmt.Printf(ErrorMsgs().ConnInit, srv.Addr, "srv.ListenAndServe")
 		return
 	}
 	log.Printf("Listening on %v", srv.Addr)

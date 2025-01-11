@@ -17,7 +17,6 @@ func (m *CommentModel) Insert(content string, channel, author, commentedPostID, 
 }
 
 func (m *CommentModel) All() ([]models.Comment, error) {
-	ErrorMsgs := models.CreateErrorMessages()
 	stmt := "SELECT ID, Content, Created, ChannelID, AuthorID, Commented_postID, Commented_commentID, Is_reply, Is_flagged FROM Comments ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -26,7 +25,7 @@ func (m *CommentModel) All() ([]models.Comment, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs.Close, "rows", "All")
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
 

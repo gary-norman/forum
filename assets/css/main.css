@@ -184,6 +184,11 @@ a:active {
   cursor: pointer;
   /*color: inherit;*/
 }
+/* ---- one-line elements ---- */
+.invisible {
+  visibility: hidden;
+  height: 0;
+}
 /* ---- containers ---- */
 .header {
   display: flex;
@@ -579,7 +584,7 @@ input[type="text"],
 input[type="password"],
 input[type="email"] {
   position: relative;
-  margin: 0.8rem;
+  /* margin: 0.8rem; */
   border: 1px solid var(--color-bg-4);
   font-size: 1.6rem;
   border-radius: 0.8rem;
@@ -592,18 +597,18 @@ input[type="email"] {
 
   &:focus-visible {
     outline: none;
-    border: 1px solid var(--color-hl-pink);
+  border: 1px solid var(--color-hl-pink);
   }
   &:focus-visible::placeholder {
     color: transparent;
   }
   &:focus-visible ~ label {
     position: absolute;
-    /*background: var(--color-hl-pink);*/
-    /*left: 1rem;*/
-    /*font-size: 1rem;*/
-    /*top: 0;*/
-    animation: form-label 300ms ease-in-out forwards;
+  /*background: var(--color-hl-pink);*/
+  /*left: 1rem;*/
+  /*font-size: 1rem;*/
+  /*top: 0;*/
+  animation: form-label 300ms ease-in-out forwards;
   }
   &:not(:focus-visible) ~ label {
     animation: form-label-back 300ms ease-in-out forwards;
@@ -615,6 +620,7 @@ input[type="email"] {
   /*  color: var(--color-bg-1);*/
   /*  height: 1rem;*/
   /*  width: fit-content;*/
+  
   /*}*/
 }
 @keyframes form-label {
@@ -656,14 +662,25 @@ input[type="email"] {
   }
 }
 /* --- login and registration from styling --- */
+.input-wrapper {
+  position: relative
+}
+#form-login {
+  & input {
+    margin: 0.8rem 0;
+  }
+}
 #form-register {
   /*textarea {*/
   /*  min-width: 100%;*/
   /*}*/
+  & input {
+      margin: 0.8rem 0 0 0;
+  }
   & input:user-valid,
-  & input:not(:placeholder-shown):valid,
-  & input:user-invalid,
-  & input:not(:placeholder-shown):invalid,
+  input:not(:placeholder-shown):valid,
+  input:user-invalid,
+  input:not(:placeholder-shown):invalid,
   .pass-nomatch,
   .pass-match {
     & + span,
@@ -698,8 +715,7 @@ input[type="email"] {
       transition: height var(--transition-dur-hover) ease-in-out;
     }
   }
-  & input:user-valid,
-  input:not(:placeholder-shown):valid,
+  & input:user-valid, input:not(:placeholder-shown):valid,
   .pass-match {
     color: var(--color-hl-green);
     & + span::before {
@@ -709,8 +725,7 @@ input[type="email"] {
       background: var(--color-hl-green);
     }
   }
-  & input:user-invalid,
-  input:not(:placeholder-shown):invalid,
+  & input:user-invalid, input:not(:placeholder-shown):invalid,
   .pass-nomatch {
     color: firebrick;
     & + span::before {
@@ -876,12 +891,24 @@ input[type="checkbox"]:checked {
       opacity: 0;
     }
   }
+  & select {
+    margin-inline: auto;
+    width: 90%;
+    padding: .4rem .4rem .4rem 1.2rem;
+    border: 1px solid var(--color-bg-3);
+    border-radius: var(--btn-radius);
+  }
+  & input {
+    margin: 0.8rem 0 0 0;
+    width: 100%;
+  }
   & textarea {
     overflow: visible;
-    /* margin: .4rem; */
+    margin: 0.8rem 0 0 0;
     padding: 0.4rem;
     resize: both;
     font-size: var(--font-sz-cards);
+    width: 100%;
     max-width: 100%;
   }
 }
@@ -892,7 +919,7 @@ input[type="checkbox"]:checked {
   color: var(--color-fg-2);
   padding: 1.2rem;
   gap: 1.2rem;
-  width: 100%;
+  width: 30rem;
   border: 1px solid var(--color-bg-3);
   border-radius: 1rem;
   box-shadow:
@@ -905,6 +932,28 @@ input[type="checkbox"]:checked {
   }
   /*& * {*/
   /*  margin : 0.4rem;*/
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
   /*}*/
 }

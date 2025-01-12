@@ -41,8 +41,7 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 	// Store tokens in the database
 	err := m.UpdateCookies(user, sessionToken, csrfToken)
 	if err != nil {
-		log.Printf(ErrorMsgs().
-			Cookies, "update", err)
+		log.Printf(ErrorMsgs().Cookies, "update", err)
 		return err
 	}
 	return nil
@@ -56,8 +55,7 @@ func (app *app) GetLoggedInUser(r *http.Request) (*models.User, error) {
 	}
 	user, getUserErr := app.users.GetUserByUsername(username.Value, "GetLoggedInUser")
 	if getUserErr != nil {
-		log.Printf(ErrorMsgs().
-			NotFound, "user", username.Value, "GetLoggedInUser", getUserErr)
+		log.Printf(ErrorMsgs().NotFound, "user", username.Value, "GetLoggedInUser", getUserErr)
 	}
 	return user, nil
 }
@@ -68,8 +66,7 @@ func (m *CookieModel) QueryCookies(r *http.Request, user *models.User) {
 	// Get the Session Token from the request cookie
 	st, err := r.Cookie("session_token")
 	if err != nil {
-		log.Printf(ErrorMsgs().
-			Cookies, "query", err)
+		log.Printf(ErrorMsgs().Cookies, "query", err)
 	}
 	csrf, _ := r.Cookie("csrf_token")
 
@@ -77,24 +74,23 @@ func (m *CookieModel) QueryCookies(r *http.Request, user *models.User) {
 	csrfToken := r.Header.Get("x-csrf-token")
 
 	stColor, csrfColor := Colors.Red, Colors.Red
+	stMatchString, csrfMatchString := "Failed!", "Failed!"
 	if st.Value == user.SessionToken {
 		stColor = Colors.Green
+		stMatchString = "Success!"
 	}
 	if csrf.Value == csrfToken && csrfToken == user.CSRFToken {
 		csrfColor = Colors.Green
+		csrfMatchString = "Success!"
 	}
 	log.Printf(ErrorMsgs().KeyValuePair, "Cookie SessionToken", st.Value)
 	log.Printf(ErrorMsgs().KeyValuePair, "User SessionToken", user.SessionToken)
+	log.Printf(Colors.Blue+"Session token verficiation: "+stColor+"%v\n"+Colors.Reset, stMatchString)
 	fmt.Printf(ErrorMsgs().Divider)
 	log.Printf(ErrorMsgs().KeyValuePair, "Cookie csrfToken", csrf.Value)
 	log.Printf(ErrorMsgs().KeyValuePair, "Header csrfToken", csrfToken)
 	log.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)
-	log.Printf(
-		Colors.Blue+"\ncookie SessionToken:\t"+Colors.White+"%v\n"+Colors.Blue+"user SessionToken:\t"+Colors.White+"%v\n"+Colors.Blue+"match:\t"+stColor+"%v\n"+Colors.Reset+
-			Colors.Yellow+"---------------------------------------------------\n"+Colors.Reset+
-			Colors.Blue+"cookie csrfToken:\t"+Colors.White+"%v\n"+Colors.Blue+"header csrfToken:\t"+Colors.White+"%v\n"+Colors.Blue+"user csrfToken:\t"+Colors.White+"%v\n"+Colors.Blue+"match:\t"+csrfColor+"%v\n"+Colors.Reset,
-		st.Value, user.SessionToken, st.Value == user.SessionToken,
-		csrf.Value, csrfToken, user.CSRFToken, csrf.Value == csrfToken && csrfToken == user.CSRFToken)
+	log.Printf(Colors.Blue+"CSRF token verficiation: "+csrfColor+"%v\n"+Colors.Reset, csrfMatchString)
 
 }
 

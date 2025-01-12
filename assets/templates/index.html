@@ -73,8 +73,8 @@
           <span class="close">&times;</span>
           <div id="form-login">
             <form action="/login" method="POST">
-              <h5 id="login-title" class="form-title">enter your details to sign in to codex</h5>
-              <div style="position: relative">
+              <h5 id="login-title" class="form-title">sign in to codex</h5>
+              <div class="input-wrapper">
                 <input
                   type="text"
                   class="input-3d"
@@ -85,7 +85,7 @@
                 />
                 <label for="login_username" class="user-label">username</label>
               </div>
-              <div style="position: relative">
+              <div class="input-wrapper">
                 <input
                   type="password"
                   class="input-3d"
@@ -164,7 +164,7 @@
             <form action="/register" method="POST">
               <p class="form-title">enter your details to register for codex</p>
               <!--  username  -->
-              <div style="position: relative">
+              <div class="input-wrapper">
                 <input
                   type="text"
                   id="register_user"
@@ -178,7 +178,7 @@
                 <span class="validation-tooltip"></span>
               </div>
               <!--  email  -->
-              <div style="position: relative">
+              <div class="input-wrapper">
                 <input
                   type="email"
                   id="register_email"
@@ -192,7 +192,7 @@
                 <span class="validation-tooltip"></span>
               </div>
               <!-- password  -->
-              <div style="position: relative">
+              <div class="input-wrapper">
               <input
                 type="password"
                 id="register_password"
@@ -211,7 +211,7 @@
               </ul>
               </div>
               <!--  repeat password  -->
-              <div style="position: relative">
+              <div class="input-wrapper">
               <input
                 type="password"
                 id="register_password-rpt"
@@ -277,10 +277,11 @@
       </div>
       <div popover id="form-post">
         <form class="wrapper-form" action="/posts/create" method="POST">
+          <h3 class="form-title">create a post</h3>
 <!--          <label class="hide-feed" for="author">User:</label>-->
           <!--                INFO this will not be in the final form as it will be determined by the logged in user -->
           <!-- FIXME the input labels need to follow the model of the login form -->
-          <label for="channel">channel</label>
+          <label for="channel" class="invisible">channel</label>
 <!--          <input type="text" list="channels" id="channel" name="channel" />-->
 <!--          <label for="channels">channels</label>-->
           <select id="channel" name="channel">
@@ -291,11 +292,15 @@
             <option value='{"channelName":"Golang", "channelID":"2004"}'>Golang</option>
             <option value='{"channelName":"SQLite", "channelID":"2005"}'>SQLite</option>
           </select>
-          <label for="title">title</label>
-          <input type="text" id="title" name="title" />
-          <label for="content">post</label>
+          <div class="input-wrapper">
+          <input type="text" id="title" name="title" placeholder="title" required>
+            <label for="title" class="user-label">title</label>
+          </div>
           <!-- FIXME fix resize issue -->
-          <textarea id="content" name="content"></textarea>
+          <div class="input-wrapper">
+            <textarea id="content" name="content" placeholder="post"></textarea>
+            <label for="content" class="user-label">post</label>
+          </div>
           <p>upload an image (optional)</p>
           <div id="drop_zone">
             <div id="uploadedFile"></div>

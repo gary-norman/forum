@@ -19,7 +19,9 @@
     <script src="/assets/js/main.js" defer></script>
     <title>&lt; codex &gt;</title>
   </head>
-  <body>
+      <body>
+      {{ $userBasePath := "/userdata/images/user-images/" }}
+      {{ $postBasePath := "/userdata/images/post-images/" }}
     <div class="wrapper-main">
       <header class="header">
         <div class="branding"></div>
@@ -276,7 +278,7 @@
         </div>
       </div>
       <div popover id="form-post">
-        <form class="wrapper-form" action="/posts/create" method="POST">
+        <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
           <h3 class="form-title">create a post</h3>
 <!--          <label class="hide-feed" for="author">User:</label>-->
           <!--                INFO this will not be in the final form as it will be determined by the logged in user -->
@@ -312,7 +314,7 @@
           </div>
           <div class="cont-flex-row flex-center">
             <label class="allow-comments">
-              <input type="checkbox" id="allow-comments-checkbox" />
+              <input type="checkbox" id="allow-comments-checkbox" name="commentable"/>
               <span class="allow-comments-fx"></span>
               <!--                            <span class="darklight-border"></span>-->
             </label>
@@ -537,6 +539,10 @@
                     </div>
                   </div>
                   <h4>{{.Title}}</h4>
+                  {{ if .Images }}
+                  <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
+                  {{ else }}
+                  {{ end }}
                   <article class="cardContent">{{.Content}}</article>
                   <div class="button-row">
                     <!--                                  --- TODO invertoff -->
@@ -700,6 +706,10 @@
                           </div>
                         </div>
                         <h4>{{.Title}}</h4>
+                        {{ if .Images }}
+                        <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
+                        {{ else }}
+                        {{ end }}
                         <article class="cardContent">{{.Content}}</article>
                         <div class="button-row">
                           <button
@@ -768,6 +778,10 @@
                           </div>
                         </div>
                         <h4>{{.Title}}</h4>
+                        {{ if .Images }}
+                        <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
+                        {{ else }}
+                        {{ end }}
                         <article class="cardContent">{{.Content}}</article>
                         <div class="button-row">
                           <button

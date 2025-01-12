@@ -42,6 +42,7 @@ const validList = regForm.querySelector('ul');
 // drag and drop
 // adapted from https://medium.com/@cwrworksite/drag-and-drop-file-upload-with-preview-using-javascript-cd85524e4a63
 const dropArea = document.querySelector('#drop_zone');
+const uploadedFile = document.querySelector('#uploadedFile')
 const dragText = document.querySelector('.dragText');
 const dragButton = document.querySelector('.button');
 let dropButton = dropArea.querySelector('.button');
@@ -189,7 +190,6 @@ logoutFormButton.addEventListener('click', function (event) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'TEST': 'TEST',
             'x-csrf-token': csrfToken
         },
         body: JSON.stringify({})
@@ -198,7 +198,7 @@ logoutFormButton.addEventListener('click', function (event) {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.text(); // or response.text()
+            return response.text();
         })
         .then(data => {
             console.log('Success:', data);
@@ -207,27 +207,15 @@ logoutFormButton.addEventListener('click', function (event) {
             console.error('Error:', error);
         });
 })
-
-// async function sendRequest(endpoint, method) {
-//     const csrfToken = getCSRFToken();
-//     console.log('csrfToken', csrfToken);
-//     if (!csrfToken) {
-//         console.error('CSRF token is missing. Cannot make requests.');
-//         return;
-//     }
-//     fetch(endpoint, {
-//         method,
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRF-Token': csrfToken,
-//         },
+// sendRequest('/protected', 'GET').then((response) => {
+//     console.log('Use of protected route successful:', response);
 //     })
-//         .then((response) => response.json())
-//         .then((data) => console.log(data))
-//         .catch((error) => console.error(error));
-// }
+//     .catch((error) => {
+//         console.error('Use of protected route failed:', error);
+// });
 
 // ---- event listeners -----
+
 // drag and drop
 // dropButton.addEventListener('click', input.click.bind(input), false);
 // when browse
@@ -240,22 +228,8 @@ logoutFormButton.addEventListener('click', function (event) {
 //             console.error('Login failed:', error);
 //         });
 // })
-// logoutFormButton.addEventListener('click', () => {
-//     sendRequest('/logout', 'POST')
-//         .then((response) => {
-//             console.log('Logout successful:', response);
-//         })
-//         .catch((error) => {
-//             console.error('Logout failed:', error);
-//         });
-// })
 
-// sendRequest('/protected', 'GET').then((response) => {
-//     console.log('Use of protected route successful:', response);
-//     })
-//     .catch((error) => {
-//         console.error('Use of protected route failed:', error);
-// });
+
 input.addEventListener('change', function () {
     file = this.files[0];
     dropArea.classList.add('active');
@@ -281,7 +255,27 @@ dropArea.addEventListener('drop', (event) => {
     // console.log('File is dropped in drag area');
     file = event.dataTransfer.files[0]; // grab single file even if user selects multiple files
     // console.log(file);
+    displayFile();
 });
+function displayFile() {
+    let fileType = file.type;
+    // console.log(fileType);
+    let validExtensions = ["image/*"];
+    if (validExtensions.includes(fileType)) {
+        let fileReader = new FileReader();
+        fileReader.onload = () => {
+            uploadedFile.innerHTML = `<div class="dragText">uploaded</div>
+        <div class="uploadedFile">${file.name}</div>`;
+            dropArea.classList.add("dropped");
+        };
+        fileReader.readAsDataURL(file);
+    } else {
+        alert("This is not an Image File");
+        dropArea.classList.remove("active");
+        dragText.textContent = "Drag and drop your file, or";
+        dragButton.style.display = "unset";
+    }
+}
 // switchDl.addEventListener('click', toggleColorScheme);
 darkSwitch.addEventListener('click', toggleDarkMode);
 actButtonsAll.forEach( button => button.addEventListener('click', (e) => {

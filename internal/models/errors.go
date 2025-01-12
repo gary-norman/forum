@@ -35,6 +35,7 @@ type Errors struct {
 	ConnInit     string
 	ConnConn     string
 	Cookies      string
+	CreateFile   string
 	Divider      string
 	Execute      string
 	KeyValuePair string
@@ -48,7 +49,9 @@ type Errors struct {
 	Protected    string
 	Query        string
 	Read         string
+	RetrieveFile string
 	Register     string
+	SaveFile     string
 	Unmarshal    string
 	UserModel    string
 	Write        string
@@ -62,6 +65,7 @@ func CreateErrorMessages() *Errors {
 		ConnClose:    Colors.Blue + "Unable to close connection to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
 		ConnInit:     Colors.Blue + "Unable to initialise connection " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
 		Cookies:      Colors.Blue + "Unable to " + Colors.White + "%v cookies with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		CreateFile:   Colors.Blue + "Unable to create file " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Divider:      Colors.Grey + "*-------------------------------------------------------*\n" + Colors.Reset,
 		Execute:      Colors.Blue + "Unable to execute template with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		KeyValuePair: Colors.Blue + "%v: " + Colors.White + "%v\n",
@@ -75,7 +79,9 @@ func CreateErrorMessages() *Errors {
 		Protected:    Colors.Blue + "CSRF validation failed for user " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Query:        Colors.Blue + "Unable to query " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Read:         Colors.Blue + "Unable to read " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		RetrieveFile: Colors.Blue + "Unable to retrieve file " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Register:     Colors.Blue + "Unable to register with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		SaveFile:     Colors.Blue + "Unable to save file " + Colors.White + "%v" + Colors.Blue + " to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Unmarshal:    Colors.Blue + "Unable to unmarshall " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		UserModel:    Colors.Blue + "Usermodel or DB called in " + Colors.White + "%v" + Colors.Blue + " for " + Colors.White + "%v" + Colors.Blue + " is nil\n" + Colors.Reset,
 		Write:        Colors.Blue + "Unable to write to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,

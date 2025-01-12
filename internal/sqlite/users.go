@@ -53,7 +53,8 @@ func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, erro
 		user, _ = m.GetUserByEmail(email, "GetUserFromLogin")
 		failure = "username"
 	}
-	log.Printf(Colors.Blue+"*Either username or email should fail as only 1 is entered at login. In this case, "+Colors.White+"%v"+Colors.Red+" failed"+Colors.Blue+" as expected.", failure)
+	log.Printf(Colors.Blue+"*Either username or email should fail as only 1 is entered at login. In this case, "+
+		Colors.White+"%v"+Colors.Red+" failed"+Colors.Blue+" as expected.", failure)
 	return user, nil
 }
 
@@ -63,9 +64,9 @@ func (m *UserModel) QueryUserNameExists(username string) (bool, error) {
 		return false, errors.New(fmt.Sprintf(ErrorMsgs().UserModel, "QueryUserNameExists", username))
 	}
 	var count int
-	err := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Username = ?", username).Scan(&count)
-	if err != nil {
-		log.Fatal(ErrorMsgs().Query, username, err)
+	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Username = ?", username).Scan(&count)
+	if queryErr != nil {
+		log.Printf(ErrorMsgs().Query, username, queryErr)
 	}
 	if count > 0 {
 		return true, nil
@@ -78,9 +79,9 @@ func (m *UserModel) QueryUserEmailExists(email string) (bool, error) {
 		return false, errors.New(fmt.Sprintf(ErrorMsgs().UserModel, "QueryUserEmailExists", email))
 	}
 	var count int
-	err := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Email_address = ?", email).Scan(&count)
-	if err != nil {
-		log.Fatal(ErrorMsgs().Query, email, err)
+	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Email_address = ?", email).Scan(&count)
+	if queryErr != nil {
+		log.Printf(ErrorMsgs().Query, email, queryErr)
 	}
 	if count > 0 {
 		return true, nil
@@ -96,12 +97,12 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 	// Query to fetch user data by username
 	stmt, prepErr := m.DB.Prepare("SELECT ID, Username, HashedPassword, SessionToken, CsrfToken FROM Users WHERE Username = ? LIMIT 1")
 	if prepErr != nil {
-		log.Fatal(ErrorMsgs().Query, username, prepErr)
+		log.Printf(ErrorMsgs().Query, username, prepErr)
 	}
 	defer func(stmt *sql.Stmt) {
 		closErr := stmt.Close()
 		if closErr != nil {
-			log.Printf(ErrorMsgs().Close, "stmt", "getUserByUsername")
+			log.Printf(ErrorMsgs().Close, "stmt", "getUserByUsername", closErr)
 		}
 	}(stmt) // Prepared statements take up server resources and should be closed after use.
 	// Create a User instance to store the result

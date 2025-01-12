@@ -5,8 +5,12 @@ import (
 	"fmt"
 	"github.com/gary-norman/forum/internal/models"
 	"html/template"
+	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
+	"os"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"time"
@@ -243,7 +247,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 
 	err = t.Execute(w, templateData)
 	if err != nil {
-		log.Print(ErrorMsgs().Execute, err)
+		log.Printf(ErrorMsgs().Execute, err)
 		return
 	}
 }
@@ -262,6 +266,62 @@ func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+func renameFileWithUUID(oldFilePath string) string {
+	// Generate a new UUID
+	newUUID := models.GenerateToken(16)
+
+	// Split the file name into its base and extension
+	base := filepath.Base(oldFilePath)
+	ext := filepath.Ext(base)
+	base = base[:len(base)-len(ext)]
+
+	// Create the new file name with the UUID and extension
+	newFilePath := filepath.Join(filepath.Dir(oldFilePath), newUUID+ext)
+
+	return newFilePath
+}
+func GetFileName(r *http.Request, calledBy, imageType string) string {
+
+	// Limit the size of the incoming file to prevent memory issues
+	parseErr := r.ParseMultipartForm(10 << 20) // Limit upload size to 10MB
+	if parseErr != nil {
+		log.Printf(ErrorMsgs().Parse, "image", calledBy, parseErr)
+		return ""
+	}
+	// Retrieve the file from form data
+	file, handler, retrieveErr := r.FormFile("file-drop")
+	if retrieveErr != nil {
+		log.Printf(ErrorMsgs().RetrieveFile, "image", calledBy, retrieveErr)
+		return ""
+	}
+	defer func(file multipart.File) {
+		closeErr := file.Close()
+		if closeErr != nil {
+			log.Printf(ErrorMsgs().Close, file, calledBy, closeErr)
+		}
+	}(file)
+	// Create a file in the server's local storage
+	renamedFile := renameFileWithUUID(handler.Filename)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "File Name", renamedFile)
+	dst, createErr := os.Create("userdata/images/" + imageType + "-images/" + renamedFile)
+	if createErr != nil {
+		log.Printf(ErrorMsgs().CreateFile, "image", calledBy, createErr)
+		return ""
+	}
+	defer func(dst *os.File) {
+		closeErr := dst.Close()
+		if closeErr != nil {
+			log.Printf(ErrorMsgs().Close, dst, calledBy, closeErr)
+		}
+	}(dst)
+	// Copy the uploaded file data to the server's file
+	_, copyErr := io.Copy(dst, file)
+	if copyErr != nil {
+		fmt.Printf(ErrorMsgs().SaveFile, file, dst, calledBy, copyErr)
+		return ""
+	}
+	return renamedFile
+}
 
 func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
@@ -270,13 +330,24 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	parseErr := r.ParseForm()
+	parseErr := r.ParseMultipartForm(10 << 20)
 	if parseErr != nil {
 		http.Error(w, parseErr.Error(), 400)
 		log.Printf(ErrorMsgs().Parse, "storePost", parseErr)
 		return
 	}
-
+	// Retrieve the file from form data
+	file, handler, retrieveErr := r.FormFile("file-drop")
+	if retrieveErr != nil {
+		log.Printf(ErrorMsgs().RetrieveFile, "image", "storePost", retrieveErr)
+	}
+	defer func(file multipart.File) {
+		closeErr := file.Close()
+		if closeErr != nil {
+			log.Printf(ErrorMsgs().Close, file, "storePost", closeErr)
+		}
+	}(file)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Form data", r.PostForm)
 	type FormData struct {
 		title       string
 		content     string
@@ -309,7 +380,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	formData := FormData{
 		title:       r.PostForm.Get("title"),
 		content:     r.PostForm.Get("content"),
-		images:      "noimage",
+		images:      "",
 		userName:    user.Username,
 		userID:      user.ID,
 		channelName: "channelName",
@@ -320,9 +391,8 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	if r.PostForm.Get("commentable") != "" {
 		formData.commentable = true
 	}
-	images := r.PostForm.Get("images")
-	if images != "" {
-		formData.images = images
+	if handler.Filename != "" {
+		formData.images = GetFileName(r, "storePost", "post")
 	}
 	formData.channelName = channelData.ChannelName
 	formData.channelID, _ = strconv.Atoi(channelData.ChannelID)

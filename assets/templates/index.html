@@ -280,24 +280,17 @@
 <!--          <label class="hide-feed" for="author">User:</label>-->
           <!--                INFO this will not be in the final form as it will be determined by the logged in user -->
           <!-- FIXME the input labels need to follow the model of the login form -->
-<!--          <select id="author" name="author" style="justify-self: center">-->
-<!--            <option selected disabled hidden>Select a user</option>-->
-<!--            <option value="1001">Lore</option>-->
-<!--            <option value="1002">Kamil</option>-->
-<!--            <option value="1003">Munky</option>-->
-<!--            <option value="1004">Bob</option>-->
-<!--            <option value="1005">Shazam!</option>-->
-<!--          </select>-->
           <label for="channel">channel</label>
-          <input type="text" list="channels" id="channel" name="channel" />
-          <datalist id="channels">
+<!--          <input type="text" list="channels" id="channel" name="channel" />-->
+<!--          <label for="channels">channels</label>-->
+          <select id="channel" name="channel">
             <option selected disabled hidden>select a channel</option>
-            <option value="2001">user's lounge</option>
-            <option value="2002">CSS</option>
-            <option value="2003">JS</option>
-            <option value="2004">Golang</option>
-            <option value="2005">SQLite</option>
-          </datalist>
+            <option value='{"channelName":"user&apos;s lounge", "channelID":"2001"}'>user's lounge</option>
+            <option value='{"channelName":"CSS", "channelID":"2002"}'>CSS</option>
+            <option value='{"channelName":"JS", "channelID":"2003"}'>JS</option>
+            <option value='{"channelName":"Golang", "channelID":"2004"}'>Golang</option>
+            <option value='{"channelName":"SQLite", "channelID":"2005"}'>SQLite</option>
+          </select>
           <label for="title">title</label>
           <input type="text" id="title" name="title" />
           <label for="content">post</label>
@@ -532,7 +525,7 @@
                     <div>
                       <small class="small-bold">{{.Author}}</small>
                       <div>
-                        <small>{{.ChannelID}}</small>
+                        <small>{{.ChannelName}}</small>
                         <small>-</small>
                         <small>{{.TimeSince}}</small>
                       </div>
@@ -693,7 +686,7 @@
                           <div>
                             <small class="small-bold">{{.Author}}</small>
                             <div>
-                              <small>{{.ChannelID}}</small>
+                              <small>{{.ChannelName}}</small>
                               <small>-</small>
                               <small>{{.TimeSince}}</small>
                               <!--                                                        <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}-->
@@ -758,7 +751,7 @@
                           <div>
                             <small class="small-bold">{{.Author}}</small>
                             <div>
-                              <small>{{.ChannelID}}</small>
+                              <small>{{.ChannelName}}</small>
                               <small>-</small>
                               <time
                                 datetime="DD-MM-YYThh:mm:ss"

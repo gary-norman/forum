@@ -12,9 +12,19 @@ import (
 )
 
 type app struct {
-	posts   *sqlite.PostModel
-	users   *sqlite.UserModel
-	cookies *CookieModel
+	users     *sqlite.UserModel
+	posts     *sqlite.PostModel
+	reactions *sqlite.ReactionModel
+	saved     *sqlite.SavedModel
+	mods      *sqlite.ModModel
+	comments  *sqlite.CommentModel
+	images    *sqlite.ImageModel
+	channels  *sqlite.ChannelModel
+	flags     *sqlite.FlagModel
+	loyalty   *sqlite.LoyaltyModel
+	members   *sqlite.MembershipModel
+	muted     *sqlite.MutedChannelModel
+	cookies   *CookieModel
 }
 
 func ErrorMsgs() *models.Errors {

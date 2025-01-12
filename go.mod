@@ -2,6 +2,6 @@ module github.com/gary-norman/forum
 
 go 1.23.1
 
-require github.com/mattn/go-sqlite3 v1.14.23 // direct
+require github.com/mattn/go-sqlite3 v1.14.24 // direct
 
-require golang.org/x/crypto v0.30.0
+require golang.org/x/crypto v0.32.0

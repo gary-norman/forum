@@ -84,6 +84,7 @@ type Post struct {
 	Author      string    `json:"author"`
 	AuthorID    int       `json:"author_id"`
 	ChannelID   int       `json:"channel_id"`
+	ChannelName string    `json:"channel_name"`
 	IsFlagged   bool      `json:"is_flagged,omitempty"`
 }
 

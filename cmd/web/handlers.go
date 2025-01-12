@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gary-norman/forum/internal/models"
 	"html/template"
@@ -208,11 +209,11 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		hours := now.Sub(post.Created).Hours()
 		var TimeSince string
 		if hours > 24 {
-			TimeSince = fmt.Sprintf("%.0f days ago.", hours/24)
+			TimeSince = fmt.Sprintf("%.0f days ago", hours/24)
 		} else if hours > 1 {
-			TimeSince = fmt.Sprintf("%.0f hours ago.", hours)
+			TimeSince = fmt.Sprintf("%.0f hours ago", hours)
 		} else if minutes := now.Sub(post.Created).Minutes(); minutes > 1 {
-			TimeSince = fmt.Sprintf("%.0f minutes ago.", minutes)
+			TimeSince = fmt.Sprintf("%.0f minutes ago", minutes)
 		} else {
 			TimeSince = "just now"
 		}
@@ -269,38 +270,52 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := r.ParseForm()
-	if err != nil {
-		http.Error(w, err.Error(), 400)
-		log.Printf(ErrorMsgs().Parse, "storePost", err)
+	parseErr := r.ParseForm()
+	if parseErr != nil {
+		http.Error(w, parseErr.Error(), 400)
+		log.Printf(ErrorMsgs().Parse, "storePost", parseErr)
 		return
 	}
-
-	// Get the 'channel' value as a string
-	channelStr := r.PostForm.Get("channel")
-	// Convert the string to an integer
-	channel, err := strconv.Atoi(channelStr)
-	if err != nil {
-		http.Error(w, "You must be a member of this channel to do that.", http.StatusBadRequest)
-		return
-	}
-
-	// Get the 'author' value as a string
-	//authorStr := r.PostForm.Get("author")
-	//// Convert the string to an integer
-	//author, err := strconv.Atoi(authorStr)
-	//if err != nil {
-	//	http.Error(w, "You must be logged in to do that.", http.StatusBadRequest)
-	//	return
-	//}
 
 	type FormData struct {
-		commentable bool
+		title       string
+		content     string
 		images      string
+		userName    string
+		userID      int
+		channelName string
+		channelID   int
+		commentable bool
+		isFlagged   bool
 	}
+	type ChannelData struct {
+		ChannelName string `json:"channelName"`
+		ChannelID   string `json:"channelID"`
+	}
+	selectionJSON := r.PostForm.Get("channel")
+	if selectionJSON == "" {
+		http.Error(w, "No selection provided", http.StatusBadRequest)
+		return
+	}
+	var channelData ChannelData
+	if err := json.Unmarshal([]byte(selectionJSON), &channelData); err != nil {
+		log.Printf(ErrorMsgs().Unmarshal, selectionJSON, err)
+		http.Error(w, "Invalid selection format", http.StatusBadRequest)
+		return
+	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "channelName", channelData.ChannelName)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "channelID", channelData.ChannelID)
+
 	formData := FormData{
-		commentable: false,
+		title:       r.PostForm.Get("title"),
+		content:     r.PostForm.Get("content"),
 		images:      "noimage",
+		userName:    user.Username,
+		userID:      user.ID,
+		channelName: "channelName",
+		channelID:   0,
+		commentable: false,
+		isFlagged:   false,
 	}
 	if r.PostForm.Get("commentable") != "" {
 		formData.commentable = true
@@ -309,21 +324,24 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	if images != "" {
 		formData.images = images
 	}
+	formData.channelName = channelData.ChannelName
+	formData.channelID, _ = strconv.Atoi(channelData.ChannelID)
 
-	err = app.posts.Insert(
-		r.PostForm.Get("title"),
-		r.PostForm.Get("content"),
-		images,
-		user.Username,
-		channel,
-		user.ID,
+	insertErr := app.posts.Insert(
+		formData.title,
+		formData.content,
+		formData.images,
+		formData.userName,
+		formData.channelName,
+		formData.channelID,
+		formData.userID,
 		formData.commentable,
-		false,
+		formData.isFlagged,
 	)
 
-	if err != nil {
-		log.Printf(ErrorMsgs().Post, err)
-		http.Error(w, err.Error(), 500)
+	if insertErr != nil {
+		log.Printf(ErrorMsgs().Post, insertErr)
+		http.Error(w, insertErr.Error(), 500)
 		return
 	}
 	http.Redirect(w, r, "/", http.StatusFound)

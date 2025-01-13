@@ -44,7 +44,11 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		posts[i].Dislikes = dislikes
 	}
 
-	err = t.Execute(w, map[string]any{"Posts": posts})
+	data := map[string]any{
+		"Posts": posts,
+	}
+
+	err = t.Execute(w, data)
 	if err != nil {
 		log.Print(ErrorMsgs.Execute, err)
 		return

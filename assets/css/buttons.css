@@ -167,11 +167,7 @@ button, .button {
         background : url('/assets/icons/notification_16.svg') no-repeat center;
     }
 }
-.btn-add {
-    &::before {
-        background : url('/assets/icons/add_circle_16.svg') no-repeat center;
-    }
-}
+
 .btn-filters {
     &::before {
         background : url('/assets/icons/filters_16.svg') no-repeat center;
@@ -279,12 +275,22 @@ button, .button {
 
 .btn-sm span{
     background-size: 1.6rem;
-    width: 1.6rem;
     height: 1.6rem;
+}
+
+.btn-md span{
+    background-size: 2.4rem;
+    height: 2.4rem;
+}
+
+.btn-add {
+    background : url('/assets/icons/add_circle_16.svg') no-repeat center;
+    width: 2.4rem;
 }
 
 .btn-edit {
     background: url('/assets/icons/edit_16.svg') no-repeat center;
+    width: 1.6rem;
 }
 
 .btn-copy {

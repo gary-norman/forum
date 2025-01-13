@@ -6,7 +6,8 @@ const commentMsg = encodeURIComponent('Hey, I found this comment, you need to se
 const postMsg = encodeURIComponent('Hey, I found this post. I think you may like it?');
 const  commentTitle = encodeURIComponent('Comment from User ??? Here');
 const postTitle = encodeURIComponent('Post Title Here');
- let scrollWindow;
+let scrollWindow;
+
  const activityBar = document.getElementById('activity-bar');
  const activityButtons = activityBar.querySelectorAll('button');
 
@@ -17,14 +18,12 @@ export function selectActiveFeed() {
 
     const pages = [homePage, userPage, channelPage];
     const activePage = pages.find(page => page.classList.contains('active-feed'));
-    let activeScrollWindow;
 
     switch (activePage) {
         case homePage:
-            activeScrollWindow = document.getElementById(`home-feed`);
 
-            scrollWindow = activeScrollWindow;
-            // console.log(scrollWindow)
+            scrollWindow = homePage.querySelector(`#home-feed`);
+            // console.log("scrollWindow:", scrollWindow)
             break;
         case userPage:
             const userFeeds = Array.from(document.querySelectorAll('[id^="activity-feed-"]'));
@@ -34,9 +33,8 @@ export function selectActiveFeed() {
             // console.log(scrollWindow)
             break;
         case channelPage:
-            activeScrollWindow = document.getElementById(`channel-feed`);
 
-            scrollWindow = activeScrollWindow;
+            scrollWindow = channelPage.querySelector(`#channel-feed`);
             // console.log(scrollWindow)
             break;
         default:
@@ -49,18 +47,25 @@ document.addEventListener('DOMContentLoaded', function () {
     let postID;
     let commentID;
     selectActiveFeed();
+    let defaultShareButton, defaultShareModal;
     const buttonControls = document.querySelectorAll('[class$="-controls"]');
+    // if (!scrollWindow.hasScrollListener) {
+    //     attachScrollListener(shareButton, shareModal);
+    // }
+
 
     buttonControls.forEach(singleControl => {
         postID = singleControl.closest('.card').getAttribute('data-post-id');
         commentID = singleControl.closest('.card').getAttribute('data-comment-id');
 
         //get all components needed
-        const shareModal = singleControl.querySelector(`[id^="share-container-${postID}"]`);
-        const shareButton = singleControl.querySelector(`[id^="share-button-${postID}"]`);
-        const label = shareModal.querySelector('label');
-        const icon = shareModal.querySelector('button');
-        const input = shareModal.querySelector('input');
+         let shareModal = singleControl.querySelector(`[id^="share-container-${postID}"]`);
+         let shareButton = singleControl.querySelector(`[id^="share-button-${postID}"]`);
+         let label = shareModal.querySelector('label');
+         let icon = shareModal.querySelector('button');
+         let input = shareModal.querySelector('input');
+         // console.log("shareButton:", shareButton)
+         // console.log("shareModal:", shareModal)
 
         activityButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -69,38 +74,30 @@ document.addEventListener('DOMContentLoaded', function () {
                     // console.log('Before selectActiveFeed:', scrollWindow);
                     selectActiveFeed();
                     // console.log('After selectActiveFeed:', scrollWindow);
-                    attachScrollListener();
+                    attachScrollListener(shareButton, shareModal);
                 }, 500);
             });
         });
 
-        shareButton.addEventListener('click', (e) => {
-            getModalPos(shareButton, shareModal, window)
-        });
+
 
         // Listen for the 'toggle' event on the modal (native popover event)
         shareModal.addEventListener('toggle', () => {
-            toggleButtonActive(shareModal, shareButton);
+            setTimeout(() => {
+                toggleButtonActive(shareModal, shareButton);
+            }, 100);
+
         });
 
-        function attachScrollListener() {
-            scrollWindow.addEventListener('scroll', (e) => {
-                scrollWindow.hasScrollListener = true; // Mark as attached
-                getModalPos(shareButton, shareModal, scrollWindow)
+        shareButton.addEventListener('click', (e) => {
+            // setTimeout(() => {
+            getModalPos(shareButton, shareModal)
+            attachScrollListener(shareButton, shareModal)
+            // }, 200);
 
-                // Parse the 'top' value and compare it with top of the mask / botton of screen
-                const modalTop = parseInt(shareModal.style.top, 10); // Convert 'top' to a number
+        });
 
-                if (modalTop <= 400 || modalTop >= window.innerHeight - 72) {
-                    // Close the popover
-                    shareModal.hidePopover();
-                }
-            });
-        }
 
-        if (!scrollWindow.hasScrollListener) {
-            attachScrollListener();
-        }
 
 
 
@@ -154,6 +151,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function attachScrollListener(shareButton, shareModal) {
+    console.log("attaching listener to:", scrollWindow)
+
+    scrollWindow.addEventListener('scroll', (e) => {
+        // console.log("scrolling on:", scrollWindow)
+        scrollWindow.hasScrollListener = true; // Mark as attached
+        getModalPos(shareButton, shareModal)
+
+        // Parse the 'top' value and compare it with top of the mask / botton of screen
+        const modalTop = parseInt(shareModal.style.top, 10); // Convert 'top' to a number
+
+        if (modalTop <= 400 || modalTop >= window.innerHeight - 72) {
+            // Close the popover
+            shareModal.hidePopover();
+        }
+    });
+}
+
 
 function scrollToPost(postId) {
     const container = scrollWindow;
@@ -189,12 +204,15 @@ scrollButton.addEventListener('click', () => {
 })
 
 
-function getModalPos(shareButton, shareModal, windowPos) {
+function getModalPos(shareButton, shareModal) {
+
+
     //get button position
     const buttonPos = shareButton.getBoundingClientRect();
+    const modalPos = shareModal.getBoundingClientRect();
 
     //set modal styling
-    shareModal.style.position = 'absolute';
+    // shareModal.style.position = 'absolute';
     shareModal.style.top = `${buttonPos.bottom - 16}px`;
     shareModal.style.left = `${buttonPos.left  - 20}px`;
 }

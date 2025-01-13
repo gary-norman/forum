@@ -17,7 +17,7 @@
         --grad-from   : 0deg;
         border-radius : .8rem;
         z-index       : -1;
-        animation     : spin 3s linear 1;
+        animation     : dash 3s linear 1;
     }
     &::after {
         content         : "";
@@ -34,14 +34,14 @@
         --color-hl-pink : var(--color-hl-green);
     }
 }
-@keyframes spin {
+@keyframes dash {
     0% {
         --pink-start: 0%;
         --trans-start: 0%;
     }
     10% {
-        --pink-start: 14%;
-        --trans-start: 14%;
+        /*--pink-start: 14%;*/
+        /*--trans-start: 14%;*/
         --pink-end: 60%;
         --trans-end: 60%;
         --color-hl-pink: var(--color-hl-green);

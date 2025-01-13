@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function attachScrollListener(shareButton, shareModal) {
-    console.log("attaching listener to:", scrollWindow)
+    // console.log("attaching listener to:", scrollWindow)
 
     scrollWindow.addEventListener('scroll', (e) => {
         // console.log("scrolling on:", scrollWindow)
@@ -166,8 +166,9 @@ function attachScrollListener(shareButton, shareModal) {
 
 
 function scrollToPost(postId) {
+    selectActiveFeed();
     const container = scrollWindow;
-    const post = document.querySelector(`[data-post-id="${postId}"]`)
+    const post = scrollWindow.querySelector(`[data-post-id="${postId}"]`)
 
 
     if (post && container) {
@@ -175,12 +176,20 @@ function scrollToPost(postId) {
         const postRect = post.getBoundingClientRect();
 
         // Calculate the position relative to the container
-        const scrollOffset = postRect.top - containerRect.top + container.scrollTop;
+        const scrollOffset = postRect.top - containerRect.top + container.scrollTop - 40;
+        console.log("FIRST:")
+        console.log("containerRect:, ", containerRect)
+        console.log("postRect:, ", postRect)
 
         container.scrollTo({
             top: scrollOffset,
             behavior: 'smooth', // Smooth scrolling animation
         });
+        console.log("THEN:")
+        console.log("containerRect:, ", containerRect)
+        console.log("postRect:, ", postRect)
+        console.log("container.scrollTop:, ", container.scrollTop)
+        console.log("scrollOffset", scrollOffset)
 
         post.classList.add('card-selected');
 
@@ -194,6 +203,11 @@ function scrollToPost(postId) {
 
 const scrollButton = document.getElementById(`scroll-test`);
 scrollButton.addEventListener('click', () => {
+    // Example: Scroll to post 3
+    scrollToPost('3');
+})
+const scrollButton1 = document.getElementById(`scroll-test-1`);
+scrollButton1.addEventListener('click', () => {
     // Example: Scroll to post 3
     scrollToPost('3');
 })

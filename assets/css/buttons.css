@@ -177,11 +177,7 @@ button,
     background: url("/assets/icons/notification_16.svg") no-repeat center;
   }
 }
-.btn-add {
-    &::before {
-        background : url('/assets/icons/add_circle_16.svg') no-repeat center;
-    }
-}
+
 .btn-filters {
   &::before {
     background: url("/assets/icons/filters_16.svg") no-repeat center;
@@ -272,25 +268,40 @@ button,
   border: 0.15rem solid var(--color-secondary-active);
   pointer-events: none;
 }
-.btn-icoonly {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  padding: 1.2rem 1rem;
-  & img {
-    filter: var(--filter-invert-on_off);
-  }
-  &:has(.btn-settings),
-  &:has(.btn-save-active),
-  &:has(.btn-save-empty),
-  &:has(.btn-edit) {
-    padding: 0;
-  }
+.btn-icoonly{
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    width           : fit-content;
+    padding: 1.2rem 1rem;
+    & img {
+        filter: var(--filter-invert-on_off);
+    }
+    &:has(.btn-settings), &:has(.btn-save-active), &:has(.btn-save-empty), &:has(.btn-edit) {
+        padding: 0;
+    }
+}
+
+
+.btn-sm span{
+    background-size: 1.6rem;
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.btn-md span{
+    background-size: 2.4rem;
+    height: 2.4rem;
+}
+
+.btn-add {
+    background : url('/assets/icons/add_circle_16.svg') no-repeat center;
+    width: 2.4rem;
 }
 
 .btn-edit {
-  background: url("/assets/icons/edit_16.svg") no-repeat center;
+    background: url('/assets/icons/edit_16.svg') no-repeat center;
+    width: 1.6rem;
 }
 
 .btn-copy {

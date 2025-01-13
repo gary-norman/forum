@@ -241,7 +241,30 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = t.Execute(w, templateData)
+	t := tpl.Lookup("index.html")
+	if t == nil {
+		http.Error(w, "template not found: index.html", 500)
+		log.Printf("Template not found: index.html")
+		return
+	}
+
+	// Retrieve total likes and dislikes for each post
+	for i, post := range posts {
+		likes, dislikes, err := app.reactions.CountReactions(post.ChannelID, post.ID, 0) // Pass 0 for CommentID if it's a post
+		if err != nil {
+			log.Printf("Error counting reactions: %v", err)
+			likes, dislikes = 0, 0 // Default values if there is an error
+		}
+
+		posts[i].Likes = likes
+		posts[i].Dislikes = dislikes
+	}
+
+	data := map[string]any{
+		"Posts": posts,
+	}
+
+	err = t.Execute(w, data)
 	if err != nil {
 		log.Print(ErrorMsgs().Execute, err)
 		return

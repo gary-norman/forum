@@ -21,7 +21,7 @@
 #user-page {
     /*position: relative;*/
     width: 100%;
-    display: flex;
+    display: none;
     padding: 0 0 12.4rem 0;
     flex-direction: column;
     align-items: flex-start;

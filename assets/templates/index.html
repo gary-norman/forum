@@ -100,7 +100,12 @@
                     </div>
                     <hr class="solid">
                     <div class="sidebar-block sidebar-channels">
-                        <small class="padded">Your Channels</small>
+                        <div class="flex-space-between">
+                            <small class="padded">Your Channels</small>
+                            <button class="btn-md btn-secondary btn-icoonly btn-filled btn-filled-fancy btn-action-secondary btn-invert-onoff_offoff">
+                                <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
+                            </button>
+                        </div>
                         <div class="sidebar-channel-block">
                             <div class="sidebar-channel">
                                 <div></div>
@@ -207,9 +212,9 @@
                         </button>
                     </div>
                     <div class="scrollable-home scrollable no-scrollbar">
-                        <div id="home-feed ">
+                        <div id="home-feed">
                             {{range .Posts}}
-                            <div class="card">
+                            <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                                 <div class="post-info-container">
                                     <span class="card-profile-pic"></span>
                                     <div>
@@ -224,22 +229,45 @@
                                 </div>
                                 <h4>{{.Title}}</h4>
                                 <article class="cardContent">{{.Content}}</article>
-                                <div class="button-row">
-                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action btn-invert-never">
-                                        <span class="btn-likes">100</span>
+                                <div class="button-row post-controls" >
+                                    {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
+                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+                                        <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                                     </button>
-                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action btn-invert-never">
-                                        <span class="btn-dislikes">24</span>
+                                    <!-- --- TODO invertoff -->
+                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+                                        <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
                                     </button>
                                     <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                         <span class="btn-reply">reply</span>
                                     </button>
-                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                    <button id="share-button-{{.ID}}-home" popovertarget="share-container-{{.ID}}-home" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                         <span class="btn-share">share</span>
                                     </button>
                                     <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                         <span class="btn-report">report</span>
                                     </button>
+                                    <div popover id="share-container-{{.ID}}-home" class="scrollable-user">
+                                        <div class="share-container">
+                                            <div class="button-row">
+                                                <a href="/" target="_blank" class="share-logo facebook"></a>
+                                                <a href="/" target="_blank" class="share-logo twitter"></a>
+                                                <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                                <a href="/" target="_blank" class="share-logo reddit"></a>
+                                                <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                                <a href="/" target="_blank" class="share-logo telegram"></a>
+                                            </div>
+                                            <div class="flex-space-between">
+                                                <label class="padded" for="copy-url-{{.ID}}-home">Copy URL link</label>
+                                                <button class="btn-sm btn-icoonly">
+                                                    <span class="btn-copy" aria-label="Copy URL link"></span>
+                                                </button>
+                                            </div>
+
+                                            <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-home" name="copy-url-{{.ID}}-home"/>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             {{end}}
@@ -443,7 +471,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                         {{end}}
                                     </div>
@@ -549,7 +576,7 @@
                             <div class="right-panel-content scroll-down">
                                 <div class="right-panel-name-container flex-space-between">
                                     <h4 class="right-panel-name">Eyesome578</h4>
-                                    <button class="btn-md btn-icoonly">
+                                    <button class="btn-sm btn-icoonly">
                                         <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                                     </button>
                                 </div>
@@ -558,14 +585,14 @@
                                         <div class="right-panel-profile-pic"></div>
                                         <small>Edit your avatar picture</small>
                                     </div>
-                                    <button class="btn-md btn-icoonly">
+                                    <button class="btn-sm btn-icoonly">
                                         <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
                                     </button>
                                 </div>
                                 <div class="right-panel-bio-container ">
                                     <div class="right-panel-bio flex-space-between">
                                         <label for="user-bio-content" class="padded">Edit your bio</label>
-                                        <button class="btn-md btn-icoonly">
+                                        <button class="btn-sm btn-icoonly">
                                             <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                                         </button>
                                     </div>
@@ -681,64 +708,64 @@
                                 </button>
                             </div>
                             <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                                    {{range .Posts}}
-                                    <div class="card" >
-                                        <div class="post-info-container">
-                                            <span class="card-profile-pic"></span>
+                                {{range .Posts}}
+                                <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                                    <div class="post-info-container">
+                                        <span class="card-profile-pic"></span>
+                                        <div>
+                                            <small class="small-bold">{{.AuthorID}}</small>
                                             <div>
-                                                <small class="small-bold">{{.AuthorID}}</small>
-                                                <div>
-                                                    <small>{{.ChannelID}}</small>
-                                                    <small>-</small>
-                                                    <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
-                                                        @ {{.Created.Format "15:04:05 UTC"}}</time>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4>{{.Title}}</h4>
-                                        <article class="cardContent">{{.Content}}</article>
-                                        <div class="button-row">
-                                            <!--                                  --- TODO invertoff -->
-                                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                                <span class="btn-likes">{{.Likes}}</span>
-                                            </button>
-                                            <!-- --- TODO invertoff -->
-                                            <button class="btn-md btn-secondary btn-icotext btn-filled">
-                                                <span class="btn-dislikes">{{.Dislikes}}</span>
-                                            </button>
-                                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                                <span class="btn-reply">reply</span>
-                                            </button>
-                                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                                <span class="btn-share">share</span>
-                                            </button>
-                                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                                <span class="btn-report">report</span>
-                                            </button>
-                                            <div popover id="share-container-{{.ID}}-channel-post" class="scrollable-user">
-                                                <div class="share-container">
-                                                    <div class="button-row">
-                                                        <a href="/" target="_blank" class="share-logo facebook"></a>
-                                                        <a href="/" target="_blank" class="share-logo twitter"></a>
-                                                        <a href="/" target="_blank" class="share-logo linkedin"></a>
-                                                        <a href="/" target="_blank" class="share-logo reddit"></a>
-                                                        <a href="/" target="_blank" class="share-logo whatsapp"></a>
-                                                        <a href="/" target="_blank" class="share-logo telegram"></a>
-                                                    </div>
-                                                    <div class="flex-space-between">
-                                                        <label class="padded" for="copy-url-{{.ID}}-channel-post">Copy URL link</label>
-                                                        <button class="btn-sm btn-icoonly">
-                                                            <span class="btn-copy" aria-label="Copy URL link"></span>
-                                                        </button>
-                                                    </div>
-
-                                                    <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-channel-post" name="copy-url-{{.ID}}-channel-post"/>
-
-                                                </div>
+                                                <small>{{.ChannelID}}</small>
+                                                <small>-</small>
+                                                <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
+                                                    @ {{.Created.Format "15:04:05 UTC"}}</time>
                                             </div>
                                         </div>
                                     </div>
-                                    {{end}}
+                                    <h4>{{.Title}}</h4>
+                                    <article class="cardContent">{{.Content}}</article>
+                                    <div class="button-row post-controls" >
+                                        {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
+                                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+                                            <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
+                                        </button>
+                                        <!-- --- TODO invertoff -->
+                                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+                                            <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
+                                        </button>
+                                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                            <span class="btn-reply">reply</span>
+                                        </button>
+                                        <button id="share-button-{{.ID}}-channel" popovertarget="share-container-{{.ID}}-channel" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                            <span class="btn-share">share</span>
+                                        </button>
+                                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                            <span class="btn-report">report</span>
+                                        </button>
+                                        <div popover id="share-container-{{.ID}}-channel" class="scrollable-user">
+                                            <div class="share-container">
+                                                <div class="button-row">
+                                                    <a href="/" target="_blank" class="share-logo facebook"></a>
+                                                    <a href="/" target="_blank" class="share-logo twitter"></a>
+                                                    <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                                    <a href="/" target="_blank" class="share-logo reddit"></a>
+                                                    <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                                    <a href="/" target="_blank" class="share-logo telegram"></a>
+                                                </div>
+                                                <div class="flex-space-between">
+                                                    <label class="padded" for="copy-url-{{.ID}}-channel">Copy URL link</label>
+                                                    <button class="btn-sm btn-icoonly">
+                                                        <span class="btn-copy" aria-label="Copy URL link"></span>
+                                                    </button>
+                                                </div>
+
+                                                <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-channel" name="copy-url-{{.ID}}-channel"/>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{end}}
                                 </div>
                         </div>
 
@@ -746,7 +773,7 @@
                             <div class="right-panel-content scroll-down">
                                 <div class="right-panel-name-container flex-space-between">
                                     <h4 class="right-panel-name">/Interesting_Things</h4>
-                                    <button class="btn-md btn-icoonly">
+                                    <button class="btn-sm btn-icoonly">
                                         <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
                                     </button>
                                 </div>
@@ -755,14 +782,14 @@
                                         <div class="right-panel-profile-pic"></div>
                                         <small>Edit channel picture</small>
                                     </div>
-                                    <button class="btn-md btn-icoonly">
+                                    <button class="btn-sm btn-icoonly">
                                         <span class="btn-edit" role="contentinfo" aria-label="Edit channel picture"></span>
                                     </button>
                                 </div>
                                 <div class="right-panel-bio-container ">
                                     <div class="right-panel-bio flex-space-between">
                                         <label for="channel-bio-content" class="padded">Edit channel bio</label>
-                                        <button class="btn-md btn-icoonly">
+                                        <button class="btn-sm btn-icoonly">
                                             <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
                                         </button>
                                     </div>
@@ -812,7 +839,7 @@
                                 <div class="right-panel-rules-container">
                                     <div class="right-panel-bio flex-space-between ">
                                         <label class="padded" for="rules-content">Edit channel rules</label>
-                                        <button class="button-md btn-icoonly">
+                                        <button class="btn-sm btn-icoonly">
                                             <span class="btn-edit" role="contentinfo" aria-label="Edit channel rules"></span>
                                         </button>
                                     </div>

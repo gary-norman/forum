@@ -12,8 +12,9 @@ import (
 )
 
 type app struct {
-	posts     *sqlite.PostModel
-	reactions *sqlite.ReactionModel
+	posts          *sqlite.PostModel
+	reactions      *sqlite.ReactionModel
+	reactionStatus *sqlite.ReactionModel
 }
 
 func main() {
@@ -30,6 +31,9 @@ func main() {
 			DB: db,
 		},
 		reactions: &sqlite.ReactionModel{
+			DB: db,
+		},
+		reactionStatus: &sqlite.ReactionModel{
 			DB: db,
 		},
 	}

@@ -46,11 +46,7 @@ button, .button {
         height: 2.4rem;
         width: 2.4rem;
     }
-    & span.btn-edit {
-        width: 1.6rem;
-        height: 1.6rem;
-        padding: 0;
-    }
+
 }
 .btn-md.btn-icotext {
     & span {
@@ -262,14 +258,14 @@ button, .button {
     align-items     : center;
     justify-content : center;
     width           : fit-content;
-    padding: 1.2rem 1rem;
+    padding: 1.2rem 1.2rem;
     & img {
         filter: var(--filter-invert-on_off);
     }
     &:has(.btn-settings), &:has(.btn-save-active), &:has(.btn-save-empty), &:has(.btn-edit) {
         padding: 0;
     }
-    & span:has(.btn-warning), & span:has(.btn-success){
+    &:has(.btn-warning), &:has(.btn-success){
         cursor        : default;
     }
 }

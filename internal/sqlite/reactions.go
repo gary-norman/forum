@@ -38,6 +38,7 @@ func (m *ReactionModel) WhichReaction(authorID, channelID, reactedPostID, reacte
 	return liked, disliked, nil
 }
 
+// TODO Might have issues cuz it's not in the database
 func (m *ReactionModel) GetReactionStatus(authorID, channelID, reactedPostID, reactedCommentID int) (ReactionStatus, error) {
 	if m == nil || m.DB == nil {
 		return ReactionStatus{}, fmt.Errorf("reaction model or database is nil")

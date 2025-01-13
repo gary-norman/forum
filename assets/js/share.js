@@ -1,7 +1,6 @@
 const link = encodeURI(window.location.href);
-let msg;
-let title;
 
+// TODO Add logic that positions the modal above the button if there's not enough space under
 const commentMsg = encodeURIComponent('Hey, I found this comment, you need to see it!');
 const postMsg = encodeURIComponent('Hey, I found this post. I think you may like it?');
 const  commentTitle = encodeURIComponent('Comment from User ??? Here');
@@ -46,6 +45,8 @@ export function selectActiveFeed() {
 document.addEventListener('DOMContentLoaded', function () {
     let postID;
     let commentID;
+    let msg;
+    let title;
     selectActiveFeed();
     let defaultShareButton, defaultShareModal;
     const buttonControls = document.querySelectorAll('[class$="-controls"]');
@@ -117,14 +118,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
 
+        // TODO check api's of sites and fix title/message
         //if postID present, make msg = postMsg, if commentID present, make msg = commentMsg
-        if (postID !== 0 && commentID === 0) {
+        if (postID !== 0 && commentID == null) {
             msg = postMsg;
             title = postTitle;
-        } else if (commentID !== 0 && postID === 0) {
+        } else if (commentID !== 0 && postID === null) {
             msg = commentMsg;
             title = commentTitle;
+
         }
+        console.log("PostID:", postID)
+        console.log("CommentID:", commentID)
+        console.log("message:", msg)
+        console.log("title:", title)
+
 
         const fb = singleControl.querySelector('.facebook');
         fb.href = `https://www.facebook.com/share.php?u=${link}`;

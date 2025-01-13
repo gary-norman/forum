@@ -155,7 +155,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validate that at least one of reactedPostID or reactedCommentID is non-zero
+	//// Validate that at least one of reactedPostID or reactedCommentID is non-zero
 	if (reactionData.ReactedPostID == nil || *reactionData.ReactedPostID == 0) && (reactionData.ReactedCommentID == nil || *reactionData.ReactedCommentID == 0) {
 		http.Error(w, "You must react to either a post or a comment", http.StatusBadRequest)
 		return
@@ -166,17 +166,11 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	if reactionData.ReactedPostID != nil {
 		//log.Println("ReactedPostID:", *reactionData.ReactedPostID)
 		postID = *reactionData.ReactedPostID
-	} else {
-		postID = 0
-		//log.Println("ReactedPostID is nil")
 	}
 
 	if reactionData.ReactedCommentID != nil {
 		//log.Printf("ReactedCommentID: %d", *reactionData.ReactedPostID)
 		commentID = *reactionData.ReactedCommentID
-	} else {
-		commentID = 0
-		//log.Println("ReactedCommentID is nil")
 	}
 
 	// Check if the user already reacted (like/dislike) and update or delete the reaction if needed

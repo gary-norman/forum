@@ -15,6 +15,8 @@ func (app *app) routes() http.Handler {
 	imageServer := http.FileServer(http.Dir("./assets/images"))
 	mux.Handle("/assets/images/", http.StripPrefix("/assets/images", imageServer))
 	fontServer := http.FileServer(http.Dir("./assets/fonts"))
+	userDataServer := http.FileServer(http.Dir("./userdata"))
+	mux.Handle("/userdata/", http.StripPrefix("/userdata", userDataServer))
 	mux.Handle("/assets/fonts/", http.StripPrefix("/assets/fonts", fontServer))
 	mux.HandleFunc("/", app.getHome)
 	mux.HandleFunc("GET /posts/create", app.createPost)

@@ -537,6 +537,9 @@
                         <small>{{.TimeSince}}</small>
                       </div>
                     </div>
+                    <div class="like-button">
+                      <button data-tooltip-name="like" class="btn-icoonly"></button>
+                    </div>
                   </div>
                   <h4>{{.Title}}</h4>
                   {{ if .Images }}
@@ -703,6 +706,9 @@
                               <!--                                                        <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}-->
                               <!--                                                            @ {{.Created.Format "15:04:05 UTC"}}</time>-->
                             </div>
+                          </div>
+                          <div class="like-button">
+                            <button data-tooltip-name="like" class="btn-icoonly"></button>
                           </div>
                         </div>
                         <h4>{{.Title}}</h4>

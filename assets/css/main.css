@@ -184,6 +184,13 @@ a:active {
   cursor: pointer;
   /*color: inherit;*/
 }
+/* ---- images ---- */
+.post-image {
+  /* TODO add a container query to size this correctly */
+  max-width: 40rem;
+  border: 1px solid var(--color-bg-3);
+  border-radius: .8rem;
+}
 /* ---- one-line elements ---- */
 .invisible {
   visibility: hidden;
@@ -932,29 +939,6 @@ input[type="checkbox"]:checked {
   }
   /*& * {*/
   /*  margin : 0.4rem;*/
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
   /*}*/
 }
 /*--- drag and drop file --- */
@@ -1495,6 +1479,15 @@ main {
           filter: var(--filter-invert-on_off);
         }
       }
+    }
+  }
+  & .like-button {
+    width: 2.4rem;
+    aspect-ratio: 1 / 1;
+    margin-inline-start: auto;
+    background: url('/assets/icons/heart-empty_24.svg') no-repeat center;
+    &:hover {
+      background: url('/assets/icons/heart-full_24.svg') no-repeat center;
     }
   }
 }

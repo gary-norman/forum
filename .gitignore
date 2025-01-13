@@ -18,4 +18,5 @@
 go.work
 # intellij files
 .idea/
+userdata/
 .DS_Store

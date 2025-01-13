@@ -187,7 +187,7 @@ a:active {
 /* ---- images ---- */
 .post-image {
   /* TODO add a container query to size this correctly */
-  max-width: 40rem;
+  max-width: 100%;
   border: 1px solid var(--color-bg-3);
   border-radius: .8rem;
 }
@@ -684,10 +684,10 @@ input[type="email"] {
   & input {
       margin: 0.8rem 0 0 0;
   }
+  & input:not(:placeholder-shown):valid,
   & input:user-valid,
-  input:not(:placeholder-shown):valid,
-  input:user-invalid,
-  input:not(:placeholder-shown):invalid,
+  & input:not(:placeholder-shown):invalid,
+  & input:user-invalid,
   .pass-nomatch,
   .pass-match {
     & + span,
@@ -722,7 +722,10 @@ input[type="email"] {
       transition: height var(--transition-dur-hover) ease-in-out;
     }
   }
-  & input:user-valid, input:not(:placeholder-shown):valid,
+  & input:valid,
+    /* TODO get code under working */
+  /*& input:not(:placeholder-shown):valid,*/
+  /*  TODO use this class*/
   .pass-match {
     color: var(--color-hl-green);
     & + span::before {
@@ -732,7 +735,10 @@ input[type="email"] {
       background: var(--color-hl-green);
     }
   }
-  & input:user-invalid, input:not(:placeholder-shown):invalid,
+  & input:user-invalid,
+  /* TODO get code under working */
+  /*& input:not(:placeholder-shown):invalid,*/
+  /*  TODO use this class*/
   .pass-nomatch {
     color: firebrick;
     & + span::before {

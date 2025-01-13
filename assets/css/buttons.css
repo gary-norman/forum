@@ -20,6 +20,8 @@ button, .button {
             background-size: .8rem !important;
         }
         height: 1.6rem;
+        width: 1.6rem;
+        background-size: 1.6rem;
     }
 }
 .btn-sm.btn-icotext {
@@ -36,16 +38,13 @@ button, .button {
     height: 3.6rem;
     gap: 0.8rem;
 
-
-
-
-
-
     & span {
         &::before {
             background-size: 1.6rem !important;
         }
+        background-size: 2.4rem;
         height: 2.4rem;
+        width: 2.4rem;
     }
     & span.btn-edit {
         width: 1.6rem;
@@ -270,12 +269,9 @@ button, .button {
     &:has(.btn-settings), &:has(.btn-save-active), &:has(.btn-save-empty), &:has(.btn-edit) {
         padding: 0;
     }
-}
-
-
-.btn-sm span{
-    background-size: 1.6rem;
-    height: 1.6rem;
+    & span:has(.btn-warning), & span:has(.btn-success){
+        cursor        : default;
+    }
 }
 
 .btn-md span{
@@ -296,6 +292,8 @@ button, .button {
 .btn-copy {
     transition: all var(--transition-dur-hover) ease-in-out;
     background: url('/assets/icons/copy_16.svg') no-repeat center;
+    width: 1.6rem;
+
 }
 
 .btn-success {

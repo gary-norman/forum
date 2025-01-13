@@ -97,11 +97,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         });
 
-
-
-
-
-
         label.addEventListener('click', async () => {
             try {
                 await updateCopyStatus(input, label, icon);
@@ -205,14 +200,10 @@ scrollButton.addEventListener('click', () => {
 
 
 function getModalPos(shareButton, shareModal) {
-
-
     //get button position
     const buttonPos = shareButton.getBoundingClientRect();
-    const modalPos = shareModal.getBoundingClientRect();
 
     //set modal styling
-    // shareModal.style.position = 'absolute';
     shareModal.style.top = `${buttonPos.bottom - 16}px`;
     shareModal.style.left = `${buttonPos.left  - 20}px`;
 }

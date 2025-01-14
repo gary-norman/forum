@@ -338,9 +338,10 @@
       <div class="main-content">
         <aside class="sidebar">
           <div class="sidebarProfile">
+            {{ if (ne .CurrentUserName "nouser") }}
             <div class="sidebar-profile-pic"></div>
             <div>
-              <h3>Eyesome578</h3>
+              <h3>{{ .CurrentUserName }}</h3>
               <div>
                 <button class="btn-md btn-icotext btn-follows btn-invert-never">
                   <span class="btn-following">72</span>
@@ -351,6 +352,8 @@
               </div>
             </div>
           </div>
+          {{ else }}
+          {{ end }}
           <div class="sidebar-scroll scroll-down">
             <hr class="solid" />
             <div class="sidebar-block sidebar-dashboard">

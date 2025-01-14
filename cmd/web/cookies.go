@@ -19,7 +19,7 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 	csrfToken := models.GenerateToken(32)
 	expires := time.Now().Add(time.Hour * 24)
 
-	// Set Session Token and CSRF Token cookies
+	// Set Session, Username, and CSRF Token cookies
 	http.SetCookie(w, &http.Cookie{
 		Name:     "session_token",
 		Value:    sessionToken,
@@ -49,13 +49,22 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 
 func (app *app) GetLoggedInUser(r *http.Request) (*models.User, error) {
 	// Get the username from the request cookie
-	username, err := r.Cookie("username")
-	if err != nil {
-		return nil, errors.New("user is not logged in")
+	userCookie, getCookieErr := r.Cookie("username")
+	if getCookieErr != nil {
+		log.Printf(ErrorMsgs().Cookies, "get", getCookieErr)
+		return nil, getCookieErr
 	}
-	user, getUserErr := app.users.GetUserByUsername(username.Value, "GetLoggedInUser")
+	var username string
+	if userCookie != nil {
+		username = userCookie.Value
+	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Username", username)
+	if username == "" {
+		return nil, errors.New("no user is logged in")
+	}
+	user, getUserErr := app.users.GetUserByUsername(username, "GetLoggedInUser")
 	if getUserErr != nil {
-		log.Printf(ErrorMsgs().NotFound, "user", username.Value, "GetLoggedInUser", getUserErr)
+		return nil, getUserErr
 	}
 	return user, nil
 }
@@ -119,8 +128,9 @@ func (m *CookieModel) UpdateCookies(user *models.User, sessionToken, csrfToken s
 	return err
 }
 
-func (m *CookieModel) DeleteCookies(user *models.User) error {
+func (m *CookieModel) DeleteCookies(w http.ResponseWriter, user *models.User) error {
 	Colors := models.CreateColors()
+	expires := time.Now().Add(time.Hour - 1000)
 	stmt := "UPDATE Users SET SessionToken = '', CsrfToken = '' WHERE Username = ?"
 	result, err := m.DB.Exec(stmt, user.Username)
 	if err != nil {
@@ -134,6 +144,24 @@ func (m *CookieModel) DeleteCookies(user *models.User) error {
 		dbUpdatedColor = Colors.Green
 	}
 	fmt.Printf(Colors.Blue+"Database update: "+dbUpdatedColor+"%v\n", dbUpdated)
-	// TODO overwrite browser cookies
+	// Set Session, Username, and CSRF Token cookies
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_token",
+		Value:    "",
+		Expires:  expires,
+		HttpOnly: true,
+	})
+	http.SetCookie(w, &http.Cookie{
+		Name:     "username",
+		Value:    "",
+		Expires:  expires,
+		HttpOnly: true,
+	})
+	http.SetCookie(w, &http.Cookie{
+		Name:     "csrf_token",
+		Value:    "",
+		Expires:  expires,
+		HttpOnly: false,
+	})
 	return err
 }

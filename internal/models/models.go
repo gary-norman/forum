@@ -151,6 +151,8 @@ type NotifyPlaceholder struct {
 }
 
 type TemplateData struct {
+	CurrentUser       *User             `json:"user"`
+	CurrentUserName   string            `json:"currentUserName"`
 	Posts             []PostWithDaysAgo `json:"posts"`
 	Images            []Image           `json:"images"`
 	Comments          []Comment         `json:"comments"`

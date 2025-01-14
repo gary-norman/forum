@@ -133,7 +133,6 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// wait for cookies to be set
-
 	log.Printf(Colors.Green+"Login Successful! Welcome, %v!\n"+Colors.Reset, user.Username)
 
 	//fprintln, err := fmt.Fprintf(w, "Welcome, %v!", user.Username)
@@ -154,6 +153,10 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	username := cookie.Value
+	if username == "" {
+		log.Printf(ErrorMsgs().KeyValuePair, "aborting logout:", "no user is logged in")
+		return
+	}
 	fmt.Printf(Colors.Orange+"Attempting logout for "+Colors.White+"%v\n"+Colors.Reset, username)
 	fmt.Printf(ErrorMsgs().Divider)
 	var user *models.User
@@ -166,15 +169,19 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Delete the Session Token and CSRF Token cookies
-	delCookiErr := app.cookies.DeleteCookies(user)
+	delCookiErr := app.cookies.DeleteCookies(w, user)
 	if delCookiErr != nil {
 		log.Printf(ErrorMsgs().Cookies, "delete", delCookiErr)
 	}
-	fprintln, err := fmt.Fprintln(w, "Logged out successfully!")
-	if err != nil {
-		return
-	}
-	log.Println(fprintln)
+	log.Println(Colors.Green + "Logged out successfully!")
+
+	//fprintln, err := fmt.Fprintf(w, "Welcome, %v!", user.Username)
+	//if err != nil {
+	//	log.Print(ErrorMsgs.Login, err)
+	//	return
+	//}
+	//log.Println(fprintln)
+	app.getHome(w, r)
 }
 
 func (app *app) protected(w http.ResponseWriter, r *http.Request) {
@@ -201,12 +208,21 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
-	posts, err := app.posts.All()
-	if err != nil {
-		http.Error(w, err.Error(), 500)
+	posts, postsErr := app.posts.All()
+	if postsErr != nil {
+		http.Error(w, postsErr.Error(), 500)
 		return
 	}
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
+	currentUser, currentUserErr := app.GetLoggedInUser(r)
+	if currentUserErr != nil {
+		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
+	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
+	currentUserName := "nouser"
+	if currentUser != nil {
+		currentUserName = currentUser.Username
+	}
 
 	for index, post := range posts {
 		now := time.Now()
@@ -228,15 +244,18 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	templateData := models.TemplateData{
-		Posts:     postsWithDaysAgo,
-		Images:    nil,
-		Comments:  nil,
-		Reactions: nil,
+		CurrentUser:     currentUser,
+		CurrentUserName: currentUserName,
+		Posts:           postsWithDaysAgo,
+		Images:          nil,
+		Comments:        nil,
+		Reactions:       nil,
 		NotifyPlaceholder: models.NotifyPlaceholder{
 			Register: "",
 			Login:    "",
 		},
 	}
+	models.JsonError(templateData)
 
 	t, err := template.ParseFiles("./assets/templates/index.html")
 	if err != nil {

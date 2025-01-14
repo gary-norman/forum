@@ -272,7 +272,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 }
 
 // TODO create edit popover
-func (app *app) EditUserDetails(r *http.Request) {
+func (app *app) editUserDetails(r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
 		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)

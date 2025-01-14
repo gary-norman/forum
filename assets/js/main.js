@@ -8,6 +8,9 @@ const actButtonsAll = actButtonContainer.querySelectorAll('button')
 const activityFeeds = document.querySelector('#activity-feeds')
 const activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]')
 // login/register buttons
+// sidebar elements
+const sidebarOption = document.querySelector('#sidebar-options');
+const sidebarOptionsList = document.querySelector('.sidebar-options-list');
 // TODO overhaul the naming of these buttons
 const loginTitle = document.querySelector('#login-title');
 const loginFormButton = document.querySelector('#login');
@@ -19,11 +22,23 @@ const btnForgot = document.querySelector('#btn_forgot');
 const formLogin = document.querySelector('#form-login');
 const formRegister = document.querySelector('#form-register');
 const formForgot = document.querySelector('#form-forgot');
+const formEditUser = document.querySelector('#form-edit-user');
+const formAccSettings = document.querySelector('#form-acc-settings');
+const formViewStats = document.querySelector('#form-view-stats');
+const formRemoveAcc = document.querySelector('#form-remove-acc');
 let forgotVisible = false;
 // login/register modal
-const modal = document.querySelector('#form-login-container');
-// Get the button that opens the modal
+const loginModal = document.querySelector('#form-login-container');
+const editUserModal = document.querySelector('#form-edit-user-container');
+const accSettingsModal = document.querySelector('#form-acc-settings-container');
+const viewStatsModal = document.querySelector('#form-view-stats-container');
+const removeAccModal = document.querySelector('#form-remove-acc-container');
+// Get the buttons that open the modals
 const openLoginModal = document.querySelector('#btn-open-login-modal');
+const openEditUserModal = document.querySelector('#btn-open-edit-user-modal');
+const openAccSettingsModal = document.querySelector('#btn-open-acc-settings-modal');
+const openViewStatsModal = document.querySelector('#btn-open-view-stats-modal');
+const openRemoveAccModal = document.querySelector('#btn-open-remove-acc-modal');
 // Get the <span> element that closes the modal
 const closeLoginModal = document.getElementsByClassName("close")[0];
 // registration form
@@ -151,6 +166,21 @@ function getCSRFToken() {
     return match ? match.substring('csrf_token='.length) : null;
 }
 
+// sendRequest('/protected', 'GET').then((response) => {
+//     console.log('Use of protected route successful:', response);
+//     })
+//     .catch((error) => {
+//         console.error('Use of protected route failed:', error);
+// });
+
+// ---- event listeners -----
+
+sidebarOption.addEventListener('click', function (event) {
+    sidebarOptionsList.classList.toggle('sidebar-options-reveal')
+    sidebarOptionsList.classList.toggle('ul-forwards')
+    sidebarOptionsList.classList.toggle('ul-reverse')
+});
+
 loginFormButton.addEventListener('submit', function (event) {
     event.preventDefault(); // Prevent the default form submission
 
@@ -207,28 +237,6 @@ logoutFormButton.addEventListener('click', function (event) {
             console.error('Error:', error);
         });
 })
-// sendRequest('/protected', 'GET').then((response) => {
-//     console.log('Use of protected route successful:', response);
-//     })
-//     .catch((error) => {
-//         console.error('Use of protected route failed:', error);
-// });
-
-// ---- event listeners -----
-
-// drag and drop
-// dropButton.addEventListener('click', input.click.bind(input), false);
-// when browse
-// loginFormButton.addEventListener('click', () => {
-//     sendRequest('/login', 'POST')
-//         .then((response) => {
-//             console.log('Login successful:', response);
-//         })
-//         .catch((error) => {
-//             console.error('Login failed:', error);
-//         });
-// })
-
 
 input.addEventListener('change', function () {
     file = this.files[0];
@@ -283,11 +291,15 @@ actButtonsAll.forEach( button => button.addEventListener('click', (e) => {
     console.log('activity-' + e.target.id);
 }) );
 // login register modal
-openLoginModal.addEventListener('click', () => modal.style.display = 'block');
-closeLoginModal.addEventListener('click', () => modal.style.display = 'none');
+openLoginModal.addEventListener('click', () => loginModal.style.display = 'block');
+openEditUserModal.addEventListener('click', () => editUserModal.style.display = 'block');
+openAccSettingsModal.addEventListener('click', () => accSettingsModal.style.display = 'block');
+openViewStatsModal.addEventListener('click', () => viewStatsModal.style.display = 'block');
+openRemoveAccModal.addEventListener('click', () => removeAccModal.style.display = 'block');
+closeLoginModal.addEventListener('click', () => loginModal.style.display = 'none');
 window.addEventListener('click', ({ target }) => {
-    if (target === modal) {
-        modal.style.display = 'none';
+    if (target === loginModal) {
+        loginModal.style.display = 'none';
     }
 });
 // login / register / forgot

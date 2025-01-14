@@ -280,12 +280,7 @@
       <div popover id="form-post">
         <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
           <h3 class="form-title">create a post</h3>
-<!--          <label class="hide-feed" for="author">User:</label>-->
-          <!--                INFO this will not be in the final form as it will be determined by the logged in user -->
-          <!-- FIXME the input labels need to follow the model of the login form -->
           <label for="channel" class="invisible">channel</label>
-<!--          <input type="text" list="channels" id="channel" name="channel" />-->
-<!--          <label for="channels">channels</label>-->
           <select id="channel" name="channel">
             <option selected disabled hidden>select a channel</option>
             <option value='{"channelName":"user&apos;s lounge", "channelID":"2001"}'>user's lounge</option>
@@ -335,10 +330,19 @@
           </div>
         </form>
       </div>
+      <div aria-modal="true" id="form-edit-user-container" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div id="form-edit-user">
+            <form action="/login" method="POST">
+            </form>
+          </div>
+        </div>
+      </div>
       <div class="main-content">
         <aside class="sidebar">
+          {{ if (ne .CurrentUserName "nouser") }}
           <div class="sidebarProfile">
-            {{ if (ne .CurrentUserName "nouser") }}
             <div class="sidebar-profile-pic"></div>
             <div>
               <h3>{{ .CurrentUserName }}</h3>
@@ -355,7 +359,9 @@
           {{ else }}
           {{ end }}
           <div class="sidebar-scroll scroll-down">
+            {{ if (ne .CurrentUserName "nouser") }}
             <hr class="solid" />
+            {{ end }}
             <div class="sidebar-block sidebar-dashboard">
               <small class="padded">Dashboard</small>
               <div class="sidebar-option home">Home</div>
@@ -370,7 +376,13 @@
                   <!--                            <span class="darklight-border"></span>-->
                 </label>
               </div>
-              <div class="sidebar-option settings">Settings</div>
+              <div class="sidebar-option settings" id="sidebar-options">Settings</div>
+              <ul class="sidebar-options-list ul-reverse">
+              <li id="btn-open-edit-user-modal">edit your profile</li>
+              <li id="btn-open-acc-settings-modal">account settings</li>
+              <li id="btn-open-view-stats-modal">view stats</li>
+              <li id="btn-open-remove-acc-modal">remove your account</li>
+            </ul>
               <!-- TODO make this the logout button -->
               <form action="/logout" method="POST">
                 <div id="logout-" class="sidebar-option logout">Log Out</div>

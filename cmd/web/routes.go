@@ -28,6 +28,7 @@ func (app *app) routes() http.Handler {
 	mux.HandleFunc("/login", app.login)
 	mux.HandleFunc("/logout", app.logout)
 	mux.HandleFunc("/protected", app.protected)
+	mux.HandleFunc("/edituser", app.editUserDetails)
 
 	return mux
 }

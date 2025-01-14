@@ -53,6 +53,24 @@ func (m *UserModel) Edit(user *models.User) error {
 	return nil
 }
 
+func (m *UserModel) Delete(user *models.User) error {
+	stmt, prepErr := m.DB.Prepare("DELETE FROM Users WHERE ID = ?")
+	if prepErr != nil {
+		log.Printf(ErrorMsgs().Query, "Users", prepErr)
+	}
+	defer func(stmt *sql.Stmt) {
+		closErr := stmt.Close()
+		if closErr != nil {
+			log.Printf(ErrorMsgs().Close, "stmt", "delete", closErr)
+		}
+	}(stmt) // Prepared statements take up server resources and should be closed after use.
+	_, err := stmt.Exec(user.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, error) {
 	Colors := models.CreateColors()
 	if m == nil || m.DB == nil {

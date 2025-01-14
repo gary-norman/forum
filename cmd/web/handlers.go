@@ -271,6 +271,33 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// TODO create edit popover
+func (app *app) EditUserDetails(r *http.Request) {
+	user, getUserErr := app.GetLoggedInUser(r)
+	if getUserErr != nil {
+		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)
+		return
+	}
+	if user.Username == "" {
+		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)
+		return
+	}
+	if parseErr := r.ParseForm(); parseErr != nil {
+		log.Printf(ErrorMsgs().Parse, "EditUserDetails", parseErr)
+		return
+	}
+	avatar := r.FormValue("avatar")
+	banner := r.FormValue("banner")
+	description := r.FormValue("description")
+	user.Avatar = avatar
+	user.Banner = banner
+	user.Description = description
+	editErr := app.users.Edit(user)
+	if editErr != nil {
+		log.Printf(ErrorMsgs().Edit, user.Username, "EditUserDetails", editErr)
+	}
+}
+
 func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("./assets/templates/posts.create.html")
 	if err != nil {

@@ -42,6 +42,7 @@ type Errors struct {
 	Cookies      string
 	CreateFile   string
 	Divider      string
+	Edit         string
 	Execute      string
 	KeyValuePair string
 	Login        string
@@ -132,6 +133,7 @@ func CreateErrorMessages() *Errors {
 		Cookies:      Colors.Blue + "Unable to " + Colors.White + "%v cookies with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		CreateFile:   Colors.Blue + "Unable to create file " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Divider:      Colors.Grey + "*-------------------------------------------------------*\n" + Colors.Reset,
+		Edit:         Colors.Blue + "Unable to edit " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Execute:      Colors.Blue + "Unable to execute template with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		KeyValuePair: Colors.Blue + "%v: " + Colors.White + "%v\n",
 		Login:        Colors.Blue + "Unable to login " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,

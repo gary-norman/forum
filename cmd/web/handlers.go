@@ -325,7 +325,9 @@ func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 		user.Avatar = GetFileName(r, "storePost", "user")
 	}
 	description := r.FormValue("bio")
-	user.Description = description
+	if description != "" {
+		user.Description = description
+	}
 	editErr := app.users.Edit(user)
 	if editErr != nil {
 		log.Printf(ErrorMsgs().Edit, user.Username, "EditUserDetails", editErr)

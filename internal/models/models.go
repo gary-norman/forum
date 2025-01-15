@@ -154,6 +154,7 @@ type TemplateData struct {
 	CurrentUser       *User             `json:"user"`
 	CurrentUserName   string            `json:"currentUserName"`
 	Posts             []PostWithDaysAgo `json:"posts"`
+	Avatar            string            `json:"avatar"`
 	Images            []Image           `json:"images"`
 	Comments          []Comment         `json:"comments"`
 	Reactions         []Reaction        `json:"reactions"`

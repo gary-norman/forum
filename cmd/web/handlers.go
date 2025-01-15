@@ -16,6 +16,23 @@ import (
 	"time"
 )
 
+// FIXME D.R.Y.
+type FormData struct {
+	title       string
+	content     string
+	images      string
+	userName    string
+	userID      int
+	channelName string
+	channelID   int
+	commentable bool
+	isFlagged   bool
+}
+type ChannelData struct {
+	ChannelName string `json:"channelName"`
+	ChannelID   string `json:"channelID"`
+}
+
 func isValidPassword(password string) bool {
 	// At least 8 characters
 	if len(password) < 8 {
@@ -220,9 +237,12 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
 	currentUserName := "nouser"
+	currentUserAvatar := ""
 	if currentUser != nil {
 		currentUserName = currentUser.Username
+		currentUserAvatar = currentUser.Avatar
 	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
 
 	for index, post := range posts {
 		now := time.Now()
@@ -247,6 +267,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		CurrentUser:     currentUser,
 		CurrentUserName: currentUserName,
 		Posts:           postsWithDaysAgo,
+		Avatar:          currentUserAvatar,
 		Images:          nil,
 		Comments:        nil,
 		Reactions:       nil,
@@ -271,8 +292,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// TODO create edit popover
-func (app *app) editUserDetails(r *http.Request) {
+func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
 		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)
@@ -282,20 +302,35 @@ func (app *app) editUserDetails(r *http.Request) {
 		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)
 		return
 	}
-	if parseErr := r.ParseForm(); parseErr != nil {
-		log.Printf(ErrorMsgs().Parse, "EditUserDetails", parseErr)
+
+	parseErr := r.ParseMultipartForm(10 << 20)
+	if parseErr != nil {
+		http.Error(w, parseErr.Error(), 400)
+		log.Printf(ErrorMsgs().Parse, "editUserDetails", parseErr)
 		return
 	}
-	avatar := r.FormValue("avatar")
-	banner := r.FormValue("banner")
-	description := r.FormValue("description")
-	user.Avatar = avatar
-	user.Banner = banner
+	// Retrieve the file from form data
+	file, handler, retrieveErr := r.FormFile("file-drop")
+	if retrieveErr != nil {
+		log.Printf(ErrorMsgs().RetrieveFile, "image", "editUserDetails", retrieveErr)
+	}
+	defer func(file multipart.File) {
+		closeErr := file.Close()
+		if closeErr != nil {
+			log.Printf(ErrorMsgs().Close, file, "editUserDetails", closeErr)
+		}
+	}(file)
+
+	if handler.Filename != "" {
+		user.Avatar = GetFileName(r, "storePost", "user")
+	}
+	description := r.FormValue("bio")
 	user.Description = description
 	editErr := app.users.Edit(user)
 	if editErr != nil {
 		log.Printf(ErrorMsgs().Edit, user.Username, "EditUserDetails", editErr)
 	}
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
@@ -393,22 +428,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Close, file, "storePost", closeErr)
 		}
 	}(file)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Form data", r.PostForm)
-	type FormData struct {
-		title       string
-		content     string
-		images      string
-		userName    string
-		userID      int
-		channelName string
-		channelID   int
-		commentable bool
-		isFlagged   bool
-	}
-	type ChannelData struct {
-		ChannelName string `json:"channelName"`
-		ChannelID   string `json:"channelID"`
-	}
+	// get channel name
 	selectionJSON := r.PostForm.Get("channel")
 	if selectionJSON == "" {
 		http.Error(w, "No selection provided", http.StatusBadRequest)

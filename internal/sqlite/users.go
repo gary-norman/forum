@@ -143,7 +143,7 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 		log.Printf(fmt.Sprintf(ErrorMsgs().UserModel, "GetUserByUsername", username))
 	}
 	// Query to fetch user data by username
-	stmt, prepErr := m.DB.Prepare("SELECT ID, Username, HashedPassword, SessionToken, CsrfToken FROM Users WHERE Username = ? LIMIT 1")
+	stmt, prepErr := m.DB.Prepare("SELECT ID, Username, HashedPassword, Email_address, Avatar, Banner, Description, UserType, Created, Is_flagged, SessionToken, CsrfToken FROM Users WHERE Username = ? LIMIT 1")
 	if prepErr != nil {
 		log.Printf(ErrorMsgs().Query, username, prepErr)
 	}
@@ -159,6 +159,13 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 		&user.ID,
 		&user.Username,
 		&user.HashedPassword,
+		&user.Email,
+		&user.Avatar,
+		&user.Banner,
+		&user.Description,
+		&user.Usertype,
+		&user.Created,
+		&user.IsFlagged,
 		&user.SessionToken,
 		&user.CSRFToken)
 	if queryErr != nil {

@@ -28,19 +28,23 @@ const formViewStats = document.querySelector('#form-view-stats');
 const formRemoveAcc = document.querySelector('#form-remove-acc');
 let forgotVisible = false;
 // login/register modal
-const loginModal = document.querySelector('#form-login-container');
-const editUserModal = document.querySelector('#form-edit-user-container');
-const accSettingsModal = document.querySelector('#form-acc-settings-container');
-const viewStatsModal = document.querySelector('#form-view-stats-container');
-const removeAccModal = document.querySelector('#form-remove-acc-container');
+const loginModal = document.querySelector('#container-form-login');
+const editUserModal = document.querySelector('#container-form-edit-user');
+const accSettingsModal = document.querySelector('#container-form-acc-settings');
+const viewStatsModal = document.querySelector('#container-form-view-stats');
+const removeAccModal = document.querySelector('#container-form-remove-acc');
 // Get the buttons that open the modals
 const openLoginModal = document.querySelector('#btn-open-login-modal');
 const openEditUserModal = document.querySelector('#btn-open-edit-user-modal');
-const openAccSettingsModal = document.querySelector('#btn-open-acc-settings-modal');
-const openViewStatsModal = document.querySelector('#btn-open-view-stats-modal');
-const openRemoveAccModal = document.querySelector('#btn-open-remove-acc-modal');
+// const openAccSettingsModal = document.querySelector('#btn-open-acc-settings-modal');
+// const openViewStatsModal = document.querySelector('#btn-open-view-stats-modal');
+// const openRemoveAccModal = document.querySelector('#btn-open-remove-acc-modal');
 // Get the <span> element that closes the modal
-const closeLoginModal = document.getElementsByClassName("close")[0];
+const closeLoginModal = loginModal.getElementsByClassName("close")[0];
+const closeEditUserModal = editUserModal.getElementsByClassName("close")[0];
+// const closeAccSettingsModal = accSettingsModal.getElementsByClassName("close")[0];
+// const closeViewStatsModal = viewStatsModal.getElementsByClassName("close")[0];
+// const closeRemoveAccModal = removeAccModal.getElementsByClassName("close")[0];
 // registration form
 const regForm = document.querySelector('#form-register');
 const regFormInputs = regForm.querySelectorAll('input');
@@ -56,12 +60,18 @@ const regPassRpt = document.querySelector('#register_password-rpt');
 const validList = regForm.querySelector('ul');
 // drag and drop
 // adapted from https://medium.com/@cwrworksite/drag-and-drop-file-upload-with-preview-using-javascript-cd85524e4a63
-const dropArea = document.querySelector('#drop_zone');
-const uploadedFile = document.querySelector('#uploadedFile')
+// user
+const dropAreaUser = document.querySelector('#drop-zone--user-image');
+const dropButtonUser = dropAreaUser.querySelector('.button');
+const inputUser = dropAreaUser.querySelector('input');
+const uploadedFileUser = document.querySelector('#uploaded-file--user-image');
+// post
+const dropAreaPost = document.querySelector('#drop-zone--post');
+const dropButtonPost = dropAreaPost.querySelector('.button');
+const inputPost = dropAreaPost.querySelector('input');
+const uploadedFilePost = document.querySelector('#uploaded-file--post');
 const dragText = document.querySelector('.dragText');
 const dragButton = document.querySelector('.button');
-let dropButton = dropArea.querySelector('.button');
-let input = dropArea.querySelector('input');
 let file;
 let filename;
 
@@ -238,34 +248,34 @@ logoutFormButton.addEventListener('click', function (event) {
         });
 })
 
-input.addEventListener('change', function () {
+inputUser.addEventListener('change', function () {
     file = this.files[0];
-    dropArea.classList.add('active');
+    dropAreaUser.classList.add('active');
 });
 // when file is inside drag area
-dropArea.addEventListener('dragover', (event) => {
+dropAreaUser.addEventListener('dragover', (event) => {
     event.preventDefault();
-    dropArea.classList.add('active');
+    dropAreaUser.classList.add('active');
     dragText.textContent = 'release to Upload';
     dragButton.style.display = 'none';
     // console.log('File is inside the drag area');
 });
 // when file leaves the drag area
-dropArea.addEventListener('dragleave', () => {
-    dropArea.classList.remove('active');
+dropAreaUser.addEventListener('dragleave', () => {
+    dropAreaUser.classList.remove('active');
     // console.log('File left the drag area');
     dragText.textContent = 'drag your file here';
 });
 // when file is dropped
-dropArea.addEventListener('drop', (event) => {
+dropAreaUser.addEventListener('drop', (event) => {
     event.preventDefault();
-    dropArea.classList.add('dropped');
+    dropAreaUser.classList.add('dropped');
     // console.log('File is dropped in drag area');
     file = event.dataTransfer.files[0]; // grab single file even if user selects multiple files
     // console.log(file);
-    displayFile();
+    displayFile(uploadedFileUser, dropAreaUser);
 });
-function displayFile() {
+function displayFile(uploadedFile, dropArea) {
     let fileType = file.type;
     // console.log(fileType);
     let validExtensions = ["image/*"];
@@ -273,7 +283,7 @@ function displayFile() {
         let fileReader = new FileReader();
         fileReader.onload = () => {
             uploadedFile.innerHTML = `<div class="dragText">uploaded</div>
-        <div class="uploadedFile">${file.name}</div>`;
+        <div class="uploaded-file">${file.name}</div>`;
             dropArea.classList.add("dropped");
         };
         fileReader.readAsDataURL(file);
@@ -290,16 +300,36 @@ actButtonsAll.forEach( button => button.addEventListener('click', (e) => {
     toggleFeed(document.getElementById("activity-" + e.target.id),document.getElementById("activity-feed-" + e.target.id),  e.target);
     console.log('activity-' + e.target.id);
 }) );
-// login register modal
+// open modals
+// TODO refactor the open and close modals
 openLoginModal.addEventListener('click', () => loginModal.style.display = 'block');
 openEditUserModal.addEventListener('click', () => editUserModal.style.display = 'block');
-openAccSettingsModal.addEventListener('click', () => accSettingsModal.style.display = 'block');
-openViewStatsModal.addEventListener('click', () => viewStatsModal.style.display = 'block');
-openRemoveAccModal.addEventListener('click', () => removeAccModal.style.display = 'block');
+// openAccSettingsModal.addEventListener('click', () => accSettingsModal.style.display = 'block');
+// openViewStatsModal.addEventListener('click', () => viewStatsModal.style.display = 'block');
+// openRemoveAccModal.addEventListener('click', () => removeAccModal.style.display = 'block');
+// close modals
 closeLoginModal.addEventListener('click', () => loginModal.style.display = 'none');
+closeEditUserModal.addEventListener('click', () => editUserModal.style.display = 'none');
+// closeAccSettingsModal.addEventListener('click', () => accSettingsModal.style.display = 'none');
+// closeViewStatsModal.addEventListener('click', () => viewStatsModal.style.display = 'none');
+// closeRemoveAccModal.addEventListener('click', () => removeAccModal.style.display = 'none');
 window.addEventListener('click', ({ target }) => {
-    if (target === loginModal) {
-        loginModal.style.display = 'none';
+    switch (target) {
+        case loginModal:
+            loginModal.style.display = 'none';
+            break;
+        case editUserModal:
+            editUserModal.style.display = 'none';
+            break;
+        case accSettingsModal:
+            accSettingsModal.style.display = 'none';
+            break;
+        case viewStatsModal:
+            viewStatsModal.style.display = 'none';
+            break;
+        case removeAccModal:
+            removeAccModal.style.display = 'none';
+            break;
     }
 });
 // login / register / forgot
@@ -310,6 +340,7 @@ btnRegister.forEach(button =>
     button.addEventListener('click', (e) => logReg(e.target.id))
 );
 btnForgot.addEventListener('click', forgot);
+// TODO get these working
 // validate password
 regPass.addEventListener('input', validatePass);
 // check passwords match

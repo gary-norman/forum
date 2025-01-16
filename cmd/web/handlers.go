@@ -508,8 +508,6 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 
 	//log.Printf("using storeReaction()")
-	// Using custom error messages
-	ErrorMsgs := models.CreateErrorMessages()
 
 	// Check if the method is POST, otherwise return Method Not Allowed
 	if r.Method != http.MethodPost {
@@ -524,7 +522,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&reactionData)
 	if err != nil {
 		// Use the error message from the Errors struct for decoding errors
-		http.Error(w, fmt.Sprintf(ErrorMsgs.Parse, "storeReaction", err), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf(ErrorMsgs().Parse, "storeReaction", err), http.StatusBadRequest)
 		log.Printf("Error decoding JSON: %v", err)
 		return
 	}
@@ -551,7 +549,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.AuthorID, reactionData.ChannelID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for fetching errors
-		http.Error(w, fmt.Sprintf(ErrorMsgs.Read, "storeReaction", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf(ErrorMsgs().Read, "storeReaction", err), http.StatusInternalServerError)
 		log.Printf("Error fetching existing reaction: %v", err)
 		return
 	}
@@ -568,7 +566,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 			err = app.reactions.Delete(existingReaction.ID)
 			if err != nil {
 				// Use your custom error message for deletion errors
-				http.Error(w, fmt.Sprintf(ErrorMsgs.Delete, "storeReaction", err), http.StatusInternalServerError)
+				http.Error(w, fmt.Sprintf(ErrorMsgs().Delete, "storeReaction", err), http.StatusInternalServerError)
 				log.Printf("Error deleting reaction: %v", err)
 				return
 			}
@@ -585,7 +583,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		err = app.reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, reactionData.ChannelID, postID, commentID)
 		if err != nil {
 			// Use your custom error message for update errors
-			http.Error(w, fmt.Sprintf(ErrorMsgs.Update, "storeReaction", err), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintf(ErrorMsgs().Update, "storeReaction", err), http.StatusInternalServerError)
 			log.Printf("Error updating reaction: %v", err)
 			return
 		}
@@ -602,7 +600,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	err = app.reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, reactionData.ChannelID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for insertion errors
-		http.Error(w, fmt.Sprintf(ErrorMsgs.Insert, "storeReaction", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf(ErrorMsgs().Insert, "storeReaction", err), http.StatusInternalServerError)
 		log.Printf("Error inserting reaction: %v", err)
 		return
 	}
@@ -616,7 +614,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	err = json.NewEncoder(w).Encode(map[string]string{"message": "Reaction added (in go)"})
 
 	if err != nil {
-		log.Printf(ErrorMsgs.Post, err)
+		log.Printf(ErrorMsgs().Post, err)
 		http.Error(w, err.Error(), 500)
 		return
 	}

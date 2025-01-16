@@ -16,6 +16,23 @@ import (
 	"time"
 )
 
+// FIXME D.R.Y.
+type FormData struct {
+	title       string
+	content     string
+	images      string
+	userName    string
+	userID      int
+	channelName string
+	channelID   int
+	commentable bool
+	isFlagged   bool
+}
+type ChannelData struct {
+	ChannelName string `json:"channelName"`
+	ChannelID   string `json:"channelID"`
+}
+
 func isValidPassword(password string) bool {
 	// At least 8 characters
 	if len(password) < 8 {
@@ -133,7 +150,6 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// wait for cookies to be set
-
 	log.Printf(Colors.Green+"Login Successful! Welcome, %v!\n"+Colors.Reset, user.Username)
 
 	//fprintln, err := fmt.Fprintf(w, "Welcome, %v!", user.Username)
@@ -154,6 +170,10 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	username := cookie.Value
+	if username == "" {
+		log.Printf(ErrorMsgs().KeyValuePair, "aborting logout:", "no user is logged in")
+		return
+	}
 	fmt.Printf(Colors.Orange+"Attempting logout for "+Colors.White+"%v\n"+Colors.Reset, username)
 	fmt.Printf(ErrorMsgs().Divider)
 	var user *models.User
@@ -166,15 +186,19 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Delete the Session Token and CSRF Token cookies
-	delCookiErr := app.cookies.DeleteCookies(user)
+	delCookiErr := app.cookies.DeleteCookies(w, user)
 	if delCookiErr != nil {
 		log.Printf(ErrorMsgs().Cookies, "delete", delCookiErr)
 	}
-	fprintln, err := fmt.Fprintln(w, "Logged out successfully!")
-	if err != nil {
-		return
-	}
-	log.Println(fprintln)
+	log.Println(Colors.Green + "Logged out successfully!")
+
+	//fprintln, err := fmt.Fprintf(w, "Welcome, %v!", user.Username)
+	//if err != nil {
+	//	log.Print(ErrorMsgs.Login, err)
+	//	return
+	//}
+	//log.Println(fprintln)
+	app.getHome(w, r)
 }
 
 func (app *app) protected(w http.ResponseWriter, r *http.Request) {
@@ -201,12 +225,24 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
-	posts, err := app.posts.All()
-	if err != nil {
-		http.Error(w, err.Error(), 500)
+	posts, postsErr := app.posts.All()
+	if postsErr != nil {
+		http.Error(w, postsErr.Error(), 500)
 		return
 	}
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
+	currentUser, currentUserErr := app.GetLoggedInUser(r)
+	if currentUserErr != nil {
+		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
+	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
+	currentUserName := "nouser"
+	currentUserAvatar := ""
+	if currentUser != nil {
+		currentUserName = currentUser.Username
+		currentUserAvatar = currentUser.Avatar
+	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
 
 	for index, post := range posts {
 		now := time.Now()
@@ -228,15 +264,19 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	templateData := models.TemplateData{
-		Posts:     postsWithDaysAgo,
-		Images:    nil,
-		Comments:  nil,
-		Reactions: nil,
+		CurrentUser:     currentUser,
+		CurrentUserName: currentUserName,
+		Posts:           postsWithDaysAgo,
+		Avatar:          currentUserAvatar,
+		Images:          nil,
+		Comments:        nil,
+		Reactions:       nil,
 		NotifyPlaceholder: models.NotifyPlaceholder{
 			Register: "",
 			Login:    "",
 		},
 	}
+	models.JsonError(templateData)
 
 	tpl, err := GetTemplate()
 	if err != nil {
@@ -270,6 +310,49 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return
 	}
+}
+
+func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
+	user, getUserErr := app.GetLoggedInUser(r)
+	if getUserErr != nil {
+		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)
+		return
+	}
+	if user.Username == "" {
+		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)
+		return
+	}
+
+	parseErr := r.ParseMultipartForm(10 << 20)
+	if parseErr != nil {
+		http.Error(w, parseErr.Error(), 400)
+		log.Printf(ErrorMsgs().Parse, "editUserDetails", parseErr)
+		return
+	}
+	// Retrieve the file from form data
+	file, handler, retrieveErr := r.FormFile("file-drop")
+	if retrieveErr != nil {
+		log.Printf(ErrorMsgs().RetrieveFile, "image", "editUserDetails", retrieveErr)
+	}
+	defer func(file multipart.File) {
+		closeErr := file.Close()
+		if closeErr != nil {
+			log.Printf(ErrorMsgs().Close, file, "editUserDetails", closeErr)
+		}
+	}(file)
+
+	if handler.Filename != "" {
+		user.Avatar = GetFileName(r, "storePost", "user")
+	}
+	description := r.FormValue("bio")
+	if description != "" {
+		user.Description = description
+	}
+	editErr := app.users.Edit(user)
+	if editErr != nil {
+		log.Printf(ErrorMsgs().Edit, user.Username, "EditUserDetails", editErr)
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
@@ -367,22 +450,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Close, file, "storePost", closeErr)
 		}
 	}(file)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Form data", r.PostForm)
-	type FormData struct {
-		title       string
-		content     string
-		images      string
-		userName    string
-		userID      int
-		channelName string
-		channelID   int
-		commentable bool
-		isFlagged   bool
-	}
-	type ChannelData struct {
-		ChannelName string `json:"channelName"`
-		ChannelID   string `json:"channelID"`
-	}
+	// get channel name
 	selectionJSON := r.PostForm.Get("channel")
 	if selectionJSON == "" {
 		http.Error(w, "No selection provided", http.StatusBadRequest)

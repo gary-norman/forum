@@ -18,9 +18,57 @@ func ErrorMsgs() *models.Errors {
 }
 
 func (m *UserModel) Insert(username, email, password, sessionToken, csrfToken, avatar, banner, description string) error {
-	stmt := "INSERT INTO Users (Username, Email_address, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, Is_flagged) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, DateTime('now'), 0)"
-	_, err := m.DB.Exec(stmt, username, email, password, sessionToken, csrfToken, avatar, banner, description)
-	return err
+	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (Username, Email_address, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, Is_flagged) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, DateTime('now'), 0)")
+	if insertErr != nil {
+		log.Printf(ErrorMsgs().Query, username, insertErr)
+	}
+	defer func(stmt *sql.Stmt) {
+		closErr := stmt.Close()
+		if closErr != nil {
+			log.Printf(ErrorMsgs().Close, "stmt", "insert", closErr)
+		}
+	}(stmt) // Prepared statements take up server resources and should be closed after use.
+	_, err := stmt.Exec(username, email, password, sessionToken, csrfToken, avatar, banner, description)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *UserModel) Edit(user *models.User) error {
+	stmt, prepErr := m.DB.Prepare("UPDATE Users SET Username = ?, Email_address = ?, HashedPassword = ?, SessionToken = ?, CsrfToken = ?, Avatar = ?, Banner = ?, Description = ? WHERE ID = ?")
+	if prepErr != nil {
+		log.Printf(ErrorMsgs().Query, "Users", prepErr)
+	}
+	defer func(stmt *sql.Stmt) {
+		closErr := stmt.Close()
+		if closErr != nil {
+			log.Printf(ErrorMsgs().Close, "stmt", "edit", closErr)
+		}
+	}(stmt) // Prepared statements take up server resources and should be closed after use.
+	_, err := stmt.Exec(user.Username, user.Email, user.HashedPassword, user.SessionToken, user.CSRFToken, user.Avatar, user.Banner, user.Description, user.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *UserModel) Delete(user *models.User) error {
+	stmt, prepErr := m.DB.Prepare("DELETE FROM Users WHERE ID = ?")
+	if prepErr != nil {
+		log.Printf(ErrorMsgs().Query, "Users", prepErr)
+	}
+	defer func(stmt *sql.Stmt) {
+		closErr := stmt.Close()
+		if closErr != nil {
+			log.Printf(ErrorMsgs().Close, "stmt", "delete", closErr)
+		}
+	}(stmt) // Prepared statements take up server resources and should be closed after use.
+	_, err := stmt.Exec(user.ID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, error) {
@@ -95,7 +143,7 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 		log.Printf(fmt.Sprintf(ErrorMsgs().UserModel, "GetUserByUsername", username))
 	}
 	// Query to fetch user data by username
-	stmt, prepErr := m.DB.Prepare("SELECT ID, Username, HashedPassword, SessionToken, CsrfToken FROM Users WHERE Username = ? LIMIT 1")
+	stmt, prepErr := m.DB.Prepare("SELECT ID, Username, HashedPassword, Email_address, Avatar, Banner, Description, UserType, Created, Is_flagged, SessionToken, CsrfToken FROM Users WHERE Username = ? LIMIT 1")
 	if prepErr != nil {
 		log.Printf(ErrorMsgs().Query, username, prepErr)
 	}
@@ -111,6 +159,13 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 		&user.ID,
 		&user.Username,
 		&user.HashedPassword,
+		&user.Email,
+		&user.Avatar,
+		&user.Banner,
+		&user.Description,
+		&user.Usertype,
+		&user.Created,
+		&user.IsFlagged,
 		&user.SessionToken,
 		&user.CSRFToken)
 	if queryErr != nil {

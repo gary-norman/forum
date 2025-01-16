@@ -15,21 +15,19 @@ func (app *app) routes() http.Handler {
 	imageServer := http.FileServer(http.Dir("./assets/images"))
 	mux.Handle("/assets/images/", http.StripPrefix("/assets/images", imageServer))
 	fontServer := http.FileServer(http.Dir("./assets/fonts"))
+	userDataServer := http.FileServer(http.Dir("./userdata"))
+	mux.Handle("/userdata/", http.StripPrefix("/userdata", userDataServer))
 	mux.Handle("/assets/fonts/", http.StripPrefix("/assets/fonts", fontServer))
 	mux.HandleFunc("/", app.getHome)
-
-	// Use a single route for /posts/create and distinguish based on HTTP method
+	mux.HandleFunc("GET /posts/create", app.createPost)
+	mux.HandleFunc("POST /posts/create", app.storePost)
 	mux.HandleFunc("/posts/create", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case http.MethodGet:
-			app.createPost(w, r) // Handle GET requests
-		case http.MethodPost:
-			app.storePost(w, r) // Handle POST requests
-		default:
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		}
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	})
-
+	mux.HandleFunc("/register", app.register)
+	mux.HandleFunc("/login", app.login)
+	mux.HandleFunc("/logout", app.logout)
+	mux.HandleFunc("/protected", app.protected)
 	mux.HandleFunc("/store-reaction", app.storeReaction)
 
 	return mux

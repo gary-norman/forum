@@ -370,10 +370,6 @@
     background: var(--color-bg-4);
     z-index: -1;
     pointer-events: auto !important;
-    
-    
-    
-    
     & form {
         pointer-events: auto !important;
         display: flex;

@@ -1,36 +1,90 @@
 package models
 
+type Colors struct {
+	Reset  string
+	Red    string
+	Green  string
+	Yellow string
+	Orange string
+	Blue   string
+	Purple string
+	Cyan   string
+	Grey   string
+	White  string
+}
+
+func CreateColors() *Colors {
+	colors := &Colors{
+		Reset:  "\033[0m",
+		Red:    "\033[31m",
+		Green:  "\033[32m",
+		Yellow: "\033[33m",
+		Orange: "\033[38;5;208m",
+		Blue:   "\033[34m",
+		Purple: "\033[35m",
+		Cyan:   "\033[36m",
+		Grey:   "\033[37m",
+		White:  "\033[97m",
+	}
+	return colors
+}
+
 type Errors struct {
-	Open      string
-	Read      string
-	Write     string
-	Close     string
-	ConnInit  string
-	ConnConn  string
-	ConnClose string
-	Parse     string
-	Execute   string
-	Post      string
-	Delete    string
-	Update    string
-	Insert    string
+	Close        string
+	ConnClose    string
+	ConnInit     string
+	ConnConn     string
+	Cookies      string
+	CreateFile   string
+	Divider      string
+	Execute      string
+	KeyValuePair string
+	Login        string
+	NoRows       string
+	NotFound     string
+	Open         string
+	Parse        string
+	Post         string
+	Printf       string
+	Protected    string
+	Query        string
+	Read         string
+	RetrieveFile string
+	Register     string
+	SaveFile     string
+	Unmarshal    string
+	UserModel    string
+	Write        string
 }
 
 func CreateErrorMessages() *Errors {
+	Colors := CreateColors()
 	errors := &Errors{
-		Open:      "Unable to open %v called by %v\n",
-		Read:      "Unable to read %v called by %v\n",
-		Write:     "Unable to write to %v called by %v\n",
-		Close:     "Unable to close %v called by %v\n",
-		ConnInit:  "Unable to initialise connection %v called by %v\n",
-		ConnConn:  "Unable to connect to %v called by %v\n",
-		ConnClose: "Unable to close connection to %v called by %v\n",
-		Parse:     "Unable to parse %v called by %v with error: %v\n",
-		Execute:   "Unable to execute template with error: %v\n",
-		Post:      "Unable to post with error: %v\n",
-		Delete:    "Unable to delete with error: %v\n",
-		Update:    "Unable to update with error: %v\n",
-		Insert:    "Unable to insert with error: %v\n",
+		Close:        Colors.Blue + "Unable to close " + Colors.White + "%v" + Colors.Blue + "called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		ConnConn:     Colors.Blue + "Unable to connect to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
+		ConnClose:    Colors.Blue + "Unable to close connection to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
+		ConnInit:     Colors.Blue + "Unable to initialise connection " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
+		Cookies:      Colors.Blue + "Unable to " + Colors.White + "%v cookies with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		CreateFile:   Colors.Blue + "Unable to create file " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Divider:      Colors.Grey + "*-------------------------------------------------------*\n" + Colors.Reset,
+		Execute:      Colors.Blue + "Unable to execute template with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		KeyValuePair: Colors.Blue + "%v: " + Colors.White + "%v\n",
+		Login:        Colors.Blue + "Unable to login " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		NoRows:       Colors.Blue + "No rows returned for " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
+		NotFound:     Colors.Blue + "Unable to find %v: " + Colors.White + "%v " + Colors.Blue + "called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Open:         Colors.Blue + "Unable to open " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error " + Colors.Red + "%v\n" + Colors.Reset,
+		Parse:        Colors.Blue + "Unable to parse " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Post:         Colors.Blue + "Unable to post with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Printf:       Colors.Blue + "Unable to print with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Protected:    Colors.Blue + "CSRF validation failed for user " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Query:        Colors.Blue + "Unable to query " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Read:         Colors.Blue + "Unable to read " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		RetrieveFile: Colors.Blue + "Unable to retrieve file " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Register:     Colors.Blue + "Unable to register with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		SaveFile:     Colors.Blue + "Unable to save file " + Colors.White + "%v" + Colors.Blue + " to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Unmarshal:    Colors.Blue + "Unable to unmarshall " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		UserModel:    Colors.Blue + "Usermodel or DB called in " + Colors.White + "%v" + Colors.Blue + " for " + Colors.White + "%v" + Colors.Blue + " is nil\n" + Colors.Reset,
+		Write:        Colors.Blue + "Unable to write to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
 	}
 	return errors
 }

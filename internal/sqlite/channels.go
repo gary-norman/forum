@@ -17,7 +17,6 @@ func (m *ChannelModel) Insert(name, avatar, description, rules string, privacy b
 }
 
 func (m *ChannelModel) All() ([]models.Channel, error) {
-	ErrorMsgs := models.CreateErrorMessages()
 	stmt := "SELECT ID, Name, Avatar, Description, Created, Rules, Privacy FROM Channels ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -26,7 +25,7 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs.Close, "rows", "All")
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
 

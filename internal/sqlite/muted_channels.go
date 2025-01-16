@@ -17,7 +17,6 @@ func (m *MutedChannelModel) Insert(authotID, postID int) error {
 }
 
 func (m *MutedChannelModel) All() ([]models.MutedChannel, error) {
-	ErrorMsgs := models.CreateErrorMessages()
 	stmt := "SELECT ID, UserID, ChannelID, Created FROM Muted_channels ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -26,7 +25,7 @@ func (m *MutedChannelModel) All() ([]models.MutedChannel, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs.Close, "rows", "All")
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
 

@@ -1,18 +1,32 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type User struct {
-	ID          int       `json:"id"`
-	Username    string    `json:"username"`
-	Password    string    `json:"password"`
-	Email       string    `json:"email_address"`
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Login
 	Avatar      string    `json:"avatar,omitempty"` // Store UUID as string
 	Banner      string    `json:"banner,omitempty"` // Store UUID as string
 	Description string    `json:"description,omitempty"`
 	Usertype    string    `json:"usertype"`
 	Created     time.Time `json:"created"`
+	TimeSince   string    `json:"time_since"`
 	IsFlagged   bool      `json:"is_flagged,omitempty"`
+}
+type UserCheck struct {
+	ID             int    `json:"id"`
+	Username       string `json:"username"`
+	Email          string
+	HashedPassword string
+}
+type Login struct {
+	Email          string
+	HashedPassword string
+	SessionToken   string
+	CSRFToken      string
 }
 
 type Bookmark struct {
@@ -65,12 +79,20 @@ type Post struct {
 	Content     string    `json:"content"`
 	Images      string    `json:"images,omitempty"` // Store JSON as string
 	Created     time.Time `json:"created"`
+	TimeSince   string    `json:"time_since"`
 	Commentable bool      `json:"commentable"`
+	Author      string    `json:"author"`
 	AuthorID    int       `json:"author_id"`
 	ChannelID   int       `json:"channel_id"`
+	ChannelName string    `json:"channel_name"`
 	IsFlagged   bool      `json:"is_flagged,omitempty"`
 	Likes       int       `json:"likes"`
 	Dislikes    int       `json:"dislikes"`
+}
+
+type PostWithDaysAgo struct {
+	Post
+	TimeSince string
 }
 
 type Image struct {
@@ -114,4 +136,31 @@ type Flag struct {
 	FlaggedUserID    *int      `json:"flagged_user_id,omitempty"`
 	FlaggedPostID    *int      `json:"flagged_post_id,omitempty"`
 	FlaggedCommentID *int      `json:"flagged_comment_id,omitempty"`
+}
+
+type Notify struct {
+	BadPass      string
+	RegisterOk   string
+	RegisterFail string
+	BadLogin     string
+	LoginOk      string
+	LoginFail    string
+}
+
+type NotifyPlaceholder struct {
+	Register string
+	Login    string
+}
+
+type TemplateData struct {
+	Posts             []PostWithDaysAgo `json:"posts"`
+	Images            []Image           `json:"images"`
+	Comments          []Comment         `json:"comments"`
+	Reactions         []Reaction        `json:"reactions"`
+	NotifyPlaceholder `json:"notifyPlaceholder"`
+}
+
+type Session struct {
+	Username string
+	Expires  time.Time
 }

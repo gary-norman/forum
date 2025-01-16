@@ -18,6 +18,7 @@
 go.work
 # intellij files
 .idea/
+userdata/
 .DS_Store
 
 # Database files that are not allowed on git

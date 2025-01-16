@@ -17,7 +17,6 @@ func (m *MembershipModel) Insert(userID, channelID int) error {
 }
 
 func (m *MembershipModel) All() ([]models.Membership, error) {
-	ErrorMsgs := models.CreateErrorMessages()
 	stmt := "SELECT ID, UserID, ChannelID, Created FROM Memberships ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -26,7 +25,7 @@ func (m *MembershipModel) All() ([]models.Membership, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs.Close, "rows", "All")
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
 

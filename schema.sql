@@ -16,7 +16,8 @@ CREATE TABLE Users (
     Description TEXT,
     Usertype TEXT NOT NULL,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Is_flagged BOOLEAN 
+    Time_since TEXT,
+    Is_flagged BOOLEAN
 );
 
 CREATE TABLE Bookmarks (
@@ -81,10 +82,14 @@ CREATE TABLE Posts (
   Images TEXT,
   Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Commentable BOOLEAN NOT NULL,
+  Author TEXT NOT NULL,
   AuthorID INTEGER NOT NULL,
+  ChannelName TEXT NOT NULL,
   ChannelID INTEGER NOT NULL,
   Is_flagged BOOLEAN,
+  FOREIGN KEY (Author) REFERENCES Users(Username),
   FOREIGN KEY (AuthorID) REFERENCES Users(ID),
+  FOREIGN KEY (ChannelName) REFERENCES Channels(Name),
   FOREIGN KEY (ChannelID) REFERENCES Channels(ID)
 );
 

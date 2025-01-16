@@ -17,7 +17,6 @@ func (m *ImageModel) Insert(authorID, postID int) error {
 }
 
 func (m *ImageModel) All() ([]models.Image, error) {
-	ErrorMsgs := models.CreateErrorMessages()
 	stmt := "SELECT ID, Created, AuthorID, PostID FROM Images ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -26,7 +25,7 @@ func (m *ImageModel) All() ([]models.Image, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs.Close, "rows", "All")
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
 

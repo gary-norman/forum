@@ -17,7 +17,6 @@ func (m *SavedModel) Insert(postID, commentID, channelID int) error {
 }
 
 func (m *SavedModel) All() ([]models.Bookmark, error) {
-	ErrorMsgs := models.CreateErrorMessages()
 	stmt := "SELECT ID, PostID, CommentID, ChannelID, Created FROM Bookmarks ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
@@ -26,7 +25,7 @@ func (m *SavedModel) All() ([]models.Bookmark, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs.Close, "rows", "All")
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
 

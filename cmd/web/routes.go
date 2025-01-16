@@ -17,6 +17,7 @@ func (app *app) routes() http.Handler {
 	fontServer := http.FileServer(http.Dir("./assets/fonts"))
 	mux.Handle("/assets/fonts/", http.StripPrefix("/assets/fonts", fontServer))
 	mux.HandleFunc("/", app.getHome)
+
 	// Use a single route for /posts/create and distinguish based on HTTP method
 	mux.HandleFunc("/posts/create", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
@@ -28,5 +29,8 @@ func (app *app) routes() http.Handler {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
 	})
+
+	mux.HandleFunc("/store-reaction", app.storeReaction)
+
 	return mux
 }

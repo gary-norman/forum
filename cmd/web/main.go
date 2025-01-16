@@ -12,7 +12,9 @@ import (
 )
 
 type app struct {
-	posts *sqlite.PostModel
+	posts          *sqlite.PostModel
+	reactions      *sqlite.ReactionModel
+	reactionStatus *sqlite.ReactionModel
 }
 
 func main() {
@@ -28,7 +30,17 @@ func main() {
 		posts: &sqlite.PostModel{
 			DB: db,
 		},
+		reactions: &sqlite.ReactionModel{
+			DB: db,
+		},
+		reactionStatus: &sqlite.ReactionModel{
+			DB: db,
+		},
 	}
+
+	// Initialise templates if (app *app) is a receiver for
+	//the init() function that sets up custom go template functions
+	app.init()
 
 	srv := http.Server{
 		Addr:    ":8989",

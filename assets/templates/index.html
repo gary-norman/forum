@@ -19,16 +19,9 @@
     <script src="/assets/js/reactions.js" defer></script>
     <script type="module" src="/assets/js/share.js" defer></script>
     <title>&lt; codex &gt;</title>
-    <style>
-      {{ if (ne .CurrentUserName "nouser") }}
-      {{ $userBasePath := "/userdata/images/user-images/" }}
-      .userAvatar {
-      background: url('{{ $userBasePath }}{{ .Avatar }}') lightgray 50% / cover no-repeat;
-      }
-      {{ end }}
-    </style>
   </head>
       <body>
+      {{ $userBasePath := "/userdata/images/user-images/" }}
       {{ $postBasePath := "/userdata/images/post-images/" }}
     <div class="wrapper-main">
       <header class="header">
@@ -379,7 +372,7 @@
         <aside class="sidebar">
           {{ if (ne .CurrentUserName "nouser") }}
           <div class="sidebarProfile">
-            <div class="sidebar-profile-pic userAvatar">
+            <div class="sidebar-profile-pic" data-image-user="{{ $postBasePath }}{{ .Avatar }}">
             </div>
             <div>
               <h3>{{ .CurrentUserName }}</h3>
@@ -846,7 +839,7 @@
                                       <div class="flex-space-between">
                                           <label class="padded" for="copy-url-{{.ID}}-post">Copy URL link</label>
                                           <button class="btn-sm btn-icoonly">
-                                              <span class="btn-copy" aria-label="Copy URL link"></span>
+                                              <span id="copy-url-{{.ID}}-post" class="btn-copy" aria-label="Copy URL link"></span>
                                           </button>
                                       </div>
                                       <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-activity" name="copy-url-{{.ID}}-activity"/>

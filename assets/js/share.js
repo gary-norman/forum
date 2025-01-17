@@ -136,15 +136,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const fb = singleControl.querySelector('.facebook');
         fb.href = `https://www.facebook.com/share.php?u=${link}`;
-
+// TODO check https works
         const twitter = singleControl.querySelector('.twitter');
-        twitter.href = `http://twitter.com/share?&url=${link}&text=${msg}&hashtags=javascript,programming`;
+        twitter.href = `https://twitter.com/share?&url=${link}&text=${msg}&hashtags=javascript,programming`;
 
         const linkedIn = singleControl.querySelector('.linkedin');
         linkedIn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${link}`;
-
+// TODO check https works
         const reddit = singleControl.querySelector('.reddit');
-        reddit.href = `http://www.reddit.com/submit?url=${link}&title=${title}`;
+        reddit.href = `https://www.reddit.com/submit?url=${link}&title=${title}`;
 
         const whatsapp = singleControl.querySelector('.whatsapp');
         whatsapp.href = `https://api.whatsapp.com/send?text=${msg}: ${link}`;

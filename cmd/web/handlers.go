@@ -17,6 +17,7 @@ import (
 )
 
 // FIXME D.R.Y.
+
 type FormData struct {
 	title       string
 	content     string

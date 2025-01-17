@@ -192,6 +192,7 @@ func (m *UserModel) GetUserByEmail(email, calledBy string) (*models.User, error)
 	defer func(stmt *sql.Stmt) {
 		closErr := stmt.Close()
 		if closErr != nil {
+			// FIXME this error
 			log.Printf(ErrorMsgs().Close, "stmt", "getUserByUsername")
 		}
 	}(stmt) // Prepared statements take up server resources and should be closed after use.

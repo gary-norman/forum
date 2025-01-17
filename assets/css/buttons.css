@@ -295,7 +295,6 @@ gap: 0.8rem;
 
 .btn-edit {
   background: url("/assets/icons/edit_16.svg") no-repeat center;
-    background: url('/assets/icons/edit_16.svg') no-repeat center;
     width: 1.6rem;
 }
 

@@ -750,7 +750,7 @@
 
 .line {
     height: 1px;
-    flex: 1 1 0%;
+    flex: 1 1 0;
     background-color: rgba(55, 65, 81, 1);
 }
 

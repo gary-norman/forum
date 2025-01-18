@@ -74,20 +74,21 @@ type Mod struct {
 }
 
 type Post struct {
-	ID          int       `json:"id"`
-	Title       string    `json:"title"`
-	Content     string    `json:"content"`
-	Images      string    `json:"images,omitempty"` // Store JSON as string
-	Created     time.Time `json:"created"`
-	TimeSince   string    `json:"time_since"`
-	Commentable bool      `json:"commentable"`
-	Author      string    `json:"author"`
-	AuthorID    int       `json:"author_id"`
-	ChannelID   int       `json:"channel_id"`
-	ChannelName string    `json:"channel_name"`
-	IsFlagged   bool      `json:"is_flagged,omitempty"`
-	Likes       int       `json:"likes"`
-	Dislikes    int       `json:"dislikes"`
+	ID           int       `json:"id"`
+	Title        string    `json:"title"`
+	Content      string    `json:"content"`
+	Images       string    `json:"images,omitempty"` // Store JSON as string
+	Created      time.Time `json:"created"`
+	TimeSince    string    `json:"time_since"`
+	Commentable  bool      `json:"commentable"`
+	Author       string    `json:"author"`
+	AuthorID     int       `json:"author_id"`
+	AuthorAvatar string    `json:"author_avatar"`
+	ChannelID    int       `json:"channel_id"`
+	ChannelName  string    `json:"channel_name"`
+	IsFlagged    bool      `json:"is_flagged,omitempty"`
+	Likes        int       `json:"likes"`
+	Dislikes     int       `json:"dislikes"`
 }
 
 type PostWithDaysAgo struct {
@@ -155,6 +156,7 @@ type NotifyPlaceholder struct {
 type TemplateData struct {
 	CurrentUser       *User             `json:"user"`
 	CurrentUserName   string            `json:"currentUserName"`
+	Channels          []Channel         `json:"channels"`
 	Posts             []PostWithDaysAgo `json:"posts"`
 	Avatar            string            `json:"avatar"`
 	Images            []Image           `json:"images"`

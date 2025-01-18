@@ -2,6 +2,7 @@ package sqlite
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/gary-norman/forum/internal/models"
 	"log"
 )
@@ -42,6 +43,6 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels", len(Channels))
 	return Channels, nil
 }

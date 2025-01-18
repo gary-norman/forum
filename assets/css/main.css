@@ -192,6 +192,9 @@ a:active {
   border: 1px solid var(--color-bg-3);
   border-radius: var(--border-radius-input);
 }
+.profile-pic, .channel-pic {
+  font-size: inherit;
+}
 /* ---- one-line elements ---- */
 .invisible {
   visibility: hidden;
@@ -1302,7 +1305,7 @@ hr.solid {
   }
 }
 
-.sidebar-profile-pic {
+.sidebar-pic {
   width: 60px;
   height: 60px;
   flex-shrink: 0;
@@ -1714,12 +1717,12 @@ main {
   }
 }
 
-.card-profile-pic {
+.card-pic {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
   border-radius: 24px;
-  background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;
+  /*background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;*/
 }
 
 .cardTitle {
@@ -1855,13 +1858,12 @@ main {
       display: flex;
       gap: 1.2rem;
       align-items: center;
-      & .right-panel-profile-pic {
+      & .right-panel-pic {
         width: 24px;
         height: 24px;
         flex-shrink: 0;
         border-radius: 60px;
-        background: url(/assets/images/profile.png) lightgray 50% / cover
-          no-repeat;
+        /*background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;*/
       }
     }
   }

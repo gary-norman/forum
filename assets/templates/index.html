@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="A multi-user forum for discussing coding tips, finding answers to problems, and finding encouragegitmaintment, support, and collaboration"
-    />
+    <meta name="description" content="A multi-user forum for discussing coding tips, finding answers to problems, and finding encouragegitmaintment, support, and collaboration"/>
     <link rel="stylesheet" href="/assets/css/css-reset_kevin-powell.css" />
     <link rel="stylesheet" href="/assets/css/fonts.css" />
     <link rel="stylesheet" href="/assets/css/colors.css" />
@@ -14,6 +11,7 @@
     <link rel="stylesheet" href="/assets/css/text_effects.css" />
     <link rel="stylesheet" href="/assets/css/user-page.css" />
     <link rel="stylesheet" href="/assets/css/channel-page.css" />
+    <link rel="stylesheet" href="/assets/css/main_effects.css">
     <link rel="stylesheet" href="/assets/css/buttons.css" /><link rel="stylesheet" href="/assets/css/main_effects.css">
     <script type="module" src="/assets/js/main.js" defer></script>
     <script src="/assets/js/reactions.js" defer></script>
@@ -21,8 +19,9 @@
     <title>&lt; codex &gt;</title>
   </head>
       <body>
-      {{ $userBasePath := "/userdata/images/user-images/" }}
+      {{ $channelBasePath := "/userdata/images/channel-images/" }}
       {{ $postBasePath := "/userdata/images/post-images/" }}
+      {{ $userBasePath := "/userdata/images/user-images/" }}
     <div class="wrapper-main">
       <header class="header">
         <div class="branding"></div>
@@ -40,28 +39,17 @@
         </form>
         <div class="flex-align-c">
           <form action="/logout" method="POST">
-<!--            <input type="hidden" name="username" value="loreforum">-->
-          <button id="logout"
-                  class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff"
-          >
+          <button id="logout" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
             <span class="btn-posts">logout</span>
           </button>
           </form>
-          <button
-            id="btn-open-login-modal"
-            class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff"
-          >
+          <button id="btn-open-login-modal" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
             <span class="btn-posts">login</span>
           </button>
-          <button
-            popovertarget="form-post"
-            class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff"
-          >
+          <button popovertarget="form-post" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
             <span class="btn-posts">post</span>
           </button>
-          <button
-            class="btn-md btn-secondary btn-icotext btn-filled btn-filled-fancy btn-action-secondary btn-invert-onoff_offoff"
-          >
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-filled-fancy btn-action-secondary btn-invert-onoff_offoff">
             <span
               class="btn-notifications"
               role="contentinfo"
@@ -71,6 +59,7 @@
           </button>
         </div>
       </header>
+      
       <div aria-modal="true" id="container-form-login" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
@@ -106,8 +95,8 @@
                 <span
                   id="btn_forgot"
                   class="button btn-filled btn-filled-firebrick btn-secondary btn-pill"
-                  >forgot password?</span
-                >
+                  >forgot password?
+                </span>
               </div>
               <button id = "login" class="btn-md btn-primary btn-action" type="submit">
                 <span>sign in</span>
@@ -372,7 +361,7 @@
         <aside class="sidebar">
           {{ if (ne .CurrentUserName "nouser") }}
           <div class="sidebarProfile">
-            <div class="sidebar-profile-pic" data-image-user="{{ $postBasePath }}{{ .Avatar }}">
+            <div class="sidebar-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}">
             </div>
             <div>
               <h3>{{ .CurrentUserName }}</h3>
@@ -420,15 +409,22 @@
             </div>
             <hr class="solid" />
             <div class="sidebar-block sidebar-channels">
+                        <div class="flex-space-between">
               <small class="padded">Your Channels</small>
+              <button class="btn-sm btn-icoonly">
+                <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
+              </button>
+                        </div>
               <div class="sidebar-channel-block">
+                {{range .Channels}}
                 <div class="sidebar-channel">
                   <div></div>
                   <div class="container-channel_info">
-                    <span class="card-profile-pic"></span>
+                    <span class="card-pic channel-pic" data-image-channel="{{ $channelBasePath }}{{ .Channel.Avatar }}"></span>
                     <div>
-                      <div>/CSS_Help</div>
+                      <div>{{ .Channel.ChannelName }}</div>
                       <div>
+                        <!-- TODO get this data and add it to DB -->
                         <div class="channel-users">9.3k</div>
                         <div class="channel-green-dot">15</div>
                       </div>
@@ -442,66 +438,7 @@
                     </button>
                   </div>
                 </div>
-                <div class="sidebar-channel">
-                  <div></div>
-                  <div class="container-channel_info">
-                    <span class="card-profile-pic"></span>
-                    <div>
-                      <div>/CSS_Playground</div>
-                      <div>
-                        <div class="channel-users">13.8k</div>
-                        <div class="channel-green-dot">37</div>
-                      </div>
-                    </div>
-                    <button class="btn-sm btn-icoonly margin-auto-0">
-                      <span
-                        class="btn-save-empty"
-                        role="contentinfo"
-                        aria-label="Edit profile name"
-                      ></span>
-                    </button>
-                  </div>
-                </div>
-                <div class="sidebar-channel">
-                  <div></div>
-                  <div class="container-channel_info">
-                    <span class="card-profile-pic"></span>
-                    <div>
-                      <div>/Golang#Discussion</div>
-                      <div>
-                        <div class="channel-users">9.4k</div>
-                        <div class="channel-green-dot">112</div>
-                      </div>
-                    </div>
-                    <button class="btn-sm btn-icoonly margin-auto-0">
-                      <span
-                        class="btn-save-empty"
-                        role="contentinfo"
-                        aria-label="Edit profile name"
-                      ></span>
-                    </button>
-                  </div>
-                </div>
-                <div class="sidebar-channel">
-                  <div></div>
-                  <div class="container-channel_info">
-                    <span class="card-profile-pic"></span>
-                    <div>
-                      <div>/Interesting_Things</div>
-                      <div>
-                        <div class="channel-users">5.6k</div>
-                        <div class="channel-green-dot">36</div>
-                      </div>
-                    </div>
-                    <button class="btn-sm btn-icoonly margin-auto-0">
-                      <span
-                        class="btn-save-empty"
-                        role="contentinfo"
-                        aria-label="Edit profile name"
-                      ></span>
-                    </button>
-                  </div>
-                </div>
+                {{ end }}
               </div>
             </div>
           </div>
@@ -570,10 +507,10 @@
             </div>
             <div class="scrollable-home scrollable no-scrollbar">
                 <div id="home-feed">
-                {{range .Posts}}
+                {{range .Channels}}
                     <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                   <div class="container-post-info">
-                    <span class="card-profile-pic"></span>
+                    <span class="card-pic channel-pic" data-image-channel="{{ $channelBasePath }}{{ .Channel.Avatar }}"></span>
                     <div>
                       <small class="small-bold">{{.Author}}</small>
                       <div>
@@ -643,7 +580,7 @@
                 <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
                 <div class="page-control">
                     <div class="page-profile">
-                        <div class="page-profile-pic"></div>
+                        <div class="page-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
                         <div>
                             <h2>Eyesome578</h2>
                             <div>
@@ -710,7 +647,7 @@
                                 <div class="activity-items activity">Something happened!</div>
                                 <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                                     <div class="container-post-info">
-                          <span class="card-profile-pic"></span>
+                          <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
                           <div>
                             <small class="small-bold">{{.Author}}</small>
                             <div>
@@ -791,7 +728,7 @@
                       {{range .Posts}}
                         <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                             <div class="container-post-info">
-                          <span class="card-profile-pic"></span>
+                          <span class="card-pic profile-pic" data-image-poster="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
                           <div>
                             <small class="small-bold">{{.Author}}</small>
                             <div>
@@ -961,7 +898,7 @@
                         </div>
                         <div class="right-panel-pic-container flex-space-between">
                             <div class="right-panel-pic-container">
-                                <div class="right-panel-profile-pic"></div>
+                                <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
                                 <small>Edit your avatar picture</small>
                             </div>
                             <button class="btn-sm btn-icoonly">
@@ -975,7 +912,7 @@
                                     <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                                 </button>
                             </div>
-                            <textarea id="user-bio-content" class="inactive-input" name="content">Placeholder text... Placeholder text...</textarea>
+                            <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Description }}</textarea>
                         </div>
                         <div class="right-panel-modded-channels-container">
                             <div class="sidebar-block sidebar-channels">
@@ -984,7 +921,7 @@
                                     <div class="sidebar-channel">
                                         <div></div>
                                         <div class="channel_info-container">
-                                            <span class="card-profile-pic"></span>
+                                            <span class="card-pic channel-pic"></span>
                                             <div>
                                                 <div>/Interesting_Things</div>
                                                 <div>
@@ -1000,7 +937,7 @@
                                     <div class="sidebar-channel">
                                         <div></div>
                                         <div class="channel_info-container">
-                                            <span class="card-profile-pic"></span>
+                                            <span class="card-pic channel-pic"></span>
                                             <div>
                                                 <div>/CSS_Help</div>
                                                 <div>
@@ -1016,7 +953,7 @@
                                     <div class="sidebar-channel">
                                         <div></div>
                                         <div class="channel_info-container">
-                                            <span class="card-profile-pic"></span>
+                                            <span class="card-pic channel-pic"></span>
                                             <div>
                                                 <div>/Golang#Discussion</div>
                                                 <div>
@@ -1053,7 +990,7 @@
                     <div class="page-banner" ></div>
                     <div class="page-control">
                         <div class="page-profile">
-                            <div class="page-profile-pic"></div>
+                            <div class="page-pic profile-pic"></div>
                             <div>
                                 <h2>/Interesting_Things</h2>
                                 <div>
@@ -1090,7 +1027,7 @@
                             {{range .Posts}}
                             <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                                 <div class="post-info-container">
-                                    <span class="card-profile-pic"></span>
+                                    <span class="card-pic profile-pic" data-image-poster="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
                                     <div>
                                         <small class="small-bold">{{.AuthorID}}</small>
                                         <div>
@@ -1158,7 +1095,7 @@
                             </div>
                             <div class="right-panel-pic-container flex-space-between">
                                 <div class="right-panel-pic-container">
-                                    <div class="right-panel-profile-pic"></div>
+                                    <div class="right-panel-pic channel-pic"></div>
                                     <small>Edit channel picture</small>
                                 </div>
                                 <button class="btn-sm btn-icoonly">
@@ -1172,7 +1109,7 @@
                                         <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
                                     </button>
                                 </div>
-                                <textarea id="channel-bio-content" class="inactive-input" name="content">Placeholder text... Placeholder text...</textarea>
+                                <textarea id="channel-bio-content" class="inactive-input" name="content">Placeholder text</textarea>
                             </div>
                             <div class="right-panel-moderators-container">
                                 <div class="sidebar-block sidebar-channels">
@@ -1180,7 +1117,8 @@
                                     <div class="sidebar-channel-block">
                                         <div class="sidebar-channel">
                                             <div class="channel_info-container">
-                                                <span class="card-profile-pic"></span>
+<!--                                                <span class="card-pic channel-pic" data-image-channel="{{ $channelBasePath }}{{ .Channel.Avatar }}"></span>-->
+                                                <span class="card-pic mod-pic"></span>
                                                 <div>
                                                     <div>User_Other112</div>
                                                 </div>
@@ -1191,7 +1129,7 @@
                                         </div>
                                         <div class="sidebar-channel">
                                             <div class="channel_info-container">
-                                                <span class="card-profile-pic"></span>
+                                                <span class="card-pic mod-pic"></span>
                                                 <div>
                                                     <div>Other_one55</div>
                                                 </div>
@@ -1202,7 +1140,7 @@
                                         </div>
                                         <div class="sidebar-channel">
                                             <div class="channel_info-container">
-                                                <span class="card-profile-pic"></span>
+                                                <span class="card-pic mod-pic"></span>
                                                 <div>
                                                     <div>User_Other112</div>
                                                 </div>

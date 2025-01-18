@@ -5,10 +5,13 @@ const commentMsg = encodeURIComponent('Hey, I found this comment, you need to se
 const postMsg = encodeURIComponent('Hey, I found this post. I think you may like it?');
 const  commentTitle = encodeURIComponent('Comment from User ??? Here');
 const postTitle = encodeURIComponent('Post Title Here');
+let activityButtons;
 let scrollWindow;
 
  const activityBar = document.getElementById('activity-bar');
- const activityButtons = activityBar.querySelectorAll('button');
+ if (activityBar) {
+     activityButtons = activityBar.querySelectorAll('button');
+ }
 
 export function selectActiveFeed() {
     const homePage = document.getElementById('home-page');
@@ -210,15 +213,19 @@ function scrollToPost(postId) {
 }
 
 const scrollButton = document.getElementById(`scroll-test`);
-scrollButton.addEventListener('click', () => {
-    // Example: Scroll to post 3
-    scrollToPost('3');
-})
+if (scrollButton) {
+    scrollButton.addEventListener('click', () => {
+        // Example: Scroll to post 3
+        scrollToPost('3');
+    })
+}
 const scrollButton1 = document.getElementById(`scroll-test-1`);
+if (scrollButton1) {
 scrollButton1.addEventListener('click', () => {
     // Example: Scroll to post 3
     scrollToPost('3');
 })
+}
 
 
 function getModalPos(shareButton, shareModal) {

@@ -1,6 +1,8 @@
 import {selectActiveFeed} from "./share.js";
-
 // variables
+//user information
+
+// dark mode
 const switchDl = document.querySelector('#switch-dl');
 const darkSwitch = document.querySelector('#sidebar-option-darkmode');
 // activity buttons
@@ -9,10 +11,11 @@ let actButtonsAll;
 // activity feeds
 let activityFeeds;
 let activityFeedsContentAll;
-// login/register buttons
 // sidebar elements
+const userProfileImage = document.querySelectorAll('.profile-pic');
 const sidebarOption = document.querySelector('#sidebar-options');
 const sidebarOptionsList = document.querySelector('.sidebar-options-list');
+// login/register buttons
 // TODO overhaul the naming of these buttons
 const loginTitle = document.querySelector('#login-title');
 const loginFormButton = document.querySelector('#login');
@@ -77,15 +80,26 @@ const dragButton = document.querySelector('.button');
 let file;
 let filename;
 
-document.addEventListener('DOMContentLoaded', function () {
-    actButtonContainer = document.querySelector('#activity-bar');
-    actButtonsAll = actButtonContainer.querySelectorAll('button');
-    activityFeeds = document.querySelector('#user-activity-feeds');
-    activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]');
-    // console.log(actButtonsAll);
-});
-
 // functions
+
+function getUserProfileImageFromAttribute() {
+    for (let i = 0; i < userProfileImage.length; i++) {
+        let attArr = ['user', 'auth'];
+        attArr[0] = userProfileImage[i].getAttribute('data-image-user');
+        attArr[1] = userProfileImage[i].getAttribute('data-image-auth');
+        console.table(attArr)
+        if (attArr[0]) { // Ensure the `data-image-user` attribute has a value
+            userProfileImage[i].style.background = `url('${attArr[0]}') no-repeat center`;
+            userProfileImage[i].style.backgroundSize = 'cover'; // Add `cover` for background sizing
+        } else if (attArr[1]) { // Ensure the `data-image-user` attribute has a value
+            userProfileImage[i].style.background = `url('${attArr[1]}') no-repeat center`;
+            userProfileImage[i].style.backgroundSize = 'cover'; // Add `cover` for background sizing
+        }
+        else {
+            console.warn('No data-image-user attribute value found for element:', userProfileImage[i]);
+        }
+    }
+}
 function toggleColorScheme() {
     // Get the current color scheme
     const currentScheme = document.documentElement.getAttribute('color-scheme');
@@ -201,6 +215,29 @@ function getCSRFToken() {
 
 // ---- event listeners -----
 
+
+document.addEventListener('DOMContentLoaded', function () {
+    const actButtonContainer = document.querySelector('#activity-bar');
+    if (!actButtonContainer) {
+        console.error('Activity bar not found');
+        return;
+    }
+    const actButtonsAll = actButtonContainer.querySelectorAll('button');
+    const activityFeeds = document.querySelector('#user-activity-feeds');
+    if (!activityFeeds) {
+        console.error('User activity feeds not found');
+        return;
+    }
+    const activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]');
+    // Log the buttons for debugging purposes (optional)
+    console.log(actButtonsAll);
+    if (typeof getUserProfileImageFromAttribute === 'function') {
+        getUserProfileImageFromAttribute();
+    } else {
+        console.error('getUserProfileImageFromAttribute is not defined');
+    }
+});
+
 sidebarOption.addEventListener('click', function (event) {
     sidebarOptionsList.classList.toggle('sidebar-options-reveal')
     sidebarOptionsList.classList.toggle('ul-forwards')
@@ -312,10 +349,13 @@ function displayFile(uploadedFile, dropArea) {
 }
 // switchDl.addEventListener('click', toggleColorScheme);
 darkSwitch.addEventListener('click', toggleDarkMode);
-actButtonsAll.forEach( button => button.addEventListener('click', (e) => {
-    toggleFeed(document.getElementById("activity-" + e.target.id),document.getElementById("activity-feed-" + e.target.id),  e.target);
-    console.log('activity-' + e.target.id);
-}) );
+if (actButtonsAll) {
+    actButtonsAll.forEach( button => button.addEventListener('click', (e) => {
+        toggleFeed(document.getElementById("activity-" + e.target.id),document.getElementById("activity-feed-" + e.target.id),  e.target);
+        console.log('activity-' + e.target.id);
+    }) );
+}
+
 // open modals
 // TODO refactor the open and close modals
 openLoginModal.addEventListener('click', () => loginModal.style.display = 'block');

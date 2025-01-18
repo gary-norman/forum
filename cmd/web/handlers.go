@@ -232,19 +232,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
-	currentUser, currentUserErr := app.GetLoggedInUser(r)
-	if currentUserErr != nil {
-		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
-	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
-	currentUserName := "nouser"
-	currentUserAvatar := ""
-	if currentUser != nil {
-		currentUserName = currentUser.Username
-		currentUserAvatar = currentUser.Avatar
-	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
-
 	for index, post := range posts {
 		now := time.Now()
 		hours := now.Sub(post.Created).Hours()
@@ -264,7 +251,28 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	//channels, channelsErr := app.channels.All()
+	//if channelsErr != nil {
+	//	http.Error(w, channelsErr.Error(), 500)
+	//	return
+	//}
+	//fmt.Printf(ErrorMsgs().KeyValuePair, "Channels", channels)
+
+	currentUser, currentUserErr := app.GetLoggedInUser(r)
+	if currentUserErr != nil {
+		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
+	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
+	currentUserName := "nouser"
+	currentUserAvatar := ""
+	if currentUser != nil {
+		currentUserName = currentUser.Username
+		currentUserAvatar = currentUser.Avatar
+	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
+
 	templateData := models.TemplateData{
+		//Channels:        channels,
 		CurrentUser:     currentUser,
 		CurrentUserName: currentUserName,
 		Posts:           postsWithDaysAgo,

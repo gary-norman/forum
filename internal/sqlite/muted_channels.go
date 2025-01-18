@@ -10,9 +10,9 @@ type MutedChannelModel struct {
 	DB *sql.DB
 }
 
-func (m *MutedChannelModel) Insert(authotID, postID int) error {
+func (m *MutedChannelModel) Insert(authorID, postID int) error {
 	stmt := "INSERT INTO Muted_channels (UserID, ChannelID, Created) VALUES (?, ?, DateTime('now'))"
-	_, err := m.DB.Exec(stmt, authotID, postID)
+	_, err := m.DB.Exec(stmt, authorID, postID)
 	return err
 }
 

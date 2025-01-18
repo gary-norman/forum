@@ -159,6 +159,7 @@ type TemplateData struct {
 	Channels          []Channel         `json:"channels"`
 	Posts             []PostWithDaysAgo `json:"posts"`
 	Avatar            string            `json:"avatar"`
+	Bio               string            `json:"bio"`
 	Images            []Image           `json:"images"`
 	Comments          []Comment         `json:"comments"`
 	Reactions         []Reaction        `json:"reactions"`

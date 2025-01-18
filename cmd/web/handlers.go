@@ -265,9 +265,11 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
 	currentUserName := "nouser"
 	currentUserAvatar := ""
+	currentUserBio := ""
 	if currentUser != nil {
 		currentUserName = currentUser.Username
 		currentUserAvatar = currentUser.Avatar
+		currentUserBio = currentUser.Description
 	}
 	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
 
@@ -277,6 +279,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		CurrentUserName: currentUserName,
 		Posts:           postsWithDaysAgo,
 		Avatar:          currentUserAvatar,
+		Bio:             currentUserBio,
 		Images:          nil,
 		Comments:        nil,
 		Reactions:       nil,

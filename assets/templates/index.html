@@ -59,10 +59,10 @@
           </button>
         </div>
       </header>
-      
       <div aria-modal="true" id="container-form-login" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
+          <!--      ---------- login form ----------   -->
           <div id="form-login">
             <form action="/login" method="POST">
               <h5 id="login-title" class="form-title">sign in to codex</h5>
@@ -153,6 +153,7 @@
             </div>
           </div>
           <div id="form-register" class="display-off">
+            <!--      ---------- register form ----------   -->
             <form action="/register" method="POST">
               <p class="form-title">enter your details to register for codex</p>
               <!--  username  -->
@@ -222,19 +223,12 @@
             </form>
             <div class="reg-log">
               <small class="signup">already registered?</small>
-              <button
-                id="btn_login-1"
-                class="button btn-filled btn-filled-orange btn-secondary btn-pill"
-              >
-                sign in
-              </button>
+              <button id="btn_login-1" class="button btn-filled btn-filled-orange btn-secondary btn-pill">sign in</button>
             </div>
           </div>
           <div id="form-forgot" class="display-off">
             <form>
-              <p class="form-title">
-                enter your username or email address to reset your password
-              </p>
+              <p class="form-title">enter your username or email address to reset your password</p>
               <label for="forgot_pass"></label>
               <input
                 type="text"
@@ -268,6 +262,7 @@
         </div>
       </div>
       <div popover id="form-post">
+        <!--      ---------- post form ----------   -->
         <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
           <h3 class="form-title">create a post</h3>
           <label for="channel" class="invisible">channel</label>
@@ -307,22 +302,17 @@
           </div>
           <!-- FIXME fix these buttons -->
           <div class="cont-flex-row flex-center">
-            <button
-              class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff"
-            >
+            <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>create post</span>
             </button>
-            <a
-              href="/"
-              class="button btn-md btn-secondary btn-action btn-filled"
-              >cancel</a
-            >
+            <a href="/" class="button btn-md btn-secondary btn-action btn-filled">cancel</a>
           </div>
         </form>
       </div>
       <div aria-modal="true" id="container-form-edit-user" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
+          <!--      ---------- edit user form ----------   -->
           <div id="form-edit-user">
             <form action="/edituser" enctype="multipart/form-data" method="POST">
               <h5 id="edit-user-title" class="form-title">edit your profile</h5>
@@ -358,6 +348,7 @@
         </div>
       </div>
       <div class="main-content">
+        <!--      ---------- sidebar ----------   -->
         <aside class="sidebar">
           {{ if (ne .CurrentUserName "nouser") }}
           <div class="sidebarProfile">
@@ -409,14 +400,14 @@
             </div>
             <hr class="solid" />
             <div class="sidebar-block sidebar-channels">
-                        <div class="flex-space-between">
+              <div class="flex-space-between">
               <small class="padded">Your Channels</small>
               <button class="btn-sm btn-icoonly">
                 <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
               </button>
-                        </div>
+              </div>
               <div class="sidebar-channel-block">
-                {{range .Channels}}
+                {{range .Channels}} <!-- sidebar channels -->
                 <div class="sidebar-channel">
                   <div></div>
                   <div class="container-channel_info">
@@ -430,45 +421,26 @@
                       </div>
                     </div>
                     <button class="btn-sm btn-icoonly margin-auto-0">
-                      <span
-                        class="btn-save-active"
-                        role="contentinfo"
-                        aria-label="Edit profile name"
-                      ></span>
+                      <span class="btn-save-active" role="contentinfo" aria-label="Edit profile name"></span>
                     </button>
                   </div>
                 </div>
-                {{ end }}
+                {{ end }} <!-- sidebar channels -->
               </div>
             </div>
           </div>
         </aside>
         <main>
-          <div
-            class="container-homepage-feed-mask"
-            style="z-index: 0; min-height: 100% !important"
-          >
+          <div class="container-homepage-feed-mask" style="z-index: 0; min-height: 100% !important">
             <svg height="100dvh" width="100dvw" preserveAspectRatio="none">
               <defs>
-                <linearGradient
-                  id="home-mask-gradient"
-                  x1="0"
-                  x2="0"
-                  y1="0"
-                  y2="1"
-                >
+                <linearGradient id="home-mask-gradient" x1="0" x2="0" y1="0" y2="1">
                   <stop offset="0%" stop-color="black" />
                   <!--                            <stop offset="6%" stop-color="black" />-->
                   <stop offset="2%" stop-color="white" />
                   <stop offset="100%" stop-color="white" />
                 </linearGradient>
-                <linearGradient
-                  id="user-mask-gradient"
-                  x1="0"
-                  x2="0"
-                  y1="0"
-                  y2="1"
-                >
+                <linearGradient id="user-mask-gradient" x1="0" x2="0" y1="0" y2="1">
                   <stop offset="0%" stop-color="black" />
                   <!--                            <stop offset="1%" stop-color="black" />-->
                   <stop offset="2%" stop-color="white" />
@@ -476,101 +448,87 @@
                 </linearGradient>
               </defs>
               <mask id="homepage-feed-mask">
-                <rect
-                  width="100%"
-                  height="100%"
-                  fill="url(#home-mask-gradient)"
-                />
+                <rect width="100%" height="100%" fill="url(#home-mask-gradient)"/>
               </mask>
               <mask id="userpage-feed-mask">
-                <rect
-                  width="100%"
-                  height="100%"
-                  fill="url(#user-mask-gradient)"
-                />
+                <rect width="100%" height="100%" fill="url(#user-mask-gradient)"/>
               </mask>
             </svg>
           </div>
           <!---- homepage ------>
           <div id="home-page" class="feeds-wrapper">
             <div class="button-row above-posts button-row-homepage">
-              <button
-                class="btn-md btn-secondary btn-icotext btn-filled btn-action"
-              >
+              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                 <span class="btn-sort">sort</span>
               </button>
-              <button
-                class="btn-md btn-secondary btn-icotext btn-filled btn-action"
-              >
+              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                 <span class="btn-filters">filters</span>
               </button>
             </div>
             <div class="scrollable-home scrollable no-scrollbar">
-                <div id="home-feed">
-                {{range .Channels}}
-                    <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
-                  <div class="container-post-info">
-                    <span class="card-pic channel-pic" data-image-channel="{{ $channelBasePath }}{{ .Channel.Avatar }}"></span>
+              <div id="home-feed">
+              {{range .Channels}} <!-- homepage channels -->
+                  <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                <div class="container-post-info">
+                  <span class="card-pic channel-pic" data-image-channel="{{ $channelBasePath }}{{ .Channel.Avatar }}"></span>
+                  <div>
+                    <small class="small-bold">{{.Author}}</small>
                     <div>
-                      <small class="small-bold">{{.Author}}</small>
-                      <div>
-                        <small>{{.ChannelName}}</small>
-                        <small>-</small>
-                        <small>{{.TimeSince}}</small>
-                      </div>
-                    </div>
-                    <div class="like-button">
-                      <button data-tooltip-name="like" class="btn-icoonly"></button>
+                      <small>{{.ChannelName}}</small>
+                      <small>-</small>
+                      <small>{{.TimeSince}}</small>
                     </div>
                   </div>
-                  <h4>{{.Title}}</h4>
-                  {{ if .Images }}
-                  <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
-                  {{ else }}
-                  {{ end }}
-                  <article class="cardContent">{{.Content}}</article>
-                    <div class="button-row post-controls" >
-                        {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
-                            <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
-                        </button>
-                        <!-- --- TODO invertoff -->
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-                            <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
-                        </button>
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                            <span class="btn-reply">reply</span>
-                        </button>
-                        <button id="share-button-{{.ID}}-home" popovertarget="share-container-{{.ID}}-home" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                            <span class="btn-share">share</span>
-                        </button>
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                            <span class="btn-report">report</span>
-                        </button>
-                        <div popover id="share-container-{{.ID}}-home" class="scrollable-user">
-                            <div class="share-container">
-                                <div class="button-row">
-                                    <a href="/" target="_blank" class="share-logo facebook"></a>
-                                    <a href="/" target="_blank" class="share-logo twitter"></a>
-                                    <a href="/" target="_blank" class="share-logo linkedin"></a>
-                                    <a href="/" target="_blank" class="share-logo reddit"></a>
-                                    <a href="/" target="_blank" class="share-logo whatsapp"></a>
-                                    <a href="/" target="_blank" class="share-logo telegram"></a>
-                                </div>
-                                <div class="flex-space-between">
-                                    <label class="padded" for="copy-url-{{.ID}}-home">Copy URL link</label>
-                                    <button class="btn-sm btn-icoonly">
-                                        <span class="btn-copy" aria-label="Copy URL link"></span>
-                                    </button>
-                                </div>
-
-                                <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-home" name="copy-url-{{.ID}}-home"/>
-
-                            </div>
+                  <div class="like-button">
+                    <button data-tooltip-name="like" class="btn-icoonly"></button>
+                  </div>
+                </div>
+                <h4>{{.Title}}</h4>
+                {{ if .Images }}
+                <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
+                {{ else }}
+                {{ end }}
+                <article class="cardContent">{{.Content}}</article>
+                  <div class="button-row post-controls" >
+                    {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}">
+                        <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
+                    </button>
+                    <!-- --- TODO invertoff -->
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+                        <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
+                    </button>
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                        <span class="btn-reply">reply</span>
+                    </button>
+                    <button id="share-button-{{.ID}}-home" popovertarget="share-container-{{.ID}}-home" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                        <span class="btn-share">share</span>
+                    </button>
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                        <span class="btn-report">report</span>
+                    </button>
+                    <div popover id="share-container-{{.ID}}-home" class="scrollable-user">
+                      <div class="share-container">
+                        <div class="button-row">
+                          <a href="/" target="_blank" class="share-logo facebook"></a>
+                          <a href="/" target="_blank" class="share-logo twitter"></a>
+                          <a href="/" target="_blank" class="share-logo linkedin"></a>
+                          <a href="/" target="_blank" class="share-logo reddit"></a>
+                          <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                          <a href="/" target="_blank" class="share-logo telegram"></a>
                         </div>
+                        <div class="flex-space-between">
+                            <label class="padded" for="copy-url-{{.ID}}-home">Copy URL link</label>
+                            <button class="btn-sm btn-icoonly">
+                                <span class="btn-copy" aria-label="Copy URL link"></span>
+                            </button>
+                        </div>
+                        <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-home" name="copy-url-{{.ID}}-home"/>
+                      </div>
                     </div>
-                    </div>
-                    {{end}}
+                  </div>
+                  </div>
+                  {{end}} <!-- homepage channels -->
               </div>
             </div>
           </div>
@@ -580,7 +538,8 @@
                 <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
                 <div class="page-control">
                     <div class="page-profile">
-                        <div class="page-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
+<!--                        <div class="page-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>-->
+                        <div class="page-pic profile-pic"></div>
                         <div>
                             <h2>Eyesome578</h2>
                             <div>
@@ -643,7 +602,7 @@
                                 </button>
                             </div>
                             <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                                {{range .Posts}}
+                                {{range .Posts}} <!-- user page activity posts -->
                                 <div class="activity-items activity">Something happened!</div>
                                 <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                                     <div class="container-post-info">
@@ -654,8 +613,6 @@
                               <small>{{.ChannelName}}</small>
                               <small>-</small>
                               <small>{{.TimeSince}}</small>
-                              <!--                                                        <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}-->
-                              <!--                                                            @ {{.Created.Format "15:04:05 UTC"}}</time>-->
                             </div>
                           </div>
                           <div class="like-button">
@@ -702,14 +659,13 @@
                                             <span class="btn-copy" aria-label="Copy URL link"></span>
                                         </button>
                                     </div>
-
-                                    <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-activity" name="copy-url-{{.ID}}-activity"/>
-
+                                    <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
+                                           id="copy-url-{{.ID}}-activity" name="copy-url-{{.ID}}-activity"/>
                                 </div>
                             </div>
                         </div>
                       </div>
-                      {{end}}
+                      {{end}} <!-- user page activity posts -->
                     </div>
                   </div>
                   <div id="activity-posts">
@@ -725,17 +681,16 @@
                         </button>
                     </div>
                     <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                      {{range .Posts}}
+                      {{range .Posts}} <!-- user page posts -->
                         <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                             <div class="container-post-info">
-                          <span class="card-pic profile-pic" data-image-poster="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
+                          <span class="card-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
                           <div>
                             <small class="small-bold">{{.Author}}</small>
                             <div>
                               <small>{{.ChannelName}}</small>
                               <small>-</small>
-                              <time datetime="DD-MM-YYThh:mm:ss" class="small-bold">{{.Created.Format "Jan 02, 2006"}}
-                                  @ {{.Created.Format "15:04:05 UTC"}}</time>
+                              <small>{{.TimeSince}}</small>
                             </div>
                           </div>
                         </div>
@@ -784,7 +739,7 @@
                               </div>
                           </div>
                       </div>
-                        {{end}}
+                        {{end}} <!-- user page posts -->
                     </div>
                   </div>
                   <div id="activity-comments">
@@ -797,39 +752,21 @@
                       </button>
                     </div>
                     <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                        <div class="activity-items comments cont-flex-column">
-                            Yo mama so fat
-                        </div>
-                        <div class="activity-items comments cont-flex-column">
-                            Yo how fat is she?
-                        </div>
-                        <div class="activity-items comments cont-flex-column">
-                            Yo mama so fat
-                        </div>
-                        <div class="activity-items comments cont-flex-column">
-                            Yo how fat is she?
-                        </div>
-                        <div class="activity-items comments cont-flex-column">
-                            Yo mama so fat
-                        </div>
-                        <div class="activity-items comments cont-flex-column">
-                            Yo mama
-                        </div>
-                        <div class="activity-items comments cont-flex-column">
-                            Yo mama so fat
-                        </div>
+                      <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
+                      <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
+                      <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
+                      <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
+                      <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
+                      <div class="activity-items comments cont-flex-column">Yo mama</div>
+                      <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
                     </div>
                   </div>
                   <div id="activity-saved">
                     <div class="filters-row button-row hide-feed">
-                      <button
-                        class="btn-md btn-secondary btn-icotext btn-filled btn-action"
-                      >
+                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                         <span class="btn-sort">sort</span>
                       </button>
-                      <button
-                        class="btn-md btn-secondary btn-icotext btn-filled btn-action"
-                      >
+                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                         <span class="btn-filters">filters</span>
                       </button>
                     </div>
@@ -888,10 +825,11 @@
                         </div>
                     </div>
                 </div>
+              {{ if (ne .CurrentUserName "nouser") }}
                 <div class="right-panel ">
                     <div class="right-panel-content scroll-down">
                         <div class="right-panel-name-container flex-space-between">
-                            <h4 class="right-panel-name">Eyesome578</h4>
+                            <h4 class="right-panel-name">{{ .CurrentUserName }}</h4>
                             <button class="btn-sm btn-icoonly">
                                 <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                             </button>
@@ -912,7 +850,7 @@
                                     <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                                 </button>
                             </div>
-                            <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Description }}</textarea>
+                            <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Bio }}</textarea>
                         </div>
                         <div class="right-panel-modded-channels-container">
                             <div class="sidebar-block sidebar-channels">
@@ -967,9 +905,7 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
                         <div class="button-row-wrap">
                             <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -981,6 +917,7 @@
                         </div>
                     </div>
                 </div>
+              {{ end }} <!-- "nouser" check -->
             </div>
         </div>
 
@@ -1024,17 +961,16 @@
                             </button>
                         </div>
                         <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                            {{range .Posts}}
+                            {{range .Posts}} <!-- channel page posts -->
                             <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                                 <div class="post-info-container">
-                                    <span class="card-pic profile-pic" data-image-poster="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
+                                    <span class="card-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
                                     <div>
                                         <small class="small-bold">{{.AuthorID}}</small>
                                         <div>
-                                            <small>{{.ChannelID}}</small>
-                                            <small>-</small>
-                                            <time datetime="DD-MM-YYThh:mm:ss"  class="small-bold">{{.Created.Format "Jan 02, 2006"}}
-                                                @ {{.Created.Format "15:04:05 UTC"}}</time>
+                                          <small>{{.ChannelID}}</small>
+                                          <small>-</small>
+                                          <small>{{.TimeSince}}</small>
                                         </div>
                                     </div>
                                 </div>
@@ -1074,14 +1010,13 @@
                                                     <span class="btn-copy" aria-label="Copy URL link"></span>
                                                 </button>
                                             </div>
-
-                                            <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-channel" name="copy-url-{{.ID}}-channel"/>
-
+                                            <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly
+                                                   type="text" id="copy-url-{{.ID}}-channel" name="copy-url-{{.ID}}-channel"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {{end}}
+                            {{end}} <!-- channel page posts -->
                         </div>
                     </div>
 
@@ -1117,7 +1052,7 @@
                                     <div class="sidebar-channel-block">
                                         <div class="sidebar-channel">
                                             <div class="channel_info-container">
-<!--                                                <span class="card-pic channel-pic" data-image-channel="{{ $channelBasePath }}{{ .Channel.Avatar }}"></span>-->
+                                                <span class="card-pic channel-pic"></span>
                                                 <span class="card-pic mod-pic"></span>
                                                 <div>
                                                     <div>User_Other112</div>
@@ -1150,7 +1085,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="right-panel-rules-container">
@@ -1177,9 +1111,8 @@
                     </div>
                 </div>
             </div>
-
         </main>
       </div>
     </div>
-      </body>
+  </body>
 </html>

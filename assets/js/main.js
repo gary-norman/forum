@@ -80,6 +80,35 @@ const dragButton = document.querySelector('.button');
 let file;
 let filename;
 
+document.addEventListener('DOMContentLoaded', function () {
+    actButtonContainer = document.querySelector('#activity-bar');
+    if (!actButtonContainer) {
+        console.error('Activity bar not found');
+        return;
+    }
+    actButtonsAll = actButtonContainer.querySelectorAll('button');
+    activityFeeds = document.querySelector('#user-activity-feeds');
+    if (!activityFeeds) {
+        console.error('User activity feeds not found');
+        return;
+    }
+    activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]');
+    // Log the buttons for debugging purposes (optional)
+    if (actButtonsAll) {
+        actButtonsAll.forEach( button => button.addEventListener('click', (e) => {
+            toggleFeed(document.getElementById("activity-" + e.target.id),document.getElementById("activity-feed-" + e.target.id),  e.target);
+            console.log('activity-' + e.target.id);
+        }) );
+    }
+
+    if (typeof getUserProfileImageFromAttribute === 'function') {
+        getUserProfileImageFromAttribute();
+    } else {
+        console.error('getUserProfileImageFromAttribute is not defined');
+    }
+    console.log("activity buttons:", actButtonsAll)
+});
+
 // functions
 
 function getUserProfileImageFromAttribute() {
@@ -87,7 +116,7 @@ function getUserProfileImageFromAttribute() {
         let attArr = ['user', 'auth'];
         attArr[0] = userProfileImage[i].getAttribute('data-image-user');
         attArr[1] = userProfileImage[i].getAttribute('data-image-auth');
-        console.table(attArr)
+        // console.table(attArr)
         if (attArr[0]) { // Ensure the `data-image-user` attribute has a value
             userProfileImage[i].style.background = `url('${attArr[0]}') no-repeat center`;
             userProfileImage[i].style.backgroundSize = 'cover'; // Add `cover` for background sizing
@@ -116,7 +145,7 @@ function toggleDarkMode() {
 // toggle the various feeds on user-page
 function toggleFeed(targetFeed, targetFeedContent, targetButton) {
     const timeOut = 400;
-    const allFeedsExceptTarget = Array.from(activityFeedsContentAll).filter(feed => feed.id !== targetFeedContent.id);
+    // const allFeedsExceptTarget = Array.from(activityFeedsContentAll).filter(feed => feed.id !== targetFeedContent.id);
 
     actButtonsAll.forEach( button => button.classList.remove('btn-active') );
     activityFeedsContentAll.forEach(feed => {
@@ -216,27 +245,7 @@ function getCSRFToken() {
 // ---- event listeners -----
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    const actButtonContainer = document.querySelector('#activity-bar');
-    if (!actButtonContainer) {
-        console.error('Activity bar not found');
-        return;
-    }
-    const actButtonsAll = actButtonContainer.querySelectorAll('button');
-    const activityFeeds = document.querySelector('#user-activity-feeds');
-    if (!activityFeeds) {
-        console.error('User activity feeds not found');
-        return;
-    }
-    const activityFeedsContentAll = activityFeeds.querySelectorAll('[id^="activity-feed-"]');
-    // Log the buttons for debugging purposes (optional)
-    console.log(actButtonsAll);
-    if (typeof getUserProfileImageFromAttribute === 'function') {
-        getUserProfileImageFromAttribute();
-    } else {
-        console.error('getUserProfileImageFromAttribute is not defined');
-    }
-});
+
 
 sidebarOption.addEventListener('click', function (event) {
     sidebarOptionsList.classList.toggle('sidebar-options-reveal')
@@ -347,14 +356,10 @@ function displayFile(uploadedFile, dropArea) {
         dragButton.style.display = "unset";
     }
 }
+
 // switchDl.addEventListener('click', toggleColorScheme);
 darkSwitch.addEventListener('click', toggleDarkMode);
-if (actButtonsAll) {
-    actButtonsAll.forEach( button => button.addEventListener('click', (e) => {
-        toggleFeed(document.getElementById("activity-" + e.target.id),document.getElementById("activity-feed-" + e.target.id),  e.target);
-        console.log('activity-' + e.target.id);
-    }) );
-}
+
 
 // open modals
 // TODO refactor the open and close modals

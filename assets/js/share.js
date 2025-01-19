@@ -131,10 +131,10 @@ document.addEventListener('DOMContentLoaded', function () {
             title = commentTitle;
 
         }
-        console.log("PostID:", postID)
-        console.log("CommentID:", commentID)
-        console.log("message:", msg)
-        console.log("title:", title)
+        // console.log("PostID:", postID)
+        // console.log("CommentID:", commentID)
+        // console.log("message:", msg)
+        // console.log("title:", title)
 
 
         const fb = singleControl.querySelector('.facebook');

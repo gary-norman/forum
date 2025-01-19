@@ -602,6 +602,7 @@
                                 </button>
                             </div>
                             <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+                                {{ $userID := .CurrentUser.ID}}
                                 {{range .Posts}} <!-- user page activity posts -->
                                 <div class="activity-items activity">Something happened!</div>
                                 <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">

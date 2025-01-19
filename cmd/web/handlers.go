@@ -231,6 +231,21 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, postsErr.Error(), 500)
 		return
 	}
+
+	// Retrieve total likes and dislikes for each post
+	for i, post := range posts {
+		likes, dislikes, likesErr := app.reactions.CountReactions(post.ChannelID, post.ID, 0) // Pass 0 for CommentID if it's a post
+		fmt.Println("Likes:", likes)
+		fmt.Println("Dislikes:", dislikes)
+		if likesErr != nil {
+			log.Printf("Error counting reactions: %v", likesErr)
+			likes, dislikes = 0, 0 // Default values if there is an error
+		}
+
+		posts[i].Likes = likes
+		posts[i].Dislikes = dislikes
+	}
+	
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
 	for index, post := range posts {
 		now := time.Now()
@@ -302,18 +317,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "template not found: index.html", 500)
 		log.Printf("Template not found: index.html")
 		return
-	}
-
-	// Retrieve total likes and dislikes for each post
-	for i, post := range posts {
-		likes, dislikes, err := app.reactions.CountReactions(post.ChannelID, post.ID, 0) // Pass 0 for CommentID if it's a post
-		if err != nil {
-			log.Printf("Error counting reactions: %v", err)
-			likes, dislikes = 0, 0 // Default values if there is an error
-		}
-
-		posts[i].Likes = likes
-		posts[i].Dislikes = dislikes
 	}
 
 	data := templateData
@@ -566,9 +569,9 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if existingReaction != nil {
-		log.Printf("Existing Reaction: %+v", existingReaction)
-	}
+	//if existingReaction != nil {
+	//	//log.Printf("Existing Reaction: %+v", existingReaction)
+	//}
 
 	// If there is an existing reaction, toggle it (i.e., remove it if the user reacts again to the same thing)
 	if existingReaction != nil {

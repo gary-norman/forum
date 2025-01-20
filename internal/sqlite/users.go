@@ -18,7 +18,7 @@ func ErrorMsgs() *models.Errors {
 }
 
 func (m *UserModel) Insert(username, email, password, sessionToken, csrfToken, avatar, banner, description string) error {
-	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (Username, Email_address, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, Is_flagged) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, DateTime('now'), 0)")
+	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (Username, EmailAddress, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, IsFlagged) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, DateTime('now'), 0)")
 	if insertErr != nil {
 		log.Printf(ErrorMsgs().Query, username, insertErr)
 	}
@@ -36,7 +36,7 @@ func (m *UserModel) Insert(username, email, password, sessionToken, csrfToken, a
 }
 
 func (m *UserModel) Edit(user *models.User) error {
-	stmt, prepErr := m.DB.Prepare("UPDATE Users SET Username = ?, Email_address = ?, HashedPassword = ?, SessionToken = ?, CsrfToken = ?, Avatar = ?, Banner = ?, Description = ? WHERE ID = ?")
+	stmt, prepErr := m.DB.Prepare("UPDATE Users SET Username = ?, EmailAddress = ?, HashedPassword = ?, SessionToken = ?, CsrfToken = ?, Avatar = ?, Banner = ?, Description = ? WHERE ID = ?")
 	if prepErr != nil {
 		log.Printf(ErrorMsgs().Query, "Users", prepErr)
 	}
@@ -127,7 +127,7 @@ func (m *UserModel) QueryUserEmailExists(email string) (bool, error) {
 		return false, errors.New(fmt.Sprintf(ErrorMsgs().UserModel, "QueryUserEmailExists", email))
 	}
 	var count int
-	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Email_address = ?", email).Scan(&count)
+	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE EmailAddress = ?", email).Scan(&count)
 	if queryErr != nil {
 		log.Printf(ErrorMsgs().Query, email, queryErr)
 	}
@@ -143,7 +143,7 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 		log.Printf(fmt.Sprintf(ErrorMsgs().UserModel, "GetUserByUsername", username))
 	}
 	// Query to fetch user data by username
-	stmt, prepErr := m.DB.Prepare("SELECT ID, Username, HashedPassword, Email_address, Avatar, Banner, Description, UserType, Created, Is_flagged, SessionToken, CsrfToken FROM Users WHERE Username = ? LIMIT 1")
+	stmt, prepErr := m.DB.Prepare("SELECT ID, Username, HashedPassword, EmailAddress, Avatar, Banner, Description, UserType, Created, IsFlagged, SessionToken, CsrfToken FROM Users WHERE Username = ? LIMIT 1")
 	if prepErr != nil {
 		log.Printf(ErrorMsgs().Query, username, prepErr)
 	}
@@ -185,7 +185,7 @@ func (m *UserModel) GetUserByEmail(email, calledBy string) (*models.User, error)
 		log.Printf(fmt.Sprintf(ErrorMsgs().UserModel, "GetUserByEmail", email))
 	}
 	// Query to fetch user data by username
-	stmt, prepErr := m.DB.Prepare("SELECT ID, HashedPassword, Email_address FROM Users WHERE Email_address = ? LIMIT 1")
+	stmt, prepErr := m.DB.Prepare("SELECT ID, HashedPassword, EmailAddress FROM Users WHERE EmailAddress = ? LIMIT 1")
 	if prepErr != nil {
 		log.Fatal(ErrorMsgs().Query, email, prepErr)
 	}
@@ -216,7 +216,7 @@ func (m *UserModel) GetUserByEmail(email, calledBy string) (*models.User, error)
 }
 
 func (m *UserModel) All() ([]models.User, error) {
-	stmt := "SELECT ID, Username, Email_address, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, Is_flagged FROM Users ORDER BY ID DESC"
+	stmt := "SELECT ID, Username, EmailAddress, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, IsFlagged FROM Users ORDER BY ID DESC"
 	rows, queryErr := m.DB.Query(stmt)
 	if queryErr != nil {
 		return nil, errors.New(fmt.Sprintf(ErrorMsgs().Query, "Users", queryErr))

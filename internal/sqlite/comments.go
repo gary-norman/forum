@@ -11,13 +11,13 @@ type CommentModel struct {
 }
 
 func (m *CommentModel) Insert(content string, channel, author, commentedPostID, commentedCommentID int, isReply, commentable bool) error {
-	stmt := "INSERT INTO Comments (Content, Created, ChannelID, AuthorID, Commented_postID, Commented_commentID, Is_reply, Is_flagged) VALUES (?, DateTime('now'), ?, ?, ?, ?, 0, 0)"
+	stmt := "INSERT INTO Comments (Content, Created, ChannelID, AuthorID, CommentedPostID, CommentedCommentID, IsReply, IsFlagged) VALUES (?, DateTime('now'), ?, ?, ?, ?, 0, 0)"
 	_, err := m.DB.Exec(stmt, content, channel, author, commentedPostID, commentedCommentID, isReply, commentable)
 	return err
 }
 
 func (m *CommentModel) All() ([]models.Comment, error) {
-	stmt := "SELECT ID, Content, Created, ChannelID, AuthorID, Commented_postID, Commented_commentID, Is_reply, Is_flagged FROM Comments ORDER BY ID DESC"
+	stmt := "SELECT ID, Content, Created, ChannelID, AuthorID, CommentedPostID, CommentedCommentID, IsReply, IsFlagged FROM Comments ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
 		return nil, err

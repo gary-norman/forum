@@ -1,6 +1,6 @@
 PRAGMA journal_mode = MEMORY;
 PRAGMA synchronous = OFF;
-PRAGMA foreign_keys = OFF;
+PRAGMA foreign_keys = ON;
 PRAGMA ignore_check_constraints = OFF;
 PRAGMA auto_vacuum = NONE;
 PRAGMA secure_delete = OFF;
@@ -9,15 +9,17 @@ BEGIN TRANSACTION;
 CREATE TABLE Users (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     Username TEXT NOT NULL,
-    Password TEXT NOT NULL,
-    Email_address TEXT NOT NULL,
+    EmailAddress TEXT NOT NULL,
     Avatar TEXT,  -- Store UUID as TEXT
     Banner TEXT,  -- Store UUID as TEXT
     Description TEXT,
     Usertype TEXT NOT NULL,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Time_since TEXT,
-    Is_flagged BOOLEAN
+    IsFlagged BOOLEAN,
+    SessionToken TEXT,
+    CsrfToken TEXT,
+    HashedPassword TEXT
+
 );
 
 CREATE TABLE Bookmarks (
@@ -58,7 +60,7 @@ CREATE TABLE Memberships (
   FOREIGN KEY (ChannelID) REFERENCES Channels(ID)
 );
 
-CREATE TABLE Muted_channels (
+CREATE TABLE MutedChannels (
      ID INTEGER PRIMARY KEY AUTOINCREMENT,
      UserID INT NOT NULL,
      ChannelID INT NOT NULL,
@@ -81,14 +83,16 @@ CREATE TABLE Posts (
   Content TEXT NOT NULL,
   Images TEXT,
   Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Commentable BOOLEAN NOT NULL,
+  IsCommentable BOOLEAN NOT NULL,
   Author TEXT NOT NULL,
   AuthorID INTEGER NOT NULL,
+  AuthorAvatar TEXT,
   ChannelName TEXT NOT NULL,
   ChannelID INTEGER NOT NULL,
-  Is_flagged BOOLEAN,
+  IsFlagged BOOLEAN,
   FOREIGN KEY (Author) REFERENCES Users(Username),
   FOREIGN KEY (AuthorID) REFERENCES Users(ID),
+  FOREIGN KEY (AuthorAvatar) REFERENCES Users(Avatar),
   FOREIGN KEY (ChannelName) REFERENCES Channels(Name),
   FOREIGN KEY (ChannelID) REFERENCES Channels(ID)
 );
@@ -102,20 +106,36 @@ CREATE TABLE Images (
   FOREIGN KEY (PostID) REFERENCES Posts(ID)
 );
 
+CREATE TABLE PostImages (
+  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  PostID INTEGER NOT NULL,
+  ImageID TEXT NOT NULL,
+  FOREIGN KEY (PostID) REFERENCES Posts(ID),
+  FOREIGN KEY (ImageID) REFERENCES Images(ID)
+);
+
 CREATE TABLE Comments (
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   Content TEXT NOT NULL,
   Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   AuthorID INTEGER NOT NULL,
   ChannelID INTEGER NOT NULL,
-  Is_reply BOOLEAN,
-  Commented_postID INTEGER,
-  Commented_commentID INTEGER,
-  Is_flagged BOOLEAN, -- Store JSON as TEXT
+  IsReply BOOLEAN,
+  CommentedPostID INTEGER,
+  CommentedCommentID INTEGER,
+  IsFlagged BOOLEAN,
   FOREIGN KEY (AuthorID) REFERENCES Users(ID),
   FOREIGN KEY (ChannelID) REFERENCES Channels(ID),
-  FOREIGN KEY (Commented_postID) REFERENCES Posts(ID),
-  FOREIGN KEY (Commented_commentID) REFERENCES Comments(ID)
+  FOREIGN KEY (CommentedPostID) REFERENCES Posts(ID),
+  FOREIGN KEY (CommentedCommentID) REFERENCES Comments(ID)
+);
+
+CREATE TABLE PostComments (
+  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  PostID INTEGER NOT NULL,
+  CommentID INTEGER NOT NULL,
+  FOREIGN KEY (PostID) REFERENCES Posts(ID),
+  FOREIGN KEY (CommentID) REFERENCES Comments(ID)
 );
 
 CREATE TABLE Reactions (
@@ -124,31 +144,29 @@ CREATE TABLE Reactions (
     Disliked BOOLEAN,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     AuthorID INTEGER NOT NULL,
-    ChannelID INTEGER NOT NULL,
-    Reacted_postID INTEGER,
-    Reacted_commentID INTEGER,
+    ReactedPostID INTEGER,
+    ReactedCommentID INTEGER,
     FOREIGN KEY (AuthorID) REFERENCES Users(ID),
-    FOREIGN KEY (ChannelID) REFERENCES Channels(ID),
-    FOREIGN KEY (Reacted_postID) REFERENCES Posts(ID),
-    FOREIGN KEY (Reacted_commentID) REFERENCES Comments(ID)
+    FOREIGN KEY (ReactedPostID) REFERENCES Posts(ID),
+    FOREIGN KEY (ReactedCommentID) REFERENCES Comments(ID)
 );
 
 CREATE TABLE Flags (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
-    Flag_type TEXT NOT NULL,
+    FlagType TEXT NOT NULL,
     Content TEXT,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     Approved BOOLEAN NOT NULL,
     AuthorID INTEGER NOT NULL,
     ChannelID INTEGER NOT NULL,
-    Flagged_userID INTEGER,
-    Flagged_postID INTEGER,
-    Flagged_commentID INTEGER,
+    FlaggedUserID INTEGER,
+    FlaggedPostID INTEGER,
+    FlaggedCommentID INTEGER,
     FOREIGN KEY (ChannelID) REFERENCES Channels(ID),
     FOREIGN KEY (AuthorID) REFERENCES Users(ID),
-    FOREIGN KEY (Flagged_userID) REFERENCES Users(ID),
-    FOREIGN KEY (Flagged_postID) REFERENCES Posts(ID),
-    FOREIGN KEY (Flagged_commentID) REFERENCES Comments(ID)
+    FOREIGN KEY (FlaggedUserID) REFERENCES Users(ID),
+    FOREIGN KEY (FlaggedPostID) REFERENCES Posts(ID),
+    FOREIGN KEY (FlaggedCommentID) REFERENCES Comments(ID)
 );
 
 -- Indices

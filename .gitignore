@@ -18,10 +18,11 @@
 go.work
 # intellij files
 .idea/
+# Mac OS files
 .DS_Store
 # Database files that are not allowed on git
-*.db*
-*.db-shm
-*.db-wal
+/forum_database.db
+#*.db-shm
+#*.db-wal
 # user data
 userdata

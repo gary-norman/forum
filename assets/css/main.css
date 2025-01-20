@@ -128,6 +128,7 @@ h3 {
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
+  align-self: self-start;
 }
 h4 {
   font-family: SpaceMono, system-ui;
@@ -668,7 +669,7 @@ input[type="text"],
 input[type="password"],
 input[type="email"] {
   position: relative;
-  margin: 0.8rem;
+  /*margin: 0.8rem;*/
   border: 1px solid var(--color-bg-4);
   font-size: 1.6rem;
   border-radius: var(--border-radius-input);
@@ -1425,6 +1426,8 @@ hr.solid {
     letter-spacing: normal;
 
     &.padded {
+      align-content: center;
+      height: 3.2rem;
       padding: 0 1.2rem;
     }
   }
@@ -1495,7 +1498,7 @@ hr.solid {
   }
 }
 
-.container-channel_info {
+.container-channel-info {
   display: flex;
   font-size: 1.2rem;
   align-items: center;
@@ -1814,7 +1817,8 @@ main {
     top: 0;
     left: 0;
     width: 28rem;
-    height: calc(100dvh - 20rem - 9.6rem - 2.4rem);
+    height: auto;
+    max-height: calc(100dvh - 20rem - 9.6rem - 2.4rem);
     background: var(--color-bg-2);
     border: 1px solid var(--color-bg-3);
     border-radius: var(--border-radius-input);
@@ -1834,6 +1838,8 @@ main {
     }
     & .right-panel-name-container {
       & .right-panel-name {
+        height: 3.2rem;
+        align-items: center;
         overflow: hidden;
         color: var(--color-fg-1);
         text-overflow: ellipsis;

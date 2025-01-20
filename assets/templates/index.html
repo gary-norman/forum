@@ -316,15 +316,6 @@
           <div id="form-edit-user">
             <form action="/edituser" enctype="multipart/form-data" method="POST">
               <h5 id="edit-user-title" class="form-title">edit your profile</h5>
-<!--              <div class="input-wrapper">-->
-<!--                <input-->
-<!--                  type="text"-->
-<!--                  id="edit_username"-->
-<!--                  name="edit_username"-->
-<!--                  placeholder="edit username"-->
-<!--                />-->
-<!--                <label for="edit_username" class="user-label">edit username</label>-->
-<!--              </div>-->
               <div class="input-wrapper">
                 <textarea id="bio" name="bio" placeholder="update your bio"></textarea>
                 <label for="bio" class="user-label">update your bio</label>
@@ -400,20 +391,20 @@
             </div>
             <hr class="solid" />
             <div class="sidebar-block sidebar-channels">
-              <div class="flex-space-between">
+              <div class="flex-space-between" style="margin-bottom: -0.8rem;">
               <small class="padded">Your Channels</small>
               <button class="btn-sm btn-icoonly">
                 <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
               </button>
               </div>
               <div class="sidebar-channel-block">
-                {{range .Channels}} <!-- sidebar channels -->
+<!--                TODO get the Channels data and add it to DB and loop range-->
                 <div class="sidebar-channel">
                   <div></div>
-                  <div class="container-channel_info">
-                    <span class="card-pic channel-pic" data-image-channel="{{ $channelBasePath }}{{ .Channel.Avatar }}"></span>
+                  <div class="container-channel-info">
+                    <span class="card-pic channel-pic" data-image-channel="channelBasePath_Channel.Avatar"></span>
                     <div>
-                      <div>{{ .Channel.ChannelName }}</div>
+                      <div>/ChannelName</div>
                       <div>
                         <!-- TODO get this data and add it to DB -->
                         <div class="channel-users">9.3k</div>
@@ -425,8 +416,8 @@
                     </button>
                   </div>
                 </div>
-                {{ end }} <!-- sidebar channels -->
               </div>
+<!--              end range of channels here-->
             </div>
           </div>
         </aside>
@@ -602,7 +593,7 @@
                                 </button>
                             </div>
                             <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                                {{ $userID := .CurrentUser.ID}}
+                                {{ if (ne .CurrentUserName "nouser") }}{{$userID := .CurrentUser.ID }}{{end}}
                                 {{range .Posts}} <!-- user page activity posts -->
                                 <div class="activity-items activity">Something happened!</div>
                                 <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
@@ -826,15 +817,18 @@
                         </div>
                     </div>
                 </div>
-              {{ if (ne .CurrentUserName "nouser") }}
+
                 <div class="right-panel ">
                     <div class="right-panel-content scroll-down">
                         <div class="right-panel-name-container flex-space-between">
-                            <h4 class="right-panel-name">{{ .CurrentUserName }}</h4>
+                            <h4 class="right-panel-name">{{ if ne .CurrentUserName "nouser"}}{{.CurrentUserName}}{{ else }}EyeSome578{{ end }}</h4>
+                          {{ if (ne .CurrentUserName "nouser") }}
                             <button class="btn-sm btn-icoonly">
                                 <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                             </button>
+                          {{ end }} <!-- "nouser" check -->
                         </div>
+                      {{ if (ne .CurrentUserName "nouser") }}
                         <div class="right-panel-pic-container flex-space-between">
                             <div class="right-panel-pic-container">
                                 <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
@@ -844,12 +838,16 @@
                                 <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
                             </button>
                         </div>
+                      {{ end }} <!-- "nouser" check -->
                         <div class="right-panel-bio-container ">
                             <div class="right-panel-bio flex-space-between">
-                                <label for="user-bio-content" class="padded">Edit your bio</label>
-                                <button class="btn-sm btn-icoonly">
+                                <label for="user-bio-content" class="padded">{{ if ne .CurrentUserName "nouser"}}Edit your bio{{ else }}User bio{{ end }}</label>
+                              {{ if (ne .CurrentUserName "nouser") }}
+                              <button class="btn-sm btn-icoonly">
                                     <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                                 </button>
+                              {{ end }} <!-- "nouser" check -->
+
                             </div>
                             <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Bio }}</textarea>
                         </div>
@@ -859,7 +857,7 @@
                                 <div class="sidebar-channel-block">
                                     <div class="sidebar-channel">
                                         <div></div>
-                                        <div class="channel_info-container">
+                                        <div class="container-channel-info">
                                             <span class="card-pic channel-pic"></span>
                                             <div>
                                                 <div>/Interesting_Things</div>
@@ -875,7 +873,7 @@
                                     </div>
                                     <div class="sidebar-channel">
                                         <div></div>
-                                        <div class="channel_info-container">
+                                        <div class="container-channel-info">
                                             <span class="card-pic channel-pic"></span>
                                             <div>
                                                 <div>/CSS_Help</div>
@@ -891,7 +889,7 @@
                                     </div>
                                     <div class="sidebar-channel">
                                         <div></div>
-                                        <div class="channel_info-container">
+                                        <div class="container-channel-info">
                                             <span class="card-pic channel-pic"></span>
                                             <div>
                                                 <div>/Golang#Discussion</div>
@@ -918,7 +916,7 @@
                         </div>
                     </div>
                 </div>
-              {{ end }} <!-- "nouser" check -->
+
             </div>
         </div>
 
@@ -1052,7 +1050,7 @@
                                     <small class="padded">Moderators</small>
                                     <div class="sidebar-channel-block">
                                         <div class="sidebar-channel">
-                                            <div class="channel_info-container">
+                                            <div class="container-channel-info">
                                                 <span class="card-pic channel-pic"></span>
                                                 <span class="card-pic mod-pic"></span>
                                                 <div>
@@ -1064,7 +1062,7 @@
                                             </div>
                                         </div>
                                         <div class="sidebar-channel">
-                                            <div class="channel_info-container">
+                                            <div class="container-channel-info">
                                                 <span class="card-pic mod-pic"></span>
                                                 <div>
                                                     <div>Other_one55</div>
@@ -1075,7 +1073,7 @@
                                             </div>
                                         </div>
                                         <div class="sidebar-channel">
-                                            <div class="channel_info-container">
+                                            <div class="container-channel-info">
                                                 <span class="card-pic mod-pic"></span>
                                                 <div>
                                                     <div>User_Other112</div>

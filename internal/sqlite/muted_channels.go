@@ -11,13 +11,13 @@ type MutedChannelModel struct {
 }
 
 func (m *MutedChannelModel) Insert(authorID, postID int) error {
-	stmt := "INSERT INTO Muted_channels (UserID, ChannelID, Created) VALUES (?, ?, DateTime('now'))"
+	stmt := "INSERT INTO MutedChannels (UserID, ChannelID, Created) VALUES (?, ?, DateTime('now'))"
 	_, err := m.DB.Exec(stmt, authorID, postID)
 	return err
 }
 
 func (m *MutedChannelModel) All() ([]models.MutedChannel, error) {
-	stmt := "SELECT ID, UserID, ChannelID, Created FROM Muted_channels ORDER BY ID DESC"
+	stmt := "SELECT ID, UserID, ChannelID, Created FROM MutedChannels ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
 		return nil, err

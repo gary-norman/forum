@@ -121,7 +121,6 @@ type Reaction struct {
 	Disliked         bool      `json:"disliked"`
 	Created          time.Time `json:"created"`
 	AuthorID         int       `json:"author_id"`
-	ChannelID        int       `json:"channel_id"`
 	ReactedPostID    *int      `json:"reacted_post_id,omitempty"`
 	ReactedCommentID *int      `json:"reacted_comment_id,omitempty"`
 }

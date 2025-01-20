@@ -22,7 +22,7 @@ func (m *ReactionModel) WhichReaction(authorID, channelID, reactedPostID, reacte
 	//fmt.Printf("WhichReaction:\nChecking reaction (reactions.go :22 -> WhichReaction) for\nauthorID: %v,\nchannelID: %v,\nreactedPostID: %v,\nreactedCommentID: %v\n", authorID, channelID, reactedPostID, reactedCommentID)
 
 	stmt := `SELECT Liked, Disliked FROM Reactions
-             WHERE AuthorID = ? AND ChannelID = ? AND Reacted_postID = ? AND Reacted_commentID = ?`
+             WHERE AuthorID = ?  AND ReactedPostID = ? AND ReactedCommentID = ?`
 
 	var liked, disliked bool
 	err := m.DB.QueryRow(stmt, authorID, channelID, reactedPostID, reactedCommentID).Scan(&liked, &disliked)
@@ -51,38 +51,38 @@ func (m *ReactionModel) GetReactionStatus(authorID, channelID, reactedPostID, re
 	return ReactionStatus{Liked: liked, Disliked: disliked}, nil
 }
 
-func (m *ReactionModel) Insert(liked, disliked bool, authorID, channelID int, reactedPostID, reactedCommentID *int) error {
+func (m *ReactionModel) Insert(liked, disliked bool, authorID int, reactedPostID, reactedCommentID *int) error {
 	if !isValidParent(*reactedPostID, *reactedCommentID) {
-		return fmt.Errorf("only one of Reacted_postID, or Reacted_commentID must be non-zero")
+		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
 	}
 
 	stmt := `INSERT INTO Reactions 
-    		(Liked, Disliked, AuthorID, ChannelID, Created, Reacted_postID, Reacted_commentID) 
-			VALUES (?, ?, ?, ?, DateTime('now'), ?, ?)`
-	_, err := m.DB.Exec(stmt, liked, disliked, authorID, channelID, reactedPostID, reactedCommentID)
+    		(Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID) 
+			VALUES (?, ?, ?, DateTime('now'), ?, ?)`
+	_, err := m.DB.Exec(stmt, liked, disliked, authorID, reactedPostID, reactedCommentID)
 	return err
 }
 
-func (m *ReactionModel) Update(liked, disliked bool, authorID, channelID, reactedPostID, reactedCommentID int) error {
+func (m *ReactionModel) Update(liked, disliked bool, authorID, reactedPostID, reactedCommentID int) error {
 	if !isValidParent(reactedPostID, reactedCommentID) {
-		return fmt.Errorf("only one of Reacted_postID, or Reacted_commentID must be non-zero")
+		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
 	}
 
 	stmt := `UPDATE Reactions 
              SET Liked = ?, Disliked = ?, Created = DateTime('now') 
-             WHERE AuthorID = ? AND ChannelID = ? AND Reacted_postID = ? AND Reacted_commentID = ?`
-	_, err := m.DB.Exec(stmt, liked, disliked, authorID, channelID, reactedPostID, reactedCommentID)
+             WHERE AuthorID = ? AND ReactedPostID = ? AND ReactedCommentID = ?`
+	_, err := m.DB.Exec(stmt, liked, disliked, authorID, reactedPostID, reactedCommentID)
 	return err
 }
 
-// Upsert inserts or updates a reaction for a specific combination of AuthorID and the parent fields (ChannelID, Reacted_postID, Reacted_commentID). It uses Exists to determine if the reaction already exists.
-func (m *ReactionModel) Upsert(liked, disliked bool, authorID, channelID, reactedPostID, reactedCommentID int) error {
+// Upsert inserts or updates a reaction for a specific combination of AuthorID and the parent fields (ChannelID, ReactedPostID, ReactedCommentID). It uses Exists to determine if the reaction already exists.
+func (m *ReactionModel) Upsert(liked, disliked bool, authorID, reactedPostID, reactedCommentID int) error {
 	if !isValidParent(reactedPostID, reactedCommentID) {
-		return fmt.Errorf("only one of Reacted_postID, or Reacted_commentID must be non-zero")
+		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
 	}
 
 	// Check if the reaction exists
-	exists, err := m.Exists(authorID, channelID, reactedPostID, reactedCommentID)
+	exists, err := m.Exists(authorID, reactedPostID, reactedCommentID)
 	if err != nil {
 		return fmt.Errorf(err.Error())
 	}
@@ -90,39 +90,38 @@ func (m *ReactionModel) Upsert(liked, disliked bool, authorID, channelID, reacte
 	if exists {
 		// If the reaction exists, update it
 		fmt.Println("Updating a reaction which already exists (reactions.go :53 -> Upsert)")
-		return m.Update(liked, disliked, authorID, channelID, reactedPostID, reactedCommentID)
+		return m.Update(liked, disliked, authorID, reactedPostID, reactedCommentID)
 	}
 	fmt.Println("Inserting a reaction (reactions.go :56 -> Upsert)")
 
-	return m.Insert(liked, disliked, authorID, channelID, &reactedPostID, &reactedCommentID)
+	return m.Insert(liked, disliked, authorID, &reactedPostID, &reactedCommentID)
 }
 
-// Exists helps avoid creating duplicate reactions by determining whether a reaction for the specific combination of AuthorID and the parent fields (ChannelID, Reacted_postID, Reacted_commentID).
-func (m *ReactionModel) Exists(authorID, channelID, reactedPostID, reactedCommentID int) (bool, error) {
-	fmt.Printf("Reaction already exists (reactions.go :63 -> Exists) for\nauthorID: %v,\nchannelID: %v,\nreactedPostID: %v,\nreactedCommentID: %v\n", authorID, channelID, reactedPostID, reactedCommentID)
+// Exists helps avoid creating duplicate reactions by determining whether a reaction for the specific combination of AuthorID and the parent fields (ChannelID, ReactedPostID, ReactedCommentID).
+func (m *ReactionModel) Exists(authorID, reactedPostID, reactedCommentID int) (bool, error) {
+	fmt.Printf("Reaction already exists (reactions.go :63 -> Exists) for\nauthorID: %v,\nreactedPostID: %v,\nreactedCommentID: %v\n", authorID, reactedPostID, reactedCommentID)
 
 	stmt := `SELECT EXISTS(
                 SELECT 1 FROM Reactions
-                WHERE AuthorID = ? AND ChannelID = ? AND Reacted_postID = ? AND Reacted_commentID = ?
+                WHERE AuthorID = ?  AND ReactedPostID = ? AND ReactedCommentID = ?
              )`
 	var exists bool
-	err := m.DB.QueryRow(stmt, authorID, channelID, reactedPostID, reactedCommentID).Scan(&exists)
+	err := m.DB.QueryRow(stmt, authorID, reactedPostID, reactedCommentID).Scan(&exists)
 	return exists, err
 }
 
 // CheckExistingReaction checks if the user has already reacted to a post or comment. For purposes of reactions, the user can only react once to a post or comment.
-func (m *ReactionModel) CheckExistingReaction(reactionAuthorID, channelID, reactedPostID, reactedCommentID int) (*models.Reaction, error) {
+func (m *ReactionModel) CheckExistingReaction(reactionAuthorID, reactedPostID, reactedCommentID int) (*models.Reaction, error) {
 	var reaction models.Reaction
 
 	// Query to find if there's a reaction by the same user for the same post or comment
-	stmt := `SELECT ID, Liked, Disliked, AuthorID, ChannelID, Created, Reacted_postID, Reacted_commentID
+	stmt := `SELECT ID, Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID
 			FROM Reactions 
-			WHERE AuthorID = ? 
-			AND ChannelID = ? 
-			AND (Reacted_postID = ? OR Reacted_commentID = ?)`
+			WHERE AuthorID = ?
+			AND (ReactedPostID = ? OR ReactedCommentID = ?)`
 
-	err := m.DB.QueryRow(stmt, reactionAuthorID, channelID, reactedPostID, reactedCommentID).Scan(
-		&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.ChannelID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID,
+	err := m.DB.QueryRow(stmt, reactionAuthorID, reactedPostID, reactedCommentID).Scan(
+		&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID,
 	)
 
 	if errors.Is(err, sql.ErrNoRows) {
@@ -137,16 +136,15 @@ func (m *ReactionModel) CheckExistingReaction(reactionAuthorID, channelID, react
 
 func (m *ReactionModel) CountReactions(channelID, reactedPostID, reactedCommentID int) (likes, dislikes int, err error) {
 	if !isValidParent(reactedPostID, reactedCommentID) {
-		return 0, 0, fmt.Errorf("only one of  Reacted_postID, or Reacted_commentID must be non-zero")
+		return 0, 0, fmt.Errorf("only one of  ReactedPostID, or ReactedCommentID must be non-zero")
 	}
 
 	stmt := `SELECT 
                  SUM(CASE WHEN Liked = 1 THEN 1 ELSE 0 END) AS Likes,
                  SUM(CASE WHEN Disliked = 1 THEN 1 ELSE 0 END) AS Dislikes
              FROM Reactions
-             WHERE ChannelID = ? AND 
-                   Reacted_postID = ? AND 
-                   Reacted_commentID = ?`
+             WHERE ReactedPostID = ? AND 
+                   ReactedCommentID = ?`
 	var likesNull, dislikesNull sql.NullInt64
 
 	// Run the query
@@ -178,17 +176,15 @@ func (m *ReactionModel) GetReaction(authorID int, reactedPostID *int, reactedCom
 
 	// Build the SQL query depending on whether the reaction is to a post or comment
 	if reactedPostID != nil {
-		stmt = `SELECT ID, Liked, Disliked, AuthorID, ChannelID, 
-       				   Created, Reacted_postID, Reacted_commentID 
+		stmt = `SELECT ID, Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID 
 				FROM Reactions 
 				WHERE AuthorID = ? AND 
-				      Reacted_postID = ?`
+				      ReactedPostID = ?`
 	} else if reactedCommentID != nil {
-		stmt = `SELECT ID, Liked, Disliked, AuthorID, ChannelID, 
-       				Created, Reacted_postID, Reacted_commentID 
+		stmt = `SELECT ID, Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID 
 				FROM Reactions 
 				WHERE AuthorID = ? AND 
-				      Reacted_commentID = ?`
+				      ReactedCommentID = ?`
 	} else {
 		return nil, nil
 	}
@@ -199,7 +195,7 @@ func (m *ReactionModel) GetReaction(authorID int, reactedPostID *int, reactedCom
 		row = m.DB.QueryRow(stmt, authorID, reactedCommentID)
 	}
 
-	err := row.Scan(&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.ChannelID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID)
+	err := row.Scan(&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			// No reaction found
@@ -222,7 +218,7 @@ func (m *ReactionModel) Delete(reactionID int) error {
 }
 
 func (m *ReactionModel) All() ([]models.Reaction, error) {
-	stmt := "SELECT ID, Liked, Disliked, AuthorID, ChannelID, Created, Reacted_postID, Reacted_commentID FROM Reactions ORDER BY ID DESC"
+	stmt := "SELECT ID, Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID FROM Reactions ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
 		return nil, err
@@ -237,7 +233,7 @@ func (m *ReactionModel) All() ([]models.Reaction, error) {
 	var Reactions []models.Reaction
 	for rows.Next() {
 		p := models.Reaction{}
-		err = rows.Scan(&p.ID, &p.Liked, &p.Disliked, &p.AuthorID, &p.ChannelID, &p.Created, &p.ReactedPostID, &p.ReactedCommentID)
+		err = rows.Scan(&p.ID, &p.Liked, &p.Disliked, &p.AuthorID, &p.Created, &p.ReactedPostID, &p.ReactedCommentID)
 		if err != nil {
 			return nil, err
 		}

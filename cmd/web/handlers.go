@@ -571,7 +571,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if the user already reacted (like/dislike) and update or delete the reaction if needed
-	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.AuthorID, reactionData.ChannelID, postID, commentID)
+	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.AuthorID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for fetching errors
 		http.Error(w, fmt.Sprintf(ErrorMsgs().Read, "storeReaction", err), http.StatusInternalServerError)
@@ -605,7 +605,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Otherwise, update the existing reaction
-		err = app.reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, reactionData.ChannelID, postID, commentID)
+		err = app.reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 		if err != nil {
 			// Use your custom error message for update errors
 			http.Error(w, fmt.Sprintf(ErrorMsgs().Update, "storeReaction", err), http.StatusInternalServerError)
@@ -622,7 +622,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// If no existing reaction, insert a new reaction
-	err = app.reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, reactionData.ChannelID, postID, commentID)
+	err = app.reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for insertion errors
 		http.Error(w, fmt.Sprintf(ErrorMsgs().Insert, "storeReaction", err), http.StatusInternalServerError)

@@ -1,0 +1,25 @@
+
+DB things to update:
+Users
+Email_addres > EmailAddress
+Is_flagged > IsFlagged
+
+Muted_channels
+name Muted_channels > MutedChannels
+Is_flagged > IsFlagged
+Commentable > IsCommentable
+
+Comments
+Is_reply > IsReply
+Is_flagged > IsFlagged
+
+Reactions
+Reacted_postID > ReactedPostID
+Reacted_commentID > ReactedCommentID
+Remove ChannelID from reactions.go functions
+
+Flags
+Flag_type > FlagType
+Flagged_userID > FlagUserID
+Flagged_postID > FlaggedUserID
+Flagged_commentID > FlaggedCommentID

@@ -38,14 +38,6 @@
           </search>
         </form>
         <div class="flex-align-c">
-          <form action="/logout" method="POST">
-          <button id="logout" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
-            <span class="btn-posts">logout</span>
-          </button>
-          </form>
-          <button id="btn-open-login-modal" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
-            <span class="btn-posts">login</span>
-          </button>
           <button popovertarget="form-post" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
             <span class="btn-posts">post</span>
           </button>
@@ -385,9 +377,17 @@
               <li id="btn-open-remove-acc-modal">remove your account</li>
             </ul>
               <!-- TODO make this the logout button -->
+              {{ if (ne .CurrentUserName "nouser") }}
               <form action="/logout" method="POST">
-                <div id="logout-" class="sidebar-option logout">Log Out</div>
+                <div id="logout" class="sidebar-option logout">Log Out</div>
               </form>
+              <div id="btn-open-login-modal" class="sidebar-option login" style="display: none">Log In</div>
+              {{ else }}
+              <form action="/logout" method="POST" style="display: none">
+                <div id="logout" class="sidebar-option logout">Log Out</div>
+              </form>
+              <div id="btn-open-login-modal" class="sidebar-option login">Log In</div>
+              {{ end }}
             </div>
             <hr class="solid" />
             {{if ne .CurrentUserName "nouser"}}
@@ -595,20 +595,22 @@
                                 </button>
                             </div>
                             <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                                {{ if (ne .CurrentUserName "nouser") }}{{$userID := .CurrentUser.ID }}{{end}}
-                                {{range .Posts}} <!-- user page activity posts -->
-                                <div class="activity-items activity">Something happened!</div>
-                                <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
-                                    <div class="container-post-info">
-                          <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
-                          <div>
-                            <small class="small-bold">{{.Author}}</small>
-                            <div>
-                              <small>{{.ChannelName}}</small>
-                              <small>-</small>
-                              <small>{{.TimeSince}}</small>
-                            </div>
-                          </div>
+                              {{ if (ne .CurrentUserName "nouser") }}
+                              {{$userID := .CurrentUser.ID }}
+                              {{end}}
+                              {{range .Posts}} <!-- user page activity posts -->
+                              <div class="activity-items activity">Something happened!</div>
+                              <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                              <div class="container-post-info">
+                              <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
+                              <div>
+                                <small class="small-bold">{{.Author}}</small>
+                                <div>
+                                  <small>{{.ChannelName}}</small>
+                                  <small>-</small>
+                                  <small>{{.TimeSince}}</small>
+                                </div>
+                              </div>
                           <div class="like-button">
                             <button data-tooltip-name="like" class="btn-icoonly"></button>
                           </div>

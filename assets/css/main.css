@@ -1483,9 +1483,14 @@ hr.solid {
   }
 }
 
+.login {
+  position: relative;
+  &::before {
+    content: url("/assets/icons/login_24.svg");
+  }
+}
 .logout {
   position: relative;
-
   &::before {
     content: url("/assets/icons/logout_24.svg");
   }

@@ -294,20 +294,19 @@ logoutFormButton.addEventListener('click', function (event) {
             'Content-Type': 'application/json',
             'x-csrf-token': csrfToken
         },
-        body: JSON.stringify({})
+        body: JSON.stringify({}),
+        cache: 'no-store'
     })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            if (response.status === 204) {
+                window.location.reload();
+            } else {
+                // Handle other status codes as needed
             }
-            return response.text();
-        })
-        .then(data => {
-            console.log('Success:', data);
         })
         .catch(error => {
-            console.error('Error:', error);
-        });
+        console.error('Error:', error);
+    });
 })
 
 inputUser.addEventListener('change', function () {

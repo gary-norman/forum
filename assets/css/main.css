@@ -211,7 +211,7 @@ a:active {
   /* margin: 0.6rem 0 0 0; */
   background: var(--color-bg-2);
   border-bottom: 1px solid var(--color-bg-3);
-  height: 8rem;
+  min-height: 6rem;
   z-index: 2;
 }
 /* ---- grid containers ---- */
@@ -1077,7 +1077,6 @@ input[type="checkbox"]:checked {
   color: var(--color-fg-2);
   padding: 1.2rem;
   gap: 1.2rem;
-  width: 30rem;
   border: 1px solid var(--color-bg-3);
   border-radius: 1rem;
   box-shadow:
@@ -1091,6 +1090,10 @@ input[type="checkbox"]:checked {
   /*& * {*/
   /*  margin : 0.4rem;*/
   /*}*/
+}
+
+.wrapper-form {
+  width: 30rem;
 }
 
 .share-container {
@@ -1887,6 +1890,11 @@ main {
 .scroll-down {
   overflow-y: auto;
   overflow-x: hidden;
+
+  &.sidebar-scroll {
+    height: auto;
+    min-height: calc(100dvh - 6rem);
+  }
   &::-webkit-scrollbar {
     width: 0.8rem;
     height: 0.8rem;

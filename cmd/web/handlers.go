@@ -187,20 +187,22 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, authErr.Error(), http.StatusUnauthorized)
 		return
 	}
+
 	// Delete the Session Token and CSRF Token cookies
 	delCookiErr := app.cookies.DeleteCookies(w, user)
 	if delCookiErr != nil {
 		log.Printf(ErrorMsgs().Cookies, "delete", delCookiErr)
 	}
+	log.Println("Check1 /")
 	log.Println(Colors.Green + "Logged out successfully!")
 
-	//fprintln, err := fmt.Fprintf(w, "Welcome, %v!", user.Username)
-	//if err != nil {
-	//	log.Print(ErrorMsgs.Login, err)
-	//	return
-	//}
-	//log.Println(fprintln)
-	app.getHome(w, r)
+	//http.Redirect(w, r, "/", http.StatusFound)
+
+	//w.Header().Set("Location", "/")
+	w.WriteHeader(http.StatusNoContent)
+	//app.getHome(w, r)
+	log.Println("Check2 /")
+	//http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (app *app) protected(w http.ResponseWriter, r *http.Request) {

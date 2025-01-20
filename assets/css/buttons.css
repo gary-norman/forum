@@ -669,8 +669,10 @@ input:checked + .allow-comments-fx {
 
 .share-logo {
     display: flex;
-    width: 4rem;
-    height: 4rem;
+    min-width: 4rem;
+    min-height: 4rem;
+    max-width: 4rem;
+    max-height: 4rem;
     border-radius: 50%;
 
 

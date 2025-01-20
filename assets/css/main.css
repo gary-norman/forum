@@ -1444,6 +1444,12 @@ hr.solid {
   align-items: center;
 }
 
+.flex-end {
+  display: flex;
+  justify-content: flex-end !important;
+  align-items: center;
+}
+
 .margin-auto-0 {
   margin-inline: auto 0;
 }

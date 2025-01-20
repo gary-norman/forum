@@ -1438,6 +1438,12 @@ hr.solid {
   align-items: center;
 }
 
+.flex-start {
+  display: flex;
+  justify-content: flex-start !important;
+  align-items: center;
+}
+
 .margin-auto-0 {
   margin-inline: auto 0;
 }

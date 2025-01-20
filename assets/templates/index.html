@@ -857,7 +857,7 @@
                                 <div class="sidebar-channel-block">
                                     <div class="sidebar-channel">
                                         <div></div>
-                                        <div class="container-channel-info">
+                                        <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
                                             <span class="card-pic channel-pic"></span>
                                             <div>
                                                 <div>/Interesting_Things</div>
@@ -866,14 +866,16 @@
                                                     <div class="channel-green-dot">36</div>
                                                 </div>
                                             </div>
+                                          {{ if (ne .CurrentUserName "nouser") }}
                                             <button class="btn-sm btn-icoonly margin-auto-0">
                                                 <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
                                             </button>
+                                          {{ end }} <!-- "nouser" check -->
                                         </div>
                                     </div>
                                     <div class="sidebar-channel">
                                         <div></div>
-                                        <div class="container-channel-info">
+                                        <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
                                             <span class="card-pic channel-pic"></span>
                                             <div>
                                                 <div>/CSS_Help</div>
@@ -882,14 +884,16 @@
                                                     <div class="channel-green-dot">36</div>
                                                 </div>
                                             </div>
+                                          {{ if (ne .CurrentUserName "nouser") }}
                                             <button class="btn-sm btn-icoonly margin-auto-0">
                                                 <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
                                             </button>
+                                          {{ end }} <!-- "nouser" check -->
                                         </div>
                                     </div>
                                     <div class="sidebar-channel">
                                         <div></div>
-                                        <div class="container-channel-info">
+                                        <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
                                             <span class="card-pic channel-pic"></span>
                                             <div>
                                                 <div>/Golang#Discussion</div>
@@ -898,9 +902,11 @@
                                                     <div class="channel-green-dot">36</div>
                                                 </div>
                                             </div>
+                                          {{ if (ne .CurrentUserName "nouser") }}
                                             <button class="btn-sm btn-icoonly margin-auto-0">
                                                 <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
                                             </button>
+                                          {{ end }} <!-- "nouser" check -->
                                         </div>
                                     </div>
                                 </div>

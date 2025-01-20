@@ -19,15 +19,16 @@ import (
 // FIXME D.R.Y.
 
 type FormData struct {
-	title       string
-	content     string
-	images      string
-	userName    string
-	userID      int
-	channelName string
-	channelID   int
-	commentable bool
-	isFlagged   bool
+	title        string
+	content      string
+	images       string
+	userName     string
+	userID       int
+	authorAvatar string
+	channelName  string
+	channelID    int
+	commentable  bool
+	isFlagged    bool
 }
 type ChannelData struct {
 	ChannelName string `json:"channelName"`
@@ -245,7 +246,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		posts[i].Likes = likes
 		posts[i].Dislikes = dislikes
 	}
-	
+
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
 	for index, post := range posts {
 		now := time.Now()
@@ -479,23 +480,29 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf(ErrorMsgs().KeyValuePair, "channelName", channelData.ChannelName)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "channelID", channelData.ChannelID)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "commentable", r.PostForm.Get("commentable"))
+	fmt.Printf(ErrorMsgs().KeyValuePair, "filename", r.PostForm.Get("file-drop"))
 
 	formData := FormData{
-		title:       r.PostForm.Get("title"),
-		content:     r.PostForm.Get("content"),
-		images:      "",
-		userName:    user.Username,
-		userID:      user.ID,
-		channelName: "channelName",
-		channelID:   0,
-		commentable: false,
-		isFlagged:   false,
+		title:        r.PostForm.Get("title"),
+		content:      r.PostForm.Get("content"),
+		images:       "",
+		userName:     user.Username,
+		userID:       user.ID,
+		authorAvatar: user.Avatar,
+		channelName:  "channelName",
+		channelID:    0,
+		commentable:  false,
+		isFlagged:    false,
 	}
-	if r.PostForm.Get("commentable") != "" {
+	fmt.Printf(ErrorMsgs().KeyValuePair, "authorAvatar", formData.authorAvatar)
+	if r.PostForm.Get("commentable") == "on" {
 		formData.commentable = true
 	}
-	if handler.Filename != "" {
-		formData.images = GetFileName(r, "storePost", "post")
+	if r.PostForm.Get("file-drop") != "" {
+		if handler.Filename != "" {
+			formData.images = GetFileName(r, "storePost", "post")
+		}
 	}
 	formData.channelName = channelData.ChannelName
 	formData.channelID, _ = strconv.Atoi(channelData.ChannelID)
@@ -506,6 +513,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 		formData.images,
 		formData.userName,
 		formData.channelName,
+		formData.authorAvatar,
 		formData.channelID,
 		formData.userID,
 		formData.commentable,

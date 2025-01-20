@@ -10,9 +10,9 @@ type PostModel struct {
 	DB *sql.DB
 }
 
-func (m *PostModel) Insert(title, content, images, author, channel string, channelID, authorID int, commentable, isFlagged bool) error {
-	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, ChannelName, ChannelID, AuthorID, Commentable, Is_flagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?, ?)"
-	_, err := m.DB.Exec(stmt, title, content, images, author, channel, channelID, authorID, commentable, isFlagged)
+func (m *PostModel) Insert(title, content, images, author, channel, authorAvatar string, channelID, authorID int, commentable, isFlagged bool) error {
+	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, ChannelName, AUthorAVatar,ChannelID, AuthorID, Commentable, Is_flagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?, ?, ?)"
+	_, err := m.DB.Exec(stmt, title, content, images, author, channel, authorAvatar, channelID, authorID, commentable, isFlagged)
 	return err
 }
 

@@ -390,12 +390,13 @@
               </form>
             </div>
             <hr class="solid" />
+            {{if ne .CurrentUserName "nouser"}}
             <div class="sidebar-block sidebar-channels">
               <div class="flex-space-between" style="margin-bottom: -0.8rem;">
-              <small class="padded">Your Channels</small>
-              <button class="btn-sm btn-icoonly">
-                <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
-              </button>
+                <small class="padded">Your Channels</small>
+                <button class="btn-sm btn-icoonly">
+                  <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
+                </button>
               </div>
               <div class="sidebar-channel-block">
 <!--                TODO get the Channels data and add it to DB and loop range-->
@@ -419,6 +420,7 @@
               </div>
 <!--              end range of channels here-->
             </div>
+            {{end}} <!-- "nouser" check -->
           </div>
         </aside>
         <main>

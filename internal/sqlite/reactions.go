@@ -17,6 +17,8 @@ type ReactionStatus struct {
 	Disliked bool
 }
 
+// TODO Remove ChannelID from all functions
+
 // WhichReaction checks if a reaction exists and returns whether it is Liked or Disliked.
 func (m *ReactionModel) WhichReaction(authorID, channelID, reactedPostID, reactedCommentID int) (bool, bool, error) {
 	//fmt.Printf("WhichReaction:\nChecking reaction (reactions.go :22 -> WhichReaction) for\nauthorID: %v,\nchannelID: %v,\nreactedPostID: %v,\nreactedCommentID: %v\n", authorID, channelID, reactedPostID, reactedCommentID)

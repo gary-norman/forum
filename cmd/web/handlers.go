@@ -244,7 +244,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf("Error counting reactions: %v", likesErr)
 			likes, dislikes = 0, 0 // Default values if there is an error
 		}
-
 		posts[i].Likes = likes
 		posts[i].Dislikes = dislikes
 	}
@@ -474,7 +473,6 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	if r.PostForm.Get("commentable") == "on" {
 		formData.commentable = true
 	}
-
 	formData.images = GetFileName(r, "file-drop", "storePost", "post")
 	formData.channelName = channelData.ChannelName
 	formData.channelID, _ = strconv.Atoi(channelData.ChannelID)

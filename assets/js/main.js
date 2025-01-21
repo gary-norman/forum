@@ -40,6 +40,7 @@ const viewStatsModal = document.querySelector('#container-form-view-stats');
 const removeAccModal = document.querySelector('#container-form-remove-acc');
 // Get the buttons that open the modals
 const openLoginModal = document.querySelector('#btn-open-login-modal');
+const openLoginModalFallback = document.querySelector('#btn-open-login-modal-fallback');
 const openEditUserModal = document.querySelector('#btn-open-edit-user-modal');
 // const openAccSettingsModal = document.querySelector('#btn-open-acc-settings-modal');
 // const openViewStatsModal = document.querySelector('#btn-open-view-stats-modal');
@@ -281,33 +282,34 @@ loginFormButton.addEventListener('submit', function (event) {
             console.error('Error:', error);
         });
 });
+if (logoutFormButton) {
+    logoutFormButton.addEventListener('click', function (event) {
+        event.preventDefault();
 
-logoutFormButton.addEventListener('click', function (event) {
-    event.preventDefault();
+        const csrfToken = getCSRFToken();
+        console.log("csrfToken: ", csrfToken)
 
-    const csrfToken = getCSRFToken();
-    console.log("csrfToken: ", csrfToken)
-
-    fetch('/logout', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'x-csrf-token': csrfToken
-        },
-        body: JSON.stringify({}),
-        cache: 'no-store'
-    })
-        .then(response => {
-            if (response.status === 204) {
-                window.location.reload();
-            } else {
-                // Handle other status codes as needed
-            }
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': csrfToken
+            },
+            body: JSON.stringify({}),
+            cache: 'no-store'
         })
-        .catch(error => {
-        console.error('Error:', error);
-    });
-})
+            .then(response => {
+                if (response.status === 204) {
+                    window.location.reload();
+                } else {
+                    // Handle other status codes as needed
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    })
+}
 // get user image from manual click
 inputUser.addEventListener('change', function () {
     file = this.files[0];
@@ -368,7 +370,10 @@ darkSwitch.addEventListener('click', toggleDarkMode);
 
 // open modals
 // TODO refactor the open and close modals
-openLoginModal.addEventListener('click', () => loginModal.style.display = 'block');
+if (openLoginModal) {
+    openLoginModal.addEventListener('click', () => loginModal.style.display = 'block');
+}
+openLoginModalFallback.addEventListener('click', () => loginModal.style.display = 'block');
 openEditUserModal.addEventListener('click', () => editUserModal.style.display = 'block');
 // openAccSettingsModal.addEventListener('click', () => accSettingsModal.style.display = 'block');
 // openViewStatsModal.addEventListener('click', () => viewStatsModal.style.display = 'block');

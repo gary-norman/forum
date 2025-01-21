@@ -381,13 +381,10 @@
               <form action="/logout" method="POST">
                 <div id="logout" class="sidebar-option logout">Log Out</div>
               </form>
-              <div id="btn-open-login-modal" class="sidebar-option login" style="display: none">Log In</div>
               {{ else }}
-              <form action="/logout" method="POST" style="display: none">
-                <div id="logout" class="sidebar-option logout">Log Out</div>
-              </form>
               <div id="btn-open-login-modal" class="sidebar-option login">Log In</div>
               {{ end }}
+              <div id="btn-open-login-modal-fallback" class="sidebar-option login">Log In fallback</div>
             </div>
             <hr class="solid" />
             {{if ne .CurrentUserName "nouser"}}

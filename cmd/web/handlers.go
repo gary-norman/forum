@@ -340,28 +340,13 @@ func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)
 		return
 	}
-
 	parseErr := r.ParseMultipartForm(10 << 20)
 	if parseErr != nil {
 		http.Error(w, parseErr.Error(), 400)
 		log.Printf(ErrorMsgs().Parse, "editUserDetails", parseErr)
 		return
 	}
-	// Retrieve the file from form data
-	file, handler, retrieveErr := r.FormFile("file-drop")
-	if retrieveErr != nil {
-		log.Printf(ErrorMsgs().RetrieveFile, "image", "editUserDetails", retrieveErr)
-	}
-	defer func(file multipart.File) {
-		closeErr := file.Close()
-		if closeErr != nil {
-			log.Printf(ErrorMsgs().Close, file, "editUserDetails", closeErr)
-		}
-	}(file)
-
-	if handler.Filename != "" {
-		user.Avatar = GetFileName(r, "storePost", "user")
-	}
+	user.Avatar = GetFileName(r, "file-drop", "editUserDetails", "user")
 	description := r.FormValue("bio")
 	if description != "" {
 		user.Description = description
@@ -374,35 +359,21 @@ func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("./assets/templates/posts.create.html")
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		log.Printf(ErrorMsgs().Parse, "./assets/templates/posts.create.html", "createPost", err)
+	t, parseErr := template.ParseFiles("./assets/templates/posts.create.html")
+	if parseErr != nil {
+		http.Error(w, parseErr.Error(), 500)
+		log.Printf(ErrorMsgs().Parse, "./assets/templates/posts.create.html", "createPost", parseErr)
 		return
 	}
 
-	err = t.Execute(w, nil)
-	if err != nil {
-		log.Printf(ErrorMsgs().Execute, err)
+	execErr := t.Execute(w, nil)
+	if execErr != nil {
+		log.Printf(ErrorMsgs().Execute, execErr)
 		return
 	}
 }
-func renameFileWithUUID(oldFilePath string) string {
-	// Generate a new UUID
-	newUUID := models.GenerateToken(16)
 
-	// Split the file name into its base and extension
-	base := filepath.Base(oldFilePath)
-	ext := filepath.Ext(base)
-	base = base[:len(base)-len(ext)]
-
-	// Create the new file name with the UUID and extension
-	newFilePath := filepath.Join(filepath.Dir(oldFilePath), newUUID+ext)
-
-	return newFilePath
-}
-func GetFileName(r *http.Request, calledBy, imageType string) string {
-
+func GetFileName(r *http.Request, fileFieldName, calledBy, imageType string) string {
 	// Limit the size of the incoming file to prevent memory issues
 	parseErr := r.ParseMultipartForm(10 << 20) // Limit upload size to 10MB
 	if parseErr != nil {
@@ -410,7 +381,7 @@ func GetFileName(r *http.Request, calledBy, imageType string) string {
 		return ""
 	}
 	// Retrieve the file from form data
-	file, handler, retrieveErr := r.FormFile("file-drop")
+	file, handler, retrieveErr := r.FormFile(fileFieldName)
 	if retrieveErr != nil {
 		log.Printf(ErrorMsgs().RetrieveFile, "image", calledBy, retrieveErr)
 		return ""
@@ -444,30 +415,33 @@ func GetFileName(r *http.Request, calledBy, imageType string) string {
 	return renamedFile
 }
 
+func renameFileWithUUID(oldFilePath string) string {
+	// Generate a new UUID
+	newUUID := models.GenerateToken(16)
+
+	// Split the file name into its base and extension
+	base := filepath.Base(oldFilePath)
+	ext := filepath.Ext(base)
+	base = base[:len(base)-len(ext)]
+
+	// Create the new file name with the UUID and extension
+	newFilePath := filepath.Join(filepath.Dir(oldFilePath), newUUID+ext)
+
+	return newFilePath
+}
+
 func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
 		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
 		return
 	}
-
 	parseErr := r.ParseMultipartForm(10 << 20)
 	if parseErr != nil {
 		http.Error(w, parseErr.Error(), 400)
 		log.Printf(ErrorMsgs().Parse, "storePost", parseErr)
 		return
 	}
-	// Retrieve the file from form data
-	file, handler, retrieveErr := r.FormFile("file-drop")
-	if retrieveErr != nil {
-		log.Printf(ErrorMsgs().RetrieveFile, "image", "storePost", retrieveErr)
-	}
-	defer func(file multipart.File) {
-		closeErr := file.Close()
-		if closeErr != nil {
-			log.Printf(ErrorMsgs().Close, file, "storePost", closeErr)
-		}
-	}(file)
 	// get channel name
 	selectionJSON := r.PostForm.Get("channel")
 	if selectionJSON == "" {
@@ -483,7 +457,6 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf(ErrorMsgs().KeyValuePair, "channelName", channelData.ChannelName)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "channelID", channelData.ChannelID)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "commentable", r.PostForm.Get("commentable"))
-	fmt.Printf(ErrorMsgs().KeyValuePair, "filename", r.PostForm.Get("file-drop"))
 
 	formData := FormData{
 		title:        r.PostForm.Get("title"),
@@ -501,11 +474,8 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	if r.PostForm.Get("commentable") == "on" {
 		formData.commentable = true
 	}
-	if r.PostForm.Get("file-drop") != "" {
-		if handler.Filename != "" {
-			formData.images = GetFileName(r, "storePost", "post")
-		}
-	}
+
+	formData.images = GetFileName(r, "file-drop", "storePost", "post")
 	formData.channelName = channelData.ChannelName
 	formData.channelID, _ = strconv.Atoi(channelData.ChannelID)
 

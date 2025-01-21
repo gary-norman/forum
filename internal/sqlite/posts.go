@@ -18,11 +18,11 @@ func (m *PostModel) Insert(title, content, images, author, channel, authorAvatar
 
 func (m *PostModel) All() ([]models.Post, error) {
 	stmt := "SELECT ID, Title, Content, Images, Created, Author, IsCommentable, AuthorID, ChannelID, ChannelName, IsFlagged FROM Posts ORDER BY ID DESC"
-	rows, err := m.DB.Query(stmt)
-	if err != nil {
-		log.Printf("Error called by %v\n", "1")
-		log.Printf(ErrorMsgs().Query, stmt, err)
-		return nil, err
+	rows, selectErr := m.DB.Query(stmt)
+	if selectErr != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "Error:", "select")
+		log.Printf(ErrorMsgs().Query, stmt, selectErr)
+		return nil, selectErr
 	}
 
 	defer func() {
@@ -34,19 +34,19 @@ func (m *PostModel) All() ([]models.Post, error) {
 	var Posts []models.Post
 	for rows.Next() {
 		p := models.Post{}
-		err = rows.Scan(&p.ID, &p.Title, &p.Content, &p.Images, &p.Created, &p.Author, &p.IsCommentable, &p.AuthorID, &p.ChannelID, &p.ChannelName, &p.IsFlagged)
-		if err != nil {
-			log.Printf("Error called by %v\n", "2")
-			log.Printf(ErrorMsgs().Query, stmt, err)
-			return nil, err
+		scanErr := rows.Scan(&p.ID, &p.Title, &p.Content, &p.Images, &p.Created, &p.Author, &p.IsCommentable, &p.AuthorID, &p.ChannelID, &p.ChannelName, &p.IsFlagged)
+		if scanErr != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "Error:", "scan")
+			log.Printf(ErrorMsgs().Query, stmt, scanErr)
+			return nil, scanErr
 		}
 		Posts = append(Posts, p)
 	}
 
-	if err = rows.Err(); err != nil {
-		log.Printf("Error called by %v\n", "3")
-		log.Printf(ErrorMsgs().Query, stmt, err)
-		return nil, err
+	if rowsErr := rows.Err(); rowsErr != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "Error:", "rows")
+		log.Printf(ErrorMsgs().Query, stmt, rowsErr)
+		return nil, rowsErr
 	}
 
 	return Posts, nil

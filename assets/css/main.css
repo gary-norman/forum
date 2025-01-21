@@ -1438,7 +1438,6 @@ hr.solid {
   }
 }
 
-
 .flex-space-around {
   justify-content: space-around !important;
 }
@@ -1459,9 +1458,10 @@ hr.solid {
   margin-inline: 0 auto;
 }
 
+/* ------ sidebar icons ------ */
+
 .home {
   position: relative;
-
   &::before {
     content: url("/assets/icons/home_24.svg");
   }
@@ -1469,7 +1469,6 @@ hr.solid {
 
 .darkMode {
   position: relative;
-
   &::before {
     content: url("/assets/icons/moon_24.svg");
   }
@@ -1477,7 +1476,6 @@ hr.solid {
 
 .settings {
   position: relative;
-
   &::before {
     content: url("/assets/icons/settings_24.svg");
   }

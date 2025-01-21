@@ -11,14 +11,14 @@ type ChannelModel struct {
 	DB *sql.DB
 }
 
-func (m *ChannelModel) Insert(name, avatar, description, rules string, privacy bool) error {
-	stmt := "INSERT INTO Channels (Name, Avatar, Description, Created, Rules, Privacy) VALUES (?, ?, ?, DateTime('now'), ?, ?)"
-	_, err := m.DB.Exec(stmt, name, avatar, description, rules, privacy)
+func (m *ChannelModel) Insert(ownerID int, name, avatar, banner, description string, privacy, isFlagged, isMuted bool) error {
+	stmt := "INSERT INTO Channels (OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted) VALUES (?, ?, ?, ?, ?, DateTime('now'),?,  ?, ?)"
+	_, err := m.DB.Exec(stmt, ownerID, name, avatar, banner, description, privacy, isFlagged, isMuted)
 	return err
 }
 
 func (m *ChannelModel) All() ([]models.Channel, error) {
-	stmt := "SELECT ID, Name, Avatar, Description, Created, Rules, Privacy FROM Channels ORDER BY ID DESC"
+	stmt := "SELECT ID, OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted FROM Channels ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
 		return nil, err
@@ -33,7 +33,7 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 	var Channels []models.Channel
 	for rows.Next() {
 		p := models.Channel{}
-		err = rows.Scan(&p.ID, &p.Name, &p.Avatar, &p.Description, &p.Created, &p.Rules, &p.Privacy)
+		err = rows.Scan(&p.ID, &p.OwnerID, &p.Name, &p.Avatar, &p.Banner, &p.Description, &p.Created, &p.Privacy, &p.IsFLagged, &p.IsMuted)
 		if err != nil {
 			return nil, err
 		}

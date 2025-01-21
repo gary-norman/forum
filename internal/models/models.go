@@ -45,12 +45,21 @@ type Loyalty struct {
 
 type Channel struct {
 	ID          int       `json:"id"`
+	OwnerID     int       `json:"owner_id"`
 	Name        string    `json:"name"`
 	Avatar      string    `json:"avatar,omitempty"` // Store UUID as string
+	Banner      string    `json:"banner,omitempty"`
 	Description string    `json:"description"`
 	Created     time.Time `json:"created"`
-	Rules       string    `json:"rules,omitempty"`
-	Privacy     bool      `json:"privacy"`
+	Rules       []ChannelRule
+	Privacy     bool `json:"privacy"`
+	IsMuted     bool `json:"is_muted"`
+	IsFLagged   bool `json:"is_flagged,omitempty"`
+}
+type ChannelRule struct {
+	ID        int    `json:"id"`
+	Rule      string `json:"rule"`
+	ChannelID int    `json:"channel_id"`
 }
 
 type MutedChannel struct {

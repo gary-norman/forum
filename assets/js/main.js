@@ -308,11 +308,17 @@ logoutFormButton.addEventListener('click', function (event) {
         console.error('Error:', error);
     });
 })
-
+// get user image from manual click
 inputUser.addEventListener('change', function () {
     file = this.files[0];
     dropAreaUser.classList.add('active');
 });
+// get post image from manual click
+inputPost.addEventListener('change', function () {
+    file = this.files[0];
+    dropAreaUser.classList.add('active');
+});
+
 // when file is inside drag area
 dropAreaUser.addEventListener('dragover', (event) => {
     event.preventDefault();

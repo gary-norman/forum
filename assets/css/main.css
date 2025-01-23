@@ -193,9 +193,25 @@ a:active {
   border: 1px solid var(--color-bg-3);
   border-radius: var(--border-radius-input);
 }
-.profile-pic, .channel-pic {
+.profile-pic, .profile-pic--empty, .channel-pic {
   font-size: inherit;
+  position: relative;
 }
+.profile-pic--empty {
+  &::before {
+    content: attr(data-initial);
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+/*.profile-pic--empty {*/
+/*  font-size: 2rem;*/
+/*}*/
+/*.profile-pic--empty-sidebar {*/
+/*  font-size: 5rem;*/
+/*}*/
 /* ---- one-line elements ---- */
 .invisible {
   visibility: hidden;

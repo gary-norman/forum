@@ -13,6 +13,7 @@ let activityFeeds;
 let activityFeedsContentAll;
 // sidebar elements
 const userProfileImage = document.querySelectorAll('.profile-pic');
+const userProfileImageEmpty = document.querySelectorAll('.profile-pic--empty');
 const sidebarOption = document.querySelector('#sidebar-options');
 const sidebarOptionsList = document.querySelector('.sidebar-options-list');
 // login/register buttons
@@ -107,10 +108,18 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         console.error('getUserProfileImageFromAttribute is not defined');
     }
+    if (typeof getInitialFromAttribute === 'function') {
+        getInitialFromAttribute();
+    } else {
+        console.error('getInitialFromAttribute is not defined');
+    }
     console.log("activity buttons:", actButtonsAll)
 });
 
 // functions
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
 
 function getUserProfileImageFromAttribute() {
     for (let i = 0; i < userProfileImage.length; i++) {
@@ -122,18 +131,60 @@ function getUserProfileImageFromAttribute() {
         if (attArr[0]) { // Ensure the `data-image-user` attribute has a value
             userProfileImage[i].style.background = `url('${attArr[0]}') no-repeat center`;
             userProfileImage[i].style.backgroundSize = 'cover'; // Add `cover` for background sizing
-        } else if (attArr[1]) { // Ensure the `data-image-user` attribute has a value
+        } else if (attArr[1]) { // Ensure the `data-image-auth` attribute has a value
             userProfileImage[i].style.background = `url('${attArr[1]}') no-repeat center`;
             userProfileImage[i].style.backgroundSize = 'cover'; // Add `cover` for background sizing
-        } else if (attArr[2]) { // Ensure the `data-image-user` attribute has a value
+        } else if (attArr[2]) { // Ensure the `data-image-channel` attribute has a value
             userProfileImage[i].style.background = `url('${attArr[2]}') no-repeat center`;
             userProfileImage[i].style.backgroundSize = 'cover'; // Add `cover` for background sizing
         }
         else {
-            console.warn('No data-image-user attribute value found for element:', userProfileImage[i]);
+            console.warn('No data-image- attribute value found for element:', userProfileImage[i]);
         }
     }
 }
+
+function getInitialFromAttribute() {
+    console.log('getInitialFromAttribute running...')
+    console.log('Elements found: ', userProfileImageEmpty.length)
+    const colorsArr = [
+        ['var(--color-hl-blue)', 'var(--color-light-1)'],
+        ['var(--color-hl-green)', 'var(--color-dark-1)'],
+        ['var(--color-hl-orange)', 'var(--color-light-1)'],
+        ['var(--color-hl-pink)', 'var(--color-light-1)'],
+        ['var(--color-hl-yellow)', 'var(--color-dark-1)'],
+        ['var(--color-hl-red)',  'var(--color-light-1)']]
+    let userTheme = getRandomInt(6)
+    for (let i = 0; i < userProfileImageEmpty.length; i++) {
+        let attArr = ['user', 'sidebar-user', 'channel'];
+        attArr[0] = userProfileImageEmpty[i].getAttribute('data-name-user');
+        attArr[1] = userProfileImageEmpty[i].getAttribute('data-name-user-sidebar');
+        attArr[2] = userProfileImageEmpty[i].getAttribute('data-name-channel');
+    if (attArr[0]) {
+        userProfileImageEmpty[i].style.background = colorsArr[userTheme][0];
+        userProfileImageEmpty[i].style.color = colorsArr[userTheme][1];
+        userProfileImageEmpty[i].style.fontSize = '2rem';
+        userProfileImageEmpty[i].setAttribute('data-initial', Array.from(`${attArr[0]}`)[0]);
+        console.log('attArr[0]');
+    } else if (attArr[1]) {
+        userProfileImageEmpty[i].style.background = colorsArr[userTheme][0];
+        userProfileImageEmpty[i].style.color = colorsArr[userTheme][1];
+        userProfileImageEmpty[i].style.fontSize = '5rem';
+        userProfileImageEmpty[i].setAttribute('data-initial', Array.from(`${attArr[1]}`)[0]);
+        console.log('attArr[0]');
+    } else if (attArr[2]) {
+        let theme = getRandomInt(6)
+        userProfileImageEmpty[i].style.background = colorsArr[theme][0];
+        userProfileImageEmpty[i].style.color = colorsArr[theme][1];
+        userProfileImageEmpty[i].setAttribute('data-initial', Array.from(`${attArr[2]}`)[0]);
+        console.log('attArr[1]');
+    }
+    else {
+        console.warn('No data-name- attribute value found for element:', userProfileImage[i]);
+    }
+  }
+}
+
 function toggleColorScheme() {
     // Get the current color scheme
     const currentScheme = document.documentElement.getAttribute('color-scheme');

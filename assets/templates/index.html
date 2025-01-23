@@ -371,7 +371,11 @@
         <aside class="sidebar">
           {{ if (ne .CurrentUserName "nouser") }}
           <div class="sidebarProfile">
+            {{ if (ne .Avatar "noimage") }}
             <div class="sidebar-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}">
+            {{ else }}
+            <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .CurrentUserName }}">
+            {{ end }}
             </div>
             <div>
               <h3>{{ .CurrentUserName }}</h3>
@@ -412,7 +416,6 @@
               <li id="btn-open-view-stats-modal">view stats</li>
               <li id="btn-open-remove-acc-modal">remove your account</li>
             </ul>
-              <!-- TODO make this the logout button -->
               {{ if (ne .CurrentUserName "nouser") }}
               <form action="/logout" method="POST">
                 <div id="logout" class="sidebar-option logout">Log Out</div>
@@ -436,7 +439,11 @@
                 <div class="sidebar-channel">
                   <div></div>
                   <div class="container-channel-info">
-                    <span class="card-pic profile-pic" data-image-channel="{{$channelBasePath}}{{.Avatar}}"></span>
+                    {{ if (ne .Avatar "noimage") }}
+                    <span class="card-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .Avatar }}"></span>
+                    {{ else }}
+                    <span class="card-pic profile-pic--empty" data-name-channel="{{ .Name }}"></span>
+                    {{ end }}
                     <div>
                       <div>/{{ .Name }}</div>
                       <div>
@@ -635,7 +642,11 @@
                               <div class="activity-items activity">Something happened!</div>
                               <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                               <div class="container-post-info">
-                              <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
+                                {{ if (ne .AuthorAvatar "noimage") }}
+                                <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
+                                {{ else }}
+                                <span class="card-pic profile-pic--empty" data-name-user="{{ .Author }}"></span>
+                                {{ end }}
                               <div>
                                 <small class="small-bold">{{.Author}}</small>
                                 <div>
@@ -649,9 +660,8 @@
                           </div>
                         </div>
                         <h4>{{.Title}}</h4>
-                        {{ if .Images }}
+                        {{ if ( ne .Images "noimage" ) }}
                         <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
-                        {{ else }}
                         {{ end }}
                         <article class="cardContent">{{.Content}}</article>
                             <div class="button-row post-controls" >
@@ -868,8 +878,12 @@
                       {{ if (ne .CurrentUserName "nouser") }}
                         <div class="right-panel-pic-container flex-space-between">
                             <div class="right-panel-pic-container">
-                                <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
-                                <small>Edit your avatar picture</small>
+                              {{ if (ne .Avatar "noimage") }}
+                              <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
+                              {{ else }}
+                              <div class="right-panel-pic profile-pic--empty" data-name-user="{{ .CurrentUserName }}"></div>
+                              {{ end }}
+                              <small>Edit your avatar picture</small>
                             </div>
                             <button class="btn-sm btn-icoonly">
                                 <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>

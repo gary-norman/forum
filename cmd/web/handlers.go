@@ -76,8 +76,8 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		hashedPassword,
 		"",
 		"",
-		"",
-		"",
+		"noimage",
+		"default.png",
 		"")
 
 	if insertErr != nil {
@@ -206,12 +206,12 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
+	userLoggedIn := true
 	posts, postsErr := app.posts.All()
 	if postsErr != nil {
 		http.Error(w, postsErr.Error(), 500)
 		return
 	}
-
 	// Retrieve total likes and dislikes for each post
 	for i, post := range posts {
 		likes, dislikes, likesErr := app.reactions.CountReactions(post.ChannelID, post.ID, 0) // Pass 0 for CommentID if it's a post
@@ -248,23 +248,27 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	currentUser, currentUserErr := app.GetLoggedInUser(r)
 	if currentUserErr != nil {
 		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
+		log.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
+		userLoggedIn = false
 	}
-
-	ownedChannels, channelsErr := app.channels.OwnedByCurrentUser(currentUser.ID)
-	if channelsErr != nil {
-		http.Error(w, channelsErr.Error(), 500)
-		return
-	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Owned Channels", ownedChannels)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
+	var ownedChannels []models.Channel
+	var channelsErr error
 
 	currentUserName := "nouser"
-	currentUserAvatar := ""
-	currentUserBio := ""
-	currentUserName = currentUser.Username
-	currentUserAvatar = currentUser.Avatar
-	currentUserBio = currentUser.Description
+	var currentUserAvatar string
+	var currentUserBio string
+	if userLoggedIn == true {
+		currentUserName = currentUser.Username
+		currentUserAvatar = currentUser.Avatar
+		currentUserBio = currentUser.Description
+		ownedChannels, channelsErr = app.channels.OwnedByCurrentUser(currentUser.ID)
+		if channelsErr != nil {
+			log.Printf(ErrorMsgs().Query, "user channels", channelsErr)
+		}
+	}
 
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Owned Channels", ownedChannels)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
 
 	templateData := models.TemplateData{
@@ -354,13 +358,13 @@ func GetFileName(r *http.Request, fileFieldName, calledBy, imageType string) str
 	parseErr := r.ParseMultipartForm(10 << 20) // Limit upload size to 10MB
 	if parseErr != nil {
 		log.Printf(ErrorMsgs().Parse, "image", calledBy, parseErr)
-		return ""
+		return "noimage"
 	}
 	// Retrieve the file from form data
 	file, handler, retrieveErr := r.FormFile(fileFieldName)
 	if retrieveErr != nil {
 		log.Printf(ErrorMsgs().RetrieveFile, "image", calledBy, retrieveErr)
-		return ""
+		return "noimage"
 	}
 	defer func(file multipart.File) {
 		closeErr := file.Close()
@@ -492,8 +496,8 @@ func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
 		OwnerID:     user.ID,
 		Name:        r.PostForm.Get("name"),
 		Description: r.PostForm.Get("description"),
-		Avatar:      "",
-		Banner:      "",
+		Avatar:      "noimage",
+		Banner:      "default.png",
 		Privacy:     false,
 		IsFLagged:   false,
 		IsMuted:     false,

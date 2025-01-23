@@ -18,7 +18,7 @@ import (
 
 // FIXME D.R.Y.
 
-type FormData struct {
+type CreatePost struct {
 	title        string
 	content      string
 	images       string
@@ -394,7 +394,7 @@ func GetFileName(r *http.Request, fileFieldName, calledBy, imageType string) str
 	// Create a file in the server's local storage
 	renamedFile := renameFileWithUUID(handler.Filename)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "File Name", renamedFile)
-	dst, createErr := os.Create("userdata/images/" + imageType + "-images/" + renamedFile)
+	dst, createErr := os.Create("db/userdata/images/" + imageType + "-images/" + renamedFile)
 	if createErr != nil {
 		log.Printf(ErrorMsgs().CreateFile, "image", calledBy, createErr)
 		return ""
@@ -457,7 +457,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf(ErrorMsgs().KeyValuePair, "channelID", channelData.ChannelID)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "commentable", r.PostForm.Get("commentable"))
 
-	formData := FormData{
+	createPostData := CreatePost{
 		title:        r.PostForm.Get("title"),
 		content:      r.PostForm.Get("content"),
 		images:       "",
@@ -469,25 +469,25 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 		commentable:  false,
 		isFlagged:    false,
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "authorAvatar", formData.authorAvatar)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "authorAvatar", createPostData.authorAvatar)
 	if r.PostForm.Get("commentable") == "on" {
-		formData.commentable = true
+		createPostData.commentable = true
 	}
-	formData.images = GetFileName(r, "file-drop", "storePost", "post")
-	formData.channelName = channelData.ChannelName
-	formData.channelID, _ = strconv.Atoi(channelData.ChannelID)
+	createPostData.images = GetFileName(r, "file-drop", "storePost", "post")
+	createPostData.channelName = channelData.ChannelName
+	createPostData.channelID, _ = strconv.Atoi(channelData.ChannelID)
 
 	insertErr := app.posts.Insert(
-		formData.title,
-		formData.content,
-		formData.images,
-		formData.userName,
-		formData.channelName,
-		formData.authorAvatar,
-		formData.channelID,
-		formData.userID,
-		formData.commentable,
-		formData.isFlagged,
+		createPostData.title,
+		createPostData.content,
+		createPostData.images,
+		createPostData.userName,
+		createPostData.channelName,
+		createPostData.authorAvatar,
+		createPostData.channelID,
+		createPostData.userID,
+		createPostData.commentable,
+		createPostData.isFlagged,
 	)
 
 	if insertErr != nil {

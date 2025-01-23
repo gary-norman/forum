@@ -19,9 +19,9 @@
     <title>&lt; codex &gt;</title>
   </head>
       <body>
-      {{ $channelBasePath := "/userdata/images/channel-images/" }}
-      {{ $postBasePath := "/userdata/images/post-images/" }}
-      {{ $userBasePath := "/userdata/images/user-images/" }}
+      {{ $channelBasePath := "db/userdata/images/channel-images/" }}
+      {{ $postBasePath := "db/userdata/images/post-images/" }}
+      {{ $userBasePath := "db/userdata/images/user-images/" }}
     <div class="wrapper-main">
       <header class="header">
         <div class="branding"></div>
@@ -242,10 +242,7 @@
                 >
                   sign in
                 </button>
-                <button
-                  id="btn_register-2"
-                  class="button btn-filled btn-filled-white_orange btn-secondary btn-pill"
-                >
+                <button id="btn_register-2" class="button btn-filled btn-filled-white_orange btn-secondary btn-pill">
                   sign up
                 </button>
               </div>
@@ -253,8 +250,8 @@
           </div>
         </div>
       </div>
+      <!--      ---------- post form ----------   -->
       <div popover id="form-post">
-        <!--      ---------- post form ----------   -->
         <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
           <h3 class="form-title">create a post</h3>
           <label for="channel" class="invisible">channel</label>
@@ -301,10 +298,49 @@
           </div>
         </form>
       </div>
+      <!--      ---------- post form ----------   -->
+      <div popover id="form-channel">
+        <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
+          <h3 class="form-title">create a channel</h3>
+          <div class="input-wrapper">
+            <input type="text" id="channel-name" name="title" placeholder="channel name" required>
+            <label for="channel-name" class="user-label">channel name</label>
+          </div>
+          <!-- FIXME fix resize issue -->
+          <div class="input-wrapper">
+            <textarea id="channel-desc" name="content" placeholder="description"></textarea>
+            <label for="channel-desc" class="user-label">description</label>
+          </div>
+          <p>upload an avatar (optional)</p>
+          <div id="drop-zone--channel">
+            <div id="uploaded-file--channel"></div>
+            <div class="drag-drop-text-wrapper">
+              <span class="dragText">drag and drop your file, or</span>
+              <!--                    <span class="button">browse</span>-->
+              <input type="file" id="browse--channel" name="file-drop" />
+            </div>
+          </div>
+          <div class="cont-flex-row flex-center">
+            <label class="allow-comments">
+              <input type="checkbox" id="channel-privacy-checkbox" name="commentable"/>
+              <span class="allow-comments-fx"></span>
+              <!--                            <span class="darklight-border"></span>-->
+            </label>
+            <label for="channel-privacy-checkbox" style="cursor: pointer">Private</label>
+          </div>
+          <!-- FIXME fix these buttons -->
+          <div class="cont-flex-row flex-center">
+            <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
+              <span>create</span>
+            </button>
+            <a href="/" class="button btn-md btn-secondary btn-action btn-filled">cancel</a>
+          </div>
+        </form>
+      </div>
+      <!--      ---------- edit user form ----------   -->
       <div aria-modal="true" id="container-form-edit-user" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
-          <!--      ---------- edit user form ----------   -->
           <div id="form-edit-user">
             <form action="/edituser" enctype="multipart/form-data" method="POST">
               <h5 id="edit-user-title" class="form-title">edit your profile</h5>
@@ -391,7 +427,7 @@
             <div class="sidebar-block sidebar-channels">
               <div class="flex-space-between" style="margin-bottom: -0.8rem;">
                 <small class="padded">Your Channels</small>
-                <button class="btn-sm btn-icoonly">
+                <button popovertarget="form-channel" class="btn-channel btn-sm btn-icoonly">
                   <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
                 </button>
               </div>

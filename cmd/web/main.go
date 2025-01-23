@@ -33,9 +33,9 @@ func ErrorMsgs() *models.Errors {
 }
 
 func main() {
-	db, err := sql.Open("sqlite3", "./forum_database.db")
+	db, err := sql.Open("sqlite3", "./db/forum_database.db")
 	if err != nil {
-		log.Fatal(ErrorMsgs().Open, "./forum_database.db", "sql.Open", err)
+		log.Fatal(ErrorMsgs().Open, "./db/forum_database.db", "sql.Open", err)
 	}
 
 	app := app{

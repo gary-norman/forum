@@ -677,76 +677,9 @@ input[type="email"] {
   height: auto;
   width: 100%;
   color: var(--color-fg-2);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   &::placeholder {
     color: var(--color-bg-4);
   }
-
   &:focus-visible {
     outline: none;
   border: 1px solid var(--color-hl-pink);
@@ -763,6 +696,7 @@ input[type="email"] {
   /*top: 0;*/
   animation: form-label 300ms ease-in-out forwards;
   }
+  /*TODO prevent this happening on form popop */
   &:not(:focus-visible) ~ label {
     animation: form-label-back 300ms ease-in-out forwards;
   }
@@ -1020,14 +954,12 @@ input[type="checkbox"]:checked {
 .btn-post {
   anchor-name: --post-button;
 }
-#form-post {
+.btn-channel {
+  anchor-name: --channel-button;
+}
+#form-post, #form-channel {
   position: absolute;
   inset: auto;
-  top: 5rem;
-  right: 15rem;
-  position-anchor: --post-button;
-  top: anchor(bottom);
-  right: anchor(right);
   margin: 0;
   padding: 2rem;
   font-size: 1.5rem;
@@ -1069,6 +1001,20 @@ input[type="checkbox"]:checked {
     max-width: 100%;
   }
 }
+#form-post {
+  top: 5rem;
+  right: 15rem;
+  position-anchor: --post-button;
+  top: anchor(bottom);
+  right: anchor(right);
+}
+#form-channel {
+  top: 15rem;
+  right: 5rem;
+  position-anchor: --channel-button;
+  bottom: anchor(bottom);
+  left: anchor(right);
+}
 
   .wrapper-form, .share-container {
   display: flex;
@@ -1079,9 +1025,7 @@ input[type="checkbox"]:checked {
   gap: 1.2rem;
   border: 1px solid var(--color-bg-3);
   border-radius: 1rem;
-  box-shadow:
-    rgba(0, 0, 0, 0.16) 0 3px 6px,
-    rgba(0, 0, 0, 0.23) 0 3px 6px;
+  box-shadow: rgb(0 0 0 / 16%) 0 3px 6px, rgb(0 0 0 / 23%) 0 3px 6px;
 
   & > label,
   & > p {
@@ -1089,6 +1033,199 @@ input[type="checkbox"]:checked {
   }
   /*& * {*/
   /*  margin : 0.4rem;*/
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   /*}*/
 }
 

@@ -25,4 +25,4 @@ go.work
 #*.db-shm
 #*.db-wal
 # user data
-userdata
+db

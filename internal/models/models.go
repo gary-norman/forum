@@ -109,18 +109,6 @@ type PostWithDaysAgo struct {
 	Post
 	TimeSince string
 }
-type CreatePost struct {
-	Title        string
-	Content      string
-	Images       string
-	UserName     string
-	UserID       int
-	AuthorAvatar string
-	ChannelName  string
-	ChannelID    int
-	Commentable  bool
-	IsFlagged    bool
-}
 
 type Image struct {
 	ID       string    `json:"id"` // UUID

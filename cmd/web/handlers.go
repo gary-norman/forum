@@ -434,21 +434,21 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf(ErrorMsgs().KeyValuePair, "channelID", channelData.ChannelID)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "commentable", r.PostForm.Get("commentable"))
 
-	createPostData := models.CreatePost{
-		Title:        r.PostForm.Get("title"),
-		Content:      r.PostForm.Get("content"),
-		Images:       "",
-		UserName:     user.Username,
-		UserID:       user.ID,
-		AuthorAvatar: user.Avatar,
-		ChannelName:  "channelName",
-		ChannelID:    0,
-		Commentable:  false,
-		IsFlagged:    false,
+	createPostData := models.Post{
+		Title:         r.PostForm.Get("title"),
+		Content:       r.PostForm.Get("content"),
+		Images:        "",
+		Author:        user.Username,
+		AuthorID:      user.ID,
+		AuthorAvatar:  user.Avatar,
+		ChannelName:   "channelName",
+		ChannelID:     0,
+		IsCommentable: false,
+		IsFlagged:     false,
 	}
 	fmt.Printf(ErrorMsgs().KeyValuePair, "authorAvatar", createPostData.AuthorAvatar)
 	if r.PostForm.Get("commentable") == "on" {
-		createPostData.Commentable = true
+		createPostData.IsCommentable = true
 	}
 	createPostData.Images = GetFileName(r, "file-drop", "storePost", "post")
 	createPostData.ChannelName = channelData.ChannelName
@@ -458,12 +458,12 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 		createPostData.Title,
 		createPostData.Content,
 		createPostData.Images,
-		createPostData.UserName,
+		createPostData.Author,
 		createPostData.ChannelName,
 		createPostData.AuthorAvatar,
 		createPostData.ChannelID,
-		createPostData.UserID,
-		createPostData.Commentable,
+		createPostData.AuthorID,
+		createPostData.IsCommentable,
 		createPostData.IsFlagged,
 	)
 

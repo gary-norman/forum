@@ -298,17 +298,17 @@
           </div>
         </form>
       </div>
-      <!--      ---------- post form ----------   -->
+      <!--      ---------- channel form ----------   -->
       <div popover id="form-channel">
-        <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
+        <form class="wrapper-form" enctype="multipart/form-data" action="/channels/create" method="POST">
           <h3 class="form-title">create a channel</h3>
           <div class="input-wrapper">
-            <input type="text" id="channel-name" name="title" placeholder="channel name" required>
+            <input type="text" id="channel-name" name="name" placeholder="channel name" required>
             <label for="channel-name" class="user-label">channel name</label>
           </div>
           <!-- FIXME fix resize issue -->
           <div class="input-wrapper">
-            <textarea id="channel-desc" name="content" placeholder="description"></textarea>
+            <textarea id="channel-desc" name="description" placeholder="description"></textarea>
             <label for="channel-desc" class="user-label">description</label>
           </div>
           <p>upload an avatar (optional)</p>
@@ -322,7 +322,7 @@
           </div>
           <div class="cont-flex-row flex-center">
             <label class="allow-comments">
-              <input type="checkbox" id="channel-privacy-checkbox" name="commentable"/>
+              <input type="checkbox" id="channel-privacy-checkbox" name="privacy"/>
               <span class="allow-comments-fx"></span>
               <!--                            <span class="darklight-border"></span>-->
             </label>
@@ -432,13 +432,13 @@
                 </button>
               </div>
               <div class="sidebar-channel-block">
-<!--                TODO get the Channels data and add it to DB and loop range-->
+                {{ range .OwnedChannels }}
                 <div class="sidebar-channel">
                   <div></div>
                   <div class="container-channel-info">
-                    <span class="card-pic channel-pic" data-image-channel="channelBasePath_Channel.Avatar"></span>
+                    <span class="card-pic profile-pic" data-image-channel="{{$channelBasePath}}{{.Avatar}}"></span>
                     <div>
-                      <div>/ChannelName</div>
+                      <div>/{{ .Name }}</div>
                       <div>
                         <!-- TODO get this data and add it to DB -->
                         <div class="channel-users">9.3k</div>
@@ -450,8 +450,8 @@
                     </button>
                   </div>
                 </div>
+                {{ end }} <!-- end range of channels here-->
               </div>
-<!--              end range of channels here-->
             </div>
             {{end}} <!-- "nouser" check -->
           </div>
@@ -496,7 +496,7 @@
               {{range .Channels}} <!-- homepage channels -->
                   <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                 <div class="container-post-info">
-                  <span class="card-pic channel-pic" data-image-channel="{{ $channelBasePath }}{{ .Channel.Avatar }}"></span>
+                  <span class="card-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .Channel.Avatar }}"></span>
                   <div>
                     <small class="small-bold">{{.Author}}</small>
                     <div>
@@ -895,7 +895,7 @@
                                     <div class="sidebar-channel">
                                         <div></div>
                                         <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
-                                            <span class="card-pic channel-pic"></span>
+                                            <span class="card-pic profile-pic"></span>
                                             <div>
                                                 <div>/Interesting_Things</div>
                                                 <div>

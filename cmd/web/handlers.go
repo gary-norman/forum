@@ -245,30 +245,30 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	//channels, channelsErr := app.channels.All()
-	//if channelsErr != nil {
-	//	http.Error(w, channelsErr.Error(), 500)
-	//	return
-	//}
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "Channels", channels)
-
 	currentUser, currentUserErr := app.GetLoggedInUser(r)
 	if currentUserErr != nil {
 		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
 	}
+
+	ownedChannels, channelsErr := app.channels.OwnedByCurrentUser(currentUser.ID)
+	if channelsErr != nil {
+		http.Error(w, channelsErr.Error(), 500)
+		return
+	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Owned Channels", ownedChannels)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
+
 	currentUserName := "nouser"
 	currentUserAvatar := ""
 	currentUserBio := ""
-	if currentUser != nil {
-		currentUserName = currentUser.Username
-		currentUserAvatar = currentUser.Avatar
-		currentUserBio = currentUser.Description
-	}
+	currentUserName = currentUser.Username
+	currentUserAvatar = currentUser.Avatar
+	currentUserBio = currentUser.Description
+
 	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
 
 	templateData := models.TemplateData{
-		//Channels:        channels,
+		OwnedChannels:   ownedChannels,
 		CurrentUser:     currentUser,
 		CurrentUserName: currentUserName,
 		Posts:           postsWithDaysAgo,
@@ -465,6 +465,53 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 		createPostData.AuthorID,
 		createPostData.IsCommentable,
 		createPostData.IsFlagged,
+	)
+
+	if insertErr != nil {
+		log.Printf(ErrorMsgs().Post, insertErr)
+		http.Error(w, insertErr.Error(), 500)
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
+	user, getUserErr := app.GetLoggedInUser(r)
+	if getUserErr != nil {
+		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
+		return
+	}
+	parseErr := r.ParseMultipartForm(10 << 20)
+	if parseErr != nil {
+		http.Error(w, parseErr.Error(), 400)
+		log.Printf(ErrorMsgs().Parse, "storeChannel", parseErr)
+		return
+	}
+
+	createChannelData := models.Channel{
+		OwnerID:     user.ID,
+		Name:        r.PostForm.Get("name"),
+		Description: r.PostForm.Get("description"),
+		Avatar:      "",
+		Banner:      "",
+		Privacy:     false,
+		IsFLagged:   false,
+		IsMuted:     false,
+	}
+	if r.PostForm.Get("privacy") == "on" {
+		createChannelData.Privacy = true
+	}
+	createChannelData.Avatar = GetFileName(r, "file-drop", "storeChannel", "channel")
+
+	insertErr := app.channels.Insert(
+		createChannelData.OwnerID,
+		createChannelData.Name,
+		createChannelData.Description,
+		createChannelData.Avatar,
+		createChannelData.Banner,
+		createChannelData.Privacy,
+		createChannelData.IsFLagged,
+		createChannelData.IsMuted,
 	)
 
 	if insertErr != nil {

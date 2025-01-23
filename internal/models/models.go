@@ -170,6 +170,7 @@ type TemplateData struct {
 	CurrentUser       *User             `json:"user"`
 	CurrentUserName   string            `json:"currentUserName"`
 	Channels          []Channel         `json:"channels"`
+	OwnedChannels     []Channel         `json:"ownedChannels"`
 	Posts             []PostWithDaysAgo `json:"posts"`
 	Avatar            string            `json:"avatar"`
 	Bio               string            `json:"bio"`

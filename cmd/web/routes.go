@@ -21,6 +21,7 @@ func (app *app) routes() http.Handler {
 	mux.HandleFunc("/", app.getHome)
 	mux.HandleFunc("GET /posts/create", app.createPost)
 	mux.HandleFunc("POST /posts/create", app.storePost)
+	mux.HandleFunc("POST /channels/create", app.storeChannel)
 	mux.HandleFunc("/posts/create", func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	})

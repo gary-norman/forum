@@ -114,15 +114,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function getUserProfileImageFromAttribute() {
     for (let i = 0; i < userProfileImage.length; i++) {
-        let attArr = ['user', 'auth'];
+        let attArr = ['user', 'auth', 'channel'];
         attArr[0] = userProfileImage[i].getAttribute('data-image-user');
         attArr[1] = userProfileImage[i].getAttribute('data-image-auth');
+        attArr[2] = userProfileImage[i].getAttribute('data-image-channel');
         // console.table(attArr)
         if (attArr[0]) { // Ensure the `data-image-user` attribute has a value
             userProfileImage[i].style.background = `url('${attArr[0]}') no-repeat center`;
             userProfileImage[i].style.backgroundSize = 'cover'; // Add `cover` for background sizing
         } else if (attArr[1]) { // Ensure the `data-image-user` attribute has a value
             userProfileImage[i].style.background = `url('${attArr[1]}') no-repeat center`;
+            userProfileImage[i].style.backgroundSize = 'cover'; // Add `cover` for background sizing
+        } else if (attArr[2]) { // Ensure the `data-image-user` attribute has a value
+            userProfileImage[i].style.background = `url('${attArr[2]}') no-repeat center`;
             userProfileImage[i].style.backgroundSize = 'cover'; // Add `cover` for background sizing
         }
         else {

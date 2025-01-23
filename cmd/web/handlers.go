@@ -16,49 +16,26 @@ import (
 	"time"
 )
 
-// FIXME D.R.Y.
-
-type CreatePost struct {
-	title        string
-	content      string
-	images       string
-	userName     string
-	userID       int
-	authorAvatar string
-	channelName  string
-	channelID    int
-	commentable  bool
-	isFlagged    bool
-}
-type ChannelData struct {
-	ChannelName string `json:"channelName"`
-	ChannelID   string `json:"channelID"`
-}
-
 func isValidPassword(password string) bool {
 	// At least 8 characters
 	if len(password) < 8 {
 		return false
 	}
-
 	// At least one digit
 	hasDigit, _ := regexp.MatchString(`[0-9]`, password)
 	if !hasDigit {
 		return false
 	}
-
 	// At least one lowercase letter
 	hasLower, _ := regexp.MatchString(`[a-z]`, password)
 	if !hasLower {
 		return false
 	}
-
 	// At least one uppercase letter
 	hasUpper, _ := regexp.MatchString(`[A-Z]`, password)
 	if !hasUpper {
 		return false
 	}
-
 	return true
 }
 
@@ -447,7 +424,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "No selection provided", http.StatusBadRequest)
 		return
 	}
-	var channelData ChannelData
+	var channelData models.ChannelData
 	if err := json.Unmarshal([]byte(selectionJSON), &channelData); err != nil {
 		log.Printf(ErrorMsgs().Unmarshal, selectionJSON, err)
 		http.Error(w, "Invalid selection format", http.StatusBadRequest)
@@ -457,37 +434,37 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf(ErrorMsgs().KeyValuePair, "channelID", channelData.ChannelID)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "commentable", r.PostForm.Get("commentable"))
 
-	createPostData := CreatePost{
-		title:        r.PostForm.Get("title"),
-		content:      r.PostForm.Get("content"),
-		images:       "",
-		userName:     user.Username,
-		userID:       user.ID,
-		authorAvatar: user.Avatar,
-		channelName:  "channelName",
-		channelID:    0,
-		commentable:  false,
-		isFlagged:    false,
+	createPostData := models.CreatePost{
+		Title:        r.PostForm.Get("title"),
+		Content:      r.PostForm.Get("content"),
+		Images:       "",
+		UserName:     user.Username,
+		UserID:       user.ID,
+		AuthorAvatar: user.Avatar,
+		ChannelName:  "channelName",
+		ChannelID:    0,
+		Commentable:  false,
+		IsFlagged:    false,
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "authorAvatar", createPostData.authorAvatar)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "authorAvatar", createPostData.AuthorAvatar)
 	if r.PostForm.Get("commentable") == "on" {
-		createPostData.commentable = true
+		createPostData.Commentable = true
 	}
-	createPostData.images = GetFileName(r, "file-drop", "storePost", "post")
-	createPostData.channelName = channelData.ChannelName
-	createPostData.channelID, _ = strconv.Atoi(channelData.ChannelID)
+	createPostData.Images = GetFileName(r, "file-drop", "storePost", "post")
+	createPostData.ChannelName = channelData.ChannelName
+	createPostData.ChannelID, _ = strconv.Atoi(channelData.ChannelID)
 
 	insertErr := app.posts.Insert(
-		createPostData.title,
-		createPostData.content,
-		createPostData.images,
-		createPostData.userName,
-		createPostData.channelName,
-		createPostData.authorAvatar,
-		createPostData.channelID,
-		createPostData.userID,
-		createPostData.commentable,
-		createPostData.isFlagged,
+		createPostData.Title,
+		createPostData.Content,
+		createPostData.Images,
+		createPostData.UserName,
+		createPostData.ChannelName,
+		createPostData.AuthorAvatar,
+		createPostData.ChannelID,
+		createPostData.UserID,
+		createPostData.Commentable,
+		createPostData.IsFlagged,
 	)
 
 	if insertErr != nil {

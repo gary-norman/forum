@@ -56,6 +56,11 @@ type Channel struct {
 	IsMuted     bool `json:"is_muted"`
 	IsFLagged   bool `json:"is_flagged,omitempty"`
 }
+type ChannelData struct {
+	ChannelName string `json:"channelName"`
+	ChannelID   string `json:"channelID"`
+}
+
 type ChannelRule struct {
 	ID        int    `json:"id"`
 	Rule      string `json:"rule"`
@@ -103,6 +108,18 @@ type Post struct {
 type PostWithDaysAgo struct {
 	Post
 	TimeSince string
+}
+type CreatePost struct {
+	Title        string
+	Content      string
+	Images       string
+	UserName     string
+	UserID       int
+	AuthorAvatar string
+	ChannelName  string
+	ChannelID    int
+	Commentable  bool
+	IsFlagged    bool
 }
 
 type Image struct {

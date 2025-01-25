@@ -533,7 +533,7 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
 		return
 	}
-
+	fmt.Printf("user: %v", user.Username)
 	// get channelID
 
 	// check if channel is private

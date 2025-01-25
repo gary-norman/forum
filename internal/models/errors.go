@@ -39,6 +39,7 @@ type Errors struct {
 	ConnClose    string
 	ConnInit     string
 	ConnConn     string
+	ConnSuccess  string
 	Cookies      string
 	CreateFile   string
 	Delete       string
@@ -60,6 +61,7 @@ type Errors struct {
 	RetrieveFile string
 	Register     string
 	SaveFile     string
+	Shutdown     string
 	Unmarshal    string
 	Update       string
 	UserModel    string
@@ -103,6 +105,7 @@ func JsonError(messageStruct TemplateData) {
 		fmt.Printf(ErrorMsgs.KeyValuePair, fieldType.Name, field.Interface())
 	}
 }
+
 func JsonPost(messageStruct PostWithDaysAgo) {
 	ErrorMsgs := CreateErrorMessages()
 	val := reflect.ValueOf(messageStruct)
@@ -114,6 +117,7 @@ func JsonPost(messageStruct PostWithDaysAgo) {
 		fmt.Printf(ErrorMsgs.KeyValuePair, fieldType.Name, field.Interface())
 	}
 }
+
 func JsonNotifyPlaceholder(messageStruct NotifyPlaceholder) {
 	ErrorMsgs := CreateErrorMessages()
 	val := reflect.ValueOf(messageStruct)
@@ -133,6 +137,7 @@ func CreateErrorMessages() *Errors {
 		ConnConn:     Colors.Blue + "Unable to connect to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
 		ConnClose:    Colors.Blue + "Unable to close connection to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
 		ConnInit:     Colors.Blue + "Unable to initialise connection " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
+		ConnSuccess:  Colors.Blue + "Server listening on " + Colors.White + "%v\n" + Colors.Green + "Success!" + Colors.Reset,
 		Cookies:      Colors.Blue + "Unable to " + Colors.White + "%v cookies with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		CreateFile:   Colors.Blue + "Unable to create file " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Delete:       Colors.Blue + "Unable to delete " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
@@ -154,7 +159,7 @@ func CreateErrorMessages() *Errors {
 		RetrieveFile: Colors.Blue + "Unable to retrieve file " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Register:     Colors.Blue + "Unable to register with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		SaveFile:     Colors.Blue + "Unable to save file " + Colors.White + "%v" + Colors.Blue + " to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
-		Unmarshal:    Colors.Blue + "Unable to unmarshall " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Shutdown:     Colors.Red + "HTTP shutdown error: " + Colors.White + "%v\n" + Colors.Reset,
 		Update:       Colors.Blue + "Unable to update " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		UserModel:    Colors.Blue + "Usermodel or DB called in " + Colors.White + "%v" + Colors.Blue + " for " + Colors.White + "%v" + Colors.Blue + " is nil\n" + Colors.Reset,
 		Write:        Colors.Blue + "Unable to write to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,

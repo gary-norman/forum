@@ -3,10 +3,11 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
-	"github.com/gary-norman/forum/internal/sqlite"
 	"log"
 	"net/http"
+
+	"github.com/gary-norman/forum/internal/models"
+	"github.com/gary-norman/forum/internal/sqlite"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -23,7 +24,7 @@ type app struct {
 	channels       *sqlite.ChannelModel
 	flags          *sqlite.FlagModel
 	loyalty        *sqlite.LoyaltyModel
-	members        *sqlite.MembershipModel
+	memberships    *sqlite.MembershipModel
 	muted          *sqlite.MutedChannelModel
 	cookies        *CookieModel
 }
@@ -48,6 +49,9 @@ func main() {
 		channels: &sqlite.ChannelModel{
 			DB: db,
 		},
+		memberships: &sqlite.MembershipModel{
+			DB: db,
+		},
 		cookies: &CookieModel{
 			DB: db,
 		},
@@ -59,7 +63,7 @@ func main() {
 		},
 	}
 	// Initialise templates if (app *app) is a receiver for
-	//the init() function that sets up custom go template functions
+	// the init() function that sets up custom go template functions
 	app.init()
 
 	srv := http.Server{

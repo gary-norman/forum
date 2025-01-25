@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
 	"html/template"
 	"io"
 	"log"
@@ -14,6 +13,8 @@ import (
 	"regexp"
 	"strconv"
 	"time"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 func isValidPassword(password string) bool {
@@ -173,13 +174,13 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	log.Println("Check1 /")
 	log.Println(Colors.Green + "Logged out successfully!")
 
-	//http.Redirect(w, r, "/", http.StatusFound)
+	// http.Redirect(w, r, "/", http.StatusFound)
 
-	//w.Header().Set("Location", "/")
+	// w.Header().Set("Location", "/")
 	w.WriteHeader(http.StatusNoContent)
-	//app.getHome(w, r)
+	// app.getHome(w, r)
 	log.Println("Check2 /")
-	//http.Redirect(w, r, "/", http.StatusFound)
+	// http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (app *app) protected(w http.ResponseWriter, r *http.Request) {
@@ -526,10 +527,28 @@ func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
+func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
+	user, getUserErr := app.GetLoggedInUser(r)
+	if getUserErr != nil {
+		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// get channelID
+
+	// check if channel is private
+
+	// if channel = private {redirect to requestMembership}
+
+	// if channel != private {memberships.userID = currentUser; memberships.channelID = currentChannel}
+
+	// send memberships struct to DB
+}
+
 func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
+	// log.Printf("using storeReaction()")
 
-	//log.Printf("using storeReaction()")
-
+	// TODO this is not necessary as routes hanndles this
 	// Check if the method is POST, otherwise return Method Not Allowed
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -557,12 +576,12 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	postID, commentID := 0, 0
 
 	if reactionData.ReactedPostID != nil {
-		//log.Println("ReactedPostID:", *reactionData.ReactedPostID)
+		// log.Println("ReactedPostID:", *reactionData.ReactedPostID)
 		postID = *reactionData.ReactedPostID
 	}
 
 	if reactionData.ReactedCommentID != nil {
-		//log.Printf("ReactedCommentID: %d", *reactionData.ReactedPostID)
+		// log.Printf("ReactedCommentID: %d", *reactionData.ReactedPostID)
 		commentID = *reactionData.ReactedCommentID
 	}
 
@@ -631,14 +650,13 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// Send a response indicating success
-	//w.WriteHeader(http.StatusCreated)
+	// w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(map[string]string{"message": "Reaction added (in go)"})
-
 	if err != nil {
 		log.Printf(ErrorMsgs().Post, err)
 		http.Error(w, err.Error(), 500)
 		return
 	}
 
-	//http.Redirect(w, r, "/", http.StatusFound)
+	// http.Redirect(w, r, "/", http.StatusFound)
 }

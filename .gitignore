@@ -20,9 +20,6 @@ go.work
 .idea/
 # Mac OS files
 .DS_Store
-# Database files that are not allowed on git
-/forum_database.db
-#*.db-shm
-#*.db-wal
-# user data
+# Database files and user data
 db
+test_database.db

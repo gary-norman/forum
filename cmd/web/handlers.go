@@ -533,22 +533,45 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
 		return
 	}
+	parseErr := r.ParseForm()
+	if parseErr != nil {
+		http.Error(w, parseErr.Error(), 400)
+		log.Printf(ErrorMsgs().Parse, "storeMembership", parseErr)
+		return
+	}
 	fmt.Printf("user: %v", user.Username)
 	// get channelID
-
-	// check if channel is private
-
+	PostedChannelID, PostErr := strconv.Atoi(r.PostForm.Get("channel-id"))
+	if PostErr != nil {
+		log.Printf("Unable to convert %v to integer\n", r.PostForm.Get("channel-id"))
+	}
 	// if channel = private {redirect to requestMembership}
+	if r.PostForm.Get("privacy") == "on" {
+		// TODO this logic in gethome
+	}
 
-	// if channel != private {memberships.userID = currentUser; memberships.channelID = currentChannel}
-
+	createMembershipData := models.Membership{
+		UserID:    user.ID,
+		ChannelID: PostedChannelID,
+	}
 	// send memberships struct to DB
+	insertErr := app.memberships.Insert(
+		createMembershipData.UserID,
+		createMembershipData.ChannelID,
+	)
+
+	if insertErr != nil {
+		log.Printf(ErrorMsgs().Post, insertErr)
+		http.Error(w, insertErr.Error(), 500)
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	// log.Printf("using storeReaction()")
 
-	// TODO this is not necessary as routes hanndles this
+	// TODO this is not necessary as routes handles this
 	// Check if the method is POST, otherwise return Method Not Allowed
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

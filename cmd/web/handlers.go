@@ -267,9 +267,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Owned Channels", ownedChannels)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
+	//fmt.Printf(ErrorMsgs().KeyValuePair, "Owned Channels", ownedChannels)
+	//fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
+	//fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
 
 	templateData := models.TemplateData{
 		OwnedChannels:   ownedChannels,

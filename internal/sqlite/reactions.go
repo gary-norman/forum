@@ -51,16 +51,89 @@ func (m *ReactionModel) GetReactionStatus(authorID, channelID, reactedPostID, re
 	return ReactionStatus{Liked: liked, Disliked: disliked}, nil
 }
 
+//func (m *ReactionModel) Insert(liked, disliked bool, authorID int, reactedPostID, reactedCommentID *int) error {
+//	if !isValidParent(*reactedPostID, *reactedCommentID) {
+//		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
+//	}
+//
+//	tx, err := m.DB.Begin() // Begin transaction
+//	if err != nil {
+//		return log.Printf(ErrorMsgs().Open, "Reactions", "Insert")
+//	}
+//
+//	stmt := `INSERT INTO Reactions
+//			(Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID)
+//			VALUES (?, ?, ?, DateTime('now'), ?, ?)`
+//
+//	// Ensure rollback is called if there's a failure
+//	defer func() {
+//		if p := recover(); p != nil {
+//			_ = tx.Rollback()
+//			panic(p)
+//		} else if err != nil {
+//			_ = tx.Rollback()
+//		}
+//	}()
+//
+//	_, err = tx.Exec(stmt, liked, disliked, authorID, reactedPostID, reactedCommentID)
+//	//_, err := m.DB.Exec(stmt, liked, disliked, authorID, reactedPostID, reactedCommentID)
+//	err = tx.Commit() // Commit the transaction
+//	return err
+//}
+
 func (m *ReactionModel) Insert(liked, disliked bool, authorID int, reactedPostID, reactedCommentID *int) error {
+	// Validate that only one of reactedPostID or reactedCommentID is non-zero
 	if !isValidParent(*reactedPostID, *reactedCommentID) {
-		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
+		return fmt.Errorf("only one of ReactedPostID or ReactedCommentID must be non-zero")
 	}
 
+	// Begin the transaction
+	tx, err := m.DB.Begin()
+	fmt.Println("Beginning transaction")
+	if err != nil {
+		return fmt.Errorf("failed to begin transaction for Insert in Reactions: %w", err)
+	}
+
+	// Ensure rollback on failure
+	defer func() {
+		if p := recover(); p != nil {
+			fmt.Println("Rolling back transaction")
+
+			_ = tx.Rollback()
+			panic(p)
+		} else if err != nil {
+			_ = tx.Rollback()
+		}
+	}()
+
+	// Define the SQL statement
 	stmt := `INSERT INTO Reactions 
-    		(Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID) 
-			VALUES (?, ?, ?, DateTime('now'), ?, ?)`
-	_, err := m.DB.Exec(stmt, liked, disliked, authorID, reactedPostID, reactedCommentID)
-	return err
+		(Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID)
+		VALUES (?, ?, ?, DateTime('now'), ?, ?)`
+
+	// Execute the query, dereferencing the pointers for ID values
+	_, err = tx.Exec(stmt, liked, disliked, authorID,
+		dereferenceInt(reactedPostID), dereferenceInt(reactedCommentID))
+	if err != nil {
+		return fmt.Errorf("failed to execute Insert query: %w", err)
+	}
+
+	// Commit the transaction
+	err = tx.Commit()
+	fmt.Println("Committing transaction")
+	if err != nil {
+		return fmt.Errorf("failed to commit transaction for Insert in Reactions: %w", err)
+	}
+
+	return nil
+}
+
+// Helper function to safely dereference an integer pointer
+func dereferenceInt(value *int) interface{} {
+	if value == nil {
+		return nil
+	}
+	return *value
 }
 
 func (m *ReactionModel) Update(liked, disliked bool, authorID, reactedPostID, reactedCommentID int) error {

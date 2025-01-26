@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (actButtonsAll) {
         actButtonsAll.forEach( button => button.addEventListener('click', (e) => {
             toggleFeed(document.getElementById("activity-" + e.target.id),document.getElementById("activity-feed-" + e.target.id),  e.target);
-            console.log('activity-' + e.target.id);
+            // console.log('activity-' + e.target.id);
         }) );
     }
 
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         console.error('getInitialFromAttribute is not defined');
     }
-    console.log("activity buttons:", actButtonsAll)
+    // console.log("activity buttons:", actButtonsAll)
 });
 
 // functions
@@ -145,8 +145,8 @@ function getUserProfileImageFromAttribute() {
 }
 
 function getInitialFromAttribute() {
-    console.log('getInitialFromAttribute running...')
-    console.log('Elements found: ', userProfileImageEmpty.length)
+    // console.log('getInitialFromAttribute running...')
+    // console.log('Elements found: ', userProfileImageEmpty.length)
     const colorsArr = [
         ['var(--color-hl-blue)', 'var(--color-light-1)'],
         ['var(--color-hl-green)', 'var(--color-dark-1)'],
@@ -165,19 +165,19 @@ function getInitialFromAttribute() {
         userProfileImageEmpty[i].style.color = colorsArr[userTheme][1];
         userProfileImageEmpty[i].style.fontSize = '2rem';
         userProfileImageEmpty[i].setAttribute('data-initial', Array.from(`${attArr[0]}`)[0]);
-        console.log('attArr[0]');
+        // console.log('attArr[0]');
     } else if (attArr[1]) {
         userProfileImageEmpty[i].style.background = colorsArr[userTheme][0];
         userProfileImageEmpty[i].style.color = colorsArr[userTheme][1];
         userProfileImageEmpty[i].style.fontSize = '5rem';
         userProfileImageEmpty[i].setAttribute('data-initial', Array.from(`${attArr[1]}`)[0]);
-        console.log('attArr[0]');
+        // console.log('attArr[0]');
     } else if (attArr[2]) {
         let theme = getRandomInt(6)
         userProfileImageEmpty[i].style.background = colorsArr[theme][0];
         userProfileImageEmpty[i].style.color = colorsArr[theme][1];
         userProfileImageEmpty[i].setAttribute('data-initial', Array.from(`${attArr[2]}`)[0]);
-        console.log('attArr[1]');
+        // console.log('attArr[1]');
     }
     else {
         console.warn('No data-name- attribute value found for element:', userProfileImage[i]);

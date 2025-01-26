@@ -81,19 +81,19 @@ func JsonError(messageStruct TemplateData) {
 			continue
 		}
 		if fieldType.Name == "Posts" {
-			fmt.Printf(ErrorMsgs.KeyValuePair, "Number of posts", len(field.Interface().([]PostWithDaysAgo)))
+			//fmt.Printf(ErrorMsgs.KeyValuePair, "Number of posts", len(field.Interface().([]PostWithDaysAgo)))
 			continue
 		}
 		if fieldType.Name == "Images" {
-			fmt.Printf(ErrorMsgs.KeyValuePair, "Number of images", len(field.Interface().([]Image)))
+			//fmt.Printf(ErrorMsgs.KeyValuePair, "Number of images", len(field.Interface().([]Image)))
 			continue
 		}
 		if fieldType.Name == "Comments" {
-			fmt.Printf(ErrorMsgs.KeyValuePair, "Number of comments", len(field.Interface().([]Comment)))
+			//fmt.Printf(ErrorMsgs.KeyValuePair, "Number of comments", len(field.Interface().([]Comment)))
 			continue
 		}
 		if fieldType.Name == "Reactions" {
-			fmt.Printf(ErrorMsgs.KeyValuePair, "Number of reactions", len(field.Interface().([]Reaction)))
+			//fmt.Printf(ErrorMsgs.KeyValuePair, "Number of reactions", len(field.Interface().([]Reaction)))
 			continue
 		}
 		if fieldType.Name == "NotifyPlaceHolder" {

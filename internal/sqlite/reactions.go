@@ -98,7 +98,6 @@ func (m *ReactionModel) Insert(liked, disliked bool, authorID int, reactedPostID
 	defer func() {
 		if p := recover(); p != nil {
 			fmt.Println("Rolling back transaction")
-
 			_ = tx.Rollback()
 			panic(p)
 		} else if err != nil {
@@ -212,32 +211,46 @@ func (m *ReactionModel) CountReactions(channelID, reactedPostID, reactedCommentI
 		return 0, 0, fmt.Errorf("only one of  ReactedPostID, or ReactedCommentID must be non-zero")
 	}
 
+	fmt.Println("Before SELECT statement:")
+	fmt.Printf("\nchannelID: %v,\nreactedPostID: %v,\nreactedCommentID: %v\n\n", channelID, reactedPostID, reactedCommentID)
+
 	stmt := `SELECT 
                  SUM(CASE WHEN Liked = 1 THEN 1 ELSE 0 END) AS Likes,
                  SUM(CASE WHEN Disliked = 1 THEN 1 ELSE 0 END) AS Dislikes
              FROM Reactions
              WHERE ReactedPostID = ? AND 
                    ReactedCommentID = ?`
-	var likesNull, dislikesNull sql.NullInt64
+	var likesSum, dislikesSum sql.NullInt64
 
 	// Run the query
-	err = m.DB.QueryRow(stmt, channelID, reactedPostID, reactedCommentID).Scan(&likesNull, &dislikesNull)
+	err = m.DB.QueryRow(stmt, reactedPostID, reactedCommentID).Scan(&likesSum, &dislikesSum)
 	if err != nil {
 		return 0, 0, err
 	}
 
-	// Convert NULL to 0 for likes and dislikes
-	if likesNull.Valid {
-		likes = int(likesNull.Int64)
-	} else {
-		likes = 0
-	}
+	likes = int(likesSum.Int64)
+	dislikes = int(dislikesSum.Int64)
 
-	if dislikesNull.Valid {
-		dislikes = int(dislikesNull.Int64)
-	} else {
-		dislikes = 0
-	}
+	fmt.Println("likes:", likes)
+	fmt.Println("dislikes:", dislikes)
+
+	//// Convert NULL to 0 for likes and dislikes
+	//if likesSum.Valid || int(likesSum.Int64) == 0 {
+	//	likes = int(likesSum.Int64)
+	//
+	//} else {
+	//	fmt.Printf("likes turning into: %v\n", likes)
+	//
+	//	likes = 0
+	//}
+	//
+	//if dislikesSum.Valid || int(dislikesSum.Int64) == 0 {
+	//	dislikes = int(dislikesSum.Int64)
+	//
+	//} else {
+	//	fmt.Printf("disikes turning into: %v\n", dislikes)
+	//	dislikes = 0
+	//}
 
 	return
 }

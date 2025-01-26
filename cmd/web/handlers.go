@@ -215,8 +215,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// Retrieve total likes and dislikes for each post
 	for i, post := range posts {
 		likes, dislikes, likesErr := app.reactions.CountReactions(post.ChannelID, post.ID, 0) // Pass 0 for CommentID if it's a post
-		fmt.Println("Likes:", likes)
-		fmt.Println("Dislikes:", dislikes)
+		fmt.Printf("PostID: %v, Likes: %v, Disikes: %v\n", posts[i].ID, likes, dislikes)
 		if likesErr != nil {
 			log.Printf("Error counting reactions: %v", likesErr)
 			likes, dislikes = 0, 0 // Default values if there is an error

@@ -635,8 +635,9 @@
                                 </button>
                             </div>
                             <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                              {{ if (ne .CurrentUserName "nouser") }}
-                              {{$userID := .CurrentUser.ID }}
+                              {{$userID := 0}} <!-- Default value for logged out users -->
+                              {{if ne .CurrentUserName "nouser"}}
+                                {{$userID = .CurrentUser.ID}}
                               {{end}}
                               {{range .Posts}} <!-- user page activity posts -->
                               <div class="activity-items activity">Something happened!</div>
@@ -660,12 +661,12 @@
                           </div>
                         </div>
                         <h4>{{.Title}}</h4>
-                        {{ if ( ne .Images "noimage" ) }}
-                        <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
+                        {{ if ne .Images "noimage" }}
+                          <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
                         {{ end }}
                         <article class="cardContent">{{.Content}}</article>
                             <div class="button-row post-controls" >
-                                {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
+                                {{$status := reactionStatus $userID .ChannelID .ID 0}}
                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
                                     <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                                 </button>

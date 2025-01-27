@@ -9,12 +9,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const likeButton = likeCountElement.closest('button');
         const dislikeButton = dislikeCountElement.closest('button');
+        const sidebar = document.querySelector(`.sidebar`)
 
         const likeID = likeCountElement.getAttribute("data-like-id");
         const dislikeID = dislikeCountElement.getAttribute("data-dislike-id");
         const postID = singlePostControl.closest('.card').getAttribute('data-post-id');
         const channelID = singlePostControl.closest('.card').getAttribute('data-channel-id');
-        const authorID = singlePostControl.closest('.card').getAttribute('data-author-id');
+        const reactionAuthorID = sidebar.querySelector('h3').getAttribute('data-current-user-ID');
 
         likeButton.addEventListener('click', function(event) {
             let likeCount = parseInt(likeCountElement.textContent, 10);
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 liked: true,
                 disliked: false,
                 reacted_post_id: parseInt(postID, 10),
-                author_id: parseInt(authorID, 10),
+                author_id: parseInt(reactionAuthorID, 10),
                 channel_id: parseInt(channelID, 10),
             };
 
@@ -78,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 liked: false,
                 disliked: true,
                 reacted_post_id: parseInt(postID, 10),
-                author_id: parseInt(authorID, 10),
+                author_id: parseInt(reactionAuthorID, 10),
                 channel_id: parseInt(channelID, 10),
             };
 

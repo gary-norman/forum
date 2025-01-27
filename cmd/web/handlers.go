@@ -133,7 +133,7 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 
 	//fprintln, err := fmt.Fprintf(w, "Welcome, %v!", user.Username)
 	//if err != nil {
-	//	log.Print(ErrorMsgs.Login, err)
+	//	log.Print(ErrorMsgs().Login, err)
 	//	return
 	//}
 	//log.Println(fprintln)
@@ -214,14 +214,14 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 	// Retrieve total likes and dislikes for each post
 	for i, post := range posts {
-		likes, dislikes, likesErr := app.reactions.CountReactions(post.ChannelID, post.ID, 0) // Pass 0 for CommentID if it's a post
+		likes, dislikes, likesErr := app.reactions.CountReactions(post.ID, 0) // Pass 0 for CommentID if it's a post
 		fmt.Printf("PostID: %v, Likes: %v, Disikes: %v\n", posts[i].ID, likes, dislikes)
 		if likesErr != nil {
 			log.Printf("Error counting reactions: %v", likesErr)
 			likes, dislikes = 0, 0 // Default values if there is an error
 		}
-		posts[i].Likes = likes
-		posts[i].Dislikes = dislikes
+		posts[i].Likes += likes
+		posts[i].Dislikes += dislikes
 	}
 
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
@@ -566,18 +566,16 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if the user already reacted (like/dislike) and update or delete the reaction if needed
-	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.AuthorID, postID, commentID)
+	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID)
 	if err != nil {
 		// Use your custom error message for fetching errors
 		http.Error(w, fmt.Sprintf(ErrorMsgs().Read, "storeReaction", err), http.StatusInternalServerError)
 		log.Printf("Error fetching existing reaction: %v", err)
 		return
 	}
-
-	//if existingReaction != nil {
-	//	//log.Printf("Existing Reaction: %+v", existingReaction)
-	//}
-
+	if existingReaction != nil {
+		log.Printf("Existing Reaction: %+v", existingReaction)
+	}
 	// If there is an existing reaction, toggle it (i.e., remove it if the user reacts again to the same thing)
 	if existingReaction != nil {
 		// If the user likes a post or comment again, remove the like/dislike (toggle behavior)
@@ -598,9 +596,8 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 			}
 			return
 		}
-
 		// Otherwise, update the existing reaction
-		err = app.reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
+		err = app.reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.ID, reactionData.AuthorID, postID, commentID)
 		if err != nil {
 			// Use your custom error message for update errors
 			http.Error(w, fmt.Sprintf(ErrorMsgs().Update, "storeReaction", err), http.StatusInternalServerError)
@@ -615,29 +612,24 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
 	// If no existing reaction, insert a new reaction
-	err = app.reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
+	err = app.reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.ID, reactionData.AuthorID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for insertion errors
 		http.Error(w, fmt.Sprintf(ErrorMsgs().Insert, "storeReaction", err), http.StatusInternalServerError)
 		log.Printf("Error inserting reaction: %v", err)
 		return
 	}
-
 	// Check reaction and store it in the database, or handle errors
 	// Respond with a JSON response
 	w.Header().Set("Content-Type", "application/json")
-
 	// Send a response indicating success
 	//w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(map[string]string{"message": "Reaction added (in go)"})
-
 	if err != nil {
 		log.Printf(ErrorMsgs().Post, err)
 		http.Error(w, err.Error(), 500)
 		return
 	}
-
 	//http.Redirect(w, r, "/", http.StatusFound)
 }

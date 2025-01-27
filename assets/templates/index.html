@@ -378,7 +378,7 @@
             {{ end }}
             </div>
             <div>
-              <h3>{{ .CurrentUserName }}</h3>
+              <h3 data-current-user-ID="{{.CurrentUser.ID}}">{{ .CurrentUserName }} - ID: {{.CurrentUser.ID}}</h3>
               <div>
                 <button class="btn-md btn-icotext btn-follows btn-invert-never">
                   <span class="btn-following">72</span>
@@ -666,7 +666,7 @@
                         {{ end }}
                         <article class="cardContent">{{.Content}}</article>
                             <div class="button-row post-controls" >
-                                {{$status := reactionStatus $userID .ChannelID .ID 0}}
+                                {{$status := reactionStatus $userID .ID 0}}
                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
                                     <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                                 </button>
@@ -721,6 +721,10 @@
                         </button>
                     </div>
                     <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                      {{$userID := 0}} <!-- Default value for logged out users -->
+                      {{if ne .CurrentUserName "nouser"}}
+                      {{$userID = .CurrentUser.ID}}
+                      {{end}}
                       {{range .Posts}} <!-- user page posts -->
                         <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                             <div class="container-post-info">
@@ -741,7 +745,7 @@
                         {{ end }}
                         <article class="cardContent">{{.Content}}</article>
                           <div class="button-row post-controls" >
-                              {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
+                              {{$status := reactionStatus $userID .ID 0}}
                               <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
                                   <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                               </button>
@@ -1018,7 +1022,11 @@
                             </button>
                         </div>
                         <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                            {{range .Posts}} <!-- channel page posts -->
+                          {{$userID := 0}} <!-- Default value for logged out users -->
+                          {{if ne .CurrentUserName "nouser"}}
+                          {{$userID = .CurrentUser.ID}}
+                          {{end}}
+                          {{range .Posts}} <!-- channel page posts -->
                             <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                                 <div class="post-info-container">
                                     <span class="card-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
@@ -1034,7 +1042,7 @@
                                 <h4>{{.Title}}</h4>
                                 <article class="cardContent">{{.Content}}</article>
                                 <div class="button-row post-controls" >
-                                    {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
+                                    {{$status := reactionStatus $userID .ID 0}}
                                     <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
                                         <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                                     </button>

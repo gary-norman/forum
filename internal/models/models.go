@@ -139,6 +139,20 @@ type Reaction struct {
 	ReactedCommentID *int      `json:"reacted_comment_id,omitempty"`
 }
 
+type PostReaction struct {
+	ID         int  `json:"id"`
+	UserID     *int `json:"user_id"`
+	PostID     *int `json:"post_id,omitempty"`
+	ReactionID *int `json:"reaction_id,omitempty"`
+}
+
+type CommentReaction struct {
+	ID         int  `json:"id"`
+	UserID     *int `json:"user_id"`
+	PostID     *int `json:"comment_id,omitempty"`
+	ReactionID *int `json:"reaction_id,omitempty"`
+}
+
 type Flag struct {
 	ID               int       `json:"id"`
 	FlagType         string    `json:"flag_type"`

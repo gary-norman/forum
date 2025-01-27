@@ -161,6 +161,15 @@ type Notify struct {
 	LoginFail    string
 }
 
+//Notify := models.Notify{
+//BadPass:      "The passwords do not match.",
+//RegisterOk:   "Registration successful.",
+//RegisterFail: "Registration failed.",
+//BadLogin:     "Username or email address not found",
+//LoginOk:      "Logged in successfully!",
+//LoginFail:    "Unable to log in.",
+//}
+
 type NotifyPlaceholder struct {
 	Register string
 	Login    string

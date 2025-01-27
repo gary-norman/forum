@@ -45,6 +45,7 @@ type Errors struct {
 	Delete       string
 	Divider      string
 	Edit         string
+	Encode       string
 	Execute      string
 	Insert       string
 	KeyValuePair string
@@ -137,12 +138,13 @@ func CreateErrorMessages() *Errors {
 		ConnConn:     Colors.Blue + "Unable to connect to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
 		ConnClose:    Colors.Blue + "Unable to close connection to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
 		ConnInit:     Colors.Blue + "Unable to initialise connection " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
-		ConnSuccess:  Colors.Blue + "Server listening on " + Colors.White + "%v\n" + Colors.Green + "Success!" + Colors.Reset,
+		ConnSuccess:  Colors.Blue + "Server listening on " + Colors.White + "%v" + Colors.Green + "success!" + Colors.Reset,
 		Cookies:      Colors.Blue + "Unable to " + Colors.White + "%v cookies with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		CreateFile:   Colors.Blue + "Unable to create file " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Delete:       Colors.Blue + "Unable to delete " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Divider:      Colors.Grey + "*-------------------------------------------------------*\n" + Colors.Reset,
 		Edit:         Colors.Blue + "Unable to edit " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
+		Encode:       Colors.Blue + "Unable to encode JSON called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Execute:      Colors.Blue + "Unable to execute template with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Insert:       Colors.Blue + "Unable to insert " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		KeyValuePair: Colors.Blue + "%v: " + Colors.White + "%v\n",

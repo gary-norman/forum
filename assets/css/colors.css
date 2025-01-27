@@ -84,21 +84,6 @@
   --color-btn-shd-d: yellow;
   --color-btn-hlt: light-dark( var(--color-btn-hl-l), var(--color-btn-hl-d) );
   --color-btn-shd: light-dark( var(--color-btn-shd-l), var(--color-btn-shd-d));
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 /* --- light mode --- */
 @media (prefers-color-scheme: light) {
     /* --- bg colours --- *!

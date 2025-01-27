@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
 	"io"
@@ -46,32 +47,72 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 	validEmail, _ := regexp.MatchString(`[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$`, email)
 	password := r.FormValue("register_password")
 	if len(username) < 5 || len(username) > 16 {
-		er := http.StatusNotAcceptable
-		http.Error(w, "username must be between 5 and 16 characters", er)
+		w.WriteHeader(http.StatusNotAcceptable)
+		err := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusNotAcceptable,
+			"message": "username must be between 5 and 16 characters",
+		})
+		if err != nil {
+			log.Printf(ErrorMsgs().Encode, "register: username", err)
+			return
+		}
+		return
 	}
 	if isValidPassword(password) != true {
-		er := http.StatusNotAcceptable
-		http.Error(w, "password must contain at least one number and one uppercase and lowercase letter,"+
-			"and at least 8 or more characters", er)
+		w.WriteHeader(http.StatusNotAcceptable)
+		err := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code": http.StatusNotAcceptable,
+			"message": "password must contain at least one number and one uppercase and lowercase letter," +
+				"and at least 8 or more characters",
+		})
+		if err != nil {
+			log.Printf(ErrorMsgs().Encode, "register: password", err)
+			return
+		}
+		return
 	}
 	if validEmail != true {
-		er := http.StatusNotAcceptable
-		http.Error(w, "please enter a valid email address", er)
+		w.WriteHeader(http.StatusNotAcceptable)
+		err := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusNotAcceptable,
+			"message": "please enter a valid email address",
+		})
+		if err != nil {
+			log.Printf(ErrorMsgs().Encode, "register: validEmail", err)
+			return
+		}
+		return
 	}
 	emailExists, err := app.users.QueryUserEmailExists(email)
 	if emailExists == true {
-		er := http.StatusConflict
-		http.Error(w, "an account is already registered to that email address", er)
+		w.WriteHeader(http.StatusConflict)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusConflict,
+			"message": "an account is already registered to that email address",
+			"body":    err,
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "register: emailExists", encErr)
+			return
+		}
 		return
 	}
-	userExists, _ := app.users.QueryUserNameExists(username)
+	userExists, err := app.users.QueryUserNameExists(username)
 	if userExists == true {
-		er := http.StatusConflict
-		http.Error(w, "an account is already registered to that username", er)
+		w.WriteHeader(http.StatusConflict)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusConflict,
+			"message": "an account is already registered to that username",
+			"body":    err,
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "register: userExists", encErr)
+			return
+		}
 		return
 	}
 	hashedPassword, _ := models.HashPassword(password)
-	insertErr := app.users.Insert(
+	insertUser := app.users.Insert(
 		username,
 		email,
 		hashedPassword,
@@ -81,64 +122,116 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		"default.png",
 		"")
 
-	if insertErr != nil {
-		log.Printf(ErrorMsgs().Register, insertErr)
-		http.Error(w, fmt.Sprintf(ErrorMsgs().Register, insertErr), 500)
+	if insertUser != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusInternalServerError,
+			"message": errors.New(fmt.Sprintf(ErrorMsgs().Register, insertUser)),
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "register: insertErr", encErr)
+			return
+		}
 		return
 	}
-	http.Redirect(w, r, "/", http.StatusFound)
+	type FormFields struct {
+		Fields map[string][]string `json:"formValues"`
+	}
+	formFields := make(map[string][]string)
+	for field, value := range r.Form {
+		fieldName := field
+		formFields[fieldName] = append(formFields[fieldName], value...)
+	}
+	// Send success response
+	w.WriteHeader(http.StatusOK)
+	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Registration successful!",
+		"body":    FormFields{Fields: formFields},
+	})
+	if encErr != nil {
+		log.Printf(ErrorMsgs().Encode, "register: send success", encErr)
+		return
+	}
 
-	fprintln, err := fmt.Fprintln(w, "Registration successful")
-	if err != nil {
-		log.Printf(ErrorMsgs().Printf, err)
-		return
-	}
-	log.Println(fprintln)
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	Colors := models.CreateColors()
-	login := r.FormValue("username")
+	// Parse JSON from the request body
+	var credentials struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	err := json.NewDecoder(r.Body).Decode(&credentials)
+	if err != nil {
+		log.Printf("Failed to parse request body: %v", err)
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	login := credentials.Username
 	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n"+Colors.Reset, login)
 	fmt.Printf(ErrorMsgs().Divider)
-	password := r.FormValue("login_password")
-	var user *models.User
+
+	password := credentials.Password
 	user, getUserErr := app.users.GetUserFromLogin(login, "login")
 	if getUserErr != nil {
 		log.Printf(ErrorMsgs().NotFound, "either", login, "login > GetUserFromLogin", getUserErr)
-	}
-	//Notify := models.Notify{
-	//	BadPass:      "The passwords do not match.",
-	//	RegisterOk:   "Registration successful.",
-	//	RegisterFail: "Registration failed.",
-	//	BadLogin:     "Username or email address not found",
-	//	LoginOk:      "Logged in successfully!",
-	//	LoginFail:    "Unable to log in.",
-	//}
-
-	if !models.CheckPasswordHash(password, user.HashedPassword) {
-		http.Error(w, "incorrect password", http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusUnauthorized,
+			"message": "User not found",
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
+			return
+		}
 		return
 	}
-	fmt.Printf(Colors.Green+"Passwords for %v match\n"+Colors.Reset, user.Username)
 
-	// Set Session Token and CSRF Token cookies
-	createCookiErr := app.cookies.CreateCookies(w, user)
-	if createCookiErr != nil {
-		log.Printf(ErrorMsgs().Cookies, "create", createCookiErr)
-		http.Error(w, "Failed to create cookies", http.StatusInternalServerError)
-		return
+	if models.CheckPasswordHash(password, user.HashedPassword) {
+		fmt.Printf(Colors.Green+"Passwords for %v match\n"+Colors.Reset, user.Username)
+		// Set Session Token and CSRF Token cookies
+		createCookiErr := app.cookies.CreateCookies(w, user)
+		if createCookiErr != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": "Failed to create cookies",
+				"body":    errors.New(fmt.Sprintf(ErrorMsgs().Cookies, "create", createCookiErr)),
+			})
+			if encErr != nil {
+				log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
+				return
+			}
+			return
+		}
+		// Respond with a successful login message
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusOK,
+			"message": fmt.Sprintf("Welcome, %s! Login successful.", user.Username),
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "login: success", encErr)
+			return
+		}
+	} else {
+		// Respond with an unsuccessful login message
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusUnauthorized,
+			"message": "incorrect password",
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "login: fail", encErr)
+			return
+		}
 	}
-	// wait for cookies to be set
-	log.Printf(Colors.Green+"Login Successful! Welcome, %v!\n"+Colors.Reset, user.Username)
-
-	//fprintln, err := fmt.Fprintf(w, "Welcome, %v!", user.Username)
-	//if err != nil {
-	//	log.Print(ErrorMsgs.Login, err)
-	//	return
-	//}
-	//log.Println(fprintln)
-	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (app *app) logout(w http.ResponseWriter, r *http.Request) {
@@ -171,16 +264,16 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	if delCookiErr != nil {
 		log.Printf(ErrorMsgs().Cookies, "delete", delCookiErr)
 	}
-	log.Println("Check1 /")
-	log.Println(Colors.Green + "Logged out successfully!")
-
-	// http.Redirect(w, r, "/", http.StatusFound)
-
-	// w.Header().Set("Location", "/")
-	w.WriteHeader(http.StatusNoContent)
-	// app.getHome(w, r)
-	log.Println("Check2 /")
-	// http.Redirect(w, r, "/", http.StatusFound)
+	// send user confirmation
+	log.Printf(Colors.Green+"%v logged out successfully!", user)
+	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Logged out successfully!",
+	})
+	if encErr != nil {
+		log.Printf(ErrorMsgs().Encode, "logout: success", encErr)
+		return
+	}
 }
 
 func (app *app) protected(w http.ResponseWriter, r *http.Request) {
@@ -189,10 +282,6 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.users.GetUserFromLogin(login, "protected")
 	if getUserErr != nil {
 		log.Printf("protected route for %v failed with error: %v", login, getUserErr)
-	}
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
 	}
 	if authErr := app.isAuthenticated(r, user.Username); authErr != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -414,7 +503,7 @@ func renameFileWithUUID(oldFilePath string) string {
 func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
-		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 	parseErr := r.ParseMultipartForm(10 << 20)
@@ -483,7 +572,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
-		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 	parseErr := r.ParseMultipartForm(10 << 20)
@@ -530,7 +619,7 @@ func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
 func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
-		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 	parseErr := r.ParseForm()
@@ -571,13 +660,6 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	// log.Printf("using storeReaction()")
 
-	// TODO this is not necessary as routes handles this
-	// Check if the method is POST, otherwise return Method Not Allowed
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	// Variable to hold the decoded data
 	var reactionData models.Reaction
 
@@ -585,14 +667,17 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&reactionData)
 	if err != nil {
 		// Use the error message from the Errors struct for decoding errors
-		http.Error(w, fmt.Sprintf(ErrorMsgs().Parse, "storeReaction", err), http.StatusBadRequest)
-		log.Printf("Error decoding JSON: %v", err)
+		log.Println("Error decoding JSON")
+		log.Printf(ErrorMsgs().Parse, "storeReaction", err)
+		//TODO expect: 100-continue on the request header (for all of these)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	//// Validate that at least one of reactedPostID or reactedCommentID is non-zero
 	if (reactionData.ReactedPostID == nil || *reactionData.ReactedPostID == 0) && (reactionData.ReactedCommentID == nil || *reactionData.ReactedCommentID == 0) {
-		http.Error(w, "You must react to either a post or a comment", http.StatusBadRequest)
+		log.Println("You must react to either a post or a comment")
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
@@ -612,8 +697,8 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.AuthorID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for fetching errors
-		http.Error(w, fmt.Sprintf(ErrorMsgs().Read, "storeReaction", err), http.StatusInternalServerError)
-		log.Printf("Error fetching existing reaction: %v", err)
+		log.Printf(ErrorMsgs().Read, "storeReaction > app.reactions.CheckExistingReaction", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -629,8 +714,8 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 			err = app.reactions.Delete(existingReaction.ID)
 			if err != nil {
 				// Use your custom error message for deletion errors
-				http.Error(w, fmt.Sprintf(ErrorMsgs().Delete, "storeReaction", err), http.StatusInternalServerError)
-				log.Printf("Error deleting reaction: %v", err)
+				log.Printf(ErrorMsgs().Delete, "storeReaction > app.reactions.Delete", err)
+				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
 			// Send response back after successful deletion
@@ -646,8 +731,8 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		err = app.reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 		if err != nil {
 			// Use your custom error message for update errors
-			http.Error(w, fmt.Sprintf(ErrorMsgs().Update, "storeReaction", err), http.StatusInternalServerError)
-			log.Printf("Error updating reaction: %v", err)
+			log.Printf(ErrorMsgs().Delete, "storeReaction > app.reactions.Update", err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 		// Send response back after successful update
@@ -663,8 +748,8 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	err = app.reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for insertion errors
-		http.Error(w, fmt.Sprintf(ErrorMsgs().Insert, "storeReaction", err), http.StatusInternalServerError)
-		log.Printf("Error inserting reaction: %v", err)
+		log.Printf(ErrorMsgs().Delete, "storeReaction > app.reactions.Upsert", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 

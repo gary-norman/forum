@@ -342,7 +342,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		userLoggedIn = false
 	}
 	var ownedChannels []models.Channel
-	var channelsErr error
+	var ownedChannelsErr error
+	var joinedChannels []models.Channel
+	//var joinedChannelsErr error
 
 	currentUserName := "nouser"
 	var currentUserAvatar string
@@ -351,10 +353,14 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		currentUserName = currentUser.Username
 		currentUserAvatar = currentUser.Avatar
 		currentUserBio = currentUser.Description
-		ownedChannels, channelsErr = app.channels.OwnedByCurrentUser(currentUser.ID)
-		if channelsErr != nil {
-			log.Printf(ErrorMsgs().Query, "user channels", channelsErr)
+		ownedChannels, ownedChannelsErr = app.channels.OwnedByCurrentUser(currentUser.ID)
+		if ownedChannelsErr != nil {
+			log.Printf(ErrorMsgs().Query, "user channels", ownedChannelsErr)
 		}
+		//joinedChannels, joinedChannelsErr = app.channels.JoinedByCurrentUser(currentUser.ID)
+		//if ownedChannelsErr != nil {
+		//	log.Printf(ErrorMsgs().Query, "user channels", joinedChannelsErr)
+		//}
 	}
 
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Owned Channels", ownedChannels)
@@ -362,15 +368,17 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
 
 	templateData := models.TemplateData{
-		OwnedChannels:   ownedChannels,
-		CurrentUser:     currentUser,
-		CurrentUserName: currentUserName,
-		Posts:           postsWithDaysAgo,
-		Avatar:          currentUserAvatar,
-		Bio:             currentUserBio,
-		Images:          nil,
-		Comments:        nil,
-		Reactions:       nil,
+		OwnedAndJoinedChannels: append(ownedChannels, joinedChannels...),
+		OwnedChannels:          ownedChannels,
+		JoinedChannels:         joinedChannels,
+		CurrentUser:            currentUser,
+		CurrentUserName:        currentUserName,
+		Posts:                  postsWithDaysAgo,
+		Avatar:                 currentUserAvatar,
+		Bio:                    currentUserBio,
+		Images:                 nil,
+		Comments:               nil,
+		Reactions:              nil,
 		NotifyPlaceholder: models.NotifyPlaceholder{
 			Register: "",
 			Login:    "",

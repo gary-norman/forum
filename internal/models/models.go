@@ -81,6 +81,11 @@ type Membership struct {
 	Created   time.Time `json:"created"`
 }
 
+type OwnedAndJoinedChannels struct {
+	OwnedChannels  []Channel
+	JoinedChannels []Channel
+}
+
 type Mod struct {
 	ID        int `json:"id"`
 	UserID    int `json:"user_id"`
@@ -176,17 +181,19 @@ type NotifyPlaceholder struct {
 }
 
 type TemplateData struct {
-	CurrentUser       *User             `json:"user"`
-	CurrentUserName   string            `json:"currentUserName"`
-	Channels          []Channel         `json:"channels"`
-	OwnedChannels     []Channel         `json:"ownedChannels"`
-	Posts             []PostWithDaysAgo `json:"posts"`
-	Avatar            string            `json:"avatar"`
-	Bio               string            `json:"bio"`
-	Images            []Image           `json:"images"`
-	Comments          []Comment         `json:"comments"`
-	Reactions         []Reaction        `json:"reactions"`
-	NotifyPlaceholder `json:"notifyPlaceholder"`
+	CurrentUser            *User     `json:"user"`
+	CurrentUserName        string    `json:"currentUserName"`
+	Channels               []Channel `json:"channels"`
+	OwnedChannels          []Channel `json:"ownedChannels"`
+	JoinedChannels         []Channel `json:"joinedChannels"`
+	OwnedAndJoinedChannels []Channel
+	Posts                  []PostWithDaysAgo `json:"posts"`
+	Avatar                 string            `json:"avatar"`
+	Bio                    string            `json:"bio"`
+	Images                 []Image           `json:"images"`
+	Comments               []Comment         `json:"comments"`
+	Reactions              []Reaction        `json:"reactions"`
+	NotifyPlaceholder      `json:"notifyPlaceholder"`
 }
 
 type Session struct {

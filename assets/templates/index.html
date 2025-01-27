@@ -436,8 +436,8 @@
               </div>
               <!-- SECTION sidebar channels -->
               <div class="sidebar-channel-block">
-                {{ range .OwnedChannels }}
-                <div class="sidebar-channel">
+                {{ range .OwnedAndJoinedChannels }}
+                <div class="sidebar-channel" data-desc-channel="{{ .Description }}">
                   <div></div>
                   <div class="container-channel-info">
                     {{ if (ne .Avatar "noimage") }}

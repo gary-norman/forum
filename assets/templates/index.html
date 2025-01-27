@@ -738,9 +738,8 @@
                           </div>
                         </div>
                         <h4>{{.Title}}</h4>
-                        {{ if .Images }}
+                        {{ if ( ne .Images "noimage" ) }}
                         <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
-                        {{ else }}
                         {{ end }}
                         <article class="cardContent">{{.Content}}</article>
                           <div class="button-row post-controls" >
@@ -981,7 +980,7 @@
             </div>
         </div>
 
-            <!----- channel page ----->
+            <!-- SECTION --- channel page ----->
             <div id="channel-page" class="feeds-wrapper">
                 <div class="banner">
                     <div class="page-banner" ></div>

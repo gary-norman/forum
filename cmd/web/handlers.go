@@ -597,7 +597,7 @@ func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
 		Avatar:      "noimage",
 		Banner:      "default.png",
 		Privacy:     false,
-		IsFLagged:   false,
+		IsFlagged:   false,
 		IsMuted:     false,
 	}
 	if r.PostForm.Get("privacy") == "on" {
@@ -612,7 +612,7 @@ func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
 		createChannelData.Avatar,
 		createChannelData.Banner,
 		createChannelData.Privacy,
-		createChannelData.IsFLagged,
+		createChannelData.IsFlagged,
 		createChannelData.IsMuted,
 	)
 
@@ -638,18 +638,36 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("user: %v", user.Username)
 	// get channelID
-	PostedChannelID, PostErr := strconv.Atoi(r.PostForm.Get("channel-id"))
-	if PostErr != nil {
+	joinedChannelID, convErr := strconv.Atoi(r.PostForm.Get("channel-id"))
+	if convErr != nil {
+		log.Printf(ErrorMsgs().Convert, r.PostForm.Get("channel-id"), "StoreMembership > GetChannelID", convErr)
 		log.Printf("Unable to convert %v to integer\n", r.PostForm.Get("channel-id"))
 	}
+	channels, err := app.channels.Search("ID", joinedChannelID)
+	if err != nil {
+		log.Printf(ErrorMsgs().Query, "channel", err)
+	}
+	channel := channels[0]
 	// if channel = private {redirect to requestMembership}
 	if r.PostForm.Get("privacy") == "on" {
-		// TODO this logic in gethome
+		// TODO this logic in gethome + JS
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusUnauthorized,
+			"message": "This channel is private, click 'OK' to agree to the channel rules and request membership.",
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "storeMembership: Privacy", encErr)
+			return
+		}
+		app.requestMembership(w, r, user.ID, joinedChannelID)
+		return
 	}
 
 	createMembershipData := models.Membership{
 		UserID:    user.ID,
-		ChannelID: PostedChannelID,
+		ChannelID: joinedChannelID,
 	}
 	// send memberships struct to DB
 	insertErr := app.memberships.Insert(
@@ -662,7 +680,19 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, insertErr.Error(), 500)
 		return
 	}
-	http.Redirect(w, r, "/", http.StatusFound)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
+	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		"code":    http.StatusAccepted,
+		"message": fmt.Sprintf("Welcome to %v!", channel.Name),
+	})
+	if encErr != nil {
+		log.Printf(ErrorMsgs().Encode, "storeMembership: Accepted", encErr)
+		return
+	}
+}
+func (app *app) requestMembership(w http.ResponseWriter, r *http.Request, userID, channelID int) {
+
 }
 
 func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {

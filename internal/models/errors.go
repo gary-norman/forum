@@ -40,6 +40,7 @@ type Errors struct {
 	ConnInit     string
 	ConnConn     string
 	ConnSuccess  string
+	Convert      string
 	Cookies      string
 	CreateFile   string
 	Delete       string
@@ -139,6 +140,7 @@ func CreateErrorMessages() *Errors {
 		ConnClose:    Colors.Blue + "Unable to close connection to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
 		ConnInit:     Colors.Blue + "Unable to initialise connection " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v\n" + Colors.Reset,
 		ConnSuccess:  Colors.Blue + "Server listening on " + Colors.White + "%v" + Colors.Green + "success!" + Colors.Reset,
+		Convert:      Colors.Blue + "Unable to convert " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Cookies:      Colors.Blue + "Unable to " + Colors.White + "%v cookies with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		CreateFile:   Colors.Blue + "Unable to create file " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Delete:       Colors.Blue + "Unable to delete " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,

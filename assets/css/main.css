@@ -55,6 +55,7 @@
   --z-index-button: 400;
   --z-index-page-control: 300;
   --z-index-header: 200;
+  --z-index-sidebar-channel: 150;
   --z-index-sidebar-options-list: 100;
   --z-index-banner: 0;
   --z-index-btn-action: 0;
@@ -278,8 +279,8 @@ a:active {
   background: rgb(1 1 1 / .8);
   backdrop-filter: var(--blur-modal);
   transition: display 0.4s ease-in-out;
-  
-  
+
+
   & > div {
     padding: 0 2rem;
     margin: 6.4rem 0;
@@ -1015,199 +1016,199 @@ input[type="checkbox"]:checked {
   }
   /*& * {*/
   /*  margin : 0.4rem;*/
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   /*}*/
 }
 
@@ -1600,33 +1601,35 @@ hr.solid {
   border-radius: var(--border-radius-input);
   margin: 1.2rem 0;
   transition: background var(--transition-dur-hover) var(--transition-type-hover) 0s;
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  z-index: var(--z-index-sidebar-channel);
   &:hover,
   &:active {
     background: var(--color-bg-2);
   }
+  &:hover::before {
+    content: "";
+    position: absolute;
+    bottom: 5.1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-bg-3);
+    width: 1.2rem;
+    aspect-ratio: 1;
+    clip-path: polygon(0 0,100% 0,50% 100%);
+  }
   &:hover::after {
     position: absolute;
-    top: -3.6rem;
-    right: 1.2rem;
+    bottom: 6.3rem;
+    left: 50%;
+    width: max-content;);););););
+    transform: translateX(-50%);
     content: attr(data-desc-channel);
     font-size: 1.2rem;
     background: var(--color-bg-3);
     padding: .8rem;
     border-radius: var(--border-radius-input);
-    transition: all 4000ms ease-in-out;
+    /* TODO make this transition work */
+    /*transition: all 4000ms ease-in-out;*/
   }
 }
 

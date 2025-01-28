@@ -13,8 +13,8 @@ type User struct {
 	Description string    `json:"description,omitempty"`
 	Usertype    string    `json:"usertype"`
 	Created     time.Time `json:"created"`
-	TimeSince   string    `json:"time_since"`
-	IsFlagged   bool      `json:"is_flagged,omitempty"`
+	TimeSince   string
+	IsFlagged   bool `json:"isFlagged,omitempty"`
 }
 type UserCheck struct {
 	ID             int    `json:"id"`
@@ -31,9 +31,9 @@ type Login struct {
 
 type Bookmark struct {
 	ID        int       `json:"id"`
-	PostID    *int      `json:"post_id,omitempty"`
-	CommentID *int      `json:"comment_id,omitempty"`
-	ChannelID *int      `json:"channel_id,omitempty"`
+	PostID    *int      `json:"postId,omitempty"`
+	CommentID *int      `json:"commentId,omitempty"`
+	ChannelID *int      `json:"channelId,omitempty"`
 	Created   time.Time `json:"created"`
 }
 
@@ -45,7 +45,7 @@ type Loyalty struct {
 
 type Channel struct {
 	ID          int       `json:"id"`
-	OwnerID     int       `json:"owner_id"`
+	OwnerID     int       `json:"ownerId"`
 	Name        string    `json:"name"`
 	Avatar      string    `json:"avatar,omitempty"` // Store UUID as string
 	Banner      string    `json:"banner,omitempty"`
@@ -53,31 +53,31 @@ type Channel struct {
 	Created     time.Time `json:"created"`
 	Rules       []ChannelRule
 	Privacy     bool `json:"privacy"`
-	IsMuted     bool `json:"is_muted"`
-	IsFLagged   bool `json:"is_flagged,omitempty"`
+	IsMuted     bool `json:"isMuted"`
+	IsFlagged   bool `json:"isFlagged,omitempty"`
 }
 type ChannelData struct {
 	ChannelName string `json:"channelName"`
-	ChannelID   string `json:"channelID"`
+	ChannelID   string `json:"channelId"`
 }
 
 type ChannelRule struct {
 	ID        int    `json:"id"`
 	Rule      string `json:"rule"`
-	ChannelID int    `json:"channel_id"`
+	ChannelID int    `json:"channelId"`
 }
 
 type MutedChannel struct {
 	ID        int       `json:"id"`
-	UserID    int       `json:"user_id"`
-	ChannelID int       `json:"channel_id"`
+	UserID    int       `json:"userId"`
+	ChannelID int       `json:"channelId"`
 	Created   time.Time `json:"created"`
 }
 
 type Membership struct {
 	ID        int       `json:"id"`
-	UserID    int       `json:"user_id"`
-	ChannelID int       `json:"channel_id"`
+	UserID    int       `json:"userId"`
+	ChannelID int       `json:"channelId"`
 	Created   time.Time `json:"created"`
 }
 
@@ -88,8 +88,8 @@ type OwnedAndJoinedChannels struct {
 
 type Mod struct {
 	ID        int `json:"id"`
-	UserID    int `json:"user_id"`
-	ChannelID int `json:"channel_id"`
+	UserID    int `json:"userId"`
+	ChannelID int `json:"channelId"`
 }
 
 type Post struct {
@@ -98,16 +98,16 @@ type Post struct {
 	Content       string    `json:"content"`
 	Images        string    `json:"images,omitempty"` // Store JSON as string
 	Created       time.Time `json:"created"`
-	TimeSince     string    `json:"time_since"`
-	IsCommentable bool      `json:"commentable"`
-	Author        string    `json:"author"`
-	AuthorID      int       `json:"author_id"`
-	AuthorAvatar  string    `json:"author_avatar"`
-	ChannelID     int       `json:"channel_id"`
-	ChannelName   string    `json:"channel_name"`
-	IsFlagged     bool      `json:"is_flagged,omitempty"`
-	Likes         int       `json:"likes"`
-	Dislikes      int       `json:"dislikes"`
+	TimeSince     string
+	IsCommentable bool   `json:"commentable"`
+	Author        string `json:"author"`
+	AuthorID      int    `json:"authorId"`
+	AuthorAvatar  string `json:"authorAvatar"`
+	ChannelID     int    `json:"channelId"`
+	ChannelName   string `json:"channelName"`
+	IsFlagged     bool   `json:"isFlagged,omitempty"`
+	Likes         int    `json:"likes"`
+	Dislikes      int    `json:"dislikes"`
 }
 
 type PostWithDaysAgo struct {
@@ -116,22 +116,22 @@ type PostWithDaysAgo struct {
 }
 
 type Image struct {
-	ID       string    `json:"id"` // UUID
+	ID       string    `json:"id"`
 	Created  time.Time `json:"created"`
-	AuthorID int       `json:"author_id"`
-	PostID   int       `json:"post_id"`
+	AuthorID int       `json:"authorId"`
+	PostID   int       `json:"postId"`
 }
 
 type Comment struct {
 	ID                 int       `json:"id"`
 	Content            string    `json:"content"`
 	Created            time.Time `json:"created"`
-	AuthorID           int       `json:"author_id"`
-	ChannelID          int       `json:"channel_id"`
-	IsReply            bool      `json:"is_reply"`
-	CommentedPostID    *int      `json:"commented_post_id,omitempty"`
-	CommentedCommentID *int      `json:"commented_comment_id,omitempty"`
-	IsFlagged          bool      `json:"is_flagged,omitempty"`
+	AuthorID           int       `json:"authorId"`
+	ChannelID          int       `json:"channelId"`
+	IsReply            bool      `json:"isReply"`
+	CommentedPostID    *int      `json:"commentedPostId,omitempty"`
+	CommentedCommentID *int      `json:"commentedCommentId,omitempty"`
+	IsFlagged          bool      `json:"isFlagged,omitempty"`
 }
 
 type Reaction struct {
@@ -139,22 +139,22 @@ type Reaction struct {
 	Liked            bool      `json:"liked"`
 	Disliked         bool      `json:"disliked"`
 	Created          time.Time `json:"created"`
-	AuthorID         int       `json:"author_id"`
-	ReactedPostID    *int      `json:"reacted_post_id,omitempty"`
-	ReactedCommentID *int      `json:"reacted_comment_id,omitempty"`
+	AuthorID         int       `json:"authorId"`
+	ReactedPostID    *int      `json:"reactedPostId,omitempty"`
+	ReactedCommentID *int      `json:"reactedCommentId,omitempty"`
 }
 
 type Flag struct {
 	ID               int       `json:"id"`
-	FlagType         string    `json:"flag_type"`
+	FlagType         string    `json:"flagType"`
 	Content          string    `json:"content,omitempty"`
 	Created          time.Time `json:"created"`
 	Approved         bool      `json:"approved"`
-	AuthorID         int       `json:"author_id"`
-	ChannelID        int       `json:"channel_id"`
-	FlaggedUserID    *int      `json:"flagged_user_id,omitempty"`
-	FlaggedPostID    *int      `json:"flagged_post_id,omitempty"`
-	FlaggedCommentID *int      `json:"flagged_comment_id,omitempty"`
+	AuthorID         int       `json:"authorId"`
+	ChannelID        int       `json:"channelId"`
+	FlaggedUserID    *int      `json:"flaggedUserId,omitempty"`
+	FlaggedPostID    *int      `json:"flaggedPostId,omitempty"`
+	FlaggedCommentID *int      `json:"flaggedCommentId,omitempty"`
 }
 
 type Notify struct {
@@ -181,19 +181,19 @@ type NotifyPlaceholder struct {
 }
 
 type TemplateData struct {
-	CurrentUser            *User     `json:"user"`
-	CurrentUserName        string    `json:"currentUserName"`
-	Channels               []Channel `json:"channels"`
-	OwnedChannels          []Channel `json:"ownedChannels"`
-	JoinedChannels         []Channel `json:"joinedChannels"`
+	CurrentUser            *User
+	CurrentUserName        string
+	Channels               []Channel
+	OwnedChannels          []Channel
+	JoinedChannels         []Channel
 	OwnedAndJoinedChannels []Channel
-	Posts                  []PostWithDaysAgo `json:"posts"`
-	Avatar                 string            `json:"avatar"`
-	Bio                    string            `json:"bio"`
-	Images                 []Image           `json:"images"`
-	Comments               []Comment         `json:"comments"`
-	Reactions              []Reaction        `json:"reactions"`
-	NotifyPlaceholder      `json:"notifyPlaceholder"`
+	Posts                  []PostWithDaysAgo
+	Avatar                 string
+	Bio                    string
+	Images                 []Image
+	Comments               []Comment
+	Reactions              []Reaction
+	NotifyPlaceholder
 }
 
 type Session struct {

@@ -207,10 +207,14 @@ function toggleFeed(targetFeed, targetFeedContent, targetButton) {
     activityFeedsContentAll.forEach(feed => {
         feed.classList.remove('collapsible-expanded');
         feed.classList.add('collapsible-collapsed');
+        setTimeout(() => {
+            feed.parentElement.classList.add('collapsible-collapsed');
+        }, timeOut);
     });
     setTimeout(() => {
         targetFeedContent.classList.remove('collapsible-collapsed');
         targetFeedContent.classList.add('collapsible-expanded');
+        targetFeedContent.parentElement.classList.remove('collapsible-collapsed');
         selectActiveFeed();
         targetButton.classList.toggle('btn-active'); }, timeOut);
     setTimeout(() => {

@@ -36,6 +36,7 @@
 
 .collapsible-collapsed {
     height: 0;
+    padding: 0 !important;
     /*display: none;*/
     overflow: hidden;
     transition: height 400ms ease-in-out;

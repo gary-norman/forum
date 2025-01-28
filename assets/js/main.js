@@ -82,6 +82,11 @@ const inputPost = dropAreaPost.querySelector('input');
 const uploadedFilePost = document.querySelector('#uploaded-file--post');
 const dragText = document.querySelector('.dragText');
 const dragButton = document.querySelector('.button');
+// page select
+const showHome = document.querySelector('#showhome')
+const showUser = document.querySelector('#showuser')
+const showChannels = document.querySelector('#showchannels')
+// ------
 let file;
 let filename;
 
@@ -333,6 +338,12 @@ function getCSRFToken() {
 
 // SECTION ---- event listeners -----
 
+// --- slect page ---
+showHome.addEventListener('click', function () {
+    homePage.classList.toggle('active-feed')
+    userPage.classList.toggle('active-feed')
+    channelPage.classList.toggle('active-feed')
+})
 // --- sidebar options dropdown ---
 sidebarOption.addEventListener('click', function (event) {
     sidebarOptionsList.classList.toggle('sidebar-options-reveal')

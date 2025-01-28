@@ -294,7 +294,7 @@ function confirmPass() {
     regPassRpt.classList.remove("pass-nomatch");
 }
 
-// showMainNotification changes the element ID to provide feedback to user
+// showMainNotification alerts the user using the main notification
 function showMainNotification(message) {
     const notification = document.getElementById('notification-main');
     const notificationContent = document.getElementById('notification-main-content');
@@ -304,20 +304,20 @@ function showMainNotification(message) {
         notification.style.display = 'none';
     }, 3000); // Hide after 3 seconds
 }
-function showNotification(elementID, message, success) {
+// showNotification changes the element ID to provide feedback to user
+function showNotification(elementID, messageOld, messageNew, success) {
     const notification = document.getElementById(elementID);
-    notification.textContent = message;
+    notification.textContent = messageNew;
     notification.style.color = "var(--color-hl-green)";
     if (!success) {
         setTimeout(() => {
-            notification.textContent = "sign in to codex";
+            notification.textContent = messageOld;
             notification.style.color = "var(--color-fg-1)";
         }, 3000); // Hide after 3 seconds
     }
 }
 // retrieve the csrf_token cookie and explicitly set the X-CSRF-Token header in requests
 function getCSRFToken() {
-
     const match = document.cookie
     .split('; ')
     .find((row) => row.startsWith('csrf_token'))
@@ -371,9 +371,9 @@ if (loginForm) {
             })
             .then(data => {
                 if (data.message === "incorrect password") {
-                    showNotification('login-title',data.message, false);
+                    showNotification('login-title', "sign in to codex", data.message, false);
                 } else {
-                    showNotification('login-title', data.message, true);
+                    showNotification('login-title', "sign in to codex", data.message, true);
                     setTimeout(() => {
                         window.location.href = '/';
                     }, 2000);

@@ -642,10 +642,12 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Convert, r.PostForm.Get("channel-id"), "StoreMembership > GetChannelID", convErr)
 		log.Printf("Unable to convert %v to integer\n", r.PostForm.Get("channel-id"))
 	}
+	// get slice of channels (in this case it is only 1, but the function still returns a slice)
 	channels, err := app.channels.Search("ID", joinedChannelID)
 	if err != nil {
 		log.Printf(ErrorMsgs().Query, "channel", err)
 	}
+	// get the channel object
 	channel := channels[0]
 	// if channel = private {redirect to requestMembership}
 	if r.PostForm.Get("privacy") == "on" {
@@ -690,6 +692,7 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
 func (app *app) requestMembership(w http.ResponseWriter, r *http.Request, userID, channelID int) {
 
 }

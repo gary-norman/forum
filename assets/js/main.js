@@ -19,7 +19,10 @@ const sidebarOptionsList = document.querySelector('.sidebar-options-list');
 // login/register buttons
 // TODO overhaul the naming of these buttons
 const loginTitle = document.querySelector('#login-title');
+const loginForm = document.querySelector('#loginForm');
 const loginFormButton = document.querySelector('#login');
+const loginFormUser = document.querySelector('#login_username');
+const loginFormPassword = document.querySelector('#login_password');
 const logoutFormButton = document.querySelector('#logout');
 const btnLogin = document.querySelectorAll('[id^="btn_login-"]');
 const btnRegister = document.querySelectorAll('[id^="btn_register-"]');
@@ -116,7 +119,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // console.log("activity buttons:", actButtonsAll)
 });
 
-// functions
+// SECTION ----- functions ------
+// organize z-indices
+const makeZIndexes = (layers) =>
+    layers.reduce((agg, layerName, index) => {
+        const valueName = `z-index-${layerName}`;
+        agg[valueName] = index * 100;
+
+        return agg;
+    }, {})
+
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -282,6 +294,27 @@ function confirmPass() {
     regPassRpt.classList.remove("pass-nomatch");
 }
 
+// showMainNotification changes the element ID to provide feedback to user
+function showMainNotification(message) {
+    const notification = document.getElementById('notification-main');
+    const notificationContent = document.getElementById('notification-main-content');
+    notificationContent.textContent = message;
+    notification.style.display = 'flex';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000); // Hide after 3 seconds
+}
+function showNotification(elementID, message, success) {
+    const notification = document.getElementById(elementID);
+    notification.textContent = message;
+    notification.style.color = "var(--color-hl-green)";
+    if (!success) {
+        setTimeout(() => {
+            notification.textContent = "sign in to codex";
+            notification.style.color = "var(--color-fg-1)";
+        }, 3000); // Hide after 3 seconds
+    }
+}
 // retrieve the csrf_token cookie and explicitly set the X-CSRF-Token header in requests
 function getCSRFToken() {
 
@@ -298,45 +331,61 @@ function getCSRFToken() {
 //         console.error('Use of protected route failed:', error);
 // });
 
-// ---- event listeners -----
+// SECTION ---- event listeners -----
 
-
-
-
+// --- sidebar options dropdown ---
 sidebarOption.addEventListener('click', function (event) {
     sidebarOptionsList.classList.toggle('sidebar-options-reveal')
     sidebarOptionsList.classList.toggle('ul-forwards')
     sidebarOptionsList.classList.toggle('ul-reverse')
 });
 
-loginFormButton.addEventListener('submit', function (event) {
-    event.preventDefault(); // Prevent the default form submission
+// --- login ---
+if (loginForm) {
+    loginForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+        // const form = event.target;
+        // const formData = new FormData(form); // Collect form data
+        const csrfToken = getCSRFToken();
+        console.log("csrfToken: ", csrfToken)
 
-    const form = event.target;
-    const formData = new FormData(form); // Collect form data
-    const csrfToken = getCSRFToken();
-    console.log("csrfToken: ", csrfToken)
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': csrfToken
+            },
+            // body: formData, // Send the form data
+            body: JSON.stringify({
+                username: document.getElementById('loginFormUser').value,
+                password: document.getElementById('loginFormPassword').value,
+            }),
+            cache: "no-store"
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Login failed.');
+                }
+            })
+            .then(data => {
+                if (data.message === "incorrect password") {
+                    showNotification('login-title',data.message, false);
+                } else {
+                    showNotification('login-title', data.message, true);
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMainNotification('An error occurred during login.');
+            });
+    });
+}
 
-    fetch('/login', {
-        method: 'POST',
-        headers: {
-            'x-csrf-token': csrfToken
-        },
-        body: formData // Send the form data
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text(); // Or response.text() if the response isn't JSON
-        })
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-});
 if (logoutFormButton) {
     logoutFormButton.addEventListener('click', function (event) {
         event.preventDefault();
@@ -354,17 +403,28 @@ if (logoutFormButton) {
             cache: 'no-store'
         })
             .then(response => {
-                if (response.status === 204) {
-                    window.location.reload();
+                if (response.ok) {
+                    return response.json(); // Parse JSON response
                 } else {
-                    // Handle other status codes as needed
+                    throw new Error('Logout failed.');
                 }
+            })
+            .then(data => {
+                // Show notification based on the response from the server
+                showMainNotification(data.message);
+                // Optional: Redirect the user after showing the notification
+                setTimeout(() => {
+                    window.location.href = '/'; // Replace with your desired location
+                }, 3500);
             })
             .catch(error => {
                 console.error('Error:', error);
+                showMainNotification('An error occurred during logout.');
             });
     })
 }
+
+// SECTION ----- drag and drop ----
 // get user image from manual click
 inputUser.addEventListener('change', function () {
     file = this.files[0];

@@ -31,7 +31,7 @@ func (m *ChannelModel) OwnedByCurrentUser(userID int) ([]models.Channel, error) 
 	var Channels []models.Channel
 	for rows.Next() {
 		p := models.Channel{}
-		err = rows.Scan(&p.ID, &p.OwnerID, &p.Name, &p.Avatar, &p.Banner, &p.Description, &p.Created, &p.Privacy, &p.IsFLagged, &p.IsMuted)
+		err = rows.Scan(&p.ID, &p.OwnerID, &p.Name, &p.Avatar, &p.Banner, &p.Description, &p.Created, &p.Privacy, &p.IsFlagged, &p.IsMuted)
 		if err != nil {
 			return nil, err
 		}
@@ -61,7 +61,7 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 	var Channels []models.Channel
 	for rows.Next() {
 		p := models.Channel{}
-		err = rows.Scan(&p.ID, &p.OwnerID, &p.Name, &p.Avatar, &p.Banner, &p.Description, &p.Created, &p.Privacy, &p.IsFLagged, &p.IsMuted)
+		err = rows.Scan(&p.ID, &p.OwnerID, &p.Name, &p.Avatar, &p.Banner, &p.Description, &p.Created, &p.Privacy, &p.IsFlagged, &p.IsMuted)
 		if err != nil {
 			return nil, err
 		}
@@ -73,4 +73,66 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 	}
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels", len(Channels))
 	return Channels, nil
+}
+
+func (m *ChannelModel) Search(column string, value interface{}) ([]models.Channel, error) {
+	// Validate column name to prevent SQL injection
+	validColumns := map[string]bool{
+		"id":          true,
+		"ownerId":     true,
+		"name":        true,
+		"avatar":      true,
+		"banner":      true,
+		"description": true,
+		"created":     true,
+		"privacy":     true,
+		"isMuted":     true,
+		"isFlagged":   true,
+	}
+
+	if !validColumns[column] {
+		return nil, fmt.Errorf("invalid column name: %s", column)
+	}
+
+	// Base query
+	query := fmt.Sprintf("SELECT id, ownerId, name, avatar, banner, description, created, privacy, isMuted, isFlagged FROM channels WHERE %s = ?", column)
+
+	// Execute the query
+	rows, err := m.DB.Query(query, value)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Parse results
+	var channels []models.Channel
+	for rows.Next() {
+		var channel models.Channel
+		var avatar, banner sql.NullString
+
+		if err := rows.Scan(
+			&channel.ID,
+			&channel.OwnerID,
+			&channel.Name,
+			&avatar,
+			&banner,
+			&channel.Description,
+			&channel.Created,
+			&channel.Privacy,
+			&channel.IsMuted,
+			&channel.IsFlagged,
+		); err != nil {
+			return nil, err
+		}
+
+		channel.Avatar = avatar.String
+		channel.Banner = banner.String
+		channels = append(channels, channel)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return channels, nil
 }

@@ -50,8 +50,7 @@
     width: 100%;
     min-height: 20rem;
     overflow: hidden;
-    z-index: 0;
-
+    z-index: var(--z-index-banner);
     &::before {
         content: "";
         position: absolute;
@@ -60,15 +59,14 @@
         width: 100%;
         height: 100%;
         background: var(--banner-gradient);
-        z-index: 2;
+        z-index: calc(var(--z-index-banner) + 2);
     }
-
     & .page-banner {
         width: 100%;
         height: 20rem;
         right: 0;
         object-fit: cover;
-        z-index: 1;
+        z-index: calc(var(--z-index-banner) + 1);
     }
 }
 
@@ -99,7 +97,7 @@
     display: flex;
     justify-content: space-between;
     width: calc(100% - 4.8rem);
-    z-index: 3;
+    z-index: var(--z-index-page-control);
     position: absolute;
     top: 50%;
     left: 2.4rem;

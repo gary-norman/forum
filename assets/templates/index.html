@@ -18,10 +18,13 @@
     <script type="module" src="/assets/js/share.js" defer></script>
     <title>&lt; codex &gt;</title>
   </head>
-      <body>
+    <body>
       {{ $channelBasePath := "db/userdata/images/channel-images/" }}
       {{ $postBasePath := "db/userdata/images/post-images/" }}
       {{ $userBasePath := "db/userdata/images/user-images/" }}
+      <div id="notification-main">
+        <div id="notification-main-content">Login successful! Welcome, Loreforum</div>
+      </div>
     <div class="wrapper-main">
       <header class="header">
         <div class="branding"></div>
@@ -51,34 +54,34 @@
           </button>
         </div>
       </header>
+      <!--  SECTION    ---------- login modal ----------   -->
       <div aria-modal="true" id="container-form-login" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
-          <!--      ---------- login form ----------   -->
           <div id="form-login">
-            <form action="/login" method="POST">
+            <form id="loginForm">
               <h5 id="login-title" class="form-title">sign in to codex</h5>
               <div class="input-wrapper">
                 <input
                   type="text"
                   class="input-3d"
-                  id="login_username"
+                  id="loginFormUser"
                   name="username"
                   placeholder="username/email"
                   required
                 />
-                <label for="login_username" class="user-label">username</label>
+                <label for="loginFormUser" class="user-label">username</label>
               </div>
               <div class="input-wrapper">
                 <input
                   type="password"
                   class="input-3d"
-                  id="login_password"
-                  name="login_password"
+                  id="loginFormPassword"
+                  name="password"
                   placeholder="password"
                   required
                 />
-                <label for="login_password" class="user-label">password</label>
+                <label for="loginFormPassword" class="user-label">password</label>
               </div>
               <div id="login-notify">
                 <span></span>
@@ -90,7 +93,7 @@
                   >forgot password?
                 </span>
               </div>
-              <button id = "login" class="btn-md btn-primary btn-action" type="submit">
+              <button type="submit" id="login" class="btn-md btn-primary btn-action">
                 <span>sign in</span>
               </button>
             </form>
@@ -145,9 +148,9 @@
             </div>
           </div>
           <div id="form-register" class="display-off">
-            <!--      ---------- register form ----------   -->
+            <!-- SECTION    ---------- register form ----------   -->
             <form action="/register" method="POST">
-              <p class="form-title">enter your details to register for codex</p>
+              <p class="form-title">register for codex</p>
               <!--  username  -->
               <div class="input-wrapper">
                 <input
@@ -238,10 +241,7 @@
               <div class="flex-align-c" style="column-gap: 0.8rem">
                 <button
                   id="btn_login-2"
-                  class="button btn-filled btn-filled-orange btn-secondary btn-pill"
-                >
-                  sign in
-                </button>
+                  class="button btn-filled btn-filled-orange btn-secondary btn-pill">sign in</button>
                 <button id="btn_register-2" class="button btn-filled btn-filled-white_orange btn-secondary btn-pill">
                   sign up
                 </button>
@@ -250,7 +250,7 @@
           </div>
         </div>
       </div>
-      <!--      ---------- post form ----------   -->
+      <!-- SECTION     ---------- post form ----------   -->
       <div popover id="form-post">
         <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
           <h3 class="form-title">create a post</h3>
@@ -298,7 +298,7 @@
           </div>
         </form>
       </div>
-      <!--      ---------- channel form ----------   -->
+      <!--  SECTION    ---------- channel popover ----------   -->
       <div popover id="form-channel">
         <form class="wrapper-form" enctype="multipart/form-data" action="/channels/create" method="POST">
           <h3 class="form-title">create a channel</h3>
@@ -337,7 +337,7 @@
           </div>
         </form>
       </div>
-      <!--      ---------- edit user form ----------   -->
+      <!--  SECTION    ---------- edit user modal ----------   -->
       <div aria-modal="true" id="container-form-edit-user" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
@@ -367,7 +367,7 @@
         </div>
       </div>
       <div class="main-content">
-        <!--      ---------- sidebar ----------   -->
+        <!-- SECTION     ---------- sidebar ----------   -->
         <aside class="sidebar">
           {{ if (ne .CurrentUserName "nouser") }}
           <div class="sidebarProfile">
@@ -434,9 +434,10 @@
                   <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
                 </button>
               </div>
+              <!-- SECTION sidebar channels -->
               <div class="sidebar-channel-block">
-                {{ range .OwnedChannels }}
-                <div class="sidebar-channel">
+                {{ range .OwnedAndJoinedChannels }}
+                <div class="sidebar-channel" data-desc-channel="{{ .Description }}">
                   <div></div>
                   <div class="container-channel-info">
                     {{ if (ne .Avatar "noimage") }}
@@ -488,7 +489,7 @@
               </mask>
             </svg>
           </div>
-          <!---- homepage ------>
+          <!-- SECTION homepage -->
           <div id="home-page" class="feeds-wrapper">
             <div class="button-row above-posts button-row-homepage">
               <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -500,6 +501,7 @@
             </div>
             <div class="scrollable-home scrollable no-scrollbar">
               <div id="home-feed">
+                <!-- SECTION homepage channels -->
               {{range .Channels}} <!-- homepage channels -->
                   <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                 <div class="container-post-info">
@@ -565,7 +567,7 @@
               </div>
             </div>
           </div>
-        <!----- user page ----->
+        <!--- SECTION user page -->
         <div id="user-page" class="active-feed feeds-wrapper">
             <div class="banner">
                 <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
@@ -621,7 +623,8 @@
                             <span class="btn-likes">reactions</span>
                         </button>
                     </div>
-                    <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%    ">
+                  <!-- SECTION user page activity feed -->
+                    <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%">
                         <div id="activity-activity">
                             <div class="filters-row button-row">
                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -720,6 +723,7 @@
                             <span class="btn-sort">scroll</span>
                         </button>
                     </div>
+                    <!-- SECTION user page posts -->
                     <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                       {{$userID := 0}} <!-- Default value for logged out users -->
                       {{if ne .CurrentUserName "nouser"}}
@@ -739,9 +743,8 @@
                           </div>
                         </div>
                         <h4>{{.Title}}</h4>
-                        {{ if .Images }}
+                        {{ if ( ne .Images "noimage" ) }}
                         <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
-                        {{ else }}
                         {{ end }}
                         <article class="cardContent">{{.Content}}</article>
                           <div class="button-row post-controls" >
@@ -982,7 +985,7 @@
             </div>
         </div>
 
-            <!----- channel page ----->
+            <!-- SECTION --- channel page ----->
             <div id="channel-page" class="feeds-wrapper">
                 <div class="banner">
                     <div class="page-banner" ></div>

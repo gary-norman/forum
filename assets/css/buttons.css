@@ -6,7 +6,7 @@ button,
   cursor: pointer;
   & span,
   & img {
-    z-index: 11;
+    z-index: calc(var(--z-index-button) + 10);
     pointer-events: none;
   }
 }
@@ -138,7 +138,7 @@ gap: 0.8rem;
     align-content: center;
     text-align: right;
     width: fit-content;
-    z-index: 10000;
+    z-index: calc(var(--z-index-button) + 1);
     &::before {
       filter: var(--filter-invert-on_off);
       background-position: left !important;
@@ -152,7 +152,7 @@ gap: 0.8rem;
   }
 }
 /* --- button icon span classes --- */
-/*TODO embed svg's*/
+/*TODO embed SVGs*/
 /*url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' style='pointer-events:none;display:block;width:100%25;height:100%25;fill:%23757575'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61.0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E") no-repeat 4px center/20px 20px;*/
 .btn-following {
   &::before {
@@ -368,6 +368,7 @@ gap: 0.8rem;
 .btn-action-primary,
 .btn-action-secondary {
   position: relative;
+  z-index: var(--z-index-btn-action);
   &:hover::before {
     content: "";
     position: absolute;
@@ -378,7 +379,7 @@ gap: 0.8rem;
     --grad-from: 0deg;
     border-radius: var(--btn-radius);
     animation: orbit-btn var(--transition-dur-hover) ease-in 1 forwards;
-    z-index: -10;
+    z-index: calc(var(--z-index-btn-action) - 10);
   }
   &:hover::after {
     content: "";
@@ -392,7 +393,7 @@ gap: 0.8rem;
     /* border: 1px solid rgba(1 1 1 / 0.2); */
     border-radius: var(--btn-radius);
     animation: linear-fill-button 0.2s ease-in 0.1s 1 forwards;
-    z-index: 1;
+    z-index: calc(var(--z-index-btn-action) + 1);
   }
 }
 .btn-action-primary {
@@ -597,7 +598,7 @@ gap: 0.8rem;
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 11;
+  z-index: var(--z-index-darklight-border);
 }
 .darklight-fx,
 .allow-comments-fx {
@@ -625,7 +626,7 @@ gap: 0.8rem;
     height: 11rem;
     aspect-ratio: 1 / 1;
     transition: all ease-in-out var(--transition-dur-hover-darklight);
-    z-index: -10;
+    z-index: var(--z-index-darklight-fx);
   }
 }
 input:checked + .darklight-fx:before {

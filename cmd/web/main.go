@@ -1,12 +1,19 @@
 package main
 
 import (
+	"context"
 	"database/sql"
+	"errors"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
-	"github.com/gary-norman/forum/internal/sqlite"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/gary-norman/forum/internal/models"
+	"github.com/gary-norman/forum/internal/sqlite"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -23,7 +30,7 @@ type app struct {
 	channels       *sqlite.ChannelModel
 	flags          *sqlite.FlagModel
 	loyalty        *sqlite.LoyaltyModel
-	members        *sqlite.MembershipModel
+	memberships    *sqlite.MembershipModel
 	muted          *sqlite.MutedChannelModel
 	cookies        *CookieModel
 }
@@ -48,6 +55,9 @@ func main() {
 		channels: &sqlite.ChannelModel{
 			DB: db,
 		},
+		memberships: &sqlite.MembershipModel{
+			DB: db,
+		},
 		cookies: &CookieModel{
 			DB: db,
 		},
@@ -59,18 +69,38 @@ func main() {
 		},
 	}
 	// Initialise templates if (app *app) is a receiver for
-	//the init() function that sets up custom go template functions
+	// the init() function that sets up custom go template functions
 	app.init()
 
-	srv := http.Server{
-		Addr:    ":8989",
+	port := 8989
+	addr := fmt.Sprintf(":%d", port)
+	srv := &http.Server{
+		Addr:    addr,
 		Handler: app.routes(),
 	}
 
-	err = srv.ListenAndServe()
-	if err != nil {
-		fmt.Printf(ErrorMsgs().ConnInit, srv.Addr, "srv.ListenAndServe")
-		return
+	go func() {
+		// Log server listening messages
+		log.Printf(ErrorMsgs().KeyValuePair, "Starting server on port", port)
+		log.Printf(ErrorMsgs().ConnSuccess, "http://localhost"+addr)
+		if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
+			fmt.Printf(ErrorMsgs().ConnInit, srv.Addr, "srv.ListenAndServe")
+			log.Fatalf("HTTP server error: %v", err)
+		}
+		log.Printf("Stopped serving new connections.")
+	}()
+
+	// set up a channel to listen for kill or interrupt
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+	<-sigChan
+
+	// create cancellation signal and timeout
+	shutdownCtx, shutdownRelease := context.WithTimeout(context.Background(), 10*time.Second)
+	defer shutdownRelease()
+	// shut down the server
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		log.Fatalf(ErrorMsgs().Shutdown, err)
 	}
-	log.Printf("Listening on %v", srv.Addr)
+	log.Printf("Graceful shutdown complete.")
 }

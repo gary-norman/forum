@@ -1766,6 +1766,7 @@ main {
   display: flex;
   flex-direction: column;
   row-gap: 1.2rem;
+  padding: 0 1.2rem;
   overflow: auto;
 }
 .button-row-homepage {
@@ -1829,12 +1830,25 @@ main {
   border: 1px solid var(--color-bg-3);
   border-radius: var(--border-radius-input);
   padding: 1.2rem;
-  margin: 0.8rem;
+  /*margin: 0.8rem;*/
   /* box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20); */
   box-shadow:
     rgba(0, 0, 0, 0.16) 0 3px 6px,
     rgba(0, 0, 0, 0.23) 0 3px 6px;
   /* z-index: 100; a positive z-index breaks the before */
+}
+
+.container-comments {
+  display: flex;
+  gap: 1.2rem;
+  padding: 1.2rem 1.2rem 2.4rem;
+
+}
+
+.reply-arrow {
+  width: 1.6rem;
+  height: 1.6rem;
+  background: url("/assets/icons/reply_arrow_16.svg") no-repeat center;
 }
 @keyframes glow-breathe {
   0%, 25%, 100% {
@@ -1872,7 +1886,7 @@ main {
           position: absolute;
           top: -0.3rem;
           left: 0;
-          content: url("/assets/icons/reply_16.svg");
+          content: url("/assets/icons/reply_arrow_16.svg");
           filter: var(--filter-invert-on_off);
         }
       }
@@ -1945,7 +1959,7 @@ main {
 }
 
 .filters-row {
-  margin: 0 1.2rem;
+  padding-bottom: 2.4rem !important;
   /*position: relative;*/
   & button {
     /*position: absolute;*/

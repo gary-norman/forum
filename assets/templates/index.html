@@ -600,134 +600,141 @@
                 </div>
             </div>
             <div class="container-content">
-                <div class="content">
-                    <div id="activity-bar" class="button-row above-activity">
-                        <button id="activity" class="btn-lg btn-secondary btn-icotext btn-activity btn-active">
-                            <span class="btn-clock">activity</span>
-                        </button>
-                        <button id="posts" class="btn-lg btn-secondary btn-icotext btn-activity">
-                            <span class="btn-posts">posts</span>
-                        </button>
-                        <button id="comments" class="btn-lg btn-secondary btn-icotext btn-activity">
-                            <span class="btn-comment">comments</span>
-                        </button>
-                        <button id="saved" class="btn-lg btn-secondary btn-invert-never btn-icotext btn-activity">
-                            <span class="btn-heart-empty">saved</span>
-                        </button>
-                        <button id="muted" class="btn-lg btn-secondary btn-icotext btn-activity">
-                            <span class="btn-mute">muted</span>
-                        </button>
-                        <button id="reactions" class="btn-lg btn-secondary btn-invert-never btn-icotext btn-activity">
-                            <span class="btn-likes">reactions</span>
-                        </button>
-                    </div>
-                    <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%    ">
-                        <div id="activity-activity">
-                            <div class="filters-row button-row">
-                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <span class="btn-sort">sort</span>
-                                </button>
-                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <span class="btn-filters">filters</span>
-                                </button>
-                                <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <span class="btn-sort">scroll</span>
-                                </button>
-                            </div>
-                            <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                              {{$userID := 0}} <!-- Default value for logged out users -->
-                              {{if ne .CurrentUserName "nouser"}}
-                                {{$userID = .CurrentUser.ID}}
-                              {{end}}
-                              {{range .Posts}} <!-- user page activity posts -->
-                              <div class="activity-items activity">Something happened!</div>
-                              <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
-                              <div class="container-post-info">
-                                {{ if (ne .AuthorAvatar "noimage") }}
-                                <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
-                                {{ else }}
-                                <span class="card-pic profile-pic--empty" data-name-user="{{ .Author }}"></span>
-                                {{ end }}
-                              <div>
-                                <small class="small-bold">{{.Author}}</small>
-                                <div>
-                                  <small>{{.ChannelName}}</small>
-                                  <small>-</small>
-                                  <small>{{.TimeSince}}</small>
-                                </div>
-                              </div>
-                          <div class="like-button">
-                            <button data-tooltip-name="like" class="btn-icoonly"></button>
+              <div class="content">
+                  <div id="activity-bar" class="button-row above-activity">
+                      <button id="activity" class="btn-lg btn-secondary btn-icotext btn-activity btn-active">
+                          <span class="btn-clock">activity</span>
+                      </button>
+                      <button id="posts" class="btn-lg btn-secondary btn-icotext btn-activity">
+                          <span class="btn-posts">posts</span>
+                      </button>
+                      <button id="comments" class="btn-lg btn-secondary btn-icotext btn-activity">
+                          <span class="btn-comment">comments</span>
+                      </button>
+                      <button id="saved" class="btn-lg btn-secondary btn-invert-never btn-icotext btn-activity">
+                          <span class="btn-heart-empty">saved</span>
+                      </button>
+                      <button id="muted" class="btn-lg btn-secondary btn-icotext btn-activity">
+                          <span class="btn-mute">muted</span>
+                      </button>
+                      <button id="reactions" class="btn-lg btn-secondary btn-invert-never btn-icotext btn-activity">
+                          <span class="btn-likes">reactions</span>
+                      </button>
+                  </div>
+                  <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%    ">
+                      <div id="activity-activity">
+                          <div class="filters-row button-row">
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                  <span class="btn-sort">sort</span>
+                              </button>
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                  <span class="btn-filters">filters</span>
+                              </button>
+                              <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                  <span class="btn-sort">scroll</span>
+                              </button>
                           </div>
-                        </div>
-                        <h4>{{.Title}}</h4>
-                        {{ if ne .Images "noimage" }}
-                          <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
-                        {{ end }}
-                        <article class="cardContent">{{.Content}}</article>
-                            <div class="button-row post-controls" >
-                                {{$status := reactionStatus $userID .ID 0}}
-                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
-                                    <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
-                                </button>
-                                <!-- --- TODO invertoff -->
-                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-                                    <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
-                                </button>
-                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                            <span class="btn-reply">reply</span>
-                          </button>
-                            <button id="share-button-{{.ID}}-activity" popovertarget="share-container-{{.ID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                <span class="btn-share">share</span>
-                            </button>
-                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                            <span class="btn-report">report</span>
-                          </button>
-                            <div popover id="share-container-{{.ID}}-activity" class="scrollable-user">
-                                <div class="share-container">
-                                    <div class="button-row">
-                                        <a href="/" target="_blank" class="share-logo facebook"></a>
-                                        <a href="/" target="_blank" class="share-logo twitter"></a>
-                                        <a href="/" target="_blank" class="share-logo linkedin"></a>
-                                        <a href="/" target="_blank" class="share-logo reddit"></a>
-                                        <a href="/" target="_blank" class="share-logo whatsapp"></a>
-                                        <a href="/" target="_blank" class="share-logo telegram"></a>
-                                    </div>
-                                    <div class="flex-space-between">
-                                        <label class="padded" for="copy-url-{{.ID}}-activity">Copy URL link</label>
-                                        <button class="btn-sm btn-icoonly">
-                                            <span class="btn-copy" aria-label="Copy URL link"></span>
-                                        </button>
-                                    </div>
-                                    <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
-                                           id="copy-url-{{.ID}}-activity" name="copy-url-{{.ID}}-activity"/>
-                                </div>
+                          <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+                            {{$userID := 0}} <!-- Default value for logged out users -->
+                            {{if ne .CurrentUserName "nouser"}}
+                              {{$userID = .CurrentUser.ID}}
+                            {{end}}
+                            {{range .Posts}} <!-- user page activity posts -->
+                            <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                            <div class="container-post-info">
+                              {{ if (ne .AuthorAvatar "noimage") }}
+                              <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
+                              {{ else }}
+                              <span class="card-pic profile-pic--empty" data-name-user="{{ .Author }}"></span>
+                              {{ end }}
+                            <div>
+                              <small class="small-bold">{{.Author}}</small>
+                              <div>
+                                <small>{{.ChannelName}}</small>
+                                <small>-</small>
+                                <small>{{.TimeSince}}</small>
+                              </div>
                             </div>
+                        <div class="like-button">
+                          <button data-tooltip-name="like" class="btn-icoonly"></button>
                         </div>
                       </div>
-                      {{end}} <!-- user page activity posts -->
-                    </div>
-                  </div>
-                  <div id="activity-posts">
-                    <div class="filters-row button-row hide-feed">
-                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-sort">sort</span>
-                      </button>
-                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-filters">filters</span>
-                      </button>
-                        <button id="scroll-test-1" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                            <span class="btn-sort">scroll</span>
+                      <h4>{{.Title}}</h4>
+                      {{ if ne .Images "noimage" }}
+                        <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
+                      {{ end }}
+                      <article class="cardContent">{{.Content}}</article>
+                          <div class="button-row post-controls" >
+                              {{$status := reactionStatus $userID .ID 0}}
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+                                  <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
+                              </button>
+                              <!-- --- TODO invertoff -->
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+                                  <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
+                              </button>
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-reply">reply</span>
                         </button>
+                          <button id="share-button-{{.ID}}-activity" popovertarget="share-container-{{.ID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                              <span class="btn-share">share</span>
+                          </button>
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-report">report</span>
+                        </button>
+                          <div popover id="share-container-{{.ID}}-activity" class="scrollable-user">
+                              <div class="share-container">
+                                  <div class="button-row">
+                                      <a href="/" target="_blank" class="share-logo facebook"></a>
+                                      <a href="/" target="_blank" class="share-logo twitter"></a>
+                                      <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                      <a href="/" target="_blank" class="share-logo reddit"></a>
+                                      <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                      <a href="/" target="_blank" class="share-logo telegram"></a>
+                                  </div>
+                                  <div class="flex-space-between">
+                                      <label class="padded" for="copy-url-{{.ID}}-activity">Copy URL link</label>
+                                      <button class="btn-sm btn-icoonly">
+                                          <span class="btn-copy" aria-label="Copy URL link"></span>
+                                      </button>
+                                  </div>
+                                  <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
+                                         id="copy-url-{{.ID}}-activity" name="copy-url-{{.ID}}-activity"/>
+                              </div>
+                          </div>
+                      </div>
                     </div>
-                    <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                      {{$userID := 0}} <!-- Default value for logged out users -->
-                      {{if ne .CurrentUserName "nouser"}}
-                      {{$userID = .CurrentUser.ID}}
-                      {{end}}
-                      {{range .Posts}} <!-- user page posts -->
-                        <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
-                            <div class="container-post-info">
+
+                    <div class="container-comments">
+                      <div class="reply-arrow"></div>
+                      <div class="card" data-comment-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
+
+                      </div>
+                    </div>
+                    {{end}} <!-- user page activity posts -->
+
+                  </div>
+                </div>
+                <div id="activity-posts">
+                  <div class="filters-row button-row hide-feed">
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                      <span class="btn-sort">sort</span>
+                    </button>
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                      <span class="btn-filters">filters</span>
+                    </button>
+                      <button id="scroll-test-1" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-sort">scroll</span>
+                      </button>
+                  </div>
+                  <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                    {{$userID := 0}} <!-- Default value for logged out users -->
+                    {{if ne .CurrentUserName "nouser"}}
+                    {{$userID = .CurrentUser.ID}}
+                    {{end}}
+                    {{range .Posts}} <!-- user page posts -->
+                      <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                        <div class="container-post-info">
                           <span class="card-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
                           <div>
                             <small class="small-bold">{{.Author}}</small>
@@ -745,240 +752,238 @@
                         {{ end }}
                         <article class="cardContent">{{.Content}}</article>
                           <div class="button-row post-controls" >
-                              {{$status := reactionStatus $userID .ID 0}}
-                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+                            {{$status := reactionStatus $userID .ID 0}}
+                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
                                   <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
-                              </button>
-                              <!-- --- TODO invertoff -->
-                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-                                  <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
+                            </button>
+                            <!-- --- TODO invertoff -->
+                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+                              <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
+                            </button>
+                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                              <span class="btn-reply">reply</span>
+                            </button>
+                            <button id="share-button-{{.ID}}-post" popovertarget="share-container-{{.ID}}-post" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                              <span class="btn-share">share</span>
+                            </button>
+                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                              <span class="btn-report">report</span>
+                            </button>
+                            <div popover id="share-container-{{.ID}}-post" class="scrollable-user">
+                              <div class="share-container">
+                                <div class="button-row">
+                                  <a href="/" target="_blank" class="share-logo facebook"></a>
+                                  <a href="/" target="_blank" class="share-logo twitter"></a>
+                                  <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                  <a href="/" target="_blank" class="share-logo reddit"></a>
+                                  <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                  <a href="/" target="_blank" class="share-logo telegram"></a>
+                                </div>
+                                <div class="flex-space-between">
+                                  <label class="padded" for="copy-url-{{.ID}}-post">Copy URL link</label>
+                                  <button class="btn-sm btn-icoonly">
+                                    <span class="btn-copy" aria-label="Copy URL link"></span>
+                                  </button>
+                                </div>
+                                <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-post" name="copy-url-{{.ID}}-activity"/>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+
+                      {{end}} <!-- user page posts -->
+
+                  </div>
+                </div>
+                <div id="activity-comments">
+                  <div class="filters-row button-row hide-feed">
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                      <span class="btn-sort">sort</span>
+                    </button>
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                      <span class="btn-filters">filters</span>
+                    </button>
+                  </div>
+                  <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                    <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
+                    <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
+                    <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
+                    <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
+                    <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
+                    <div class="activity-items comments cont-flex-column">Yo mama</div>
+                    <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
+                  </div>
+                </div>
+                <div id="activity-saved">
+                  <div class="filters-row button-row hide-feed">
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                      <span class="btn-sort">sort</span>
+                    </button>
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                      <span class="btn-filters">filters</span>
+                    </button>
+                  </div>
+                    <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                        <div class="activity-items saved">You saved this post</div>
+                        <div class="activity-items saved">You saved this post</div>
+                        <div class="activity-items saved">You saved this post</div>
+                        <div class="activity-items saved">You saved this post</div>
+                        <div class="activity-items saved">You saved this post</div>
+                        <div class="activity-items saved">You saved this post</div>
+                    </div>
+                </div>
+                      <div id="activity-muted">
+                          <div class="filters-row button-row hide-feed">
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                  <span class="btn-sort">sort</span>
                               </button>
                               <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                  <span class="btn-reply">reply</span>
+                                  <span class="btn-filters">filters</span>
                               </button>
-                              <button id="share-button-{{.ID}}-post" popovertarget="share-container-{{.ID}}-post" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                  <span class="btn-share">share</span>
+                          </div>
+                          <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                              <div class="activity-items muted">You muted this post</div>
+                              <div class="activity-items muted">You muted this post</div>
+                              <div class="activity-items muted">You muted this post</div>
+                              <div class="activity-items muted">You muted this post</div>
+                              <div class="activity-items muted">You muted this post</div>
+                              <div class="activity-items muted">You muted this post</div>
+                              <div class="activity-items muted">You muted this post</div>
+                              <div class="activity-items muted">You muted this post</div>
+                              <div class="activity-items muted">You muted this post</div>
+                              <div class="activity-items muted">You muted this post</div>
+                          </div>
+                      </div>
+                      <div id="activity-reactions">
+                          <div class="filters-row button-row hide-feed">
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                  <span class="btn-sort">sort</span>
                               </button>
                               <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                  <span class="btn-report">report</span>
+                                  <span class="btn-filters">filters</span>
                               </button>
-                              <div popover id="share-container-{{.ID}}-post" class="scrollable-user">
-                                  <div class="share-container">
-                                      <div class="button-row">
-                                          <a href="/" target="_blank" class="share-logo facebook"></a>
-                                          <a href="/" target="_blank" class="share-logo twitter"></a>
-                                          <a href="/" target="_blank" class="share-logo linkedin"></a>
-                                          <a href="/" target="_blank" class="share-logo reddit"></a>
-                                          <a href="/" target="_blank" class="share-logo whatsapp"></a>
-                                          <a href="/" target="_blank" class="share-logo telegram"></a>
-                                      </div>
-                                      <div class="flex-space-between">
-                                          <label class="padded" for="copy-url-{{.ID}}-post">Copy URL link</label>
-                                          <button class="btn-sm btn-icoonly">
-                                              <span class="btn-copy" aria-label="Copy URL link"></span>
+                          </div>
+                          <div id="activity-feed-reactions" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                              <div class="activity-items reactions">You liked this post</div>
+                              <div class="activity-items reactions">You liked this post</div>
+                              <div class="activity-items reactions">You liked this post</div>
+                              <div class="activity-items reactions">You liked this post</div>
+                              <div class="activity-items reactions">You liked this post</div>
+                              <div class="activity-items reactions">You liked this post</div>
+                              <div class="activity-items reactions">You liked this post</div>
+                              <div class="activity-items reactions">You liked this post</div>
+                              <div class="activity-items reactions">You liked this post</div>
+                              <div class="activity-items reactions">You liked this post</div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+                <div class="right-panel ">
+                  <div class="right-panel-content scroll-down">
+                      <div class="right-panel-name-container flex-space-between">
+                          <h4 class="right-panel-name">{{ if ne .CurrentUserName "nouser"}}{{.CurrentUserName}}{{ else }}EyeSome578{{ end }}</h4>
+                        {{ if (ne .CurrentUserName "nouser") }}
+                          <button class="btn-sm btn-icoonly">
+                              <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
+                          </button>
+                        {{ end }} <!-- "nouser" check -->
+                      </div>
+                    {{ if (ne .CurrentUserName "nouser") }}
+                      <div class="right-panel-pic-container flex-space-between">
+                          <div class="right-panel-pic-container">
+                            {{ if (ne .Avatar "noimage") }}
+                              <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
+                            {{ else }}
+                              <div class="right-panel-pic profile-pic--empty" data-name-user="{{ .CurrentUserName }}"></div>
+                            {{ end }}
+                            <small>Edit your avatar picture</small>
+                          </div>
+                          <button class="btn-sm btn-icoonly">
+                              <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
+                          </button>
+                      </div>
+                    {{ end }} <!-- "nouser" check -->
+                      <div class="right-panel-bio-container ">
+                        <div class="right-panel-bio flex-space-between">
+                          <label for="user-bio-content" class="padded">{{ if ne .CurrentUserName "nouser"}}Edit your bio{{ else }}User bio{{ end }}</label>
+                          {{ if (ne .CurrentUserName "nouser") }}
+                            <button class="btn-sm btn-icoonly">
+                              <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
+                            </button>
+                          {{ end }} <!-- "nouser" check -->
+                        </div>
+                        <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Bio }}</textarea>
+                      </div>
+                      <div class="right-panel-modded-channels-container">
+                          <div class="sidebar-block sidebar-channels">
+                              <small class="padded">Modded Channels</small>
+                              <div class="sidebar-channel-block">
+                                  <div class="sidebar-channel">
+                                      <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
+                                          <span class="card-pic profile-pic"></span>
+                                          <div>
+                                              <div>/Interesting_Things</div>
+                                              <div>
+                                                  <div class="channel-users">5.6k</div>
+                                                  <div class="channel-green-dot">36</div>
+                                              </div>
+                                          </div>
+                                        {{ if (ne .CurrentUserName "nouser") }}
+                                          <button class="btn-sm btn-icoonly margin-auto-0">
+                                              <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
                                           </button>
+                                        {{ end }} <!-- "nouser" check -->
                                       </div>
-                                      <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-post" name="copy-url-{{.ID}}-activity"/>
+                                  </div>
+                                  <div class="sidebar-channel">
+                                      <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
+                                          <span class="card-pic channel-pic"></span>
+                                          <div>
+                                              <div>/CSS_Help</div>
+                                              <div>
+                                                  <div class="channel-users">5.6k</div>
+                                                  <div class="channel-green-dot">36</div>
+                                              </div>
+                                          </div>
+                                        {{ if (ne .CurrentUserName "nouser") }}
+                                          <button class="btn-sm btn-icoonly margin-auto-0">
+                                              <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                                          </button>
+                                        {{ end }} <!-- "nouser" check -->
+                                      </div>
+                                  </div>
+                                  <div class="sidebar-channel">
+                                      <div></div>
+                                      <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
+                                          <span class="card-pic channel-pic"></span>
+                                          <div>
+                                              <div>/Golang#Discussion</div>
+                                              <div>
+                                                  <div class="channel-users">5.6k</div>
+                                                  <div class="channel-green-dot">36</div>
+                                              </div>
+                                          </div>
+                                        {{ if (ne .CurrentUserName "nouser") }}
+                                          <button class="btn-sm btn-icoonly margin-auto-0">
+                                              <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                                          </button>
+                                        {{ end }} <!-- "nouser" check -->
+                                      </div>
                                   </div>
                               </div>
                           </div>
                       </div>
-                        {{end}} <!-- user page posts -->
-                    </div>
-                  </div>
-                  <div id="activity-comments">
-                    <div class="filters-row button-row hide-feed">
-                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-sort">sort</span>
-                      </button>
-                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-filters">filters</span>
-                      </button>
-                    </div>
-                    <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                      <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-                      <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
-                      <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-                      <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
-                      <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-                      <div class="activity-items comments cont-flex-column">Yo mama</div>
-                      <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-                    </div>
-                  </div>
-                  <div id="activity-saved">
-                    <div class="filters-row button-row hide-feed">
-                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-sort">sort</span>
-                      </button>
-                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-filters">filters</span>
-                      </button>
-                    </div>
-                      <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                          <div class="activity-items saved">You saved this post</div>
-                          <div class="activity-items saved">You saved this post</div>
-                          <div class="activity-items saved">You saved this post</div>
-                          <div class="activity-items saved">You saved this post</div>
-                          <div class="activity-items saved">You saved this post</div>
-                          <div class="activity-items saved">You saved this post</div>
+                      <div class="button-row-wrap">
+                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                              <span class="btn-share">share</span>
+                          </button>
+                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                              <span class="btn-report">report</span>
+                          </button>
                       </div>
                   </div>
-                        <div id="activity-muted">
-                            <div class="filters-row button-row hide-feed">
-                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <span class="btn-sort">sort</span>
-                                </button>
-                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <span class="btn-filters">filters</span>
-                                </button>
-                            </div>
-                            <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                                <div class="activity-items muted">You muted this post</div>
-                            </div>
-                        </div>
-                        <div id="activity-reactions">
-                            <div class="filters-row button-row hide-feed">
-                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <span class="btn-sort">sort</span>
-                                </button>
-                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <span class="btn-filters">filters</span>
-                                </button>
-                            </div>
-                            <div id="activity-feed-reactions" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                                <div class="activity-items reactions">You liked this post</div>
-                                <div class="activity-items reactions">You liked this post</div>
-                                <div class="activity-items reactions">You liked this post</div>
-                                <div class="activity-items reactions">You liked this post</div>
-                                <div class="activity-items reactions">You liked this post</div>
-                                <div class="activity-items reactions">You liked this post</div>
-                                <div class="activity-items reactions">You liked this post</div>
-                                <div class="activity-items reactions">You liked this post</div>
-                                <div class="activity-items reactions">You liked this post</div>
-                                <div class="activity-items reactions">You liked this post</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
-                <div class="right-panel ">
-                    <div class="right-panel-content scroll-down">
-                        <div class="right-panel-name-container flex-space-between">
-                            <h4 class="right-panel-name">{{ if ne .CurrentUserName "nouser"}}{{.CurrentUserName}}{{ else }}EyeSome578{{ end }}</h4>
-                          {{ if (ne .CurrentUserName "nouser") }}
-                            <button class="btn-sm btn-icoonly">
-                                <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
-                            </button>
-                          {{ end }} <!-- "nouser" check -->
-                        </div>
-                      {{ if (ne .CurrentUserName "nouser") }}
-                        <div class="right-panel-pic-container flex-space-between">
-                            <div class="right-panel-pic-container">
-                              {{ if (ne .Avatar "noimage") }}
-                              <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
-                              {{ else }}
-                              <div class="right-panel-pic profile-pic--empty" data-name-user="{{ .CurrentUserName }}"></div>
-                              {{ end }}
-                              <small>Edit your avatar picture</small>
-                            </div>
-                            <button class="btn-sm btn-icoonly">
-                                <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
-                            </button>
-                        </div>
-                      {{ end }} <!-- "nouser" check -->
-                        <div class="right-panel-bio-container ">
-                            <div class="right-panel-bio flex-space-between">
-                                <label for="user-bio-content" class="padded">{{ if ne .CurrentUserName "nouser"}}Edit your bio{{ else }}User bio{{ end }}</label>
-                              {{ if (ne .CurrentUserName "nouser") }}
-                              <button class="btn-sm btn-icoonly">
-                                    <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
-                                </button>
-                              {{ end }} <!-- "nouser" check -->
-
-                            </div>
-                            <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Bio }}</textarea>
-                        </div>
-                        <div class="right-panel-modded-channels-container">
-                            <div class="sidebar-block sidebar-channels">
-                                <small class="padded">Modded Channels</small>
-                                <div class="sidebar-channel-block">
-                                    <div class="sidebar-channel">
-                                        <div></div>
-                                        <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
-                                            <span class="card-pic profile-pic"></span>
-                                            <div>
-                                                <div>/Interesting_Things</div>
-                                                <div>
-                                                    <div class="channel-users">5.6k</div>
-                                                    <div class="channel-green-dot">36</div>
-                                                </div>
-                                            </div>
-                                          {{ if (ne .CurrentUserName "nouser") }}
-                                            <button class="btn-sm btn-icoonly margin-auto-0">
-                                                <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                                            </button>
-                                          {{ end }} <!-- "nouser" check -->
-                                        </div>
-                                    </div>
-                                    <div class="sidebar-channel">
-                                        <div></div>
-                                        <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
-                                            <span class="card-pic channel-pic"></span>
-                                            <div>
-                                                <div>/CSS_Help</div>
-                                                <div>
-                                                    <div class="channel-users">5.6k</div>
-                                                    <div class="channel-green-dot">36</div>
-                                                </div>
-                                            </div>
-                                          {{ if (ne .CurrentUserName "nouser") }}
-                                            <button class="btn-sm btn-icoonly margin-auto-0">
-                                                <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                                            </button>
-                                          {{ end }} <!-- "nouser" check -->
-                                        </div>
-                                    </div>
-                                    <div class="sidebar-channel">
-                                        <div></div>
-                                        <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
-                                            <span class="card-pic channel-pic"></span>
-                                            <div>
-                                                <div>/Golang#Discussion</div>
-                                                <div>
-                                                    <div class="channel-users">5.6k</div>
-                                                    <div class="channel-green-dot">36</div>
-                                                </div>
-                                            </div>
-                                          {{ if (ne .CurrentUserName "nouser") }}
-                                            <button class="btn-sm btn-icoonly margin-auto-0">
-                                                <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                                            </button>
-                                          {{ end }} <!-- "nouser" check -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="button-row-wrap">
-                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                <span class="btn-share">share</span>
-                            </button>
-                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                <span class="btn-report">report</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 

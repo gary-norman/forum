@@ -621,7 +621,7 @@
                           <span class="btn-likes">reactions</span>
                       </button>
                   </div>
-                  <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%    ">
+                  <div id="user-activity-feeds">
                       <div id="activity-activity">
                           <div class="filters-row button-row">
                               <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -664,7 +664,7 @@
                         <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
                       {{ end }}
                       <article class="cardContent">{{.Content}}</article>
-                          <div class="button-row post-controls" >
+                          <div class="button-row-wrap post-controls" >
                               {{$status := reactionStatus $userID .ID 0}}
                               <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
                                   <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>

@@ -59,7 +59,7 @@ func (m *ReactionModel) Insert(liked, disliked bool, reactionID, authorID int, r
 
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	fmt.Println("Beginning INSERT INTO transaction")
+	//fmt.Println("Beginning INSERT INTO transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Insert in Reactions: %w", err)
 	}
@@ -83,14 +83,14 @@ func (m *ReactionModel) Insert(liked, disliked bool, reactionID, authorID int, r
 	// Execute the query, dereferencing the pointers for reactionID values
 	_, err = tx.Exec(stmt1, liked, disliked, authorID,
 		dereferenceInt(reactedPostID), dereferenceInt(reactedCommentID))
-	fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, reactedPostID)
+	//fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, reactedPostID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Insert query: %w", err)
 	}
 
 	// Commit the transaction
 	err = tx.Commit()
-	fmt.Println("Committing INSERT INTO transaction")
+	//fmt.Println("Committing INSERT INTO transaction")
 	if err != nil {
 		return fmt.Errorf("failed to commit transaction for Insert in Reactions: %w", err)
 	}
@@ -113,7 +113,7 @@ func (m *ReactionModel) Update(liked, disliked bool, reactionID, authorID, react
 
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	fmt.Println("Beginning UPDATE transaction")
+	//fmt.Println("Beginning UPDATE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Insert in Reactions: %w", err)
 	}
@@ -132,7 +132,7 @@ func (m *ReactionModel) Update(liked, disliked bool, reactionID, authorID, react
 	stmt1 := `UPDATE Reactions 
              SET Liked = ?, Disliked = ?, Created = DateTime('now') 
              WHERE AuthorID = ? AND ReactedPostID = ? AND ReactedCommentID = ?`
-	fmt.Printf("Updating Reactions, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
+	//fmt.Printf("Updating Reactions, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
 
 	// Execute the query, dereferencing the pointers for reactionID values
 	_, err = tx.Exec(stmt1, liked, disliked, authorID, reactedPostID, reactedCommentID)
@@ -142,7 +142,7 @@ func (m *ReactionModel) Update(liked, disliked bool, reactionID, authorID, react
 
 	// Commit the transaction
 	err = tx.Commit()
-	fmt.Println("Committing UPDATE transaction")
+	//fmt.Println("Committing UPDATE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to commit transaction for Update in Reactions: %w", err)
 	}
@@ -165,17 +165,17 @@ func (m *ReactionModel) Upsert(liked, disliked bool, reactionID, authorID, react
 
 	if exists {
 		// If the reaction exists, update it
-		fmt.Println("Updating a reaction which already exists (reactions.go :53)")
+		//fmt.Println("Updating a reaction which already exists (reactions.go :53)")
 		return m.Update(liked, disliked, reactionID, authorID, reactedPostID, reactedCommentID)
 	}
-	fmt.Println("Inserting a reaction (reactions.go :56)")
+	//fmt.Println("Inserting a reaction (reactions.go :56)")
 
 	return m.Insert(liked, disliked, reactionID, authorID, &reactedPostID, &reactedCommentID)
 }
 
 // Exists helps avoid creating duplicate reactions by determining whether a reaction for the specific combination of AuthorID, PostID and the reaction itself - liked/disliked
 func (m *ReactionModel) Exists(liked, disliked bool, authorID, reactedPostID int) (bool, error) {
-	fmt.Printf("Reaction already exists (reactions.go :63 -> Exists) for\nauthorID: %v,\nreactedPostID: %v,\nLiked: %v\nDisliked: %v", authorID, reactedPostID, liked, disliked)
+	//fmt.Printf("Reaction already exists (reactions.go :63 -> Exists) for\nauthorID: %v,\nreactedPostID: %v,\nLiked: %v\nDisliked: %v", authorID, reactedPostID, liked, disliked)
 	stmt := `SELECT EXISTS(
                 SELECT 1 FROM Reactions
                 WHERE AuthorID = ? AND ReactedPostID = ?)`
@@ -197,7 +197,7 @@ func (m *ReactionModel) CheckExistingReaction(liked, disliked bool, reactionAuth
 		&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.Created, &reaction.ReactedPostID)
 	if errors.Is(err, sql.ErrNoRows) {
 		// No existing reaction found
-		fmt.Println("No existing reaction found")
+		//fmt.Println("No existing reaction found")
 		return nil, nil
 	} else if err != nil {
 		return nil, err
@@ -277,7 +277,7 @@ func (m *ReactionModel) GetReaction(authorID int, reactedPostID *int, reactedCom
 func (m *ReactionModel) Delete(reactionID int) error {
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	fmt.Println("Beginning DELETE transaction")
+	//fmt.Println("Beginning DELETE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Delete in Reactions: %w", err)
 	}
@@ -296,14 +296,10 @@ func (m *ReactionModel) Delete(reactionID int) error {
 	stmt1 := `DELETE FROM Reactions WHERE ID = ?`
 	// Execute the query, dereferencing the pointers for ID values
 	_, err = m.DB.Exec(stmt1, reactionID)
-	fmt.Printf("Deleting from Reactions where reactionID: %v\n", reactionID)
+	//fmt.Printf("Deleting from Reactions where reactionID: %v\n", reactionID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Delete query: %w", err)
 	}
-
-	stmt2 := `DELETE FROM PostReactions WHERE ID = ?`
-	_, err = m.DB.Exec(stmt2, reactionID)
-	fmt.Printf("Deleting from PostReactions where reactionID: %v\n", reactionID)
 
 	if err != nil {
 		return fmt.Errorf("failed to execute Delete query: %w", err)
@@ -311,7 +307,7 @@ func (m *ReactionModel) Delete(reactionID int) error {
 
 	// Commit the transaction
 	err = tx.Commit()
-	fmt.Println("Committing DELETE transaction")
+	//fmt.Println("Committing DELETE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to commit transaction for Delete in Reactions: %w", err)
 	}

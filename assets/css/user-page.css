@@ -116,8 +116,14 @@
     background: limegreen;
 }
 #user-activity-feeds {
+    position: absolute;
+    height: 100%;
+    width: calc(100% - 27.2rem - 9.6rem - 2.4rem);
     & > *  {
-        padding: 1.2rem;
+        padding: 0 1.2rem;
+        & > * {
+            width: 100%;
+        }
     }
 
 }

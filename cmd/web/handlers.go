@@ -384,7 +384,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			Login:    "",
 		},
 	}
-	models.JsonError(templateData)
+	//models.JsonError(templateData)
 
 	tpl, err := GetTemplate()
 	if err != nil {

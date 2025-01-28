@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="/assets/css/user-page.css" />
     <link rel="stylesheet" href="/assets/css/channel-page.css" />
     <link rel="stylesheet" href="/assets/css/main_effects.css">
-    <link rel="stylesheet" href="/assets/css/buttons.css" /><link rel="stylesheet" href="/assets/css/main_effects.css">
+    <link rel="stylesheet" href="/assets/css/buttons.css" />
+    <link rel="stylesheet" href="/assets/css/main_effects.css">
     <script type="module" src="/assets/js/main.js" defer></script>
     <script src="/assets/js/reactions.js" defer></script>
     <script type="module" src="/assets/js/share.js" defer></script>
@@ -28,10 +29,11 @@
     <div class="wrapper-main">
       <header class="header">
         <div class="branding"></div>
+        <label for="pagedrop"></label>
         <select name="pagedrop" id="pagedrop" class="button">
-          <option id="showhome" value="homepage">home</option>
-          <option id="showuser" value="userpage">user page</option>
-          <option id="showchannels" value="channelpage">channels</option>
+          <option id="btn-show-home" value="home-page">home</option>
+          <option id="btn-show-user" value="user-page">user page</option>
+          <option id="btn-show-channels" value="channel-page">channels</option>
         </select>
         <form class="wrapper-search">
           <search>
@@ -573,7 +575,7 @@
             </div>
           </div>
         <!--- SECTION user page -->
-        <div id="user-page" class="active-feed feeds-wrapper">
+        <div id="user-page" class="feeds-wrapper">
             <div class="banner">
                 <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
                 <div class="page-control">
@@ -732,7 +734,11 @@
                       {{range .Posts}} <!-- user page posts -->
                         <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                             <div class="container-post-info">
-                          <span class="card-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
+                              {{ if (ne .AuthorAvatar "noimage") }}
+                              <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
+                              {{ else }}
+                              <span class="card-pic profile-pic--empty" data-name-user="{{ .Author }}"></span>
+                              {{ end }}
                           <div>
                             <small class="small-bold">{{.Author}}</small>
                             <div>
@@ -986,17 +992,22 @@
         </div>
 
             <!-- SECTION --- channel page ----->
-            <div id="channel-page" class="feeds-wrapper">
+            <div id="channel-page" class="active-feed feeds-wrapper">
+
                 <div class="banner">
-                    <div class="page-banner" ></div>
+                  <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
                     <div class="page-control">
                         <div class="page-profile">
                             <div class="page-pic profile-pic"></div>
                             <div>
                                 <h2>/Interesting_Things</h2>
                                 <div>
-                                    <div class="channel-users">13.8k</div>
-                                    <div class="channel-green-dot">37</div>
+                                  <button class="btn-md btn-icotext btn-follows btn-invert-never">
+                                  <span class="btn-channel-users">13.8k</span>
+                                </button>
+                                  <button class="btn-md btn-icotext btn-follows btn-invert-never" style="position: relative">
+                                    <span class="btn-channel-green-dot">37</span>
+                                  </button>
                                 </div>
                             </div>
                         </div>
@@ -1014,7 +1025,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="content-container">
+                <div class="container-content">
                     <div class="content">
                         <div class="filters-row button-row">
                             <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -1024,63 +1035,70 @@
                                 <span class="btn-filters">filters</span>
                             </button>
                         </div>
+<!--                      SECTION channel page feed-->
                         <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                            {{range .Posts}} <!-- channel page posts -->
-                            <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
-                                <div class="post-info-container">
-                                    <span class="card-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
-                                    <div>
-                                        <small class="small-bold">{{.AuthorID}}</small>
-                                        <div>
-                                          <small>{{.ChannelID}}</small>
-                                          <small>-</small>
-                                          <small>{{.TimeSince}}</small>
-                                        </div>
-                                    </div>
+                          {{range .Posts}} <!-- channel page posts -->
+                          <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                            <div class="container-post-info">
+                              {{ if (ne .AuthorAvatar "noimage") }}
+                              <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
+                              {{ else }}
+                              <span class="card-pic profile-pic--empty" data-name-user="{{ .Author }}"></span>
+                              {{ end }}
+                              <div>
+                                <small class="small-bold">{{.Author}}</small>
+                                <div>
+                                  <small>{{.ChannelName}}</small>
+                                  <small>-</small>
+                                  <small>{{.TimeSince}}</small>
                                 </div>
-                                <h4>{{.Title}}</h4>
-                                <article class="cardContent">{{.Content}}</article>
-                                <div class="button-row post-controls" >
-                                    {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
-                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
-                                        <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
-                                    </button>
-                                    <!-- --- TODO invertoff -->
-                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-                                        <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
-                                    </button>
-                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                        <span class="btn-reply">reply</span>
-                                    </button>
-                                    <button id="share-button-{{.ID}}-channel" popovertarget="share-container-{{.ID}}-channel" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                        <span class="btn-share">share</span>
-                                    </button>
-                                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                        <span class="btn-report">report</span>
-                                    </button>
-                                    <div popover id="share-container-{{.ID}}-channel" class="scrollable-user">
-                                        <div class="share-container">
-                                            <div class="button-row">
-                                                <a href="/" target="_blank" class="share-logo facebook"></a>
-                                                <a href="/" target="_blank" class="share-logo twitter"></a>
-                                                <a href="/" target="_blank" class="share-logo linkedin"></a>
-                                                <a href="/" target="_blank" class="share-logo reddit"></a>
-                                                <a href="/" target="_blank" class="share-logo whatsapp"></a>
-                                                <a href="/" target="_blank" class="share-logo telegram"></a>
-                                            </div>
-                                            <div class="flex-space-between">
-                                                <label class="padded" for="copy-url-{{.ID}}-channel">Copy URL link</label>
-                                                <button class="btn-sm btn-icoonly">
-                                                    <span class="btn-copy" aria-label="Copy URL link"></span>
-                                                </button>
-                                            </div>
-                                            <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly
-                                                   type="text" id="copy-url-{{.ID}}-channel" name="copy-url-{{.ID}}-channel"/>
-                                        </div>
-                                    </div>
-                                </div>
+                              </div>
                             </div>
-                            {{end}} <!-- channel page posts -->
+                            <h4>{{.Title}}</h4>
+                            {{ if ( ne .Images "noimage" ) }}
+                            <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
+                            {{ end }}
+                            <article class="cardContent">{{.Content}}</article>
+                            <div class="button-row post-controls" >
+                              {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+                                <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
+                              </button>
+                              <!-- --- TODO invertoff -->
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+                                <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
+                              </button>
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                <span class="btn-reply">reply</span>
+                              </button>
+                              <button id="share-button-{{.ID}}-post" popovertarget="share-container-{{.ID}}-post" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                <span class="btn-share">share</span>
+                              </button>
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                <span class="btn-report">report</span>
+                              </button>
+                              <div popover id="share-container-{{.ID}}-post" class="scrollable-user">
+                                <div class="share-container">
+                                  <div class="button-row">
+                                    <a href="/" target="_blank" class="share-logo facebook"></a>
+                                    <a href="/" target="_blank" class="share-logo twitter"></a>
+                                    <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                    <a href="/" target="_blank" class="share-logo reddit"></a>
+                                    <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                    <a href="/" target="_blank" class="share-logo telegram"></a>
+                                  </div>
+                                  <div class="flex-space-between">
+                                    <label class="padded" for="copy-url-{{.ID}}-post">Copy URL link</label>
+                                    <button class="btn-sm btn-icoonly">
+                                      <span id="copy-url-{{.ID}}-post" class="btn-copy" aria-label="Copy URL link"></span>
+                                    </button>
+                                  </div>
+                                  <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-activity" name="copy-url-{{.ID}}-activity"/>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {{end}} <!-- channel page posts -->
                         </div>
                     </div>
 

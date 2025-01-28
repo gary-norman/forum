@@ -1,4 +1,4 @@
-import {selectActiveFeed} from "./share.js";
+import {channelPage, homePage, pages, selectActiveFeed, userPage} from "./share.js";
 // variables
 //user information
 
@@ -83,13 +83,14 @@ const uploadedFilePost = document.querySelector('#uploaded-file--post');
 const dragText = document.querySelector('.dragText');
 const dragButton = document.querySelector('.button');
 // page select
-const showHome = document.querySelector('#showhome')
-const showUser = document.querySelector('#showuser')
-const showChannels = document.querySelector('#showchannels')
+const selectDropdown = document.getElementById('pagedrop');
 // ------
 let file;
 let filename;
-
+// document.addEventListener('DOMContentLoaded', () => {
+//
+//
+// });
 document.addEventListener('DOMContentLoaded', function () {
     actButtonContainer = document.querySelector('#activity-bar');
     if (!actButtonContainer) {
@@ -338,12 +339,19 @@ function getCSRFToken() {
 
 // SECTION ---- event listeners -----
 
-// --- slect page ---
-showHome.addEventListener('click', function () {
-    homePage.classList.toggle('active-feed')
-    userPage.classList.toggle('active-feed')
-    channelPage.classList.toggle('active-feed')
-})
+// --- select page ---
+selectDropdown.addEventListener('change', () => {
+    const selectedValue = selectDropdown.value;
+    console.log("selectedValue: ", selectedValue);
+    pages.forEach((element) => {
+        console.log("elementID: ", element.id, "selectedPage: ", selectedValue);
+        if (element.id === selectedValue) {
+            element.classList.add('active-feed');
+        } else {
+            element.classList.remove('active-feed');
+        }
+    });
+});
 // --- sidebar options dropdown ---
 sidebarOption.addEventListener('click', function (event) {
     sidebarOptionsList.classList.toggle('sidebar-options-reveal')

@@ -244,14 +244,21 @@ gap: 0.8rem;
     background: url("/assets/icons/send_16.svg") no-repeat center;
   }
 }
-.btn- {
+.btn-channel-users {
   &::before {
-    background: url("/assets/icons/") no-repeat center;
+    background: url("/assets/icons/users_16.svg") no-repeat center;
   }
 }
-.btn- {
+/* FIXME span css conflicts with .btn-icotext & span &::before */
+.btn-channel-green-dot {
   &::before {
-    background: url("/assets/icons/") no-repeat center;
+    content: "•";
+    color: var(--color-hl-primary);
+    font-size: 2.8rem;
+    position: absolute;
+    left: 1.6rem;
+    top: 0.4rem;
+    transform: translate(0, -47%);
   }
 }
 

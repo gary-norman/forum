@@ -402,22 +402,32 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 	//models.JsonError(templateData)
 
-	tpl, err := GetTemplate()
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		log.Printf(ErrorMsgs().Parse, "./assets/templates/index.html", "getHome", err)
+	if tpl == nil {
+		http.Error(w, "Template is not initialized", http.StatusInternalServerError)
 		return
 	}
 
-	t := tpl.Lookup("index.html")
-	if t == nil {
-		http.Error(w, "template not found: index.html", 500)
-		log.Printf("Template not found: index.html")
-		return
+	err := tpl.Execute(w, nil)
+	if err != nil {
+		http.Error(w, "Error executing template", http.StatusInternalServerError)
 	}
+
+	//tpl, err := GetTemplate()
+	//if err != nil {
+	//	http.Error(w, err.Error(), 500)
+	//	log.Printf(ErrorMsgs().Parse, "/assets/templates/index.html", "getHome", err)
+	//	return
+	//}
+	//
+	//t := tpl.Lookup("index.html")
+	//if t == nil {
+	//	http.Error(w, "template not found: index.html", 500)
+	//	log.Printf("Template not found: index.html")
+	//	return
+	//}
 
 	data := templateData
-	execErr := t.Execute(w, data)
+	execErr := tpl.Execute(w, data)
 	if execErr != nil {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return

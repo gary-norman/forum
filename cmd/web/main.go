@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -19,6 +20,7 @@ import (
 )
 
 type app struct {
+	db             *sql.DB // Store DB reference for cleanup
 	users          *sqlite.UserModel
 	posts          *sqlite.PostModel
 	reactions      *sqlite.ReactionModel
@@ -38,21 +40,32 @@ type app struct {
 func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
 }
-func initializeApp() (*app, error) {
+
+// Global template variable
+var tpl *template.Template
+
+func loadTemplates() error {
+	var err error
+	tpl, err = template.ParseFiles("assets/templates/index.html")
+	return err
+}
+
+func initializeApp() (*app, func(), error) {
 	// Open database connection
-	db, err := sql.Open("sqlite3", "/db/forum_database.db") // Adjust DB path
+	db, err := sql.Open("sqlite3", "db/forum_database.db") // Adjust DB path
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	// Verify connection
 	if err = db.Ping(); err != nil {
 		db.Close() // Close DB if ping fails
-		return nil, err
+		return nil, nil, err
 	}
 
-	// Initialize app with necessary models
-	return &app{
+	// App instance with DB reference
+	appInstance := &app{
+		db: db, // Store reference for cleanup
 		posts: &sqlite.PostModel{
 			DB: db,
 		},
@@ -74,15 +87,35 @@ func initializeApp() (*app, error) {
 		reactionStatus: &sqlite.ReactionModel{
 			DB: db,
 		},
-	}, nil
+	}
+	// Cleanup function to close DB connection
+	cleanup := func() {
+		log.Println("Closing database connection...")
+		if err := db.Close(); err != nil {
+			log.Printf("Error closing DB: %v", err)
+		} else {
+			log.Println("Database closed successfully.")
+		}
+	}
+
+	return appInstance, cleanup, nil
 }
 
 func main() {
+	// Load templates at startup
+	if err := loadTemplates(); err != nil {
+		log.Fatalf("Failed to load templates: %v", err)
+	}
 	// Initialize the app
-	app, err := initializeApp()
+	app, cleanup, err := initializeApp()
 	if err != nil {
 		log.Fatalf("Failed to initialize app: %v", err)
 	}
+	defer cleanup() // Ensure DB closes on normal exit
+
+	// Handle shutdown signals (Ctrl+C, system shutdown)
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 	port := 8989
 	addr := fmt.Sprintf(":%d", port)
 	srv := &http.Server{

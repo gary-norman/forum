@@ -17,32 +17,31 @@ func (m *ChannelModel) Insert(ownerID int, name, description, avatar, banner str
 	return err
 }
 
-func (m *ChannelModel) OwnedByCurrentUser(userID int) ([]models.Channel, error) {
-	stmt := "SELECT ID, OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted FROM Channels WHERE OwnerID = ?"
-	rows, err := m.DB.Query(stmt, userID)
-	if err != nil {
-		return nil, err
+func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]models.Channel, error) {
+	stmt := "SELECT ID, OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted FROM Channels WHERE ? = ?"
+	rows, queryErr := m.DB.Query(stmt, column, ID)
+	if queryErr != nil {
+		return nil, queryErr
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
 			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
 		}
 	}()
-	var Channels []models.Channel
+	var channels []models.Channel
 	for rows.Next() {
 		p := models.Channel{}
-		err = rows.Scan(&p.ID, &p.OwnerID, &p.Name, &p.Avatar, &p.Banner, &p.Description, &p.Created, &p.Privacy, &p.IsFlagged, &p.IsMuted)
-		if err != nil {
-			return nil, err
+		scanErr := rows.Scan(&p.ID, &p.OwnerID, &p.Name, &p.Avatar, &p.Banner, &p.Description, &p.Created, &p.Privacy, &p.IsFlagged, &p.IsMuted)
+		if scanErr != nil {
+			return nil, scanErr
 		}
-		Channels = append(Channels, p)
+		channels = append(channels, p)
 	}
-
-	if err = rows.Err(); err != nil {
-		return nil, err
+	if rowsErr := rows.Err(); rowsErr != nil {
+		return nil, rowsErr
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels", len(Channels))
-	return Channels, nil
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels", len(channels))
+	return channels, nil
 }
 
 func (m *ChannelModel) All() ([]models.Channel, error) {

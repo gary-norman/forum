@@ -234,6 +234,18 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *app) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
+	var channels []models.Channel
+	for _, membership := range memberships {
+		channel, err := app.channels.OwnedOrJoinedByCurrentUser(membership.ChannelID, "ID")
+		if err != nil {
+			return nil, errors.New(fmt.Sprintf(ErrorMsgs().KeyValuePair, "Error calling JoinedByCurrentUser > OwnedOrJoinedByCurrentUser", err))
+		}
+		channels = append(channels, channel[0])
+	}
+	return channels, nil
+}
+
 func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	Colors := models.CreateColors()
 	// Retrieve the cookie
@@ -344,7 +356,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	var ownedChannels []models.Channel
 	var ownedChannelsErr error
 	var joinedChannels []models.Channel
-	//var joinedChannelsErr error
+	var joinedChannelsErr error
 
 	currentUserName := "nouser"
 	var currentUserAvatar string
@@ -353,14 +365,18 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		currentUserName = currentUser.Username
 		currentUserAvatar = currentUser.Avatar
 		currentUserBio = currentUser.Description
-		ownedChannels, ownedChannelsErr = app.channels.OwnedByCurrentUser(currentUser.ID)
+		ownedChannels, ownedChannelsErr = app.channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
 		if ownedChannelsErr != nil {
 			log.Printf(ErrorMsgs().Query, "user channels", ownedChannelsErr)
 		}
-		//joinedChannels, joinedChannelsErr = app.channels.JoinedByCurrentUser(currentUser.ID)
-		//if ownedChannelsErr != nil {
-		//	log.Printf(ErrorMsgs().Query, "user channels", joinedChannelsErr)
-		//}
+		memberships, memberErr := app.memberships.UserMemberships(currentUser.ID)
+		if memberErr != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+		}
+		joinedChannels, joinedChannelsErr = app.JoinedByCurrentUser(memberships)
+		if ownedChannelsErr != nil {
+			log.Printf(ErrorMsgs().Query, "user channels", joinedChannelsErr)
+		}
 	}
 
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Owned Channels", ownedChannels)

@@ -38,14 +38,21 @@ type app struct {
 func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
 }
-
-func main() {
-	db, err := sql.Open("sqlite3", "./db/forum_database.db")
+func initializeApp() (*app, error) {
+	// Open database connection
+	db, err := sql.Open("sqlite3", "/db/forum_database.db") // Adjust DB path
 	if err != nil {
-		log.Fatal(ErrorMsgs().Open, "./db/forum_database.db", "sql.Open", err)
+		return nil, err
 	}
 
-	app := app{
+	// Verify connection
+	if err = db.Ping(); err != nil {
+		db.Close() // Close DB if ping fails
+		return nil, err
+	}
+
+	// Initialize app with necessary models
+	return &app{
 		posts: &sqlite.PostModel{
 			DB: db,
 		},
@@ -67,11 +74,15 @@ func main() {
 		reactionStatus: &sqlite.ReactionModel{
 			DB: db,
 		},
-	}
-	// Initialise templates if (app *app) is a receiver for
-	// the init() function that sets up custom go template functions
-	app.init()
+	}, nil
+}
 
+func main() {
+	// Initialize the app
+	app, err := initializeApp()
+	if err != nil {
+		log.Fatalf("Failed to initialize app: %v", err)
+	}
 	port := 8989
 	addr := fmt.Sprintf(":%d", port)
 	srv := &http.Server{

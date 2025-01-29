@@ -130,13 +130,11 @@ CREATE TABLE Comments (
   Content TEXT NOT NULL,
   Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   AuthorID INTEGER NOT NULL,
-  ChannelID INTEGER NOT NULL,
-  IsReply BOOLEAN,
   CommentedPostID INTEGER,
   CommentedCommentID INTEGER,
+  IsCommentable BOOLEAN,
   IsFlagged BOOLEAN,
   FOREIGN KEY (AuthorID) REFERENCES Users(ID),
-  FOREIGN KEY (ChannelID) REFERENCES Channels(ID),
   FOREIGN KEY (CommentedPostID) REFERENCES Posts(ID),
   FOREIGN KEY (CommentedCommentID) REFERENCES Comments(ID)
 );

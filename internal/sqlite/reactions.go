@@ -51,7 +51,7 @@ func (m *ReactionModel) GetReactionStatus(authorID, reactedPostID, reactedCommen
 	return ReactionStatus{Liked: liked, Disliked: disliked}, nil
 }
 
-func (m *ReactionModel) Insert(liked, disliked bool, reactionID, authorID int, reactedPostID, reactedCommentID *int) error {
+func (m *ReactionModel) Insert(liked, disliked bool, authorID int, reactedPostID, reactedCommentID *int) error {
 	// Validate that only one of reactedPostID or reactedCommentID is non-zero
 	if !isValidParent(*reactedPostID, *reactedCommentID) {
 		return fmt.Errorf("only one of ReactedPostID or ReactedCommentID must be non-zero")
@@ -170,7 +170,7 @@ func (m *ReactionModel) Upsert(liked, disliked bool, reactionID, authorID, react
 	}
 	//fmt.Println("Inserting a reaction (reactions.go :56)")
 
-	return m.Insert(liked, disliked, reactionID, authorID, &reactedPostID, &reactedCommentID)
+	return m.Insert(liked, disliked, authorID, &reactedPostID, &reactedCommentID)
 }
 
 // Exists helps avoid creating duplicate reactions by determining whether a reaction for the specific combination of AuthorID, PostID and the reaction itself - liked/disliked

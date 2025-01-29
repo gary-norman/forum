@@ -229,32 +229,34 @@ func (m *ReactionModel) CountReactions(reactedPostID, reactedCommentID int) (lik
 	//fmt.Println("likes:", likes)
 	//fmt.Println("dislikes:", dislikes)
 
-	return
+	return likes, dislikes, err
 }
 
 // GetReaction checks if a user has already reacted to a post or comment. It retrieves already existing reactions.
-func (m *ReactionModel) GetReaction(authorID int, reactedPostID *int, reactedCommentID *int) (*models.Reaction, error) {
+func (m *ReactionModel) GetReaction(authorID, reactedPostID, reactedCommentID int) (*models.Reaction, error) {
 	var reaction models.Reaction
 	var stmt string
 
 	// Build the SQL query depending on whether the reaction is to a post or comment
-	if reactedPostID != nil {
+	if reactedPostID != 0 {
 		stmt = `SELECT ID, Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID 
 				FROM Reactions 
 				WHERE AuthorID = ? AND 
 				      ReactedPostID = ?`
-	} else if reactedCommentID != nil {
+
+	} else if reactedCommentID != 0 {
 		stmt = `SELECT ID, Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID 
 				FROM Reactions 
 				WHERE AuthorID = ? AND 
 				      ReactedCommentID = ?`
 	} else {
+		log.Printf("Couldn't find the reaction with AuthorID: %v, reactedPostID: %v, reactedCommentID: %v\n", authorID, &reactedPostID, &reactedCommentID)
 		return nil, nil
 	}
 
 	// Query the database
 	row := m.DB.QueryRow(stmt, authorID, reactedPostID)
-	if reactedCommentID != nil {
+	if reactedCommentID != 0 {
 		row = m.DB.QueryRow(stmt, authorID, reactedCommentID)
 	}
 

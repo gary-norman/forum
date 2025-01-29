@@ -2,6 +2,7 @@ package sqlite
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/gary-norman/forum/internal/models"
 	"log"
@@ -206,4 +207,45 @@ func (m *CommentModel) Exists(content string, authorID, parentPostID, parentComm
 	var exists bool
 	err := m.DB.QueryRow(stmt, authorID, parentPostID, parentCommentID, content).Scan(&exists)
 	return exists, err
+}
+
+// GetReaction checks if a user has already reacted to a post or comment. It retrieves already existing reactions.
+func (m *CommentModel) GetComment(authorID int, reactedPostID int, reactedCommentID int) (*models.Reaction, error) {
+	var reaction models.Reaction
+	var stmt string
+
+	// Build the SQL query depending on whether the reaction is to a post or comment
+	if reactedPostID != 0 {
+		stmt = `SELECT ID, Created, AuthorID, CommentedPostID, CommentedCommentID, IsCommentable, IsFlagged 
+				FROM Comments 
+				WHERE AuthorID = ? AND 
+				      ReactedPostID = ?`
+	} else if reactedCommentID != 0 {
+		stmt = `SELECT ID, Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID 
+				FROM Reactions 
+				WHERE AuthorID = ? AND 
+				      ReactedCommentID = ?`
+	} else {
+		return nil, nil
+	}
+
+	// Query the database
+	row := m.DB.QueryRow(stmt, authorID, reactedPostID)
+	if reactedCommentID != 0 {
+		row = m.DB.QueryRow(stmt, authorID, reactedCommentID)
+	}
+
+	err := row.Scan(&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			// No reaction found
+			return nil, nil
+		}
+		// Other errors
+		log.Printf("Error fetching reaction: %v", err)
+		return nil, err
+	}
+
+	// Return the existing reaction
+	return &reaction, nil
 }

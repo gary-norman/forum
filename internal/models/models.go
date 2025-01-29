@@ -122,10 +122,9 @@ type Comment struct {
 	Content            string    `json:"content"`
 	Created            time.Time `json:"created"`
 	AuthorID           int       `json:"author_id"`
-	ChannelID          int       `json:"channel_id"`
-	IsReply            bool      `json:"is_reply"`
 	CommentedPostID    *int      `json:"commented_post_id,omitempty"`
 	CommentedCommentID *int      `json:"commented_comment_id,omitempty"`
+	IsCommentable      bool      `json:"is_commentable"`
 	IsFlagged          bool      `json:"is_flagged,omitempty"`
 }
 

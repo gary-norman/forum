@@ -1861,7 +1861,7 @@ main {
   }
 }
 
-.container-post-info {
+.container-post-info, .container-comment-info {
   display: flex;
   align-items: center;
   column-gap: 1.2rem;

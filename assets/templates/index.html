@@ -640,7 +640,8 @@
                               {{$userID = .CurrentUser.ID}}
                             {{end}}
                             {{range .Posts}} <!-- user page activity posts -->
-                            <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                            {{ $postID := .ID }}
+                            <div class="card" data-post-id="{{$postID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                             <div class="container-post-info">
                               {{ if (ne .AuthorAvatar "noimage") }}
                               <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
@@ -665,24 +666,24 @@
                       {{ end }}
                       <article class="cardContent">{{.Content}}</article>
                           <div class="button-row-wrap post-controls" >
-                              {{$status := reactionStatus $userID .ID 0}}
+                              {{$status := reactionStatus $userID $postID 0}}
                               <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
-                                  <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
+                                  <span class="btn-likes" data-like-ID="user-{{$postID}}">{{.Likes}}</span>
                               </button>
                               <!-- --- TODO invertoff -->
                               <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-                                  <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
+                                  <span class="btn-dislikes" data-dislike-ID="user-{{$postID}}">{{.Dislikes}}</span>
                               </button>
                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                           <span class="btn-reply">reply</span>
                         </button>
-                          <button id="share-button-{{.ID}}-activity" popovertarget="share-container-{{.ID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <button id="share-button-{{$postID}}-activity" popovertarget="share-container-{{$postID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                               <span class="btn-share">share</span>
                           </button>
                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                           <span class="btn-report">report</span>
                         </button>
-                          <div popover id="share-container-{{.ID}}-activity" class="scrollable-user">
+                          <div popover id="share-container-{{$postID}}-activity" class="scrollable-user">
                               <div class="share-container">
                                   <div class="button-row">
                                       <a href="/" target="_blank" class="share-logo facebook"></a>
@@ -693,25 +694,47 @@
                                       <a href="/" target="_blank" class="share-logo telegram"></a>
                                   </div>
                                   <div class="flex-space-between">
-                                      <label class="padded" for="copy-url-{{.ID}}-activity">Copy URL link</label>
+                                      <label class="padded" for="copy-url-{{$postID}}-activity">Copy URL link</label>
                                       <button class="btn-sm btn-icoonly">
                                           <span class="btn-copy" aria-label="Copy URL link"></span>
                                       </button>
                                   </div>
                                   <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
-                                         id="copy-url-{{.ID}}-activity" name="copy-url-{{.ID}}-activity"/>
+                                         id="copy-url-{{$postID}}-activity" name="copy-url-{{$postID}}-activity"/>
                               </div>
                           </div>
                       </div>
                     </div>
-
+                    {{ range .Comments}}
+                    {{ $commentID := .ID }}
                     <div class="container-comments">
                       <div class="reply-arrow"></div>
-                      <div class="card" data-comment-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
-
+                      <div class="card" data-comment-id="{{$commentID}}" data-channel-ID="{{$postID.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                        <form action="/edituser" enctype="multipart/form-data" method="POST">
+                          <h5 id="edit-comment-title-" class="form-title">edit your profile</h5>
+                          <div class="input-wrapper">
+                            <textarea id="bio" name="bio" placeholder="update your bio"></textarea>
+                            <label for="bio" class="user-label">update your bio</label>
+                          </div>
+                          <p>upload an image (optional)</p>
+                          <div id="drop-zone--user-image">
+                            <div id="uploaded-file--user-image"></div>
+                            <div class="drag-drop-text-wrapper">
+                              <span class="dragText">drag and drop your file, or</span>
+                              <!--                    <span class="button">browse</span>-->
+                              <input type="file" id="browse--user-image" name="file-drop" />
+                            </div>
+                          </div>
+                          <div class="cont-flex-row flex-center">
+                            <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
+                              <span>submit</span>
+                            </button>
+                          </div>
+                        </form>
                       </div>
                     </div>
-                    {{end}} <!-- user page activity posts -->
+                    {{end}} <!-- user page activity post COMMENTS -->
+                  {{end}} <!-- user page activity POSTS -->
 
                   </div>
                 </div>

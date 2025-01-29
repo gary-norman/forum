@@ -215,7 +215,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// Retrieve total likes and dislikes for each post
 	for i, post := range posts {
 		likes, dislikes, likesErr := app.reactions.CountReactions(post.ID, 0) // Pass 0 for CommentID if it's a post
-		fmt.Printf("PostID: %v, Likes: %v, Disikes: %v\n", posts[i].ID, likes, dislikes)
+		//fmt.Printf("PostID: %v, Likes: %v, Disikes: %v\n", posts[i].ID, likes, dislikes)
 		if likesErr != nil {
 			log.Printf("Error counting reactions: %v", likesErr)
 			likes, dislikes = 0, 0 // Default values if there is an error
@@ -574,7 +574,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if existingReaction != nil {
-		log.Printf("Existing Reaction: %+v", existingReaction)
+		//log.Printf("Existing Reaction: %+v", existingReaction)
 	}
 	// If there is an existing reaction, toggle it (i.e., remove it if the user reacts again to the same thing)
 	if existingReaction != nil {
@@ -597,7 +597,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// Otherwise, update the existing reaction
-		err = app.reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.ID, reactionData.AuthorID, postID, commentID)
+		err = app.reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 		if err != nil {
 			// Use your custom error message for update errors
 			http.Error(w, fmt.Sprintf(ErrorMsgs().Update, "storeReaction", err), http.StatusInternalServerError)

@@ -14,7 +14,7 @@ type CommentModel struct {
 // Upsert inserts or updates a reaction for a specific combination of AuthorID and the parent fields (ChannelID, ReactedPostID, ReactedCommentID). It uses Exists to determine if the reaction already exists.
 func (m *CommentModel) Upsert(content string, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
 	if !isValidParent(parentPostID, parentCommentID) {
-		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
+		return fmt.Errorf("only one of CommentedPostID, or CommentedCommentID must be non-zero")
 	}
 
 	// Check if the reaction exists
@@ -27,16 +27,16 @@ func (m *CommentModel) Upsert(content string, authorID, parentPostID, parentComm
 	if exists {
 		// If the reaction exists, update it
 		//fmt.Println("Updating a reaction which already exists (reactions.go :53)")
-		return m.Update(liked, disliked, reactionID, authorID, parentPostID, parentCommentID, isFlagged)
+		return m.Update(content, authorID, parentPostID, parentCommentID, isFlagged, isCommentable)
 	}
 	//fmt.Println("Inserting a reaction (reactions.go :56)")
 
-	return m.Insert(content, authorID, &parentPostID, &parentCommentID, isFlagged, isCommentable)
+	return m.Insert(content, authorID, parentPostID, parentCommentID, isFlagged, isCommentable)
 }
 
-func (m *CommentModel) Insert(content string, authorID int, parentPostID, parentCommentID *int, isFlagged, isCommentable bool) error {
+func (m *CommentModel) Insert(content string, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
 	// Validate that only one of parentPostID or parentCommentID is non-zero
-	if !isValidParent(*parentPostID, *parentCommentID) {
+	if !isValidParent(parentPostID, parentCommentID) {
 		return fmt.Errorf("only one of CommentedPostID or CommentedCommentID must be non-zero")
 	}
 
@@ -44,7 +44,7 @@ func (m *CommentModel) Insert(content string, authorID int, parentPostID, parent
 	tx, err := m.DB.Begin()
 	//fmt.Println("Beginning INSERT INTO transaction")
 	if err != nil {
-		return fmt.Errorf("failed to begin transaction for Insert in Reactions: %w", err)
+		return fmt.Errorf("failed to begin transaction for Insert in Comments: %w", err)
 	}
 
 	// Ensure rollback on failure
@@ -60,12 +60,12 @@ func (m *CommentModel) Insert(content string, authorID int, parentPostID, parent
 
 	// Define the SQL statement
 	stmt1 := `INSERT INTO Comments 
-		(Content, Created, AuthorID, CommentedPostID, CommentedCommentID, IsReply, IsFlagged)
-		VALUES (?, ?, ?, DateTime('now'), ?, ?)`
+		(Content, Created, AuthorID, CommentedPostID, CommentedCommentID, IsCommentable, IsFlagged)
+		VALUES (?, DateTime('now'), ?, ?, ?, ?, ?)`
 
 	// Execute the query, dereferencing the pointers for reactionID values
-	_, err = tx.Exec(stmt1, content, ,
-		dereferenceInt(parentPostID), dereferenceInt(parentCommentID))
+	_, err = tx.Exec(stmt1, content, authorID,
+		parentPostID, parentCommentID, isCommentable, isFlagged)
 	//fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, parentPostID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Insert query: %w", err)
@@ -75,7 +75,90 @@ func (m *CommentModel) Insert(content string, authorID int, parentPostID, parent
 	err = tx.Commit()
 	//fmt.Println("Committing INSERT INTO transaction")
 	if err != nil {
-		return fmt.Errorf("failed to commit transaction for Insert in Reactions: %w", err)
+		return fmt.Errorf("failed to commit transaction for Insert in Comments: %w", err)
+	}
+
+	return err
+}
+
+func (m *CommentModel) Update(content string, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
+	if !isValidParent(parentPostID, parentCommentID) {
+		return fmt.Errorf("only one of CommentedPostID, or CommentedCommentID must be non-zero")
+	}
+
+	// Begin the transaction
+	tx, err := m.DB.Begin()
+	//fmt.Println("Beginning UPDATE transaction")
+	if err != nil {
+		return fmt.Errorf("failed to begin transaction for Insert in Comments: %w", err)
+	}
+
+	// Ensure rollback on failure
+	defer func() {
+		if p := recover(); p != nil {
+			fmt.Println("Rolling back transaction")
+			_ = tx.Rollback()
+			panic(p)
+		} else if err != nil {
+			_ = tx.Rollback()
+		}
+	}()
+
+	// Define the SQL statement
+	stmt1 := `UPDATE Comments 
+		SET Content = ?, Created = DateTime('now'), IsCommentable = ?, IsFlagged = ?
+		WHERE AuthorID = ? AND CommentedPostID = ? AND CommentedCommentID = ?`
+
+	// Execute the query
+	_, err = tx.Exec(stmt1, content, isCommentable, isFlagged, authorID, parentPostID, parentCommentID)
+	//fmt.Printf("Updating Comments, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
+	if err != nil {
+		return fmt.Errorf("failed to execute Update query: %w", err)
+	}
+
+	// Commit the transaction
+	err = tx.Commit()
+	//fmt.Println("Committing UPDATE transaction")
+	if err != nil {
+		return fmt.Errorf("failed to commit transaction for Update in Comments: %w", err)
+	}
+
+	return err
+}
+
+// Delete removes a reaction from the database by ID
+func (m *CommentModel) Delete(commentID int) error {
+	// Begin the transaction
+	tx, err := m.DB.Begin()
+	//fmt.Println("Beginning DELETE transaction")
+	if err != nil {
+		return fmt.Errorf("failed to begin transaction for Delete in Comments: %w", err)
+	}
+
+	// Ensure rollback on failure
+	defer func() {
+		if p := recover(); p != nil {
+			fmt.Println("Rolling back transaction")
+			_ = tx.Rollback()
+			panic(p)
+		} else if err != nil {
+			_ = tx.Rollback()
+		}
+	}()
+
+	stmt1 := `DELETE FROM Comments WHERE ID = ?`
+	// Execute the query, dereferencing the pointers for ID values
+	_, err = m.DB.Exec(stmt1, commentID)
+	//fmt.Printf("Deleting from Reactions where commentID: %v\n", commentID)
+	if err != nil {
+		return fmt.Errorf("failed to execute Delete query: %w", err)
+	}
+
+	// Commit the transaction
+	err = tx.Commit()
+	//fmt.Println("Committing DELETE transaction")
+	if err != nil {
+		return fmt.Errorf("failed to commit transaction for Delete in Comments: %w", err)
 	}
 
 	return err

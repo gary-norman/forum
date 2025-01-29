@@ -51,9 +51,9 @@ func (m *ReactionModel) GetReactionStatus(authorID, reactedPostID, reactedCommen
 	return ReactionStatus{Liked: liked, Disliked: disliked}, nil
 }
 
-func (m *ReactionModel) Insert(liked, disliked bool, authorID int, reactedPostID, reactedCommentID *int) error {
+func (m *ReactionModel) Insert(liked, disliked bool, authorID, reactedPostID, reactedCommentID int) error {
 	// Validate that only one of reactedPostID or reactedCommentID is non-zero
-	if !isValidParent(*reactedPostID, *reactedCommentID) {
+	if !isValidParent(reactedPostID, reactedCommentID) {
 		return fmt.Errorf("only one of ReactedPostID or ReactedCommentID must be non-zero")
 	}
 
@@ -82,7 +82,7 @@ func (m *ReactionModel) Insert(liked, disliked bool, authorID int, reactedPostID
 
 	// Execute the query, dereferencing the pointers for reactionID values
 	_, err = tx.Exec(stmt1, liked, disliked, authorID,
-		dereferenceInt(reactedPostID), dereferenceInt(reactedCommentID))
+		reactedPostID, reactedCommentID)
 	//fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, reactedPostID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Insert query: %w", err)
@@ -106,7 +106,7 @@ func dereferenceInt(value *int) interface{} {
 	return *value
 }
 
-func (m *ReactionModel) Update(liked, disliked bool, reactionID, authorID, reactedPostID, reactedCommentID int) error {
+func (m *ReactionModel) Update(liked, disliked bool, authorID, reactedPostID, reactedCommentID int) error {
 	if !isValidParent(reactedPostID, reactedCommentID) {
 		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
 	}
@@ -134,7 +134,7 @@ func (m *ReactionModel) Update(liked, disliked bool, reactionID, authorID, react
              WHERE AuthorID = ? AND ReactedPostID = ? AND ReactedCommentID = ?`
 	//fmt.Printf("Updating Reactions, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
 
-	// Execute the query, dereferencing the pointers for reactionID values
+	// Execute the query
 	_, err = tx.Exec(stmt1, liked, disliked, authorID, reactedPostID, reactedCommentID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Update query: %w", err)
@@ -166,11 +166,11 @@ func (m *ReactionModel) Upsert(liked, disliked bool, reactionID, authorID, react
 	if exists {
 		// If the reaction exists, update it
 		//fmt.Println("Updating a reaction which already exists (reactions.go :53)")
-		return m.Update(liked, disliked, reactionID, authorID, reactedPostID, reactedCommentID)
+		return m.Update(liked, disliked, authorID, reactedPostID, reactedCommentID)
 	}
 	//fmt.Println("Inserting a reaction (reactions.go :56)")
 
-	return m.Insert(liked, disliked, authorID, &reactedPostID, &reactedCommentID)
+	return m.Insert(liked, disliked, authorID, reactedPostID, reactedCommentID)
 }
 
 // Exists helps avoid creating duplicate reactions by determining whether a reaction for the specific combination of AuthorID, PostID and the reaction itself - liked/disliked
@@ -297,10 +297,6 @@ func (m *ReactionModel) Delete(reactionID int) error {
 	// Execute the query, dereferencing the pointers for ID values
 	_, err = m.DB.Exec(stmt1, reactionID)
 	//fmt.Printf("Deleting from Reactions where reactionID: %v\n", reactionID)
-	if err != nil {
-		return fmt.Errorf("failed to execute Delete query: %w", err)
-	}
-
 	if err != nil {
 		return fmt.Errorf("failed to execute Delete query: %w", err)
 	}

@@ -618,7 +618,7 @@ a:active {
   display: flex;
   flex-direction: row;
   gap: 4.8rem;
-  width: calc(100dvw - 32rem);
+  width: calc(100dvw - 30.4rem);
   height: 20dvh;
   /*border: 2px hotpink solid;*/
 }

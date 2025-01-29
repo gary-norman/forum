@@ -401,15 +401,21 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 	//models.JsonError(templateData)
-
-	if tpl == nil {
-		http.Error(w, "Template is not initialized", http.StatusInternalServerError)
+	tpl, err := GetTemplate()
+	if err != nil {
+		log.Printf(ErrorMsgs().Parse, "./assets/templates/index.html", "getHome", err)
 		return
 	}
 
-	err := tpl.Execute(w, nil)
-	if err != nil {
-		http.Error(w, "Error executing template", http.StatusInternalServerError)
+	t := tpl.Lookup("index.html")
+	//if t == nil {
+	//	log.Printf("Template not found: index.html")
+	//	return
+	//}
+
+	if t == nil {
+		http.Error(w, "Template is not initialized", http.StatusInternalServerError)
+		return
 	}
 
 	//tpl, err := GetTemplate()
@@ -427,7 +433,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	//}
 
 	data := templateData
-	execErr := tpl.Execute(w, data)
+	execErr := t.Execute(w, data)
 	if execErr != nil {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return
@@ -463,14 +469,14 @@ func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
-	t, parseErr := template.ParseFiles("./assets/templates/posts.create.html")
+	tpl, parseErr := template.ParseFiles("./assets/templates/posts.create.html")
 	if parseErr != nil {
 		http.Error(w, parseErr.Error(), 500)
 		log.Printf(ErrorMsgs().Parse, "./assets/templates/posts.create.html", "createPost", parseErr)
 		return
 	}
 
-	execErr := t.Execute(w, nil)
+	execErr := tpl.Execute(w, nil)
 	if execErr != nil {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return

@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -41,14 +40,14 @@ func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
 }
 
-// Global template variable
-var tpl *template.Template
-
-func loadTemplates() error {
-	var err error
-	tpl, err = template.ParseFiles("assets/templates/index.html")
-	return err
-}
+//// Global template variable
+//var tpl *template.Template
+//
+//func loadTemplates() error {
+//	var err error
+//	tpl, err = template.ParseFiles("assets/templates/index.html")
+//	return err
+//}
 
 func initializeApp() (*app, func(), error) {
 	// Open database connection
@@ -103,16 +102,26 @@ func initializeApp() (*app, func(), error) {
 
 func main() {
 	// Load templates at startup
-	if err := loadTemplates(); err != nil {
-		log.Fatalf("Failed to load templates: %v", err)
-	}
+
+	//tpl, err := GetTemplate()
+	//if err != nil {
+	//	log.Printf(ErrorMsgs().Parse, "./assets/templates/index.html", "main", err)
+	//	return
+	//}
+	//
+	//t := tpl.Lookup("index.html")
+	//if t == nil {
+	//	log.Printf("Template not found: index.html")
+	//	return
+	//}
+
 	// Initialize the app
 	app, cleanup, err := initializeApp()
 	if err != nil {
 		log.Fatalf("Failed to initialize app: %v", err)
 	}
 	defer cleanup() // Ensure DB closes on normal exit
-
+	app.init()
 	// Handle shutdown signals (Ctrl+C, system shutdown)
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)

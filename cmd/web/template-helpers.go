@@ -6,6 +6,8 @@ import (
 	"math/rand"
 )
 
+// FIXME figure out where to put this
+
 var Template *template.Template
 
 // init Function to initialise the custom template functions
@@ -17,7 +19,7 @@ func (app *app) init() {
 		"decrement":      Decrement,
 		"same":           CheckSameName,
 		"reactionStatus": app.reactions.GetReactionStatus,
-	}).ParseGlob("./assets/templates/*.html"))
+	}).ParseGlob("assets/templates/*.html"))
 }
 
 // CheckSameName Function to check if the member and artist names are the same, for go templates

@@ -56,6 +56,11 @@ type Channel struct {
 	IsMuted     bool `json:"isMuted"`
 	IsFlagged   bool `json:"isFlagged,omitempty"`
 }
+
+type ChannelWithDaysAgo struct {
+	Channel
+	TimeSince string
+}
 type ChannelData struct {
 	ChannelName string `json:"channelName"`
 	ChannelID   string `json:"channelId"`
@@ -185,9 +190,11 @@ type TemplateData struct {
 	RandomUser             User
 	CurrentUser            *User
 	CurrentUserName        string
+	CurrentUserID          int
 	Channels               []Channel
 	AllChannels            []Channel
-	RandomChannel          Channel
+	RandomChannel          ChannelWithDaysAgo
+	RandomChannelOwnerName string
 	OwnedChannels          []Channel
 	JoinedChannels         []Channel
 	OwnedAndJoinedChannels []Channel

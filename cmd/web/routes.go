@@ -31,7 +31,7 @@ func (app *app) routes() http.Handler {
 	mux.HandleFunc("POST /protected", app.protected)
 	mux.HandleFunc("POST /store-reaction", app.storeReaction)
 	mux.HandleFunc("POST /edituser", app.editUserDetails)
-	mux.HandleFunc("POST /channels/membership", app.storeMembership)
+	mux.HandleFunc("POST /channels/join", app.storeMembership)
 
 	return mux
 }

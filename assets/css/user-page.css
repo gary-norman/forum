@@ -69,25 +69,8 @@
         z-index: calc(var(--z-index-banner) + 1);
     }
 }
-
-
-
 .page-profile {
     /*z-index: 999;*/
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     & .page-profile-pic {
         width         : 8rem;
         height        : 8rem;
@@ -98,7 +81,7 @@
 
     & h2 {
         overflow: hidden;
-        width: fit-content;
+        width: calc-size(fit-content, size + 2.6rem);
         color: var(--color-fg-1);
         text-overflow: ellipsis;
         font-style: normal;

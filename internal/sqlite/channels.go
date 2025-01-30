@@ -18,29 +18,52 @@ func (m *ChannelModel) Insert(ownerID int, name, description, avatar, banner str
 }
 
 func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]models.Channel, error) {
-	stmt := "SELECT ID, OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted FROM Channels WHERE ? = ?"
-	rows, queryErr := m.DB.Query(stmt, column, ID)
+	validColumns := map[string]bool{
+		"ID":          true,
+		"OwnerID":     true,
+		"Name":        true,
+		"Avatar":      true,
+		"Banner":      true,
+		"Description": true,
+		"Created":     true,
+		"Privacy":     true,
+		"IsFlagged":   true,
+		"IsMuted":     true,
+	}
+
+	if !validColumns[column] {
+		return nil, fmt.Errorf("invalid column name: %s", column)
+	}
+
+	// Safely construct the query
+	stmt := fmt.Sprintf(
+		"SELECT ID, OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted FROM Channels WHERE %s = ?",
+		column,
+	)
+	rows, queryErr := m.DB.Query(stmt, ID)
 	if queryErr != nil {
 		return nil, queryErr
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+			log.Printf(ErrorMsgs().Close, rows, "OwnedOrJoinedByCurrentUser", closeErr)
 		}
 	}()
 	var channels []models.Channel
 	for rows.Next() {
-		p := models.Channel{}
-		scanErr := rows.Scan(&p.ID, &p.OwnerID, &p.Name, &p.Avatar, &p.Banner, &p.Description, &p.Created, &p.Privacy, &p.IsFlagged, &p.IsMuted)
+		var c models.Channel
+		scanErr := rows.Scan(&c.ID, &c.OwnerID, &c.Name, &c.Avatar, &c.Banner, &c.Description, &c.Created, &c.Privacy, &c.IsFlagged, &c.IsMuted)
 		if scanErr != nil {
 			return nil, scanErr
 		}
-		channels = append(channels, p)
+		channels = append(channels, c)
 	}
 	if rowsErr := rows.Err(); rowsErr != nil {
 		return nil, rowsErr
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned/joined by current user", len(channels))
+	if column == "OwnerID" {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned by current user", len(channels))
+	}
 	return channels, nil
 }
 

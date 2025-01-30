@@ -27,6 +27,8 @@ const logoutFormButton = document.querySelector('#logout');
 const btnLogin = document.querySelectorAll('[id^="btn_login-"]');
 const btnRegister = document.querySelectorAll('[id^="btn_register-"]');
 const btnForgot = document.querySelector('#btn_forgot');
+// join channel
+const joinChannelButton = document.querySelector('#join-channel-btn')
 //input fields with fancy animations
 const styledInputs = document.querySelectorAll(
     'textarea, input[type="text"], input[type="password"], input[type="email"]'
@@ -513,6 +515,46 @@ if (logoutFormButton) {
             });
     })
 }
+joinChannelButton.addEventListener('submit', function (event) {
+    event.preventDefault();
+    // const form = event.target;
+    // const formData = new FormData(form); // Collect form data
+    const csrfToken = getCSRFToken();
+
+    console.log("csrfToken: ", csrfToken)
+
+    fetch('/channels/join', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-csrf-token': csrfToken
+        },
+        body: JSON.stringify( {
+            channelId: document.getElementById('join-channel-id').value,
+            agree: document.getElementById('rules-agree-checkbox').value,
+        }),
+        cache: 'no-store'
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json(); // Parse JSON response
+            } else {
+                throw new Error('Join channel failed.');
+            }
+        })
+        .then(data => {
+            // Show notification based on the response from the server
+            showMainNotification(data.message);
+            // Optional: Redirect the user after showing the notification
+            setTimeout(() => {
+                window.location.href = '/'; // Replace with your desired location
+            }, 3500);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMainNotification('An error occurred while joining channel.');
+        });
+})
 
 // SECTION ----- drag and drop ----
 // get user image from manual click

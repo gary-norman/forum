@@ -263,6 +263,56 @@ a:active {
   justify-self: center;
   align-self: center;
 }
+
+/* ---- flex containers ---- */
+.cont-flex-row {
+  display: flex;
+}
+
+.drag-drop-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  /* gap: 0.8rem; */
+  /* align-content: center; */
+}
+
+.main-content {
+  display: flex;
+  flex-grow: 1;
+  /*gap     : 1.2rem;*/
+}
+.container-content {
+  display: flex;
+  flex-direction: row;
+  gap: 4.8rem;
+  width: calc(100dvw - 32rem);
+  height: 20dvh;
+  /*border: 2px hotpink solid;*/
+}
+
+.content {
+  /* 100% of container - right panel - padding*/
+  width: calc(100% - 27.2rem - 9.6rem);
+  height: 100%;
+  z-index: var(--z-index-content);
+  padding: 0 2.4rem;
+  overflow: hidden;
+  /*border: 3px cornflowerblue solid;*/
+}
+
+.cont-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-align-c {
+  display: flex;
+  justify-content: center;
+  column-gap: 1.2rem;
+}
+
 /*SECTION ----notifications ---*/
 #notification-main {
   display: none;
@@ -477,8 +527,8 @@ a:active {
     padding: 0 0 0.8rem 0;
   }
 }
-/* ---- lab test colors ---- */
 
+/* ---- lab test colors ---- */
 .hexGRN {
   background: var(--color-hl-green);
   justify-content: space-between;
@@ -560,58 +610,6 @@ a:active {
     var(--color-hl-pink-lab)
   );
 }
-
-/* ---- flex containers ---- */
-
-.cont-flex-row {
-  display: flex;
-}
-
-.drag-drop-text-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  /* gap: 0.8rem; */
-  /* align-content: center; */
-}
-
-.main-content {
-  display: flex;
-  flex-grow: 1;
-  /*gap     : 1.2rem;*/
-}
-.container-content {
-  display: flex;
-  flex-direction: row;
-  gap: 4.8rem;
-  width: calc(100dvw - 32rem);
-  height: 20dvh;
-  /*border: 2px hotpink solid;*/
-}
-
-.content {
-  /* 100% of container - right panel - padding*/
-  width: calc(100% - 27.2rem - 9.6rem);
-  height: 100%;
-  z-index: var(--z-index-content);
-  padding: 0 2.4rem;
-  overflow: hidden;
-  /*border: 3px cornflowerblue solid;*/
-}
-
-.cont-flex-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.flex-align-c {
-  display: flex;
-  justify-content: center;
-  column-gap: 1.2rem;
-}
-
-/* ---------------------------------------- */
 
 /* prevent special form element styling  */
 
@@ -942,7 +940,10 @@ input[type="checkbox"]:checked {
 .btn-channel {
   anchor-name: --channel-button;
 }
-#form-post, #form-channel {
+.btn-join-channel {
+  anchor-name: --join-channel-button;
+}
+#form-post, #form-channel, #form-join-channel {
   position: absolute;
   inset: auto;
   margin: 0;
@@ -1000,8 +1001,19 @@ input[type="checkbox"]:checked {
   bottom: anchor(bottom);
   left: anchor(right);
 }
+#form-join-channel {
+  top: 15rem;
+  right: 5rem;
+  position-anchor: --join-channel-button;
+  bottom: anchor(bottom);
+  right: anchor(left);
+}
 
-  .wrapper-form, .share-container {
+.text-join-channel {
+  font-size: 1.2rem;
+}
+
+.wrapper-form, .share-container {
   display: flex;
   flex-direction: column;
   background: var(--color-bg-2);
@@ -1011,207 +1023,10 @@ input[type="checkbox"]:checked {
   border: 1px solid var(--color-bg-3);
   border-radius: 1rem;
   box-shadow: rgb(0 0 0 / 16%) 0 3px 6px, rgb(0 0 0 / 23%) 0 3px 6px;
-
   & > label,
   & > p {
     margin: 0 0 -0.8rem 0.8rem;
   }
-  /*& * {*/
-  /*  margin : 0.4rem;*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /*}*/
 }
 
 .wrapper-form {
@@ -1657,6 +1472,20 @@ hr.solid {
     & div:nth-of-type(2) {
       display: flex;
     }
+  }
+}
+.private-channel {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: -0.2rem;
+    width : 2.4rem;
+    aspect-ratio: 1 / 1;
+    background: url('/assets/icons/lock_24.svg');
+    z-index: 2;
   }
 }
 

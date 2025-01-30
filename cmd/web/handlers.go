@@ -48,6 +48,11 @@ func getRandomChannel(channelSlice []models.Channel) models.Channel {
 	channel := channelSlice[rndInt]
 	return channel
 }
+func getRandomUser(userSlice []models.User) models.User {
+	rndInt := rand.IntN(len(userSlice))
+	user := userSlice[rndInt]
+	return user
+}
 
 func (app *app) register(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("register_user")
@@ -356,6 +361,11 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	// SECTION --- user ---
+	allUsers, allUsersErr := app.users.All()
+	if allUsersErr != nil {
+		log.Printf(ErrorMsgs().Query, "users.All", allUsersErr)
+	}
+	randomUser := getRandomUser(allUsers)
 	currentUser, currentUserErr := app.GetLoggedInUser(r)
 	if currentUserErr != nil {
 		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
@@ -371,7 +381,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	if allChanErr != nil {
 		log.Printf(ErrorMsgs().Query, "channels.All", allChanErr)
 	}
-	// TODO fetch a random channel from all
 	randomChannel := getRandomChannel(allChannels)
 	var ownedChannels []models.Channel
 	var ownedChannelsErr error
@@ -408,6 +417,8 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		OwnedAndJoinedChannels: append(ownedChannels, joinedChannels...),
 		OwnedChannels:          ownedChannels,
 		JoinedChannels:         joinedChannels,
+		AllUsers:               allUsers,
+		RandomUser:             randomUser,
 		CurrentUser:            currentUser,
 		CurrentUserName:        currentUserName,
 		Posts:                  postsWithDaysAgo,

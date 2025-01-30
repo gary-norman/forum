@@ -670,14 +670,16 @@ input[type="email"] {
   &:focus-visible::placeholder {
     color: transparent;
   }
+}
+.user-interacted > * {
   &:focus-visible ~ label {
     flex-basis: auto;
     position: absolute;
-  /*background: var(--color-hl-pink);*/
-  /*left: 1rem;*/
-  /*font-size: 1rem;*/
-  /*top: 0;*/
-  animation: form-label 300ms ease-in-out forwards;
+    /*background: var(--color-hl-pink);*/
+    /*left: 1rem;*/
+    /*font-size: 1rem;*/
+    /*top: 0;*/
+    animation: form-label 300ms ease-in-out forwards;
   }
   /*TODO prevent this happening on form popop */
   &:not(:focus-visible) ~ label {

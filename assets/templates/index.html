@@ -583,7 +583,7 @@
 <!--                        <div class="page-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>-->
                         <div class="page-pic profile-pic"></div>
                         <div>
-                            <h2>Eyesome578</h2>
+                            <h2>{{ .RandomUser.Username }}</h2>
                             <div>
                                 <button class="btn-md btn-icotext btn-follows btn-invert-never">
                                     <span class="btn-following">72</span>
@@ -882,7 +882,7 @@
                 <div class="right-panel ">
                     <div class="right-panel-content scroll-down">
                         <div class="right-panel-name-container flex-space-between">
-                            <h4 class="right-panel-name">{{ if ne .CurrentUserName "nouser"}}{{.CurrentUserName}}{{ else }}EyeSome578{{ end }}</h4>
+                            <h4 class="right-panel-name">{{ if ne .CurrentUserName "nouser"}}{{.CurrentUserName}}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
                           {{ if (ne .CurrentUserName "nouser") }}
                             <button class="btn-sm btn-icoonly">
                                 <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
@@ -907,12 +907,11 @@
                         <div class="right-panel-bio-container ">
                             <div class="right-panel-bio flex-space-between">
                                 <label for="user-bio-content" class="padded">{{ if ne .CurrentUserName "nouser"}}Edit your bio{{ else }}User bio{{ end }}</label>
-                              {{ if (ne .CurrentUserName "nouser") }}
-                              <button class="btn-sm btn-icoonly">
+                                {{ if (ne .CurrentUserName "nouser") }}
+                                <button class="btn-sm btn-icoonly">
                                     <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                                 </button>
                               {{ end }} <!-- "nouser" check -->
-
                             </div>
                             <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Bio }}</textarea>
                         </div>

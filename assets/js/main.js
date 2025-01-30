@@ -27,6 +27,15 @@ const logoutFormButton = document.querySelector('#logout');
 const btnLogin = document.querySelectorAll('[id^="btn_login-"]');
 const btnRegister = document.querySelectorAll('[id^="btn_register-"]');
 const btnForgot = document.querySelector('#btn_forgot');
+//input fields with fancy animations
+const styledInputs = document.querySelectorAll(
+    'textarea, input[type="text"], input[type="password"], input[type="email"]'
+)
+// modals
+const modals = document.querySelectorAll(".modal");
+// popovers
+const popovers = document.querySelectorAll("[popover]")
+console.log("popovers: ", popovers)
 // login/register forms
 const formLogin = document.querySelector('#form-login');
 const formRegister = document.querySelector('#form-register');
@@ -92,6 +101,7 @@ let filename;
 //
 // });
 document.addEventListener('DOMContentLoaded', function () {
+    toggleUserInteracted("add");
     actButtonContainer = document.querySelector('#activity-bar');
     if (!actButtonContainer) {
         console.error('Activity bar not found');
@@ -126,6 +136,67 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // SECTION ----- functions ------
+// toggle user-interacted class to input fields to prevent label animation before they are selected
+function toggleUserInteracted(action) {
+    styledInputs.forEach(input => {
+        if (action === "add") {
+        input.addEventListener("focus", function () {
+            this.closest('.input-wrapper').classList.add("user-interacted");
+        });
+        } if (action === "remove") {
+            document.querySelectorAll('.input-wrapper').forEach(element => {
+                element.classList.remove("user-interacted");
+            })
+        }
+    });
+}
+// TODO get this popover animataion reset to work
+// revert to original state if popovers are closed
+// popovers.forEach(popover => {
+// const observer = new MutationObserver(mutations => {
+//     mutations.forEach(mutation => {
+//         if (mutation.attributeName === "open") {
+//             const popover = mutation.target;
+//             if (!popover.hasAttribute("open")) {
+//                 console.log("Popover closed:", popover);
+//                 toggleUserInteracted("remove")
+//             }
+//         }
+//     });
+// });
+//
+//     observer.observe(popover, { attributes: true, attributeFilter: ["open"] });
+// });
+
+document.addEventListener("click", () => {
+    popovers.forEach(popover => {
+        if (popover.matches(":popover-open")) {
+            console.log("Open popover: ", popover);
+            popover.addEventListener('toggle', () => {toggleUserInteracted("remove")})
+        }
+    });
+});
+
+
+
+// revert to original state if modals are closed
+modals.forEach(modal => {
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            if (mutation.attributeName === "style") {
+                const currentDisplay = getComputedStyle(modal).display;
+                if (currentDisplay === "none") {
+                    console.log("Modal closed:", modal);
+                    toggleUserInteracted("remove")
+                }
+            }
+        });
+    });
+
+    observer.observe(modal, { attributes: true, attributeFilter: ["style"] });
+});
+
+
 // organize z-indices
 const makeZIndexes = (layers) =>
     layers.reduce((agg, layerName, index) => {

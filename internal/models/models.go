@@ -181,6 +181,8 @@ type NotifyPlaceholder struct {
 }
 
 type TemplateData struct {
+	AllUsers               []User
+	RandomUser             User
 	CurrentUser            *User
 	CurrentUserName        string
 	Channels               []Channel

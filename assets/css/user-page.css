@@ -74,6 +74,19 @@
 
 .page-profile {
     /*z-index: 999;*/
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     & .page-profile-pic {
         width         : 8rem;
@@ -85,6 +98,7 @@
 
     & h2 {
         overflow: hidden;
+        width: fit-content;
         color: var(--color-fg-1);
         text-overflow: ellipsis;
         font-style: normal;

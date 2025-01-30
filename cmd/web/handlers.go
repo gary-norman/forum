@@ -378,6 +378,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	var joinedChannels []models.Channel
 	var joinedChannelsErr error
 
+	// get owned and joined channels of current user
 	if userLoggedIn == true {
 		currentUserName = currentUser.Username
 		currentUserAvatar = currentUser.Avatar
@@ -395,10 +396,11 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Query, "user channels", joinedChannelsErr)
 		}
 	}
-	//
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "Owned Channels", ownedChannels)
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
+
+	// TODO get channel moderators
+
+	// TODO get channel posts
+
 	// SECTION -- template ---
 	templateData := models.TemplateData{
 		AllChannels:            allChannels,

@@ -1391,9 +1391,15 @@ hr.solid {
   padding: 0 1.2rem;
   & > div:nth-child(2) {
     display: flex;
+    width: max-content;
     flex-direction: column;
     align-items: center;
     padding: 0 0 0 1rem;
+    
+    
+    
+    
+    
     & > div {
       display: flex;
       flex-direction: row;
@@ -1964,7 +1970,7 @@ main {
     align-items: center;
     gap: 1.2rem;
     align-self: stretch;
-    & > * {
+    & > div {
       width: 100%;
       & > .sidebar-block {
         padding: 0.4rem 0;

@@ -47,7 +47,7 @@ type Channel struct {
 	ID          int       `json:"id"`
 	OwnerID     int       `json:"ownerId"`
 	Name        string    `json:"name"`
-	Avatar      string    `json:"avatar,omitempty"` // Store UUID as string
+	Avatar      string    `json:"avatar,omitempty"`
 	Banner      string    `json:"banner,omitempty"`
 	Description string    `json:"description"`
 	Created     time.Time `json:"created"`

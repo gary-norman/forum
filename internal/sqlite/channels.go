@@ -40,7 +40,7 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]mode
 	if rowsErr := rows.Err(); rowsErr != nil {
 		return nil, rowsErr
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels", len(channels))
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned/joined by current user", len(channels))
 	return channels, nil
 }
 
@@ -70,7 +70,7 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels", len(Channels))
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Total channels", len(Channels))
 	return Channels, nil
 }
 

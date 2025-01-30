@@ -40,7 +40,7 @@ func (m *MembershipModel) UserMemberships(userID int) ([]models.Membership, erro
 	if rowsErr := rows.Err(); rowsErr != nil {
 		return nil, rowsErr
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels", len(memberships))
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Members of this channel", len(memberships))
 	return memberships, nil
 }
 

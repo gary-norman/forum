@@ -39,6 +39,9 @@ type app struct {
 func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
 }
+func Colors() *models.Colors {
+	return models.CreateColors()
+}
 
 //// Global template variable
 //var tpl *template.Template
@@ -138,7 +141,8 @@ func main() {
 	go func() {
 		// Log server listening messages
 		log.Printf(ErrorMsgs().KeyValuePair, "Starting server on port", port)
-		log.Printf(ErrorMsgs().ConnSuccess, "http://localhost"+addr)
+		address := "http://localhost" + addr
+		log.Printf(ErrorMsgs().ConnSuccess, address)
 		if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
 			fmt.Printf(ErrorMsgs().ConnInit, srv.Addr, "srv.ListenAndServe")
 			log.Fatalf("HTTP server error: %v", err)
@@ -158,5 +162,5 @@ func main() {
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Fatalf(ErrorMsgs().Shutdown, err)
 	}
-	log.Printf("Graceful shutdown complete.")
+	log.Printf(Colors().Green + "Graceful shutdown complete." + Colors().Reset)
 }

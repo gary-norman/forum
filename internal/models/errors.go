@@ -58,6 +58,7 @@ type Errors struct {
 	Post         string
 	Printf       string
 	Protected    string
+	// Query: Unable to query "v" with error "v"
 	Query        string
 	Read         string
 	RetrieveFile string

@@ -184,6 +184,8 @@ type TemplateData struct {
 	CurrentUser            *User
 	CurrentUserName        string
 	Channels               []Channel
+	AllChannels            []Channel
+	RandomChannel          Channel
 	OwnedChannels          []Channel
 	JoinedChannels         []Channel
 	OwnedAndJoinedChannels []Channel

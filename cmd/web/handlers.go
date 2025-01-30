@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"io"
 	"log"
+	"math/rand/v2"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -39,6 +40,13 @@ func isValidPassword(password string) bool {
 		return false
 	}
 	return true
+}
+
+// TODO use interface to get and return any type
+func getRandomChannel(channelSlice []models.Channel) models.Channel {
+	rndInt := rand.IntN(len(channelSlice))
+	channel := channelSlice[rndInt]
+	return channel
 }
 
 func (app *app) register(w http.ResponseWriter, r *http.Request) {
@@ -309,6 +317,7 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	userLoggedIn := true
+	// SECTION --- posts ---
 	posts, postsErr := app.posts.All()
 	if postsErr != nil {
 		http.Error(w, postsErr.Error(), 500)
@@ -317,8 +326,8 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// Retrieve total likes and dislikes for each post
 	for i, post := range posts {
 		likes, dislikes, likesErr := app.reactions.CountReactions(post.ChannelID, post.ID, 0) // Pass 0 for CommentID if it's a post
-		fmt.Println("Likes:", likes)
-		fmt.Println("Dislikes:", dislikes)
+		//fmt.Println("Likes:", likes)
+		//fmt.Println("Dislikes:", dislikes)
 		if likesErr != nil {
 			log.Printf("Error counting reactions: %v", likesErr)
 			likes, dislikes = 0, 0 // Default values if there is an error
@@ -346,21 +355,29 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			TimeSince: TimeSince,
 		}
 	}
-
+	// SECTION --- user ---
 	currentUser, currentUserErr := app.GetLoggedInUser(r)
 	if currentUserErr != nil {
 		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
 		log.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
 		userLoggedIn = false
 	}
+	currentUserName := "nouser"
+	var currentUserAvatar string
+	var currentUserBio string
+
+	// SECTION --- channels --
+	allChannels, allChanErr := app.channels.All()
+	if allChanErr != nil {
+		log.Printf(ErrorMsgs().Query, "channels.All", allChanErr)
+	}
+	// TODO fetch a random channel from all
+	randomChannel := getRandomChannel(allChannels)
 	var ownedChannels []models.Channel
 	var ownedChannelsErr error
 	var joinedChannels []models.Channel
 	var joinedChannelsErr error
 
-	currentUserName := "nouser"
-	var currentUserAvatar string
-	var currentUserBio string
 	if userLoggedIn == true {
 		currentUserName = currentUser.Username
 		currentUserAvatar = currentUser.Avatar
@@ -378,12 +395,14 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Query, "user channels", joinedChannelsErr)
 		}
 	}
-
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Owned Channels", ownedChannels)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
-
+	//
+	//fmt.Printf(ErrorMsgs().KeyValuePair, "Owned Channels", ownedChannels)
+	//fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
+	//fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
+	// SECTION -- template ---
 	templateData := models.TemplateData{
+		AllChannels:            allChannels,
+		RandomChannel:          randomChannel,
 		OwnedAndJoinedChannels: append(ownedChannels, joinedChannels...),
 		OwnedChannels:          ownedChannels,
 		JoinedChannels:         joinedChannels,
@@ -403,7 +422,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	//models.JsonError(templateData)
 	tpl, err := GetTemplate()
 	if err != nil {
-		log.Printf(ErrorMsgs().Parse, "./assets/templates/index.html", "getHome", err)
+		log.Printf(ErrorMsgs().Parse, "templates", "getHome", err)
 		return
 	}
 
@@ -417,20 +436,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Template is not initialized", http.StatusInternalServerError)
 		return
 	}
-
-	//tpl, err := GetTemplate()
-	//if err != nil {
-	//	http.Error(w, err.Error(), 500)
-	//	log.Printf(ErrorMsgs().Parse, "/assets/templates/index.html", "getHome", err)
-	//	return
-	//}
-	//
-	//t := tpl.Lookup("index.html")
-	//if t == nil {
-	//	http.Error(w, "template not found: index.html", 500)
-	//	log.Printf("Template not found: index.html")
-	//	return
-	//}
 
 	data := templateData
 	execErr := t.Execute(w, data)

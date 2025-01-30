@@ -121,7 +121,10 @@ func main() {
 		log.Fatalf("Failed to initialize app: %v", err)
 	}
 	defer cleanup() // Ensure DB closes on normal exit
+
+	// initialise templates
 	app.init()
+
 	// Handle shutdown signals (Ctrl+C, system shutdown)
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)

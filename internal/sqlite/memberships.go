@@ -18,7 +18,8 @@ func (m *MembershipModel) Insert(userID, channelID int) error {
 }
 
 func (m *MembershipModel) UserMemberships(userID int) ([]models.Membership, error) {
-	stmt := "SELECT ID, UserID, ChannelID, Created FROM Memberships WHERE ID = ?"
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Checking memberships for UserID", userID)
+	stmt := "SELECT ID, UserID, ChannelID, Created FROM Memberships WHERE UserID = ?"
 	rows, queryErr := m.DB.Query(stmt, userID)
 	if queryErr != nil {
 		return nil, queryErr
@@ -40,7 +41,7 @@ func (m *MembershipModel) UserMemberships(userID int) ([]models.Membership, erro
 	if rowsErr := rows.Err(); rowsErr != nil {
 		return nil, rowsErr
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Members of this channel", len(memberships))
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels joined by current user", len(memberships))
 	return memberships, nil
 }
 

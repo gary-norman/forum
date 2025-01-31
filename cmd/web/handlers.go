@@ -185,10 +185,10 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	login := credentials.Username
+	password := credentials.Password
 	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n"+Colors.Reset, login)
 	fmt.Printf(ErrorMsgs().Divider)
 
-	password := credentials.Password
 	user, getUserErr := app.users.GetUserFromLogin(login, "login")
 	if getUserErr != nil {
 		log.Printf(ErrorMsgs().NotFound, "either", login, "login > GetUserFromLogin", getUserErr)
@@ -248,6 +248,8 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
+	fmt.Println(Colors().Orange + "Checking if this user is a member of this channel" + Colors().Reset)
+	fmt.Printf(ErrorMsgs().Divider)
 	var channels []models.Channel
 	for _, membership := range memberships {
 		channel, err := app.channels.OwnedOrJoinedByCurrentUser(membership.ChannelID, "ID")
@@ -256,7 +258,11 @@ func (app *app) JoinedByCurrentUser(memberships []models.Membership) ([]models.C
 		}
 		channels = append(channels, channel[0])
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels joined by current user", len(channels))
+	if len(channels) > 0 {
+		fmt.Printf(Colors().Green + "Current user is a member of this channel" + Colors().Reset)
+	} else {
+		fmt.Printf(Colors().Red + "Current user is not a member of this channel" + Colors().Reset)
+	}
 	return channels, nil
 }
 
@@ -428,7 +434,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
 		}
 		joinedChannels, joinedChannelsErr = app.JoinedByCurrentUser(memberships)
-		if ownedChannelsErr != nil {
+		if joinedChannelsErr != nil {
 			log.Printf(ErrorMsgs().Query, "user joined channels", joinedChannelsErr)
 		}
 	}
@@ -754,16 +760,16 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		createMembershipData.UserID,
 		createMembershipData.ChannelID,
 	)
-
 	if insertErr != nil {
 		log.Printf(ErrorMsgs().Post, insertErr)
 		http.Error(w, insertErr.Error(), 500)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
+	w.WriteHeader(http.StatusOK)
 	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-		"code":    http.StatusAccepted,
+		"code":    http.StatusOK,
 		"message": fmt.Sprintf("Welcome to %v!", channel.Name),
 	})
 	if encErr != nil {
@@ -771,6 +777,7 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
 func (app *app) requestMembership(w http.ResponseWriter, r *http.Request, userID, channelID int) {
 
 }

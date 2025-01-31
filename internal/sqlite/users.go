@@ -221,7 +221,7 @@ func (m *UserModel) GetUserByEmail(email, calledBy string) (*models.User, error)
 // TODO accept an interface for any given value
 
 // GetSingleUserValue returns the string of the column specified in output, which should be entered in all lower case
-func (m *UserModel) GetSingleUserValue(ID int, column, output string) (string, error) {
+func (m *UserModel) GetSingleUserValue(ID int, searchColumn, outputColumn string) (string, error) {
 	validColumns := map[string]bool{
 		"ID":             true,
 		"Username":       true,
@@ -236,12 +236,12 @@ func (m *UserModel) GetSingleUserValue(ID int, column, output string) (string, e
 		"Created":        true,
 		"IsFlagged":      true,
 	}
-	if !validColumns[column] {
-		return "", fmt.Errorf("invalid column name: %s", column)
+	if !validColumns[searchColumn] {
+		return "", fmt.Errorf("invalid searchColumn name: %s", searchColumn)
 	}
 	stmt := fmt.Sprintf(
 		"SELECT ID, Username, EmailAddress, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, IsFlagged FROM Users WHERE %s = ?",
-		column,
+		searchColumn,
 	)
 	rows, queryErr := m.DB.Query(stmt, ID)
 	if queryErr != nil {
@@ -265,7 +265,7 @@ func (m *UserModel) GetSingleUserValue(ID int, column, output string) (string, e
 		return "", fmt.Errorf("no user found")
 	}
 
-	// Map column names to their values
+	// Map searchColumn names to their values
 	fields := map[string]any{
 		"id":             user.ID,
 		"username":       user.Username,
@@ -281,10 +281,10 @@ func (m *UserModel) GetSingleUserValue(ID int, column, output string) (string, e
 		"isFlagged":      user.IsFlagged,
 	}
 
-	// Check if output exists in the map
-	value, exists := fields[output]
+	// Check if outputColumn exists in the map
+	value, exists := fields[outputColumn]
 	if !exists {
-		return "", fmt.Errorf("invalid column name: %s", output)
+		return "", fmt.Errorf("invalid searchColumn name: %s", outputColumn)
 	}
 
 	// Convert the value to a string (handling different types)

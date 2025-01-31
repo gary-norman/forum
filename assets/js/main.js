@@ -152,23 +152,9 @@ function toggleUserInteracted(action) {
         }
     });
 }
-// TODO get this popover animataion reset to work
-// revert to original state if popovers are closed
-// popovers.forEach(popover => {
-// const observer = new MutationObserver(mutations => {
-//     mutations.forEach(mutation => {
-//         if (mutation.attributeName === "open") {
-//             const popover = mutation.target;
-//             if (!popover.hasAttribute("open")) {
-//                 console.log("Popover closed:", popover);
-//                 toggleUserInteracted("remove")
-//             }
-//         }
-//     });
-// });
-//
-//     observer.observe(popover, { attributes: true, attributeFilter: ["open"] });
-// });
+
+// revert to original state if modals are closed
+// TODO get this popover reset to work without constant click listeners
 
 document.addEventListener("click", () => {
     popovers.forEach(popover => {

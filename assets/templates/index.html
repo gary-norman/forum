@@ -27,6 +27,7 @@
         <div id="notification-main-content">Login successful! Welcome, Loreforum</div>
       </div>
     <div class="wrapper-main">
+<!--      SECTION ---------- header ------------>
       <header class="header">
         <div class="branding"></div>
         <label for="pagedrop"></label>
@@ -344,7 +345,7 @@
           </div>
         </form>
       </div>
-<!--      SECTION ---------- join channel popover ----------  -->
+<!--  SECTION ---------- join channel popover ----------  -->
       <div popover id="form-join-channel">
         <form action="/channels/join" class="wrapper-form" method="POST">
 
@@ -457,7 +458,7 @@
               {{ else }}
               <div id="btn-open-login-modal" class="sidebar-option login">Log In</div>
               {{ end }}
-              <div id="btn-open-login-modal-fallback" class="sidebar-option login">Log In fallback</div>
+              <div id="btn-open-login-modal-fallback" class="sidebar-option login" style="display: none">Log In fallback</div>
             </div>
             <hr class="solid" />
             <!-- SECTION sidebar channels -->
@@ -1037,17 +1038,20 @@
                             </div>
                         </div>
                         <div class="page-buttons">
-                          <!-- TODO check if current user is member, disable follow button if so -->
+                          {{ if (eq .RandomChannelIsOwnedOrJoined false) }}
                           <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
                             <span class="btn-posts">join</span>
                           </button>
+                          {{ end }}
                             <div class="user-following"></div>
                             <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
                                 <img src="/assets/icons/share_16.svg" alt="share button">
                             </button>
+                          {{ if (eq .RandomChannelIsOwnedOrJoined false) }}
                             <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
                                 <img src="/assets/icons/heart-empty_24.svg" alt="like button">
                             </button>
+                          {{ end }}
                         </div>
                     </div>
                 </div>
@@ -1061,7 +1065,7 @@
                                 <span class="btn-filters">filters</span>
                             </button>
                         </div>
-<!--                      SECTION channel page feed-->
+<!-- SECTION ---------- channel page feed ---------- -->
                         <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
 <!--                          TODO range through channel posts-->
                           {{range .Posts}} <!-- channel page posts -->
@@ -1128,7 +1132,7 @@
                           {{end}} <!-- channel page posts -->
                         </div>
                     </div>
-
+<!--SECTION ------------ user right panel ------------ -->
                     <div class="right-panel ">
                         <div class="right-panel-content scroll-down">
                             <div class="right-panel-name-container flex-space-between">
@@ -1136,10 +1140,13 @@
                                 <h4 class="right-panel-name">/{{ .RandomChannel.Name }}</h4>
                                 <small>created by {{ if (eq .RandomChannel.OwnerID .CurrentUserID) }}you {{ else }} {{ .RandomChannelOwnerName }} {{ end }}{{ .RandomChannel.TimeSince}}</small>
                               </div>
-                                <button class="btn-sm btn-icoonly">
+                              {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
+                                <button id="right-panel-channel--edit-channel-name" class="btn-sm btn-icoonly">
                                     <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
                                 </button>
+                              {{ end }}
                             </div>
+                          {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
                           <div class="right-panel-pic-container flex-space-between">
                             <div class="right-panel-pic-container">
                               {{ if (ne .RandomChannel.Avatar "noimage") }}
@@ -1149,20 +1156,24 @@
                               {{ end }}
                               <small>Edit channel picture</small>
                             </div>
-                            <button class="btn-sm btn-icoonly">
+                            <button id="right-panel-channel--edit-channel-picture" class="btn-sm btn-icoonly">
                               <span class="btn-edit" role="contentinfo" aria-label="Edit channel picture"></span>
                             </button>
                           </div>
-                            <div class="right-panel-pic-container flex-space-between">
-                            </div>
+                          {{ end }}
                             <div class="right-panel-bio-container ">
+                              {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
                                 <div class="right-panel-bio flex-space-between">
                                     <label for="channel-bio-content" class="padded">Edit channel bio</label>
                                     <button class="btn-sm btn-icoonly">
                                         <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
                                     </button>
                                 </div>
-                                <textarea id="channel-bio-content" class="inactive-input" name="content">{{ .RandomChannel.Description }}</textarea>
+                              {{ end }}
+                              <div class="sidebar-channel-block">
+                                <article>{{ .RandomChannel.Description }}</article>
+                              </div>
+                              <textarea id="channel-bio-content" class="inactive-input" name="content" style="display: none">{{ .RandomChannel.Description }}</textarea>
                             </div>
                             <div class="right-panel-moderators-container">
                                 <div class="sidebar-block sidebar-channels">
@@ -1184,15 +1195,29 @@
                                 </div>
                             </div>
                             <div class="right-panel-rules-container">
+                              {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
                                 <div class="right-panel-bio flex-space-between ">
                                     <label class="padded" for="rules-content">Edit channel rules</label>
                                     <button class="btn-sm btn-icoonly">
                                         <span class="btn-edit" role="contentinfo" aria-label="Edit channel rules"></span>
                                     </button>
                                 </div>
+                              {{ else }}
+                                <div class="right-panel-bio flex-space-between ">
+                                  <label class="padded" for="rules-content">Channel rules</label>
+                                </div>
+                              {{ end }}
 <!--                              TODO range through channel rules-->
-                                <textarea id="rules-content" class="inactive-input" name="content">Placeholder text... Placeholder text...</textarea>
-                            </div>
+                              <div class="sidebar-channel-block">
+                                <ul class="sidebar-channel-ul">
+                                  <li>don't be a dick</li>
+                                  <li>OMG you're still being a dick</li>
+                                  <li>could you try not being a dick?</li>
+                                  <li>seriously though, just stop being a dick</li>
+                                </ul>
+                                <textarea id="rules-content" class="inactive-input" name="content" style="display: none">Placeholder text... Placeholder text...</textarea>
+                                </div>
+                              </div>
                             <div class="button-row-wrap">
                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                     <span class="btn-share">share</span>

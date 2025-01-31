@@ -259,9 +259,9 @@ func (app *app) JoinedByCurrentUser(memberships []models.Membership) ([]models.C
 		channels = append(channels, channel[0])
 	}
 	if len(channels) > 0 {
-		fmt.Printf(Colors().Green + "Current user is a member of this channel" + Colors().Reset)
+		fmt.Println(Colors().Green + "Current user is a member of this channel" + Colors().Reset)
 	} else {
-		fmt.Printf(Colors().Red + "Current user is not a member of this channel" + Colors().Reset)
+		fmt.Println(Colors().Red + "Current user is not a member of this channel" + Colors().Reset)
 	}
 	return channels, nil
 }
@@ -418,6 +418,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	var ownedChannelsErr error
 	var joinedChannels []models.Channel
 	var joinedChannelsErr error
+	isJoinedOrOwned := false
 
 	// get owned and joined channels of current user
 	if userLoggedIn == true {
@@ -437,6 +438,16 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		if joinedChannelsErr != nil {
 			log.Printf(ErrorMsgs().Query, "user joined channels", joinedChannelsErr)
 		}
+		var joined bool
+		for _, channel := range joinedChannels {
+			if currentUser.ID == channel.OwnerID {
+				joined = true
+				break
+			}
+		}
+		if currentUser.ID == randomChannel.OwnerID || joined == true {
+			isJoinedOrOwned = true
+		}
 	}
 
 	// TODO get channel moderators
@@ -445,24 +456,25 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 
 	// SECTION -- template ---
 	templateData := models.TemplateData{
-		AllChannels:            allChannels,
-		RandomChannel:          randomChannel,
-		RandomChannelOwnerName: randomChannelOwnerName,
-		OwnedAndJoinedChannels: append(ownedChannels, joinedChannels...),
-		OwnedChannels:          ownedChannels,
-		JoinedChannels:         joinedChannels,
-		AllUsers:               allUsers,
-		RandomUser:             randomUser,
-		CurrentUser:            currentUser,
+		AllUsers:    allUsers,
+		RandomUser:  randomUser,
+		CurrentUser: currentUser,
 		//TODO get these values dynamically (NIL pointer reference)
-		CurrentUserID:   currentUserID,
-		CurrentUserName: currentUserName,
-		Posts:           postsWithDaysAgo,
-		Avatar:          currentUserAvatar,
-		Bio:             currentUserBio,
-		Images:          nil,
-		Comments:        nil,
-		Reactions:       nil,
+		CurrentUserID:                currentUserID,
+		CurrentUserName:              currentUserName,
+		AllChannels:                  allChannels,
+		RandomChannel:                randomChannel,
+		RandomChannelOwnerName:       randomChannelOwnerName,
+		OwnedChannels:                ownedChannels,
+		JoinedChannels:               joinedChannels,
+		OwnedAndJoinedChannels:       append(ownedChannels, joinedChannels...),
+		RandomChannelIsOwnedOrJoined: isJoinedOrOwned,
+		Posts:                        postsWithDaysAgo,
+		Avatar:                       currentUserAvatar,
+		Bio:                          currentUserBio,
+		Images:                       nil,
+		Comments:                     nil,
+		Reactions:                    nil,
 		NotifyPlaceholder: models.NotifyPlaceholder{
 			Register: "",
 			Login:    "",

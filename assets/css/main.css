@@ -1417,6 +1417,10 @@ hr.solid {
   gap: 1.2rem;
   background: var(--color-bg-1);
   border-radius: var(--border-radius-input);
+  & article {
+    font-size: 1.2rem;
+    padding: 1.2rem 0;
+  }
 }
 
 .sidebar-channel {
@@ -1472,6 +1476,13 @@ hr.solid {
     & div:nth-of-type(2) {
       display: flex;
     }
+  }
+}
+.sidebar-channel-ul {
+  font-size: 1.2rem;
+  padding: 1.2rem 0 1.2rem 2rem;
+  & li {
+    list-style-image: url('/assets/icons/bulletpoint.svg');
   }
 }
 .private-channel {

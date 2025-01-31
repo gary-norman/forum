@@ -186,24 +186,25 @@ type NotifyPlaceholder struct {
 }
 
 type TemplateData struct {
-	AllUsers               []User
-	RandomUser             User
-	CurrentUser            *User
-	CurrentUserName        string
-	CurrentUserID          int
-	Channels               []Channel
-	AllChannels            []Channel
-	RandomChannel          ChannelWithDaysAgo
-	RandomChannelOwnerName string
-	OwnedChannels          []Channel
-	JoinedChannels         []Channel
-	OwnedAndJoinedChannels []Channel
-	Posts                  []PostWithDaysAgo
-	Avatar                 string
-	Bio                    string
-	Images                 []Image
-	Comments               []Comment
-	Reactions              []Reaction
+	AllUsers                     []User
+	RandomUser                   User
+	CurrentUser                  *User
+	CurrentUserName              string
+	CurrentUserID                int
+	Channels                     []Channel
+	AllChannels                  []Channel
+	RandomChannel                ChannelWithDaysAgo
+	RandomChannelOwnerName       string
+	RandomChannelIsOwnedOrJoined bool
+	OwnedChannels                []Channel
+	JoinedChannels               []Channel
+	OwnedAndJoinedChannels       []Channel
+	Posts                        []PostWithDaysAgo
+	Avatar                       string
+	Bio                          string
+	Images                       []Image
+	Comments                     []Comment
+	Reactions                    []Reaction
 	NotifyPlaceholder
 }
 

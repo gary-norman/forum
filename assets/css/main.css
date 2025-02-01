@@ -1441,31 +1441,31 @@ hr.solid {
   &:active {
     background: var(--color-bg-2);
   }
-  &:hover::before {
-    content: "";
-    position: absolute;
-    bottom: 5.1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--color-bg-3);
-    width: 1.2rem;
-    aspect-ratio: 1;
-    clip-path: polygon(0 0,100% 0,50% 100%);
-  }
-  &:hover::after {
-    position: absolute;
-    bottom: 6.3rem;
-    left: 50%;
-    width: max-content;);););););
-    transform: translateX(-50%);
-    content: attr(data-desc-channel);
-    font-size: 1.2rem;
-    background: var(--color-bg-3);
-    padding: .8rem;
-    border-radius: var(--border-radius-input);
-    /* TODO make this transition work */
-    /*transition: all 4000ms ease-in-out;*/
-  }
+  /*&:hover::before {*/
+  /*  content: "";*/
+  /*  position: absolute;*/
+  /*  bottom: 5.1rem;*/
+  /*  left: 50%;*/
+  /*  transform: translateX(-50%);*/
+  /*  background: var(--color-bg-3);*/
+  /*  width: 1.2rem;*/
+  /*  aspect-ratio: 1;*/
+  /*  clip-path: polygon(0 0,100% 0,50% 100%);*/
+  /*}*/
+  /*&:hover::after {*/
+  /*  position: absolute;*/
+  /*  bottom: 6.3rem;*/
+  /*  left: 50%;*/
+  /*  width: max-content;);););););*/
+  /*  transform: translateX(-50%);*/
+  /*  content: attr(data-desc-channel);*/
+  /*  font-size: 1.2rem;*/
+  /*  background: var(--color-bg-3);*/
+  /*  padding: .8rem;*/
+  /*  border-radius: var(--border-radius-input);*/
+  /*  !* TODO make this transition work *!*/
+  /*  !*transition: all 4000ms ease-in-out;*!*/
+  /*}*/
 }
 
 .container-channel-info {
@@ -1474,18 +1474,21 @@ hr.solid {
   align-items: center;
   padding: 0.8rem 1.2rem;
   column-gap: 1.2rem;
-  justify-content: space-between;
-
+  justify-content: flex-start;
   & div:nth-of-type(1) {
     display: flex;
     flex-direction: column;
     row-gap: 0.4rem;
-
     & div:nth-of-type(2) {
       display: flex;
     }
   }
+  & div:nth-of-type(2) {
+    margin-inline-start: auto;
+    z-index: 100;
+  }
 }
+
 .sidebar-channel-ul {
   font-size: 1.2rem;
   padding: 1.2rem 0 1.2rem 2rem;
@@ -1496,14 +1499,19 @@ hr.solid {
 .private-channel {
   position: relative;
   &::after {
-    content: "";
+    content: "private";
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
-    right: -0.2rem;
-    width : 2.4rem;
-    aspect-ratio: 1 / 1;
-    background: url('/assets/icons/lock_24.svg');
+    transform: translateY(-70%);
+    right: 0.1rem;
+    height: 1.6rem;
+    /*width : 2.4rem;*/
+    /*aspect-ratio: 1 / 1;*/
+    padding: 0 .4rem;
+    background: transparent;
+    color: var(--color-hl-green);
+    font-size: 0.8rem;
+    border: 1px solid var(--color-hl-green);
     z-index: 2;
   }
 }

@@ -324,6 +324,12 @@ gap: 0.8rem;
     transition: all var(--transition-dur-hover) ease-in-out;
     background : url('/assets/icons/warning_16.svg') no-repeat center;
 }
+.btn-save {
+  &:hover > span {
+    background: url("/assets/icons/heart-full_24.svg") no-repeat center;
+    background-size: 1.6rem;
+  }
+}
 .btn-save-empty {
   background: url("/assets/icons/heart-empty_24.svg") no-repeat center;
 }

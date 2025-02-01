@@ -471,7 +471,6 @@
               <div class="sidebar-channel-block">
                 {{ range .OwnedAndJoinedChannels }}
                 <div class="sidebar-channel" data-desc-channel="{{ .Description }}">
-                  <div></div>
                   <div class="container-channel-info">
                     {{ if (ne .Avatar "noimage") }}
                     <span class="card-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .Avatar }}"></span>
@@ -486,13 +485,16 @@
                         <div class="channel-green-dot">15</div>
                       </div>
                     </div>
-                    {{ if (eq .Owned true) }}
-                    <span class="info-box">owner</span>
-                    {{ else }}
-                    <button class="btn-sm btn-icoonly margin-auto-0">
-                      <span class="btn-save-active" role="contentinfo" aria-label="Edit profile name"></span>
-                    </button>
-                    {{ end }}
+                    <div>
+                      {{ if (eq .Owned true) }}
+                      <span class="info-box">owner</span>
+                      {{ else }}
+<!--                      TODO add logic to check if channel is saved-->
+                      <button class="btn-save btn-sm btn-icoonly margin-auto-0">
+                        <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
+                      </button>
+                      {{ end }}
+                    </div>
                   </div>
                 </div>
                 {{ end }} <!-- end range of channels here-->
@@ -778,6 +780,10 @@
                               <small>{{.TimeSince}}</small>
                             </div>
                           </div>
+<!--                    TODO check if this like button is necessary-->
+                        <div class="like-button">
+                          <button data-tooltip-name="like" class="btn-icoonly"></button>
+                        </div>
                         </div>
                         <h4>{{.Title}}</h4>
                         {{ if ( ne .Images "noimage" ) }}
@@ -1027,7 +1033,11 @@
                   <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
                     <div class="page-control">
                         <div class="page-profile">
-                            <div class="page-pic profile-pic"></div>
+                          {{ if (ne .RandomChannel.Avatar "noimage") }}
+                          <div class="sidebar-pic profile-pic" data-image-user="{{ $channelBasePath }}{{ .RandomChannel.Avatar }}"></div>
+                            {{ else }}
+                            <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .RandomChannel.Name }}"></div>
+                              {{ end }}
                             <div>
                                 <h2 {{ if (eq .RandomChannel.Privacy true) }}class="private-channel"{{ end }}>/{{ .RandomChannel.Name }}</h2>
                                 <div>

@@ -56,6 +56,16 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]mode
 		if scanErr != nil {
 			return nil, scanErr
 		}
+		if column == "OwnerID" {
+			fmt.Printf(ErrorMsgs().KeyValuePair, "updating Owned of", c.Name)
+			c.Owned = true
+			fmt.Printf(ErrorMsgs().KeyValuePair, "Owned", c.Owned)
+		}
+		if column == "ID" {
+			fmt.Printf(ErrorMsgs().KeyValuePair, "updating Joined of", c.Name)
+			c.Joined = true
+			fmt.Printf(ErrorMsgs().KeyValuePair, "Joined", c.Joined)
+		}
 		channels = append(channels, c)
 	}
 	if rowsErr := rows.Err(); rowsErr != nil {

@@ -42,6 +42,22 @@ func isValidPassword(password string) bool {
 	return true
 }
 
+func getTimeSince(created time.Time) string {
+	now := time.Now()
+	hours := now.Sub(created).Hours()
+	var timeSince string
+	if hours > 24 {
+		timeSince = fmt.Sprintf("%.0f days ago", hours/24)
+	} else if hours > 1 {
+		timeSince = fmt.Sprintf("%.0f hours ago", hours)
+	} else if minutes := now.Sub(created).Minutes(); minutes > 1 {
+		timeSince = fmt.Sprintf("%.0f minutes ago", minutes)
+	} else {
+		timeSince = "just now"
+	}
+	return timeSince
+}
+
 // TODO use interface to get and return any type
 func getRandomChannel(channelSlice []models.ChannelWithDaysAgo) models.ChannelWithDaysAgo {
 	rndInt := rand.IntN(len(channelSlice))
@@ -350,21 +366,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// TODO make a function with interface to unify this and other withdaysago
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
 	for index, post := range posts {
-		now := time.Now()
-		hours := now.Sub(post.Created).Hours()
-		var TimeSince string
-		if hours > 24 {
-			TimeSince = fmt.Sprintf("%.0f days ago", hours/24)
-		} else if hours > 1 {
-			TimeSince = fmt.Sprintf("%.0f hours ago", hours)
-		} else if minutes := now.Sub(post.Created).Minutes(); minutes > 1 {
-			TimeSince = fmt.Sprintf("%.0f minutes ago", minutes)
-		} else {
-			TimeSince = "just now"
-		}
 		postsWithDaysAgo[index] = models.PostWithDaysAgo{
 			Post:      post,
-			TimeSince: TimeSince,
+			TimeSince: getTimeSince(post.Created),
 		}
 	}
 
@@ -380,6 +384,13 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
 		userLoggedIn = false
 	}
+	currentUser.TimeSince = getTimeSince(currentUser.Created)
+	for index, post := range posts {
+		postsWithDaysAgo[index] = models.PostWithDaysAgo{
+			Post:      post,
+			TimeSince: getTimeSince(post.Created),
+		}
+	}
 	currentUserName := "nouser"
 	var currentUserID int
 	var currentUserAvatar string
@@ -392,21 +403,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 	channelsWithDaysAgo := make([]models.ChannelWithDaysAgo, len(allChannels))
 	for index, channel := range allChannels {
-		now := time.Now()
-		hours := now.Sub(channel.Created).Hours()
-		var TimeSince string
-		if hours > 24 {
-			TimeSince = fmt.Sprintf("%.0f days ago", hours/24)
-		} else if hours > 1 {
-			TimeSince = fmt.Sprintf("%.0f hours ago", hours)
-		} else if minutes := now.Sub(channel.Created).Minutes(); minutes > 1 {
-			TimeSince = fmt.Sprintf("%.0f minutes ago", minutes)
-		} else {
-			TimeSince = "just now"
-		}
 		channelsWithDaysAgo[index] = models.ChannelWithDaysAgo{
 			Channel:   channel,
-			TimeSince: TimeSince,
+			TimeSince: getTimeSince(channel.Created),
 		}
 	}
 	randomChannel := getRandomChannel(channelsWithDaysAgo)
@@ -415,10 +414,10 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Query, "GetSingleUserValue", ownerErr)
 	}
 	var ownedChannels []models.Channel
-	var ownedChannelsErr error
 	var joinedChannels []models.Channel
-	var joinedChannelsErr error
+	var ownedAndJoinedChannels []models.Channel
 	isJoinedOrOwned := false
+	isOwned := false
 
 	// get owned and joined channels of current user
 	if userLoggedIn == true {
@@ -426,28 +425,29 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		currentUserID = currentUser.ID
 		currentUserAvatar = currentUser.Avatar
 		currentUserBio = currentUser.Description
-		ownedChannels, ownedChannelsErr = app.channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
-		if ownedChannelsErr != nil {
-			log.Printf(ErrorMsgs().Query, "user owned channels", ownedChannelsErr)
-		}
 		memberships, memberErr := app.memberships.UserMemberships(currentUser.ID)
 		if memberErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
 		}
-		joinedChannels, joinedChannelsErr = app.JoinedByCurrentUser(memberships)
+		ownedChannels, ownedChannelsErr := app.channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
+		if ownedChannelsErr != nil {
+			log.Printf(ErrorMsgs().Query, "user owned channels", ownedChannelsErr)
+		}
+		joinedChannels, joinedChannelsErr := app.JoinedByCurrentUser(memberships)
 		if joinedChannelsErr != nil {
 			log.Printf(ErrorMsgs().Query, "user joined channels", joinedChannelsErr)
 		}
-		var joined bool
+		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+		isOwned = currentUser.ID == randomChannel.OwnerID
+		joined := false
+
 		for _, channel := range joinedChannels {
-			if currentUser.ID == channel.OwnerID {
+			if randomChannel.ID == channel.ID {
 				joined = true
 				break
 			}
 		}
-		if currentUser.ID == randomChannel.OwnerID || joined == true {
-			isJoinedOrOwned = true
-		}
+		isJoinedOrOwned = isOwned || joined
 	}
 
 	// TODO get channel moderators
@@ -467,7 +467,8 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		RandomChannelOwnerName:       randomChannelOwnerName,
 		OwnedChannels:                ownedChannels,
 		JoinedChannels:               joinedChannels,
-		OwnedAndJoinedChannels:       append(ownedChannels, joinedChannels...),
+		OwnedAndJoinedChannels:       ownedAndJoinedChannels,
+		RandomChannelIsOwned:         isOwned,
 		RandomChannelIsOwnedOrJoined: isJoinedOrOwned,
 		Posts:                        postsWithDaysAgo,
 		Avatar:                       currentUserAvatar,

@@ -488,9 +488,13 @@
                         <div class="channel-green-dot">15</div>
                       </div>
                     </div>
+                    {{ if (eq .Owned true) }}
+                    <span class="info-box">owner</span>
+                    {{ else }}
                     <button class="btn-sm btn-icoonly margin-auto-0">
                       <span class="btn-save-active" role="contentinfo" aria-label="Edit profile name"></span>
                     </button>
+                    {{ end }}
                   </div>
                 </div>
                 {{ end }} <!-- end range of channels here-->
@@ -500,6 +504,7 @@
           </div>
         </aside>
         <main>
+<!--          SECTION ---------- homepage feed mask ---------- -->
           <div class="container-homepage-feed-mask" style="z-index: 0; min-height: 100% !important">
             <svg height="100dvh" width="100dvw" preserveAspectRatio="none">
               <defs>

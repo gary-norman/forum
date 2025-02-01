@@ -109,6 +109,14 @@
 .invert-off {
   filter: invert(0);
 }
+.info-box {
+  color: var(--color-hl-green);
+  font-size: 0.8rem;
+  border: .1rem solid var(--color-hl-green);
+  border-radius: .2rem;
+  padding: 0 0.4rem;
+  background: transparent;
+}
 /*svg {
   stroke: var(--color-fg-1);
   fill: var(--color-fg-1);

@@ -16,6 +16,7 @@ type User struct {
 	TimeSince   string
 	IsFlagged   bool `json:"isFlagged,omitempty"`
 }
+
 type UserCheck struct {
 	ID             int    `json:"id"`
 	Username       string `json:"username"`
@@ -52,6 +53,8 @@ type Channel struct {
 	Description string    `json:"description"`
 	Created     time.Time `json:"created"`
 	Rules       []ChannelRule
+	Owned       bool
+	Joined      bool
 	Privacy     bool `json:"privacy"`
 	IsMuted     bool `json:"isMuted"`
 	IsFlagged   bool `json:"isFlagged,omitempty"`
@@ -78,17 +81,17 @@ type MutedChannel struct {
 	ChannelID int       `json:"channelId"`
 	Created   time.Time `json:"created"`
 }
+type OwnedAndJoinedChannels struct {
+	Owned    bool
+	Joined   bool
+	Channels []Channel
+}
 
 type Membership struct {
 	ID        int       `json:"id"`
 	UserID    int       `json:"userId"`
 	ChannelID int       `json:"channelId"`
 	Created   time.Time `json:"created"`
-}
-
-type OwnedAndJoinedChannels struct {
-	OwnedChannels  []Channel
-	JoinedChannels []Channel
 }
 
 type Mod struct {
@@ -196,6 +199,7 @@ type TemplateData struct {
 	RandomChannel                ChannelWithDaysAgo
 	RandomChannelOwnerName       string
 	RandomChannelIsOwnedOrJoined bool
+	RandomChannelIsOwned         bool
 	OwnedChannels                []Channel
 	JoinedChannels               []Channel
 	OwnedAndJoinedChannels       []Channel

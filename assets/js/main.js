@@ -468,14 +468,10 @@ if (logoutFormButton) {
     logoutFormButton.addEventListener('click', function (event) {
         event.preventDefault();
 
-        const csrfToken = getCSRFToken();
-        console.log("csrfToken: ", csrfToken)
-
         fetch('/logout', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-csrf-token': csrfToken
             },
             body: JSON.stringify({}),
             cache: 'no-store'

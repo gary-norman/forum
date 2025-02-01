@@ -302,10 +302,6 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	if getUserErr != nil {
 		log.Printf("GetUserByUsername for %v failed with error: %v", username, getUserErr)
 	}
-	if authErr := app.isAuthenticated(r, username); authErr != nil {
-		http.Error(w, authErr.Error(), http.StatusUnauthorized)
-		return
-	}
 
 	// Delete the Session Token and CSRF Token cookies
 	delCookiErr := app.cookies.DeleteCookies(w, user)
@@ -384,7 +380,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
 		userLoggedIn = false
 	}
-	currentUser.TimeSince = getTimeSince(currentUser.Created)
 	for index, post := range posts {
 		postsWithDaysAgo[index] = models.PostWithDaysAgo{
 			Post:      post,
@@ -421,6 +416,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 
 	// get owned and joined channels of current user
 	if userLoggedIn == true {
+		currentUser.TimeSince = getTimeSince(currentUser.Created)
 		currentUserName = currentUser.Username
 		currentUserID = currentUser.ID
 		currentUserAvatar = currentUser.Avatar

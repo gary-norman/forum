@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/assets/css/main_effects.css">
     <link rel="stylesheet" href="/assets/css/buttons.css" />
     <link rel="stylesheet" href="/assets/css/main_effects.css">
+    <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
     <script type="module" src="/assets/js/main.js" defer></script>
     <script src="/assets/js/reactions.js" defer></script>
     <script type="module" src="/assets/js/share.js" defer></script>
@@ -365,6 +366,19 @@
           <div class="cont-flex-row flex-center">
             <button id="join-channel-btn" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>join</span>
+            </button>
+            <a href="/" class="button btn-md btn-secondary btn-action btn-filled">cancel</a>
+          </div>
+        </form>
+      </div>
+<!--  SECTION ---------- edit channel rules popover ----------  -->
+      <div popover id="form-edit-channel-rules">
+        <form action="/channels/edit-rules" class="wrapper-form" method="POST">
+          <h5 id="edit-channel-rules-title" class="form-title">edit rules for {{ .RandomChannel.Name }}</h5>
+          <!-- FIXME fix these buttons -->
+          <div class="cont-flex-row flex-center">
+            <button id="edit-channel-rules-btn" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
+              <span>submit</span>
             </button>
             <a href="/" class="button btn-md btn-secondary btn-action btn-filled">cancel</a>
           </div>
@@ -1028,7 +1042,6 @@
 
             <!-- SECTION --- channel page ----->
             <div id="channel-page" class="active-feed feeds-wrapper">
-
                 <div class="banner">
                   <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
                     <div class="page-control">
@@ -1159,6 +1172,7 @@
                                 </button>
                               {{ end }}
                             </div>
+<!--                    ----------- edit channel image ----------- -->
                           {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
                           <div class="right-panel-pic-container flex-space-between">
                             <div class="right-panel-pic-container">
@@ -1175,10 +1189,11 @@
                           </div>
                           {{ end }}
                             <div class="right-panel-bio-container ">
+<!--                    ----------- edit channel bio ----------- -->
                               {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
                                 <div class="right-panel-bio flex-space-between">
                                     <label for="channel-bio-content" class="padded">Edit channel bio</label>
-                                    <button class="btn-sm btn-icoonly">
+                                    <button id="right-panel-channel--edit-channel-bio" class="btn-sm btn-icoonly">
                                         <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
                                     </button>
                                 </div>
@@ -1190,7 +1205,17 @@
                             </div>
                             <div class="right-panel-moderators-container">
                                 <div class="sidebar-block sidebar-channels">
-                                    <small class="padded">Moderators</small>
+<!--                    ----------- edit channel mods ----------- -->
+                                  {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
+                                  <div class="right-panel-bio flex-space-between">
+                                    <label for="channel-bio-content" class="padded">Edit moderators</label>
+                                    <button id="right-panel-channel--edit-channel-mods" class="btn-sm btn-icoonly">
+                                      <span class="btn-edit" role="contentinfo" aria-label="Edit channel moderators"></span>
+                                    </button>
+                                  </div>
+                                  {{ else }}
+                                  <small class="padded">Moderators</small>
+                                  {{ end }}
                                     <div class="sidebar-channel-block">
 <!--                                      TODO range through moderators-->
                                         <div class="sidebar-channel">
@@ -1208,10 +1233,11 @@
                                 </div>
                             </div>
                             <div class="right-panel-rules-container">
+<!--                    ----------- edit channel rules ----------- -->
                               {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
                                 <div class="right-panel-bio flex-space-between ">
                                     <label class="padded" for="rules-content">Edit channel rules</label>
-                                    <button class="btn-sm btn-icoonly">
+                                    <button popovertarget="form-edit-channel-rules" id="right-panel-channel--edit-channel-rules" class="btn-sm btn-icoonly">
                                         <span class="btn-edit" role="contentinfo" aria-label="Edit channel rules"></span>
                                     </button>
                                 </div>

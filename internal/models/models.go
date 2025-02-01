@@ -165,6 +165,19 @@ type Flag struct {
 	FlaggedCommentID *int      `json:"flaggedCommentId,omitempty"`
 }
 
+type Notifications struct {
+	ID           int       `json:"id"`
+	Notification string    `json:"notification"`
+	Created      time.Time `json:"created"`
+	Read         bool      `json:"read"`
+	Archived     bool      `json:"archived"`
+}
+type NotificationsUsers struct {
+	ID             int `json:"id"`
+	UserID         int `json:"userId"`
+	NotificationID int `json:"notificationId"`
+}
+
 type Notify struct {
 	BadPass      string
 	RegisterOk   string

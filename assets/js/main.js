@@ -11,6 +11,8 @@ let actButtonsAll;
 // activity feeds
 let activityFeeds;
 let activityFeedsContentAll;
+// right panel buttons
+let rightPanelButtons;
 // sidebar elements
 const userProfileImage = document.querySelectorAll('.profile-pic');
 const userProfileImageEmpty = document.querySelectorAll('.profile-pic--empty');
@@ -37,7 +39,6 @@ const styledInputs = document.querySelectorAll(
 const modals = document.querySelectorAll(".modal");
 // popovers
 const popovers = document.querySelectorAll("[popover]")
-console.log("popovers: ", popovers)
 // login/register forms
 const formLogin = document.querySelector('#form-login');
 const formRegister = document.querySelector('#form-register');
@@ -122,6 +123,8 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleFeed(document.getElementById("activity-" + e.target.id),document.getElementById("activity-feed-" + e.target.id),  e.target);
             console.log('activity-' + e.target.id);
         }) );
+    // right panel buttons
+    rightPanelButtons = document.querySelectorAll('[id^="right-panel-channel--"]')
     }
 
     if (typeof getUserProfileImageFromAttribute === 'function') {
@@ -358,7 +361,6 @@ function confirmPass() {
     }
     regPassRpt.classList.remove("pass-nomatch");
 }
-
 // showMainNotification changes the element ID to provide feedback to user
 function showMainNotification(message) {
     const notification = document.getElementById('notification-main');
@@ -396,7 +398,11 @@ function getCSRFToken() {
 //     .catch((error) => {
 //         console.error('Use of protected route failed:', error);
 // });
+// switch the <p> elements in right panel to <textarea> for editing
+// and change the edit button to submit
+function rightPanelEdit(target) {
 
+}
 // SECTION ---- event listeners -----
 
 // --- select page ---
@@ -634,6 +640,11 @@ window.addEventListener('click', ({ target }) => {
             break;
     }
 });
+// TODO create the functionality in the function
+// right panel buttons
+rightPanelButtons.forEach(button =>
+    button.addEventListener('click', (e) => rightPanelEdit(e.target.id))
+)
 // login / register / forgot
 btnLogin.forEach(button =>
     button.addEventListener('click', (e) => logReg(e.target.id))

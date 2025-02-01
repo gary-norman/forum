@@ -951,8 +951,11 @@ input[type="checkbox"]:checked {
 .btn-join-channel {
   anchor-name: --join-channel-button;
 }
-#form-post, #form-channel, #form-join-channel {
-  position: absolute;
+#right-panel-channel--edit-channel-rules {
+  anchor-name: --edit-channel-rules-button;
+}
+#form-post, #form-channel, #form-join-channel, #form-edit-channel-rules {
+  position: fixed;
   inset: auto;
   margin: 0;
   padding: 2rem;
@@ -1014,6 +1017,13 @@ input[type="checkbox"]:checked {
   right: 5rem;
   position-anchor: --join-channel-button;
   bottom: anchor(bottom);
+  right: anchor(left);
+}
+#form-edit-channel-rules {
+  top: 15rem;
+  right: 5rem;
+  position-anchor: --edit-channel-rules-button;
+  top: calc(anchor(bottom) - 20rem);
   right: anchor(left);
 }
 

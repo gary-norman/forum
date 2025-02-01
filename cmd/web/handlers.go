@@ -340,7 +340,7 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
-	userLoggedIn := true
+	var userLoggedIn bool
 	// SECTION --- posts ---
 	posts, postsErr := app.posts.All()
 	if postsErr != nil {
@@ -379,6 +379,10 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
 		log.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
 		userLoggedIn = false
+	}
+	validTokens := app.cookies.QueryCookies(w, r, currentUser)
+	if validTokens == true {
+		userLoggedIn = true
 	}
 	for index, post := range posts {
 		postsWithDaysAgo[index] = models.PostWithDaysAgo{

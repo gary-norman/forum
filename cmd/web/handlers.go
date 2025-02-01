@@ -747,22 +747,6 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Query, "channel", err)
 	}
 	channel := channels[0]
-	//// if channel = private {redirect to requestMembership}
-	//if r.PostForm.Get("privacy") == "on" {
-	//	// TODO this logic in gethome + JS
-	//	w.Header().Set("Content-Type", "application/json")
-	//	w.WriteHeader(http.StatusUnauthorized)
-	//	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-	//		"code":    http.StatusUnauthorized,
-	//		"message": "This channel is private, click 'OK' to agree to the channel rules and request membership.",
-	//	})
-	//	if encErr != nil {
-	//		log.Printf(ErrorMsgs().Encode, "storeMembership: Privacy", encErr)
-	//		return
-	//	}
-	//	app.requestMembership(w, r, user.ID, joinedChannelID)
-	//	return
-	//}
 
 	createMembershipData := models.Membership{
 		UserID:    user.ID,

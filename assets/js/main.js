@@ -367,17 +367,18 @@ function showMainNotification(message) {
     notification.style.display = 'flex';
     setTimeout(() => {
         notification.style.display = 'none';
-    }, 3000); // Hide after 3 seconds
+    }, 2500); // Hide after 3 seconds
 }
 function showNotification(elementID, message, success) {
     const notification = document.getElementById(elementID);
     notification.textContent = message;
     notification.style.color = "var(--color-hl-green)";
     if (!success) {
+        notification.style.color = 'firebrick';
         setTimeout(() => {
             notification.textContent = "sign in to codex";
             notification.style.color = "var(--color-fg-1)";
-        }, 3000); // Hide after 3 seconds
+        }, 2500); // Hide after 3 seconds
     }
 }
 // retrieve the csrf_token cookie and explicitly set the X-CSRF-Token header in requests
@@ -464,6 +465,7 @@ if (loginForm) {
     });
 }
 
+// --- logout ---
 if (logoutFormButton) {
     logoutFormButton.addEventListener('click', function (event) {
         event.preventDefault();
@@ -497,12 +499,12 @@ if (logoutFormButton) {
             });
     })
 }
+// ---- join channel ----
 joinChannelButton.addEventListener('submit', function (event) {
     event.preventDefault();
     // const form = event.target;
     // const formData = new FormData(form); // Collect form data
     const csrfToken = getCSRFToken();
-
     console.log("csrfToken: ", csrfToken)
 
     fetch('/channels/join', {

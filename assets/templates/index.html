@@ -24,7 +24,7 @@
       {{ $postBasePath := "db/userdata/images/post-images/" }}
       {{ $userBasePath := "db/userdata/images/user-images/" }}
       <div id="notification-main">
-        <div id="notification-main-content">Login successful! Welcome, Loreforum</div>
+        <div id="notification-main-content"></div>
       </div>
     <div class="wrapper-main">
 <!--      SECTION ---------- header ------------>
@@ -265,11 +265,9 @@
           <label for="channel" class="invisible">channel</label>
           <select id="channel" name="channel">
             <option selected disabled hidden>select a channel</option>
-            <option value='{"channelName":"user&apos;s lounge", "channelID":"2001"}'>user's lounge</option>
-            <option value='{"channelName":"CSS", "channelID":"2002"}'>CSS</option>
-            <option value='{"channelName":"JS", "channelID":"2003"}'>JS</option>
-            <option value='{"channelName":"Golang", "channelID":"2004"}'>Golang</option>
-            <option value='{"channelName":"SQLite", "channelID":"2005"}'>SQLite</option>
+            {{ range .OwnedAndJoinedChannels }}
+            <option value='{"channelName":"{{ .Name }}", "channelID":"{{ .ID }}"}'>{{ .Name }}</option>
+            {{ end }}
           </select>
           <div class="input-wrapper">
           <input type="text" id="title" name="title" placeholder="title" required>

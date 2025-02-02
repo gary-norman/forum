@@ -230,6 +230,38 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error counting comments: %v", commentsErr)
 	}
 
+	// Retrieve total likes and dislikes for each post
+	for i, comment := range comments {
+		likes, dislikes, likesErr := app.reactions.CountReactions(0, comment.ID) // Pass 0 for CommentID if it's a post
+		//fmt.Printf("PostID: %v, Likes: %v, Disikes: %v\n", posts[i].ID, likes, dislikes)
+		if likesErr != nil {
+			log.Printf("Error counting reactions: %v", likesErr)
+			likes, dislikes = 0, 0 // Default values if there is an error
+		}
+		comments[i].Likes += likes
+		comments[i].Dislikes += dislikes
+	}
+
+	commentsWithDaysAgo := make([]models.CommentWithDaysAgo, len(comments))
+	for index, comment := range comments {
+		now := time.Now()
+		hours := now.Sub(comment.Created).Hours()
+		var TimeSince string
+		if hours > 24 {
+			TimeSince = fmt.Sprintf("%.0f days ago", hours/24)
+		} else if hours > 1 {
+			TimeSince = fmt.Sprintf("%.0f hours ago", hours)
+		} else if minutes := now.Sub(comment.Created).Minutes(); minutes > 1 {
+			TimeSince = fmt.Sprintf("%.0f minutes ago", minutes)
+		} else {
+			TimeSince = "just now"
+		}
+		commentsWithDaysAgo[index] = models.CommentWithDaysAgo{
+			Comment:   comment,
+			TimeSince: TimeSince,
+		}
+	}
+
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
 	for index, post := range posts {
 		now := time.Now()
@@ -247,7 +279,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		postsWithDaysAgo[index] = models.PostWithDaysAgo{
 			Post:      post,
 			TimeSince: TimeSince,
-			Comments:  comments,
+			Comments:  commentsWithDaysAgo,
 		}
 	}
 
@@ -664,6 +696,19 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get channel name
+	selectionJSON := r.PostForm.Get("channel")
+	if selectionJSON == "" {
+		http.Error(w, "No selection provided", http.StatusBadRequest)
+		return
+	}
+	var channelData models.ChannelData
+	if err := json.Unmarshal([]byte(selectionJSON), &channelData); err != nil {
+		log.Printf(ErrorMsgs().Unmarshal, selectionJSON, err)
+		http.Error(w, "Invalid selection format", http.StatusBadRequest)
+		return
+	}
+
 	postIDStr := r.PostForm.Get("postID")
 	commentIDStr := r.PostForm.Get("commentID")
 
@@ -707,18 +752,27 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 		commentIDPtr = commentData.CommentedCommentID
 	}
 
-	// Create the comment with pointer values
 	commentData = models.Comment{
 		Content:            r.PostForm.Get("content"),
-		AuthorID:           user.ID,
 		CommentedPostID:    postIDPtr,
 		CommentedCommentID: commentIDPtr,
 		IsCommentable:      false,
 		IsFlagged:          false,
+		Author:             user.Username,
+		AuthorID:           user.ID,
+		AuthorAvatar:       user.Avatar,
+		ChannelName:        channelData.ChannelName,
+		ChannelID:          0,
 	}
+
+	commentData.ChannelID, _ = strconv.Atoi(channelData.ChannelID)
 
 	insertErr := app.comments.Upsert(
 		commentData.Content,
+		commentData.Author,
+		commentData.ChannelName,
+		commentData.AuthorAvatar,
+		commentData.ChannelID,
 		commentData.AuthorID,
 		postID,
 		commentID,

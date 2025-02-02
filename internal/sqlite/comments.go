@@ -13,7 +13,7 @@ type CommentModel struct {
 }
 
 // Upsert inserts or updates a reaction for a specific combination of AuthorID and the parent fields (ChannelID, ReactedPostID, ReactedCommentID). It uses Exists to determine if the reaction already exists.
-func (m *CommentModel) Upsert(content string, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
+func (m *CommentModel) Upsert(content, author, channel, authorAvatar string, channelID, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
 	if !isValidParent(parentPostID, parentCommentID) {
 		return fmt.Errorf("only one of CommentedPostID, or CommentedCommentID must be non-zero")
 	}
@@ -28,14 +28,14 @@ func (m *CommentModel) Upsert(content string, authorID, parentPostID, parentComm
 	if exists {
 		// If the reaction exists, update it
 		//fmt.Println("Updating a reaction which already exists (reactions.go :53)")
-		return m.Update(content, authorID, parentPostID, parentCommentID, isFlagged, isCommentable)
+		return m.Update(content, author, channel, authorAvatar, channelID, authorID, parentPostID, parentCommentID, isFlagged, isCommentable)
 	}
 	//fmt.Println("Inserting a reaction (reactions.go :56)")
 
-	return m.Insert(content, authorID, parentPostID, parentCommentID, isFlagged, isCommentable)
+	return m.Insert(content, author, channel, authorAvatar, channelID, authorID, parentPostID, parentCommentID, isFlagged, isCommentable)
 }
 
-func (m *CommentModel) Insert(content string, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
+func (m *CommentModel) Insert(content, author, channel, authorAvatar string, channelID, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
 	// Validate that only one of parentPostID or parentCommentID is non-zero
 	if !isValidParent(parentPostID, parentCommentID) {
 		return fmt.Errorf("only one of CommentedPostID or CommentedCommentID must be non-zero")
@@ -61,12 +61,11 @@ func (m *CommentModel) Insert(content string, authorID, parentPostID, parentComm
 
 	// Define the SQL statement
 	stmt1 := `INSERT INTO Comments 
-		(Content, Created, AuthorID, CommentedPostID, CommentedCommentID, IsCommentable, IsFlagged)
-		VALUES (?, DateTime('now'), ?, ?, ?, ?, ?)`
+		(Content, Created, Author, AuthorID, AuthorAvatar, ChannelName, ChannelID, CommentedPostID, CommentedCommentID, IsCommentable, IsFlagged)
+		VALUES (?, DateTime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
 	// Execute the query, dereferencing the pointers for reactionID values
-	_, err = tx.Exec(stmt1, content, authorID,
-		parentPostID, parentCommentID, isCommentable, isFlagged)
+	_, err = tx.Exec(stmt1, content, author, authorID, authorAvatar, channel, channelID, parentPostID, parentCommentID, isCommentable, isFlagged)
 	//fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, parentPostID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Insert query: %w", err)
@@ -82,7 +81,7 @@ func (m *CommentModel) Insert(content string, authorID, parentPostID, parentComm
 	return err
 }
 
-func (m *CommentModel) Update(content string, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
+func (m *CommentModel) Update(content, author, channel, authorAvatar string, channelID, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
 	if !isValidParent(parentPostID, parentCommentID) {
 		return fmt.Errorf("only one of CommentedPostID, or CommentedCommentID must be non-zero")
 	}
@@ -107,11 +106,11 @@ func (m *CommentModel) Update(content string, authorID, parentPostID, parentComm
 
 	// Define the SQL statement
 	stmt1 := `UPDATE Comments 
-		SET Content = ?, Created = DateTime('now'), IsCommentable = ?, IsFlagged = ?
-		WHERE AuthorID = ? AND CommentedPostID = ? AND CommentedCommentID = ?`
+		SET Content = ?, Created = DateTime('now'), IsCommentable = ?, IsFlagged = ?, Author = ?, AuthorAvatar = ?, ChannelName = ?, ChannelID = ?
+		WHERE AuthorID = ? AND (CommentedPostID = ? OR CommentedCommentID = ?)`
 
 	// Execute the query
-	_, err = tx.Exec(stmt1, content, isCommentable, isFlagged, authorID, parentPostID, parentCommentID)
+	_, err = tx.Exec(stmt1, content, isCommentable, isFlagged, author, authorAvatar, channel, channelID, authorID, parentPostID, parentCommentID)
 	//fmt.Printf("Updating Comments, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
 	if err != nil {
 		return fmt.Errorf("failed to execute Update query: %w", err)
@@ -166,7 +165,7 @@ func (m *CommentModel) Delete(commentID int) error {
 }
 
 func (m *CommentModel) All() ([]models.Comment, error) {
-	stmt := "SELECT ID, Content, Created, AuthorID, CommentedPostID, CommentedCommentID, IsFlagged, IsCommentable FROM Comments ORDER BY ID DESC"
+	stmt := "SELECT ID, Content, Created, Author, AuthorID, AuthorAvatar, ChannelName, ChannelID, CommentedPostID, CommentedCommentID, IsCommentable, IsFlagged FROM Comments ORDER BY ID DESC"
 
 	if m == nil {
 		log.Println("Error: DB is nil")
@@ -199,7 +198,11 @@ func (m *CommentModel) All() ([]models.Comment, error) {
 			&p.ID,
 			&p.Content,
 			&p.Created,
+			&p.Author,
 			&p.AuthorID,
+			&p.AuthorAvatar,
+			&p.ChannelName,
+			&p.ChannelID,
 			&p.CommentedPostID,
 			&p.CommentedCommentID,
 			&p.IsFlagged,

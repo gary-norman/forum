@@ -107,7 +107,12 @@ type Post struct {
 
 type PostWithDaysAgo struct {
 	Post
-	Comments  []Comment
+	Comments  []CommentWithDaysAgo
+	TimeSince string
+}
+
+type CommentWithDaysAgo struct {
+	Comment
 	TimeSince string
 }
 
@@ -122,11 +127,18 @@ type Comment struct {
 	ID                 int       `json:"id"`
 	Content            string    `json:"content"`
 	Created            time.Time `json:"created"`
+	TimeSince          string    `json:"time_since"`
+	Author             string    `json:"author"`
 	AuthorID           int       `json:"author_id"`
+	AuthorAvatar       string    `json:"author_avatar"`
+	ChannelID          int       `json:"channel_id"`
+	ChannelName        string    `json:"channel_name"`
 	CommentedPostID    *int      `json:"commented_post_id,omitempty"`
 	CommentedCommentID *int      `json:"commented_comment_id,omitempty"`
 	IsCommentable      bool      `json:"is_commentable"`
 	IsFlagged          bool      `json:"is_flagged,omitempty"`
+	Likes              int       `json:"likes"`
+	Dislikes           int       `json:"dislikes"`
 }
 
 type Reaction struct {
@@ -137,20 +149,6 @@ type Reaction struct {
 	AuthorID         int       `json:"author_id"`
 	ReactedPostID    *int      `json:"reacted_post_id,omitempty"`
 	ReactedCommentID *int      `json:"reacted_comment_id,omitempty"`
-}
-
-type PostReaction struct {
-	ID         int  `json:"id"`
-	UserID     *int `json:"user_id"`
-	PostID     *int `json:"post_id,omitempty"`
-	ReactionID *int `json:"reaction_id,omitempty"`
-}
-
-type CommentReaction struct {
-	ID         int  `json:"id"`
-	UserID     *int `json:"user_id"`
-	PostID     *int `json:"comment_id,omitempty"`
-	ReactionID *int `json:"reaction_id,omitempty"`
 }
 
 type Flag struct {

@@ -34,7 +34,19 @@ func (m *PostModel) All() ([]models.Post, error) {
 	var Posts []models.Post
 	for rows.Next() {
 		p := models.Post{}
-		scanErr := rows.Scan(&p.ID, &p.Title, &p.Content, &p.Images, &p.Created, &p.Author, &p.AuthorAvatar, &p.IsCommentable, &p.AuthorID, &p.ChannelID, &p.ChannelName, &p.IsFlagged)
+		scanErr := rows.Scan(
+			&p.ID,
+			&p.Title,
+			&p.Content,
+			&p.Images,
+			&p.Created,
+			&p.Author,
+			&p.AuthorAvatar,
+			&p.IsCommentable,
+			&p.AuthorID,
+			&p.ChannelID,
+			&p.ChannelName,
+			&p.IsFlagged)
 		if scanErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "Error:", "scan")
 			log.Printf(ErrorMsgs().Query, stmt, scanErr)

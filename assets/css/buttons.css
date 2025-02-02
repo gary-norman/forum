@@ -224,6 +224,12 @@ gap: 0.8rem;
     background: url("/assets/icons/reply_16.svg") no-repeat center;
   }
 }
+
+.btn-reply-comment {
+  &::before {
+    background: url("/assets/icons/reply_comment_16.svg") no-repeat center;
+  }
+}
 .btn-report {
   &::before {
     background: url("/assets/icons/report_16.svg") no-repeat center;

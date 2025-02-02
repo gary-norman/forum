@@ -107,6 +107,7 @@ type Post struct {
 
 type PostWithDaysAgo struct {
 	Post
+	Comments  []Comment
 	TimeSince string
 }
 

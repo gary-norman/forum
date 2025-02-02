@@ -166,10 +166,23 @@ func (m *CommentModel) Delete(commentID int) error {
 }
 
 func (m *CommentModel) All() ([]models.Comment, error) {
-	stmt := "SELECT ID, Content, Created, ChannelID, AuthorID, CommentedPostID, CommentedCommentID, IsReply, IsFlagged FROM Comments ORDER BY ID DESC"
-	rows, err := m.DB.Query(stmt)
-	if err != nil {
-		return nil, err
+	stmt := "SELECT ID, Content, Created, AuthorID, CommentedPostID, CommentedCommentID, IsFlagged, IsCommentable FROM Comments ORDER BY ID DESC"
+
+	if m == nil {
+		log.Println("Error: DB is nil")
+		return nil, fmt.Errorf("database connection is not initialized")
+	}
+
+	if m.DB == nil {
+		log.Println("Error: CommentModel is nil")
+		return nil, fmt.Errorf("database connection is not initialized")
+	}
+
+	rows, selectErr := m.DB.Query(stmt)
+	if selectErr != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "Error:", "select")
+		log.Printf(ErrorMsgs().Query, stmt, selectErr)
+		return nil, selectErr
 	}
 
 	defer func() {
@@ -181,21 +194,28 @@ func (m *CommentModel) All() ([]models.Comment, error) {
 	var Comments []models.Comment
 	for rows.Next() {
 		p := models.Comment{}
-		err = rows.Scan(&p.ID, &p.Content, &p.Created, &p.ChannelID, &p.AuthorID, &p.CommentedPostID, &p.CommentedCommentID, &p.IsReply, &p.IsFlagged)
-		if err != nil {
-			return nil, err
+
+		scanErr := rows.Scan(
+			&p.ID,
+			&p.Content,
+			&p.Created,
+			&p.AuthorID,
+			&p.CommentedPostID,
+			&p.CommentedCommentID,
+			&p.IsFlagged,
+			&p.IsCommentable)
+		if scanErr != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "Error:", "scan")
+			log.Printf(ErrorMsgs().Query, stmt, scanErr)
+			return nil, scanErr
 		}
 		Comments = append(Comments, p)
-	}
-
-	if err = rows.Err(); err != nil {
-		return nil, err
 	}
 
 	return Comments, nil
 }
 
-// Exists helps avoid creating duplicate reactions by determining whether a reaction for the specific combination of AuthorID, PostID and the reaction itself - liked/disliked
+// Exists helps avoid creating duplicate comments by determining whether a comment for the specific combination of AuthorID, PostID/CommentID and the content of the comment
 func (m *CommentModel) Exists(content string, authorID, parentPostID, parentCommentID int) (bool, error) {
 	//fmt.Printf("Reaction already exists (reactions.go :63 -> Exists) for\nauthorID: %v,\nparentPostID: %v,\nLiked: %v\nDisliked: %v", authorID, parentPostID, liked, disliked)
 	stmt := `SELECT EXISTS(

@@ -224,6 +224,12 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		posts[i].Dislikes += dislikes
 	}
 
+	comments, commentsErr := app.comments.All()
+	if commentsErr != nil {
+		//http.Error(w, commentsErr.Error(), 500)
+		log.Printf("Error counting comments: %v", commentsErr)
+	}
+
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
 	for index, post := range posts {
 		now := time.Now()
@@ -241,6 +247,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		postsWithDaysAgo[index] = models.PostWithDaysAgo{
 			Post:      post,
 			TimeSince: TimeSince,
+			Comments:  comments,
 		}
 	}
 
@@ -278,7 +285,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		Avatar:          currentUserAvatar,
 		Bio:             currentUserBio,
 		Images:          nil,
-		Comments:        nil,
 		Reactions:       nil,
 		NotifyPlaceholder: models.NotifyPlaceholder{
 			Register: "",
@@ -525,68 +531,6 @@ func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
-
-	//log.Printf("using storeReaction()")
-
-	// Check if the method is POST, otherwise return Method Not Allowed
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// Variable to hold the decoded data
-	var commentData models.Comment
-
-	// Decode the JSON request body into the commentData variable
-	err := json.NewDecoder(r.Body).Decode(&commentData)
-	if err != nil {
-		// Use the error message from the Errors struct for decoding errors
-		http.Error(w, fmt.Sprintf(ErrorMsgs().Parse, "storeReaction", err), http.StatusBadRequest)
-		log.Printf("Error decoding JSON: %v", err)
-		return
-	}
-
-	//// Validate that at least one of reactedPostID or reactedCommentID is non-zero
-	if (commentData.CommentedPostID == nil || *commentData.CommentedPostID == 0) && (commentData.CommentedCommentID == nil || *commentData.CommentedCommentID == 0) {
-		http.Error(w, "You must react to either a post or a comment", http.StatusBadRequest)
-		return
-	}
-
-	postID, commentID := 0, 0
-
-	if commentData.CommentedPostID != nil {
-		//log.Println("ReactedPostID:", *commentData.ReactedPostID)
-		postID = *commentData.CommentedPostID
-	}
-
-	if commentData.CommentedCommentID != nil {
-		//log.Printf("ReactedCommentID: %d", *commentData.ReactedPostID)
-		commentID = *commentData.CommentedCommentID
-	}
-
-	// If no existing reaction, insert a new reaction
-	err = app.comments.Upsert(commentData.Content, commentData.AuthorID, postID, commentID, commentData.IsFlagged, commentData.IsCommentable)
-	if err != nil {
-		// Use your custom error message for insertion errors
-		http.Error(w, fmt.Sprintf(ErrorMsgs().Insert, "storeComment", err), http.StatusInternalServerError)
-		log.Printf("Error inserting comment: %v", err)
-		return
-	}
-	// Check reaction and store it in the database, or handle errors
-	// Respond with a JSON response
-	w.Header().Set("Content-Type", "application/json")
-	// Send a response indicating success
-	//w.WriteHeader(http.StatusCreated)
-	err = json.NewEncoder(w).Encode(map[string]string{"message": "Comment added (in go)"})
-	if err != nil {
-		log.Printf(ErrorMsgs().Post, err)
-		http.Error(w, err.Error(), 500)
-		return
-	}
-	//http.Redirect(w, r, "/", http.StatusFound)
-}
-
 func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 
 	//log.Printf("using storeReaction()")
@@ -694,4 +638,98 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
+	user, getUserErr := app.GetLoggedInUser(r)
+	if getUserErr != nil {
+		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
+		return
+	}
+	//log.Printf("using storeReaction()")
+
+	// Check if the method is POST, otherwise return Method Not Allowed
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Variable to hold the decoded data
+	var commentData models.Comment
+
+	parseErr := r.ParseMultipartForm(10 << 20)
+	if parseErr != nil {
+		http.Error(w, parseErr.Error(), 400)
+		log.Printf(ErrorMsgs().Parse, "storeComment", parseErr)
+		return
+	}
+
+	postIDStr := r.PostForm.Get("postID")
+	commentIDStr := r.PostForm.Get("commentID")
+
+	// Convert postIDStr to an integer
+	postID, err := strconv.Atoi(postIDStr)
+	if err != nil {
+		http.Error(w, "Invalid postID", http.StatusBadRequest)
+		return
+	}
+
+	// Convert commentIDStr to an integer
+	commentID, err := strconv.Atoi(commentIDStr)
+	if err != nil {
+		http.Error(w, "Invalid commentID", http.StatusBadRequest)
+		return
+	}
+
+	// Convert integers to pointers
+	var postIDPtr, commentIDPtr *int
+
+	if postID != 0 {
+		postIDPtr = &postID
+	}
+
+	if commentID != 0 {
+		commentIDPtr = &commentID
+	}
+
+	// Validate that at least one of them is non-zero
+	if (postIDPtr == nil || *postIDPtr == 0) && (commentIDPtr == nil || *commentIDPtr == 0) {
+		http.Error(w, "You must reply to either a post or a comment", http.StatusBadRequest)
+		return
+	}
+
+	// If CommentedPostID or CommentedCommentID already exists, use them
+	if commentData.CommentedPostID != nil {
+		postIDPtr = commentData.CommentedPostID
+	}
+
+	if commentData.CommentedCommentID != nil {
+		commentIDPtr = commentData.CommentedCommentID
+	}
+
+	// Create the comment with pointer values
+	commentData = models.Comment{
+		Content:            r.PostForm.Get("content"),
+		AuthorID:           user.ID,
+		CommentedPostID:    postIDPtr,
+		CommentedCommentID: commentIDPtr,
+		IsCommentable:      false,
+		IsFlagged:          false,
+	}
+
+	insertErr := app.comments.Upsert(
+		commentData.Content,
+		commentData.AuthorID,
+		postID,
+		commentID,
+		commentData.IsFlagged,
+		commentData.IsCommentable)
+
+	if insertErr != nil {
+		log.Printf(ErrorMsgs().Comment, insertErr)
+		http.Error(w, insertErr.Error(), 500)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusFound)
 }

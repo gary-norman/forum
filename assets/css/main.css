@@ -755,9 +755,33 @@ input[type="email"] {
     top: 0;
   }
 }
-/* --- login and registration from styling --- */
+
+/* reply with a comment form styling */
+
+.form-reply {
+  width: 100%;
+  & > * {
+    gap: 1.2rem;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    align-content: flex-end;
+  }
+}
+/* --- login and registration form styling --- */
 .input-wrapper {
-  position: relative
+  position: relative;
+  &.container-reply {
+    width: 100%;
+    & textarea {
+      resize: none;
+      overflow: hidden;
+      min-width: 24rem;
+      min-height: 5rem; /* Set a minimum height */
+      max-height: 30rem; /* Optional: Set a max height */
+    }
+  }
+
 }
 #form-login, #form-edit-user {
   & input {

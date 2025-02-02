@@ -468,7 +468,8 @@
             <svg height="100dvh" width="100dvw" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="home-mask-gradient" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stop-color="black" />
+                  <stop offset="0%" stop-color="black" />+
+
                   <!--                            <stop offset="6%" stop-color="black" />-->
                   <stop offset="2%" stop-color="white" />
                   <stop offset="100%" stop-color="white" />
@@ -622,32 +623,32 @@
                       </button>
                   </div>
                   <div id="user-activity-feeds">
-                      <div id="activity-activity">
-                          <div class="filters-row button-row">
-                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                  <span class="btn-sort">sort</span>
-                              </button>
-                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                  <span class="btn-filters">filters</span>
-                              </button>
-                              <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                  <span class="btn-sort">scroll</span>
-                              </button>
-                          </div>
-                          <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                            {{$userID := 0}} <!-- Default value for logged out users -->
-                            {{if ne .CurrentUserName "nouser"}}
-                              {{$userID = .CurrentUser.ID}}
-                            {{end}}
-                            {{range .Posts}} <!-- user page activity posts -->
-                            {{ $postID := .ID }}
-                            <div class="card" data-post-id="{{$postID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
-                            <div class="container-post-info">
-                              {{ if (ne .AuthorAvatar "noimage") }}
+                    <div id="activity-activity">
+                      <div class="filters-row button-row">
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-sort">sort</span>
+                        </button>
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-filters">filters</span>
+                        </button>
+                        <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-sort">scroll</span>
+                        </button>
+                      </div>
+                      <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+                        {{$userID := 0}} <!-- Default value for logged out users -->
+                        {{if ne .CurrentUserName "nouser"}}
+                          {{$userID = .CurrentUser.ID}}
+                        {{end}}
+                        {{range .Posts}} <!-- user page activity posts -->
+                        {{ $post := . }}
+                        <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                          <div class="container-post-info">
+                            {{ if (ne .AuthorAvatar "noimage") }}
                               <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
-                              {{ else }}
+                            {{ else }}
                               <span class="card-pic profile-pic--empty" data-name-user="{{ .Author }}"></span>
-                              {{ end }}
+                            {{ end }}
                             <div>
                               <small class="small-bold">{{.Author}}</small>
                               <div>
@@ -656,84 +657,138 @@
                                 <small>{{.TimeSince}}</small>
                               </div>
                             </div>
-                        <div class="like-button">
-                          <button data-tooltip-name="like" class="btn-icoonly"></button>
-                        </div>
-                      </div>
-                      <h4>{{.Title}}</h4>
-                      {{ if ne .Images "noimage" }}
-                        <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
-                      {{ end }}
-                      <article class="cardContent">{{.Content}}</article>
-                          <div class="button-row-wrap post-controls" >
-                              {{$status := reactionStatus $userID $postID 0}}
-                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
-                                  <span class="btn-likes" data-like-ID="user-{{$postID}}">{{.Likes}}</span>
-                              </button>
-                              <!-- --- TODO invertoff -->
-                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-                                  <span class="btn-dislikes" data-dislike-ID="user-{{$postID}}">{{.Dislikes}}</span>
-                              </button>
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                          <span class="btn-reply">reply</span>
-                        </button>
-                          <button id="share-button-{{$postID}}-activity" popovertarget="share-container-{{$postID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                              <span class="btn-share">share</span>
-                          </button>
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                          <span class="btn-report">report</span>
-                        </button>
-                          <div popover id="share-container-{{$postID}}-activity" class="scrollable-user">
-                              <div class="share-container">
-                                  <div class="button-row">
-                                      <a href="/" target="_blank" class="share-logo facebook"></a>
-                                      <a href="/" target="_blank" class="share-logo twitter"></a>
-                                      <a href="/" target="_blank" class="share-logo linkedin"></a>
-                                      <a href="/" target="_blank" class="share-logo reddit"></a>
-                                      <a href="/" target="_blank" class="share-logo whatsapp"></a>
-                                      <a href="/" target="_blank" class="share-logo telegram"></a>
-                                  </div>
-                                  <div class="flex-space-between">
-                                      <label class="padded" for="copy-url-{{$postID}}-activity">Copy URL link</label>
-                                      <button class="btn-sm btn-icoonly">
-                                          <span class="btn-copy" aria-label="Copy URL link"></span>
-                                      </button>
-                                  </div>
-                                  <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
-                                         id="copy-url-{{$postID}}-activity" name="copy-url-{{$postID}}-activity"/>
-                              </div>
-                          </div>
-                      </div>
-                    </div>
-                    {{ range .Comments}}
-                    {{ $commentID := .ID }}
-                    <div class="container-comments">
-                      <div class="reply-arrow"></div>
-                      <div class="card" data-comment-id="{{$commentID}}" data-channel-ID="{{$postID.ChannelID}}" data-author-ID="{{.AuthorID}}">
-                        <form action="/edituser" enctype="multipart/form-data" method="POST">
-                          <h5 id="edit-comment-title-" class="form-title">edit your profile</h5>
-                          <div class="input-wrapper">
-                            <textarea id="bio" name="bio" placeholder="update your bio"></textarea>
-                            <label for="bio" class="user-label">update your bio</label>
-                          </div>
-                          <p>upload an image (optional)</p>
-                          <div id="drop-zone--user-image">
-                            <div id="uploaded-file--user-image"></div>
-                            <div class="drag-drop-text-wrapper">
-                              <span class="dragText">drag and drop your file, or</span>
-                              <!--                    <span class="button">browse</span>-->
-                              <input type="file" id="browse--user-image" name="file-drop" />
+                            <div class="like-button">
+                              <button data-tooltip-name="like" class="btn-icoonly"></button>
                             </div>
                           </div>
-                          <div class="cont-flex-row flex-center">
-                            <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
-                              <span>submit</span>
+                          <h4>{{.Title}}</h4>
+                          {{ if ne .Images "noimage" }}
+                            <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
+                          {{ end }}
+                          <article class="cardContent">{{.Content}}</article>
+                          <!--  Post control buttons -->
+                          <div class="button-row-wrap post-controls" >
+                            {{$status := reactionStatus $userID $post.ID 0}}
+                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+                              <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{.Likes}}</span>
                             </button>
+                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+                              <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{.Dislikes}}</span>
+                            </button>
+                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                              <span class="btn-reply">reply</span>
+                            </button>
+                            <button id="share-button-{{$post.ID}}-activity" popovertarget="share-container-{{$post.ID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                              <span class="btn-share">share</span>
+                            </button>
+                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                              <span class="btn-report">report</span>
+                            </button>
+                            <!--  Share modal -->
+                            <div popover id="share-container-{{$post.ID}}-activity" class="scrollable-user">
+                              <div class="share-container">
+                                <div class="button-row">
+                                  <a href="/" target="_blank" class="share-logo facebook"></a>
+                                  <a href="/" target="_blank" class="share-logo twitter"></a>
+                                  <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                  <a href="/" target="_blank" class="share-logo reddit"></a>
+                                  <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                  <a href="/" target="_blank" class="share-logo telegram"></a>
+                                </div>
+                                  <div class="flex-space-between">
+                                    <label class="padded" for="copy-url-{{$post.ID}}-activity">Copy URL link</label>
+                                    <button class="btn-sm btn-icoonly">
+                                      <span class="btn-copy" aria-label="Copy URL link"></span>
+                                    </button>
+                                  </div>
+                                  <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
+                                         id="copy-url-{{$post.ID}}-activity" name="copy-url-{{$post.ID}}-activity"/>
+                              </div>
+                            </div>
                           </div>
-                        </form>
-                      </div>
-                    </div>
-                    {{end}} <!-- user page activity post COMMENTS -->
+                          <!--  Reply / Submit Commenty form -->
+                          <form class="form-reply" action="/addcomment" enctype="multipart/form-data" method="POST">
+                            <div class="cont-flex-row flex-end">
+                              <div class="input-wrapper container-reply">
+                                <textarea id="comment-form-{{$post.ID}}" name="content" placeholder="Type a reply..."></textarea>
+                                <label for="comment-form-{{$post.ID}}" class="user-label">Reply</label>
+                              </div>
+                              <button class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+                                <span class="btn-reply-comment">comment</span>
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      {{ range .Comments}}
+                      {{ $comment := . }}
+                        <div class="container-comments">
+                          <div class="reply-arrow"></div>
+                          <div class="card" data-post-id="{{$comment.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                            <div class="container-post-info">
+                              {{ if (ne .AuthorAvatar "noimage") }}
+                              <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
+                              {{ else }}
+                              <span class="card-pic profile-pic--empty" data-name-user="{{ .Author }}"></span>
+                              {{ end }}
+                              <div>
+                                <small class="small-bold">{{.Author}}</small>
+                                <div>
+                                  <small>{{.ChannelName}}</small>
+                                  <small>-</small>
+                                  <small>{{.TimeSince}}</small>
+                                </div>
+                              </div>
+                              <div class="like-button">
+                                <button data-tooltip-name="like" class="btn-icoonly"></button>
+                              </div>
+                            </div>
+                            <h4>{{.Title}}</h4>
+                            {{ if ne .Images "noimage" }}
+                            <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
+                            {{ end }}
+                            <article class="cardContent">{{.Content}}</article>
+                            <!--  Post control buttons -->
+                            <div class="button-row-wrap post-controls" >
+                              {{$status := reactionStatus $userID $post.ID 0}}
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+                                <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{.Likes}}</span>
+                              </button>
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+                                <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{.Dislikes}}</span>
+                              </button>
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                <span class="btn-reply">reply</span>
+                              </button>
+                              <button id="share-button-{{$post.ID}}-activity" popovertarget="share-container-{{$post.ID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                <span class="btn-share">share</span>
+                              </button>
+                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                                <span class="btn-report">report</span>
+                              </button>
+                              <!--  Share modal -->
+                              <div popover id="share-container-{{$post.ID}}-activity" class="scrollable-user">
+                                <div class="share-container">
+                                  <div class="button-row">
+                                    <a href="/" target="_blank" class="share-logo facebook"></a>
+                                    <a href="/" target="_blank" class="share-logo twitter"></a>
+                                    <a href="/" target="_blank" class="share-logo linkedin"></a>
+                                    <a href="/" target="_blank" class="share-logo reddit"></a>
+                                    <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                                    <a href="/" target="_blank" class="share-logo telegram"></a>
+                                  </div>
+                                  <div class="flex-space-between">
+                                    <label class="padded" for="copy-url-{{$post.ID}}-activity">Copy URL link</label>
+                                    <button class="btn-sm btn-icoonly">
+                                      <span class="btn-copy" aria-label="Copy URL link"></span>
+                                    </button>
+                                  </div>
+                                  <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
+                                         id="copy-url-{{$post.ID}}-activity" name="copy-url-{{$post.ID}}-activity"/>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                      {{end}} <!-- user page activity post COMMENTS -->
                   {{end}} <!-- user page activity POSTS -->
 
                   </div>

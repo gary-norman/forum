@@ -51,6 +51,9 @@ func main() {
 		cookies: &CookieModel{
 			DB: db,
 		},
+		comments: &sqlite.CommentModel{
+			DB: db,
+		},
 		reactions: &sqlite.ReactionModel{
 			DB: db,
 		},

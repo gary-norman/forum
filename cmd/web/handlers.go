@@ -454,7 +454,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// TODO get channel moderators
 
 	// TODO get channel posts
-
+	// TODO create structs for each type (ChannelTemplate etc) and serve them in the template struct
 	// SECTION -- template ---
 	templateData := models.TemplateData{
 		AllUsers:    allUsers,

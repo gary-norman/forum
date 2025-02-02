@@ -18,6 +18,7 @@ func ErrorMsgs() *models.Errors {
 }
 
 func (m *UserModel) Insert(username, email, password, sessionToken, csrfToken, avatar, banner, description string) error {
+	// FIXME this prepare statement is unnecessary as it is not used in a loop
 	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (Username, EmailAddress, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, IsFlagged) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, DateTime('now'), 0)")
 	if insertErr != nil {
 		log.Printf(ErrorMsgs().Query, username, insertErr)
@@ -145,7 +146,7 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 		log.Printf(fmt.Sprintf(ErrorMsgs().UserModel, "GetUserByUsername", username))
 	}
 	// Query to fetch user data by username
-	stmt, prepErr := m.DB.Prepare("SELECT ID, Username, HashedPassword, EmailAddress, Avatar, Banner, Description, UserType, Created, IsFlagged, SessionToken, CsrfToken FROM Users WHERE Username = ? LIMIT 1")
+	stmt, prepErr := m.DB.Prepare("SELECT * FROM Users WHERE Username = ? LIMIT 1")
 	if prepErr != nil {
 		log.Printf(ErrorMsgs().Query, username, prepErr)
 	}
@@ -240,7 +241,7 @@ func (m *UserModel) GetSingleUserValue(ID int, searchColumn, outputColumn string
 		return "", fmt.Errorf("invalid searchColumn name: %s", searchColumn)
 	}
 	stmt := fmt.Sprintf(
-		"SELECT ID, Username, EmailAddress, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, IsFlagged FROM Users WHERE %s = ?",
+		"SELECT * FROM Users WHERE %s = ?",
 		searchColumn,
 	)
 	rows, queryErr := m.DB.Query(stmt, ID)
@@ -294,7 +295,7 @@ func (m *UserModel) GetSingleUserValue(ID int, searchColumn, outputColumn string
 }
 
 func (m *UserModel) All() ([]models.User, error) {
-	stmt := "SELECT ID, Username, EmailAddress, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, IsFlagged FROM Users ORDER BY ID DESC"
+	stmt := "SELECT * FROM Users ORDER BY ID DESC"
 	rows, queryErr := m.DB.Query(stmt)
 	if queryErr != nil {
 		return nil, errors.New(fmt.Sprintf(ErrorMsgs().Query, "Users", queryErr))

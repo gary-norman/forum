@@ -52,7 +52,7 @@ type Channel struct {
 	Banner      string    `json:"banner,omitempty"`
 	Description string    `json:"description"`
 	Created     time.Time `json:"created"`
-	Rules       []ChannelRule
+	Rules       []Rule
 	Owned       bool
 	Joined      bool
 	Privacy     bool `json:"privacy"`
@@ -60,6 +60,12 @@ type Channel struct {
 	IsFlagged   bool `json:"isFlagged,omitempty"`
 }
 
+type Rule struct {
+	ID         int       `json:"id"`
+	Rule       string    `json:"rule"`
+	Created    time.Time `json:"created"`
+	Predefined bool      `json:"predefined"`
+}
 type ChannelWithDaysAgo struct {
 	Channel
 	TimeSince string
@@ -71,8 +77,9 @@ type ChannelData struct {
 
 type ChannelRule struct {
 	ID        int    `json:"id"`
-	Rule      string `json:"rule"`
+	RuleID    string `json:"rule"`
 	ChannelID int    `json:"channelId"`
+	Created   int    `json:"created"`
 }
 
 type MutedChannel struct {

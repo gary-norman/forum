@@ -51,10 +51,18 @@ gap: 0.8rem;
     &::before {
         background-size: 1.6rem !important;
     }
+    
+    
+    
+    
     background-size: 2.4rem;
     height: 2.4rem;
-    width: 2.4rem;
+    width: max-content;
     padding: 0;
+    
+    
+    
+    
 }
 & span.btn-edit {
     width: 1.6rem;

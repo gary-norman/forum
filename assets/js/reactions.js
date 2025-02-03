@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const likeID = likeCountElement.getAttribute("data-like-id");
         const dislikeID = dislikeCountElement.getAttribute("data-dislike-id");
         const postID = singlePostControl.closest('.card').getAttribute('data-post-id');
+        const commentID = singlePostControl.closest('.card').getAttribute('data-comment-id');
         const channelID = singlePostControl.closest('.card').getAttribute('data-channel-id');
         const reactionAuthorID = sidebar.querySelector('h3').getAttribute('data-current-user-ID');
 
@@ -39,14 +40,40 @@ document.addEventListener('DOMContentLoaded', function () {
                     dislikeButton.classList.remove('active');
                 }
             }
-            // Send the updated like to the backend via POST request
-            const postData = {
-                liked: true,
-                disliked: false,
-                reacted_post_id: parseInt(postID, 10),
-                author_id: parseInt(reactionAuthorID, 10),
-                channel_id: parseInt(channelID, 10),
-            };
+
+
+            let postData1;
+
+            if (postID === null) {
+                // Send the updated like to the backend via POST request
+                postData1 = {
+                    liked: true,
+                    disliked: false,
+                    commented_comment_id: parseInt(commentID, 10),
+                    author_id: parseInt(reactionAuthorID, 10),
+                    channel_id: parseInt(channelID, 10),
+                };
+            } else if (commentID === null) {
+                // Send the updated like to the backend via POST request
+                postData1 = {
+                    liked: true,
+                    disliked: false,
+                    reacted_post_id: parseInt(postID, 10),
+                    author_id: parseInt(reactionAuthorID, 10),
+                    channel_id: parseInt(channelID, 10),
+                };
+            }
+
+            let postData = checkData(commentID, postID, reactionAuthorID, channelID, "like")
+
+            // // Send the updated like to the backend via POST request
+            // const postData = {
+            //     liked: true,
+            //     disliked: false,
+            //     reacted_post_id: parseInt(postID, 10),
+            //     author_id: parseInt(reactionAuthorID, 10),
+            //     channel_id: parseInt(channelID, 10),
+            // };
 
             fetchData(postData, "like");
         });
@@ -74,20 +101,69 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            // Send the updated like to the backend via POST request
-            const postData = {
-                liked: false,
-                disliked: true,
-                reacted_post_id: parseInt(postID, 10),
-                author_id: parseInt(reactionAuthorID, 10),
-                channel_id: parseInt(channelID, 10),
-            };
+            let postData = checkData(commentID, postID, reactionAuthorID, channelID, "dislike")
 
             fetchData(postData, "dislike");
         });
     });
 
 });
+
+function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {
+    let postData;
+
+    if (likeStatus === "like") {
+        if (postID === null) {
+            // Send the updated like to the backend via POST request
+            postData = {
+                liked: true,
+                disliked: false,
+                reacted_comment_id: parseInt(commentID, 10),
+                author_id: parseInt(reactionAuthorID, 10),
+                channel_id: parseInt(channelID, 10),
+            };
+            console.log("liked comment: ", postData)
+
+        } else if (commentID === null) {
+            // Send the updated like to the backend via POST request
+            postData = {
+                liked: true,
+                disliked: false,
+                reacted_post_id: parseInt(postID, 10),
+                author_id: parseInt(reactionAuthorID, 10),
+                channel_id: parseInt(channelID, 10),
+            };
+            console.log("liked post: ", postData)
+
+        }
+    } else if (likeStatus === "dislike") {
+        if (postID === null) {
+            // Send the updated like to the backend via POST request
+            postData = {
+                liked: false,
+                disliked: true,
+                reacted_comment_id: parseInt(commentID, 10),
+                author_id: parseInt(reactionAuthorID, 10),
+                channel_id: parseInt(channelID, 10),
+            };
+            console.log("disliked comment: ", postData)
+
+        } else if (commentID === null) {
+            // Send the updated like to the backend via POST request
+            postData = {
+                liked: false,
+                disliked: true,
+                reacted_post_id: parseInt(postID, 10),
+                author_id: parseInt(reactionAuthorID, 10),
+                channel_id: parseInt(channelID, 10),
+            };
+            console.log("disliked post: ", postData)
+
+        }
+    }
+
+    return postData;
+}
 
 function fetchData(postData, likeString) {
     fetch('http://localhost:8989/store-reaction', {

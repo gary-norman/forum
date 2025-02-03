@@ -725,7 +725,7 @@
                         <div class="container-comments">
                           <div class="container-comment">
                             <div class="reply-arrow"></div>
-                            <div class="card" data-post-id="{{$comment.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                            <div class="card" data-comment-id="{{$comment.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{.AuthorID}}">
                               <div class="container-post-info">
                                 {{ if (ne .AuthorAvatar "noimage") }}
                                 <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
@@ -958,112 +958,113 @@
                   </div>
               </div>
 
-                <div class="right-panel ">
-                  <div class="right-panel-content scroll-down">
-                      <div class="right-panel-name-container flex-space-between">
-                          <h4 class="right-panel-name">{{ if ne .CurrentUserName "nouser"}}{{.CurrentUserName}}{{ else }}EyeSome578{{ end }}</h4>
-                        {{ if (ne .CurrentUserName "nouser") }}
-                          <button class="btn-sm btn-icoonly">
-                              <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
-                          </button>
-                        {{ end }} <!-- "nouser" check -->
-                      </div>
+
+            </div>
+              <div class="right-panel ">
+                <div class="right-panel-content scroll-down">
+                  <div class="right-panel-name-container flex-space-between">
+                    <h4 class="right-panel-name">{{ if ne .CurrentUserName "nouser"}}{{.CurrentUserName}}{{ else }}EyeSome578{{ end }}</h4>
                     {{ if (ne .CurrentUserName "nouser") }}
-                      <div class="right-panel-pic-container flex-space-between">
-                          <div class="right-panel-pic-container">
-                            {{ if (ne .Avatar "noimage") }}
-                              <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
-                            {{ else }}
-                              <div class="right-panel-pic profile-pic--empty" data-name-user="{{ .CurrentUserName }}"></div>
-                            {{ end }}
-                            <small>Edit your avatar picture</small>
-                          </div>
-                          <button class="btn-sm btn-icoonly">
-                              <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
-                          </button>
-                      </div>
+                    <button class="btn-sm btn-icoonly">
+                      <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
+                    </button>
                     {{ end }} <!-- "nouser" check -->
-                      <div class="right-panel-bio-container ">
-                        <div class="right-panel-bio flex-space-between">
-                          <label for="user-bio-content" class="padded">{{ if ne .CurrentUserName "nouser"}}Edit your bio{{ else }}User bio{{ end }}</label>
+                  </div>
+                  {{ if (ne .CurrentUserName "nouser") }}
+                  <div class="right-panel-pic-container flex-space-between">
+                    <div class="right-panel-pic-container">
+                      {{ if (ne .Avatar "noimage") }}
+                      <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
+                      {{ else }}
+                      <div class="right-panel-pic profile-pic--empty" data-name-user="{{ .CurrentUserName }}"></div>
+                      {{ end }}
+                      <small>Edit your avatar picture</small>
+                    </div>
+                    <button class="btn-sm btn-icoonly">
+                      <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
+                    </button>
+                  </div>
+                  {{ end }} <!-- "nouser" check -->
+                  <div class="right-panel-bio-container ">
+                    <div class="right-panel-bio flex-space-between">
+                      <label for="user-bio-content" class="padded">{{ if ne .CurrentUserName "nouser"}}Edit your bio{{ else }}User bio{{ end }}</label>
+                      {{ if (ne .CurrentUserName "nouser") }}
+                      <button class="btn-sm btn-icoonly">
+                        <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
+                      </button>
+                      {{ end }} <!-- "nouser" check -->
+                    </div>
+                    <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Bio }}</textarea>
+                  </div>
+                  <div class="right-panel-modded-channels-container">
+                    <div class="sidebar-block sidebar-channels">
+                      <small class="padded">Modded Channels</small>
+                      <div class="sidebar-channel-block">
+                        <div class="sidebar-channel">
+                          <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
+                          <span class="card-pic profile-pic"></span>
+                          <div>
+                            <div>/Interesting_Things</div>
+                            <div>
+                              <div class="channel-users">5.6k</div>
+                              <div class="channel-green-dot">36</div>
+                            </div>
+                          </div>
                           {{ if (ne .CurrentUserName "nouser") }}
-                            <button class="btn-sm btn-icoonly">
-                              <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
-                            </button>
+                          <button class="btn-sm btn-icoonly margin-auto-0">
+                            <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                          </button>
                           {{ end }} <!-- "nouser" check -->
                         </div>
-                        <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Bio }}</textarea>
                       </div>
-                      <div class="right-panel-modded-channels-container">
-                          <div class="sidebar-block sidebar-channels">
-                              <small class="padded">Modded Channels</small>
-                              <div class="sidebar-channel-block">
-                                  <div class="sidebar-channel">
-                                      <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
-                                          <span class="card-pic profile-pic"></span>
-                                          <div>
-                                              <div>/Interesting_Things</div>
-                                              <div>
-                                                  <div class="channel-users">5.6k</div>
-                                                  <div class="channel-green-dot">36</div>
-                                              </div>
-                                          </div>
-                                        {{ if (ne .CurrentUserName "nouser") }}
-                                          <button class="btn-sm btn-icoonly margin-auto-0">
-                                              <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                                          </button>
-                                        {{ end }} <!-- "nouser" check -->
-                                      </div>
-                                  </div>
-                                  <div class="sidebar-channel">
-                                      <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
-                                          <span class="card-pic channel-pic"></span>
-                                          <div>
-                                              <div>/CSS_Help</div>
-                                              <div>
-                                                  <div class="channel-users">5.6k</div>
-                                                  <div class="channel-green-dot">36</div>
-                                              </div>
-                                          </div>
-                                        {{ if (ne .CurrentUserName "nouser") }}
-                                          <button class="btn-sm btn-icoonly margin-auto-0">
-                                              <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                                          </button>
-                                        {{ end }} <!-- "nouser" check -->
-                                      </div>
-                                  </div>
-                                  <div class="sidebar-channel">
-                                      <div></div>
-                                      <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
-                                          <span class="card-pic channel-pic"></span>
-                                          <div>
-                                              <div>/Golang#Discussion</div>
-                                              <div>
-                                                  <div class="channel-users">5.6k</div>
-                                                  <div class="channel-green-dot">36</div>
-                                              </div>
-                                          </div>
-                                        {{ if (ne .CurrentUserName "nouser") }}
-                                          <button class="btn-sm btn-icoonly margin-auto-0">
-                                              <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                                          </button>
-                                        {{ end }} <!-- "nouser" check -->
-                                      </div>
-                                  </div>
-                              </div>
+                      <div class="sidebar-channel">
+                        <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
+                        <span class="card-pic channel-pic"></span>
+                        <div>
+                          <div>/CSS_Help</div>
+                          <div>
+                            <div class="channel-users">5.6k</div>
+                            <div class="channel-green-dot">36</div>
                           </div>
+                        </div>
+                        {{ if (ne .CurrentUserName "nouser") }}
+                        <button class="btn-sm btn-icoonly margin-auto-0">
+                          <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                        </button>
+                        {{ end }} <!-- "nouser" check -->
                       </div>
-                      <div class="button-row-wrap">
-                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                              <span class="btn-share">share</span>
-                          </button>
-                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                              <span class="btn-report">report</span>
-                          </button>
+                    </div>
+                    <div class="sidebar-channel">
+                      <div></div>
+                      <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
+                      <span class="card-pic channel-pic"></span>
+                      <div>
+                        <div>/Golang#Discussion</div>
+                        <div>
+                          <div class="channel-users">5.6k</div>
+                          <div class="channel-green-dot">36</div>
+                        </div>
                       </div>
+                      {{ if (ne .CurrentUserName "nouser") }}
+                      <button class="btn-sm btn-icoonly margin-auto-0">
+                        <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                      </button>
+                      {{ end }} <!-- "nouser" check -->
+                    </div>
                   </div>
                 </div>
+              </div>
             </div>
+          <div class="button-row-wrap">
+            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+              <span class="btn-share">share</span>
+            </button>
+            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+              <span class="btn-report">report</span>
+            </button>
+          </div>
+        </div>
+      </div>
         </div>
 
             <!----- channel page ----->

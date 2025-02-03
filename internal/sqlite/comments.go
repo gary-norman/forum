@@ -13,13 +13,14 @@ type CommentModel struct {
 }
 
 // Upsert inserts or updates a reaction for a specific combination of AuthorID and the parent fields (ChannelID, ReactedPostID, ReactedCommentID). It uses Exists to determine if the reaction already exists.
-func (m *CommentModel) Upsert(content, author, channel, authorAvatar string, channelID, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
-	if !isValidParent(parentPostID, parentCommentID) {
+func (m *CommentModel) Upsert(comment models.Comment) error {
+
+	if !isValidParent(*comment.CommentedPostID, *comment.CommentedCommentID) {
 		return fmt.Errorf("only one of CommentedPostID, or CommentedCommentID must be non-zero")
 	}
 
 	// Check if the reaction exists
-	exists, err := m.Exists(content, authorID, parentPostID, parentCommentID)
+	exists, err := m.Exists(comment)
 	if err != nil {
 		fmt.Println("Upsert Comment > Exists error")
 		return fmt.Errorf(err.Error())
@@ -28,16 +29,16 @@ func (m *CommentModel) Upsert(content, author, channel, authorAvatar string, cha
 	if exists {
 		// If the reaction exists, update it
 		//fmt.Println("Updating a reaction which already exists (reactions.go :53)")
-		return m.Update(content, author, channel, authorAvatar, channelID, authorID, parentPostID, parentCommentID, isFlagged, isCommentable)
+		return m.Update(comment)
 	}
 	//fmt.Println("Inserting a reaction (reactions.go :56)")
 
-	return m.Insert(content, author, channel, authorAvatar, channelID, authorID, parentPostID, parentCommentID, isFlagged, isCommentable)
+	return m.Insert(comment)
 }
 
-func (m *CommentModel) Insert(content, author, channel, authorAvatar string, channelID, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
+func (m *CommentModel) Insert(comment models.Comment) error {
 	// Validate that only one of parentPostID or parentCommentID is non-zero
-	if !isValidParent(parentPostID, parentCommentID) {
+	if !isValidParent(*comment.CommentedPostID, *comment.CommentedCommentID) {
 		return fmt.Errorf("only one of CommentedPostID or CommentedCommentID must be non-zero")
 	}
 
@@ -65,7 +66,17 @@ func (m *CommentModel) Insert(content, author, channel, authorAvatar string, cha
 		VALUES (?, DateTime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
 	// Execute the query, dereferencing the pointers for reactionID values
-	_, err = tx.Exec(stmt1, content, author, authorID, authorAvatar, channel, channelID, parentPostID, parentCommentID, isCommentable, isFlagged)
+	_, err = tx.Exec(stmt1,
+		&comment.Content,
+		&comment.Author,
+		&comment.AuthorID,
+		&comment.AuthorAvatar,
+		&comment.ChannelName,
+		&comment.ChannelID,
+		&comment.CommentedPostID,
+		&comment.CommentedCommentID,
+		&comment.IsCommentable,
+		&comment.IsFlagged)
 	//fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, parentPostID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Insert query: %w", err)
@@ -81,8 +92,8 @@ func (m *CommentModel) Insert(content, author, channel, authorAvatar string, cha
 	return err
 }
 
-func (m *CommentModel) Update(content, author, channel, authorAvatar string, channelID, authorID, parentPostID, parentCommentID int, isFlagged, isCommentable bool) error {
-	if !isValidParent(parentPostID, parentCommentID) {
+func (m *CommentModel) Update(comment models.Comment) error {
+	if !isValidParent(*comment.CommentedPostID, *comment.CommentedCommentID) {
 		return fmt.Errorf("only one of CommentedPostID, or CommentedCommentID must be non-zero")
 	}
 
@@ -110,7 +121,17 @@ func (m *CommentModel) Update(content, author, channel, authorAvatar string, cha
 		WHERE AuthorID = ? AND (CommentedPostID = ? OR CommentedCommentID = ?)`
 
 	// Execute the query
-	_, err = tx.Exec(stmt1, content, isCommentable, isFlagged, author, authorAvatar, channel, channelID, authorID, parentPostID, parentCommentID)
+	_, err = tx.Exec(stmt1,
+		&comment.Content,
+		&comment.IsCommentable,
+		&comment.IsFlagged,
+		&comment.Author,
+		&comment.AuthorAvatar,
+		&comment.ChannelName,
+		&comment.ChannelID,
+		&comment.AuthorID,
+		&comment.CommentedPostID,
+		&comment.CommentedCommentID)
 	//fmt.Printf("Updating Comments, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
 	if err != nil {
 		return fmt.Errorf("failed to execute Update query: %w", err)
@@ -219,7 +240,7 @@ func (m *CommentModel) All() ([]models.Comment, error) {
 }
 
 // Exists helps avoid creating duplicate comments by determining whether a comment for the specific combination of AuthorID, PostID/CommentID and the content of the comment
-func (m *CommentModel) Exists(content string, authorID, parentPostID, parentCommentID int) (bool, error) {
+func (m *CommentModel) Exists(comment models.Comment) (bool, error) {
 	//fmt.Printf("Reaction already exists (reactions.go :63 -> Exists) for\nauthorID: %v,\nparentPostID: %v,\nLiked: %v\nDisliked: %v", authorID, parentPostID, liked, disliked)
 	stmt := `SELECT EXISTS(
                 SELECT 1 FROM Comments
@@ -228,7 +249,11 @@ func (m *CommentModel) Exists(content string, authorID, parentPostID, parentComm
                       Content = ?`
 
 	var exists bool
-	err := m.DB.QueryRow(stmt, authorID, parentPostID, parentCommentID, content).Scan(&exists)
+	err := m.DB.QueryRow(stmt,
+		&comment.AuthorID,
+		&comment.CommentedPostID,
+		&comment.CommentedCommentID,
+		&comment.Content).Scan(&exists)
 	return exists, err
 }
 

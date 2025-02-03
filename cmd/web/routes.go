@@ -30,6 +30,7 @@ func (app *app) routes() http.Handler {
 	mux.HandleFunc("/logout", app.logout)
 	mux.HandleFunc("/protected", app.protected)
 	mux.HandleFunc("/store-reaction", app.storeReaction)
+	mux.HandleFunc("/store-comment", app.storeComment)
 	mux.HandleFunc("/edituser", app.editUserDetails)
 
 	return mux

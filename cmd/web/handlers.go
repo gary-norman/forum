@@ -259,6 +259,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		commentsWithDaysAgo[index] = models.CommentWithDaysAgo{
 			Comment:   comment,
 			TimeSince: TimeSince,
+			Replies:   []models.CommentWithDaysAgo{}, // Initialize with no replies
 		}
 	}
 
@@ -276,11 +277,25 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		} else {
 			TimeSince = "just now"
 		}
+
+		/// Filter comments that belong to the current post based on the postID and CommentedPostID
+		var postComments []models.CommentWithDaysAgo
+		for _, comment := range commentsWithDaysAgo {
+			// Match the postID with CommentedPostID
+			if comment.Comment.CommentedPostID != nil && *comment.Comment.CommentedPostID == post.ID {
+				// For each comment, recursively assign its replies
+				commentWithReplies := getRepliesForComment(comment, commentsWithDaysAgo)
+				postComments = append(postComments, commentWithReplies)
+			}
+
+		}
+
 		postsWithDaysAgo[index] = models.PostWithDaysAgo{
 			Post:      post,
 			TimeSince: TimeSince,
-			Comments:  commentsWithDaysAgo,
+			Comments:  postComments, // Only include comments related to the current post
 		}
+
 	}
 
 	currentUser, currentUserErr := app.GetLoggedInUser(r)
@@ -345,6 +360,26 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return
 	}
+}
+
+// Recursively fetch replies for each comment
+func getRepliesForComment(comment models.CommentWithDaysAgo, commentsWithDaysAgo []models.CommentWithDaysAgo) models.CommentWithDaysAgo {
+	// Find replies to the current comment
+	var replies []models.CommentWithDaysAgo
+	for _, possibleReply := range commentsWithDaysAgo {
+		if possibleReply.Comment.CommentedCommentID != nil && *possibleReply.Comment.CommentedCommentID == comment.Comment.ID {
+			replyWithReplies := getRepliesForComment(possibleReply, commentsWithDaysAgo) // Recursively get replies for this reply
+			replies = append(replies, replyWithReplies)
+		}
+	}
+
+	// If no replies are found, we can avoid unnecessary recursion
+	if len(replies) > 0 {
+		comment.Replies = replies
+	}
+
+	// Return the comment with its replies
+	return comment
 }
 
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
@@ -699,9 +734,12 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	// get channel name
 	selectionJSON := r.PostForm.Get("channel")
 	if selectionJSON == "" {
-		http.Error(w, "No selection provided", http.StatusBadRequest)
+		http.Error(w, "No selection provided for channel", http.StatusBadRequest)
 		return
 	}
+
+	log.Printf("Received selectionJSON: %s", selectionJSON)
+
 	var channelData models.ChannelData
 	if err := json.Unmarshal([]byte(selectionJSON), &channelData); err != nil {
 		log.Printf(ErrorMsgs().Unmarshal, selectionJSON, err)
@@ -715,15 +753,13 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	// Convert postIDStr to an integer
 	postID, err := strconv.Atoi(postIDStr)
 	if err != nil {
-		http.Error(w, "Invalid postID", http.StatusBadRequest)
-		return
+		log.Printf("postID: %v", postID)
 	}
 
 	// Convert commentIDStr to an integer
 	commentID, err := strconv.Atoi(commentIDStr)
 	if err != nil {
-		http.Error(w, "Invalid commentID", http.StatusBadRequest)
-		return
+		log.Printf("commentID: %v", commentID)
 	}
 
 	// Convert integers to pointers
@@ -736,6 +772,9 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	if commentID != 0 {
 		commentIDPtr = &commentID
 	}
+
+	log.Printf("postID: %v", postID)
+	log.Printf("commentID: %v", commentID)
 
 	// Validate that at least one of them is non-zero
 	if (postIDPtr == nil || *postIDPtr == 0) && (commentIDPtr == nil || *commentIDPtr == 0) {
@@ -752,6 +791,9 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 		commentIDPtr = commentData.CommentedCommentID
 	}
 
+	log.Printf("postIDPtr: %v", &postIDPtr)
+	log.Printf("commentIDPtr: %v", &commentIDPtr)
+
 	commentData = models.Comment{
 		Content:            r.PostForm.Get("content"),
 		CommentedPostID:    postIDPtr,
@@ -766,6 +808,9 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	commentData.ChannelID, _ = strconv.Atoi(channelData.ChannelID)
+
+	log.Printf("commentData.Content (in go handler): %v", commentData.Content)
+	log.Printf("commentData (in go handler): %v", commentData)
 
 	insertErr := app.comments.Upsert(
 		commentData.Content,

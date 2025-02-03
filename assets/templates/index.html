@@ -708,12 +708,15 @@
                               </div>
                             </div>
                             <!--  Reply / Submit Commenty form -->
-                            <form class="form-reply" action="/addcomment" enctype="multipart/form-data" method="POST">
+                            <form class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
                               <div class="cont-flex-row flex-end">
                                 <div class="input-wrapper container-reply">
                                   <textarea id="comment-form-textarea-{{$post.ID}}" name="content" placeholder="Type a reply..."></textarea>
                                   <label for="comment-form-textarea-{{$post.ID}}" class="user-label">Reply</label>
                                 </div>
+                                <!-- Hidden input to store the postID -->
+                                <input type="hidden" name="postID" value="{{$post.ID}}">
+                                <input type="hidden" name="channel" value='{"channelName": "{{$post.ChannelName}}", "channelID": "{{$post.ChannelID}}"}'>
                                 <button class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
                                   <span class="btn-reply-comment">comment</span>
                                 </button>
@@ -721,38 +724,39 @@
                             </form>
                           </div> <!-- end post card -->
                       {{ range .Comments}}
-                      {{ $comment := . }}
+
+                      {{ $comment := .Comment }}
                         <div class="container-comments">
                           <div class="container-comment">
                             <div class="reply-arrow"></div>
-                            <div class="card" data-comment-id="{{$comment.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{.AuthorID}}">
+                            <div class="card" data-comment-id="{{$comment.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$comment.AuthorID}}">
                               <div class="container-post-info">
-                                {{ if (ne .AuthorAvatar "noimage") }}
-                                <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ .AuthorAvatar }}"></span>
+                                {{ if (ne $comment.AuthorAvatar "noimage") }}
+                                <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $comment.AuthorAvatar }}"></span>
                                 {{ else }}
-                                <span class="card-pic profile-pic--empty" data-name-user="{{ .Author }}"></span>
+                                <span class="card-pic profile-pic--empty" data-name-user="{{ $comment.Author }}"></span>
                                 {{ end }}
                                 <div>
-                                  <small class="small-bold">{{.Author}}</small>
+                                  <small class="small-bold">{{$comment.Author}}</small>
                                   <div>
-                                    <small>{{.ChannelName}}</small>
+                                    <small>{{$comment.ChannelName}}</small>
                                     <small>-</small>
-                                    <small>{{.TimeSince}}</small>
+                                    <small>{{$comment.TimeSince}}</small>
                                   </div>
                                 </div>
                                 <div class="like-button">
                                   <button data-tooltip-name="like" class="btn-icoonly"></button>
                                 </div>
                               </div>
-                              <article class="cardContent">{{.Content}}</article>
+                              <article class="cardContent">{{$comment.Content}}</article>
                               <!--  Post control buttons -->
                               <div class="button-row-wrap post-controls" >
                                 {{$status := reactionStatus $userID 0 $comment.ID}}
                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
-                                  <span class="btn-likes" data-like-ID="user-{{$comment.ID}}">{{.Likes}}</span>
+                                  <span class="btn-likes" data-like-ID="user-{{$comment.ID}}">{{$comment.Likes}}</span>
                                 </button>
                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-                                  <span class="btn-dislikes" data-dislike-ID="user-{{$comment.ID}}">{{.Dislikes}}</span>
+                                  <span class="btn-dislikes" data-dislike-ID="user-{{$comment.ID}}">{{$comment.Dislikes}}</span>
                                 </button>
                                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                                   <span class="btn-reply">reply</span>
@@ -785,10 +789,29 @@
                                   </div>
                                 </div>
                               </div>
-                            </div>
+                              <!--  Reply / Submit Commenty form -->
+                              <form class="form-reply" action="/addcomment" enctype="multipart/form-data" method="POST">
+                                <div class="cont-flex-row flex-end">
+                                  <div class="input-wrapper container-reply">
+                                    <textarea id="comment-form-textarea-{{$comment.ID}}" name="content" placeholder="Type a reply..."></textarea>
+                                    <label for="comment-form-textarea-{{$comment.ID}}" class="user-label">Reply</label>
+                                  </div>
+                                  <!-- Hidden input to store the commentID (if replying to a comment) -->
+                                  <input type="hidden" name="commentID" value="{{$comment.CommentedCommentID}}">
+                                  <button type="submit" class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+                                    <span class="btn-reply-comment">comment</span>
+                                  </button>
+                                </div>
+                              </form>
+                            </div> <!-- end comment card-->
                           </div> <!-- end single container-comment wrapper -->
-                        {{end}} <!-- user page activity post COMMENTS -->
+
+
+
                       </div><!-- end container-comments wrapper -->
+
+
+                    {{end}} <!-- user page activity post COMMENTS -->
                     </div> <!-- end container-post wrapper -->
                   {{end}} <!-- user page activity POSTS -->
 

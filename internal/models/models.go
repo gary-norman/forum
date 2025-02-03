@@ -112,8 +112,9 @@ type PostWithDaysAgo struct {
 }
 
 type CommentWithDaysAgo struct {
-	Comment
-	TimeSince string
+	Comment   Comment              // The actual comment data
+	TimeSince string               // Time since the comment was created
+	Replies   []CommentWithDaysAgo // Nested replies (which can have their own replies)
 }
 
 type Image struct {

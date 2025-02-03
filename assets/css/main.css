@@ -678,19 +678,22 @@ input[type="email"] {
   }
 }
 .user-interacted > * {
-  &:focus-visible ~ label {
+  &:
+  focus-visible ~ label {
     flex-basis: auto;
-    position: absolute;
-    /*background: var(--color-hl-pink);*/
-    /*left: 1rem;*/
-    /*font-size: 1rem;*/
-    /*top: 0;*/
-    animation: form-label 300ms ease-in-out forwards;
+  position: absolute;
+  /*background: var(--color-hl-pink);*/
+  /*left: 1rem;*/
+  /*font-size: 1rem;*/
+  /*top: 0;*/
+  animation: form-label 300ms ease-in-out forwards;
   }
   /*TODO prevent this happening on form popop */
-  &:not(:focus-visible) ~ label {
+  &:not(:
+  focus-visible) ~ label {
     animation: form-label-back 300ms ease-in-out forwards;
   }
+;
 }
 @keyframes form-label {
   0% {
@@ -747,54 +750,59 @@ input[type="email"] {
   /*textarea {*/
   /*  min-width: 100%;*/
   /*}*/
+  position: relative;
   & input {
       margin: 0.8rem 0 0 0;
   }
-  & input:not(:placeholder-shown):valid,
-  & input:user-valid,
-  & input:not(:placeholder-shown):invalid,
-  & input:user-invalid,
-  .pass-nomatch,
-  .pass-match {
-    & + span,
+  & .validation-icon::before {
+    display: flex;
+    content: "";
+    position: absolute;
+    right: 0.4rem;
+    top: 1.5rem;
+    height: 1.6rem;
+    width: 1.6rem;
+    background: url("/assets/icons/form-grey.svg");
+  }
+  & .pass-nomatch,  input#register_user:user-invalid {
     & ~ .validation-tooltip {
-      height: 0;
-      width: 0;
-    }
-    & + span::before {
-      display: flex;
-      content: "";
       position: relative;
-      left: 8.6rem;
-      top: -3.2rem;
-      height: 1.6rem;
-      width: 1.6rem;
-    }
-    & ~ .validation-tooltip::before {
-      content: "";
-      display: none;
-      position: relative;
-      top: 0;
-      left: 0;
-      padding: 0.8rem;
-      text-align: justify;
-      background: var(--color-bg-1);
-      font-family: SpaceGrotesk-Regular, system-ui;
-      font-size: clamp(1.2rem, 1.4rem + -0.3dvw, 2.4rem);
-      border-radius: var(--border-radius-input);
-      border: 1px solid var(--color-bg-5);
-      height: 0;
-      z-index: 1;
-      transition: height var(--transition-dur-hover) ease-in-out;
+      /*color: firebrick;*/
+      &::before {
+        display       : block;
+        height        : fit-content;
+        opacity: 1;
+        @starting-style {
+          opacity: 0;
+        }
+        width: max-content;
+        position      : absolute;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-51%);
+        padding       : 0.8rem;
+        /* text-align    : justify; */
+        background    : var(
+        --color-bg-1);
+        font-family   : SpaceGrotesk-Regular, system-ui;
+        font-size     : clamp(.8rem, 1.4rem + -0.3dvw, 1.2rem);
+        border-radius : var(
+        --border-radius-input);
+        border        : 1px solid var(
+        --color-bg-5);
+        z-index       : 1;
+        transition    : opacity var(
+        --transition-dur-hover) ease-in-out;
+      }
     }
   }
   & input:valid,
     /* TODO get code under working */
   /*& input:not(:placeholder-shown):valid,*/
-  /*  TODO use this class*/
   .pass-match {
     color: var(--color-hl-green);
-    & + span::before {
+    border-color: var(--color-hl-green);
+    & ~ .validation-icon::before {
       background: url("/assets/icons/form-success.svg") no-repeat;
     }
     & ~ label {
@@ -804,10 +812,10 @@ input[type="email"] {
   & input:user-invalid,
   /* TODO get code under working */
   /*& input:not(:placeholder-shown):invalid,*/
-  /*  TODO use this class*/
   .pass-nomatch {
     color: firebrick;
-    & + span::before {
+    border-color: firebrick;
+    & ~ .validation-icon::before {
       background: url("/assets/icons/form-error.svg") no-repeat;
     }
     & ~ label {
@@ -815,8 +823,20 @@ input[type="email"] {
     }
   }
 }
+
+.pass-nomatch {
+  & ~ .validation-tooltip::before {
+    content : "passwords do not match";
+  }
+}
+input#register_user:user-invalid {
+  & ~ .validation-tooltip::before {
+    content: "username must have 5 or more characters";
+  }
+}
+
 #register_password-rpt {
-  margin: .8rem 0 !important;
+  /*margin: .8rem 0 !important;*/
 }
 
 .validation-list {
@@ -891,24 +911,9 @@ input[type="email"] {
 /*    transform: translateX(-50%) translateY(-150%);*/
 /*  }*/
 /*}*/
-input#register_user:user-invalid {
-  & ~ .validation-tooltip::before {
-    display: block;
-    content: "username must have 5 or more characters";
-    height: fit-content;
-    width: 19rem;
-    transform: translateX(-50%) translateY(-189%);
-  }
-}
-.pass-nomatch {
-  & ~ .validation-tooltip::before {
-    display: block;
-    content: "passwords do not match";
-    height: fit-content;
-    width: 19rem;
-    transform: translateX(-50%) translateY(-189%);
-  }
-}
+
+
+
 
 textarea.inactive-input,
 input[type="text"].inactive-input {

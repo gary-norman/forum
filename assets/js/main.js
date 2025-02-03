@@ -642,9 +642,10 @@ window.addEventListener('click', ({ target }) => {
 });
 // TODO create the functionality in the function
 // right panel buttons
-rightPanelButtons.forEach(button =>
-    button.addEventListener('click', (e) => rightPanelEdit(e.target.id))
-)
+if (rightPanelButtons) {
+    rightPanelButtons.forEach(button =>
+        button.addEventListener('click', (e) => rightPanelEdit(e.target.id))
+)};
 // login / register / forgot
 btnLogin.forEach(button =>
     button.addEventListener('click', (e) => logReg(e.target.id))

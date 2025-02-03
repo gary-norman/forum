@@ -19,6 +19,7 @@
     <script src="/assets/js/reactions.js" defer></script>
     <script type="module" src="/assets/js/share.js" defer></script>
     <title>&lt; codex &gt;</title>
+    <title>{{- /*gotype: github.com/gary-norman/forum/internal/models.TemplateData*/ -}}</title>
   </head>
     <body>
       {{ $channelBasePath := "db/userdata/images/channel-images/" }}
@@ -375,7 +376,9 @@
       <div popover id="form-edit-channel-rules">
         <form action="/channels/edit-rules" class="wrapper-form" method="POST">
           <h5 id="edit-channel-rules-title" class="form-title">edit rules for {{ .RandomChannel.Name }}</h5>
-          <!-- FIXME fix these buttons -->
+          {{ range .RandomChannelRules }}
+          <span>{{ .}}</span>
+          {{ end }}
           <div class="cont-flex-row flex-center">
             <button id="edit-channel-rules-btn" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>submit</span>

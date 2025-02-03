@@ -161,7 +161,6 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 	queryErr := stmt.QueryRow(username).Scan(
 		&user.ID,
 		&user.Username,
-		&user.HashedPassword,
 		&user.Email,
 		&user.Avatar,
 		&user.Banner,
@@ -170,7 +169,8 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 		&user.Created,
 		&user.IsFlagged,
 		&user.SessionToken,
-		&user.CSRFToken)
+		&user.CSRFToken,
+		&user.HashedPassword)
 	if queryErr != nil {
 		if errors.Is(queryErr, sql.ErrNoRows) {
 			// No user found
@@ -256,10 +256,8 @@ func (m *UserModel) GetSingleUserValue(ID int, searchColumn, outputColumn string
 	var user models.User
 	if rows.Next() {
 		if scanErr := rows.Scan(
-			&user.ID, &user.Username, &user.Email, &user.HashedPassword,
-			&user.SessionToken, &user.CSRFToken, &user.Avatar, &user.Banner,
-			&user.Description, &user.Usertype, &user.Created, &user.IsFlagged,
-		); scanErr != nil {
+			&user.ID, &user.Username, &user.Email, &user.Avatar, &user.Banner, &user.Description, &user.Usertype,
+			&user.Created, &user.IsFlagged, &user.SessionToken, &user.CSRFToken, &user.HashedPassword); scanErr != nil {
 			return "", scanErr
 		}
 	} else {
@@ -285,12 +283,11 @@ func (m *UserModel) GetSingleUserValue(ID int, searchColumn, outputColumn string
 	// Check if outputColumn exists in the map
 	value, exists := fields[outputColumn]
 	if !exists {
-		return "", fmt.Errorf("invalid searchColumn name: %s", outputColumn)
+		return "", fmt.Errorf("invalid search Column name: %s", outputColumn)
 	}
 
 	// Convert the value to a string (handling different types)
 	outputValue := fmt.Sprintf("%v", value)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "outputValue:", outputValue)
 	return outputValue, nil
 }
 
@@ -309,7 +306,8 @@ func (m *UserModel) All() ([]models.User, error) {
 	var Users []models.User
 	for rows.Next() {
 		p := models.User{}
-		scanErr := rows.Scan(&p.ID, &p.Username, &p.Email, &p.HashedPassword, &p.SessionToken, &p.CSRFToken, &p.Avatar, &p.Banner, &p.Description, &p.Usertype, &p.Created, &p.IsFlagged)
+		scanErr := rows.Scan(&p.ID, &p.Username, &p.Email, &p.Avatar, &p.Banner, &p.Description, &p.Usertype,
+			&p.Created, &p.IsFlagged, &p.SessionToken, &p.CSRFToken, &p.HashedPassword)
 		if scanErr != nil {
 			return nil, scanErr
 		}

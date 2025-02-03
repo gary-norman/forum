@@ -372,7 +372,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// SECTION --- user ---
 	allUsers, allUsersErr := app.users.All()
 	if allUsersErr != nil {
-		log.Printf(ErrorMsgs().Query, "users.All", allUsersErr)
+		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
 	}
 	randomUser := getRandomUser(allUsers)
 	currentUser, currentUserErr := app.GetLoggedInUser(r)
@@ -385,12 +385,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	//if validTokens == true {
 	//	userLoggedIn = true
 	//}
-	for index, post := range posts {
-		postsWithDaysAgo[index] = models.PostWithDaysAgo{
-			Post:      post,
-			TimeSince: getTimeSince(post.Created),
-		}
-	}
 	currentUserName := "nouser"
 	var currentUserID int
 	var currentUserAvatar string
@@ -411,7 +405,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	randomChannel := getRandomChannel(channelsWithDaysAgo)
 	randomChannelOwnerName, ownerErr := app.users.GetSingleUserValue(randomChannel.OwnerID, "ID", "username")
 	if ownerErr != nil {
-		log.Printf(ErrorMsgs().Query, "GetSingleUserValue", ownerErr)
+		log.Printf(ErrorMsgs().Query, "getHome > GetSingleUserValue", ownerErr)
 	}
 	var ownedChannels []models.Channel
 	var joinedChannels []models.Channel
@@ -419,13 +413,13 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	isJoinedOrOwned := false
 	isOwned := false
 
-	// get owned and joined channels of current user
 	if userLoggedIn == true {
 		currentUser.TimeSince = getTimeSince(currentUser.Created)
 		currentUserName = currentUser.Username
 		currentUserID = currentUser.ID
 		currentUserAvatar = currentUser.Avatar
 		currentUserBio = currentUser.Description
+		// get owned and joined channels of current user
 		memberships, memberErr := app.memberships.UserMemberships(currentUser.ID)
 		if memberErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
@@ -441,7 +435,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
 		isOwned = currentUser.ID == randomChannel.OwnerID
 		joined := false
-
 		for _, channel := range joinedChannels {
 			if randomChannel.ID == channel.ID {
 				joined = true
@@ -450,7 +443,11 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		}
 		isJoinedOrOwned = isOwned || joined
 	}
-
+	// get all rules for the current channel
+	randomChannelRules, err := app.rules.AllForChannel(randomChannel.ID)
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > AllForChannel", err)
+	}
 	// TODO get channel moderators
 
 	// TODO get channel posts
@@ -471,6 +468,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		OwnedAndJoinedChannels:       ownedAndJoinedChannels,
 		RandomChannelIsOwned:         isOwned,
 		RandomChannelIsOwnedOrJoined: isJoinedOrOwned,
+		RandomChannelRules:           randomChannelRules,
 		Posts:                        postsWithDaysAgo,
 		Avatar:                       currentUserAvatar,
 		Bio:                          currentUserBio,
@@ -509,19 +507,20 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
-	user, getUserErr := app.GetLoggedInUser(r)
-	if getUserErr != nil {
-		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)
+	user, err := app.GetLoggedInUser(r)
+	if err != nil {
+		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", err)
 		return
 	}
 	if user.Username == "" {
-		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)
+		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", err)
 		return
 	}
-	parseErr := r.ParseMultipartForm(10 << 20)
-	if parseErr != nil {
-		http.Error(w, parseErr.Error(), 400)
-		log.Printf(ErrorMsgs().Parse, "editUserDetails", parseErr)
+
+	err = r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		log.Printf(ErrorMsgs().Parse, "editUserDetails", err)
 		return
 	}
 	user.Avatar = GetFileName(r, "file-drop", "editUserDetails", "user")

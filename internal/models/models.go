@@ -220,6 +220,7 @@ type TemplateData struct {
 	RandomChannelOwnerName       string
 	RandomChannelIsOwnedOrJoined bool
 	RandomChannelIsOwned         bool
+	RandomChannelRules           []Rule
 	OwnedChannels                []Channel
 	JoinedChannels               []Channel
 	OwnedAndJoinedChannels       []Channel

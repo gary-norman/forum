@@ -34,6 +34,7 @@ type app struct {
 	memberships    *sqlite.MembershipModel
 	muted          *sqlite.MutedChannelModel
 	cookies        *CookieModel
+	rules          *sqlite.RuleModel
 }
 
 func ErrorMsgs() *models.Errors {
@@ -87,6 +88,9 @@ func initializeApp() (*app, func(), error) {
 			DB: db,
 		},
 		reactionStatus: &sqlite.ReactionModel{
+			DB: db,
+		},
+		rules: &sqlite.RuleModel{
 			DB: db,
 		},
 	}

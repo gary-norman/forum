@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="8"
+   height="8"
+   viewBox="0 0 8 8"
+   fill="none"
+   version="1.1"
+   id="svg7"
+   sodipodi:docname="bulletpoint.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs7" />
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="13.257143"
+     inkscape:cx="13.200431"
+     inkscape:cy="11.050646"
+     inkscape:window-width="1104"
+     inkscape:window-height="742"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg7" />
+  <path
+     d="M 0.40181043,7.7412074 V 5.7732213 L 6.2749708,4.280832 V 3.9856341 L 0.40181043,2.4932446 V 0.52525869 L 7.6223431,2.4276451 V 5.838821 Z"
+     fill="#ea4f92"
+     id="path7"
+     style="stroke-width:0.841563" />
+</svg>

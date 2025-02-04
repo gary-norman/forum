@@ -140,14 +140,20 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("activity buttons:", actButtonsAll)
 });
 document.addEventListener("DOMContentLoaded", () => {
-    const addButton = document.getElementById("add-unsubmitted-rule");
-    const submitButton = document.getElementById("edit-channel-rules-btn");
-    const rulesWrapper = document.getElementById("rules-wrapper");
-    const inputField = document.getElementById("create-unsubmitted-rule");
-    const hiddenInput = document.getElementById("rules-hidden-input");
+    const addButton = document.querySelector('#add-unsubmitted-rule');
+    const submitButton = document.querySelector('#edit-channel-rules-btn');
+    const rulesWrapper = document.querySelector('#rules-wrapper');
+    const inputField = document.querySelector('#create-unsubmitted-rule');
+    const hiddenInput = document.querySelector('#rules-hidden-input');
+    const existingRulesContainer = document.querySelectorAll('#popover-existing-rules')
+
+    existingRulesContainer.forEach(element => element.addEventListener('click', (e) => {
+        removeExistingRule(e.target.id);
+    }))
 
     let rulesList = [];
-    let ruleCounter = 0;
+    let addRuleCounter = 0;
+    let removeExistingRuleCounter = 0;
 
     addButton.addEventListener("click", addRule);
     inputField.addEventListener("keydown", handleKeyPress);
@@ -156,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const ruleText = inputField.value.trim();
 
         if (ruleText) {
-            const ruleId = `ruleItem-${ruleCounter++}`;
+            const ruleId = `ruleItem-${addRuleCounter++}`;
             createRuleItem(ruleId, ruleText);
 
             rulesList.push({ id: ruleId, text: ruleText });
@@ -164,6 +170,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             inputField.value = "";
         }
+    }
+    function removeExistingRule(ruleId) {
+        const item = document.getElementById(ruleId);
+        const ruleText = item.innerText.trim();
+        console.log("ruleText: ", ruleText)
+
+        if (ruleText) {
+            createRuleItem(ruleId, ruleText);
+
+            rulesList.push({ id: ruleId, text: ruleText });
+            updateHiddenInput();
+        }
+        console.log('removing ', item);
+        item.remove();
     }
 
     function createRuleItem(ruleId, ruleText) {
@@ -265,19 +285,19 @@ document.addEventListener("DOMContentLoaded", () => {
 // SECTION ----- functions ------
 
 // toggle user-interacted class to input fields to prevent label animation before they are selected
-// function toggleUserInteracted(action) {
-//     styledInputs.forEach(input => {
-//         if (action === "add") {
-//         input.addEventListener("focus", function () {
-//             this.closest('.input-wrapper').classList.add("user-interacted");
-//         });
-//         } if (action === "remove") {
-//             document.querySelectorAll('.input-wrapper').forEach(element => {
-//                 element.classList.remove("user-interacted");
-//             })
-//         }
-//     });
-// }
+function toggleUserInteracted(action) {
+    styledInputs.forEach(input => {
+        if (action === "add") {
+        input.addEventListener("focus", function () {
+            this.closest('.input-wrapper').classList.add("user-interacted");
+        });
+        } if (action === "remove") {
+            document.querySelectorAll('.input-wrapper').forEach(element => {
+                element.classList.remove("user-interacted");
+            })
+        }
+    });
+}
 
 // revert to original state if modals are closed
 // TODO get this popover reset to work without constant click listeners

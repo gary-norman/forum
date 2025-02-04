@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gary-norman/forum/internal/models"
@@ -898,9 +899,8 @@ func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
 
 	// Get the "rules" input value
 	rulesJSON := r.FormValue("rules")
-	if rulesJSON == "" {
-		http.Error(w, "Missing rules data", http.StatusBadRequest)
-		return
+	if rulesJSON == "" { // TODO send this message to the user
+		log.Printf(ErrorMsgs().KeyValuePair, "message to user", "you have not added or removed any rules")
 	}
 
 	// Decode JSON into a slice of Rule structs
@@ -910,20 +910,28 @@ func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Extract the "text" field from each rule
-	var ruleTexts []string
 	for _, rule := range rules {
-		ruleTexts = append(ruleTexts, rule.Text)
-	}
-	for _, rule := range ruleTexts {
-		ruleId, err := app.rules.CreateRule(rule)
+		id, found := strings.CutPrefix(rule.ID, "existing-channel-rule-")
+		idInt, err := strconv.Atoi(id)
 		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > CreateRule", err)
+			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > id => idInt", err)
 		}
-		err = app.rules.InsertRule(channelId, ruleId)
-		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > InsertRule", err)
+		if found == true {
+			err := app.rules.DeleteRule(channelId, idInt)
+			if err != nil {
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > DeleteRule", err)
+			}
+		} else {
+			ruleId, err := app.rules.CreateRule(rule.Text)
+			if err != nil {
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > CreateRule", err)
+			}
+			err = app.rules.InsertRule(channelId, ruleId)
+			if err != nil {
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > InsertRule", err)
+			}
 		}
 	}
+	// TODO redirect to /channels/{{.channelID}}
 	http.Redirect(w, r, "/", http.StatusFound)
 }

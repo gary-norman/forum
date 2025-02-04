@@ -377,10 +377,15 @@
         <form action="/channels/add-rules/{{.RandomChannel.Channel.ID}}" class="wrapper-form" method="POST">
           <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .RandomChannel.Name }}</h5>
           <span style="color: var(--color-hl-pink); font-size: 1.6rem">current rules</span>
-          {{ range .RandomChannelRules }}
-            <span>{{ .Rule}}</span>
-          {{ end }}
+          <div id="popover-existing-rules" class="cont-flex-column">
+            {{ range .RandomChannelRules }}
+              <span id="existing-channel-rule-{{ .ID }}">{{ .Rule}}</span>
+            {{ end }}
+          </div>
           <span style="color: var(--color-hl-green); font-size: 1.6rem">rules to be added</span>
+          <ol id="rules-wrapper" class="cont-flex-column"></ol>
+
+          <span style="color: var(--color-inv-input); font-size: 1.6rem">rules to be removed</span>
           <ol id="rules-wrapper" class="cont-flex-column"></ol>
 
           <div class="flex-space-between">
@@ -1263,7 +1268,6 @@
                                   <label class="padded" for="rules-content">Channel rules</label>
                                 </div>
                               {{ end }}
-<!--                              TODO range through channel rules-->
                               <div class="sidebar-channel-block">
                                 <ul class="sidebar-channel-ul">
                                   {{ range .RandomChannelRules}}

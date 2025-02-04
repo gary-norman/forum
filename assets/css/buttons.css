@@ -302,6 +302,10 @@ gap: 0.8rem;
     background : url('/assets/icons/add_circle_16.svg') no-repeat center;
     width: 2.4rem;
 }
+.btn-minus {
+    background : url('/assets/icons/minus_circle_16.svg') no-repeat center;
+    width: 2.4rem;
+}
 
 .btn-edit {
   background: url("/assets/icons/edit_16.svg") no-repeat center;

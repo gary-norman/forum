@@ -374,17 +374,17 @@
       </div>
 <!--  SECTION ---------- edit channel rules popover ----------  -->
       <div popover id="form-edit-channel-rules">
-        <form action="/channels/edit-rules" class="wrapper-form" method="POST">
+        <form action="/channels/add-rules/{{.RandomChannel.Channel.ID}}" class="wrapper-form" method="POST">
           <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .RandomChannel.Name }}</h5>
           <span style="color: var(--color-hl-pink); font-size: 1.6rem">current rules</span>
           {{ range .RandomChannelRules }}
             <span>{{ .Rule}}</span>
           {{ end }}
           <span style="color: var(--color-hl-green); font-size: 1.6rem">rules to be added</span>
-          <div id="rules-wrapper" class="cont-flex-column"></div>
+          <ol id="rules-wrapper" class="cont-flex-column"></ol>
 
           <div class="flex-space-between">
-            <input type="text" id="create-unsubmitted-rule" name="create-rule" placeholder="create new rule" required />
+            <input type="text" id="create-unsubmitted-rule" name="create-rule" placeholder="create new rule" />
             <button type="button" id="add-unsubmitted-rule" class="btn-channel btn-sm btn-icoonly">
               <span class="btn-add" role="contentinfo" aria-description="Add Rule"></span>
             </button>
@@ -949,7 +949,7 @@
 
                 <div class="right-panel ">
                     <div class="right-panel-content scroll-down">
-                        <div class="right-panel-name-container flex-space-between">
+                        <div class="right-panel-container-name flex-space-between">
                             <h4 class="right-panel-name">{{ if ne .CurrentUserName "nouser"}}{{.CurrentUserName}}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
                           {{ if (ne .CurrentUserName "nouser") }}
                             <button class="btn-sm btn-icoonly">
@@ -958,8 +958,8 @@
                           {{ end }} <!-- "nouser" check -->
                         </div>
                       {{ if (ne .CurrentUserName "nouser") }}
-                        <div class="right-panel-pic-container flex-space-between">
-                            <div class="right-panel-pic-container">
+                        <div class="right-panel-container-pic flex-space-between">
+                            <div class="right-panel-container-pic">
                               {{ if (ne .Avatar "noimage") }}
                               <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
                               {{ else }}
@@ -972,7 +972,7 @@
                             </button>
                         </div>
                       {{ end }} <!-- "nouser" check -->
-                        <div class="right-panel-bio-container ">
+                        <div class="right-panel-container-bio ">
                             <div class="right-panel-bio flex-space-between">
                                 <label for="user-bio-content" class="padded">{{ if ne .CurrentUserName "nouser"}}Edit your bio{{ else }}User bio{{ end }}</label>
                                 {{ if (ne .CurrentUserName "nouser") }}
@@ -983,7 +983,7 @@
                             </div>
                             <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Bio }}</textarea>
                         </div>
-                        <div class="right-panel-modded-channels-container">
+                        <div class="right-panel-container-modded-channels">
                             <div class="sidebar-block sidebar-channels">
                                 <small class="padded">Modded Channels</small>
                                 <div class="sidebar-channel-block">
@@ -1178,7 +1178,7 @@
 <!--SECTION ------------ user right panel ------------ -->
                     <div class="right-panel ">
                         <div class="right-panel-content scroll-down">
-                            <div class="right-panel-name-container flex-space-between">
+                            <div class="right-panel-container-name flex-space-between">
                               <div class="cont-flex-column">
                                 <h4 class="right-panel-name">/{{ .RandomChannel.Name }}</h4>
                                 <small>created by {{ if (eq .RandomChannel.OwnerID .CurrentUserID) }}you {{ else }} {{ .RandomChannelOwnerName }} {{ end }}{{ .RandomChannel.TimeSince}}</small>
@@ -1191,8 +1191,8 @@
                             </div>
 <!--                    ----------- edit channel image ----------- -->
                           {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
-                          <div class="right-panel-pic-container flex-space-between">
-                            <div class="right-panel-pic-container">
+                          <div class="right-panel-container-pic flex-space-between">
+                            <div class="right-panel-container-pic">
                               {{ if (ne .RandomChannel.Avatar "noimage") }}
                               <div class="right-panel-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .RandomChannel.Avatar}}"></div>
                               {{ else }}
@@ -1205,7 +1205,7 @@
                             </button>
                           </div>
                           {{ end }}
-                            <div class="right-panel-bio-container ">
+                            <div class="right-panel-container-bio ">
 <!--                    ----------- edit channel bio ----------- -->
                               {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
                                 <div class="right-panel-bio flex-space-between">
@@ -1220,7 +1220,7 @@
                               </div>
                               <textarea id="channel-bio-content" class="inactive-input" name="content" style="display: none">{{ .RandomChannel.Description }}</textarea>
                             </div>
-                            <div class="right-panel-moderators-container">
+                            <div class="right-panel-container-moderators">
                                 <div class="sidebar-block sidebar-channels">
 <!--                    ----------- edit channel mods ----------- -->
                                   {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
@@ -1249,7 +1249,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="right-panel-rules-container">
+                            <div id="right-panel-container-rules">
 <!--                    ----------- edit channel rules ----------- -->
                               {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
                                 <div class="right-panel-bio flex-space-between ">
@@ -1266,10 +1266,9 @@
 <!--                              TODO range through channel rules-->
                               <div class="sidebar-channel-block">
                                 <ul class="sidebar-channel-ul">
-                                  <li>don't be a dick</li>
-                                  <li>OMG you're still being a dick</li>
-                                  <li>could you try not being a dick?</li>
-                                  <li>seriously though, just stop being a dick</li>
+                                  {{ range .RandomChannelRules}}
+                                  <li>{{ .Rule }}</li>
+                                  {{ end }}
                                 </ul>
                                 <textarea id="rules-content" class="inactive-input" name="content" style="display: none">Placeholder text... Placeholder text...</textarea>
                                 </div>

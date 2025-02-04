@@ -141,49 +141,143 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 document.addEventListener("DOMContentLoaded", () => {
     const addButton = document.getElementById("add-unsubmitted-rule");
+    const submitButton = document.getElementById("edit-channel-rules-btn");
     const rulesWrapper = document.getElementById("rules-wrapper");
     const inputField = document.getElementById("create-unsubmitted-rule");
     const hiddenInput = document.getElementById("rules-hidden-input");
 
     let rulesList = [];
+    let ruleCounter = 0;
 
-    addButton.addEventListener("click", () => {
+    addButton.addEventListener("click", addRule);
+    inputField.addEventListener("keydown", handleKeyPress);
+
+    function addRule() {
         const ruleText = inputField.value.trim();
 
         if (ruleText) {
-            // Create rule element
-            const ruleSpan = document.createElement("span");
-            ruleSpan.classList.add("rule-item");
-            ruleSpan.textContent = ruleText;
+            const ruleId = `ruleItem-${ruleCounter++}`;
+            createRuleItem(ruleId, ruleText);
 
-            // Append to rules wrapper
-            rulesWrapper.appendChild(ruleSpan);
+            rulesList.push({ id: ruleId, text: ruleText });
+            updateHiddenInput();
 
-            // Store in rules list
-            rulesList.push(ruleText);
-            hiddenInput.value = JSON.stringify(rulesList); // Store as JSON for form submission
-
-            // Clear input field
             inputField.value = "";
         }
-    });
+    }
+
+    function createRuleItem(ruleId, ruleText) {
+        const ruleItem = document.createElement("li");
+        ruleItem.classList.add("rule-item");
+        ruleItem.classList.add("flex-space-between")
+        ruleItem.id = ruleId;
+
+        // Rule text span
+        const ruleTextSpan = document.createElement("span");
+        ruleTextSpan.textContent = ruleText;
+        ruleTextSpan.classList.add("rule-text");
+        ruleTextSpan.addEventListener("click", () => editRule(ruleId, ruleText));
+
+        // Delete button
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("delete-rule-btn");
+        deleteButton.classList.add("btn-channel");
+        deleteButton.classList.add("btn-sm");
+        deleteButton.classList.add("btn-icoonly");
+        deleteButton.innerHTML = `<span class="btn-minus" role="contentinfo" aria-description="Remove Rule"></span>`;
+        deleteButton.addEventListener("click", (event) => {
+            event.stopPropagation(); // Prevent triggering edit on click
+            removeRule(ruleId);
+        });
+
+        ruleItem.appendChild(ruleTextSpan);
+        ruleItem.appendChild(deleteButton);
+        rulesWrapper.appendChild(ruleItem);
+    }
+
+    function editRule(ruleId, oldText) {
+        const ruleItem = document.getElementById(ruleId);
+        if (!ruleItem) return;
+
+        const editInput = document.createElement("input");
+        editInput.type = "text";
+        editInput.value = oldText;
+        editInput.classList.add("rule-edit-input");
+
+        ruleItem.replaceChildren(editInput);
+        editInput.focus();
+
+        editInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                saveEditedRule(ruleId, editInput.value);
+            } else if (event.key === "Escape") {
+                cancelEdit(ruleId, oldText);
+            }
+        });
+
+        editInput.addEventListener("blur", () => saveEditedRule(ruleId, editInput.value));
+    }
+
+    function saveEditedRule(ruleId, newText) {
+        if (!newText.trim()) return cancelEdit(ruleId, rulesList.find(r => r.id === ruleId)?.text || "");
+
+        const ruleIndex = rulesList.findIndex(rule => rule.id === ruleId);
+        if (ruleIndex !== -1) {
+            rulesList[ruleIndex].text = newText;
+            updateHiddenInput();
+        }
+
+        createRuleItem(ruleId, newText);
+        document.querySelector(".rule-edit-input")?.remove();
+    }
+
+    function cancelEdit(ruleId, oldText) {
+        createRuleItem(ruleId, oldText);
+        document.querySelector(".rule-edit-input")?.remove();
+    }
+
+    function removeRule(ruleId) {
+        rulesList = rulesList.filter(rule => rule.id !== ruleId);
+
+        const ruleItem = document.getElementById(ruleId);
+        if (ruleItem) ruleItem.remove();
+
+        updateHiddenInput();
+    }
+
+    function updateHiddenInput() {
+        hiddenInput.value = JSON.stringify(rulesList);
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            if (event.ctrlKey || event.metaKey) {
+                submitButton.click();
+            } else {
+                addButton.click();
+                event.preventDefault();
+            }
+        }
+    }
 });
 
+
 // SECTION ----- functions ------
+
 // toggle user-interacted class to input fields to prevent label animation before they are selected
-function toggleUserInteracted(action) {
-    styledInputs.forEach(input => {
-        if (action === "add") {
-        input.addEventListener("focus", function () {
-            this.closest('.input-wrapper').classList.add("user-interacted");
-        });
-        } if (action === "remove") {
-            document.querySelectorAll('.input-wrapper').forEach(element => {
-                element.classList.remove("user-interacted");
-            })
-        }
-    });
-}
+// function toggleUserInteracted(action) {
+//     styledInputs.forEach(input => {
+//         if (action === "add") {
+//         input.addEventListener("focus", function () {
+//             this.closest('.input-wrapper').classList.add("user-interacted");
+//         });
+//         } if (action === "remove") {
+//             document.querySelectorAll('.input-wrapper').forEach(element => {
+//                 element.classList.remove("user-interacted");
+//             })
+//         }
+//     });
+// }
 
 // revert to original state if modals are closed
 // TODO get this popover reset to work without constant click listeners

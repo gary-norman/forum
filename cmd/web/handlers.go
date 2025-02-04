@@ -729,8 +729,7 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-	parseErr := r.ParseForm()
-	if parseErr != nil {
+	if parseErr := r.ParseForm(); parseErr != nil {
 		http.Error(w, parseErr.Error(), 400)
 		log.Printf(ErrorMsgs().Parse, "storeMembership", parseErr)
 		return
@@ -889,4 +888,42 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
+	channelId, err := strconv.Atoi(r.PathValue("channelId"))
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > convert channelId to int", err)
+	}
+
+	// Get the "rules" input value
+	rulesJSON := r.FormValue("rules")
+	if rulesJSON == "" {
+		http.Error(w, "Missing rules data", http.StatusBadRequest)
+		return
+	}
+
+	// Decode JSON into a slice of Rule structs
+	var rules []models.POSTRule
+	if err := json.Unmarshal([]byte(rulesJSON), &rules); err != nil {
+		http.Error(w, "Invalid JSON format", http.StatusBadRequest)
+		return
+	}
+
+	// Extract the "text" field from each rule
+	var ruleTexts []string
+	for _, rule := range rules {
+		ruleTexts = append(ruleTexts, rule.Text)
+	}
+	for _, rule := range ruleTexts {
+		ruleId, err := app.rules.CreateRule(rule)
+		if err != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > CreateRule", err)
+		}
+		err = app.rules.InsertRule(channelId, ruleId)
+		if err != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > InsertRule", err)
+		}
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
 }

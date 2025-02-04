@@ -973,7 +973,7 @@ input[type="checkbox"]:checked {
 .btn-join-channel {
   anchor-name: --join-channel-button;
 }
-#right-panel-channel--edit-channel-rules {
+#right-panel-container-rules {
   anchor-name: --edit-channel-rules-button;
   position: relative;
 }
@@ -997,9 +997,6 @@ input[type="checkbox"]:checked {
     display: flex;
     opacity: 1;
     flex-direction: column;
-    
-    
-    
     @starting-style {
       opacity: 0;
     }
@@ -1050,7 +1047,7 @@ input[type="checkbox"]:checked {
   top: 15rem;
   right: 5rem;
   position-anchor: --edit-channel-rules-button;
-  top: calc(anchor(bottom) - 20rem);
+  bottom: anchor(top););););););
   right: anchor(left);
 }
 #rules-wrapper {
@@ -1058,6 +1055,10 @@ input[type="checkbox"]:checked {
     font-size: 1.2rem;
     color: var(--color-fg-3);
   }
+}
+/*TODO make a delete icon and use it here*/
+.rule-item {
+  cursor: pointer;
 }
 
 .text-join-channel {
@@ -1876,7 +1877,7 @@ main {
         padding: 0.4rem 0;
       }
     }
-    & .right-panel-name-container {
+    & .right-panel-container-name {
       & .right-panel-name {
         height: 3.2rem;
         align-items: center;
@@ -1885,8 +1886,8 @@ main {
         text-overflow: ellipsis;
       }
     }
-    & .right-panel-bio-container,
-    & .right-panel-rules-container {
+    & .right-panel-container-bio,
+    & #right-panel-container-rules {
       & label {
         font-family: SpaceGrotesk-Regular, system-ui;
         font-size: 1.2rem;
@@ -1900,7 +1901,7 @@ main {
         }
       }
     }
-    & .right-panel-pic-container {
+    & .right-panel-container-pic {
       display: flex;
       gap: 1.2rem;
       align-items: center;

@@ -67,6 +67,11 @@ type Rule struct {
 	Created    time.Time `json:"created"`
 	Predefined bool      `json:"predefined"`
 }
+
+type POSTRule struct {
+	ID   string `json:"id"`
+	Text string `json:"text"`
+}
 type ChannelWithDaysAgo struct {
 	Channel
 	TimeSince string

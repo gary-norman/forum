@@ -139,6 +139,35 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     console.log("activity buttons:", actButtonsAll)
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const addButton = document.getElementById("add-unsubmitted-rule");
+    const rulesWrapper = document.getElementById("rules-wrapper");
+    const inputField = document.getElementById("create-unsubmitted-rule");
+    const hiddenInput = document.getElementById("rules-hidden-input");
+
+    let rulesList = [];
+
+    addButton.addEventListener("click", () => {
+        const ruleText = inputField.value.trim();
+
+        if (ruleText) {
+            // Create rule element
+            const ruleSpan = document.createElement("span");
+            ruleSpan.classList.add("rule-item");
+            ruleSpan.textContent = ruleText;
+
+            // Append to rules wrapper
+            rulesWrapper.appendChild(ruleSpan);
+
+            // Store in rules list
+            rulesList.push(ruleText);
+            hiddenInput.value = JSON.stringify(rulesList); // Store as JSON for form submission
+
+            // Clear input field
+            inputField.value = "";
+        }
+    });
+});
 
 // SECTION ----- functions ------
 // toggle user-interacted class to input fields to prevent label animation before they are selected

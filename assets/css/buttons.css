@@ -51,18 +51,10 @@ gap: 0.8rem;
     &::before {
         background-size: 1.6rem !important;
     }
-    
-    
-    
-    
     background-size: 2.4rem;
     height: 2.4rem;
     width: max-content;
     padding: 0;
-    
-    
-    
-    
 }
 & span.btn-edit {
     width: 1.6rem;
@@ -101,9 +93,6 @@ gap: 0.8rem;
   /* border     : 0.15rem solid transparent; */
   color: var(--color-light-1);
   transition: all var(--transition-dur-hover);
-  
-  
-
   & span {
     color: var(--color-dark-1);
     /*&::before {*/
@@ -121,6 +110,9 @@ gap: 0.8rem;
       /*}*/
     }
   }
+}
+.btn-register-submit {
+  margin: .8rem 0 0 0
 }
 .btn-follows {
   & span {

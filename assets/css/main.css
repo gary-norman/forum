@@ -407,7 +407,7 @@ a:active {
 }
 .close:hover,
 .close:focus {
-  color: firebrick;
+  color: var(--color-inv-input);
   transform: rotate(-90deg);
   text-decoration: none;
   cursor: pointer;
@@ -752,7 +752,7 @@ input[type="email"] {
   /*}*/
   position: relative;
   & input {
-      margin: 0.8rem 0 0 0;
+    margin: 0.8rem 0 0 0;
   }
   & .validation-icon::before {
     display: flex;
@@ -766,20 +766,34 @@ input[type="email"] {
   }
   & .pass-nomatch,  input#register_user:user-invalid {
     & ~ .validation-tooltip {
-      position: relative;
-      /*color: firebrick;*/
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      /*color: var(--color-inv-input);*/
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -0.9rem;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--color-bg-1);
+        width: 1.2rem;
+        aspect-ratio: 1;
+        clip-path: polygon(0 0,100% 0,50% 100%);
+      }
       &::before {
         display       : block;
         height        : fit-content;
         opacity: 1;
         @starting-style {
-          opacity: 0;
+          opacity : 0;
         }
+        
         width: max-content;
         position      : absolute;
-        bottom: 28px;
+        bottom: 0;
         left: 50%;
-        transform: translateX(-51%);
+        transform: translateX(-50%);
         padding       : 0.8rem;
         /* text-align    : justify; */
         background    : var(
@@ -788,11 +802,14 @@ input[type="email"] {
         font-size     : clamp(.8rem, 1.4rem + -0.3dvw, 1.2rem);
         border-radius : var(
         --border-radius-input);
-        border        : 1px solid var(
-        --color-bg-5);
+        /* border        : 1px solid var(
+        --color-bg-5); */
         z-index       : 1;
         transition    : opacity var(
         --transition-dur-hover) ease-in-out;
+        
+        
+        
       }
     }
   }
@@ -813,13 +830,13 @@ input[type="email"] {
   /* TODO get code under working */
   /*& input:not(:placeholder-shown):invalid,*/
   .pass-nomatch {
-    color: firebrick;
-    border-color: firebrick;
+    color: var(--color-inv-input);
+    border-color: var(--color-inv-input);
     & ~ .validation-icon::before {
       background: url("/assets/icons/form-error.svg") no-repeat;
     }
     & ~ label {
-      background: firebrick;
+      background: var(--color-inv-input);
     }
   }
 }
@@ -979,6 +996,10 @@ input[type="checkbox"]:checked {
   &:popover-open {
     display: flex;
     opacity: 1;
+    flex-direction: column;
+    
+    
+    
     @starting-style {
       opacity: 0;
     }
@@ -1031,6 +1052,12 @@ input[type="checkbox"]:checked {
   position-anchor: --edit-channel-rules-button;
   top: calc(anchor(bottom) - 20rem);
   right: anchor(left);
+}
+#rules-wrapper {
+  & span {
+    font-size: 1.2rem;
+    color: var(--color-fg-3);
+  }
 }
 
 .text-join-channel {
@@ -1334,7 +1361,7 @@ hr.solid {
   & li:nth-of-type(4) {
     transition-delay: var(--delay-4);
     &:hover {
-        background: firebrick;
+        background: var(--color-inv-input);
     }
   }
 }
@@ -1584,7 +1611,7 @@ main {
   width: fit-content;
 }
 .activity {
-  background: firebrick;
+  background: var(--color-inv-input);
 }
 .comments {
   background: var(--color-hl-blue);

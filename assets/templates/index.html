@@ -222,7 +222,7 @@
               <span class="validation-icon"></span>
               <span class="validation-tooltip"></span>
               </div>
-              <button class="btn-md btn-primary btn-action" type="submit">
+              <button class="btn-md btn-primary btn-action btn-register-submit" type="submit">
                 <span>register</span>
               </button>
             </form>
@@ -375,10 +375,24 @@
 <!--  SECTION ---------- edit channel rules popover ----------  -->
       <div popover id="form-edit-channel-rules">
         <form action="/channels/edit-rules" class="wrapper-form" method="POST">
-          <h5 id="edit-channel-rules-title" class="form-title">edit rules for {{ .RandomChannel.Name }}</h5>
+          <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .RandomChannel.Name }}</h5>
+          <span style="color: var(--color-hl-pink); font-size: 1.6rem">current rules</span>
           {{ range .RandomChannelRules }}
-          <span>{{ .}}</span>
+            <span>{{ .Rule}}</span>
           {{ end }}
+          <span style="color: var(--color-hl-green); font-size: 1.6rem">rules to be added</span>
+          <div id="rules-wrapper" class="cont-flex-column"></div>
+
+          <div class="flex-space-between">
+            <input type="text" id="create-unsubmitted-rule" name="create-rule" placeholder="create new rule" required />
+            <button type="button" id="add-unsubmitted-rule" class="btn-channel btn-sm btn-icoonly">
+              <span class="btn-add" role="contentinfo" aria-description="Add Rule"></span>
+            </button>
+            <label for="create-unsubmitted-rule"></label>
+          </div>
+
+          <input type="hidden" name="rules" id="rules-hidden-input" />
+
           <div class="cont-flex-row flex-center">
             <button id="edit-channel-rules-btn" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>submit</span>

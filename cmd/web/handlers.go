@@ -613,6 +613,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 
 	// Decode the JSON request body into the reactionData variable
 	err := json.NewDecoder(r.Body).Decode(&reactionData)
+	fmt.Printf("reactionData received: %v\n", &reactionData)
 	if err != nil {
 		// Use the error message from the Errors struct for decoding errors
 		http.Error(w, fmt.Sprintf(ErrorMsgs().Parse, "storeReaction", err), http.StatusBadRequest)
@@ -638,19 +639,21 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		commentID = *reactionData.ReactedCommentID
 	}
 
+	fmt.Printf("commentID after conversion: %v\n", commentID)
+	fmt.Printf("postID after conversion: %v\n", postID)
+
 	// Check if the user already reacted (like/dislike) and update or delete the reaction if needed
-	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID)
+	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for fetching errors
 		http.Error(w, fmt.Sprintf(ErrorMsgs().Read, "storeReaction", err), http.StatusInternalServerError)
 		log.Printf("Error fetching existing reaction: %v", err)
 		return
 	}
-	if existingReaction != nil {
-		//log.Printf("Existing Reaction: %+v", existingReaction)
-	}
 	// If there is an existing reaction, toggle it (i.e., remove it if the user reacts again to the same thing)
 	if existingReaction != nil {
+		log.Printf("Existing Reaction: %+v", existingReaction)
+
 		// If the user likes a post or comment again, remove the like/dislike (toggle behavior)
 		if existingReaction.Liked == reactionData.Liked && existingReaction.Disliked == reactionData.Disliked {
 			// Reaction is the same, so remove it
@@ -686,7 +689,8 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// If no existing reaction, insert a new reaction
-	err = app.reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.ID, reactionData.AuthorID, postID, commentID)
+	err = app.reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
+	fmt.Printf("Upserting liked: %v, disliked: %v, authorID: %v, postID: %v, commentID: %v\n", reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for insertion errors
 		http.Error(w, fmt.Sprintf(ErrorMsgs().Insert, "storeReaction", err), http.StatusInternalServerError)
@@ -713,7 +717,6 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
 		return
 	}
-	//log.Printf("using storeReaction()")
 
 	// Check if the method is POST, otherwise return Method Not Allowed
 	if r.Method != http.MethodPost {
@@ -731,14 +734,12 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// get channel name
+	// Get channel data
 	selectionJSON := r.PostForm.Get("channel")
 	if selectionJSON == "" {
 		http.Error(w, "No selection provided for channel", http.StatusBadRequest)
 		return
 	}
-
-	log.Printf("Received selectionJSON: %s", selectionJSON)
 
 	var channelData models.ChannelData
 	if err := json.Unmarshal([]byte(selectionJSON), &channelData); err != nil {
@@ -751,53 +752,22 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	commentIDStr := r.PostForm.Get("commentID")
 
 	// Convert postIDStr to an integer
-	postID, err := strconv.Atoi(postIDStr)
-	if err != nil {
+	postID, postConvErr := strconv.Atoi(postIDStr)
+	if postConvErr != nil {
 		log.Printf("postID: %v", postID)
 	}
 
 	// Convert commentIDStr to an integer
-	commentID, err := strconv.Atoi(commentIDStr)
-	if err != nil {
+	commentID, commentConvErr := strconv.Atoi(commentIDStr)
+	if commentConvErr != nil {
 		log.Printf("commentID: %v", commentID)
 	}
 
-	// Convert integers to pointers
-	var postIDPtr, commentIDPtr *int
-
-	if postID != 0 {
-		postIDPtr = &postID
-	}
-
-	if commentID != 0 {
-		commentIDPtr = &commentID
-	}
-
-	log.Printf("postID: %v", postID)
-	log.Printf("commentID: %v", commentID)
-
-	// Validate that at least one of them is non-zero
-	if (postIDPtr == nil || *postIDPtr == 0) && (commentIDPtr == nil || *commentIDPtr == 0) {
-		http.Error(w, "You must reply to either a post or a comment", http.StatusBadRequest)
-		return
-	}
-
-	// If CommentedPostID or CommentedCommentID already exists, use them
-	if commentData.CommentedPostID != nil {
-		postIDPtr = commentData.CommentedPostID
-	}
-
-	if commentData.CommentedCommentID != nil {
-		commentIDPtr = commentData.CommentedCommentID
-	}
-
-	log.Printf("postIDPtr: %v", &postIDPtr)
-	log.Printf("commentIDPtr: %v", &commentIDPtr)
-
+	// Assign the returned values
 	commentData = models.Comment{
 		Content:            r.PostForm.Get("content"),
-		CommentedPostID:    postIDPtr,
-		CommentedCommentID: commentIDPtr,
+		CommentedPostID:    &postID,
+		CommentedCommentID: &commentID,
 		IsCommentable:      false,
 		IsFlagged:          false,
 		Author:             user.Username,
@@ -809,20 +779,12 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 
 	commentData.ChannelID, _ = strconv.Atoi(channelData.ChannelID)
 
-	log.Printf("commentData.Content (in go handler): %v", commentData.Content)
-	log.Printf("commentData (in go handler): %v", commentData)
+	// Log the values
+	fmt.Printf("commentData.CommentedPostID: %v", commentData.CommentedPostID)
+	fmt.Printf("commentData.CommentedCommentID: %v", commentData.CommentedCommentID)
 
-	insertErr := app.comments.Upsert(
-		commentData.Content,
-		commentData.Author,
-		commentData.ChannelName,
-		commentData.AuthorAvatar,
-		commentData.ChannelID,
-		commentData.AuthorID,
-		postID,
-		commentID,
-		commentData.IsFlagged,
-		commentData.IsCommentable)
+	// Insert the comment
+	insertErr := app.comments.Upsert(commentData)
 
 	if insertErr != nil {
 		log.Printf(ErrorMsgs().Comment, insertErr)

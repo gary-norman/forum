@@ -17,6 +17,7 @@
     <script src="/assets/js/reactions.js" defer></script>
     <script type="module" src="/assets/js/share.js" defer></script>
     <title>&lt; codex &gt;</title>
+    <title>{{- /*gotype: github.com/gary-norman/forum/internal/models.TemplateData*/ -}}</title>
   </head>
       <body>
       {{ $channelBasePath := "db/userdata/images/channel-images/" }}
@@ -372,9 +373,9 @@
           {{ if (ne .CurrentUserName "nouser") }}
           <div class="sidebarProfile">
             {{ if (ne .Avatar "noimage") }}
-            <div class="sidebar-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}">
+              <div class="sidebar-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}">
             {{ else }}
-            <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .CurrentUserName }}">
+              <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .CurrentUserName }}">
             {{ end }}
             </div>
             <div>
@@ -641,7 +642,7 @@
                           {{$userID = .CurrentUser.ID}}
                         {{end}}
                         {{range .Posts}} <!-- user page activity posts -->
-                        {{ $post := . }}
+                        {{ $post := .Post }}
                         <div class="container-post">
                           <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                             <div class="container-post-info">
@@ -656,6 +657,7 @@
                                   <small>{{.ChannelName}}</small>
                                   <small>-</small>
                                   <small>{{.TimeSince}}</small>
+                                  <small>PostID: {{$post.ID}}</small>
                                 </div>
                               </div>
                               <div class="like-button">
@@ -741,7 +743,8 @@
                                   <div>
                                     <small>{{$comment.ChannelName}}</small>
                                     <small>-</small>
-                                    <small>{{$comment.TimeSince}}</small>
+                                    <small>{{.TimeSince}}</small>
+                                    <small>commentID: {{$comment.ID}}</small>
                                   </div>
                                 </div>
                                 <div class="like-button">

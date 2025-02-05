@@ -67,11 +67,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (postID === null) {
             shareModal = singleControl.querySelector(`[id^="share-container-${commentID}"]`);
             shareButton = singleControl.querySelector(`[id^="share-button-${commentID}"]`);
-            console.log("comment ID ✔️")
+            // console.log("comment ID ✔️")
         } else if (commentID === null) {
             shareModal = singleControl.querySelector(`[id^="share-container-${postID}"]`);
             shareButton = singleControl.querySelector(`[id^="share-button-${postID}"]`);
-            console.log("post ID ✔️")
+            // console.log("post ID ✔️")
         }
         //get all components needed
 

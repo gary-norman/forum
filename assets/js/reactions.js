@@ -113,7 +113,7 @@ function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {
     let postData;
 
     if (likeStatus === "like") {
-        if (postID === null) {
+        if (postID === null || postID === 0) {
             // Send the updated like to the backend via POST request
             postData = {
                 liked: true,
@@ -124,7 +124,7 @@ function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {
             };
             console.log("liked comment: ", postData)
 
-        } else if (commentID === null) {
+        } else if (commentID === null || commentID === 0) {
             // Send the updated like to the backend via POST request
             postData = {
                 liked: true,
@@ -137,7 +137,7 @@ function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {
 
         }
     } else if (likeStatus === "dislike") {
-        if (postID === null) {
+        if (postID === null || postID === 0) {
             // Send the updated like to the backend via POST request
             postData = {
                 liked: false,
@@ -148,7 +148,7 @@ function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {
             };
             console.log("disliked comment: ", postData)
 
-        } else if (commentID === null) {
+        } else if (commentID === null || commentID === 0) {
             // Send the updated like to the backend via POST request
             postData = {
                 liked: false,

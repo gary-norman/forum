@@ -11,7 +11,7 @@ type PostModel struct {
 }
 
 func (m *PostModel) Insert(title, content, images, author, channel, authorAvatar string, channelID, authorID int, commentable, isFlagged bool) error {
-	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, ChannelName, AuthorAVatar, ChannelID, AuthorID, IsCommentable, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?, ?, ?)"
+	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, ChannelName, AuthorAvatar, ChannelID, AuthorID, IsCommentable, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?, ?, ?)"
 	_, err := m.DB.Exec(stmt, title, content, images, author, channel, authorAvatar, channelID, authorID, commentable, isFlagged)
 	return err
 }
@@ -34,7 +34,19 @@ func (m *PostModel) All() ([]models.Post, error) {
 	var Posts []models.Post
 	for rows.Next() {
 		p := models.Post{}
-		scanErr := rows.Scan(&p.ID, &p.Title, &p.Content, &p.Images, &p.Created, &p.Author, &p.AuthorAvatar, &p.IsCommentable, &p.AuthorID, &p.ChannelID, &p.ChannelName, &p.IsFlagged)
+		scanErr := rows.Scan(
+			&p.ID,
+			&p.Title,
+			&p.Content,
+			&p.Images,
+			&p.Created,
+			&p.Author,
+			&p.AuthorAvatar,
+			&p.IsCommentable,
+			&p.AuthorID,
+			&p.ChannelID,
+			&p.ChannelName,
+			&p.IsFlagged)
 		if scanErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "Error:", "scan")
 			log.Printf(ErrorMsgs().Query, stmt, scanErr)

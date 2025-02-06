@@ -112,7 +112,14 @@ type Post struct {
 
 type PostWithDaysAgo struct {
 	Post
+	Comments  []CommentWithDaysAgo
 	TimeSince string
+}
+
+type CommentWithDaysAgo struct {
+	Comment   Comment              // The actual comment data
+	TimeSince string               // Time since the comment was created
+	Replies   []CommentWithDaysAgo // Nested replies (which can have their own replies)
 }
 
 type Image struct {
@@ -126,12 +133,18 @@ type Comment struct {
 	ID                 int       `json:"id"`
 	Content            string    `json:"content"`
 	Created            time.Time `json:"created"`
-	AuthorID           int       `json:"authorId"`
-	ChannelID          int       `json:"channelId"`
-	IsReply            bool      `json:"isReply"`
-	CommentedPostID    *int      `json:"commentedPostId,omitempty"`
-	CommentedCommentID *int      `json:"commentedCommentId,omitempty"`
-	IsFlagged          bool      `json:"isFlagged,omitempty"`
+	TimeSince          string    `json:"time_since"`
+	Author             string    `json:"author"`
+	AuthorID           int       `json:"author_id"`
+	AuthorAvatar       string    `json:"author_avatar"`
+	ChannelID          int       `json:"channel_id"`
+	ChannelName        string    `json:"channel_name"`
+	CommentedPostID    *int      `json:"commented_post_id,omitempty"`
+	CommentedCommentID *int      `json:"commented_comment_id,omitempty"`
+	IsCommentable      bool      `json:"is_commentable"`
+	IsFlagged          bool      `json:"is_flagged,omitempty"`
+	Likes              int       `json:"likes"`
+	Dislikes           int       `json:"dislikes"`
 }
 
 type Reaction struct {
@@ -142,20 +155,6 @@ type Reaction struct {
 	AuthorID         int       `json:"authorId"`
 	ReactedPostID    *int      `json:"reactedPostId,omitempty"`
 	ReactedCommentID *int      `json:"reactedCommentId,omitempty"`
-}
-
-type PostReaction struct {
-	ID         int  `json:"id"`
-	UserID     *int `json:"user_id"`
-	PostID     *int `json:"post_id,omitempty"`
-	ReactionID *int `json:"reaction_id,omitempty"`
-}
-
-type CommentReaction struct {
-	ID         int  `json:"id"`
-	UserID     *int `json:"user_id"`
-	PostID     *int `json:"comment_id,omitempty"`
-	ReactionID *int `json:"reaction_id,omitempty"`
 }
 
 type Flag struct {

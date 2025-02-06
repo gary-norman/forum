@@ -32,6 +32,7 @@ func (app *app) routes() http.Handler {
 	mux.HandleFunc("POST /store-reaction", app.storeReaction)
 	mux.HandleFunc("POST /edituser", app.editUserDetails)
 	mux.HandleFunc("POST /channels/membership", app.storeMembership)
+	mux.HandleFunc("POST /store-comment", app.storeComment)
 
 	return mux
 }

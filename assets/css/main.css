@@ -585,7 +585,7 @@ a:active {
   display: flex;
   flex-direction: row;
   gap: 4.8rem;
-  width: calc(100dvw - 32rem);
+  width: calc(100dvw - 30.4rem);
   height: 20dvh;
   /*border: 2px hotpink solid;*/
 }
@@ -722,9 +722,33 @@ input[type="email"] {
     top: 0;
   }
 }
-/* --- login and registration from styling --- */
+
+/* reply with a comment form styling */
+
+.form-reply {
+  width: 100%;
+  & > * {
+    gap: 1.2rem;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    align-content: flex-end;
+  }
+}
+/* --- login and registration form styling --- */
 .input-wrapper {
-  position: relative
+  position: relative;
+  &.container-reply {
+    width: 100%;
+    & textarea {
+      resize: none;
+      overflow: hidden;
+      min-width: 24rem;
+      min-height: 5rem; /* Set a minimum height */
+      max-height: 30rem; /* Optional: Set a max height */
+    }
+  }
+
 }
 #form-login, #form-edit-user {
   & input {
@@ -1732,6 +1756,7 @@ main {
   display: flex;
   flex-direction: column;
   row-gap: 1.2rem;
+  padding: 0 1.2rem;
   overflow: auto;
 }
 .button-row-homepage {
@@ -1789,18 +1814,33 @@ main {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  width: min-content;
+  width: 100%;
   color: var(--color-fg-1);
   background: var(--color-bg-2);
   border: 1px solid var(--color-bg-3);
   border-radius: var(--border-radius-input);
   padding: 1.2rem;
-  margin: 0.8rem;
+  margin-bottom: 1.2rem;
   /* box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20); */
   box-shadow:
     rgba(0, 0, 0, 0.16) 0 3px 6px,
     rgba(0, 0, 0, 0.23) 0 3px 6px;
   /* z-index: 100; a positive z-index breaks the before */
+}
+
+.container-comment {
+  display: flex;
+  width: 100%;
+  gap: 1.2rem;
+  padding: 1.2rem 0 2.4rem 1.2rem;
+  margin-top: -1.2rem;
+
+}
+
+.reply-arrow {
+  width: 1.6rem;
+  height: 1.6rem;
+  background: url("/assets/icons/reply_arrow_16.svg") no-repeat center;
 }
 @keyframes glow-breathe {
   0%, 25%, 100% {
@@ -1810,7 +1850,8 @@ main {
     --color-ratio: 100%;
   }
 }
-.container-post-info {
+
+.container-post-info, .container-comment-info {
   display: flex;
   align-items: center;
   column-gap: 1.2rem;
@@ -1837,7 +1878,7 @@ main {
           position: absolute;
           top: -0.3rem;
           left: 0;
-          content: url("/assets/icons/reply_16.svg");
+          content: url("/assets/icons/reply_arrow_16.svg");
           filter: var(--filter-invert-on_off);
         }
       }
@@ -1910,7 +1951,7 @@ main {
 }
 
 .filters-row {
-  margin: 0 1.2rem;
+  padding-bottom: 2.4rem !important;
   /*position: relative;*/
   & button {
     /*position: absolute;*/

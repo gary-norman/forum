@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"math/rand"
+	"strconv"
 )
 
 var Template *template.Template
@@ -16,6 +18,7 @@ func (app *app) init() {
 		"increment":      Increment,
 		"decrement":      Decrement,
 		"same":           CheckSameName,
+		"compareAsInts":  CompareAsInts,
 		"reactionStatus": app.reactions.GetReactionStatus,
 	}).ParseGlob("./assets/templates/*.html"))
 }
@@ -23,6 +26,55 @@ func (app *app) init() {
 // CheckSameName Function to check if the member and artist names are the same, for go templates
 func CheckSameName(firstString, secondString string) bool {
 	return firstString == secondString
+}
+
+// CompareAsInts converts both arguments to integers and compares them
+func CompareAsInts(a, b interface{}) bool {
+	intA, errA := ConvertToInt(a)
+	intB, errB := ConvertToInt(b)
+
+	if errA != nil || errB != nil {
+		log.Printf("error in conversion: %v", errA)
+		log.Printf("error in conversion: %v", errB)
+		return false // Return false if conversion fails
+	}
+
+	return intA == intB
+}
+
+func ConvertToInt(value interface{}) (int, error) {
+	switch v := value.(type) {
+	case int:
+		return v, nil
+	case *int: // Handle pointer to int
+		if v == nil {
+			return 0, strconv.ErrSyntax // Handle nil pointers safely
+		}
+		return *v, nil
+	case int64:
+		return int(v), nil
+	case *int64: // Handle pointer to int64
+		if v == nil {
+			return 0, strconv.ErrSyntax
+		}
+		return int(*v), nil
+	case float64:
+		return int(v), nil
+	case *float64: // Handle pointer to float64
+		if v == nil {
+			return 0, strconv.ErrSyntax
+		}
+		return int(*v), nil
+	case string:
+		return strconv.Atoi(v)
+	case *string: // Handle pointer to string
+		if v == nil {
+			return 0, strconv.ErrSyntax
+		}
+		return strconv.Atoi(*v)
+	default:
+		return 0, strconv.ErrSyntax
+	}
 }
 
 // RandomInt Function to get a random integer between 0 and the max number, for go templates

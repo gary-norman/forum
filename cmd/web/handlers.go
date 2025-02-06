@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"html/template"
 	"io"
@@ -305,13 +304,52 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// Retrieve total likes and dislikes for each post
 	for i, post := range posts {
 		likes, dislikes, likesErr := app.reactions.CountReactions(post.ID, 0) // Pass 0 for CommentID if it's a post
-		fmt.Printf("PostID: %v, Likes: %v, Disikes: %v\n", posts[i].ID, likes, dislikes)
+		//fmt.Printf("PostID: %v, Likes: %v, Disikes: %v\n", posts[i].ID, likes, dislikes)
 		if likesErr != nil {
 			log.Printf("Error counting reactions: %v", likesErr)
 			likes, dislikes = 0, 0 // Default values if there is an error
 		}
 		posts[i].Likes += likes
 		posts[i].Dislikes += dislikes
+	}
+
+	comments, commentsErr := app.comments.All()
+	if commentsErr != nil {
+		//http.Error(w, commentsErr.Error(), 500)
+		log.Printf("Error counting comments: %v", commentsErr)
+	}
+
+	// Retrieve total likes and dislikes for each post
+	for i, comment := range comments {
+		likes, dislikes, likesErr := app.reactions.CountReactions(0, comment.ID) // Pass 0 for CommentID if it's a post
+		//fmt.Printf("PostID: %v, Likes: %v, Disikes: %v\n", posts[i].ID, likes, dislikes)
+		if likesErr != nil {
+			log.Printf("Error counting reactions: %v", likesErr)
+			likes, dislikes = 0, 0 // Default values if there is an error
+		}
+		comments[i].Likes += likes
+		comments[i].Dislikes += dislikes
+	}
+
+	commentsWithDaysAgo := make([]models.CommentWithDaysAgo, len(comments))
+	for index, comment := range comments {
+		now := time.Now()
+		hours := now.Sub(comment.Created).Hours()
+		var TimeSince string
+		if hours > 24 {
+			TimeSince = fmt.Sprintf("%.0f days ago", hours/24)
+		} else if hours > 1 {
+			TimeSince = fmt.Sprintf("%.0f hours ago", hours)
+		} else if minutes := now.Sub(comment.Created).Minutes(); minutes > 1 {
+			TimeSince = fmt.Sprintf("%.0f minutes ago", minutes)
+		} else {
+			TimeSince = "just now"
+		}
+		commentsWithDaysAgo[index] = models.CommentWithDaysAgo{
+			Comment:   comment,
+			TimeSince: TimeSince,
+			Replies:   []models.CommentWithDaysAgo{}, // Initialize with no replies
+		}
 	}
 
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
@@ -328,10 +366,25 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		} else {
 			TimeSince = "just now"
 		}
+
+		/// Filter comments that belong to the current post based on the postID and CommentedPostID
+		var postComments []models.CommentWithDaysAgo
+		for _, comment := range commentsWithDaysAgo {
+			// Match the postID with CommentedPostID
+			if comment.Comment.CommentedPostID != nil && *comment.Comment.CommentedPostID == post.ID {
+				// For each comment, recursively assign its replies
+				commentWithReplies := getRepliesForComment(comment, commentsWithDaysAgo)
+				postComments = append(postComments, commentWithReplies)
+			}
+
+		}
+
 		postsWithDaysAgo[index] = models.PostWithDaysAgo{
 			Post:      post,
 			TimeSince: TimeSince,
+			Comments:  postComments, // Only include comments related to the current post
 		}
+
 	}
 
 	currentUser, currentUserErr := app.GetLoggedInUser(r)
@@ -376,14 +429,13 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		Avatar:                 currentUserAvatar,
 		Bio:                    currentUserBio,
 		Images:                 nil,
-		Comments:               nil,
 		Reactions:              nil,
 		NotifyPlaceholder: models.NotifyPlaceholder{
 			Register: "",
 			Login:    "",
 		},
 	}
-	models.JsonError(templateData)
+	//models.JsonError(templateData)
 
 	tpl, err := GetTemplate()
 	if err != nil {
@@ -405,6 +457,26 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return
 	}
+}
+
+// Recursively fetch replies for each comment
+func getRepliesForComment(comment models.CommentWithDaysAgo, commentsWithDaysAgo []models.CommentWithDaysAgo) models.CommentWithDaysAgo {
+	// Find replies to the current comment
+	var replies []models.CommentWithDaysAgo
+	for _, possibleReply := range commentsWithDaysAgo {
+		if possibleReply.Comment.CommentedCommentID != nil && *possibleReply.Comment.CommentedCommentID == comment.Comment.ID {
+			replyWithReplies := getRepliesForComment(possibleReply, commentsWithDaysAgo) // Recursively get replies for this reply
+			replies = append(replies, replyWithReplies)
+		}
+	}
+
+	// If no replies are found, we can avoid unnecessary recursion
+	if len(replies) > 0 {
+		comment.Replies = replies
+	}
+
+	// Return the comment with its replies
+	return comment
 }
 
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
@@ -705,6 +777,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 
 	// Decode the JSON request body into the reactionData variable
 	err := json.NewDecoder(r.Body).Decode(&reactionData)
+	fmt.Printf("reactionData received: %v\n", &reactionData)
 	if err != nil {
 		// Use the error message from the Errors struct for decoding errors
 		log.Println("Error decoding JSON")
@@ -733,19 +806,21 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		commentID = *reactionData.ReactedCommentID
 	}
 
+	fmt.Printf("commentID after conversion: %v\n", commentID)
+	fmt.Printf("postID after conversion: %v\n", postID)
+
 	// Check if the user already reacted (like/dislike) and update or delete the reaction if needed
-	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID)
+	existingReaction, err := app.reactions.CheckExistingReaction(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for fetching errors
 		log.Printf(ErrorMsgs().Read, "storeReaction > app.reactions.CheckExistingReaction", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	if existingReaction != nil {
-		log.Printf("Existing Reaction: %+v", existingReaction)
-	}
 	// If there is an existing reaction, toggle it (i.e., remove it if the user reacts again to the same thing)
 	if existingReaction != nil {
+		log.Printf("Existing Reaction: %+v", existingReaction)
+
 		// If the user likes a post or comment again, remove the like/dislike (toggle behavior)
 		if existingReaction.Liked == reactionData.Liked && existingReaction.Disliked == reactionData.Disliked {
 			// Reaction is the same, so remove it
@@ -765,7 +840,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// Otherwise, update the existing reaction
-		err = app.reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.ID, reactionData.AuthorID, postID, commentID)
+		err = app.reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 		if err != nil {
 			// Use your custom error message for update errors
 			log.Printf(ErrorMsgs().Delete, "storeReaction > app.reactions.Update", err)
@@ -781,7 +856,8 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// If no existing reaction, insert a new reaction
-	err = app.reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.ID, reactionData.AuthorID, postID, commentID)
+	err = app.reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
+	fmt.Printf("Upserting liked: %v, disliked: %v, authorID: %v, postID: %v, commentID: %v\n", reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 	if err != nil {
 		// Use your custom error message for insertion errors
 		log.Printf(ErrorMsgs().Delete, "storeReaction > app.reactions.Upsert", err)
@@ -800,4 +876,88 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
+	user, getUserErr := app.GetLoggedInUser(r)
+	if getUserErr != nil {
+		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// Check if the method is POST, otherwise return Method Not Allowed
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Variable to hold the decoded data
+	var commentData models.Comment
+
+	parseErr := r.ParseMultipartForm(10 << 20)
+	if parseErr != nil {
+		http.Error(w, parseErr.Error(), 400)
+		log.Printf(ErrorMsgs().Parse, "storeComment", parseErr)
+		return
+	}
+
+	// Get channel data
+	selectionJSON := r.PostForm.Get("channel")
+	if selectionJSON == "" {
+		http.Error(w, "No selection provided for channel", http.StatusBadRequest)
+		return
+	}
+
+	var channelData models.ChannelData
+	if err := json.Unmarshal([]byte(selectionJSON), &channelData); err != nil {
+		log.Printf(ErrorMsgs().Unmarshal, selectionJSON, err)
+		http.Error(w, "Invalid selection format", http.StatusBadRequest)
+		return
+	}
+
+	postIDStr := r.PostForm.Get("postID")
+	commentIDStr := r.PostForm.Get("commentID")
+
+	// Convert postIDStr to an integer
+	postID, postConvErr := strconv.Atoi(postIDStr)
+	if postConvErr != nil {
+		log.Printf("postID: %v", postID)
+	}
+
+	// Convert commentIDStr to an integer
+	commentID, commentConvErr := strconv.Atoi(commentIDStr)
+	if commentConvErr != nil {
+		log.Printf("commentID: %v", commentID)
+	}
+
+	// Assign the returned values
+	commentData = models.Comment{
+		Content:            r.PostForm.Get("content"),
+		CommentedPostID:    &postID,
+		CommentedCommentID: &commentID,
+		IsCommentable:      false,
+		IsFlagged:          false,
+		Author:             user.Username,
+		AuthorID:           user.ID,
+		AuthorAvatar:       user.Avatar,
+		ChannelName:        channelData.ChannelName,
+		ChannelID:          0,
+	}
+
+	commentData.ChannelID, _ = strconv.Atoi(channelData.ChannelID)
+
+	// Log the values
+	fmt.Printf("commentData.CommentedPostID: %v", commentData.CommentedPostID)
+	fmt.Printf("commentData.CommentedCommentID: %v", commentData.CommentedCommentID)
+
+	// Insert the comment
+	insertErr := app.comments.Upsert(commentData)
+
+	if insertErr != nil {
+		log.Printf(ErrorMsgs().Comment, insertErr)
+		http.Error(w, insertErr.Error(), 500)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusFound)
 }

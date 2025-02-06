@@ -61,10 +61,20 @@ document.addEventListener('DOMContentLoaded', function () {
     buttonControls.forEach(singleControl => {
         postID = singleControl.closest('.card').getAttribute('data-post-id');
         commentID = singleControl.closest('.card').getAttribute('data-comment-id');
+        let shareModal;
+        let shareButton;
 
+        if (postID === null) {
+            shareModal = singleControl.querySelector(`[id^="share-container-${commentID}"]`);
+            shareButton = singleControl.querySelector(`[id^="share-button-${commentID}"]`);
+            // console.log("comment ID ✔️")
+        } else if (commentID === null) {
+            shareModal = singleControl.querySelector(`[id^="share-container-${postID}"]`);
+            shareButton = singleControl.querySelector(`[id^="share-button-${postID}"]`);
+            // console.log("post ID ✔️")
+        }
         //get all components needed
-         let shareModal = singleControl.querySelector(`[id^="share-container-${postID}"]`);
-         let shareButton = singleControl.querySelector(`[id^="share-button-${postID}"]`);
+
          let label = shareModal.querySelector('label');
          let icon = shareModal.querySelector('button');
          let input = shareModal.querySelector('input');

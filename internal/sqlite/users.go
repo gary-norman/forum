@@ -128,11 +128,12 @@ func (m *UserModel) QueryUserEmailExists(email string) (bool, error) {
 	if m == nil || m.DB == nil {
 		return false, errors.New(fmt.Sprintf(ErrorMsgs().UserModel, "QueryUserEmailExists", email))
 	}
-	exists, queryErr := m.DB.Exec("SELECT EXISTS(SELECT 1 FROM Users WHERE EmailAddress = ?)", email)
+	var count int
+	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE EmailAddress = ?", email).Scan(&count)
 	if queryErr != nil {
 		log.Printf(ErrorMsgs().Query, email, queryErr)
 	}
-	if exists > 0 {
+	if count > 0 {
 		return true, nil
 	}
 	return false, errors.New(fmt.Sprintf(Colors.Red+"Email does not exist: "+Colors.White+"%v"+Colors.Reset, email))

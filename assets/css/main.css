@@ -2130,10 +2130,16 @@ main {
 
 .filters-row {
   padding-bottom: 2.4rem !important;
-  /*position: relative;*/
+  position: relative;
+  
+  
+  
+  
+  
+  
   & button {
-    position: absolute;
-    top : 1.2rem;
+    /* position: absolute; */
+    /* top : 1.2rem; */
   } */
 
   & button:nth-of-type(1) {

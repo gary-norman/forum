@@ -381,21 +381,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 
 	commentsWithDaysAgo := make([]models.CommentWithDaysAgo, len(comments))
 	for index, comment := range comments {
-		now := time.Now()
-		hours := now.Sub(comment.Created).Hours()
-		var TimeSince string
-		if hours > 24 {
-			TimeSince = fmt.Sprintf("%.0f days ago", hours/24)
-		} else if hours > 1 {
-			TimeSince = fmt.Sprintf("%.0f hours ago", hours)
-		} else if minutes := now.Sub(comment.Created).Minutes(); minutes > 1 {
-			TimeSince = fmt.Sprintf("%.0f minutes ago", minutes)
-		} else {
-			TimeSince = "just now"
-		}
 		commentsWithDaysAgo[index] = models.CommentWithDaysAgo{
 			Comment:   comment,
-			TimeSince: TimeSince,
+			TimeSince: getTimeSince(comment.Created),
 			Replies:   []models.CommentWithDaysAgo{}, // Initialize with no replies
 		}
 	}
@@ -416,7 +404,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		postsWithDaysAgo[index] = models.PostWithDaysAgo{
 			Post:      post,
 			TimeSince: getTimeSince(post.Created),
-			Comments: postComments, // Only include comments related to the current post
+			Comments:  postComments, // Only include comments related to the current post
 		}
 
 	}

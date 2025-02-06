@@ -295,7 +295,7 @@
               <span class="allow-comments-fx"></span>
               <!--                            <span class="darklight-border"></span>-->
             </label>
-            <label for="allow-comments-checkbox" style="cursor: pointer">Allow comments</label>
+            <label for="allow-comments-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Allow comments</label>
           </div>
           <!-- FIXME fix these buttons -->
           <div class="cont-flex-row flex-center">
@@ -334,7 +334,7 @@
               <span class="allow-comments-fx"></span>
               <!--                            <span class="darklight-border"></span>-->
             </label>
-            <label for="channel-privacy-checkbox" style="cursor: pointer">Private</label>
+            <label for="channel-privacy-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Private</label>
           </div>
           <!-- FIXME fix these buttons -->
           <div class="cont-flex-row flex-center">
@@ -348,7 +348,6 @@
 <!--  SECTION ---------- join channel popover ----------  -->
       <div popover id="form-join-channel">
         <form action="/channels/join" class="wrapper-form" method="POST">
-
           <h5 id="join-channel-title" class="form-title">join {{ .RandomChannel.Name }}</h5>
           <span id="join-agree" class="text-join-channel">check the agree checkbox to agree to the rules of this channel</span>
           <div class="cont-flex-row flex-center">
@@ -358,7 +357,7 @@
               <span class="allow-comments-fx"></span>
               <!--                            <span class="darklight-border"></span>-->
             </label>
-            <label for="rules-agree-checkbox" style="cursor: pointer">agree</label>
+            <label for="rules-agree-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">agree</label>
           </div>
           {{ if (eq .RandomChannel.Privacy true) }}
           <span class="text-join-channel">this channel is private. Your request will be sent to the moderators for approval.</span>
@@ -372,22 +371,32 @@
           </div>
         </form>
       </div>
+
+      <div id="fruits">
+        <div id="banana"></div>
+        <div id="apple"></div>
+        <div id="orange"></div>
+        <div id="peach"></div>
+      </div>
+
 <!--  SECTION ---------- edit channel rules popover ----------  -->
       <div popover id="form-edit-channel-rules">
-        <form action="/channels/add-rules/{{.RandomChannel.Channel.ID}}" class="wrapper-form" method="POST">
+        <form id="popover-form-edit-channel-rules" action="/channels/add-rules/{{.RandomChannel.Channel.ID}}" class="wrapper-form" method="POST">
           <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .RandomChannel.Name }}</h5>
-          <span style="color: var(--color-hl-pink); font-size: 1.6rem">current rules</span>
-          <div id="popover-existing-rules" class="cont-flex-column">
+          <span id="edit-channel-rules-title-rules-existing">current rules</span>
+          <div id="rules-wrapper-existing" class="cont-flex-column">
             {{ range .RandomChannelRules }}
               <span id="existing-channel-rule-{{ .ID }}">{{ .Rule}}</span>
             {{ end }}
           </div>
-          <span style="color: var(--color-hl-green); font-size: 1.6rem">rules to be added</span>
-          <ol id="rules-wrapper" class="cont-flex-column"></ol>
-
-          <span style="color: var(--color-inv-input); font-size: 1.6rem">rules to be removed</span>
-          <ol id="rules-wrapper" class="cont-flex-column"></ol>
-
+          <div id="wrapper-edit-channel-rules-added">
+            <span id="edit-channel-rules-title-rules-added">rules to be added</span>
+            <ol id="rules-wrapper-added" class="cont-flex-column"></ol>
+          </div>
+          <div id="wrapper-edit-channel-rules-removed">
+            <span id="edit-channel-rules-title-rules-removed">rules to be removed</span>
+            <ol id="rules-wrapper-removed" class="cont-flex-column"></ol>
+          </div>
           <div class="flex-space-between">
             <input type="text" id="create-unsubmitted-rule" name="create-rule" placeholder="create new rule" />
             <button type="button" id="add-unsubmitted-rule" class="btn-channel btn-sm btn-icoonly">

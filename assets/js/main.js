@@ -142,18 +142,19 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener("DOMContentLoaded", () => {
     const addButton = document.querySelector('#add-unsubmitted-rule');
     const submitButton = document.querySelector('#edit-channel-rules-btn');
-    const rulesWrapper = document.querySelector('#rules-wrapper');
+    const addedRulesWrapper = document.querySelector('#rules-wrapper-added');
+    const removedRulesWrapper = document.querySelector('#rules-wrapper-removed');
     const inputField = document.querySelector('#create-unsubmitted-rule');
     const hiddenInput = document.querySelector('#rules-hidden-input');
-    const existingRulesContainer = document.querySelectorAll('#popover-existing-rules')
+    const existingRulesContainer = document.querySelector('#rules-wrapper-existing')
+    let existingRules = existingRulesContainer.querySelectorAll('[id^="existing-channel-rule-"]')
 
-    existingRulesContainer.forEach(element => element.addEventListener('click', (e) => {
+    existingRules.forEach(element => element.addEventListener('click', (e) => {
         removeExistingRule(e.target.id);
     }))
 
     let rulesList = [];
     let addRuleCounter = 0;
-    let removeExistingRuleCounter = 0;
 
     addButton.addEventListener("click", addRule);
     inputField.addEventListener("keydown", handleKeyPress);
@@ -163,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (ruleText) {
             const ruleId = `ruleItem-${addRuleCounter++}`;
-            createRuleItem(ruleId, ruleText);
+            createRuleItem(ruleId, ruleText, "add");
 
             rulesList.push({ id: ruleId, text: ruleText });
             updateHiddenInput();
@@ -174,11 +175,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function removeExistingRule(ruleId) {
         const item = document.getElementById(ruleId);
         const ruleText = item.innerText.trim();
-        console.log("ruleText: ", ruleText)
+        console.log("existing ruleText: ", ruleText)
 
         if (ruleText) {
-            createRuleItem(ruleId, ruleText);
-
+            console.log('remove rule: ', ruleId)
+            createRuleItem(ruleId, ruleText, "remove");
             rulesList.push({ id: ruleId, text: ruleText });
             updateHiddenInput();
         }
@@ -186,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
         item.remove();
     }
 
-    function createRuleItem(ruleId, ruleText) {
+    function createRuleItem(ruleId, ruleText, process) {
         const ruleItem = document.createElement("li");
         ruleItem.classList.add("rule-item");
         ruleItem.classList.add("flex-space-between")
@@ -196,7 +197,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const ruleTextSpan = document.createElement("span");
         ruleTextSpan.textContent = ruleText;
         ruleTextSpan.classList.add("rule-text");
-        ruleTextSpan.addEventListener("click", () => editRule(ruleId, ruleText));
+        if (process === "add") {
+            console.log("process add: text = ", ruleText, 'ID = ', ruleItem.id)
+            ruleTextSpan.addEventListener("click", () => editRule(ruleId, ruleText));
+        } else {
+            console.log("process remove: text = ", ruleText, 'ID = ', ruleItem.id)
+            ruleItem.addEventListener('click', () => removeRule(ruleId))
+        }
 
         // Delete button
         const deleteButton = document.createElement("button");
@@ -212,7 +219,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         ruleItem.appendChild(ruleTextSpan);
         ruleItem.appendChild(deleteButton);
-        rulesWrapper.appendChild(ruleItem);
+        console.log('process query: ', process)
+        if (process === "remove") {
+            removedRulesWrapper.appendChild(ruleItem);
+        } else {
+            addedRulesWrapper.appendChild(ruleItem);
+        }
     }
 
     function editRule(ruleId, oldText) {
@@ -257,10 +269,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function removeRule(ruleId) {
+        console.log("removeRule: ", ruleId)
         rulesList = rulesList.filter(rule => rule.id !== ruleId);
-
         const ruleItem = document.getElementById(ruleId);
+        console.log('ruleItem ID: ', ruleItem.id)
+
         if (ruleItem) ruleItem.remove();
+
+        if (ruleItem.id.startsWith("existing-channel-rule-")) {
+            console.log('removing existing rule: ', ruleItem.innerText)
+            const ruleTextSpan = document.createElement("span");
+            ruleTextSpan.textContent = ruleItem.innerText;
+            ruleTextSpan.id = ruleId
+            existingRulesContainer.appendChild(ruleTextSpan)
+
+            existingRules = existingRulesContainer.querySelectorAll('[id^="existing-channel-rule-"]')
+            existingRules.forEach(element => element.addEventListener('click', (e) => {
+                removeExistingRule(e.target.id);
+            }))
+        }
 
         updateHiddenInput();
     }

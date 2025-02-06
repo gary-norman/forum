@@ -16,6 +16,8 @@ func (app *app) routes() http.Handler {
 	mux.Handle("/assets/images/", http.StripPrefix("/assets/images", imageServer))
 	fontServer := http.FileServer(http.Dir("./assets/fonts"))
 	mux.Handle("/assets/fonts/", http.StripPrefix("/assets/fonts", fontServer))
+	cursorServer := http.FileServer(http.Dir("./assets/cursors"))
+	mux.Handle("/assets/cursors/", http.StripPrefix("/assets/cursors", cursorServer))
 	userDataServer := http.FileServer(http.Dir("./db/userdata"))
 	mux.Handle("/db/userdata/", http.StripPrefix("/db/userdata", userDataServer))
 	mux.HandleFunc("/", app.getHome)

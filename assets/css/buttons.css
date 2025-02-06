@@ -1,6 +1,11 @@
 :root {
   --btn-radius: 2.4rem;
   cursor: url('/assets/cursors/default.svg'), auto;
+  --cursor-text: url('/assets/cursors/text.svg'), text;
+  --cursor-minus: url('/assets/cursors/minus.svg'), auto;
+  --cursor-plus: url('/assets/cursors/plus.svg'), cell;
+  --cursor-pointer: url('/assets/cursors/pointer.svg'), pointer;
+  --cursor-info: url('/assets/cursors/info.svg'), help;
 }
 /* SECTION -------- cursors --------*/
 body {

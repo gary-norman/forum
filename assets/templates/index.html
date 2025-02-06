@@ -348,18 +348,18 @@
 <!--  SECTION ---------- join channel popover ----------  -->
       <div popover id="form-join-channel">
         <form action="/channels/join" class="wrapper-form" method="POST">
-          <h5 id="join-channel-title" class="form-title">join {{ .RandomChannel.Name }}</h5>
+          <h5 id="join-channel-title" class="form-title">join {{ .ThisChannel.Name }}</h5>
           <span id="join-agree" class="text-join-channel">check the agree checkbox to agree to the rules of this channel</span>
           <div class="cont-flex-row flex-center">
             <label class="allow-comments">
-              <input id="join-channel-id" type="hidden" value="{{ .RandomChannel.ID }}" name="channelId" />
+              <input id="join-channel-id" type="hidden" value="{{ .ThisChannel.ID }}" name="channelId" />
               <input type="checkbox" id="rules-agree-checkbox" name="agree" required/>
               <span class="allow-comments-fx"></span>
               <!--                            <span class="darklight-border"></span>-->
             </label>
             <label for="rules-agree-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">agree</label>
           </div>
-          {{ if (eq .RandomChannel.Privacy true) }}
+          {{ if (eq .ThisChannel.Privacy true) }}
           <span class="text-join-channel">this channel is private. Your request will be sent to the moderators for approval.</span>
           {{ end }}
           <!-- FIXME fix these buttons -->
@@ -381,11 +381,11 @@
 
 <!--  SECTION ---------- edit channel rules popover ----------  -->
       <div popover id="form-edit-channel-rules">
-        <form id="popover-form-edit-channel-rules" action="/channels/add-rules/{{.RandomChannel.Channel.ID}}" class="wrapper-form" method="POST">
-          <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .RandomChannel.Name }}</h5>
+        <form id="popover-form-edit-channel-rules" action="/channels/add-rules/{{.ThisChannel.Channel.ID}}" class="wrapper-form" method="POST">
+          <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .ThisChannel.Name }}</h5>
           <span id="edit-channel-rules-title-rules-existing">current rules</span>
           <div id="rules-wrapper-existing" class="cont-flex-column">
-            {{ range .RandomChannelRules }}
+            {{ range .ThisChannelRules }}
               <span id="existing-channel-rule-{{ .ID }}">{{ .Rule}}</span>
             {{ end }}
           </div>
@@ -513,9 +513,9 @@
                   <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
                 </button>
               </div>
-              <div class="sidebar-channel-block">
+              <div id="sidebar-channel-block">
                 {{ range .OwnedAndJoinedChannels }}
-                <div class="sidebar-channel" data-desc-channel="{{ .Description }}">
+                <div class="sidebar-channel" data-channel-desc="{{ .Description }}" data-channel-id="{{ .ID }}">
                   <div class="container-channel-info">
                     {{ if (ne .Avatar "noimage") }}
                     <span class="card-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .Avatar }}"></span>
@@ -985,9 +985,7 @@
                             </div>
                           </div>
                       </div>
-
                       {{end}} <!-- user page posts -->
-
                   </div>
                 </div>
                 <div id="activity-comments">
@@ -1190,13 +1188,13 @@
                   <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
                     <div class="page-control">
                         <div class="page-profile">
-                          {{ if (ne .RandomChannel.Avatar "noimage") }}
-                          <div class="sidebar-pic profile-pic" data-image-user="{{ $channelBasePath }}{{ .RandomChannel.Avatar }}"></div>
+                          {{ if (ne .ThisChannel.Avatar "noimage") }}
+                          <div class="sidebar-pic profile-pic" data-image-user="{{ $channelBasePath }}{{ .ThisChannel.Avatar }}"></div>
                             {{ else }}
-                            <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .RandomChannel.Name }}"></div>
+                            <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}"></div>
                               {{ end }}
                             <div>
-                                <h2 {{ if (eq .RandomChannel.Privacy true) }}class="private-channel"{{ end }}>/{{ .RandomChannel.Name }}</h2>
+                                <h2 {{ if (eq .ThisChannel.Privacy true) }}class="private-channel"{{ end }}>/{{ .ThisChannel.Name }}</h2>
                                 <div>
                                   <button class="btn-md btn-icotext btn-follows btn-invert-never">
                                   <span class="btn-channel-users">13.8k</span>
@@ -1208,7 +1206,7 @@
                             </div>
                         </div>
                         <div class="page-buttons">
-                          {{ if (eq .RandomChannelIsOwnedOrJoined false) }}
+                          {{ if (eq .ThisChannelIsOwnedOrJoined false) }}
                           <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
                             <span class="btn-posts">join</span>
                           </button>
@@ -1217,7 +1215,7 @@
                             <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
                                 <img src="/assets/icons/share_16.svg" alt="share button">
                             </button>
-                          {{ if (eq .RandomChannelIsOwnedOrJoined false) }}
+                          {{ if (eq .ThisChannelIsOwnedOrJoined false) }}
                             <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
                                 <img src="/assets/icons/heart-empty_24.svg" alt="like button">
                             </button>
@@ -1317,23 +1315,23 @@
                         <div class="right-panel-content scroll-down">
                             <div class="right-panel-container-name flex-space-between">
                               <div class="cont-flex-column">
-                                <h4 class="right-panel-name">/{{ .RandomChannel.Name }}</h4>
-                                <small>created by {{ if (eq .RandomChannel.OwnerID .CurrentUserID) }}you {{ else }} {{ .RandomChannelOwnerName }} {{ end }}{{ .RandomChannel.TimeSince}}</small>
+                                <h4 class="right-panel-name">/{{ .ThisChannel.Name }}</h4>
+                                <small>created by {{ if (eq .ThisChannel.OwnerID .CurrentUserID) }}you {{ else }} {{ .ThisChannelOwnerName }} {{ end }}{{ .ThisChannel.TimeSince}}</small>
                               </div>
-                              {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
+                              {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
                                 <button id="right-panel-channel--edit-channel-name" class="btn-sm btn-icoonly">
                                     <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
                                 </button>
                               {{ end }}
                             </div>
 <!--                    ----------- edit channel image ----------- -->
-                          {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
+                          {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
                           <div class="right-panel-container-pic flex-space-between">
                             <div class="right-panel-container-pic">
-                              {{ if (ne .RandomChannel.Avatar "noimage") }}
-                              <div class="right-panel-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .RandomChannel.Avatar}}"></div>
+                              {{ if (ne .ThisChannel.Avatar "noimage") }}
+                              <div class="right-panel-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .ThisChannel.Avatar}}"></div>
                               {{ else }}
-                              <div class="right-panel-pic profile-pic--empty" data-name-channel="{{ .RandomChannel.Name }}"></div>
+                              <div class="right-panel-pic profile-pic--empty" data-name-channel="{{ .ThisChannel.Name }}"></div>
                               {{ end }}
                               <small>Edit channel picture</small>
                             </div>
@@ -1344,7 +1342,7 @@
                           {{ end }}
                             <div class="right-panel-container-bio ">
 <!--                    ----------- edit channel bio ----------- -->
-                              {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
+                              {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
                                 <div class="right-panel-bio flex-space-between">
                                     <label for="channel-bio-content" class="padded">Edit channel bio</label>
                                     <button id="right-panel-channel--edit-channel-bio" class="btn-sm btn-icoonly">
@@ -1353,14 +1351,14 @@
                                 </div>
                               {{ end }}
                               <div class="sidebar-channel-block">
-                                <article>{{ .RandomChannel.Description }}</article>
+                                <article>{{ .ThisChannel.Description }}</article>
                               </div>
-                              <textarea id="channel-bio-content" class="inactive-input" name="content" style="display: none">{{ .RandomChannel.Description }}</textarea>
+                              <textarea id="channel-bio-content" class="inactive-input" name="content" style="display: none">{{ .ThisChannel.Description }}</textarea>
                             </div>
                             <div class="right-panel-container-moderators">
                                 <div class="sidebar-block sidebar-channels">
 <!--                    ----------- edit channel mods ----------- -->
-                                  {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
+                                  {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
                                   <div class="right-panel-bio flex-space-between">
                                     <label for="channel-bio-content" class="padded">Edit moderators</label>
                                     <button id="right-panel-channel--edit-channel-mods" class="btn-sm btn-icoonly">
@@ -1388,7 +1386,7 @@
                             </div>
                             <div id="right-panel-container-rules">
 <!--                    ----------- edit channel rules ----------- -->
-                              {{ if (eq .RandomChannelIsOwnedOrJoined true) }}
+                              {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
                                 <div class="right-panel-bio flex-space-between ">
                                     <label class="padded" for="rules-content">Edit channel rules</label>
                                     <button popovertarget="form-edit-channel-rules" id="right-panel-channel--edit-channel-rules" class="btn-sm btn-icoonly">
@@ -1402,7 +1400,7 @@
                               {{ end }}
                               <div class="sidebar-channel-block">
                                 <ul class="sidebar-channel-ul">
-                                  {{ range .RandomChannelRules}}
+                                  {{ range .ThisChannelRules}}
                                   <li>{{ .Rule }}</li>
                                   {{ end }}
                                 </ul>

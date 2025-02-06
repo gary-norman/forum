@@ -107,6 +107,7 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 	return Channels, nil
 }
 
+// Search queries the database for any channel column that contains the value and returns a slice of matching channels
 func (m *ChannelModel) Search(column string, value interface{}) ([]models.Channel, error) {
 	// Validate column name to prevent SQL injection
 	validColumns := map[string]bool{

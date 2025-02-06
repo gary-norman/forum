@@ -104,6 +104,10 @@ let filename;
 //
 // });
 document.addEventListener('DOMContentLoaded', function () {
+    const joinedAndOwnedChannelContainer = document.querySelector('#sidebar-channel-block')
+    const joinedAndOwnedChannels = joinedAndOwnedChannelContainer.querySelectorAll('.sidebar-channel')
+    joinedAndOwnedChannels.forEach( channel => channel.addEventListener('click', (e) => navigateToChannel(channel)));
+
     toggleUserInteracted("add");
     actButtonContainer = document.querySelector('#activity-bar');
     if (!actButtonContainer) {
@@ -139,6 +143,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // console.log("activity buttons:", actButtonsAll)
 });
+
+// ------- channel rules -------
 document.addEventListener("DOMContentLoaded", () => {
     const addButton = document.querySelector('#add-unsubmitted-rule');
     const submitButton = document.querySelector('#edit-channel-rules-btn');
@@ -310,8 +316,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // SECTION ----- functions ------
-
-// toggle user-interacted class to input fields to prevent label animation before they are selected
+function navigateToChannel(channel) {
+    const link = channel.getAttribute('data-channel-id')
+    window.location.href = `/channels/${link}`
+    changePage(channelPage)
+}
+// toggleUserInteracted toggles user-interacted class on input fields to prevent label animation before they are selected
 function toggleUserInteracted(action) {
     styledInputs.forEach(input => {
         if (action === "add") {
@@ -574,8 +584,16 @@ function getCSRFToken() {
 // });
 // switch the <p> elements in right panel to <textarea> for editing
 // and change the edit button to submit
-function rightPanelEdit(target) {
 
+function changePage(page) {
+    pages.forEach((element) => {
+        console.log("elementID: ", element.id, "selectedPage: ", page);
+        if (element.id === page) {
+            element.classList.add('active-feed');
+        } else {
+            element.classList.remove('active-feed');
+        }
+    });
 }
 // SECTION ---- event listeners -----
 
@@ -583,15 +601,9 @@ function rightPanelEdit(target) {
 selectDropdown.addEventListener('change', () => {
     const selectedValue = selectDropdown.value;
     console.log("selectedValue: ", selectedValue);
-    pages.forEach((element) => {
-        console.log("elementID: ", element.id, "selectedPage: ", selectedValue);
-        if (element.id === selectedValue) {
-            element.classList.add('active-feed');
-        } else {
-            element.classList.remove('active-feed');
-        }
-    });
+    changePage(selectedValue)
 });
+
 // --- sidebar options dropdown ---
 sidebarOption.addEventListener('click', function (event) {
     sidebarOptionsList.classList.toggle('sidebar-options-reveal')

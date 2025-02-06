@@ -223,7 +223,7 @@ a:visited,
 a:link,
 a:active {
   text-decoration: none;
-  cursor: url('/assets/cursors/pointer.svg'), pointer;;
+  cursor: var(--cursor-pointer);
   /*color: inherit;*/
 }
 
@@ -465,7 +465,7 @@ a:active {
   color: var(--color-error);
   transform: rotate(-90deg);
   text-decoration: none;
-  cursor: url('/assets/cursors/pointer.svg'), pointer;
+  cursor: var(--cursor-pointer);
 }
 
 .form-title {
@@ -1308,7 +1308,7 @@ input[type='checkbox']:checked {
 
   & label {
     transition: all var(--transition-dur-hover) ease-in-out;
-    cursor: url('/assets/cursors/pointer.svg'), pointer;
+    cursor: var(--cursor-pointer);
   }
 
   & input {
@@ -1369,7 +1369,7 @@ input[type='checkbox']:checked {
   & .button {
     padding: 0.5rem 0.5rem;
     color: #5074b5;
-    cursor: url('/assets/cursors/pointer.svg'), pointer;
+    cursor: var(--cursor-pointer);
   }
 
   & p a:hover {
@@ -1377,7 +1377,7 @@ input[type='checkbox']:checked {
   }
 
   & input {
-    cursor: url('/assets/cursors/pointer.svg'), pointer;
+    cursor: var(--cursor-pointer);
   }
 }
 
@@ -1531,7 +1531,7 @@ hr.solid {
   align-items: center;
   border-radius: var(--border-radius-input);
   transition: background var(--transition-dur-hover) var(--transition-type-hover) 0s;
-  cursor: url('/assets/cursors/pointer.svg'), pointer;
+  cursor: var(--cursor-pointer);
 
   &:hover,
   &:active {
@@ -1576,7 +1576,7 @@ hr.solid {
 
     &:hover {
       background: var(--color-hl-pink);
-      cursor: url('/assets/cursors/pointer.svg'), pointer;
+      cursor: var(--cursor-pointer);
       transition: all var(--transition-dur-hover) var(--transition-type-hover) 0s;
     }
   }
@@ -1711,7 +1711,7 @@ hr.solid {
   }
 }
 
-.sidebar-channel-block {
+#sidebar-channel-block, .sidebar-channel-block {
   font-size: 1.6rem;
   padding: 0 1.2rem;
   gap: 1.2rem;
@@ -1770,17 +1770,16 @@ hr.solid {
   padding: 0.8rem 1.2rem;
   column-gap: 1.2rem;
   justify-content: flex-start;
+  cursor: var(--cursor-pointer);
 
   & div:nth-of-type(1) {
     display: flex;
     flex-direction: column;
     row-gap: 0.4rem;
-
     & div:nth-of-type(2) {
       display: flex;
     }
   }
-
   & div:nth-of-type(2) {
     margin-inline-start: auto;
     z-index: 100;

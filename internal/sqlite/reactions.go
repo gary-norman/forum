@@ -192,7 +192,7 @@ func (m *ReactionModel) CheckExistingReaction(liked, disliked bool, reactionAuth
 			FROM Reactions 
 			WHERE AuthorID = ? 
 			AND ReactedPostID = ?
-			AND ReactedCommentID - ?
+			AND ReactedCommentID = ?
 			AND (Liked = ? OR Disliked = ?)`
 	err := m.DB.QueryRow(stmt, reactionAuthorID, reactedPostID, reactedCommentID, liked, disliked).Scan(
 		&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID)

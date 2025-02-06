@@ -65,6 +65,7 @@ func getRandomChannel(channelSlice []models.ChannelWithDaysAgo) models.ChannelWi
 	channel := channelSlice[rndInt]
 	return channel
 }
+
 func getRandomUser(userSlice []models.User) models.User {
 	rndInt := rand.IntN(len(userSlice))
 	user := userSlice[rndInt]
@@ -406,7 +407,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			TimeSince: getTimeSince(post.Created),
 			Comments:  postComments, // Only include comments related to the current post
 		}
-
 	}
 
 	// SECTION --- user ---
@@ -442,8 +442,23 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			TimeSince: getTimeSince(channel.Created),
 		}
 	}
-	randomChannel := getRandomChannel(channelsWithDaysAgo)
-	randomChannelOwnerName, ownerErr := app.users.GetSingleUserValue(randomChannel.OwnerID, "ID", "username")
+	var thisChannel models.ChannelWithDaysAgo
+	channelId, err := strconv.Atoi(r.PathValue("channelId"))
+	foundChannels, err := app.channels.Search("id", channelId)
+	if err != nil {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > found channels", err)
+	}
+	if len(foundChannels) > 0 {
+		thisChannel = models.ChannelWithDaysAgo{
+			Channel:   foundChannels[0],
+			TimeSince: getTimeSince(foundChannels[0].Created),
+		}
+	} else {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "no channel found", "getting random channel")
+		thisChannel = getRandomChannel(channelsWithDaysAgo)
+	}
+
+	thisChannelOwnerName, ownerErr := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")
 	if ownerErr != nil {
 		log.Printf(ErrorMsgs().Query, "getHome > GetSingleUserValue", ownerErr)
 	}
@@ -473,10 +488,10 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Query, "user joined channels", joinedChannelsErr)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
-		isOwned = currentUser.ID == randomChannel.OwnerID
+		isOwned = currentUser.ID == thisChannel.OwnerID
 		joined := false
 		for _, channel := range joinedChannels {
-			if randomChannel.ID == channel.ID {
+			if thisChannel.ID == channel.ID {
 				joined = true
 				break
 			}
@@ -484,7 +499,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		isJoinedOrOwned = isOwned || joined
 	}
 	// get all rules for the current channel
-	randomChannelRules, err := app.rules.AllForChannel(randomChannel.ID)
+	thisChannelRules, err := app.rules.AllForChannel(thisChannel.ID)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "getHome > AllForChannel", err)
 	}
@@ -498,22 +513,22 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		RandomUser:  randomUser,
 		CurrentUser: currentUser,
 		//TODO get these values dynamically (NIL pointer reference)
-		CurrentUserID:                currentUserID,
-		CurrentUserName:              currentUserName,
-		AllChannels:                  allChannels,
-		RandomChannel:                randomChannel,
-		RandomChannelOwnerName:       randomChannelOwnerName,
-		OwnedChannels:                ownedChannels,
-		JoinedChannels:               joinedChannels,
-		OwnedAndJoinedChannels:       ownedAndJoinedChannels,
-		RandomChannelIsOwned:         isOwned,
-		RandomChannelIsOwnedOrJoined: isJoinedOrOwned,
-		RandomChannelRules:           randomChannelRules,
-		Posts:                        postsWithDaysAgo,
-		Avatar:                       currentUserAvatar,
-		Bio:                          currentUserBio,
-		Images:                       nil,
-		Reactions:                    nil,
+		CurrentUserID:              currentUserID,
+		CurrentUserName:            currentUserName,
+		AllChannels:                allChannels,
+		ThisChannel:                thisChannel,
+		ThisChannelOwnerName:       thisChannelOwnerName,
+		OwnedChannels:              ownedChannels,
+		JoinedChannels:             joinedChannels,
+		OwnedAndJoinedChannels:     ownedAndJoinedChannels,
+		ThisChannelIsOwned:         isOwned,
+		ThisChannelIsOwnedOrJoined: isJoinedOrOwned,
+		ThisChannelRules:           thisChannelRules,
+		Posts:                      postsWithDaysAgo,
+		Avatar:                     currentUserAvatar,
+		Bio:                        currentUserBio,
+		Images:                     nil,
+		Reactions:                  nil,
 		NotifyPlaceholder: models.NotifyPlaceholder{
 			Register: "",
 			Login:    "",
@@ -990,8 +1005,9 @@ func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	// TODO redirect to /channels/{{.channelID}}
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, "/channels/"+r.PathValue("channelId"), http.StatusFound)
 }
+
 func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {

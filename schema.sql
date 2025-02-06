@@ -55,11 +55,20 @@ CREATE TABLE Channels (
   FOREIGN KEY (OwnerID) REFERENCES Users(ID)
 );
 
-CREATE TABLE ChannelRules (
+CREATE TABLE Rules (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Rule TEXT
+    Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ChannelsRules (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     ChannelID INTEGER NOT NULL,
-    Rule TEXT NOT NULL,
-    FOREIGN KEY (ChannelID) REFERENCES Channels(ID)
+    RuleID TEXT NOT NULL,
+    Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(ChannelID, RuleID),
+    FOREIGN KEY (ChannelID) REFERENCES Channels(ID),
+    FOREIGN KEY (RuleID) REFERENCES Rules(ID)
 );
 
 CREATE TABLE Memberships (
@@ -194,11 +203,24 @@ CREATE TABLE Flags (
     FOREIGN KEY (FlaggedCommentID) REFERENCES Comments(ID)
 );
 
+CREATE TABLE Notifications (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Notification TEXT,
+    Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    Read BOOLEAN,
+    Archived BOOLEAN
+);
+
+CREATE TABLE NotificationsUsers (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserID INT,
+    NotificationID INT,
+    FOREIGN KEY (UserID) REFERENCES Users(ID),
+    FOREIGN KEY (NotificationID) REFERENCES Notifications(ID)
+);
+
 -- Indices
-CREATE INDEX idx_Users_ID ON Users (ID);
-CREATE INDEX idx_Channels_ID ON Channels (ID);
-CREATE INDEX idx_Posts_ID ON Posts (ID);
-CREATE INDEX idx_Comments_ID ON Comments (ID);
+-- INFO these are not necessary as sqlite automatically creates indexes for primary keys
 
 COMMIT TRANSACTION;
 PRAGMA ignore_check_constraints = OFF;

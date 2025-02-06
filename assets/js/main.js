@@ -1,4 +1,4 @@
-import {selectActiveFeed} from "./share.js";
+import {channelPage, homePage, pages, selectActiveFeed, userPage} from "./share.js";
 // variables
 //user information
 
@@ -11,6 +11,8 @@ let actButtonsAll;
 // activity feeds
 let activityFeeds;
 let activityFeedsContentAll;
+// right panel buttons
+let rightPanelButtons;
 // sidebar elements
 const userProfileImage = document.querySelectorAll('.profile-pic');
 const userProfileImageEmpty = document.querySelectorAll('.profile-pic--empty');
@@ -27,6 +29,16 @@ const logoutFormButton = document.querySelector('#logout');
 const btnLogin = document.querySelectorAll('[id^="btn_login-"]');
 const btnRegister = document.querySelectorAll('[id^="btn_register-"]');
 const btnForgot = document.querySelector('#btn_forgot');
+// join channel
+const joinChannelButton = document.querySelector('#join-channel-btn')
+//input fields with fancy animations
+const styledInputs = document.querySelectorAll(
+    'textarea, input[type="text"], input[type="password"], input[type="email"]'
+)
+// modals
+const modals = document.querySelectorAll(".modal");
+// popovers
+const popovers = document.querySelectorAll("[popover]")
 // login/register forms
 const formLogin = document.querySelector('#form-login');
 const formRegister = document.querySelector('#form-register');
@@ -82,10 +94,17 @@ const inputPost = dropAreaPost.querySelector('input');
 const uploadedFilePost = document.querySelector('#uploaded-file--post');
 const dragText = document.querySelector('.dragText');
 const dragButton = document.querySelector('.button');
+// page select
+const selectDropdown = document.getElementById('pagedrop');
+// ------
 let file;
 let filename;
-
+// document.addEventListener('DOMContentLoaded', () => {
+//
+//
+// });
 document.addEventListener('DOMContentLoaded', function () {
+    toggleUserInteracted("add");
     actButtonContainer = document.querySelector('#activity-bar');
     if (!actButtonContainer) {
         console.error('Activity bar not found');
@@ -104,6 +123,8 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleFeed(document.getElementById("activity-" + e.target.id),document.getElementById("activity-feed-" + e.target.id),  e.target);
             // console.log('activity-' + e.target.id);
         }) );
+    // right panel buttons
+    rightPanelButtons = document.querySelectorAll('[id^="right-panel-channel--"]')
     }
 
     if (typeof getUserProfileImageFromAttribute === 'function') {
@@ -118,8 +139,225 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // console.log("activity buttons:", actButtonsAll)
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const addButton = document.querySelector('#add-unsubmitted-rule');
+    const submitButton = document.querySelector('#edit-channel-rules-btn');
+    const addedRulesWrapper = document.querySelector('#rules-wrapper-added');
+    const removedRulesWrapper = document.querySelector('#rules-wrapper-removed');
+    const inputField = document.querySelector('#create-unsubmitted-rule');
+    const hiddenInput = document.querySelector('#rules-hidden-input');
+    const existingRulesContainer = document.querySelector('#rules-wrapper-existing')
+    let existingRules = existingRulesContainer.querySelectorAll('[id^="existing-channel-rule-"]')
+
+    existingRules.forEach(element => element.addEventListener('click', (e) => {
+        removeExistingRule(e.target.id);
+    }))
+
+    let rulesList = [];
+    let addRuleCounter = 0;
+
+    addButton.addEventListener("click", addRule);
+    inputField.addEventListener("keydown", handleKeyPress);
+
+    function addRule() {
+        const ruleText = inputField.value.trim();
+
+        if (ruleText) {
+            const ruleId = `ruleItem-${addRuleCounter++}`;
+            createRuleItem(ruleId, ruleText, "add");
+
+            rulesList.push({ id: ruleId, text: ruleText });
+            updateHiddenInput();
+
+            inputField.value = "";
+        }
+    }
+    function removeExistingRule(ruleId) {
+        const item = document.getElementById(ruleId);
+        const ruleText = item.innerText.trim();
+        console.log("existing ruleText: ", ruleText)
+
+        if (ruleText) {
+            console.log('remove rule: ', ruleId)
+            createRuleItem(ruleId, ruleText, "remove");
+            rulesList.push({ id: ruleId, text: ruleText });
+            updateHiddenInput();
+        }
+        console.log('removing ', item);
+        item.remove();
+    }
+
+    function createRuleItem(ruleId, ruleText, process) {
+        const ruleItem = document.createElement("li");
+        ruleItem.classList.add("rule-item");
+        ruleItem.classList.add("flex-space-between")
+        ruleItem.id = ruleId;
+
+        // Rule text span
+        const ruleTextSpan = document.createElement("span");
+        ruleTextSpan.textContent = ruleText;
+        ruleTextSpan.classList.add("rule-text");
+        if (process === "add") {
+            console.log("process add: text = ", ruleText, 'ID = ', ruleItem.id)
+            ruleTextSpan.addEventListener("click", () => editRule(ruleId, ruleText));
+        } else {
+            console.log("process remove: text = ", ruleText, 'ID = ', ruleItem.id)
+            ruleItem.addEventListener('click', () => removeRule(ruleId))
+        }
+
+        // Delete button
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("delete-rule-btn");
+        deleteButton.classList.add("btn-channel");
+        deleteButton.classList.add("btn-sm");
+        deleteButton.classList.add("btn-icoonly");
+        deleteButton.innerHTML = `<span class="btn-minus" role="contentinfo" aria-description="Remove Rule"></span>`;
+        deleteButton.addEventListener("click", (event) => {
+            event.stopPropagation(); // Prevent triggering edit on click
+            removeRule(ruleId);
+        });
+
+        ruleItem.appendChild(ruleTextSpan);
+        ruleItem.appendChild(deleteButton);
+        console.log('process query: ', process)
+        if (process === "remove") {
+            removedRulesWrapper.appendChild(ruleItem);
+        } else {
+            addedRulesWrapper.appendChild(ruleItem);
+        }
+    }
+
+    function editRule(ruleId, oldText) {
+        const ruleItem = document.getElementById(ruleId);
+        if (!ruleItem) return;
+
+        const editInput = document.createElement("input");
+        editInput.type = "text";
+        editInput.value = oldText;
+        editInput.classList.add("rule-edit-input");
+
+        ruleItem.replaceChildren(editInput);
+        editInput.focus();
+
+        editInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                saveEditedRule(ruleId, editInput.value);
+            } else if (event.key === "Escape") {
+                cancelEdit(ruleId, oldText);
+            }
+        });
+
+        editInput.addEventListener("blur", () => saveEditedRule(ruleId, editInput.value));
+    }
+
+    function saveEditedRule(ruleId, newText) {
+        if (!newText.trim()) return cancelEdit(ruleId, rulesList.find(r => r.id === ruleId)?.text || "");
+
+        const ruleIndex = rulesList.findIndex(rule => rule.id === ruleId);
+        if (ruleIndex !== -1) {
+            rulesList[ruleIndex].text = newText;
+            updateHiddenInput();
+        }
+
+        createRuleItem(ruleId, newText);
+        document.querySelector(".rule-edit-input")?.remove();
+    }
+
+    function cancelEdit(ruleId, oldText) {
+        createRuleItem(ruleId, oldText);
+        document.querySelector(".rule-edit-input")?.remove();
+    }
+
+    function removeRule(ruleId) {
+        console.log("removeRule: ", ruleId)
+        rulesList = rulesList.filter(rule => rule.id !== ruleId);
+        const ruleItem = document.getElementById(ruleId);
+        console.log('ruleItem ID: ', ruleItem.id)
+
+        if (ruleItem) ruleItem.remove();
+
+        if (ruleItem.id.startsWith("existing-channel-rule-")) {
+            console.log('removing existing rule: ', ruleItem.innerText)
+            const ruleTextSpan = document.createElement("span");
+            ruleTextSpan.textContent = ruleItem.innerText;
+            ruleTextSpan.id = ruleId
+            existingRulesContainer.appendChild(ruleTextSpan)
+
+            existingRules = existingRulesContainer.querySelectorAll('[id^="existing-channel-rule-"]')
+            existingRules.forEach(element => element.addEventListener('click', (e) => {
+                removeExistingRule(e.target.id);
+            }))
+        }
+
+        updateHiddenInput();
+    }
+
+    function updateHiddenInput() {
+        hiddenInput.value = JSON.stringify(rulesList);
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            if (event.ctrlKey || event.metaKey) {
+                submitButton.click();
+            } else {
+                addButton.click();
+                event.preventDefault();
+            }
+        }
+    }
+});
+
 
 // SECTION ----- functions ------
+
+// toggle user-interacted class to input fields to prevent label animation before they are selected
+function toggleUserInteracted(action) {
+    styledInputs.forEach(input => {
+        if (action === "add") {
+        input.addEventListener("focus", function () {
+            this.closest('.input-wrapper').classList.add("user-interacted");
+        });
+        } if (action === "remove") {
+            document.querySelectorAll('.input-wrapper').forEach(element => {
+                element.classList.remove("user-interacted");
+            })
+        }
+    });
+}
+
+// revert to original state if modals are closed
+// TODO get this popover reset to work without constant click listeners
+
+document.addEventListener("click", () => {
+    popovers.forEach(popover => {
+        if (popover.matches(":popover-open")) {
+            console.log("Open popover: ", popover);
+            popover.addEventListener('toggle', () => {toggleUserInteracted("remove")})
+        }
+    });
+});
+
+
+
+// revert to original state if modals are closed
+modals.forEach(modal => {
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            if (mutation.attributeName === "style") {
+                const currentDisplay = getComputedStyle(modal).display;
+                if (currentDisplay === "none") {
+                    console.log("Modal closed:", modal);
+                    toggleUserInteracted("remove")
+                }
+            }
+        });
+    });
+
+    observer.observe(modal, { attributes: true, attributeFilter: ["style"] });
+});
+
+
 // organize z-indices
 const makeZIndexes = (layers) =>
     layers.reduce((agg, layerName, index) => {
@@ -297,8 +535,7 @@ function confirmPass() {
     }
     regPassRpt.classList.remove("pass-nomatch");
 }
-
-// showMainNotification alerts the user using the main notification
+// showMainNotification changes the element ID to provide feedback to user
 function showMainNotification(message) {
     const notification = document.getElementById('notification-main');
     const notificationContent = document.getElementById('notification-main-content');
@@ -306,7 +543,7 @@ function showMainNotification(message) {
     notification.style.display = 'flex';
     setTimeout(() => {
         notification.style.display = 'none';
-    }, 3000); // Hide after 3 seconds
+    }, 2500); // Hide after 3 seconds
 }
 // showNotification changes the element ID to provide feedback to user
 function showNotification(elementID, messageOld, messageNew, success) {
@@ -314,10 +551,11 @@ function showNotification(elementID, messageOld, messageNew, success) {
     notification.textContent = messageNew;
     notification.style.color = "var(--color-hl-green)";
     if (!success) {
+        notification.style.color = 'firebrick';
         setTimeout(() => {
             notification.textContent = messageOld;
             notification.style.color = "var(--color-fg-1)";
-        }, 3000); // Hide after 3 seconds
+        }, 2500); // Hide after 3 seconds
     }
 }
 // retrieve the csrf_token cookie and explicitly set the X-CSRF-Token header in requests
@@ -334,9 +572,26 @@ function getCSRFToken() {
 //     .catch((error) => {
 //         console.error('Use of protected route failed:', error);
 // });
+// switch the <p> elements in right panel to <textarea> for editing
+// and change the edit button to submit
+function rightPanelEdit(target) {
 
+}
 // SECTION ---- event listeners -----
 
+// --- select page ---
+selectDropdown.addEventListener('change', () => {
+    const selectedValue = selectDropdown.value;
+    console.log("selectedValue: ", selectedValue);
+    pages.forEach((element) => {
+        console.log("elementID: ", element.id, "selectedPage: ", selectedValue);
+        if (element.id === selectedValue) {
+            element.classList.add('active-feed');
+        } else {
+            element.classList.remove('active-feed');
+        }
+    });
+});
 // --- sidebar options dropdown ---
 sidebarOption.addEventListener('click', function (event) {
     sidebarOptionsList.classList.toggle('sidebar-options-reveal')
@@ -390,18 +645,15 @@ if (loginForm) {
     });
 }
 
+// --- logout ---
 if (logoutFormButton) {
     logoutFormButton.addEventListener('click', function (event) {
         event.preventDefault();
-
-        const csrfToken = getCSRFToken();
-        console.log("csrfToken: ", csrfToken)
 
         fetch('/logout', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-csrf-token': csrfToken
             },
             body: JSON.stringify({}),
             cache: 'no-store'
@@ -427,6 +679,46 @@ if (logoutFormButton) {
             });
     })
 }
+// ---- join channel ----
+joinChannelButton.addEventListener('submit', function (event) {
+    event.preventDefault();
+    // const form = event.target;
+    // const formData = new FormData(form); // Collect form data
+    const csrfToken = getCSRFToken();
+    console.log("csrfToken: ", csrfToken)
+
+    fetch('/channels/join', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-csrf-token': csrfToken
+        },
+        body: JSON.stringify( {
+            channelId: document.getElementById('join-channel-id').value,
+            agree: document.getElementById('rules-agree-checkbox').value,
+        }),
+        cache: 'no-store'
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json(); // Parse JSON response
+            } else {
+                throw new Error('Join channel failed.');
+            }
+        })
+        .then(data => {
+            // Show notification based on the response from the server
+            showMainNotification(data.message);
+            // Optional: Redirect the user after showing the notification
+            setTimeout(() => {
+                window.location.href = '/'; // Replace with your desired location
+            }, 3500);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMainNotification('An error occurred while joining channel.');
+        });
+})
 
 // SECTION ----- drag and drop ----
 // get user image from manual click
@@ -522,6 +814,12 @@ window.addEventListener('click', ({ target }) => {
             break;
     }
 });
+// TODO create the functionality in the function
+// right panel buttons
+if (rightPanelButtons) {
+    rightPanelButtons.forEach(button =>
+        button.addEventListener('click', (e) => rightPanelEdit(e.target.id))
+)};
 // login / register / forgot
 btnLogin.forEach(button =>
     button.addEventListener('click', (e) => logReg(e.target.id))

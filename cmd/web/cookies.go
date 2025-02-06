@@ -47,6 +47,7 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 	return nil
 }
 
+// GetLoggedInUser gets the currently logged in user from the session token and returns the user's struct
 func (app *app) GetLoggedInUser(r *http.Request) (*models.User, error) {
 	// Get the username from the request cookie
 	userCookie, getCookieErr := r.Cookie("username")
@@ -69,13 +70,15 @@ func (app *app) GetLoggedInUser(r *http.Request) (*models.User, error) {
 	return user, nil
 }
 
-func (m *CookieModel) QueryCookies(r *http.Request, user *models.User) {
+func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user *models.User) bool {
 	Colors := models.CreateColors()
+	var success bool
 
 	// Get the Session Token from the request cookie
 	st, err := r.Cookie("session_token")
 	if err != nil {
 		log.Printf(ErrorMsgs().Cookies, "query", err)
+		return false
 	}
 	csrf, _ := r.Cookie("csrf_token")
 
@@ -87,6 +90,13 @@ func (m *CookieModel) QueryCookies(r *http.Request, user *models.User) {
 	if st.Value == user.SessionToken {
 		stColor = Colors.Green
 		stMatchString = "Success!"
+		success = true
+	} else {
+		err := m.DeleteCookies(w, user)
+		if err != nil {
+			log.Printf("error deleting cookies")
+		}
+		success = false
 	}
 	if csrf.Value == csrfToken && csrfToken == user.CSRFToken {
 		csrfColor = Colors.Green
@@ -101,6 +111,7 @@ func (m *CookieModel) QueryCookies(r *http.Request, user *models.User) {
 	log.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)
 	log.Printf(Colors.Blue+"CSRF token verficiation: "+csrfColor+"%v\n"+Colors.Reset, csrfMatchString)
 
+	return success
 }
 
 func (m *CookieModel) UpdateCookies(user *models.User, sessionToken, csrfToken string) error {

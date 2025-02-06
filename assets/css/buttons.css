@@ -1,9 +1,30 @@
 :root {
   --btn-radius: 2.4rem;
+  cursor: url('/assets/cursors/default.svg'), auto;
 }
+/* SECTION -------- cursors --------*/
+body {
+
+}
+.cursor-text {
+  cursor: url('/assets/cursors/text.svg'), text;
+}
+.cursor-minus {
+  cursor: url('/assets/cursors/minus.svg'), auto;
+}
+.cursor-plus {
+  cursor: url('/assets/cursors/plus.svg'), cell;
+}
+.cursor-pointer {
+  cursor: url('/assets/cursors/pointer.svg'), pointer;
+}
+.cursor-info {
+  cursor: url('/assets/cursors/info.svg'), help;
+}
+/* SECTION -------- buttons --------*/
 button,
 .button {
-  cursor: pointer;
+  cursor: url('/assets/cursors/pointer.svg'), pointer;
   & span,
   & img {
     z-index: calc(var(--z-index-button) + 10);
@@ -53,7 +74,7 @@ gap: 0.8rem;
     }
     background-size: 2.4rem;
     height: 2.4rem;
-    width: 2.4rem;
+    width: max-content;
     padding: 0;
 }
 & span.btn-edit {
@@ -93,9 +114,6 @@ gap: 0.8rem;
   /* border     : 0.15rem solid transparent; */
   color: var(--color-light-1);
   transition: all var(--transition-dur-hover);
-  
-  
-
   & span {
     color: var(--color-dark-1);
     /*&::before {*/
@@ -113,6 +131,9 @@ gap: 0.8rem;
       /*}*/
     }
   }
+}
+.btn-register-submit {
+  margin: .8rem 0 0 0
 }
 .btn-follows {
   & span {
@@ -250,14 +271,21 @@ gap: 0.8rem;
     background: url("/assets/icons/send_16.svg") no-repeat center;
   }
 }
-.btn- {
+.btn-channel-users {
   &::before {
-    background: url("/assets/icons/") no-repeat center;
+    background: url("/assets/icons/users_16.svg") no-repeat center;
   }
 }
-.btn- {
+/* FIXME span css conflicts with .btn-icotext & span &::before */
+.btn-channel-green-dot {
   &::before {
-    background: url("/assets/icons/") no-repeat center;
+    content: "•";
+    color: var(--color-hl-primary);
+    font-size: 2.8rem;
+    position: absolute;
+    left: 1.6rem;
+    top: 0.4rem;
+    transform: translate(0, -47%);
   }
 }
 
@@ -301,6 +329,10 @@ gap: 0.8rem;
     background : url('/assets/icons/add_circle_16.svg') no-repeat center;
     width: 2.4rem;
 }
+.btn-minus {
+    background : url('/assets/icons/minus_circle_16.svg') no-repeat center;
+    width: 2.4rem;
+}
 
 .btn-edit {
   background: url("/assets/icons/edit_16.svg") no-repeat center;
@@ -322,6 +354,12 @@ gap: 0.8rem;
 .btn-warning {
     transition: all var(--transition-dur-hover) ease-in-out;
     background : url('/assets/icons/warning_16.svg') no-repeat center;
+}
+.btn-save {
+  &:hover > span {
+    background: url("/assets/icons/heart-full_24.svg") no-repeat center;
+    background-size: 1.6rem;
+  }
 }
 .btn-save-empty {
   background: url("/assets/icons/heart-empty_24.svg") no-repeat center;
@@ -585,7 +623,7 @@ gap: 0.8rem;
   border-radius: var(--btn-radius);
   border: 0.2rem solid var(--color-secondary-border);
   position: relative;
-  cursor: pointer;
+  cursor: url('/assets/cursors/pointer.svg'), pointer;
   z-index: 0;
   clip-path: border-box;
 

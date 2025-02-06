@@ -17,32 +17,64 @@ func (m *ChannelModel) Insert(ownerID int, name, description, avatar, banner str
 	return err
 }
 
-func (m *ChannelModel) OwnedByCurrentUser(userID int) ([]models.Channel, error) {
-	stmt := "SELECT ID, OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted FROM Channels WHERE OwnerID = ?"
-	rows, err := m.DB.Query(stmt, userID)
-	if err != nil {
-		return nil, err
+func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]models.Channel, error) {
+	validColumns := map[string]bool{
+		"ID":          true,
+		"OwnerID":     true,
+		"Name":        true,
+		"Avatar":      true,
+		"Banner":      true,
+		"Description": true,
+		"Created":     true,
+		"Privacy":     true,
+		"IsFlagged":   true,
+		"IsMuted":     true,
+	}
+
+	if !validColumns[column] {
+		return nil, fmt.Errorf("invalid column name: %s", column)
+	}
+
+	// Safely construct the query
+	stmt := fmt.Sprintf(
+		"SELECT ID, OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted FROM Channels WHERE %s = ?",
+		column,
+	)
+	rows, queryErr := m.DB.Query(stmt, ID)
+	if queryErr != nil {
+		return nil, queryErr
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+			log.Printf(ErrorMsgs().Close, rows, "OwnedOrJoinedByCurrentUser", closeErr)
 		}
 	}()
-	var Channels []models.Channel
+	var channels []models.Channel
 	for rows.Next() {
-		p := models.Channel{}
-		err = rows.Scan(&p.ID, &p.OwnerID, &p.Name, &p.Avatar, &p.Banner, &p.Description, &p.Created, &p.Privacy, &p.IsFlagged, &p.IsMuted)
-		if err != nil {
-			return nil, err
+		var c models.Channel
+		scanErr := rows.Scan(&c.ID, &c.OwnerID, &c.Name, &c.Avatar, &c.Banner, &c.Description, &c.Created, &c.Privacy, &c.IsFlagged, &c.IsMuted)
+		if scanErr != nil {
+			return nil, scanErr
 		}
-		Channels = append(Channels, p)
+		if column == "OwnerID" {
+			fmt.Printf(ErrorMsgs().KeyValuePair, "updating Owned of", c.Name)
+			c.Owned = true
+			fmt.Printf(ErrorMsgs().KeyValuePair, "Owned", c.Owned)
+		}
+		if column == "ID" {
+			fmt.Printf(ErrorMsgs().KeyValuePair, "updating Joined of", c.Name)
+			c.Joined = true
+			fmt.Printf(ErrorMsgs().KeyValuePair, "Joined", c.Joined)
+		}
+		channels = append(channels, c)
 	}
-
-	if err = rows.Err(); err != nil {
-		return nil, err
+	if rowsErr := rows.Err(); rowsErr != nil {
+		return nil, rowsErr
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels", len(Channels))
-	return Channels, nil
+	if column == "OwnerID" {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned by current user", len(channels))
+	}
+	return channels, nil
 }
 
 func (m *ChannelModel) All() ([]models.Channel, error) {
@@ -71,7 +103,7 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels", len(Channels))
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Total channels", len(Channels))
 	return Channels, nil
 }
 

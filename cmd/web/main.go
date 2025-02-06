@@ -19,6 +19,7 @@ import (
 )
 
 type app struct {
+	db             *sql.DB // Store DB reference for cleanup
 	users          *sqlite.UserModel
 	posts          *sqlite.PostModel
 	reactions      *sqlite.ReactionModel
@@ -33,19 +34,41 @@ type app struct {
 	memberships    *sqlite.MembershipModel
 	muted          *sqlite.MutedChannelModel
 	cookies        *CookieModel
+	rules          *sqlite.RuleModel
 }
 
 func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
 }
+func Colors() *models.Colors {
+	return models.CreateColors()
+}
 
-func main() {
-	db, err := sql.Open("sqlite3", "./db/forum_database.db")
+//// Global template variable
+//var tpl *template.Template
+//
+//func loadTemplates() error {
+//	var err error
+//	tpl, err = template.ParseFiles("assets/templates/index.html")
+//	return err
+//}
+
+func initializeApp() (*app, func(), error) {
+	// Open database connection
+	db, err := sql.Open("sqlite3", "db/forum_database.db") // Adjust DB path
 	if err != nil {
-		log.Fatal(ErrorMsgs().Open, "./db/forum_database.db", "sql.Open", err)
+		return nil, nil, err
 	}
 
-	app := app{
+	// Verify connection
+	if err = db.Ping(); err != nil {
+		db.Close() // Close DB if ping fails
+		return nil, nil, err
+	}
+
+	// App instance with DB reference
+	appInstance := &app{
+		db: db, // Store reference for cleanup
 		posts: &sqlite.PostModel{
 			DB: db,
 		},
@@ -70,11 +93,51 @@ func main() {
 		reactionStatus: &sqlite.ReactionModel{
 			DB: db,
 		},
+		rules: &sqlite.RuleModel{
+			DB: db,
+		},
 	}
-	// Initialise templates if (app *app) is a receiver for
-	// the init() function that sets up custom go template functions
+	// Cleanup function to close DB connection
+	cleanup := func() {
+		log.Println("Closing database connection...")
+		if err := db.Close(); err != nil {
+			log.Printf("Error closing DB: %v", err)
+		} else {
+			log.Println("Database closed successfully.")
+		}
+	}
+
+	return appInstance, cleanup, nil
+}
+
+func main() {
+	// Load templates at startup
+
+	//tpl, err := GetTemplate()
+	//if err != nil {
+	//	log.Printf(ErrorMsgs().Parse, "./assets/templates/index.html", "main", err)
+	//	return
+	//}
+	//
+	//t := tpl.Lookup("index.html")
+	//if t == nil {
+	//	log.Printf("Template not found: index.html")
+	//	return
+	//}
+
+	// Initialize the app
+	app, cleanup, err := initializeApp()
+	if err != nil {
+		log.Fatalf("Failed to initialize app: %v", err)
+	}
+	defer cleanup() // Ensure DB closes on normal exit
+
+	// initialise templates
 	app.init()
 
+	// Handle shutdown signals (Ctrl+C, system shutdown)
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 	port := 8989
 	addr := fmt.Sprintf(":%d", port)
 	srv := &http.Server{
@@ -85,7 +148,8 @@ func main() {
 	go func() {
 		// Log server listening messages
 		log.Printf(ErrorMsgs().KeyValuePair, "Starting server on port", port)
-		log.Printf(ErrorMsgs().ConnSuccess, "http://localhost"+addr)
+		address := "http://localhost" + addr
+		log.Printf(ErrorMsgs().ConnSuccess, address)
 		if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
 			fmt.Printf(ErrorMsgs().ConnInit, srv.Addr, "srv.ListenAndServe")
 			log.Fatalf("HTTP server error: %v", err)
@@ -105,5 +169,5 @@ func main() {
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Fatalf(ErrorMsgs().Shutdown, err)
 	}
-	log.Printf("Graceful shutdown complete.")
+	log.Printf(Colors().Green + "Graceful shutdown complete." + Colors().Reset)
 }

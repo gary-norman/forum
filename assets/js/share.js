@@ -1,4 +1,8 @@
 const link = encodeURI(window.location.href);
+export const homePage = document.getElementById('home-page');
+export const userPage = document.getElementById('user-page');
+export const channelPage = document.getElementById('channel-page');
+export const pages = [homePage, userPage, channelPage];
 
 // TODO Add logic that positions the modal above the button if there's not enough space under
 const commentMsg = encodeURIComponent('Hey, I found this comment, you need to see it!');
@@ -14,11 +18,6 @@ let scrollWindow;
  }
 
 export function selectActiveFeed() {
-    const homePage = document.getElementById('home-page');
-    const userPage = document.getElementById('user-page');
-    const channelPage = document.getElementById('channel-page');
-
-    const pages = [homePage, userPage, channelPage];
     const activePage = pages.find(page => page.classList.contains('active-feed'));
 
     switch (activePage) {

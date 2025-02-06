@@ -2,16 +2,19 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
 	"io"
 	"log"
+	"math/rand/v2"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gary-norman/forum/internal/models"
@@ -38,6 +41,34 @@ func isValidPassword(password string) bool {
 		return false
 	}
 	return true
+}
+
+func getTimeSince(created time.Time) string {
+	now := time.Now()
+	hours := now.Sub(created).Hours()
+	var timeSince string
+	if hours > 24 {
+		timeSince = fmt.Sprintf("%.0f days ago", hours/24)
+	} else if hours > 1 {
+		timeSince = fmt.Sprintf("%.0f hours ago", hours)
+	} else if minutes := now.Sub(created).Minutes(); minutes > 1 {
+		timeSince = fmt.Sprintf("%.0f minutes ago", minutes)
+	} else {
+		timeSince = "just now"
+	}
+	return timeSince
+}
+
+// TODO use interface to get and return any type
+func getRandomChannel(channelSlice []models.ChannelWithDaysAgo) models.ChannelWithDaysAgo {
+	rndInt := rand.IntN(len(channelSlice))
+	channel := channelSlice[rndInt]
+	return channel
+}
+func getRandomUser(userSlice []models.User) models.User {
+	rndInt := rand.IntN(len(userSlice))
+	user := userSlice[rndInt]
+	return user
 }
 
 func (app *app) register(w http.ResponseWriter, r *http.Request) {
@@ -171,10 +202,10 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	login := credentials.Username
+	password := credentials.Password
 	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n"+Colors.Reset, login)
 	fmt.Printf(ErrorMsgs().Divider)
 
-	password := credentials.Password
 	user, getUserErr := app.users.GetUserFromLogin(login, "login")
 	if getUserErr != nil {
 		log.Printf(ErrorMsgs().NotFound, "either", login, "login > GetUserFromLogin", getUserErr)
@@ -233,6 +264,25 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *app) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
+	fmt.Println(Colors().Orange + "Checking if this user is a member of this channel" + Colors().Reset)
+	fmt.Printf(ErrorMsgs().Divider)
+	var channels []models.Channel
+	for _, membership := range memberships {
+		channel, err := app.channels.OwnedOrJoinedByCurrentUser(membership.ChannelID, "ID")
+		if err != nil {
+			return nil, errors.New(fmt.Sprintf(ErrorMsgs().KeyValuePair, "Error calling JoinedByCurrentUser > OwnedOrJoinedByCurrentUser", err))
+		}
+		channels = append(channels, channel[0])
+	}
+	if len(channels) > 0 {
+		fmt.Println(Colors().Green + "Current user is a member of this channel" + Colors().Reset)
+	} else {
+		fmt.Println(Colors().Red + "Current user is not a member of this channel" + Colors().Reset)
+	}
+	return channels, nil
+}
+
 func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	Colors := models.CreateColors()
 	// Retrieve the cookie
@@ -252,10 +302,6 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.users.GetUserByUsername(username, "logout")
 	if getUserErr != nil {
 		log.Printf("GetUserByUsername for %v failed with error: %v", username, getUserErr)
-	}
-	if authErr := app.isAuthenticated(r, username); authErr != nil {
-		http.Error(w, authErr.Error(), http.StatusUnauthorized)
-		return
 	}
 
 	// Delete the Session Token and CSRF Token cookies
@@ -295,7 +341,9 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
+	//var userLoggedIn bool
 	userLoggedIn := true
+	// SECTION --- posts ---
 	posts, postsErr := app.posts.All()
 	if postsErr != nil {
 		http.Error(w, postsErr.Error(), 500)
@@ -351,22 +399,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			Replies:   []models.CommentWithDaysAgo{}, // Initialize with no replies
 		}
 	}
-
+	// TODO make a function with interface to unify this and other withdaysago
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
 	for index, post := range posts {
-		now := time.Now()
-		hours := now.Sub(post.Created).Hours()
-		var TimeSince string
-		if hours > 24 {
-			TimeSince = fmt.Sprintf("%.0f days ago", hours/24)
-		} else if hours > 1 {
-			TimeSince = fmt.Sprintf("%.0f hours ago", hours)
-		} else if minutes := now.Sub(post.Created).Minutes(); minutes > 1 {
-			TimeSince = fmt.Sprintf("%.0f minutes ago", minutes)
-		} else {
-			TimeSince = "just now"
-		}
-
 		/// Filter comments that belong to the current post based on the postID and CommentedPostID
 		var postComments []models.CommentWithDaysAgo
 		for _, comment := range commentsWithDaysAgo {
@@ -378,76 +413,139 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			}
 
 		}
-
 		postsWithDaysAgo[index] = models.PostWithDaysAgo{
 			Post:      post,
-			TimeSince: TimeSince,
-			Comments:  postComments, // Only include comments related to the current post
+			TimeSince: getTimeSince(post.Created),
+			Comments: postComments, // Only include comments related to the current post
 		}
 
 	}
 
+	// SECTION --- user ---
+	allUsers, allUsersErr := app.users.All()
+	if allUsersErr != nil {
+		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
+	}
+	randomUser := getRandomUser(allUsers)
 	currentUser, currentUserErr := app.GetLoggedInUser(r)
 	if currentUserErr != nil {
 		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
 		log.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
 		userLoggedIn = false
 	}
-	var ownedChannels []models.Channel
-	var ownedChannelsErr error
-	var joinedChannels []models.Channel
-	//var joinedChannelsErr error
-
+	//validTokens := app.cookies.QueryCookies(w, r, currentUser)
+	//if validTokens == true {
+	//	userLoggedIn = true
+	//}
 	currentUserName := "nouser"
+	var currentUserID int
 	var currentUserAvatar string
 	var currentUserBio string
+
+	// SECTION --- channels --
+	allChannels, allChanErr := app.channels.All()
+	if allChanErr != nil {
+		log.Printf(ErrorMsgs().Query, "channels.All", allChanErr)
+	}
+	channelsWithDaysAgo := make([]models.ChannelWithDaysAgo, len(allChannels))
+	for index, channel := range allChannels {
+		channelsWithDaysAgo[index] = models.ChannelWithDaysAgo{
+			Channel:   channel,
+			TimeSince: getTimeSince(channel.Created),
+		}
+	}
+	randomChannel := getRandomChannel(channelsWithDaysAgo)
+	randomChannelOwnerName, ownerErr := app.users.GetSingleUserValue(randomChannel.OwnerID, "ID", "username")
+	if ownerErr != nil {
+		log.Printf(ErrorMsgs().Query, "getHome > GetSingleUserValue", ownerErr)
+	}
+	var ownedChannels []models.Channel
+	var joinedChannels []models.Channel
+	var ownedAndJoinedChannels []models.Channel
+	isJoinedOrOwned := false
+	isOwned := false
+
 	if userLoggedIn == true {
+		currentUser.TimeSince = getTimeSince(currentUser.Created)
 		currentUserName = currentUser.Username
+		currentUserID = currentUser.ID
 		currentUserAvatar = currentUser.Avatar
 		currentUserBio = currentUser.Description
-		ownedChannels, ownedChannelsErr = app.channels.OwnedByCurrentUser(currentUser.ID)
-		if ownedChannelsErr != nil {
-			log.Printf(ErrorMsgs().Query, "user channels", ownedChannelsErr)
+		// get owned and joined channels of current user
+		memberships, memberErr := app.memberships.UserMemberships(currentUser.ID)
+		if memberErr != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
 		}
-		//joinedChannels, joinedChannelsErr = app.channels.JoinedByCurrentUser(currentUser.ID)
-		//if ownedChannelsErr != nil {
-		//	log.Printf(ErrorMsgs().Query, "user channels", joinedChannelsErr)
-		//}
+		ownedChannels, ownedChannelsErr := app.channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
+		if ownedChannelsErr != nil {
+			log.Printf(ErrorMsgs().Query, "user owned channels", ownedChannelsErr)
+		}
+		joinedChannels, joinedChannelsErr := app.JoinedByCurrentUser(memberships)
+		if joinedChannelsErr != nil {
+			log.Printf(ErrorMsgs().Query, "user joined channels", joinedChannelsErr)
+		}
+		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+		isOwned = currentUser.ID == randomChannel.OwnerID
+		joined := false
+		for _, channel := range joinedChannels {
+			if randomChannel.ID == channel.ID {
+				joined = true
+				break
+			}
+		}
+		isJoinedOrOwned = isOwned || joined
 	}
+	// get all rules for the current channel
+	randomChannelRules, err := app.rules.AllForChannel(randomChannel.ID)
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > AllForChannel", err)
+	}
+	// TODO get channel moderators
 
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "Owned Channels", ownedChannels)
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "currentUserAvatar", currentUserAvatar)
-
+	// TODO get channel posts
+	// TODO create structs for each type (ChannelTemplate etc) and serve them in the template struct
+	// SECTION -- template ---
 	templateData := models.TemplateData{
-		OwnedAndJoinedChannels: append(ownedChannels, joinedChannels...),
-		OwnedChannels:          ownedChannels,
-		JoinedChannels:         joinedChannels,
-		CurrentUser:            currentUser,
-		CurrentUserName:        currentUserName,
-		Posts:                  postsWithDaysAgo,
-		Avatar:                 currentUserAvatar,
-		Bio:                    currentUserBio,
-		Images:                 nil,
-		Reactions:              nil,
+		AllUsers:    allUsers,
+		RandomUser:  randomUser,
+		CurrentUser: currentUser,
+		//TODO get these values dynamically (NIL pointer reference)
+		CurrentUserID:                currentUserID,
+		CurrentUserName:              currentUserName,
+		AllChannels:                  allChannels,
+		RandomChannel:                randomChannel,
+		RandomChannelOwnerName:       randomChannelOwnerName,
+		OwnedChannels:                ownedChannels,
+		JoinedChannels:               joinedChannels,
+		OwnedAndJoinedChannels:       ownedAndJoinedChannels,
+		RandomChannelIsOwned:         isOwned,
+		RandomChannelIsOwnedOrJoined: isJoinedOrOwned,
+		RandomChannelRules:           randomChannelRules,
+		Posts:                        postsWithDaysAgo,
+		Avatar:                       currentUserAvatar,
+		Bio:                          currentUserBio,
+		Images:                       nil,
+		Reactions:                    nil,
 		NotifyPlaceholder: models.NotifyPlaceholder{
 			Register: "",
 			Login:    "",
 		},
 	}
 	//models.JsonError(templateData)
-
 	tpl, err := GetTemplate()
 	if err != nil {
-		http.Error(w, err.Error(), 500)
-		log.Printf(ErrorMsgs().Parse, "./assets/templates/index.html", "getHome", err)
+		log.Printf(ErrorMsgs().Parse, "templates", "getHome", err)
 		return
 	}
 
 	t := tpl.Lookup("index.html")
+	//if t == nil {
+	//	log.Printf("Template not found: index.html")
+	//	return
+	//}
+
 	if t == nil {
-		http.Error(w, "template not found: index.html", 500)
-		log.Printf("Template not found: index.html")
+		http.Error(w, "Template is not initialized", http.StatusInternalServerError)
 		return
 	}
 
@@ -480,19 +578,20 @@ func getRepliesForComment(comment models.CommentWithDaysAgo, commentsWithDaysAgo
 }
 
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
-	user, getUserErr := app.GetLoggedInUser(r)
-	if getUserErr != nil {
-		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)
+	user, err := app.GetLoggedInUser(r)
+	if err != nil {
+		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", err)
 		return
 	}
 	if user.Username == "" {
-		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", getUserErr)
+		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", err)
 		return
 	}
-	parseErr := r.ParseMultipartForm(10 << 20)
-	if parseErr != nil {
-		http.Error(w, parseErr.Error(), 400)
-		log.Printf(ErrorMsgs().Parse, "editUserDetails", parseErr)
+
+	err = r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		log.Printf(ErrorMsgs().Parse, "editUserDetails", err)
 		return
 	}
 	user.Avatar = GetFileName(r, "file-drop", "editUserDetails", "user")
@@ -508,14 +607,14 @@ func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
-	t, parseErr := template.ParseFiles("./assets/templates/posts.create.html")
+	tpl, parseErr := template.ParseFiles("./assets/templates/posts.create.html")
 	if parseErr != nil {
 		http.Error(w, parseErr.Error(), 500)
 		log.Printf(ErrorMsgs().Parse, "./assets/templates/posts.create.html", "createPost", parseErr)
 		return
 	}
 
-	execErr := t.Execute(w, nil)
+	execErr := tpl.Execute(w, nil)
 	if execErr != nil {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return
@@ -701,42 +800,25 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-	parseErr := r.ParseForm()
-	if parseErr != nil {
+	if parseErr := r.ParseForm(); parseErr != nil {
 		http.Error(w, parseErr.Error(), 400)
 		log.Printf(ErrorMsgs().Parse, "storeMembership", parseErr)
 		return
 	}
 	fmt.Printf("user: %v", user.Username)
 	// get channelID
-	joinedChannelID, convErr := strconv.Atoi(r.PostForm.Get("channel-id"))
+	joinedChannelID, convErr := strconv.Atoi(r.PostForm.Get("channelId"))
 	if convErr != nil {
-		log.Printf(ErrorMsgs().Convert, r.PostForm.Get("channel-id"), "StoreMembership > GetChannelID", convErr)
-		log.Printf("Unable to convert %v to integer\n", r.PostForm.Get("channel-id"))
+		log.Printf(ErrorMsgs().Convert, r.PostForm.Get("channelId"), "StoreMembership > GetChannelID", convErr)
+		log.Printf("Unable to convert %v to integer\n", r.PostForm.Get("channelId"))
 	}
 	// get slice of channels (in this case it is only 1, but the function still returns a slice)
-	channels, err := app.channels.Search("ID", joinedChannelID)
+	channels, err := app.channels.Search("id", joinedChannelID)
 	if err != nil {
 		log.Printf(ErrorMsgs().Query, "channel", err)
 	}
 	// get the channel object
 	channel := channels[0]
-	// if channel = private {redirect to requestMembership}
-	if r.PostForm.Get("privacy") == "on" {
-		// TODO this logic in gethome + JS
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusUnauthorized)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-			"code":    http.StatusUnauthorized,
-			"message": "This channel is private, click 'OK' to agree to the channel rules and request membership.",
-		})
-		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "storeMembership: Privacy", encErr)
-			return
-		}
-		app.requestMembership(w, r, user.ID, joinedChannelID)
-		return
-	}
 
 	createMembershipData := models.Membership{
 		UserID:    user.ID,
@@ -747,16 +829,16 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		createMembershipData.UserID,
 		createMembershipData.ChannelID,
 	)
-
 	if insertErr != nil {
 		log.Printf(ErrorMsgs().Post, insertErr)
 		http.Error(w, insertErr.Error(), 500)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
+	w.WriteHeader(http.StatusOK)
 	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-		"code":    http.StatusAccepted,
+		"code":    http.StatusOK,
 		"message": fmt.Sprintf("Welcome to %v!", channel.Name),
 	})
 	if encErr != nil {
@@ -878,6 +960,50 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	// http.Redirect(w, r, "/", http.StatusFound)
 }
 
+func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
+	channelId, err := strconv.Atoi(r.PathValue("channelId"))
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > convert channelId to int", err)
+	}
+
+	// Get the "rules" input value
+	rulesJSON := r.FormValue("rules")
+	if rulesJSON == "" { // TODO send this message to the user
+		log.Printf(ErrorMsgs().KeyValuePair, "message to user", "you have not added or removed any rules")
+	}
+
+	// Decode JSON into a slice of Rule structs
+	var rules []models.POSTRule
+	if err := json.Unmarshal([]byte(rulesJSON), &rules); err != nil {
+		http.Error(w, "Invalid JSON format", http.StatusBadRequest)
+		return
+	}
+
+	for _, rule := range rules {
+		id, found := strings.CutPrefix(rule.ID, "existing-channel-rule-")
+		idInt, err := strconv.Atoi(id)
+		if err != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > id => idInt", err)
+		}
+		if found == true {
+			err := app.rules.DeleteRule(channelId, idInt)
+			if err != nil {
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > DeleteRule", err)
+			}
+		} else {
+			ruleId, err := app.rules.CreateRule(rule.Text)
+			if err != nil {
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > CreateRule", err)
+			}
+			err = app.rules.InsertRule(channelId, ruleId)
+			if err != nil {
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > InsertRule", err)
+			}
+		}
+	}
+	// TODO redirect to /channels/{{.channelID}}
+	http.Redirect(w, r, "/", http.StatusFound)
+}
 func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {

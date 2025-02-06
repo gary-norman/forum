@@ -16,6 +16,7 @@ type User struct {
 	TimeSince   string
 	IsFlagged   bool `json:"isFlagged,omitempty"`
 }
+
 type UserCheck struct {
 	ID             int    `json:"id"`
 	Username       string `json:"username"`
@@ -44,17 +45,36 @@ type Loyalty struct {
 }
 
 type Channel struct {
-	ID          int       `json:"id"`
-	OwnerID     int       `json:"ownerId"`
-	Name        string    `json:"name"`
-	Avatar      string    `json:"avatar,omitempty"` // Store UUID as string
-	Banner      string    `json:"banner,omitempty"`
-	Description string    `json:"description"`
-	Created     time.Time `json:"created"`
-	Rules       []ChannelRule
-	Privacy     bool `json:"privacy"`
-	IsMuted     bool `json:"isMuted"`
-	IsFlagged   bool `json:"isFlagged,omitempty"`
+	ID               int       `json:"id"`
+	OwnerID          int       `json:"ownerId"`
+	Name             string    `json:"name"`
+	Avatar           string    `json:"avatar,omitempty"`
+	Banner           string    `json:"banner,omitempty"`
+	Description      string    `json:"description"`
+	Created          time.Time `json:"created"`
+	Rules            []Rule
+	UnsubmittedRules []string
+	Owned            bool
+	Joined           bool
+	Privacy          bool `json:"privacy"`
+	IsMuted          bool `json:"isMuted"`
+	IsFlagged        bool `json:"isFlagged,omitempty"`
+}
+
+type Rule struct {
+	ID         int       `json:"id"`
+	Rule       string    `json:"rule"`
+	Created    time.Time `json:"created"`
+	Predefined bool      `json:"predefined"`
+}
+
+type POSTRule struct {
+	ID   string `json:"id"`
+	Text string `json:"text"`
+}
+type ChannelWithDaysAgo struct {
+	Channel
+	TimeSince string
 }
 type ChannelData struct {
 	ChannelName string `json:"channelName"`
@@ -63,8 +83,9 @@ type ChannelData struct {
 
 type ChannelRule struct {
 	ID        int    `json:"id"`
-	Rule      string `json:"rule"`
+	RuleID    string `json:"rule"`
 	ChannelID int    `json:"channelId"`
+	Created   int    `json:"created"`
 }
 
 type MutedChannel struct {
@@ -73,17 +94,17 @@ type MutedChannel struct {
 	ChannelID int       `json:"channelId"`
 	Created   time.Time `json:"created"`
 }
+type OwnedAndJoinedChannels struct {
+	Owned    bool
+	Joined   bool
+	Channels []Channel
+}
 
 type Membership struct {
 	ID        int       `json:"id"`
 	UserID    int       `json:"userId"`
 	ChannelID int       `json:"channelId"`
 	Created   time.Time `json:"created"`
-}
-
-type OwnedAndJoinedChannels struct {
-	OwnedChannels  []Channel
-	JoinedChannels []Channel
 }
 
 type Mod struct {
@@ -170,6 +191,19 @@ type Flag struct {
 	FlaggedCommentID *int      `json:"flaggedCommentId,omitempty"`
 }
 
+type Notifications struct {
+	ID           int       `json:"id"`
+	Notification string    `json:"notification"`
+	Created      time.Time `json:"created"`
+	Read         bool      `json:"read"`
+	Archived     bool      `json:"archived"`
+}
+type NotificationsUsers struct {
+	ID             int `json:"id"`
+	UserID         int `json:"userId"`
+	NotificationID int `json:"notificationId"`
+}
+
 type Notify struct {
 	BadPass      string
 	RegisterOk   string
@@ -194,18 +228,27 @@ type NotifyPlaceholder struct {
 }
 
 type TemplateData struct {
-	CurrentUser            *User
-	CurrentUserName        string
-	Channels               []Channel
-	OwnedChannels          []Channel
-	JoinedChannels         []Channel
-	OwnedAndJoinedChannels []Channel
-	Posts                  []PostWithDaysAgo
-	Avatar                 string
-	Bio                    string
-	Images                 []Image
-	Comments               []Comment
-	Reactions              []Reaction
+	AllUsers                     []User
+	RandomUser                   User
+	CurrentUser                  *User
+	CurrentUserName              string
+	CurrentUserID                int
+	Channels                     []Channel
+	AllChannels                  []Channel
+	RandomChannel                ChannelWithDaysAgo
+	RandomChannelOwnerName       string
+	RandomChannelIsOwnedOrJoined bool
+	RandomChannelIsOwned         bool
+	RandomChannelRules           []Rule
+	OwnedChannels                []Channel
+	JoinedChannels               []Channel
+	OwnedAndJoinedChannels       []Channel
+	Posts                        []PostWithDaysAgo
+	Avatar                       string
+	Bio                          string
+	Images                       []Image
+	Comments                     []Comment
+	Reactions                    []Reaction
 	NotifyPlaceholder
 }
 

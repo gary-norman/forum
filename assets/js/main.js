@@ -1,4 +1,5 @@
 import {channelPage, homePage, pages, selectActiveFeed, userPage} from "./share.js";
+
 // variables
 //user information
 
@@ -96,6 +97,8 @@ const dragText = document.querySelector('.dragText');
 const dragButton = document.querySelector('.button');
 // page select
 const selectDropdown = document.getElementById('pagedrop');
+// feeds
+const feeds = document.querySelectorAll('.feeds-wrapper')
 // ------
 let file;
 let filename;
@@ -104,6 +107,9 @@ let filename;
 //
 // });
 document.addEventListener('DOMContentLoaded', function () {
+    feeds.forEach(feed => {
+        feed.classList.add('feeds-wrapper-loaded')
+    })
     const joinedAndOwnedChannelContainer = document.querySelector('#sidebar-channel-block')
     const joinedAndOwnedChannels = joinedAndOwnedChannelContainer.querySelectorAll('.sidebar-channel')
     joinedAndOwnedChannels.forEach( channel => channel.addEventListener('click', (e) => navigateToChannel(channel)));

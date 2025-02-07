@@ -91,8 +91,6 @@
                 </div>
             </form>
         </div> <!-- end post card -->
-
-        {{printf "Comment: %v" .Comments}}
         {{ range .Comments}}
             {{ $comment := .Comment}}
             <div class="container-comments">

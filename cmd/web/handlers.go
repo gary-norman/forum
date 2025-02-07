@@ -344,7 +344,7 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	//var userLoggedIn bool
 	userLoggedIn := true
-	// SECTION --- posts ---
+	// SECTION --- posts and comments ---
 	posts, postsErr := app.posts.All()
 	if postsErr != nil {
 		http.Error(w, postsErr.Error(), 500)
@@ -407,6 +407,10 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			TimeSince: getTimeSince(post.Created),
 			Comments:  postComments, // Only include comments related to the current post
 		}
+	}
+
+	for index, post := range postsWithDaysAgo {
+		fmt.Printf("post: %v\ncomments: %v\n\n", post, postsWithDaysAgo[index].Comments)
 	}
 
 	// SECTION --- user ---

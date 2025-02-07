@@ -728,8 +728,7 @@
                       </div>
                       <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
                   {{range .Posts}} <!-- user page activity posts -->
-                  {{printf "Comment: %v" $.Comments}}
-                    {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" $.Comments) }}
+                    {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
                   {{end}} <!-- user page activity POSTS -->
                 </div>
                 <div id="activity-posts">
@@ -747,7 +746,7 @@
                     <!-- SECTION user page posts -->
                   <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                     {{range .Posts}} <!-- user page posts -->
-                      {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" $.Comments) }}
+                      {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
                     {{end}} <!-- user page posts -->
                   </div>
                 </div>
@@ -1001,7 +1000,7 @@
                         <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
 <!--                          TODO range through channel posts -->
                           {{range .Posts}} <!-- channel page posts -->
-                            {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" $.Comments) }}
+                            {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
                           {{end}} <!-- channel page posts -->
                         </div>
                     </div>

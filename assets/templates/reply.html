@@ -79,7 +79,7 @@
               <label for="comment-form-textarea-{{$comment.ID}}" class="user-label">Reply</label>
             </div>
             <!-- Hidden input to store the commentID (if replying to a comment) -->
-            <input type="hidden" name="commentID" value="{{$comment.CommentedCommentID}}">
+            <input type="hidden" name="commentID" value="{{$comment.ID}}">
             <button type="submit" class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
               <span class="btn-reply-comment">comment</span>
             </button>

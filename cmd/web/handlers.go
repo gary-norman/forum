@@ -1009,6 +1009,8 @@ func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
+
+	// SECTION getting user
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
 		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
@@ -1021,6 +1023,7 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// SECTION retrieving comment form data
 	// Variable to hold the decoded data
 	var commentData models.Comment
 
@@ -1031,6 +1034,7 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// SECTION setting channel data
 	// Get channel data
 	selectionJSON := r.PostForm.Get("channel")
 	if selectionJSON == "" {
@@ -1059,9 +1063,6 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	if commentConvErr != nil {
 		log.Printf("commentID: %v", commentID)
 	}
-
-	log.Printf("commentID: %v", commentID)
-	log.Printf("postID: %v", postID)
 
 	// Assign the returned values
 	commentData = models.Comment{

@@ -31,7 +31,7 @@ func CheckSameName(firstString, secondString string) bool {
 	return firstString == secondString
 }
 
-// CompareAsInts converts both arguments to integers and compares them
+// CompareAsInts converts both arguments to integers using ConvertToInt and compares them
 func CompareAsInts(a, b interface{}) bool {
 	intA, errA := ConvertToInt(a)
 	intB, errB := ConvertToInt(b)
@@ -45,6 +45,7 @@ func CompareAsInts(a, b interface{}) bool {
 	return intA == intB
 }
 
+// ConvertToInt converts different variable types into an int
 func ConvertToInt(value interface{}) (int, error) {
 	switch v := value.(type) {
 	case int:

@@ -7,7 +7,6 @@
     {{ if ne .CurrentUser.Username "nouser" }}
         {{ $userID = .CurrentUser.ID }}
     {{ end }}
-
     {{ $post := .Post }}
     <div class="container-post-down">
         <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">

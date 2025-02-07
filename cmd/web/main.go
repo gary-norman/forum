@@ -53,6 +53,27 @@ func Colors() *models.Colors {
 //	return err
 //}
 
+func newApp(db *sql.DB) *app {
+	return &app{
+		db:             db,
+		users:          &sqlite.UserModel{DB: db},
+		posts:          &sqlite.PostModel{DB: db},
+		reactions:      &sqlite.ReactionModel{DB: db},
+		reactionStatus: &sqlite.ReactionModel{DB: db},
+		saved:          &sqlite.SavedModel{DB: db},
+		mods:           &sqlite.ModModel{DB: db},
+		comments:       &sqlite.CommentModel{DB: db},
+		images:         &sqlite.ImageModel{DB: db},
+		channels:       &sqlite.ChannelModel{DB: db},
+		flags:          &sqlite.FlagModel{DB: db},
+		loyalty:        &sqlite.LoyaltyModel{DB: db},
+		memberships:    &sqlite.MembershipModel{DB: db},
+		muted:          &sqlite.MutedChannelModel{DB: db},
+		cookies:        &CookieModel{DB: db}, // Not in sqlite, handled separately
+		rules:          &sqlite.RuleModel{DB: db},
+	}
+}
+
 func initializeApp() (*app, func(), error) {
 	// Open database connection
 	db, err := sql.Open("sqlite3", "db/forum_database.db") // Adjust DB path
@@ -67,36 +88,8 @@ func initializeApp() (*app, func(), error) {
 	}
 
 	// App instance with DB reference
-	appInstance := &app{
-		db: db, // Store reference for cleanup
-		posts: &sqlite.PostModel{
-			DB: db,
-		},
-		users: &sqlite.UserModel{
-			DB: db,
-		},
-		channels: &sqlite.ChannelModel{
-			DB: db,
-		},
-		memberships: &sqlite.MembershipModel{
-			DB: db,
-		},
-		cookies: &CookieModel{
-			DB: db,
-		},
-		comments: &sqlite.CommentModel{
-			DB: db,
-		},
-		reactions: &sqlite.ReactionModel{
-			DB: db,
-		},
-		reactionStatus: &sqlite.ReactionModel{
-			DB: db,
-		},
-		rules: &sqlite.RuleModel{
-			DB: db,
-		},
-	}
+	appInstance := newApp(db)
+
 	// Cleanup function to close DB connection
 	cleanup := func() {
 		log.Println("Closing database connection...")

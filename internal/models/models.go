@@ -251,7 +251,6 @@ type TemplateData struct {
 	Reactions                  []Reaction
 	NotifyPlaceholder
 }
-
 type Session struct {
 	Username string
 	Expires  time.Time

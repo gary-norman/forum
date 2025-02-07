@@ -22,6 +22,7 @@ func (app *app) init() {
 		"same":           CheckSameName,
 		"compareAsInts":  CompareAsInts,
 		"reactionStatus": app.reactions.GetReactionStatus,
+		"dict":           dict,
 	}).ParseGlob("assets/templates/*.html"))
 }
 
@@ -82,6 +83,16 @@ func ConvertToInt(value interface{}) (int, error) {
 // RandomInt Function to get a random integer between 0 and the max number, for go templates
 func RandomInt(max int) int {
 	return rand.Intn(max)
+}
+
+// dict allows 2 parameters to be passed to the {{template}} in the tmpl
+func dict(values ...interface{}) map[string]interface{} {
+	m := make(map[string]interface{})
+	for i := 0; i < len(values); i += 2 {
+		key, _ := values[i].(string)
+		m[key] = values[i+1]
+	}
+	return m
 }
 
 // Increment Function to increment an integer for go templates

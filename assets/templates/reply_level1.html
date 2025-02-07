@@ -3,7 +3,7 @@
   {{ $postBasePath := "db/userdata/images/post-images/" }}
   {{ $userBasePath := "db/userdata/images/user-images/" }}
   {{ $userID := 0 }} <!-- Default value for logged out users -->
-  {{ if ne .CurrentUser.Username "nouser" }}
+  {{ if ne .CurrentUser nil }}
     {{ $userID = .CurrentUser.ID }}
   {{ end }}
 

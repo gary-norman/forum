@@ -22,17 +22,17 @@
     <title>{{- /*gotype: github.com/gary-norman/forum/internal/models.TemplateData*/ -}}</title>
   </head>
     <body>
-
+{{/*SECTION --------- variables ---------*/}}
     {{ $channelBasePath := "db/userdata/images/channel-images/" }}
     {{ $postBasePath := "db/userdata/images/post-images/" }}
     {{ $userBasePath := "db/userdata/images/user-images/" }}
-{{/*    SECTION --------- posts template ---------*/}}
+{{/*SECTION --------- posts template ---------*/}}
 
-      <div id="notification-main">
-        <div id="notification-main-content"></div>
-      </div>
+    <div id="notification-main">
+      <div id="notification-main-content"></div>
+    </div>
     <div class="wrapper-main">
-<!--      SECTION ---------- header ------------>
+{{/*SECTION ---------- header -----------*/}}
     <header class="header">
       <div class="branding"></div>
       <label for="pagedrop"></label>
@@ -67,7 +67,7 @@
         </button>
       </div>
     </header>
-      <!--  SECTION    ---------- login modal ----------   -->
+{{/*SECTION    ---------- login modal ----------*/}}
     <div aria-modal="true" id="container-form-login" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
@@ -161,39 +161,39 @@
           </div>
         </div>
         <div id="form-register" class="display-off">
-          <!-- SECTION    ---------- register form ----------   -->
-          <form action="/register" method="POST">
-            <p class="form-title">register for codex</p>
-            <!--  username  -->
-            <div class="input-wrapper">
-              <input
-                type="text"
-                id="register_user"
-                name="register_user"
-                placeholder="username"
-                pattern="\w{5,16}"
-                required
-              />
-              <label for="register_user" class="user-label">username</label>
-              <span class="validation-icon"></span>
-              <span class="validation-tooltip"></span>
-            </div>
-            <!--  email  -->
-            <div class="input-wrapper">
-              <input
-                type="email"
-                id="register_email"
-                name="register_email"
-                placeholder="email address"
-                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                required
-              />
-              <label for="register_email" class="user-label">email</label>
-              <span class="validation-icon"></span>
-              <span class="validation-tooltip"></span>
-            </div>
-            <!-- password  -->
-            <div class="input-wrapper">
+{{/*SECTION    ---------- register form ----------*/}}
+        <form action="/register" method="POST">
+          <p class="form-title">register for codex</p>
+{{/* ---------- username ---------- */}}
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="register_user"
+              name="register_user"
+              placeholder="username"
+              pattern="\w{5,16}"
+              required
+            />
+            <label for="register_user" class="user-label">username</label>
+            <span class="validation-icon"></span>
+            <span class="validation-tooltip"></span>
+          </div>
+{{/* ---------- email ---------- */}}
+          <div class="input-wrapper">
+            <input
+              type="email"
+              id="register_email"
+              name="register_email"
+              placeholder="email address"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+              required
+            />
+            <label for="register_email" class="user-label">email</label>
+            <span class="validation-icon"></span>
+            <span class="validation-tooltip"></span>
+          </div>
+{{/* ---------- password ---------- */}}
+          <div class="input-wrapper">
             <input
               type="password"
               id="register_password"
@@ -210,9 +210,9 @@
               <li id="li-valid-lower">1 lowercase letter</li>
               <li id="li-valid-8">8 or more characters</li>
             </ul>
-            </div>
-            <!--  repeat password  -->
-            <div class="input-wrapper">
+          </div>
+{{/* ---------- repeat password ---------- */}}
+          <div class="input-wrapper">
             <input
               type="password"
               id="register_password-rpt"
@@ -221,7 +221,7 @@
               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
               required
             />
-              <label for="register_password-rpt" class="user-label">repeat password</label>
+            <label for="register_password-rpt" class="user-label">repeat password</label>
             <span class="validation-icon"></span>
             <span class="validation-tooltip"></span>
             </div>
@@ -233,37 +233,37 @@
             <small class="signup">already registered?</small>
             <button id="btn_login-1" class="button btn-filled btn-filled-orange btn-secondary btn-pill">sign in</button>
           </div>
-        </div>
-        <div id="form-forgot" class="display-off">
-          <form>
-            <p class="form-title">enter your username or email address to reset your password</p>
-            <label for="forgot_pass"></label>
-            <input
-              type="text"
-              class="input-3d"
-              id="forgot_pass"
-              name="forgot_pass"
-              placeholder="username/email"
-            />
-            <button class="btn-md btn-primary btn-action" type="submit">
-              <span>reset</span>
-            </button>
-          </form>
-          <div class="reg-log">
-            <small class="signup">not what you're looking for?</small>
-            <div class="flex-align-c" style="column-gap: 0.8rem">
-              <button
-                id="btn_login-2"
-                class="button btn-filled btn-filled-orange btn-secondary btn-pill">sign in</button>
-              <button id="btn_register-2" class="button btn-filled btn-filled-white_orange btn-secondary btn-pill">
-                sign up
+          </div>
+          <div id="form-forgot" class="display-off">
+            <form>
+              <p class="form-title">enter your username or email address to reset your password</p>
+              <label for="forgot_pass"></label>
+              <input
+                type="text"
+                class="input-3d"
+                id="forgot_pass"
+                name="forgot_pass"
+                placeholder="username/email"
+              />
+              <button class="btn-md btn-primary btn-action" type="submit">
+                <span>reset</span>
               </button>
+            </form>
+            <div class="reg-log">
+              <small class="signup">not what you're looking for?</small>
+              <div class="flex-align-c" style="column-gap: 0.8rem">
+                <button
+                  id="btn_login-2"
+                  class="button btn-filled btn-filled-orange btn-secondary btn-pill">sign in</button>
+                <button id="btn_register-2" class="button btn-filled btn-filled-white_orange btn-secondary btn-pill">
+                  sign up
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-      <!-- SECTION     ---------- post form ----------   -->
+{{/*SECTION     ---------- post form ---------- */}}
       <div popover id="form-post">
         <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
           <h3 class="form-title">create a post</h3>
@@ -278,7 +278,7 @@
           <input type="text" id="title" name="title" placeholder="title" required>
             <label for="title" class="user-label">title</label>
           </div>
-          <!-- FIXME fix resize issue -->
+{{/*  FIXME ---------- fix resize issue ---------- */}}
           <div class="input-wrapper">
             <textarea id="content" name="content" placeholder="post"></textarea>
             <label for="content" class="user-label">post</label>
@@ -288,19 +288,19 @@
             <div id="uploaded-file--post"></div>
             <div class="drag-drop-text-wrapper">
               <span class="dragText">drag and drop your file, or</span>
-              <!--                    <span class="button">browse</span>-->
+{{/*              <span class="button">browse</span> */}}
               <input type="file" id="browse--post" name="file-drop" />
             </div>
           </div>
           <div class="cont-flex-row flex-center">
-            <label class="allow-comments">
-              <input type="checkbox" id="allow-comments-checkbox" name="commentable"/>
-              <span class="allow-comments-fx"></span>
-              <!--                            <span class="darklight-border"></span>-->
-            </label>
+            <div class="allow-comments">
+            <input type="checkbox" id="allow-comments-checkbox" name="commentable"/>
+            <span class="allow-comments-fx"></span>
+{{/*              <span class="darklight-border"></span>*/}}
+            </div>
             <label for="allow-comments-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Allow comments</label>
           </div>
-          <!-- FIXME fix these buttons -->
+{{/*FIXME ---------- fix these buttons ---------- */}}
           <div class="cont-flex-row flex-center">
             <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>create post</span>
@@ -309,7 +309,7 @@
           </div>
         </form>
       </div>
-      <!--  SECTION    ---------- create channel popover ----------   -->
+{{/*SECTION    ---------- create channel popover ---------- */}}
       <div popover id="form-channel">
         <form class="wrapper-form" enctype="multipart/form-data" action="/channels/create" method="POST">
           <h3 class="form-title">create a channel</h3>
@@ -317,7 +317,7 @@
             <input type="text" id="channel-name" name="name" placeholder="channel name" required>
             <label for="channel-name" class="user-label">channel name</label>
           </div>
-          <!-- FIXME fix resize issue -->
+{{/*FIXME ---------- fix resize issue ---------- */}}
           <div class="input-wrapper">
             <textarea id="channel-desc" name="description" placeholder="description"></textarea>
             <label for="channel-desc" class="user-label">description</label>
@@ -327,7 +327,7 @@
             <div id="uploaded-file--channel"></div>
             <div class="drag-drop-text-wrapper">
               <span class="dragText">drag and drop your file, or</span>
-              <!--                    <span class="button">browse</span>-->
+{{/*              <span class="button">browse</span> */}}
               <input type="file" id="browse--channel" name="file-drop" />
             </div>
           </div>
@@ -335,11 +335,11 @@
             <label class="allow-comments">
               <input type="checkbox" id="channel-privacy-checkbox" name="privacy"/>
               <span class="allow-comments-fx"></span>
-              <!--                            <span class="darklight-border"></span>-->
+{{/*              <span class="darklight-border"></span>*/}}
             </label>
             <label for="channel-privacy-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Private</label>
           </div>
-          <!-- FIXME fix these buttons -->
+{{/*FIXME ---------- fix these buttons ---------- */}}
           <div class="cont-flex-row flex-center">
             <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>create</span>
@@ -348,7 +348,7 @@
           </div>
         </form>
       </div>
-<!--  SECTION ---------- join channel popover ----------  -->
+{{/*SECTION ---------- join channel popover ---------- */}}
       <div popover id="form-join-channel">
         <form action="/channels/join" class="wrapper-form" method="POST">
           <h5 id="join-channel-title" class="form-title">join {{ .ThisChannel.Name }}</h5>
@@ -358,14 +358,14 @@
               <input id="join-channel-id" type="hidden" value="{{ .ThisChannel.ID }}" name="channelId" />
               <input type="checkbox" id="rules-agree-checkbox" name="agree" required/>
               <span class="allow-comments-fx"></span>
-              <!--                            <span class="darklight-border"></span>-->
+{{/*              <span class="darklight-border"></span> */}}
             </label>
             <label for="rules-agree-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">agree</label>
           </div>
           {{ if (eq .ThisChannel.Privacy true) }}
           <span class="text-join-channel">this channel is private. Your request will be sent to the moderators for approval.</span>
           {{ end }}
-          <!-- FIXME fix these buttons -->
+{{/*FIXME ---------- fix these buttons ----------*/}}
           <div class="cont-flex-row flex-center">
             <button id="join-channel-btn" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>join</span>
@@ -374,15 +374,7 @@
           </div>
         </form>
       </div>
-
-      <div id="fruits">
-        <div id="banana"></div>
-        <div id="apple"></div>
-        <div id="orange"></div>
-        <div id="peach"></div>
-      </div>
-
-<!--  SECTION ---------- edit channel rules popover ----------  -->
+{{/*SECTION ---------- edit channel rules popover ---------- */}}
       <div popover id="form-edit-channel-rules">
         <form id="popover-form-edit-channel-rules" action="/channels/add-rules/{{.ThisChannel.Channel.ID}}" class="wrapper-form" method="POST">
           <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .ThisChannel.Name }}</h5>
@@ -407,9 +399,7 @@
             </button>
             <label for="create-unsubmitted-rule"></label>
           </div>
-
           <input type="hidden" name="rules" id="rules-hidden-input" />
-
           <div class="cont-flex-row flex-center">
             <button id="edit-channel-rules-btn" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>submit</span>
@@ -418,7 +408,7 @@
           </div>
         </form>
       </div>
-      <!--  SECTION    ---------- edit user modal ----------   -->
+{{/*SECTION    ---------- edit user modal ---------- */}}
       <div aria-modal="true" id="container-form-edit-user" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
@@ -434,7 +424,7 @@
                 <div id="uploaded-file--user-image"></div>
                 <div class="drag-drop-text-wrapper">
                   <span class="dragText">drag and drop your file, or</span>
-                  <!--                    <span class="button">browse</span>-->
+{{/*                 <span class="button">browse</span> */}}
                   <input type="file" id="browse--user-image" name="file-drop" />
                 </div>
               </div>
@@ -448,151 +438,148 @@
         </div>
       </div>
       <div class="main-content">
-        <!-- SECTION     ---------- sidebar ----------   -->
-        <aside class="sidebar">
-          {{ if (ne .CurrentUserName "nouser") }}
-          <div class="sidebarProfile">
-            {{ if (ne .Avatar "noimage") }}
-              <div class="sidebar-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}">
-            {{ else }}
-              <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .CurrentUserName }}">
-            {{ end }}
-            </div>
+{{/*SECTION     ---------- sidebar ---------- */}}
+      <aside class="sidebar">
+        {{ if (ne .CurrentUserName "nouser") }}
+        <div class="sidebarProfile">
+          {{ if (ne .Avatar "noimage") }}
+            <div class="sidebar-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
+          {{ else }}
+            <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .CurrentUserName }}"></div>
+          {{ end }}
+          <div>
+            <h3 data-current-user-ID="{{.CurrentUser.ID}}">{{ .CurrentUserName }} - ID: {{.CurrentUser.ID}}</h3>
             <div>
-              <h3 data-current-user-ID="{{.CurrentUser.ID}}">{{ .CurrentUserName }} - ID: {{.CurrentUser.ID}}</h3>
-              <div>
-                <button class="btn-md btn-icotext btn-follows btn-invert-never">
-                  <span class="btn-following">72</span>
-                </button>
-                <button class="btn-md btn-icotext btn-follows btn-invert-never">
-                  <span class="btn-followers">64</span>
-                </button>
-              </div>
+              <button class="btn-md btn-icotext btn-follows btn-invert-never">
+                <span class="btn-following">72</span>
+              </button>
+              <button class="btn-md btn-icotext btn-follows btn-invert-never">
+                <span class="btn-followers">64</span>
+              </button>
             </div>
           </div>
-          {{ else }}
+        </div>
+        {{ end }}
+        <div class="sidebar-scroll scroll-down">
+          {{ if (ne .CurrentUserName "nouser") }}
+          <hr class="solid" />
           {{ end }}
-          <div class="sidebar-scroll scroll-down">
-            {{ if (ne .CurrentUserName "nouser") }}
-            <hr class="solid" />
-            {{ end }}
-            <div class="sidebar-block sidebar-dashboard">
-              <small class="padded">Dashboard</small>
-              <div class="sidebar-option home">Home</div>
-              <div
-                class="sidebar-option flex-space-between darkMode"
-                id="sidebar-option-darkmode"
-              >
-                <div>Colour Scheme</div>
-                <label for="darkmode-checkbox" class="darklight">
-                  <input type="checkbox" id="darkmode-checkbox" />
-                  <span class="darklight-fx"></span>
-                  <!--                            <span class="darklight-border"></span>-->
-                </label>
-              </div>
-              <div class="sidebar-option settings" id="sidebar-options">Settings</div>
-              <ul class="sidebar-options-list ul-reverse">
+          <div class="sidebar-block sidebar-dashboard">
+            <small class="padded">Dashboard</small>
+            <div class="sidebar-option home">Home</div>
+            <div
+              class="sidebar-option flex-space-between darkMode"
+              id="sidebar-option-darkmode"
+            >
+            <div>Colour Scheme</div>
+            <label for="darkmode-checkbox" class="darklight">
+              <input type="checkbox" id="darkmode-checkbox" />
+              <span class="darklight-fx"></span>
+{{/*                <span class="darklight-border"></span> */}}
+            </label>
+            </div>
+            <div class="sidebar-option settings" id="sidebar-options">Settings</div>
+            <ul class="sidebar-options-list ul-reverse">
               <li id="btn-open-edit-user-modal">edit your profile</li>
               <li id="btn-open-acc-settings-modal">account settings</li>
               <li id="btn-open-view-stats-modal">view stats</li>
               <li id="btn-open-remove-acc-modal">remove your account</li>
             </ul>
-              {{ if (ne .CurrentUserName "nouser") }}
-              <form action="/logout" method="POST">
-                <div id="logout" class="sidebar-option logout">Log Out</div>
-              </form>
-              {{ else }}
-              <div id="btn-open-login-modal" class="sidebar-option login">Log In</div>
-              {{ end }}
-              <div id="btn-open-login-modal-fallback" class="sidebar-option login" style="display: none">Log In fallback</div>
+            {{ if (ne .CurrentUserName "nouser") }}
+            <form action="/logout" method="POST">
+              <div id="logout" class="sidebar-option logout">Log Out</div>
+            </form>
+            {{ else }}
+            <div id="btn-open-login-modal" class="sidebar-option login">Log In</div>
+            {{ end }}
+            <div id="btn-open-login-modal-fallback" class="sidebar-option login" style="display: none">Log In fallback</div>
+          </div>
+          <hr class="solid" />
+{{/*SECTION ---------- sidebar channels ---------- */}}
+          {{if ne .CurrentUserName "nouser"}}
+          <div class="sidebar-block sidebar-channels">
+            <div class="flex-space-between" style="margin-bottom: -0.8rem;">
+              <small class="padded">Your Channels</small>
+              <button popovertarget="form-channel" class="btn-channel btn-sm btn-icoonly">
+                <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
+              </button>
             </div>
-            <hr class="solid" />
-            <!-- SECTION sidebar channels -->
-            {{if ne .CurrentUserName "nouser"}}
-            <div class="sidebar-block sidebar-channels">
-              <div class="flex-space-between" style="margin-bottom: -0.8rem;">
-                <small class="padded">Your Channels</small>
-                <button popovertarget="form-channel" class="btn-channel btn-sm btn-icoonly">
-                  <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
-                </button>
-              </div>
-              <div id="sidebar-channel-block">
-                {{ range .OwnedAndJoinedChannels }}
-                <div class="sidebar-channel" data-channel-desc="{{ .Description }}" data-channel-id="{{ .ID }}">
-                  <div class="container-channel-info">
-                    {{ if (ne .Avatar "noimage") }}
-                    <span class="card-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .Avatar }}"></span>
-                    {{ else }}
-                    <span class="card-pic profile-pic--empty" data-name-channel="{{ .Name }}"></span>
-                    {{ end }}
+            <div id="sidebar-channel-block">
+              {{ range .OwnedAndJoinedChannels }}
+              <div class="sidebar-channel" data-channel-desc="{{ .Description }}" data-channel-id="{{ .ID }}">
+                <div class="container-channel-info">
+                  {{ if (ne .Avatar "noimage") }}
+                  <span class="card-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .Avatar }}"></span>
+                  {{ else }}
+                  <span class="card-pic profile-pic--empty" data-name-channel="{{ .Name }}"></span>
+                  {{ end }}
+                  <div>
+                    <div>/{{ .Name }}</div>
                     <div>
-                      <div>/{{ .Name }}</div>
-                      <div>
-                        <!-- TODO get this data and add it to DB -->
-                        <div class="channel-users">9.3k</div>
-                        <div class="channel-green-dot">15</div>
-                      </div>
-                    </div>
-                    <div>
-                      {{ if (eq .Owned true) }}
-                      <span class="info-box">owner</span>
-                      {{ else }}
-<!--                      TODO add logic to check if channel is saved-->
-                      <button class="btn-save btn-sm btn-icoonly margin-auto-0">
-                        <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
-                      </button>
-                      {{ end }}
-                    </div>
+{{/*                        TODO get this data and add it to DB */}}
+                    <div class="channel-users">9.3k</div>
+                    <div class="channel-green-dot">15</div>
                   </div>
                 </div>
-                {{ end }} <!-- end range of channels here-->
+                  <div>
+                    {{ if (eq .Owned true) }}
+                    <span class="info-box">owner</span>
+                    {{ else }}
+{{/*                      TODO add logic to check if channel is saved */}}
+                    <button class="btn-save btn-sm btn-icoonly margin-auto-0">
+                      <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
+                    </button>
+                    {{ end }}
+                  </div>
+                </div>
               </div>
+              {{ end }} <!-- end range of channels here-->
             </div>
-            {{end}} <!-- "nouser" check -->
           </div>
-        </aside>
-        <main>
-<!--          SECTION ---------- homepage feed mask ---------- -->
-          <div class="container-homepage-feed-mask" style="z-index: 0; min-height: 100% !important">
-            <svg height="100dvh" width="100dvw" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="home-mask-gradient" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stop-color="black" />+
-
-                  <!--                            <stop offset="6%" stop-color="black" />-->
-                  <stop offset="2%" stop-color="white" />
-                  <stop offset="100%" stop-color="white" />
-                </linearGradient>
-                <linearGradient id="user-mask-gradient" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stop-color="black" />
-                  <!--                            <stop offset="1%" stop-color="black" />-->
-                  <stop offset="2%" stop-color="white" />
-                  <stop offset="100%" stop-color="white" />
-                </linearGradient>
-              </defs>
-              <mask id="homepage-feed-mask">
-                <rect width="100%" height="100%" fill="url(#home-mask-gradient)"/>
-              </mask>
-              <mask id="userpage-feed-mask">
-                <rect width="100%" height="100%" fill="url(#user-mask-gradient)"/>
-              </mask>
-            </svg>
+          {{end}} <!-- "nouser" check -->
+        </div>
+      </aside>
+      <main>
+{{/*SECTION ---------- homepage feed mask ---------- */}}
+        <div class="container-homepage-feed-mask" style="z-index: 0; min-height: 100% !important">
+          <svg height="100dvh" width="100dvw" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="home-mask-gradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="black" />+
+{{/*                   <stop offset="6%" stop-color="black" /> */}}
+                <stop offset="2%" stop-color="white" />
+                <stop offset="100%" stop-color="white" />
+              </linearGradient>
+              <linearGradient id="user-mask-gradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="black" />
+{{/*                   <stop offset="1%" stop-color="black" />*/}}
+                <stop offset="2%" stop-color="white" />
+                <stop offset="100%" stop-color="white" />
+              </linearGradient>
+            </defs>
+            <mask id="homepage-feed-mask">
+              <rect width="100%" height="100%" fill="url(#home-mask-gradient)"/>
+            </mask>
+            <mask id="userpage-feed-mask">
+              <rect width="100%" height="100%" fill="url(#user-mask-gradient)"/>
+            </mask>
+          </svg>
+        </div>
+{{/*SECTION ---------- homepage ---------- */}}
+        <div id="home-page" class="feeds-wrapper">
+          <div class="button-row above-posts button-row-homepage">
+            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+              <span class="btn-sort">sort</span>
+            </button>
+            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+              <span class="btn-filters">filters</span>
+            </button>
           </div>
-          <!-- SECTION homepage -->
-          <div id="home-page" class="feeds-wrapper">
-            <div class="button-row above-posts button-row-homepage">
-              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                <span class="btn-sort">sort</span>
-              </button>
-              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                <span class="btn-filters">filters</span>
-              </button>
-            </div>
-            <div class="scrollable-home scrollable no-scrollbar">
-              <div id="home-feed">
-                <!-- SECTION homepage channels -->
+          <div class="scrollable-home scrollable no-scrollbar">
+            <div id="home-feed">
+{{/*SECTION ---------- homepage channels ---------- */}}
               {{range .Channels}} <!-- homepage channels -->
-                  <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
+              <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
                 <div class="container-post-info">
                   <span class="card-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .Channel.Avatar }}"></span>
                   <div>
@@ -616,20 +603,20 @@
                   <div class="button-row post-controls" >
                     {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
                     <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}">
-                        <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
+                      <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
                     </button>
-                    <!-- --- TODO invertoff -->
+{{/*                     TODO invertoff */}}
                     <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-                        <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
+                      <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
                     </button>
                     <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-reply">reply</span>
+                      <span class="btn-reply">reply</span>
                     </button>
                     <button id="share-button-{{.ID}}-home" popovertarget="share-container-{{.ID}}-home" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-share">share</span>
+                      <span class="btn-share">share</span>
                     </button>
                     <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-report">report</span>
+                      <span class="btn-report">report</span>
                     </button>
                     <div popover id="share-container-{{.ID}}-home" class="scrollable-user">
                       <div class="share-container">
@@ -642,56 +629,56 @@
                           <a href="/" target="_blank" class="share-logo telegram"></a>
                         </div>
                         <div class="flex-space-between">
-                            <label class="padded" for="copy-url-{{.ID}}-home">Copy URL link</label>
-                            <button class="btn-sm btn-icoonly">
-                                <span class="btn-copy" aria-label="Copy URL link"></span>
-                            </button>
+                          <label class="padded" for="copy-url-{{.ID}}-home">Copy URL link</label>
+                          <button class="btn-sm btn-icoonly">
+                            <span class="btn-copy" aria-label="Copy URL link"></span>
+                          </button>
                         </div>
                         <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-home" name="copy-url-{{.ID}}-home"/>
                       </div>
                     </div>
                   </div>
-                  </div>
-                  {{end}} <!-- homepage channels -->
+                </div>
+                {{end}} <!-- homepage channels -->
               </div>
             </div>
           </div>
-        <!--- SECTION user page -->
-        <div id="user-page" class="active-feed feeds-wrapper">
+{{/*SECTION ---------- user page ---------- */}}
+          <div id="user-page" class="active-feed feeds-wrapper">
             <div class="banner">
-                <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
-                <div class="page-control">
-                    <div class="page-profile">
-<!--                        <div class="page-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>-->
-                        <div class="page-pic profile-pic"></div>
-                        <div>
-                            <h2>{{ .RandomUser.Username }}</h2>
-                            <div>
-                                <button class="btn-md btn-icotext btn-follows btn-invert-never">
-                                    <span class="btn-following">72</span>
-                                </button>
-                                <button class="btn-md btn-icotext btn-follows btn-invert-never">
-                                    <span class="btn-followers">64</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="page-buttons">
-                        <button class="btn-lg btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
-                            <span class="btn-follow">follow</span>
-                        </button>
-                        <div class="user-following"></div>
-                        <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
-                            <img src="/assets/icons/share_16.svg" alt="share button">
-                        </button>
-                        <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
-                            <img src="/assets/icons/heart-empty_24.svg" alt="like button">
-                        </button>
-                    </div>
+              <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
+              <div class="page-control">
+                <div class="page-profile">
+{{/*            <div class="page-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>*/}}
+                  <div class="page-pic profile-pic"></div>
+                  <div>
+                      <h2>{{ .RandomUser.Username }}</h2>
+                      <div>
+                          <button class="btn-md btn-icotext btn-follows btn-invert-never">
+                              <span class="btn-following">72</span>
+                          </button>
+                          <button class="btn-md btn-icotext btn-follows btn-invert-never">
+                              <span class="btn-followers">64</span>
+                          </button>
+                      </div>
+                  </div>
+                  </div>
+                  <div class="page-buttons">
+                      <button class="btn-lg btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+                          <span class="btn-follow">follow</span>
+                      </button>
+                      <div class="user-following"></div>
+                      <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
+                          <img src="/assets/icons/share_16.svg" alt="share button">
+                      </button>
+                      <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
+                          <img src="/assets/icons/heart-empty_24.svg" alt="like button">
+                      </button>
+                  </div>
                 </div>
-            </div>
-            <div class="container-content">
-              <div class="content">
+              </div>
+              <div class="container-content">
+                <div class="content">
                   <div id="activity-bar" class="button-row above-activity">
                       <button id="activity" class="btn-lg btn-secondary btn-icotext btn-activity btn-active">
                           <span class="btn-clock">activity</span>
@@ -712,134 +699,136 @@
                           <span class="btn-likes">reactions</span>
                       </button>
                   </div>
-                  <!-- SECTION user page activity feed -->
-                    <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%">
-                    <div id="activity-activity">
-                      <div class="filters-row button-row">
+  {{/*SECTION ---------- user page activity feed ----------*/}}
+                  <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%">
+                  <div id="activity-activity">
+                    <div class="filters-row button-row">
+                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                        <span class="btn-sort">sort</span>
+                      </button>
+                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                        <span class="btn-filters">filters</span>
+                      </button>
+                      <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                        <span class="btn-sort">scroll</span>
+                      </button>
+                    </div>
+                    <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+                    {{range .Posts}} <!-- user page activity posts -->
+                      {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
+                    {{end}} <!-- user page activity POSTS -->
+                    </div>
+                    <div id="activity-posts">
+                      <div class="filters-row button-row hide-feed">
                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                           <span class="btn-sort">sort</span>
                         </button>
                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                           <span class="btn-filters">filters</span>
                         </button>
-                        <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                          <span class="btn-sort">scroll</span>
+                          <button id="scroll-test-1" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                            <span class="btn-sort">scroll</span>
+                          </button>
+                      </div>
+    {{/*SECTION---------- user page posts ----------*/}}
+                      <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                        {{range .Posts}} <!-- user page posts -->
+                          {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
+                        {{end}} <!-- user page posts -->
+                      </div>
+                    </div>
+  {{/*SECTION ------- activity comments ---------- */}}
+                    <div id="activity-comments">
+                      <div class="filters-row button-row hide-feed">
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-sort">sort</span>
+                        </button>
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-filters">filters</span>
                         </button>
                       </div>
-                      <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                  {{range .Posts}} <!-- user page activity posts -->
-                    {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
-                  {{end}} <!-- user page activity POSTS -->
-                </div>
-                <div id="activity-posts">
-                  <div class="filters-row button-row hide-feed">
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                      <span class="btn-sort">sort</span>
-                    </button>
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                      <span class="btn-filters">filters</span>
-                    </button>
-                      <button id="scroll-test-1" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                          <span class="btn-sort">scroll</span>
-                      </button>
-                  </div>
-                    <!-- SECTION user page posts -->
-                  <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                    {{range .Posts}} <!-- user page posts -->
-                      {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
-                    {{end}} <!-- user page posts -->
-                  </div>
-                </div>
-                <div id="activity-comments">
-                  <div class="filters-row button-row hide-feed">
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                      <span class="btn-sort">sort</span>
-                    </button>
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                      <span class="btn-filters">filters</span>
-                    </button>
-                  </div>
-                  <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                    <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-                    <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
-                    <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-                    <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
-                    <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-                    <div class="activity-items comments cont-flex-column">Yo mama</div>
-                    <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-                  </div>
-                </div>
-                <div id="activity-saved">
-                  <div class="filters-row button-row hide-feed">
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                      <span class="btn-sort">sort</span>
-                    </button>
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                      <span class="btn-filters">filters</span>
-                    </button>
-                  </div>
-                    <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                        <div class="activity-items saved">You saved this post</div>
-                        <div class="activity-items saved">You saved this post</div>
-                        <div class="activity-items saved">You saved this post</div>
-                        <div class="activity-items saved">You saved this post</div>
-                        <div class="activity-items saved">You saved this post</div>
-                        <div class="activity-items saved">You saved this post</div>
+                      <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                        <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
+                        <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
+                        <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
+                        <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
+                        <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
+                        <div class="activity-items comments cont-flex-column">Yo mama</div>
+                        <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
+                      </div>
+                    </div>
+  {{/*SECTION ------- saved activities ---------- */}}
+                    <div id="activity-saved">
+                      <div class="filters-row button-row hide-feed">
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-sort">sort</span>
+                        </button>
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-filters">filters</span>
+                        </button>
+                      </div>
+                        <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                          <div class="activity-items saved">You saved this post</div>
+                          <div class="activity-items saved">You saved this post</div>
+                          <div class="activity-items saved">You saved this post</div>
+                          <div class="activity-items saved">You saved this post</div>
+                          <div class="activity-items saved">You saved this post</div>
+                          <div class="activity-items saved">You saved this post</div>
+                        </div>
+                    </div>
+  {{/*SECTION ------- muted activities ---------- */}}
+                      <div id="activity-muted">
+                        <div class="filters-row button-row hide-feed">
+                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                              <span class="btn-sort">sort</span>
+                          </button>
+                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                              <span class="btn-filters">filters</span>
+                          </button>
+                        </div>
+                        <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                          <div class="activity-items muted">You muted this post</div>
+                          <div class="activity-items muted">You muted this post</div>
+                          <div class="activity-items muted">You muted this post</div>
+                          <div class="activity-items muted">You muted this post</div>
+                          <div class="activity-items muted">You muted this post</div>
+                          <div class="activity-items muted">You muted this post</div>
+                          <div class="activity-items muted">You muted this post</div>
+                          <div class="activity-items muted">You muted this post</div>
+                          <div class="activity-items muted">You muted this post</div>
+                          <div class="activity-items muted">You muted this post</div>
+                        </div>
+                      </div>
+  {{/*SECTION ------- actvity reactions ---------- */}}
+                      <div id="activity-reactions">
+                        <div class="filters-row button-row hide-feed">
+                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                            <span class="btn-sort">sort</span>
+                          </button>
+                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                            <span class="btn-filters">filters</span>
+                          </button>
+                        </div>
+                        <div id="activity-feed-reactions" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                          <div class="activity-items reactions">You liked this post</div>
+                          <div class="activity-items reactions">You liked this post</div>
+                          <div class="activity-items reactions">You liked this post</div>
+                          <div class="activity-items reactions">You liked this post</div>
+                          <div class="activity-items reactions">You liked this post</div>
+                          <div class="activity-items reactions">You liked this post</div>
+                          <div class="activity-items reactions">You liked this post</div>
+                          <div class="activity-items reactions">You liked this post</div>
+                          <div class="activity-items reactions">You liked this post</div>
+                          <div class="activity-items reactions">You liked this post</div>
+                        </div>
+                      </div>
                     </div>
                 </div>
-                      <div id="activity-muted">
-                          <div class="filters-row button-row hide-feed">
-                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                  <span class="btn-sort">sort</span>
-                              </button>
-                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                  <span class="btn-filters">filters</span>
-                              </button>
-                          </div>
-                          <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                              <div class="activity-items muted">You muted this post</div>
-                              <div class="activity-items muted">You muted this post</div>
-                              <div class="activity-items muted">You muted this post</div>
-                              <div class="activity-items muted">You muted this post</div>
-                              <div class="activity-items muted">You muted this post</div>
-                              <div class="activity-items muted">You muted this post</div>
-                              <div class="activity-items muted">You muted this post</div>
-                              <div class="activity-items muted">You muted this post</div>
-                              <div class="activity-items muted">You muted this post</div>
-                              <div class="activity-items muted">You muted this post</div>
-                          </div>
-                      </div>
-                      <div id="activity-reactions">
-                          <div class="filters-row button-row hide-feed">
-                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                  <span class="btn-sort">sort</span>
-                              </button>
-                              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                  <span class="btn-filters">filters</span>
-                              </button>
-                          </div>
-                          <div id="activity-feed-reactions" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                              <div class="activity-items reactions">You liked this post</div>
-                              <div class="activity-items reactions">You liked this post</div>
-                              <div class="activity-items reactions">You liked this post</div>
-                              <div class="activity-items reactions">You liked this post</div>
-                              <div class="activity-items reactions">You liked this post</div>
-                              <div class="activity-items reactions">You liked this post</div>
-                              <div class="activity-items reactions">You liked this post</div>
-                              <div class="activity-items reactions">You liked this post</div>
-                              <div class="activity-items reactions">You liked this post</div>
-                              <div class="activity-items reactions">You liked this post</div>
-                          </div>
-                      </div>
-                  </div>
               </div>
-
-
-            </div>
               <div class="right-panel ">
                 <div class="right-panel-content scroll-down">
-                        <div class="right-panel-container-name flex-space-between">
-                            <h4 class="right-panel-name">{{ if ne .CurrentUserName "nouser"}}{{.CurrentUserName}}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
+                  <div class="right-panel-container-name flex-space-between">
+                    <h4 class="right-panel-name">{{ if ne .CurrentUserName "nouser"}}{{.CurrentUserName}}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
                     {{ if (ne .CurrentUserName "nouser") }}
                     <button class="btn-sm btn-icoonly">
                       <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
@@ -847,8 +836,8 @@
                     {{ end }} <!-- "nouser" check -->
                   </div>
                   {{ if (ne .CurrentUserName "nouser") }}
-                        <div class="right-panel-container-pic flex-space-between">
-                            <div class="right-panel-container-pic">
+                  <div class="right-panel-container-pic flex-space-between">
+                    <div class="right-panel-container-pic">
                       {{ if (ne .Avatar "noimage") }}
                       <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
                       {{ else }}
@@ -861,7 +850,7 @@
                     </button>
                   </div>
                   {{ end }} <!-- "nouser" check -->
-                        <div class="right-panel-container-bio ">
+                  <div class="right-panel-container-bio ">
                     <div class="right-panel-bio flex-space-between">
                       <label for="user-bio-content" class="padded">{{ if ne .CurrentUserName "nouser"}}Edit your bio{{ else }}User bio{{ end }}</label>
                       {{ if (ne .CurrentUserName "nouser") }}
@@ -872,15 +861,50 @@
                     </div>
                     <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Bio }}</textarea>
                   </div>
-                        <div class="right-panel-container-modded-channels">
+                  <div class="right-panel-container-modded-channels">
                     <div class="sidebar-block sidebar-channels">
                       <small class="padded">Modded Channels</small>
                       <div class="sidebar-channel-block">
                         <div class="sidebar-channel">
                           <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
-                          <span class="card-pic profile-pic"></span>
+                            <span class="card-pic profile-pic"></span>
+                            <div>
+                              <div>/Interesting_Things</div>
+                              <div>
+                                <div class="channel-users">5.6k</div>
+                                <div class="channel-green-dot">36</div>
+                              </div>
+                            </div>
+                            {{ if (ne .CurrentUserName "nouser") }}
+                            <button class="btn-sm btn-icoonly margin-auto-0">
+                              <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                            </button>
+                            {{ end }} <!-- "nouser" check -->
+                          </div>
+                        </div>
+                        <div class="sidebar-channel">
+                          <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
+                            <span class="card-pic channel-pic"></span>
+                            <div>
+                              <div>/CSS_Help</div>
+                              <div>
+                                <div class="channel-users">5.6k</div>
+                                <div class="channel-green-dot">36</div>
+                              </div>
+                            </div>
+                            {{ if (ne .CurrentUserName "nouser") }}
+                            <button class="btn-sm btn-icoonly margin-auto-0">
+                              <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                            </button>
+                            {{ end }} <!-- "nouser" check -->
+                          </div>
+                        </div>
+                        <div class="sidebar-channel">
+{{/*TODO ---------- does this need <div></div> ---------- */}}
+                        <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
+                          <span class="card-pic channel-pic"></span>
                           <div>
-                            <div>/Interesting_Things</div>
+                            <div>/Golang#Discussion</div>
                             <div>
                               <div class="channel-users">5.6k</div>
                               <div class="channel-green-dot">36</div>
@@ -893,229 +917,193 @@
                           {{ end }} <!-- "nouser" check -->
                         </div>
                       </div>
-                      <div class="sidebar-channel">
-                        <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
-                        <span class="card-pic channel-pic"></span>
-                        <div>
-                          <div>/CSS_Help</div>
-                          <div>
-                            <div class="channel-users">5.6k</div>
-                            <div class="channel-green-dot">36</div>
-                          </div>
-                        </div>
-                        {{ if (ne .CurrentUserName "nouser") }}
-                        <button class="btn-sm btn-icoonly margin-auto-0">
-                          <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                        </button>
-                        {{ end }} <!-- "nouser" check -->
-                      </div>
                     </div>
+                  </div>
+                </div>
+              <div class="button-row-wrap">
+                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                  <span class="btn-share">share</span>
+                </button>
+                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                  <span class="btn-report">report</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+{{/*SECTION ---------- channel page ----------*/}}
+      <div id="channel-page" class="feeds-wrapper">
+        <div class="banner">
+          <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
+            <div class="page-control">
+              <div class="page-profile">
+                {{ if (ne .ThisChannel.Avatar "noimage") }}
+                <div class="sidebar-pic profile-pic" data-image-user="{{ $channelBasePath }}{{ .ThisChannel.Avatar }}"></div>
+                {{ else }}
+                <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}"></div>
+                {{ end }}
+                <div>
+                  <h2 {{ if (eq .ThisChannel.Privacy true) }}class="private-channel"{{ end }}>/{{ .ThisChannel.Name }}</h2>
+                  <div>
+                    <button class="btn-md btn-icotext btn-follows btn-invert-never">
+                    <span class="btn-channel-users">13.8k</span>
+                  </button>
+                  <button class="btn-md btn-icotext btn-follows btn-invert-never" style="position: relative">
+                    <span class="btn-channel-green-dot">37</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+              <div class="page-buttons">
+                {{ if (eq .ThisChannelIsOwnedOrJoined false) }}
+                <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+                  <span class="btn-posts">join</span>
+                </button>
+                {{ end }}
+                  <div class="user-following"></div>
+                  <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
+                    <img src="/assets/icons/share_16.svg" alt="share button">
+                  </button>
+                {{ if (eq .ThisChannelIsOwnedOrJoined false) }}
+                  <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
+                    <img src="/assets/icons/heart-empty_24.svg" alt="like button">
+                  </button>
+                {{ end }}
+              </div>
+            </div>
+          </div>
+          <div class="container-content">
+            <div class="content">
+              <div class="filters-row button-row">
+                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                  <span class="btn-sort">sort</span>
+                </button>
+                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                  <span class="btn-filters">filters</span>
+                </button>
+              </div>
+{{/*SECTION ---------- channel page feed ---------- */}}
+              <div id="wrapper-channel-feed" style="position: absolute; width: 100%; height: 100%">
+                <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+{{/*                         TODO range through channel posts */}}
+                {{range .Posts}} <!-- channel page posts -->
+                  {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
+                {{end}} <!-- channel page posts -->
+                </div>
+              </div>
+            </div>
+{{/*SECTION ------------ user right panel ------------ */}}
+            <div class="right-panel ">
+              <div class="right-panel-content scroll-down">
+                <div class="right-panel-container-name flex-space-between">
+                  <div class="cont-flex-column">
+                    <h4 class="right-panel-name">/{{ .ThisChannel.Name }}</h4>
+                    <small>created by {{ if (eq .ThisChannel.OwnerID .CurrentUserID) }}you {{ else }} {{ .ThisChannelOwnerName }} {{ end }}{{ .ThisChannel.TimeSince}}</small>
+                  </div>
+                  {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
+                    <button id="right-panel-channel--edit-channel-name" class="btn-sm btn-icoonly">
+                      <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
+                    </button>
+                  {{ end }}
+                </div>
+{{/*SECTION ----------- edit channel image ----------- */}}
+                {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
+                <div class="right-panel-container-pic flex-space-between">
+                  <div class="right-panel-container-pic">
+                    {{ if (ne .ThisChannel.Avatar "noimage") }}
+                    <div class="right-panel-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .ThisChannel.Avatar}}"></div>
+                    {{ else }}
+                    <div class="right-panel-pic profile-pic--empty" data-name-channel="{{ .ThisChannel.Name }}"></div>
+                    {{ end }}
+                    <small>Edit channel picture</small>
+                  </div>
+                  <button id="right-panel-channel--edit-channel-picture" class="btn-sm btn-icoonly">
+                    <span class="btn-edit" role="contentinfo" aria-label="Edit channel picture"></span>
+                  </button>
+                </div>
+                {{ end }}
+                <div class="right-panel-container-bio ">
+{{/*SECTION ----------- edit channel bio ----------- */}}
+                {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
+                  <div class="right-panel-bio flex-space-between">
+                    <label for="channel-bio-content" class="padded">Edit channel bio</label>
+                    <button id="right-panel-channel--edit-channel-bio" class="btn-sm btn-icoonly">
+                        <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
+                    </button>
+                  </div>
+                {{ end }}
+                  <div class="sidebar-channel-block">
+                    <article>{{ .ThisChannel.Description }}</article>
+                  </div>
+                  <textarea id="channel-bio-content" class="inactive-input" name="content" style="display: none">{{ .ThisChannel.Description }}</textarea>
+                </div>
+                <div class="right-panel-container-moderators">
+                  <div class="sidebar-block sidebar-channels">
+{{/*SECTION ----------- edit channel mods ----------- */}}
+                  {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
+                  <div class="right-panel-bio flex-space-between">
+                    <label for="channel-bio-content" class="padded">Edit moderators</label>
+                    <button id="right-panel-channel--edit-channel-mods" class="btn-sm btn-icoonly">
+                      <span class="btn-edit" role="contentinfo" aria-label="Edit channel moderators"></span>
+                    </button>
+                  </div>
+                  {{ else }}
+                  <small class="padded">Moderators</small>
+                  {{ end }}
+                  <div class="sidebar-channel-block">
+{{/*                                     TODO range through moderators*/}}
                     <div class="sidebar-channel">
-                      <div></div>
-                      <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
-                      <span class="card-pic channel-pic"></span>
-                      <div>
-                        <div>/Golang#Discussion</div>
+                      <div class="container-channel-info">
+                        <span class="card-pic mod-pic"></span>
                         <div>
-                          <div class="channel-users">5.6k</div>
-                          <div class="channel-green-dot">36</div>
+                          <div>Other_one55</div>
                         </div>
+                        <button class="btn-sm btn-icoonly margin-auto-0">
+                          <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
+                        </button>
                       </div>
-                      {{ if (ne .CurrentUserName "nouser") }}
-                      <button class="btn-sm btn-icoonly margin-auto-0">
-                        <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                      </button>
-                      {{ end }} <!-- "nouser" check -->
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          <div class="button-row-wrap">
-            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-              <span class="btn-share">share</span>
-            </button>
-            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-              <span class="btn-report">report</span>
-            </button>
-          </div>
-        </div>
+              <div id="right-panel-container-rules">
+{{/*SECTION ----------- edit channel rules ----------- */}}
+              {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
+                <div class="right-panel-bio flex-space-between ">
+                  <label class="padded" for="rules-content">Edit channel rules</label>
+                  <button popovertarget="form-edit-channel-rules" id="right-panel-channel--edit-channel-rules" class="btn-sm btn-icoonly">
+                    <span class="btn-edit" role="contentinfo" aria-label="Edit channel rules"></span>
+                  </button>
+                </div>
+              {{ else }}
+                <div class="right-panel-bio flex-space-between ">
+                  <label class="padded" for="rules-content">Channel rules</label>
+                </div>
+              {{ end }}
+              <div class="sidebar-channel-block">
+                <ul class="sidebar-channel-ul">
+                  {{ range .ThisChannelRules}}
+                  <li>{{ .Rule }}</li>
+                  {{ end }}
+                </ul>
+                <textarea id="rules-content" class="inactive-input" name="content" style="display: none">Placeholder text... Placeholder text...</textarea>
               </div>
-      </div>
-        </div>
-
-            <!-- SECTION --- channel page ----->
-            <div id="channel-page" class="feeds-wrapper">
-                <div class="banner">
-                  <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
-                    <div class="page-control">
-                        <div class="page-profile">
-                          {{ if (ne .ThisChannel.Avatar "noimage") }}
-                          <div class="sidebar-pic profile-pic" data-image-user="{{ $channelBasePath }}{{ .ThisChannel.Avatar }}"></div>
-                            {{ else }}
-                            <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}"></div>
-                              {{ end }}
-                            <div>
-                                <h2 {{ if (eq .ThisChannel.Privacy true) }}class="private-channel"{{ end }}>/{{ .ThisChannel.Name }}</h2>
-                                <div>
-                                  <button class="btn-md btn-icotext btn-follows btn-invert-never">
-                                  <span class="btn-channel-users">13.8k</span>
-                                </button>
-                                  <button class="btn-md btn-icotext btn-follows btn-invert-never" style="position: relative">
-                                    <span class="btn-channel-green-dot">37</span>
-                                  </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="page-buttons">
-                          {{ if (eq .ThisChannelIsOwnedOrJoined false) }}
-                          <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
-                            <span class="btn-posts">join</span>
-                          </button>
-                          {{ end }}
-                            <div class="user-following"></div>
-                            <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
-                                <img src="/assets/icons/share_16.svg" alt="share button">
-                            </button>
-                          {{ if (eq .ThisChannelIsOwnedOrJoined false) }}
-                            <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
-                                <img src="/assets/icons/heart-empty_24.svg" alt="like button">
-                            </button>
-                          {{ end }}
-                        </div>
-                    </div>
+              </div>
+                <div class="button-row-wrap">
+                  <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                    <span class="btn-share">share</span>
+                  </button>
+                  <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                    <span class="btn-mute">mute</span>
+                  </button>
+                  <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                    <span class="btn-report">report</span>
+                  </button>
                 </div>
-                <div class="container-content">
-                    <div class="content">
-                        <div class="filters-row button-row">
-                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                <span class="btn-sort">sort</span>
-                            </button>
-                            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                <span class="btn-filters">filters</span>
-                            </button>
-                        </div>
-<!-- SECTION ---------- channel page feed ---------- -->
-                      <div id="wrapper-channel-feed" style="position: absolute; width: 100%; height: 100%">
-                        <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-<!--                          TODO range through channel posts -->
-                          {{range .Posts}} <!-- channel page posts -->
-                            {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
-                          {{end}} <!-- channel page posts -->
-                        </div>
-                    </div>
-                    </div>
-<!--SECTION ------------ user right panel ------------ -->
-                    <div class="right-panel ">
-                        <div class="right-panel-content scroll-down">
-                            <div class="right-panel-container-name flex-space-between">
-                              <div class="cont-flex-column">
-                                <h4 class="right-panel-name">/{{ .ThisChannel.Name }}</h4>
-                                <small>created by {{ if (eq .ThisChannel.OwnerID .CurrentUserID) }}you {{ else }} {{ .ThisChannelOwnerName }} {{ end }}{{ .ThisChannel.TimeSince}}</small>
-                              </div>
-                              {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
-                                <button id="right-panel-channel--edit-channel-name" class="btn-sm btn-icoonly">
-                                    <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
-                                </button>
-                              {{ end }}
-                            </div>
-<!--                    ----------- edit channel image ----------- -->
-                          {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
-                          <div class="right-panel-container-pic flex-space-between">
-                            <div class="right-panel-container-pic">
-                              {{ if (ne .ThisChannel.Avatar "noimage") }}
-                              <div class="right-panel-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .ThisChannel.Avatar}}"></div>
-                              {{ else }}
-                              <div class="right-panel-pic profile-pic--empty" data-name-channel="{{ .ThisChannel.Name }}"></div>
-                              {{ end }}
-                              <small>Edit channel picture</small>
-                            </div>
-                            <button id="right-panel-channel--edit-channel-picture" class="btn-sm btn-icoonly">
-                              <span class="btn-edit" role="contentinfo" aria-label="Edit channel picture"></span>
-                            </button>
-                          </div>
-                          {{ end }}
-                            <div class="right-panel-container-bio ">
-<!--                    ----------- edit channel bio ----------- -->
-                              {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
-                                <div class="right-panel-bio flex-space-between">
-                                    <label for="channel-bio-content" class="padded">Edit channel bio</label>
-                                    <button id="right-panel-channel--edit-channel-bio" class="btn-sm btn-icoonly">
-                                        <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
-                                    </button>
-                                </div>
-                              {{ end }}
-                              <div class="sidebar-channel-block">
-                                <article>{{ .ThisChannel.Description }}</article>
-                              </div>
-                              <textarea id="channel-bio-content" class="inactive-input" name="content" style="display: none">{{ .ThisChannel.Description }}</textarea>
-                            </div>
-                            <div class="right-panel-container-moderators">
-                                <div class="sidebar-block sidebar-channels">
-<!--                    ----------- edit channel mods ----------- -->
-                                  {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
-                                  <div class="right-panel-bio flex-space-between">
-                                    <label for="channel-bio-content" class="padded">Edit moderators</label>
-                                    <button id="right-panel-channel--edit-channel-mods" class="btn-sm btn-icoonly">
-                                      <span class="btn-edit" role="contentinfo" aria-label="Edit channel moderators"></span>
-                                    </button>
-                                  </div>
-                                  {{ else }}
-                                  <small class="padded">Moderators</small>
-                                  {{ end }}
-                                    <div class="sidebar-channel-block">
-<!--                                      TODO range through moderators-->
-                                        <div class="sidebar-channel">
-                                            <div class="container-channel-info">
-                                                <span class="card-pic mod-pic"></span>
-                                                <div>
-                                                    <div>Other_one55</div>
-                                                </div>
-                                                <button class="btn-sm btn-icoonly margin-auto-0">
-                                                    <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="right-panel-container-rules">
-<!--                    ----------- edit channel rules ----------- -->
-                              {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
-                                <div class="right-panel-bio flex-space-between ">
-                                    <label class="padded" for="rules-content">Edit channel rules</label>
-                                    <button popovertarget="form-edit-channel-rules" id="right-panel-channel--edit-channel-rules" class="btn-sm btn-icoonly">
-                                        <span class="btn-edit" role="contentinfo" aria-label="Edit channel rules"></span>
-                                    </button>
-                                </div>
-                              {{ else }}
-                                <div class="right-panel-bio flex-space-between ">
-                                  <label class="padded" for="rules-content">Channel rules</label>
-                                </div>
-                              {{ end }}
-                              <div class="sidebar-channel-block">
-                                <ul class="sidebar-channel-ul">
-                                  {{ range .ThisChannelRules}}
-                                  <li>{{ .Rule }}</li>
-                                  {{ end }}
-                                </ul>
-                                <textarea id="rules-content" class="inactive-input" name="content" style="display: none">Placeholder text... Placeholder text...</textarea>
-                                </div>
-                              </div>
-                            <div class="button-row-wrap">
-                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <span class="btn-share">share</span>
-                                </button>
-                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <span class="btn-mute">mute</span>
-                                </button>
-                                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                                    <span class="btn-report">report</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
         </main>
       </div>

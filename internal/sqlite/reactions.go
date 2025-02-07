@@ -59,7 +59,7 @@ func (m *ReactionModel) Insert(liked, disliked bool, authorID, reactedPostID, re
 
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	fmt.Println("Beginning INSERT INTO transaction")
+	//fmt.Println("Beginning INSERT INTO transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Insert in Reactions: %w", err)
 	}
@@ -83,14 +83,14 @@ func (m *ReactionModel) Insert(liked, disliked bool, authorID, reactedPostID, re
 	// Execute the query, dereferencing the pointers for reactionID values
 	_, err = tx.Exec(stmt1, liked, disliked, authorID,
 		reactedPostID, reactedCommentID)
-	fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, reactedPostID)
+	//fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, reactedPostID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Insert query: %w", err)
 	}
 
 	// Commit the transaction
 	err = tx.Commit()
-	fmt.Println("Committing INSERT INTO transaction")
+	//fmt.Println("Committing INSERT INTO transaction")
 	if err != nil {
 		return fmt.Errorf("failed to commit transaction for Insert in Reactions: %w", err)
 	}
@@ -113,7 +113,7 @@ func (m *ReactionModel) Update(liked, disliked bool, authorID, reactedPostID, re
 
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	fmt.Println("Beginning UPDATE transaction")
+	//fmt.Println("Beginning UPDATE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Insert in Reactions: %w", err)
 	}
@@ -142,7 +142,7 @@ func (m *ReactionModel) Update(liked, disliked bool, authorID, reactedPostID, re
 
 	// Commit the transaction
 	err = tx.Commit()
-	fmt.Println("Committing UPDATE transaction")
+	//fmt.Println("Committing UPDATE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to commit transaction for Update in Reactions: %w", err)
 	}

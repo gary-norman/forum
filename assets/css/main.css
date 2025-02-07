@@ -1993,19 +1993,30 @@ main {
   /* z-index: 100; a positive z-index breaks the before */
 }
 
-.container-single-comment {
+.container-post-down, .container-comment-down {
   display: flex;
-  width: 100%;
+  flex-direction: column;
   gap: 1.2rem;
+}
+.container-comment-across {
+  display: flex;
+  flex-direction: row;
+  gap: 1.2rem;
+}
+
+.container-comment-down {
+  width: 100%;
   padding: 1.2rem 0 2.4rem 1.2rem;
   margin-top: -1.2rem;
-
 }
 
 .reply-arrow {
   width: 1.6rem;
   height: 1.6rem;
-  background: url("/assets/icons/reply_arrow_16.svg") no-repeat center;
+  background: url("/assets/icons/arrow-right-white_16.svg") no-repeat center;
+  &:first-of-type {
+    background: url("/assets/icons/reply_arrow_16.svg") no-repeat center;
+  }
 }
 @keyframes glow-breathe {
 

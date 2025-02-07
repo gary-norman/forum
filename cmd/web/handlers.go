@@ -409,10 +409,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	for index, post := range postsWithDaysAgo {
-		fmt.Printf("post: %v\ncomments: %v\n\n", post, postsWithDaysAgo[index].Comments)
-	}
-
 	// SECTION --- user ---
 	allUsers, allUsersErr := app.users.All()
 	if allUsersErr != nil {

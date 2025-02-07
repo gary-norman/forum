@@ -113,7 +113,7 @@ func (m *ReactionModel) Update(liked, disliked bool, authorID, reactedPostID, re
 
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	//fmt.Println("Beginning UPDATE transaction")
+	fmt.Println("Beginning UPDATE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Insert in Reactions: %w", err)
 	}
@@ -142,7 +142,7 @@ func (m *ReactionModel) Update(liked, disliked bool, authorID, reactedPostID, re
 
 	// Commit the transaction
 	err = tx.Commit()
-	//fmt.Println("Committing UPDATE transaction")
+	fmt.Println("Committing UPDATE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to commit transaction for Update in Reactions: %w", err)
 	}
@@ -157,7 +157,7 @@ func (m *ReactionModel) Upsert(liked, disliked bool, authorID, reactedPostID, re
 	}
 
 	// Check if the reaction exists
-	exists, err := m.Exists(liked, disliked, authorID, reactedPostID)
+	exists, err := m.Exists(authorID, reactedPostID, reactedCommentID)
 	if err != nil {
 		fmt.Println("Upsert > Exists error")
 		return fmt.Errorf(err.Error())
@@ -173,14 +173,14 @@ func (m *ReactionModel) Upsert(liked, disliked bool, authorID, reactedPostID, re
 	return m.Insert(liked, disliked, authorID, reactedPostID, reactedCommentID)
 }
 
-// Exists helps avoid creating duplicate reactions by determining whether a reaction for the specific combination of AuthorID, PostID and the reaction itself - liked/disliked
-func (m *ReactionModel) Exists(liked, disliked bool, authorID, reactedPostID int) (bool, error) {
-	//fmt.Printf("Reaction already exists (reactions.go :63 -> Exists) for\nauthorID: %v,\nreactedPostID: %v,\nLiked: %v\nDisliked: %v", authorID, reactedPostID, liked, disliked)
+// Exists helps avoid creating duplicate reactions by determining whether a reaction for the specific combination of AuthorID, PostID and CommentID
+func (m *ReactionModel) Exists(authorID, reactedPostID, reactedCommentID int) (bool, error) {
+
 	stmt := `SELECT EXISTS(
                 SELECT 1 FROM Reactions
-                WHERE AuthorID = ? AND ReactedPostID = ?)`
+                WHERE AuthorID = ? AND ReactedPostID = ? AND ReactedCommentID = ?)`
 	var exists bool
-	err := m.DB.QueryRow(stmt, authorID, reactedPostID).Scan(&exists)
+	err := m.DB.QueryRow(stmt, authorID, reactedPostID, reactedCommentID).Scan(&exists)
 	return exists, err
 }
 
@@ -192,7 +192,7 @@ func (m *ReactionModel) CheckExistingReaction(liked, disliked bool, reactionAuth
 			FROM Reactions 
 			WHERE AuthorID = ? 
 			AND ReactedPostID = ?
-			AND ReactedCommentID - ?
+			AND ReactedCommentID = ?
 			AND (Liked = ? OR Disliked = ?)`
 	err := m.DB.QueryRow(stmt, reactionAuthorID, reactedPostID, reactedCommentID, liked, disliked).Scan(
 		&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID)

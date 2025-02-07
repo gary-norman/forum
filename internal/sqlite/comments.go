@@ -42,10 +42,10 @@ func (m *CommentModel) Insert(comment models.Comment) error {
 	//	return fmt.Errorf("only one of CommentedPostID or CommentedCommentID must be non-zero")
 	//}
 
-	// Safely retrieve CommentedPostID and CommentedCommentID
-	postID, commentID := m.SafeGetCommentedID(comment)
+	//// Safely retrieve CommentedPostID and CommentedCommentID
+	//postID, commentID := m.SafeGetCommentedID(comment)
 
-	log.Printf("postID: %v, commentID: %v", postID, commentID)
+	log.Printf("postID: %v, commentID: %v", &comment.CommentedPostID, &comment.CommentedCommentID)
 
 	// Begin the transaction
 	tx, err := m.DB.Begin()
@@ -78,8 +78,8 @@ func (m *CommentModel) Insert(comment models.Comment) error {
 		&comment.AuthorAvatar,
 		&comment.ChannelName,
 		&comment.ChannelID,
-		&postID,
-		&commentID,
+		&comment.CommentedPostID,
+		&comment.CommentedCommentID,
 		&comment.IsCommentable,
 		&comment.IsFlagged)
 	//fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, parentPostID)
@@ -101,9 +101,6 @@ func (m *CommentModel) Update(comment models.Comment) error {
 	//if !isValidParent(*comment.CommentedPostID, *comment.CommentedCommentID) {
 	//	return fmt.Errorf("only one of CommentedPostID, or CommentedCommentID must be non-zero")
 	//}
-
-	// Safely retrieve CommentedPostID and CommentedCommentID
-	postID, commentID := m.SafeGetCommentedID(comment)
 
 	// Begin the transaction
 	tx, err := m.DB.Begin()
@@ -138,8 +135,8 @@ func (m *CommentModel) Update(comment models.Comment) error {
 		&comment.ChannelName,
 		&comment.ChannelID,
 		&comment.AuthorID,
-		&postID,
-		&commentID)
+		&comment.CommentedPostID,
+		&comment.CommentedCommentID)
 	//fmt.Printf("Updating Comments, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
 	if err != nil {
 		return fmt.Errorf("failed to execute Update query: %w", err)
@@ -157,43 +154,22 @@ func (m *CommentModel) Update(comment models.Comment) error {
 
 // Exists helps avoid creating duplicate comments by determining whether a comment for the specific combination of AuthorID, PostID/CommentID and Content
 func (m *CommentModel) Exists(comment models.Comment) (bool, error) {
-	// Safely retrieve CommentedPostID and CommentedCommentID
-	postID, commentID := m.SafeGetCommentedID(comment)
-
 	// SQL query to check if the comment exists with the provided parameters
 	stmt := `SELECT EXISTS(
                 SELECT 1 FROM Comments
                 WHERE AuthorID = ? AND 
-                      (CommentedPostID = ? OR CommentedCommentID = ?) AND 
+                      CommentedPostID = ? AND 
+                      CommentedCommentID = ? AND 
                       Content = ?)`
 
 	var exists bool
 	err := m.DB.QueryRow(stmt,
 		&comment.AuthorID,
-		&postID,
-		&commentID,
+		&comment.CommentedPostID,
+		&comment.CommentedCommentID,
 		&comment.Content).Scan(&exists)
 
 	return exists, err
-}
-
-// Safe handling of CommentedPostID and CommentedCommentID values
-func (m *CommentModel) SafeGetCommentedID(comment models.Comment) (postID int, commentID int) {
-	// Default values
-	postID = 0
-	commentID = 0
-
-	// If CommentedPostID is not nil, use its value
-	if comment.CommentedPostID != nil {
-		postID = *comment.CommentedPostID
-	}
-
-	// If CommentedCommentID is not nil, use its value
-	if comment.CommentedCommentID != nil {
-		commentID = *comment.CommentedCommentID
-	}
-
-	return postID, commentID
 }
 
 // Delete removes a reaction from the database by ID

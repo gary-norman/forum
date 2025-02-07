@@ -1044,12 +1044,15 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 		log.Printf("commentID: %v", commentID)
 	}
 
+	log.Printf("commentID: %v", commentID)
+	log.Printf("postID: %v", postID)
+
 	// Assign the returned values
 	commentData = models.Comment{
 		Content:            r.PostForm.Get("content"),
 		CommentedPostID:    &postID,
 		CommentedCommentID: &commentID,
-		IsCommentable:      false,
+		IsCommentable:      true,
 		IsFlagged:          false,
 		Author:             user.Username,
 		AuthorID:           user.ID,
@@ -1061,8 +1064,8 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	commentData.ChannelID, _ = strconv.Atoi(channelData.ChannelID)
 
 	// Log the values
-	fmt.Printf("commentData.CommentedPostID: %v", commentData.CommentedPostID)
-	fmt.Printf("commentData.CommentedCommentID: %v", commentData.CommentedCommentID)
+	fmt.Printf("commentData.CommentedPostID: %v\n", *commentData.CommentedPostID)
+	fmt.Printf("commentData.CommentedCommentID: %v\n", *commentData.CommentedCommentID)
 
 	// Insert the comment
 	insertErr := app.comments.Upsert(commentData)

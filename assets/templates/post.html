@@ -177,7 +177,7 @@
                     {{ if .Replies}}
                         {{ range .Replies }}
                                 <div class="container-comment-across">
-                                    {{ template "reply" (dict "CurrentUser" $.CurrentUser "Comment" .Comment) }}
+                                    {{ template "reply_level1" (dict "CurrentUser" $.CurrentUser "Comment" . ) }}
                                 </div> <!-- end container-comment-across wrapper -->
                             {{ end }} <!-- end range Replies -->
                         {{ end }} <!-- end if Replies -->

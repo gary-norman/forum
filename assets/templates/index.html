@@ -23,185 +23,11 @@
   </head>
     <body>
 
+    {{ $channelBasePath := "db/userdata/images/channel-images/" }}
+    {{ $postBasePath := "db/userdata/images/post-images/" }}
+    {{ $userBasePath := "db/userdata/images/user-images/" }}
 {{/*    SECTION --------- posts template ---------*/}}
-{{ define "post" }}
-  {{ $channelBasePath := "db/userdata/images/channel-images/" }}
-  {{ $postBasePath := "db/userdata/images/post-images/" }}
-  {{ $userBasePath := "db/userdata/images/user-images/" }}
-  {{ $userID := 0 }} <!-- Default value for logged out users -->
-  {{ if ne .CurrentUser.Username "nouser" }}
-    {{ $userID = .CurrentUser.ID }}
-  {{ end }}
-  {{ $post := .Post }}
-  <div class="container-post">
-    <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{.AuthorID}}">
-      <div class="container-post-info">
-        {{ if (ne $post.AuthorAvatar "noimage") }}
-          <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $post.AuthorAvatar }}"></span>
-        {{ else }}
-          <span class="card-pic profile-pic--empty" data-name-user="{{ $post.Author }}"></span>
-        {{ end }}
-        <div>
-          <small class="small-bold">{{$post.Author}}</small>
-          <div>
-            <small>{{$post.ChannelName}}</small>
-            <small>-</small>
-            <small>{{$post.TimeSince}}</small>
-            <small>PostID: {{$post.ID}}</small>
-          </div>
-        </div>
-        <div class="like-button">
-          <button data-tooltip-name="like" class="btn-icoonly"></button>
-        </div>
-      </div>
-      <h4>{{$post.Title}}</h4>
-      {{ if ne $post.Images "noimage" }}
-        <img src={{$postBasePath}}{{$post.Images}} class="post-image" alt="Post Image">
-      {{ end }}
-      <article class="cardContent">{{$post.Content}}</article>
-      <!--  Post control buttons -->
-      <div class="button-row-wrap post-controls" >
-        {{$status := reactionStatus $userID $post.ID 0}}
-        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
-          <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{$post.Likes}}</span>
-        </button>
-        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-          <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
-        </button>
-        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-          <span class="btn-reply">reply</span>
-        </button>
-        <button id="share-button-{{$post.ID}}-activity" popovertarget="share-container-{{$post.ID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-          <span class="btn-share">share</span>
-        </button>
-        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-          <span class="btn-report">report</span>
-        </button>
-        <!--  Share modal -->
-        <div popover id="share-container-{{$post.ID}}-activity" class="scrollable-user">
-          <div class="share-container">
-            <div class="button-row">
-              <a href="/" target="_blank" class="share-logo facebook"></a>
-              <a href="/" target="_blank" class="share-logo twitter"></a>
-              <a href="/" target="_blank" class="share-logo linkedin"></a>
-              <a href="/" target="_blank" class="share-logo reddit"></a>
-              <a href="/" target="_blank" class="share-logo whatsapp"></a>
-              <a href="/" target="_blank" class="share-logo telegram"></a>
-            </div>
-            <div class="flex-space-between">
-              <label class="padded" for="copy-url-{{$post.ID}}-activity">Copy URL link</label>
-              <button class="btn-sm btn-icoonly">
-                <span class="btn-copy" aria-label="Copy URL link"></span>
-              </button>
-            </div>
-            <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
-                   id="copy-url-{{$post.ID}}-activity" name="copy-url-{{$post.ID}}-activity"/>
-          </div>
-        </div>
-      </div>
-      <!--  Reply / Submit Comment form -->
-      <form class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
-        <div class="cont-flex-row flex-end">
-          <div class="input-wrapper container-reply">
-            <textarea id="comment-form-textarea-{{$post.ID}}" name="content" placeholder="Type a reply..."></textarea>
-            <label for="comment-form-textarea-{{$post.ID}}" class="user-label">Reply</label>
-          </div>
-          <!-- Hidden input to store the postID -->
-          <input type="hidden" name="postID" value="{{$post.ID}}">
-          <input type="hidden" name="channel" value='{"channelName": "{{$post.ChannelName}}", "channelID": "{{$post.ChannelID}}"}'>
-          <button class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
-            <span class="btn-reply-comment">comment</span>
-          </button>
-        </div>
-      </form>
-    </div> <!-- end post card -->
-    {{ range .Comments}}
 
-      {{ $comment := .Comment }}
-      <div class="container-comments">
-        <div class="container-comment">
-          <div class="reply-arrow"></div>
-          <div class="card" data-comment-id="{{$comment.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$comment.AuthorID}}">
-            <div class="container-post-info">
-              {{ if (ne $comment.AuthorAvatar "noimage") }}
-                <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $comment.AuthorAvatar }}"></span>
-              {{ else }}
-                <span class="card-pic profile-pic--empty" data-name-user="{{ $comment.Author }}"></span>
-              {{ end }}
-              <div>
-                <small class="small-bold">{{$comment.Author}}</small>
-                <div>
-                  <small>{{$comment.ChannelName}}</small>
-                  <small>-</small>
-                  <small>{{.TimeSince}}</small>
-                  <small>commentID: {{$comment.ID}}</small>
-                </div>
-              </div>
-              <div class="like-button">
-                <button data-tooltip-name="like" class="btn-icoonly"></button>
-              </div>
-            </div>
-            <article class="cardContent">{{$comment.Content}}</article>
-            <!--  Post control buttons -->
-            <div class="button-row-wrap post-controls" >
-              {{$status := reactionStatus $userID 0 $comment.ID}}
-              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
-                <span class="btn-likes" data-like-ID="user-{{$comment.ID}}">{{$comment.Likes}}</span>
-              </button>
-              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-                <span class="btn-dislikes" data-dislike-ID="user-{{$comment.ID}}">{{$comment.Dislikes}}</span>
-              </button>
-              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                <span class="btn-reply">reply</span>
-              </button>
-              <button id="share-button-{{$comment.ID}}-activity" popovertarget="share-container-{{$comment.ID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                <span class="btn-share">share</span>
-              </button>
-              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                <span class="btn-report">report</span>
-              </button>
-              <!--  Share modal -->
-              <div popover id="share-container-{{$comment.ID}}-activity" class="scrollable-user">
-                <div class="share-container">
-                  <div class="button-row">
-                    <a href="/" target="_blank" class="share-logo facebook"></a>
-                    <a href="/" target="_blank" class="share-logo twitter"></a>
-                    <a href="/" target="_blank" class="share-logo linkedin"></a>
-                    <a href="/" target="_blank" class="share-logo reddit"></a>
-                    <a href="/" target="_blank" class="share-logo whatsapp"></a>
-                    <a href="/" target="_blank" class="share-logo telegram"></a>
-                  </div>
-                  <div class="flex-space-between">
-                    <label class="padded" for="copy-url-{{$comment.ID}}-activity">Copy URL link</label>
-                    <button class="btn-sm btn-icoonly">
-                      <span class="btn-copy" aria-label="Copy URL link"></span>
-                    </button>
-                  </div>
-                  <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
-                         id="copy-url-{{$comment.ID}}-activity" name="copy-url-{{$comment.ID}}-activity"/>
-                </div>
-              </div>
-            </div>
-            <!--  Reply / Submit Comment form -->
-            <form class="form-reply" action="/addcomment" enctype="multipart/form-data" method="POST">
-              <div class="cont-flex-row flex-end">
-                <div class="input-wrapper container-reply">
-                  <textarea id="comment-form-textarea-{{$comment.ID}}" name="content" placeholder="Type a reply..."></textarea>
-                  <label for="comment-form-textarea-{{$comment.ID}}" class="user-label">Reply</label>
-                </div>
-                <!-- Hidden input to store the commentID (if replying to a comment) -->
-                <input type="hidden" name="commentID" value="{{$comment.CommentedCommentID}}">
-                <button type="submit" class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
-                  <span class="btn-reply-comment">comment</span>
-                </button>
-              </div>
-            </form>
-          </div> <!-- end comment card-->
-        </div> <!-- end single container-comment wrapper -->
-      </div><!-- end container-comments wrapper -->
-    {{end}} <!-- user page activity post COMMENTS -->
-  </div> <!-- end container-post wrapper -->
-{{ end }}
       <div id="notification-main">
         <div id="notification-main-content"></div>
       </div>
@@ -902,7 +728,8 @@
                       </div>
                       <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
                   {{range .Posts}} <!-- user page activity posts -->
-                  {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" $.Comments) }}
+                  {{printf "Comment: %v" $.Comments}}
+                    {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" $.Comments) }}
                   {{end}} <!-- user page activity POSTS -->
                 </div>
                 <div id="activity-posts">

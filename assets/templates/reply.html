@@ -80,6 +80,7 @@
             </div>
             <!-- Hidden input to store the commentID (if replying to a comment) -->
             <input type="hidden" name="commentID" value="{{$comment.ID}}">
+            <input type="hidden" name="channel" value='{"channelName": "{{$comment.ChannelName}}", "channelID": "{{$comment.ChannelID}}"}'>
             <button type="submit" class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
               <span class="btn-reply-comment">comment</span>
             </button>

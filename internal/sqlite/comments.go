@@ -37,16 +37,6 @@ func (m *CommentModel) Upsert(comment models.Comment) error {
 }
 
 func (m *CommentModel) Insert(comment models.Comment) error {
-	//// Validate that only one of parentPostID or parentCommentID is non-zero
-	//if !isValidParent(*comment.CommentedPostID, *comment.CommentedCommentID) {
-	//	return fmt.Errorf("only one of CommentedPostID or CommentedCommentID must be non-zero")
-	//}
-
-	//// Safely retrieve CommentedPostID and CommentedCommentID
-	//postID, commentID := m.SafeGetCommentedID(comment)
-
-	log.Printf("postID: %v, commentID: %v", &comment.CommentedPostID, &comment.CommentedCommentID)
-
 	// Begin the transaction
 	tx, err := m.DB.Begin()
 	//fmt.Println("Beginning INSERT INTO transaction")

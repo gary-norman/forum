@@ -1055,13 +1055,13 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	// Convert postIDStr to an integer
 	postID, postConvErr := strconv.Atoi(postIDStr)
 	if postConvErr != nil {
-		log.Printf("postID: %v", postID)
+		log.Printf("Error converting postID: %v", postID)
 	}
 
 	// Convert commentIDStr to an integer
 	commentID, commentConvErr := strconv.Atoi(commentIDStr)
 	if commentConvErr != nil {
-		log.Printf("commentID: %v", commentID)
+		log.Printf("Error converting commentID: %v", commentID)
 	}
 
 	// Assign the returned values

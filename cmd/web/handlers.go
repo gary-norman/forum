@@ -72,6 +72,83 @@ func getRandomUser(userSlice []models.User) models.User {
 	return user
 }
 
+// getRepliesForComment Recursively fetches replies for each comment
+func getRepliesForComment(comment models.CommentWithDaysAgo, commentsWithDaysAgo []models.CommentWithDaysAgo) models.CommentWithDaysAgo {
+	// Find replies to the current comment
+	var replies []models.CommentWithDaysAgo
+	for _, possibleReply := range commentsWithDaysAgo {
+		if possibleReply.Comment.CommentedCommentID != nil && *possibleReply.Comment.CommentedCommentID == comment.Comment.ID {
+			replyWithReplies := getRepliesForComment(possibleReply, commentsWithDaysAgo) // Recursively get replies for this reply
+			replies = append(replies, replyWithReplies)
+		}
+	}
+
+	// If no replies are found, we can avoid unnecessary recursion
+	if len(replies) > 0 {
+		comment.Replies = replies
+	}
+
+	// Return the comment with its replies
+	return comment
+}
+
+func GetFileName(r *http.Request, fileFieldName, calledBy, imageType string) string {
+	// Limit the size of the incoming file to prevent memory issues
+	parseErr := r.ParseMultipartForm(10 << 20) // Limit upload size to 10MB
+	if parseErr != nil {
+		log.Printf(ErrorMsgs().Parse, "image", calledBy, parseErr)
+		return "noimage"
+	}
+	// Retrieve the file from form data
+	file, handler, retrieveErr := r.FormFile(fileFieldName)
+	if retrieveErr != nil {
+		log.Printf(ErrorMsgs().RetrieveFile, "image", calledBy, retrieveErr)
+		return "noimage"
+	}
+	defer func(file multipart.File) {
+		closeErr := file.Close()
+		if closeErr != nil {
+			log.Printf(ErrorMsgs().Close, file, calledBy, closeErr)
+		}
+	}(file)
+	// Create a file in the server's local storage
+	renamedFile := renameFileWithUUID(handler.Filename)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "File Name", renamedFile)
+	dst, createErr := os.Create("db/userdata/images/" + imageType + "-images/" + renamedFile)
+	if createErr != nil {
+		log.Printf(ErrorMsgs().CreateFile, "image", calledBy, createErr)
+		return ""
+	}
+	defer func(dst *os.File) {
+		closeErr := dst.Close()
+		if closeErr != nil {
+			log.Printf(ErrorMsgs().Close, dst, calledBy, closeErr)
+		}
+	}(dst)
+	// Copy the uploaded file data to the server's file
+	_, copyErr := io.Copy(dst, file)
+	if copyErr != nil {
+		fmt.Printf(ErrorMsgs().SaveFile, file, dst, calledBy, copyErr)
+		return ""
+	}
+	return renamedFile
+}
+
+func renameFileWithUUID(oldFilePath string) string {
+	// Generate a new UUID
+	newUUID := models.GenerateToken(16)
+
+	// Split the file name into its base and extension
+	base := filepath.Base(oldFilePath)
+	ext := filepath.Ext(base)
+	base = base[:len(base)-len(ext)]
+
+	// Create the new file name with the UUID and extension
+	newFilePath := filepath.Join(filepath.Dir(oldFilePath), newUUID+ext)
+
+	return newFilePath
+}
+
 func (app *app) register(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("register_user")
 	email := r.FormValue("register_email")
@@ -435,10 +512,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	//if validTokens == true {
 	//	userLoggedIn = true
 	//}
-	currentUserName := "nouser"
-	var currentUserID int
-	var currentUserAvatar string
-	var currentUserBio string
 
 	// SECTION --- channels --
 	allChannels, allChanErr := app.channels.All()
@@ -483,10 +556,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		currentUser.Followers, currentUser.Following, currentUserErr = app.loyalty.CountUsers(currentUser.ID)
 
 		currentUser.TimeSince = getTimeSince(currentUser.Created)
-		currentUserName = currentUser.Username
-		currentUserID = currentUser.ID
-		currentUserAvatar = currentUser.Avatar
-		currentUserBio = currentUser.Description
 		// get owned and joined channels of current user
 		memberships, memberErr := app.memberships.UserMemberships(currentUser.ID)
 		if memberErr != nil {
@@ -519,15 +588,15 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// TODO get channel moderators
 
 	// TODO get channel posts
-	// TODO create structs for each type (ChannelTemplate etc) and serve them in the template struct
 	// SECTION -- template ---
 	templateData := models.TemplateData{
+		// ---------- users ----------
 		AllUsers:    allUsers,
 		RandomUser:  randomUser,
 		CurrentUser: currentUser,
-		//TODO get these values dynamically (NIL pointer reference)
-		CurrentUserID:              currentUserID,
-		CurrentUserName:            currentUserName,
+		// ---------- posts ----------
+		Posts: postsWithDaysAgo,
+		// ---------- channels ----------
 		AllChannels:                allChannels,
 		ThisChannel:                thisChannel,
 		ThisChannelOwnerName:       thisChannelOwnerName,
@@ -537,15 +606,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		ThisChannelIsOwned:         isOwned,
 		ThisChannelIsOwnedOrJoined: isJoinedOrOwned,
 		ThisChannelRules:           thisChannelRules,
-		Posts:                      postsWithDaysAgo,
-		Avatar:                     currentUserAvatar,
-		Bio:                        currentUserBio,
-		Images:                     nil,
-		Reactions:                  nil,
-		NotifyPlaceholder: models.NotifyPlaceholder{
-			Register: "",
-			Login:    "",
-		},
+		// ---------- misc ----------
+		Images:    nil,
+		Reactions: nil,
 	}
 	//models.JsonError(templateData)
 	tpl, err := GetTemplate()
@@ -555,10 +618,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	t := tpl.Lookup("index.html")
-	//if t == nil {
-	//	log.Printf("Template not found: index.html")
-	//	return
-	//}
 
 	if t == nil {
 		http.Error(w, "Template is not initialized", http.StatusInternalServerError)
@@ -571,26 +630,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return
 	}
-}
-
-// Recursively fetch replies for each comment
-func getRepliesForComment(comment models.CommentWithDaysAgo, commentsWithDaysAgo []models.CommentWithDaysAgo) models.CommentWithDaysAgo {
-	// Find replies to the current comment
-	var replies []models.CommentWithDaysAgo
-	for _, possibleReply := range commentsWithDaysAgo {
-		if possibleReply.Comment.CommentedCommentID != nil && *possibleReply.Comment.CommentedCommentID == comment.Comment.ID {
-			replyWithReplies := getRepliesForComment(possibleReply, commentsWithDaysAgo) // Recursively get replies for this reply
-			replies = append(replies, replyWithReplies)
-		}
-	}
-
-	// If no replies are found, we can avoid unnecessary recursion
-	if len(replies) > 0 {
-		comment.Replies = replies
-	}
-
-	// Return the comment with its replies
-	return comment
 }
 
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
@@ -635,63 +674,6 @@ func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return
 	}
-}
-
-func GetFileName(r *http.Request, fileFieldName, calledBy, imageType string) string {
-	// Limit the size of the incoming file to prevent memory issues
-	parseErr := r.ParseMultipartForm(10 << 20) // Limit upload size to 10MB
-	if parseErr != nil {
-		log.Printf(ErrorMsgs().Parse, "image", calledBy, parseErr)
-		return "noimage"
-	}
-	// Retrieve the file from form data
-	file, handler, retrieveErr := r.FormFile(fileFieldName)
-	if retrieveErr != nil {
-		log.Printf(ErrorMsgs().RetrieveFile, "image", calledBy, retrieveErr)
-		return "noimage"
-	}
-	defer func(file multipart.File) {
-		closeErr := file.Close()
-		if closeErr != nil {
-			log.Printf(ErrorMsgs().Close, file, calledBy, closeErr)
-		}
-	}(file)
-	// Create a file in the server's local storage
-	renamedFile := renameFileWithUUID(handler.Filename)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "File Name", renamedFile)
-	dst, createErr := os.Create("db/userdata/images/" + imageType + "-images/" + renamedFile)
-	if createErr != nil {
-		log.Printf(ErrorMsgs().CreateFile, "image", calledBy, createErr)
-		return ""
-	}
-	defer func(dst *os.File) {
-		closeErr := dst.Close()
-		if closeErr != nil {
-			log.Printf(ErrorMsgs().Close, dst, calledBy, closeErr)
-		}
-	}(dst)
-	// Copy the uploaded file data to the server's file
-	_, copyErr := io.Copy(dst, file)
-	if copyErr != nil {
-		fmt.Printf(ErrorMsgs().SaveFile, file, dst, calledBy, copyErr)
-		return ""
-	}
-	return renamedFile
-}
-
-func renameFileWithUUID(oldFilePath string) string {
-	// Generate a new UUID
-	newUUID := models.GenerateToken(16)
-
-	// Split the file name into its base and extension
-	base := filepath.Base(oldFilePath)
-	ext := filepath.Ext(base)
-	base = base[:len(base)-len(ext)]
-
-	// Create the new file name with the UUID and extension
-	newFilePath := filepath.Join(filepath.Dir(oldFilePath), newUUID+ext)
-
-	return newFilePath
 }
 
 func (app *app) storePost(w http.ResponseWriter, r *http.Request) {

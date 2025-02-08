@@ -22,13 +22,16 @@
     <title>&lt; codex &gt;</title>
     <title>{{- /*gotype: github.com/gary-norman/forum/internal/models.TemplateData*/ -}}</title>
   </head>
-    <body>
+  <body>
 {{/*SECTION --------- variables ---------*/}}
-    {{ $channelBasePath := "db/userdata/images/channel-images/" }}
-    {{ $postBasePath := "db/userdata/images/post-images/" }}
-    {{ $userBasePath := "db/userdata/images/user-images/" }}
+{{ $channelBasePath := "db/userdata/images/channel-images/" }}
+{{ $postBasePath := "db/userdata/images/post-images/" }}
+{{ $userBasePath := "db/userdata/images/user-images/" }}
+{{ $user := .CurrentUser }}
+{{ if eq .CurrentUser nil }}
+  {{ $user = .RandomUser }}
+{{ end }}
 {{/*SECTION --------- posts template ---------*/}}
-
     <div id="notification-main">
       <div id="notification-main-content"></div>
     </div>
@@ -265,7 +268,7 @@
         </div>
       </div>
 {{/*SECTION     ---------- post form ---------- */}}
-      <div popover id="form-post">
+    <div popover id="form-post">
         <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
           <h3 class="form-title">create a post</h3>
           <label for="channel" class="invisible">channel</label>
@@ -311,7 +314,7 @@
         </form>
       </div>
 {{/*SECTION    ---------- create channel popover ---------- */}}
-      <div popover id="form-channel">
+    <div popover id="form-channel">
         <form class="wrapper-form" enctype="multipart/form-data" action="/channels/create" method="POST">
           <h3 class="form-title">create a channel</h3>
           <div class="input-wrapper">
@@ -350,7 +353,7 @@
         </form>
       </div>
 {{/*SECTION ---------- join channel popover ---------- */}}
-      <div popover id="form-join-channel">
+    <div popover id="form-join-channel">
         <form action="/channels/join" class="wrapper-form" method="POST">
           <h5 id="join-channel-title" class="form-title">join {{ .ThisChannel.Name }}</h5>
           <span id="join-agree" class="text-join-channel">check the agree checkbox to agree to the rules of this channel</span>
@@ -376,7 +379,7 @@
         </form>
       </div>
 {{/*SECTION ---------- edit channel rules popover ---------- */}}
-      <div popover id="form-edit-channel-rules">
+    <div popover id="form-edit-channel-rules">
         <form id="popover-form-edit-channel-rules" action="/channels/add-rules/{{.ThisChannel.Channel.ID}}" class="wrapper-form" method="POST">
           <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .ThisChannel.Name }}</h5>
           <span id="edit-channel-rules-title-rules-existing">current rules</span>
@@ -410,7 +413,7 @@
         </form>
       </div>
 {{/*SECTION    ---------- edit user modal ---------- */}}
-      <div aria-modal="true" id="container-form-edit-user" class="modal">
+    <div aria-modal="true" id="container-form-edit-user" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
           <div id="form-edit-user">
@@ -440,134 +443,134 @@
       </div>
       <div class="main-content">
 {{/*SECTION     ---------- sidebar ---------- */}}
-      <aside class="sidebar">
-        {{ if (ne .CurrentUserName "nouser") }}
-        <div class="sidebarProfile">
-          {{ if (ne .Avatar "noimage") }}
-            <div class="sidebar-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
-          {{ else }}
-            <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .CurrentUserName }}"></div>
-          {{ end }}
-          <div>
-            <h3 data-current-user-ID="{{.CurrentUser.ID}}">{{ .CurrentUserName }}</h3>
-            <div>
-              <button class="btn-lg btn-icotext btn-follows btn-invert-never">
-                <span class="btn-following">{{.CurrentUser.Following}}</span>
-              </button>
-              <button class="btn-lg btn-icotext btn-follows btn-invert-never">
-                <span class="btn-followers">{{.CurrentUser.Followers}}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        {{ end }}
-        <div class="sidebar-scroll scroll-down">
-          {{ if (ne .CurrentUserName "nouser") }}
-          <hr class="solid" />
-          {{ end }}
-          <div class="sidebar-block sidebar-dashboard">
-            <small class="padded">Dashboard</small>
-            <div class="sidebar-option home">Home</div>
-            <div
-              class="sidebar-option flex-space-between darkMode"
-              id="sidebar-option-darkmode"
-            >
-            <div>Colour Scheme</div>
-            <label for="darkmode-checkbox" class="darklight">
-              <input type="checkbox" id="darkmode-checkbox" />
-              <span class="darklight-fx"></span>
-{{/*                <span class="darklight-border"></span> */}}
-            </label>
-            </div>
-            <div class="sidebar-option settings" id="sidebar-options">Settings</div>
-            <ul class="sidebar-options-list ul-reverse">
-              <li id="btn-open-edit-user-modal">edit your profile</li>
-              <li id="btn-open-acc-settings-modal">account settings</li>
-              <li id="btn-open-view-stats-modal">view stats</li>
-              <li id="btn-open-remove-acc-modal">remove your account</li>
-            </ul>
-            {{ if (ne .CurrentUserName "nouser") }}
-            <form action="/logout" method="POST">
-              <div id="logout" class="sidebar-option logout">Log Out</div>
-            </form>
+        <aside class="sidebar">
+          {{ if ne .CurrentUser nil }}
+          <div class="sidebarProfile">
+            {{ if (ne $user.Avatar "noimage") }}
+              <div class="sidebar-pic profile-pic" data-image-user="{{ $userBasePath }}{{ $user.Avatar }}"></div>
             {{ else }}
-            <div id="btn-open-login-modal" class="sidebar-option login">Log In</div>
+              <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username }}"></div>
             {{ end }}
-            <div id="btn-open-login-modal-fallback" class="sidebar-option login" style="display: none">Log In fallback</div>
-          </div>
-          <hr class="solid" />
-{{/*SECTION ---------- sidebar channels ---------- */}}
-          {{if ne .CurrentUserName "nouser"}}
-          <div class="sidebar-block sidebar-channels">
-            <div class="flex-space-between" style="margin-bottom: -0.8rem;">
-              <small class="padded">Your Channels</small>
-              <button popovertarget="form-channel" class="btn-channel btn-sm btn-icoonly">
-                <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
-              </button>
-            </div>
-            <div id="sidebar-channel-block">
-              {{ range .OwnedAndJoinedChannels }}
-              <div class="sidebar-channel" data-channel-desc="{{ .Description }}" data-channel-id="{{ .ID }}">
-                <div class="container-channel-info">
-                  {{ if (ne .Avatar "noimage") }}
-                  <span class="card-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .Avatar }}"></span>
-                  {{ else }}
-                  <span class="card-pic profile-pic--empty" data-name-channel="{{ .Name }}"></span>
-                  {{ end }}
-                  <div>
-                    <div>/{{ .Name }}</div>
-                    <div>
-{{/*                        TODO get this data and add it to DB */}}
-                    <div class="channel-users">9.3k</div>
-                    <div class="channel-green-dot">15</div>
-                  </div>
-                </div>
-                  <div>
-                    {{ if (eq .Owned true) }}
-                    <span class="info-box">owner</span>
-                    {{ else }}
-{{/*                      TODO add logic to check if channel is saved */}}
-                    <button class="btn-save btn-sm btn-icoonly margin-auto-0">
-                      <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
-                    </button>
-                    {{ end }}
-                  </div>
-                </div>
+            <div>
+              <h3 data-current-user-ID="{{$user.ID}}">{{ $user.Username }}</h3>
+              <div>
+                <button class="btn-lg btn-icotext btn-follows btn-invert-never">
+                  <span class="btn-following">{{$user.Following}}</span>
+                </button>
+                <button class="btn-lg btn-icotext btn-follows btn-invert-never">
+                  <span class="btn-followers">{{$user.Followers}}</span>
+                </button>
               </div>
-              {{ end }} <!-- end range of channels here-->
             </div>
           </div>
-          {{end}} <!-- "nouser" check -->
-        </div>
-      </aside>
-      <main>
+          {{ end }}
+          <div class="sidebar-scroll scroll-down">
+            {{ if ne .CurrentUser nil }}
+            <hr class="solid" />
+            {{ end }}
+            <div class="sidebar-block sidebar-dashboard">
+              <small class="padded">Dashboard</small>
+              <div class="sidebar-option home">Home</div>
+              <div
+                class="sidebar-option flex-space-between darkMode"
+                id="sidebar-option-darkmode"
+              >
+              <div>Colour Scheme</div>
+              <label for="darkmode-checkbox" class="darklight">
+                <input type="checkbox" id="darkmode-checkbox" />
+                <span class="darklight-fx"></span>
+  {{/*                <span class="darklight-border"></span> */}}
+              </label>
+              </div>
+              <div class="sidebar-option settings" id="sidebar-options">Settings</div>
+              <ul class="sidebar-options-list ul-reverse">
+                <li id="btn-open-edit-user-modal">edit your profile</li>
+                <li id="btn-open-acc-settings-modal">account settings</li>
+                <li id="btn-open-view-stats-modal">view stats</li>
+                <li id="btn-open-remove-acc-modal">remove your account</li>
+              </ul>
+              {{ if ne .CurrentUser nil }}
+              <form action="/logout" method="POST">
+                <div id="logout" class="sidebar-option logout">Log Out</div>
+              </form>
+              {{ else }}
+              <div id="btn-open-login-modal" class="sidebar-option login">Log In</div>
+              {{ end }}
+              <div id="btn-open-login-modal-fallback" class="sidebar-option login" style="display: none">Log In fallback</div>
+            </div>
+            <hr class="solid" />
+  {{/*SECTION ---------- sidebar channels ---------- */}}
+            {{if ne .CurrentUser nil}}
+            <div class="sidebar-block sidebar-channels">
+              <div class="flex-space-between" style="margin-bottom: -0.8rem;">
+                <small class="padded">Your Channels</small>
+                <button popovertarget="form-channel" class="btn-channel btn-sm btn-icoonly">
+                  <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
+                </button>
+              </div>
+              <div id="sidebar-channel-block">
+                {{ range .OwnedAndJoinedChannels }}
+                <div class="sidebar-channel" data-channel-desc="{{ .Description }}" data-channel-id="{{ .ID }}">
+                  <div class="container-channel-info">
+                    {{ if (ne .Avatar "noimage") }}
+                    <span class="card-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .Avatar }}"></span>
+                    {{ else }}
+                    <span class="card-pic profile-pic--empty" data-name-channel="{{ .Name }}"></span>
+                    {{ end }}
+                    <div>
+                      <div>/{{ .Name }}</div>
+                      <div>
+  {{/*                        TODO get this data and add it to DB */}}
+                      <div class="channel-users">9.3k</div>
+                      <div class="channel-green-dot">15</div>
+                    </div>
+                  </div>
+                    <div>
+                      {{ if (eq .Owned true) }}
+                      <span class="info-box">owner</span>
+                      {{ else }}
+  {{/*                      TODO add logic to check if channel is saved */}}
+                      <button class="btn-save btn-sm btn-icoonly margin-auto-0">
+                        <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
+                      </button>
+                      {{ end }}
+                    </div>
+                  </div>
+                </div>
+                {{ end }} <!-- end range of channels here-->
+              </div>
+            </div>
+            {{end}} <!-- "nouser" check -->
+          </div>
+        </aside>
+        <main>
 {{/*SECTION ---------- homepage feed mask ---------- */}}
-        <div class="container-homepage-feed-mask" style="z-index: 0; min-height: 100% !important">
-          <svg height="100dvh" width="100dvw" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="home-mask-gradient" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stop-color="black" />+
+          <div class="container-homepage-feed-mask" style="z-index: 0; min-height: 100% !important">
+        <svg height="100dvh" width="100dvw" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="home-mask-gradient" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="black" />+
 {{/*                   <stop offset="6%" stop-color="black" /> */}}
-                <stop offset="2%" stop-color="white" />
-                <stop offset="100%" stop-color="white" />
-              </linearGradient>
-              <linearGradient id="user-mask-gradient" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stop-color="black" />
+              <stop offset="2%" stop-color="white" />
+              <stop offset="100%" stop-color="white" />
+            </linearGradient>
+            <linearGradient id="user-mask-gradient" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="black" />
 {{/*                   <stop offset="1%" stop-color="black" />*/}}
-                <stop offset="2%" stop-color="white" />
-                <stop offset="100%" stop-color="white" />
-              </linearGradient>
-            </defs>
-            <mask id="homepage-feed-mask">
-              <rect width="100%" height="100%" fill="url(#home-mask-gradient)"/>
-            </mask>
-            <mask id="userpage-feed-mask">
-              <rect width="100%" height="100%" fill="url(#user-mask-gradient)"/>
-            </mask>
-          </svg>
-        </div>
+              <stop offset="2%" stop-color="white" />
+              <stop offset="100%" stop-color="white" />
+            </linearGradient>
+          </defs>
+          <mask id="homepage-feed-mask">
+            <rect width="100%" height="100%" fill="url(#home-mask-gradient)"/>
+          </mask>
+          <mask id="userpage-feed-mask">
+            <rect width="100%" height="100%" fill="url(#user-mask-gradient)"/>
+          </mask>
+        </svg>
+      </div>
 {{/*SECTION ---------- homepage ---------- */}}
-        <div id="home-page" class="feeds-wrapper">
+          <div id="home-page" class="feeds-wrapper">
           <div class="button-row above-posts button-row-homepage">
             <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
               <span class="btn-sort">sort</span>
@@ -850,20 +853,20 @@
               <div class="right-panel ">
                 <div class="right-panel-content scroll-down">
                   <div class="right-panel-container-name flex-space-between">
-                    <h4 class="right-panel-name">{{ if ne .CurrentUserName "nouser"}}{{.CurrentUserName}}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
-                    {{ if (ne .CurrentUserName "nouser") }}
+                    <h4 class="right-panel-name">{{ if ne .CurrentUser nil}}{{$user.Username}}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
+                    {{ if ne .CurrentUser nil }}
                     <button class="btn-sm btn-icoonly">
                       <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                     </button>
                     {{ end }} <!-- "nouser" check -->
                   </div>
-                  {{ if (ne .CurrentUserName "nouser") }}
+                  {{ if ne .CurrentUser nil }}
                   <div class="right-panel-container-pic flex-space-between">
                     <div class="right-panel-container-pic">
-                      {{ if (ne .Avatar "noimage") }}
-                      <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>
+                      {{ if (ne $user.Avatar "noimage") }}
+                      <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ $user.Avatar }}"></div>
                       {{ else }}
-                      <div class="right-panel-pic profile-pic--empty" data-name-user="{{ .CurrentUserName }}"></div>
+                      <div class="right-panel-pic profile-pic--empty" data-name-user="{{ $user.Username }}"></div>
                       {{ end }}
                       <small>Edit your avatar picture</small>
                     </div>
@@ -874,21 +877,21 @@
                   {{ end }} <!-- "nouser" check -->
                   <div class="right-panel-container-bio ">
                     <div class="right-panel-bio flex-space-between">
-                      <label for="user-bio-content" class="padded">{{ if ne .CurrentUserName "nouser"}}Edit your bio{{ else }}User bio{{ end }}</label>
-                      {{ if (ne .CurrentUserName "nouser") }}
+                      <label for="user-bio-content" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
+                      {{ if ne .CurrentUser nil }}
                       <button class="btn-sm btn-icoonly">
                         <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                       </button>
                       {{ end }} <!-- "nouser" check -->
                     </div>
-                    <textarea id="user-bio-content" class="inactive-input" name="content">{{ .Bio }}</textarea>
+                    <textarea id="user-bio-content" class="inactive-input" name="content">{{ $user.Description }}</textarea>
                   </div>
                   <div class="right-panel-container-modded-channels">
                     <div class="sidebar-block sidebar-channels">
                       <small class="padded">Modded Channels</small>
                       <div class="sidebar-channel-block">
                         <div class="sidebar-channel">
-                          <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
+                          <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
                             <span class="card-pic profile-pic"></span>
                             <div>
                               <div>/Interesting_Things</div>
@@ -897,7 +900,7 @@
                                 <div class="channel-green-dot">36</div>
                               </div>
                             </div>
-                            {{ if (ne .CurrentUserName "nouser") }}
+                            {{ if ne .CurrentUser nil }}
                             <button class="btn-sm btn-icoonly margin-auto-0">
                               <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
                             </button>
@@ -905,7 +908,7 @@
                           </div>
                         </div>
                         <div class="sidebar-channel">
-                          <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
+                          <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
                             <span class="card-pic channel-pic"></span>
                             <div>
                               <div>/CSS_Help</div>
@@ -914,7 +917,7 @@
                                 <div class="channel-green-dot">36</div>
                               </div>
                             </div>
-                            {{ if (ne .CurrentUserName "nouser") }}
+                            {{ if ne .CurrentUser nil }}
                             <button class="btn-sm btn-icoonly margin-auto-0">
                               <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
                             </button>
@@ -923,7 +926,7 @@
                         </div>
                         <div class="sidebar-channel">
 {{/*TODO ---------- does this need <div></div> ---------- */}}
-                        <div class="container-channel-info {{ if (eq .CurrentUserName "nouser") }}flex-start{{end}}">
+                        <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
                           <span class="card-pic channel-pic"></span>
                           <div>
                             <div>/Golang#Discussion</div>
@@ -932,7 +935,7 @@
                               <div class="channel-green-dot">36</div>
                             </div>
                           </div>
-                          {{ if (ne .CurrentUserName "nouser") }}
+                          {{ if ne .CurrentUser nil }}
                           <button class="btn-sm btn-icoonly margin-auto-0">
                             <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
                           </button>
@@ -955,7 +958,7 @@
         </div>
       </div>
 {{/*SECTION ---------- channel page ----------*/}}
-      <div id="channel-page" class="feeds-wrapper">
+          <div id="channel-page" class="feeds-wrapper">
         <div class="banner">
           <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
             <div class="page-control">
@@ -1021,7 +1024,7 @@
                 <div class="right-panel-container-name flex-space-between">
                   <div class="cont-flex-column">
                     <h4 class="right-panel-name">/{{ .ThisChannel.Name }}</h4>
-                    <small>created by {{ if (eq .ThisChannel.OwnerID .CurrentUserID) }}you {{ else }} {{ .ThisChannelOwnerName }} {{ end }}{{ .ThisChannel.TimeSince}}</small>
+                    <small>created by {{ if (eq .ThisChannel.OwnerID $user.ID) }}you {{ else }} {{ .ThisChannelOwnerName }} {{ end }}{{ .ThisChannel.TimeSince}}</small>
                   </div>
                   {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
                     <button id="right-panel-channel--edit-channel-name" class="btn-sm btn-icoonly">

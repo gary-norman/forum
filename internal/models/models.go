@@ -224,17 +224,14 @@ type Notify struct {
 //LoginFail:    "Unable to log in.",
 //}
 
-type NotifyPlaceholder struct {
-	Register string
-	Login    string
-}
-
 type TemplateData struct {
-	AllUsers                   []User
-	RandomUser                 User
-	CurrentUser                *User
-	CurrentUserName            string
-	CurrentUserID              int
+	// ---------- users ----------
+	AllUsers    []User
+	RandomUser  User
+	CurrentUser *User
+	// ---------- posts ----------
+	Posts []PostWithDaysAgo
+	// ---------- channels ----------
 	Channels                   []Channel
 	AllChannels                []Channel
 	ThisChannel                ChannelWithDaysAgo
@@ -245,13 +242,9 @@ type TemplateData struct {
 	OwnedChannels              []Channel
 	JoinedChannels             []Channel
 	OwnedAndJoinedChannels     []Channel
-	Posts                      []PostWithDaysAgo
-	Avatar                     string
-	Bio                        string
-	Images                     []Image
-	Comments                   []Comment
-	Reactions                  []Reaction
-	NotifyPlaceholder
+	// ---------- misc ----------
+	Images    []Image
+	Reactions []Reaction
 }
 type Session struct {
 	Username string

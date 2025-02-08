@@ -102,27 +102,11 @@ func JsonError(messageStruct TemplateData) {
 			//fmt.Printf(ErrorMsgs.KeyValuePair, "Number of reactions", len(field.Interface().([]Reaction)))
 			continue
 		}
-		if fieldType.Name == "NotifyPlaceHolder" {
-			JsonNotifyPlaceholder(field.Interface().(NotifyPlaceholder))
-			continue
-		}
 		fmt.Printf(ErrorMsgs.KeyValuePair, fieldType.Name, field.Interface())
 	}
 }
 
 func JsonPost(messageStruct PostWithDaysAgo) {
-	ErrorMsgs := CreateErrorMessages()
-	val := reflect.ValueOf(messageStruct)
-	typ := val.Type()
-
-	for i := 0; i < val.NumField(); i++ {
-		field := val.Field(i)
-		fieldType := typ.Field(i)
-		fmt.Printf(ErrorMsgs.KeyValuePair, fieldType.Name, field.Interface())
-	}
-}
-
-func JsonNotifyPlaceholder(messageStruct NotifyPlaceholder) {
 	ErrorMsgs := CreateErrorMessages()
 	val := reflect.ValueOf(messageStruct)
 	typ := val.Type()

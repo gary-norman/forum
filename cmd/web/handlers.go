@@ -431,9 +431,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	//attach following/follower numbers to a random user
 	randomUser.Followers, randomUser.Following, currentUserErr = app.loyalty.CountUsers(randomUser.ID)
 
-	//attach following/follower numbers to currently logged-in user
-	currentUser.Followers, currentUser.Following, currentUserErr = app.loyalty.CountUsers(currentUser.ID)
-
 	//validTokens := app.cookies.QueryCookies(w, r, currentUser)
 	//if validTokens == true {
 	//	userLoggedIn = true
@@ -482,6 +479,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	isOwned := false
 
 	if userLoggedIn == true {
+		//attach following/follower numbers to currently logged-in user
+		currentUser.Followers, currentUser.Following, currentUserErr = app.loyalty.CountUsers(currentUser.ID)
+
 		currentUser.TimeSince = getTimeSince(currentUser.Created)
 		currentUserName = currentUser.Username
 		currentUserID = currentUser.ID

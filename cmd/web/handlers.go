@@ -414,6 +414,13 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	if allUsersErr != nil {
 		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
 	}
+
+	for _, user := range allUsers {
+		user.Followers, user.Following, allUsersErr = app.loyalty.CountUsers(user.ID)
+
+		fmt.Printf("user: %v, followers: %v, following: %v\n", user.Username, user.Followers, user.Following)
+	}
+
 	randomUser := getRandomUser(allUsers)
 	currentUser, currentUserErr := app.GetLoggedInUser(r)
 	if currentUserErr != nil {
@@ -421,6 +428,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
 		userLoggedIn = false
 	}
+
+	currentUser.Followers, currentUser.Following, currentUserErr = app.loyalty.CountUsers(currentUser.ID)
+
 	//validTokens := app.cookies.QueryCookies(w, r, currentUser)
 	//if validTokens == true {
 	//	userLoggedIn = true

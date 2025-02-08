@@ -14,11 +14,6 @@ type CommentModel struct {
 
 // Upsert inserts or updates a reaction for a specific combination of AuthorID and the parent fields (ChannelID, ReactedPostID, ReactedCommentID). It uses Exists to determine if the reaction already exists.
 func (m *CommentModel) Upsert(comment models.Comment) error {
-
-	//if !isValidParent(*comment.CommentedPostID, *comment.CommentedCommentID) {
-	//	return fmt.Errorf("OOonly one of CommentedPostID, or CommentedCommentID must be non-zero")
-	//}
-
 	// Check if the reaction exists
 	exists, err := m.Exists(comment)
 	if err != nil {
@@ -162,7 +157,7 @@ func (m *CommentModel) Exists(comment models.Comment) (bool, error) {
 	return exists, err
 }
 
-// Delete removes a reaction from the database by ID
+// Delete removes a comment from the database by ID
 func (m *CommentModel) Delete(commentID int) error {
 	// Begin the transaction
 	tx, err := m.DB.Begin()

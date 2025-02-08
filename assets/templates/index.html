@@ -452,10 +452,10 @@
             <h3 data-current-user-ID="{{.CurrentUser.ID}}">{{ .CurrentUserName }} - ID: {{.CurrentUser.ID}}</h3>
             <div>
               <button class="btn-md btn-icotext btn-follows btn-invert-never">
-                <span class="btn-following">72</span>
+                <span class="btn-following">{{.CurrentUser.Following}}</span>
               </button>
               <button class="btn-md btn-icotext btn-follows btn-invert-never">
-                <span class="btn-followers">64</span>
+                <span class="btn-followers">{{.CurrentUser.Followers}}</span>
               </button>
             </div>
           </div>

@@ -15,6 +15,8 @@ type User struct {
 	Created     time.Time `json:"created"`
 	TimeSince   string
 	IsFlagged   bool `json:"isFlagged,omitempty"`
+	Followers   int  `json:"followers"`
+	Following   int  `json:"following"`
 }
 
 type UserCheck struct {

@@ -451,10 +451,10 @@
           <div>
             <h3 data-current-user-ID="{{.CurrentUser.ID}}">{{ .CurrentUserName }}</h3>
             <div>
-              <button class="btn-md btn-icotext btn-follows btn-invert-never">
+              <button class="btn-lg btn-icotext btn-follows btn-invert-never">
                 <span class="btn-following">{{.CurrentUser.Following}}</span>
               </button>
-              <button class="btn-md btn-icotext btn-follows btn-invert-never">
+              <button class="btn-lg btn-icotext btn-follows btn-invert-never">
                 <span class="btn-followers">{{.CurrentUser.Followers}}</span>
               </button>
             </div>
@@ -650,17 +650,27 @@
               <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
               <div class="page-control">
                 <div class="page-profile">
-{{/*            <div class="page-pic profile-pic" data-image-user="{{ $userBasePath }}{{ .Avatar }}"></div>*/}}
-                  <div class="page-pic profile-pic"></div>
-                  <div>
-                      <h2>{{ .RandomUser.Username }}</h2>
+                  {{ if (ne .RandomUser.Avatar "noimage") }}
+                    <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ $userBasePath }}{{ .RandomUser.Avatar }}"></div>
+                  {{ else }}
+                    <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .RandomUser.Username}}"></div>
+                  {{ end }}
+                  <div class="flex-start">
+                      <h2 class="align-self-start">{{ .RandomUser.Username }}</h2>
                       <div>
-                          <button class="btn-md btn-icotext btn-follows btn-invert-never">
-                              <span class="btn-following">following: {{.RandomUser.Following}}</span>
+                          <div class="cont-flex-column">
+                            <small>following:</small>
+                            <button class="btn-lg btn-icotext btn-follows btn-invert-never">
+                              <span class="btn-following">{{.RandomUser.Following}}</span>
+                            </button>
+                          </div>
+                        <div class="cont-flex-column">
+                          <small>followers:</small>
+                          <button class="btn-lg btn-icotext btn-follows btn-invert-never">
+                            <span class="btn-followers">{{.RandomUser.Followers}}</span>
                           </button>
-                          <button class="btn-md btn-icotext btn-follows btn-invert-never">
-                              <span class="btn-followers">followers: {{.RandomUser.Followers}}</span>
-                          </button>
+                        </div>
+
                       </div>
                   </div>
                   </div>
@@ -955,18 +965,18 @@
                 {{ else }}
                 <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}"></div>
                 {{ end }}
-                <div>
-                  <h2 {{ if (eq .ThisChannel.Privacy true) }}class="private-channel"{{ end }}>/{{ .ThisChannel.Name }}</h2>
+                <div class="flex-start">
+                  <h2 {{ if (eq .ThisChannel.Privacy true) }}class="private-channel align-self-start"{{ end }}>/{{ .ThisChannel.Name }}</h2>
                   <div>
                     <button class="btn-md btn-icotext btn-follows btn-invert-never">
-                    <span class="btn-channel-users">13.8k</span>
-                  </button>
-                  <button class="btn-md btn-icotext btn-follows btn-invert-never" style="position: relative">
-                    <span class="btn-channel-green-dot">37</span>
-                  </button>
+                      <span class="btn-channel-users">13.8k</span>
+                    </button>
+                    <button class="btn-md btn-icotext btn-follows btn-invert-never" style="position: relative">
+                      <span class="btn-channel-green-dot">37</span>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
               <div class="page-buttons">
                 {{ if (eq .ThisChannelIsOwnedOrJoined false) }}
                 <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">

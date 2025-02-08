@@ -73,11 +73,7 @@
       background: url('/assets/icons/codex-logo-blue.svg') no-repeat;
     }
 
-    .btn-following {
-      &::before {
-        background: url('/assets/icons/following-blue_24.svg') no-repeat center;
-      }
-    }
+
 
     /*.btn-notifications {*/
     /*  &::before {*/
@@ -235,7 +231,7 @@ a:active {
   border-radius: var(--border-radius-input);
 }
 
-.profile-pic,
+.profile-pic, .user-page-pic,
 .profile-pic--empty,
 .channel-pic {
   font-size: inherit;
@@ -1507,10 +1503,17 @@ hr.solid {
 }
 
 .sidebar-pic {
-  width: 60px;
-  height: 60px;
+  width: 6rem;
+  height: 6rem;
   flex-shrink: 0;
-  border-radius: 60px;
+  border-radius: 6rem;
+  align-self: center;
+
+  &.user-page-pic {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 8rem;
+  }
 }
 
 .sidebar-block {
@@ -1664,6 +1667,14 @@ hr.solid {
 
 .flex-end {
   justify-content: flex-end !important;
+}
+
+.align-self-start {
+  align-self: flex-start;
+}
+
+.align-self-end {
+  align-self: flex-end;
 }
 
 .margin-auto-0 {

@@ -11,7 +11,7 @@
 
   {{ $comment := .Comment }}
   <div class="reply-arrow"></div>
-  <div class="container-comment-down">
+  <div class="container-card-down">
     <div class="card" data-comment-id="{{$comment.ID}}" data-channel-ID="{{$comment.ChannelID}}" data-author-ID="{{$comment.AuthorID}}">
       <div class="container-post-info">
         {{ if (ne $comment.AuthorAvatar "noimage") }}

@@ -1993,21 +1993,22 @@ main {
   /* z-index: 100; a positive z-index breaks the before */
 }
 
-.container-post-down, .container-comment-down {
+.container-card-down {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-}
-.container-comment-across {
-  display: flex;
-  flex-direction: row;
-  gap: 1.2rem;
-}
-
-.container-comment-down {
   width: 100%;
   padding: 1.2rem 0 2.4rem 1.2rem;
   margin-top: -1.2rem;
+
+  &:last-of-type:not(:first-of-type) {
+    padding: 0;
+  }
+}
+.container-card-across {
+  display: flex;
+  flex-direction: row;
+  gap: 1.2rem;
 }
 
 .reply-arrow {

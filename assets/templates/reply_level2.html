@@ -12,7 +12,7 @@
   {{ $comment := .Comment.Comment }}
     {{printf "comment: %v" $comment}}
   <div class="reply-arrow"></div>
-  <div class="container-comment-down">
+  <div class="container-card-down">
     <div class="card" data-comment-id="{{$comment.ID}}" data-channel-ID="{{$comment.ChannelID}}" data-author-ID="{{$comment.AuthorID}}">
       <div class="container-post-info">
         {{ if (ne $comment.AuthorAvatar "noimage") }}
@@ -95,7 +95,7 @@
 
     <!-- Recursively Render Replies -->
     {{ if .Replies}}
-      <div class="container-comment-across">
+      <div class="container-card-across">
         {{ range .Replies }}
           {{ template "reply_level3" (dict "CurrentUser" $.CurrentUser "Comment" .) }}
         {{ end }} <!-- end range Replies -->

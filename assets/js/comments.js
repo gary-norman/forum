@@ -27,9 +27,14 @@ document.addEventListener("DOMContentLoaded", function () {
             setTimeout(() => {
                 if ( targetForm.classList.contains('replying')) {
                     targetForm.classList.remove('replying');
+                    const textarea = targetForm.querySelector('[id^="comment-form-textarea-"]');
+                    textarea.value = '';
+                    textarea.style.height = "5rem";
                 } else {
                     targetForm.classList.add('replying');
                 }
+
+
             }, 200);
 
         })

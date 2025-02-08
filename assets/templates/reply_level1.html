@@ -44,14 +44,14 @@
 {{/*          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
 {{/*            <span class="btn-reply">reply</span>*/}}
 {{/*          </button>*/}}
-          <button id="share-button-{{$comment.ID}}-activity" popovertarget="share-container-{{$comment.ID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+          <button id="share-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}" popovertarget="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
             <span class="btn-share">share</span>
           </button>
           <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
             <span class="btn-report">report</span>
           </button>
           <!--  Share modal -->
-          <div popover id="share-container-{{$comment.ID}}-activity" class="scrollable-user">
+          <div popover id="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}" class="scrollable-user">
             <div class="share-container">
               <div class="button-row">
                 <a href="/" target="_blank" class="share-logo facebook"></a>
@@ -62,13 +62,13 @@
                 <a href="/" target="_blank" class="share-logo telegram"></a>
               </div>
               <div class="flex-space-between">
-                <label class="padded" for="copy-url-comment-{{$comment.ID}}">Copy URL link</label>
+                <label class="padded" for="copy-url-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}">Copy URL link</label>
                 <button class="btn-sm btn-icoonly">
                   <span class="btn-copy" aria-label="Copy URL link"></span>
                 </button>
               </div>
               <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
-                     id="copy-url-comment-{{$comment.ID}}" name="copy-url-comment-{{$comment.ID}}"/>
+                     id="copy-url-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}" name="copy-url-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}"/>
             </div>
           </div>
         </div>

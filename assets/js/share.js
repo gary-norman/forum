@@ -47,6 +47,7 @@ export function selectActiveFeed() {
 document.addEventListener('DOMContentLoaded', function () {
     let postID;
     let commentID;
+    let channelID;
     let msg;
     let title;
     selectActiveFeed();
@@ -60,18 +61,22 @@ document.addEventListener('DOMContentLoaded', function () {
     buttonControls.forEach(singleControl => {
         postID = singleControl.closest('.card').getAttribute('data-post-id');
         commentID = singleControl.closest('.card').getAttribute('data-comment-id');
+        channelID = singleControl.closest('.card').getAttribute('data-channel-id');
+
         let shareModal;
         let shareButton;
 
         if (postID === null) {
-            shareModal = singleControl.querySelector(`[id^="share-container-${commentID}"]`);
-            shareButton = singleControl.querySelector(`[id^="share-button-${commentID}"]`);
+            shareModal = singleControl.querySelector(`[id^="share-container-channel-${channelID}-comment-${commentID}"]`);
+            shareButton = singleControl.querySelector(`[id^="share-button-channel-${channelID}-comment-${commentID}"]`);
             // console.log("comment ID ✔️")
+
         } else if (commentID === null) {
-            shareModal = singleControl.querySelector(`[id^="share-container-${postID}"]`);
-            shareButton = singleControl.querySelector(`[id^="share-button-${postID}"]`);
+            shareModal = singleControl.querySelector(`[id^="share-container-channel-${channelID}-post-${postID}"]`);
+            shareButton = singleControl.querySelector(`[id^="share-button-channel-${channelID}-post-${postID}"]`);
             // console.log("post ID ✔️")
         }
+
         //get all components needed
 
          let label = shareModal.querySelector('label');

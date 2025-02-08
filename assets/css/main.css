@@ -838,6 +838,11 @@ input[type='email'] {
 
 .form-reply {
   width: 100%;
+  display: none;
+
+  &.replying {
+    display: flex;
+  }
   & > * {
     gap: 1.2rem;
     width: 100%;
@@ -2001,9 +2006,9 @@ main {
   padding: 1.2rem 0 2.4rem 1.2rem;
   margin-top: -1.2rem;
 
-  &:last-of-type:not(:first-of-type) {
-    padding: 0;
-  }
+  /*&:last-of-type:not(:first-of-type) {*/
+  /*  padding: 0;*/
+  /*}*/
 }
 .container-card-across {
   display: flex;

@@ -20,137 +20,6 @@ import (
 	"github.com/gary-norman/forum/internal/models"
 )
 
-//SECTION ------- helper functions ----------
-
-func isValidPassword(password string) bool {
-	// At least 8 characters
-	if len(password) < 8 {
-		return false
-	}
-	// At least one digit
-	hasDigit, _ := regexp.MatchString(`[0-9]`, password)
-	if !hasDigit {
-		return false
-	}
-	// At least one lowercase letter
-	hasLower, _ := regexp.MatchString(`[a-z]`, password)
-	if !hasLower {
-		return false
-	}
-	// At least one uppercase letter
-	hasUpper, _ := regexp.MatchString(`[A-Z]`, password)
-	if !hasUpper {
-		return false
-	}
-	return true
-}
-
-func getTimeSince(created time.Time) string {
-	now := time.Now()
-	hours := now.Sub(created).Hours()
-	var timeSince string
-	if hours > 24 {
-		timeSince = fmt.Sprintf("%.0f days ago", hours/24)
-	} else if hours > 1 {
-		timeSince = fmt.Sprintf("%.0f hours ago", hours)
-	} else if minutes := now.Sub(created).Minutes(); minutes > 1 {
-		timeSince = fmt.Sprintf("%.0f minutes ago", minutes)
-	} else {
-		timeSince = "just now"
-	}
-	return timeSince
-}
-
-// TODO use interface to get and return any type
-func getRandomChannel(channelSlice []models.ChannelWithDaysAgo) models.ChannelWithDaysAgo {
-	rndInt := rand.IntN(len(channelSlice))
-	channel := channelSlice[rndInt]
-	return channel
-}
-
-func getRandomUser(userSlice []models.User) models.User {
-	rndInt := rand.IntN(len(userSlice))
-	user := userSlice[rndInt]
-	return user
-}
-
-// getRepliesForComment Recursively fetches replies for each comment
-func getRepliesForComment(comment models.CommentWithDaysAgo, commentsWithDaysAgo []models.CommentWithDaysAgo) models.CommentWithDaysAgo {
-	// Find replies to the current comment
-	var replies []models.CommentWithDaysAgo
-	for _, possibleReply := range commentsWithDaysAgo {
-		if possibleReply.Comment.CommentedCommentID != nil && *possibleReply.Comment.CommentedCommentID == comment.Comment.ID {
-			replyWithReplies := getRepliesForComment(possibleReply, commentsWithDaysAgo) // Recursively get replies for this reply
-			replies = append(replies, replyWithReplies)
-		}
-	}
-
-	// If no replies are found, we can avoid unnecessary recursion
-	if len(replies) > 0 {
-		comment.Replies = replies
-	}
-
-	// Return the comment with its replies
-	return comment
-}
-
-func GetFileName(r *http.Request, fileFieldName, calledBy, imageType string) string {
-	// Limit the size of the incoming file to prevent memory issues
-	parseErr := r.ParseMultipartForm(10 << 20) // Limit upload size to 10MB
-	if parseErr != nil {
-		log.Printf(ErrorMsgs().Parse, "image", calledBy, parseErr)
-		return "noimage"
-	}
-	// Retrieve the file from form data
-	file, handler, retrieveErr := r.FormFile(fileFieldName)
-	if retrieveErr != nil {
-		log.Printf(ErrorMsgs().RetrieveFile, "image", calledBy, retrieveErr)
-		return "noimage"
-	}
-	defer func(file multipart.File) {
-		closeErr := file.Close()
-		if closeErr != nil {
-			log.Printf(ErrorMsgs().Close, file, calledBy, closeErr)
-		}
-	}(file)
-	// Create a file in the server's local storage
-	renamedFile := renameFileWithUUID(handler.Filename)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "File Name", renamedFile)
-	dst, createErr := os.Create("db/userdata/images/" + imageType + "-images/" + renamedFile)
-	if createErr != nil {
-		log.Printf(ErrorMsgs().CreateFile, "image", calledBy, createErr)
-		return ""
-	}
-	defer func(dst *os.File) {
-		closeErr := dst.Close()
-		if closeErr != nil {
-			log.Printf(ErrorMsgs().Close, dst, calledBy, closeErr)
-		}
-	}(dst)
-	// Copy the uploaded file data to the server's file
-	_, copyErr := io.Copy(dst, file)
-	if copyErr != nil {
-		fmt.Printf(ErrorMsgs().SaveFile, file, dst, calledBy, copyErr)
-		return ""
-	}
-	return renamedFile
-}
-
-func renameFileWithUUID(oldFilePath string) string {
-	// Generate a new UUID
-	newUUID := models.GenerateToken(16)
-
-	// Split the file name into its base and extension
-	base := filepath.Base(oldFilePath)
-	ext := filepath.Ext(base)
-	base = base[:len(base)-len(ext)]
-
-	// Create the new file name with the UUID and extension
-	newFilePath := filepath.Join(filepath.Dir(oldFilePath), newUUID+ext)
-
-	return newFilePath
-}
-
 //SECTION ------- template handlers ----------
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
@@ -191,7 +60,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		comments[i].Likes += likes
 		comments[i].Dislikes += dislikes
 	}
-
+	//TODO ---------- change WithDaysAgo to WithWrapping ----------
 	commentsWithDaysAgo := make([]models.CommentWithDaysAgo, len(comments))
 	for index, comment := range comments {
 		commentsWithDaysAgo[index] = models.CommentWithDaysAgo{
@@ -200,7 +69,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			Replies:   []models.CommentWithDaysAgo{}, // Initialize with no replies
 		}
 	}
-	// TODO make a function with interface to unify this and other withdaysago
 	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
 	for index, post := range posts {
 		/// Filter comments that belong to the current post based on the postID and CommentedPostID
@@ -212,7 +80,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 				commentWithReplies := getRepliesForComment(comment, commentsWithDaysAgo)
 				postComments = append(postComments, commentWithReplies)
 			}
-
 		}
 		postsWithDaysAgo[index] = models.PostWithDaysAgo{
 			Post:      post,
@@ -240,7 +107,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		userLoggedIn = false
 	}
 
-	//attach following/follower numbers to a random user
+	//attach following/follower numbers to the random user
 	randomUser.Followers, randomUser.Following, currentUserErr = app.loyalty.CountUsers(randomUser.ID)
 
 	//validTokens := app.cookies.QueryCookies(w, r, currentUser)
@@ -323,6 +190,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// TODO get channel moderators
 
 	// TODO get channel posts
+
 	// SECTION -- template ---
 	templateData := models.TemplateData{
 		// ---------- users ----------
@@ -1103,4 +971,135 @@ func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
 	}
 	// TODO redirect to /channels/{{.channelID}}
 	http.Redirect(w, r, "/channels/"+r.PathValue("channelId"), http.StatusFound)
+}
+
+//SECTION ------- helper functions ----------
+
+func isValidPassword(password string) bool {
+	// At least 8 characters
+	if len(password) < 8 {
+		return false
+	}
+	// At least one digit
+	hasDigit, _ := regexp.MatchString(`[0-9]`, password)
+	if !hasDigit {
+		return false
+	}
+	// At least one lowercase letter
+	hasLower, _ := regexp.MatchString(`[a-z]`, password)
+	if !hasLower {
+		return false
+	}
+	// At least one uppercase letter
+	hasUpper, _ := regexp.MatchString(`[A-Z]`, password)
+	if !hasUpper {
+		return false
+	}
+	return true
+}
+
+func getTimeSince(created time.Time) string {
+	now := time.Now()
+	hours := now.Sub(created).Hours()
+	var timeSince string
+	if hours > 24 {
+		timeSince = fmt.Sprintf("%.0f days ago", hours/24)
+	} else if hours > 1 {
+		timeSince = fmt.Sprintf("%.0f hours ago", hours)
+	} else if minutes := now.Sub(created).Minutes(); minutes > 1 {
+		timeSince = fmt.Sprintf("%.0f minutes ago", minutes)
+	} else {
+		timeSince = "just now"
+	}
+	return timeSince
+}
+
+// TODO use interface to get and return any type
+func getRandomChannel(channelSlice []models.ChannelWithDaysAgo) models.ChannelWithDaysAgo {
+	rndInt := rand.IntN(len(channelSlice))
+	channel := channelSlice[rndInt]
+	return channel
+}
+
+func getRandomUser(userSlice []models.User) models.User {
+	rndInt := rand.IntN(len(userSlice))
+	user := userSlice[rndInt]
+	return user
+}
+
+// getRepliesForComment Recursively fetches replies for each comment
+func getRepliesForComment(comment models.CommentWithDaysAgo, commentsWithDaysAgo []models.CommentWithDaysAgo) models.CommentWithDaysAgo {
+	// Find replies to the current comment
+	var replies []models.CommentWithDaysAgo
+	for _, possibleReply := range commentsWithDaysAgo {
+		if possibleReply.Comment.CommentedCommentID != nil && *possibleReply.Comment.CommentedCommentID == comment.Comment.ID {
+			replyWithReplies := getRepliesForComment(possibleReply, commentsWithDaysAgo) // Recursively get replies for this reply
+			replies = append(replies, replyWithReplies)
+		}
+	}
+
+	// If no replies are found, we can avoid unnecessary recursion
+	if len(replies) > 0 {
+		comment.Replies = replies
+	}
+
+	// Return the comment with its replies
+	return comment
+}
+
+func GetFileName(r *http.Request, fileFieldName, calledBy, imageType string) string {
+	// Limit the size of the incoming file to prevent memory issues
+	parseErr := r.ParseMultipartForm(10 << 20) // Limit upload size to 10MB
+	if parseErr != nil {
+		log.Printf(ErrorMsgs().Parse, "image", calledBy, parseErr)
+		return "noimage"
+	}
+	// Retrieve the file from form data
+	file, handler, retrieveErr := r.FormFile(fileFieldName)
+	if retrieveErr != nil {
+		log.Printf(ErrorMsgs().RetrieveFile, "image", calledBy, retrieveErr)
+		return "noimage"
+	}
+	defer func(file multipart.File) {
+		closeErr := file.Close()
+		if closeErr != nil {
+			log.Printf(ErrorMsgs().Close, file, calledBy, closeErr)
+		}
+	}(file)
+	// Create a file in the server's local storage
+	renamedFile := renameFileWithUUID(handler.Filename)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "File Name", renamedFile)
+	dst, createErr := os.Create("db/userdata/images/" + imageType + "-images/" + renamedFile)
+	if createErr != nil {
+		log.Printf(ErrorMsgs().CreateFile, "image", calledBy, createErr)
+		return ""
+	}
+	defer func(dst *os.File) {
+		closeErr := dst.Close()
+		if closeErr != nil {
+			log.Printf(ErrorMsgs().Close, dst, calledBy, closeErr)
+		}
+	}(dst)
+	// Copy the uploaded file data to the server's file
+	_, copyErr := io.Copy(dst, file)
+	if copyErr != nil {
+		fmt.Printf(ErrorMsgs().SaveFile, file, dst, calledBy, copyErr)
+		return ""
+	}
+	return renamedFile
+}
+
+func renameFileWithUUID(oldFilePath string) string {
+	// Generate a new UUID
+	newUUID := models.GenerateToken(16)
+
+	// Split the file name into its base and extension
+	base := filepath.Base(oldFilePath)
+	ext := filepath.Ext(base)
+	base = base[:len(base)-len(ext)]
+
+	// Create the new file name with the UUID and extension
+	newFilePath := filepath.Join(filepath.Dir(oldFilePath), newUUID+ext)
+
+	return newFilePath
 }

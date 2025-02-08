@@ -227,8 +227,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := templateData
-	execErr := t.Execute(w, data)
+	execErr := t.Execute(w, templateData)
 	if execErr != nil {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return

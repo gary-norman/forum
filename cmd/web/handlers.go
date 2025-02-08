@@ -20,6 +20,8 @@ import (
 	"github.com/gary-norman/forum/internal/models"
 )
 
+//SECTION ------- helper functions ----------
+
 func isValidPassword(password string) bool {
 	// At least 8 characters
 	if len(password) < 8 {
@@ -149,274 +151,7 @@ func renameFileWithUUID(oldFilePath string) string {
 	return newFilePath
 }
 
-func (app *app) register(w http.ResponseWriter, r *http.Request) {
-	username := r.FormValue("register_user")
-	email := r.FormValue("register_email")
-	validEmail, _ := regexp.MatchString(`[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$`, email)
-	password := r.FormValue("register_password")
-	if len(username) < 5 || len(username) > 16 {
-		w.WriteHeader(http.StatusNotAcceptable)
-		err := json.NewEncoder(w).Encode(map[string]interface{}{
-			"code":    http.StatusNotAcceptable,
-			"message": "username must be between 5 and 16 characters",
-		})
-		if err != nil {
-			log.Printf(ErrorMsgs().Encode, "register: username", err)
-			return
-		}
-		return
-	}
-	if isValidPassword(password) != true {
-		w.WriteHeader(http.StatusNotAcceptable)
-		err := json.NewEncoder(w).Encode(map[string]interface{}{
-			"code": http.StatusNotAcceptable,
-			"message": "password must contain at least one number and one uppercase and lowercase letter," +
-				"and at least 8 or more characters",
-		})
-		if err != nil {
-			log.Printf(ErrorMsgs().Encode, "register: password", err)
-			return
-		}
-		return
-	}
-	if validEmail != true {
-		w.WriteHeader(http.StatusNotAcceptable)
-		err := json.NewEncoder(w).Encode(map[string]interface{}{
-			"code":    http.StatusNotAcceptable,
-			"message": "please enter a valid email address",
-		})
-		if err != nil {
-			log.Printf(ErrorMsgs().Encode, "register: validEmail", err)
-			return
-		}
-		return
-	}
-	emailExists, err := app.users.QueryUserEmailExists(email)
-	if emailExists == true {
-		w.WriteHeader(http.StatusConflict)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-			"code":    http.StatusConflict,
-			"message": "an account is already registered to that email address",
-			"body":    err,
-		})
-		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "register: emailExists", encErr)
-			return
-		}
-		return
-	}
-	userExists, err := app.users.QueryUserNameExists(username)
-	if userExists == true {
-		w.WriteHeader(http.StatusConflict)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-			"code":    http.StatusConflict,
-			"message": "an account is already registered to that username",
-			"body":    err,
-		})
-		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "register: userExists", encErr)
-			return
-		}
-		return
-	}
-	hashedPassword, _ := models.HashPassword(password)
-	insertUser := app.users.Insert(
-		username,
-		email,
-		hashedPassword,
-		"",
-		"",
-		"noimage",
-		"default.png",
-		"")
-
-	if insertUser != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-			"code":    http.StatusInternalServerError,
-			"message": errors.New(fmt.Sprintf(ErrorMsgs().Register, insertUser)),
-		})
-		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "register: insertErr", encErr)
-			return
-		}
-		return
-	}
-	type FormFields struct {
-		Fields map[string][]string `json:"formValues"`
-	}
-	formFields := make(map[string][]string)
-	for field, value := range r.Form {
-		fieldName := field
-		formFields[fieldName] = append(formFields[fieldName], value...)
-	}
-	// Send success response
-	w.WriteHeader(http.StatusOK)
-	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Registration successful!",
-		"body":    FormFields{Fields: formFields},
-	})
-	if encErr != nil {
-		log.Printf(ErrorMsgs().Encode, "register: send success", encErr)
-		return
-	}
-
-	http.Redirect(w, r, "/", http.StatusFound)
-}
-
-func (app *app) login(w http.ResponseWriter, r *http.Request) {
-	Colors := models.CreateColors()
-	// Parse JSON from the request body
-	var credentials struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
-	err := json.NewDecoder(r.Body).Decode(&credentials)
-	if err != nil {
-		log.Printf("Failed to parse request body: %v", err)
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
-		return
-	}
-
-	login := credentials.Username
-	password := credentials.Password
-	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n"+Colors.Reset, login)
-	fmt.Printf(ErrorMsgs().Divider)
-
-	user, getUserErr := app.users.GetUserFromLogin(login, "login")
-	if getUserErr != nil {
-		log.Printf(ErrorMsgs().NotFound, "either", login, "login > GetUserFromLogin", getUserErr)
-		w.WriteHeader(http.StatusUnauthorized)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-			"code":    http.StatusUnauthorized,
-			"message": "User not found",
-		})
-		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
-			return
-		}
-		return
-	}
-
-	if models.CheckPasswordHash(password, user.HashedPassword) {
-		fmt.Printf(Colors.Green+"Passwords for %v match\n"+Colors.Reset, user.Username)
-		// Set Session Token and CSRF Token cookies
-		createCookiErr := app.cookies.CreateCookies(w, user)
-		if createCookiErr != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-				"code":    http.StatusInternalServerError,
-				"message": "Failed to create cookies",
-				"body":    errors.New(fmt.Sprintf(ErrorMsgs().Cookies, "create", createCookiErr)),
-			})
-			if encErr != nil {
-				log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
-				return
-			}
-			return
-		}
-		// Respond with a successful login message
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-			"code":    http.StatusOK,
-			"message": fmt.Sprintf("Welcome, %s! Login successful.", user.Username),
-		})
-		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "login: success", encErr)
-			return
-		}
-	} else {
-		// Respond with an unsuccessful login message
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-			"code":    http.StatusUnauthorized,
-			"message": "incorrect password",
-		})
-		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "login: fail", encErr)
-			return
-		}
-	}
-}
-
-func (app *app) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
-	fmt.Println(Colors().Orange + "Checking if this user is a member of this channel" + Colors().Reset)
-	fmt.Printf(ErrorMsgs().Divider)
-	var channels []models.Channel
-	for _, membership := range memberships {
-		channel, err := app.channels.OwnedOrJoinedByCurrentUser(membership.ChannelID, "ID")
-		if err != nil {
-			return nil, errors.New(fmt.Sprintf(ErrorMsgs().KeyValuePair, "Error calling JoinedByCurrentUser > OwnedOrJoinedByCurrentUser", err))
-		}
-		channels = append(channels, channel[0])
-	}
-	if len(channels) > 0 {
-		fmt.Println(Colors().Green + "Current user is a member of this channel" + Colors().Reset)
-	} else {
-		fmt.Println(Colors().Red + "Current user is not a member of this channel" + Colors().Reset)
-	}
-	return channels, nil
-}
-
-func (app *app) logout(w http.ResponseWriter, r *http.Request) {
-	Colors := models.CreateColors()
-	// Retrieve the cookie
-	cookie, cookiErr := r.Cookie("username")
-	if cookiErr != nil {
-		http.Error(w, "User not logged in", http.StatusUnauthorized)
-		return
-	}
-	username := cookie.Value
-	if username == "" {
-		log.Printf(ErrorMsgs().KeyValuePair, "aborting logout:", "no user is logged in")
-		return
-	}
-	fmt.Printf(Colors.Orange+"Attempting logout for "+Colors.White+"%v\n"+Colors.Reset, username)
-	fmt.Printf(ErrorMsgs().Divider)
-	var user *models.User
-	user, getUserErr := app.users.GetUserByUsername(username, "logout")
-	if getUserErr != nil {
-		log.Printf("GetUserByUsername for %v failed with error: %v", username, getUserErr)
-	}
-
-	// Delete the Session Token and CSRF Token cookies
-	delCookiErr := app.cookies.DeleteCookies(w, user)
-	if delCookiErr != nil {
-		log.Printf(ErrorMsgs().Cookies, "delete", delCookiErr)
-	}
-	// send user confirmation
-	log.Printf(Colors.Green+"%v logged out successfully!", user)
-	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": "Logged out successfully!",
-	})
-	if encErr != nil {
-		log.Printf(ErrorMsgs().Encode, "logout: success", encErr)
-		return
-	}
-}
-
-func (app *app) protected(w http.ResponseWriter, r *http.Request) {
-	login := r.FormValue("username")
-	var user *models.User
-	user, getUserErr := app.users.GetUserFromLogin(login, "protected")
-	if getUserErr != nil {
-		log.Printf("protected route for %v failed with error: %v", login, getUserErr)
-	}
-	if authErr := app.isAuthenticated(r, user.Username); authErr != nil {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
-		return
-	}
-	fprintf, err := fmt.Fprintf(w, "CSRF Valildation successful! Welcome, %s", user.Username)
-	if err != nil {
-		log.Print(ErrorMsgs().Protected, user.Username, err)
-		return
-	}
-	log.Println(fprintf)
-}
+//SECTION ------- template handlers ----------
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	//var userLoggedIn bool
@@ -632,6 +367,262 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//SECTION ------- user login handlers ----------
+
+func (app *app) register(w http.ResponseWriter, r *http.Request) {
+	username := r.FormValue("register_user")
+	email := r.FormValue("register_email")
+	validEmail, _ := regexp.MatchString(`[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$`, email)
+	password := r.FormValue("register_password")
+	if len(username) < 5 || len(username) > 16 {
+		w.WriteHeader(http.StatusNotAcceptable)
+		err := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusNotAcceptable,
+			"message": "username must be between 5 and 16 characters",
+		})
+		if err != nil {
+			log.Printf(ErrorMsgs().Encode, "register: username", err)
+			return
+		}
+		return
+	}
+	if isValidPassword(password) != true {
+		w.WriteHeader(http.StatusNotAcceptable)
+		err := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code": http.StatusNotAcceptable,
+			"message": "password must contain at least one number and one uppercase and lowercase letter," +
+				"and at least 8 or more characters",
+		})
+		if err != nil {
+			log.Printf(ErrorMsgs().Encode, "register: password", err)
+			return
+		}
+		return
+	}
+	if validEmail != true {
+		w.WriteHeader(http.StatusNotAcceptable)
+		err := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusNotAcceptable,
+			"message": "please enter a valid email address",
+		})
+		if err != nil {
+			log.Printf(ErrorMsgs().Encode, "register: validEmail", err)
+			return
+		}
+		return
+	}
+	emailExists, err := app.users.QueryUserEmailExists(email)
+	if emailExists == true {
+		w.WriteHeader(http.StatusConflict)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusConflict,
+			"message": "an account is already registered to that email address",
+			"body":    err,
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "register: emailExists", encErr)
+			return
+		}
+		return
+	}
+	userExists, err := app.users.QueryUserNameExists(username)
+	if userExists == true {
+		w.WriteHeader(http.StatusConflict)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusConflict,
+			"message": "an account is already registered to that username",
+			"body":    err,
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "register: userExists", encErr)
+			return
+		}
+		return
+	}
+	hashedPassword, _ := models.HashPassword(password)
+	insertUser := app.users.Insert(
+		username,
+		email,
+		hashedPassword,
+		"",
+		"",
+		"noimage",
+		"default.png",
+		"")
+
+	if insertUser != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusInternalServerError,
+			"message": errors.New(fmt.Sprintf(ErrorMsgs().Register, insertUser)),
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "register: insertErr", encErr)
+			return
+		}
+		return
+	}
+	type FormFields struct {
+		Fields map[string][]string `json:"formValues"`
+	}
+	formFields := make(map[string][]string)
+	for field, value := range r.Form {
+		fieldName := field
+		formFields[fieldName] = append(formFields[fieldName], value...)
+	}
+	// Send success response
+	w.WriteHeader(http.StatusOK)
+	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Registration successful!",
+		"body":    FormFields{Fields: formFields},
+	})
+	if encErr != nil {
+		log.Printf(ErrorMsgs().Encode, "register: send success", encErr)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (app *app) login(w http.ResponseWriter, r *http.Request) {
+	Colors := models.CreateColors()
+	// Parse JSON from the request body
+	var credentials struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	err := json.NewDecoder(r.Body).Decode(&credentials)
+	if err != nil {
+		log.Printf("Failed to parse request body: %v", err)
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	login := credentials.Username
+	password := credentials.Password
+	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n"+Colors.Reset, login)
+	fmt.Printf(ErrorMsgs().Divider)
+
+	user, getUserErr := app.users.GetUserFromLogin(login, "login")
+	if getUserErr != nil {
+		log.Printf(ErrorMsgs().NotFound, "either", login, "login > GetUserFromLogin", getUserErr)
+		w.WriteHeader(http.StatusUnauthorized)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusUnauthorized,
+			"message": "User not found",
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
+			return
+		}
+		return
+	}
+
+	if models.CheckPasswordHash(password, user.HashedPassword) {
+		fmt.Printf(Colors.Green+"Passwords for %v match\n"+Colors.Reset, user.Username)
+		// Set Session Token and CSRF Token cookies
+		createCookiErr := app.cookies.CreateCookies(w, user)
+		if createCookiErr != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": "Failed to create cookies",
+				"body":    errors.New(fmt.Sprintf(ErrorMsgs().Cookies, "create", createCookiErr)),
+			})
+			if encErr != nil {
+				log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
+				return
+			}
+			return
+		}
+		// Respond with a successful login message
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusOK,
+			"message": fmt.Sprintf("Welcome, %s! Login successful.", user.Username),
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "login: success", encErr)
+			return
+		}
+	} else {
+		// Respond with an unsuccessful login message
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			"code":    http.StatusUnauthorized,
+			"message": "incorrect password",
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "login: fail", encErr)
+			return
+		}
+	}
+}
+
+func (app *app) logout(w http.ResponseWriter, r *http.Request) {
+	Colors := models.CreateColors()
+	// Retrieve the cookie
+	cookie, cookiErr := r.Cookie("username")
+	if cookiErr != nil {
+		http.Error(w, "User not logged in", http.StatusUnauthorized)
+		return
+	}
+	username := cookie.Value
+	if username == "" {
+		log.Printf(ErrorMsgs().KeyValuePair, "aborting logout:", "no user is logged in")
+		return
+	}
+	fmt.Printf(Colors.Orange+"Attempting logout for "+Colors.White+"%v\n"+Colors.Reset, username)
+	fmt.Printf(ErrorMsgs().Divider)
+	var user *models.User
+	user, getUserErr := app.users.GetUserByUsername(username, "logout")
+	if getUserErr != nil {
+		log.Printf("GetUserByUsername for %v failed with error: %v", username, getUserErr)
+	}
+
+	// Delete the Session Token and CSRF Token cookies
+	delCookiErr := app.cookies.DeleteCookies(w, user)
+	if delCookiErr != nil {
+		log.Printf(ErrorMsgs().Cookies, "delete", delCookiErr)
+	}
+	// send user confirmation
+	log.Printf(Colors.Green+"%v logged out successfully!", user)
+	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": "Logged out successfully!",
+	})
+	if encErr != nil {
+		log.Printf(ErrorMsgs().Encode, "logout: success", encErr)
+		return
+	}
+}
+
+//SECTION ------- routing handlers ----------
+
+func (app *app) protected(w http.ResponseWriter, r *http.Request) {
+	login := r.FormValue("username")
+	var user *models.User
+	user, getUserErr := app.users.GetUserFromLogin(login, "protected")
+	if getUserErr != nil {
+		log.Printf("protected route for %v failed with error: %v", login, getUserErr)
+	}
+	if authErr := app.isAuthenticated(r, user.Username); authErr != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+	fprintf, err := fmt.Fprintf(w, "CSRF Valildation successful! Welcome, %s", user.Username)
+	if err != nil {
+		log.Print(ErrorMsgs().Protected, user.Username, err)
+		return
+	}
+	log.Println(fprintf)
+}
+
+//SECTION ------- user handlers ----------
+
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 	user, err := app.GetLoggedInUser(r)
 	if err != nil {
@@ -660,6 +651,8 @@ func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
 }
+
+//SECTION ------- post handlers ----------
 
 func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
 	tpl, parseErr := template.ParseFiles("./assets/templates/posts.create.html")
@@ -743,110 +736,6 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
-}
-
-func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
-	user, getUserErr := app.GetLoggedInUser(r)
-	if getUserErr != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-	parseErr := r.ParseMultipartForm(10 << 20)
-	if parseErr != nil {
-		http.Error(w, parseErr.Error(), 400)
-		log.Printf(ErrorMsgs().Parse, "storeChannel", parseErr)
-		return
-	}
-
-	createChannelData := models.Channel{
-		OwnerID:     user.ID,
-		Name:        r.PostForm.Get("name"),
-		Description: r.PostForm.Get("description"),
-		Avatar:      "noimage",
-		Banner:      "default.png",
-		Privacy:     false,
-		IsFlagged:   false,
-		IsMuted:     false,
-	}
-	if r.PostForm.Get("privacy") == "on" {
-		createChannelData.Privacy = true
-	}
-	createChannelData.Avatar = GetFileName(r, "file-drop", "storeChannel", "channel")
-
-	insertErr := app.channels.Insert(
-		createChannelData.OwnerID,
-		createChannelData.Name,
-		createChannelData.Description,
-		createChannelData.Avatar,
-		createChannelData.Banner,
-		createChannelData.Privacy,
-		createChannelData.IsFlagged,
-		createChannelData.IsMuted,
-	)
-
-	if insertErr != nil {
-		log.Printf(ErrorMsgs().Post, insertErr)
-		http.Error(w, insertErr.Error(), 500)
-		return
-	}
-	http.Redirect(w, r, "/", http.StatusFound)
-}
-
-func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
-	user, getUserErr := app.GetLoggedInUser(r)
-	if getUserErr != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-	if parseErr := r.ParseForm(); parseErr != nil {
-		http.Error(w, parseErr.Error(), 400)
-		log.Printf(ErrorMsgs().Parse, "storeMembership", parseErr)
-		return
-	}
-	fmt.Printf("user: %v", user.Username)
-	// get channelID
-	joinedChannelID, convErr := strconv.Atoi(r.PostForm.Get("channelId"))
-	if convErr != nil {
-		log.Printf(ErrorMsgs().Convert, r.PostForm.Get("channelId"), "StoreMembership > GetChannelID", convErr)
-		log.Printf("Unable to convert %v to integer\n", r.PostForm.Get("channelId"))
-	}
-	// get slice of channels (in this case it is only 1, but the function still returns a slice)
-	channels, err := app.channels.Search("id", joinedChannelID)
-	if err != nil {
-		log.Printf(ErrorMsgs().Query, "channel", err)
-	}
-	// get the channel object
-	channel := channels[0]
-
-	createMembershipData := models.Membership{
-		UserID:    user.ID,
-		ChannelID: joinedChannelID,
-	}
-	// send memberships struct to DB
-	insertErr := app.memberships.Insert(
-		createMembershipData.UserID,
-		createMembershipData.ChannelID,
-	)
-	if insertErr != nil {
-		log.Printf(ErrorMsgs().Post, insertErr)
-		http.Error(w, insertErr.Error(), 500)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
-		"code":    http.StatusOK,
-		"message": fmt.Sprintf("Welcome to %v!", channel.Name),
-	})
-	if encErr != nil {
-		log.Printf(ErrorMsgs().Encode, "storeMembership: Accepted", encErr)
-		return
-	}
-}
-
-func (app *app) requestMembership(w http.ResponseWriter, r *http.Request, userID, channelID int) {
-
 }
 
 func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
@@ -958,51 +847,6 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	// http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
-	channelId, err := strconv.Atoi(r.PathValue("channelId"))
-	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > convert channelId to int", err)
-	}
-
-	// Get the "rules" input value
-	rulesJSON := r.FormValue("rules")
-	if rulesJSON == "" { // TODO send this message to the user
-		log.Printf(ErrorMsgs().KeyValuePair, "message to user", "you have not added or removed any rules")
-	}
-
-	// Decode JSON into a slice of Rule structs
-	var rules []models.POSTRule
-	if err := json.Unmarshal([]byte(rulesJSON), &rules); err != nil {
-		http.Error(w, "Invalid JSON format", http.StatusBadRequest)
-		return
-	}
-
-	for _, rule := range rules {
-		id, found := strings.CutPrefix(rule.ID, "existing-channel-rule-")
-		idInt, err := strconv.Atoi(id)
-		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > id => idInt", err)
-		}
-		if found == true {
-			err := app.rules.DeleteRule(channelId, idInt)
-			if err != nil {
-				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > DeleteRule", err)
-			}
-		} else {
-			ruleId, err := app.rules.CreateRule(rule.Text)
-			if err != nil {
-				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > CreateRule", err)
-			}
-			err = app.rules.InsertRule(channelId, ruleId)
-			if err != nil {
-				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > InsertRule", err)
-			}
-		}
-	}
-	// TODO redirect to /channels/{{.channelID}}
-	http.Redirect(w, r, "/channels/"+r.PathValue("channelId"), http.StatusFound)
-}
-
 func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 
 	// SECTION getting user
@@ -1089,4 +933,174 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+//SECTION ------- channel handlers ----------
+
+func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
+	user, getUserErr := app.GetLoggedInUser(r)
+	if getUserErr != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	parseErr := r.ParseMultipartForm(10 << 20)
+	if parseErr != nil {
+		http.Error(w, parseErr.Error(), 400)
+		log.Printf(ErrorMsgs().Parse, "storeChannel", parseErr)
+		return
+	}
+
+	createChannelData := models.Channel{
+		OwnerID:     user.ID,
+		Name:        r.PostForm.Get("name"),
+		Description: r.PostForm.Get("description"),
+		Avatar:      "noimage",
+		Banner:      "default.png",
+		Privacy:     false,
+		IsFlagged:   false,
+		IsMuted:     false,
+	}
+	if r.PostForm.Get("privacy") == "on" {
+		createChannelData.Privacy = true
+	}
+	createChannelData.Avatar = GetFileName(r, "file-drop", "storeChannel", "channel")
+
+	insertErr := app.channels.Insert(
+		createChannelData.OwnerID,
+		createChannelData.Name,
+		createChannelData.Description,
+		createChannelData.Avatar,
+		createChannelData.Banner,
+		createChannelData.Privacy,
+		createChannelData.IsFlagged,
+		createChannelData.IsMuted,
+	)
+
+	if insertErr != nil {
+		log.Printf(ErrorMsgs().Post, insertErr)
+		http.Error(w, insertErr.Error(), 500)
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
+	user, getUserErr := app.GetLoggedInUser(r)
+	if getUserErr != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	if parseErr := r.ParseForm(); parseErr != nil {
+		http.Error(w, parseErr.Error(), 400)
+		log.Printf(ErrorMsgs().Parse, "storeMembership", parseErr)
+		return
+	}
+	fmt.Printf("user: %v", user.Username)
+	// get channelID
+	joinedChannelID, convErr := strconv.Atoi(r.PostForm.Get("channelId"))
+	if convErr != nil {
+		log.Printf(ErrorMsgs().Convert, r.PostForm.Get("channelId"), "StoreMembership > GetChannelID", convErr)
+		log.Printf("Unable to convert %v to integer\n", r.PostForm.Get("channelId"))
+	}
+	// get slice of channels (in this case it is only 1, but the function still returns a slice)
+	channels, err := app.channels.Search("id", joinedChannelID)
+	if err != nil {
+		log.Printf(ErrorMsgs().Query, "channel", err)
+	}
+	// get the channel object
+	channel := channels[0]
+
+	createMembershipData := models.Membership{
+		UserID:    user.ID,
+		ChannelID: joinedChannelID,
+	}
+	// send memberships struct to DB
+	insertErr := app.memberships.Insert(
+		createMembershipData.UserID,
+		createMembershipData.ChannelID,
+	)
+	if insertErr != nil {
+		log.Printf(ErrorMsgs().Post, insertErr)
+		http.Error(w, insertErr.Error(), 500)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		"code":    http.StatusOK,
+		"message": fmt.Sprintf("Welcome to %v!", channel.Name),
+	})
+	if encErr != nil {
+		log.Printf(ErrorMsgs().Encode, "storeMembership: Accepted", encErr)
+		return
+	}
+}
+
+func (app *app) requestMembership(w http.ResponseWriter, r *http.Request, userID, channelID int) {
+
+}
+
+func (app *app) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
+	fmt.Println(Colors().Orange + "Checking if this user is a member of this channel" + Colors().Reset)
+	fmt.Printf(ErrorMsgs().Divider)
+	var channels []models.Channel
+	for _, membership := range memberships {
+		channel, err := app.channels.OwnedOrJoinedByCurrentUser(membership.ChannelID, "ID")
+		if err != nil {
+			return nil, errors.New(fmt.Sprintf(ErrorMsgs().KeyValuePair, "Error calling JoinedByCurrentUser > OwnedOrJoinedByCurrentUser", err))
+		}
+		channels = append(channels, channel[0])
+	}
+	if len(channels) > 0 {
+		fmt.Println(Colors().Green + "Current user is a member of this channel" + Colors().Reset)
+	} else {
+		fmt.Println(Colors().Red + "Current user is not a member of this channel" + Colors().Reset)
+	}
+	return channels, nil
+}
+
+func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
+	channelId, err := strconv.Atoi(r.PathValue("channelId"))
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > convert channelId to int", err)
+	}
+
+	// Get the "rules" input value
+	rulesJSON := r.FormValue("rules")
+	if rulesJSON == "" { // TODO send this message to the user
+		log.Printf(ErrorMsgs().KeyValuePair, "message to user", "you have not added or removed any rules")
+	}
+
+	// Decode JSON into a slice of Rule structs
+	var rules []models.POSTRule
+	if err := json.Unmarshal([]byte(rulesJSON), &rules); err != nil {
+		http.Error(w, "Invalid JSON format", http.StatusBadRequest)
+		return
+	}
+
+	for _, rule := range rules {
+		id, found := strings.CutPrefix(rule.ID, "existing-channel-rule-")
+		idInt, err := strconv.Atoi(id)
+		if err != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > id => idInt", err)
+		}
+		if found == true {
+			err := app.rules.DeleteRule(channelId, idInt)
+			if err != nil {
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > DeleteRule", err)
+			}
+		} else {
+			ruleId, err := app.rules.CreateRule(rule.Text)
+			if err != nil {
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > CreateRule", err)
+			}
+			err = app.rules.InsertRule(channelId, ruleId)
+			if err != nil {
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > InsertRule", err)
+			}
+		}
+	}
+	// TODO redirect to /channels/{{.channelID}}
+	http.Redirect(w, r, "/channels/"+r.PathValue("channelId"), http.StatusFound)
 }

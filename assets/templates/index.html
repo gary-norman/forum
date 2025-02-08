@@ -699,25 +699,33 @@
                           <span class="btn-likes">reactions</span>
                       </button>
                   </div>
-  {{/*SECTION ---------- user page activity feed ----------*/}}
+
+                  {{/*SECTION ---------- user page activity feed ----------*/}}
                   <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%">
-                  <div id="activity-activity">
-                    <div class="filters-row button-row">
-                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-sort">sort</span>
-                      </button>
-                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-filters">filters</span>
-                      </button>
-                      <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                        <span class="btn-sort">scroll</span>
-                      </button>
+
+                    {{/*SECTION ------- activity activity ---------- */}}
+                    <div id="activity-activity">
+                      <div class="filters-row button-row">
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-sort">sort</span>
+                        </button>
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-filters">filters</span>
+                        </button>
+                        <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-sort">scroll</span>
+                        </button>
+                      </div>
+                      <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+                        {{range .Posts}} <!-- user page activity posts -->
+                          {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
+                        {{end}} <!-- user page activity POSTS -->
+                      </div>
+
+
                     </div>
-                    <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-                    {{range .Posts}} <!-- user page activity posts -->
-                      {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
-                    {{end}} <!-- user page activity POSTS -->
-                    </div>
+
+                    {{/*SECTION ------- activity posts ---------- */}}
                     <div id="activity-posts">
                       <div class="filters-row button-row hide-feed">
                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -726,18 +734,19 @@
                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                           <span class="btn-filters">filters</span>
                         </button>
-                          <button id="scroll-test-1" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                            <span class="btn-sort">scroll</span>
-                          </button>
+                        <button id="scroll-test-1" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-sort">scroll</span>
+                        </button>
                       </div>
-    {{/*SECTION---------- user page posts ----------*/}}
+                      {{/*SECTION---------- user page posts ----------*/}}
                       <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                         {{range .Posts}} <!-- user page posts -->
-                          {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
+                        {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
                         {{end}} <!-- user page posts -->
                       </div>
                     </div>
-  {{/*SECTION ------- activity comments ---------- */}}
+
+                    {{/*SECTION ------- activity comments ---------- */}}
                     <div id="activity-comments">
                       <div class="filters-row button-row hide-feed">
                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -757,7 +766,8 @@
                         <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
                       </div>
                     </div>
-  {{/*SECTION ------- saved activities ---------- */}}
+
+                    {{/*SECTION ------- saved activities ---------- */}}
                     <div id="activity-saved">
                       <div class="filters-row button-row hide-feed">
                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -767,60 +777,61 @@
                           <span class="btn-filters">filters</span>
                         </button>
                       </div>
-                        <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                          <div class="activity-items saved">You saved this post</div>
-                          <div class="activity-items saved">You saved this post</div>
-                          <div class="activity-items saved">You saved this post</div>
-                          <div class="activity-items saved">You saved this post</div>
-                          <div class="activity-items saved">You saved this post</div>
-                          <div class="activity-items saved">You saved this post</div>
-                        </div>
-                    </div>
-  {{/*SECTION ------- muted activities ---------- */}}
-                      <div id="activity-muted">
-                        <div class="filters-row button-row hide-feed">
-                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                              <span class="btn-sort">sort</span>
-                          </button>
-                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                              <span class="btn-filters">filters</span>
-                          </button>
-                        </div>
-                        <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                          <div class="activity-items muted">You muted this post</div>
-                          <div class="activity-items muted">You muted this post</div>
-                          <div class="activity-items muted">You muted this post</div>
-                          <div class="activity-items muted">You muted this post</div>
-                          <div class="activity-items muted">You muted this post</div>
-                          <div class="activity-items muted">You muted this post</div>
-                          <div class="activity-items muted">You muted this post</div>
-                          <div class="activity-items muted">You muted this post</div>
-                          <div class="activity-items muted">You muted this post</div>
-                          <div class="activity-items muted">You muted this post</div>
-                        </div>
+                      <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                        <div class="activity-items saved">You saved this post</div>
+                        <div class="activity-items saved">You saved this post</div>
+                        <div class="activity-items saved">You saved this post</div>
+                        <div class="activity-items saved">You saved this post</div>
+                        <div class="activity-items saved">You saved this post</div>
+                        <div class="activity-items saved">You saved this post</div>
                       </div>
-  {{/*SECTION ------- actvity reactions ---------- */}}
-                      <div id="activity-reactions">
-                        <div class="filters-row button-row hide-feed">
-                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                            <span class="btn-sort">sort</span>
-                          </button>
-                          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                            <span class="btn-filters">filters</span>
-                          </button>
-                        </div>
-                        <div id="activity-feed-reactions" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                          <div class="activity-items reactions">You liked this post</div>
-                          <div class="activity-items reactions">You liked this post</div>
-                          <div class="activity-items reactions">You liked this post</div>
-                          <div class="activity-items reactions">You liked this post</div>
-                          <div class="activity-items reactions">You liked this post</div>
-                          <div class="activity-items reactions">You liked this post</div>
-                          <div class="activity-items reactions">You liked this post</div>
-                          <div class="activity-items reactions">You liked this post</div>
-                          <div class="activity-items reactions">You liked this post</div>
-                          <div class="activity-items reactions">You liked this post</div>
-                        </div>
+                    </div>
+
+                    {{/*SECTION ------- muted activities ---------- */}}
+                    <div id="activity-muted">
+                      <div class="filters-row button-row hide-feed">
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-sort">sort</span>
+                        </button>
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-filters">filters</span>
+                        </button>
+                      </div>
+                      <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                        <div class="activity-items muted">You muted this post</div>
+                        <div class="activity-items muted">You muted this post</div>
+                        <div class="activity-items muted">You muted this post</div>
+                        <div class="activity-items muted">You muted this post</div>
+                        <div class="activity-items muted">You muted this post</div>
+                        <div class="activity-items muted">You muted this post</div>
+                        <div class="activity-items muted">You muted this post</div>
+                        <div class="activity-items muted">You muted this post</div>
+                        <div class="activity-items muted">You muted this post</div>
+                        <div class="activity-items muted">You muted this post</div>
+                      </div>
+                    </div>
+
+                    {{/*SECTION ------- actvity reactions ---------- */}}
+                    <div id="activity-reactions">
+                      <div class="filters-row button-row hide-feed">
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-sort">sort</span>
+                        </button>
+                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                          <span class="btn-filters">filters</span>
+                        </button>
+                      </div>
+                      <div id="activity-feed-reactions" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+                        <div class="activity-items reactions">You liked this post</div>
+                        <div class="activity-items reactions">You liked this post</div>
+                        <div class="activity-items reactions">You liked this post</div>
+                        <div class="activity-items reactions">You liked this post</div>
+                        <div class="activity-items reactions">You liked this post</div>
+                        <div class="activity-items reactions">You liked this post</div>
+                        <div class="activity-items reactions">You liked this post</div>
+                        <div class="activity-items reactions">You liked this post</div>
+                        <div class="activity-items reactions">You liked this post</div>
+                        <div class="activity-items reactions">You liked this post</div>
                       </div>
                     </div>
                 </div>

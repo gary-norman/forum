@@ -50,6 +50,7 @@ const formViewStats = document.querySelector('#form-view-stats');
 const formRemoveAcc = document.querySelector('#form-remove-acc');
 let forgotVisible = false;
 // login/register modal
+const loginHeader = document.querySelector('#modal-header-logreg')
 const loginModal = document.querySelector('#container-form-login');
 const editUserModal = document.querySelector('#container-form-edit-user');
 const accSettingsModal = document.querySelector('#container-form-acc-settings');
@@ -494,6 +495,12 @@ function toggleFeed(targetFeed, targetFeedContent, targetButton) {
 }
 // toggle login and register forms
 function logReg(target) {
+    if (target === 'btn_login-1' || target === 'btn_login-2') {
+        loginHeader.innerText = "sign in to codex"
+    }
+    if (target === 'btn_register-1' || target === 'btn_register-2') {
+        loginHeader.innerText = "register for codex"
+    }
     if (target === 'btn_login-2') {
         console.log('btn-log-2');
         formLogin.classList.remove('display-off');
@@ -515,6 +522,7 @@ function forgot() {
     formLogin.classList.add('display-off');
     formRegister.classList.add('display-off');
     formForgot.classList.remove('display-off');
+    loginHeader.innerText = "reset password"
     forgotVisible = true;
 }
 // validate each requirement of the password

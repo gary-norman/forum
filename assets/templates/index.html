@@ -74,10 +74,12 @@
 {{/*SECTION    ---------- login modal ----------*/}}
     <div aria-modal="true" id="container-form-login" class="modal">
       <div class="modal-content">
+        <div class="modal-header">
+          <div id="modal-header-logreg">sign in to codex</div>
+        </div>
         <span class="close">&times;</span>
         <div id="form-login">
           <form id="loginForm">
-            <h5 id="login-title" class="form-title">sign in to codex</h5>
             <div class="input-wrapper">
               <input
                 type="text"
@@ -100,16 +102,19 @@
               />
               <label for="loginFormPassword" class="user-label">password</label>
             </div>
-            <div id="login-notify">
-              <span></span>
+            <div class="remember-forgot">
+              <div class="cont-flex-row flex-center" style="column-gap: 0.4rem">
+                <div class="allow-comments">
+                  <input type="checkbox" id="login-remember-checkbox" name="privacy"/>
+                  <span class="allow-comments-fx"></span>
+                </div>
+                <label for="login-remember-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">remember me</label>
+              </div>
+              <div class="forgot">
+                <span id="btn_forgot">forgot password?</span>
+              </div>
             </div>
-            <div class="forgot">
-              <span
-                id="btn_forgot"
-                class="button btn-filled btn-filled-firebrick btn-secondary btn-pill"
-                >forgot password?
-              </span>
-            </div>
+
             <button type="submit" id="login" class="btn-md btn-primary btn-action">
               <span>sign in</span>
             </button>
@@ -156,18 +161,17 @@
           </div>
           <div class="reg-log">
             <small class="signup">don't have an account?</small>
-            <button
-              id="btn_register-1"
-              class="button btn-filled btn-filled-orange btn-secondary btn-pill"
-            >
-              sign up
-            </button>
+            <button id="btn_register-1"
+{{/*              class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
+            >register</button>
           </div>
         </div>
         <div id="form-register" class="display-off">
 {{/*SECTION    ---------- register form ----------*/}}
         <form action="/register" method="POST">
-          <p class="form-title">register for codex</p>
+{{/*          <div class="modal-header">*/}}
+{{/*            <div>register for codex</div>*/}}
+{{/*          </div>*/}}
 {{/* ---------- username ---------- */}}
           <div class="input-wrapper">
             <input
@@ -853,7 +857,7 @@
               <div class="right-panel ">
                 <div class="right-panel-content scroll-down">
                   <div class="right-panel-container-name flex-space-between">
-                    <h4 class="right-panel-name">{{ if ne .CurrentUser nil}}{{$user.Username}}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
+                    <h4 class="right-panel-name">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
                     {{ if ne .CurrentUser nil }}
                     <button class="btn-sm btn-icoonly">
                       <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>

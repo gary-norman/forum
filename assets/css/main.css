@@ -2335,6 +2335,9 @@ main {
     gap: 1.2rem;
     align-self: stretch;
 
+    & form {
+      width: 100%;
+    }
     &>div {
       width: 100%;
 
@@ -2382,6 +2385,28 @@ main {
         border-radius: 60px;
         /*background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;*/
       }
+    }
+  }
+}
+
+.edit-settings {
+  display: flex;
+  gap: 0.8rem;
+
+  & button:has(.btn-success), & button:has(.btn-cancel) {
+    display: none;
+  }
+
+  & button:has(.btn-edit) {
+    display: flex;
+  }
+
+  &.editing {
+    & button:has(.btn-success), & button:has(.btn-cancel) {
+      display: flex;
+    }
+    & button:has(.btn-edit) {
+      display: none;
     }
   }
 }

@@ -19,6 +19,7 @@
     <script src="/assets/js/reactions.js" defer></script>
     <script type="module" src="/assets/js/share.js" defer></script>
     <script type="module" src="/assets/js/comments.js" defer></script>
+    <script type="module" src="/assets/js/edit_user.js" defer></script>
     <title>&lt; codex &gt;</title>
     <title>{{- /*gotype: github.com/gary-norman/forum/internal/models.TemplateData*/ -}}</title>
   </head>
@@ -416,35 +417,6 @@
           </div>
         </form>
       </div>
-{{/*SECTION    ---------- edit user modal ---------- */}}
-    <div aria-modal="true" id="container-form-edit-user" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <div id="form-edit-user">
-            <form action="/edituser" enctype="multipart/form-data" method="POST">
-              <h5 id="edit-user-title" class="form-title">edit your profile</h5>
-              <div class="input-wrapper">
-                <textarea id="bio" name="bio" placeholder="update your bio"></textarea>
-                <label for="bio" class="user-label">update your bio</label>
-              </div>
-              <p>upload an image (optional)</p>
-              <div id="drop-zone--user-image">
-                <div id="uploaded-file--user-image"></div>
-                <div class="drag-drop-text-wrapper">
-                  <span class="dragText">drag and drop your file, or</span>
-{{/*                 <span class="button">browse</span> */}}
-                  <input type="file" id="browse--user-image" name="file-drop" />
-                </div>
-              </div>
-              <div class="cont-flex-row flex-center">
-                <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
-                  <span>submit</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
       <div class="main-content">
 {{/*SECTION     ---------- sidebar ---------- */}}
         <aside class="sidebar">
@@ -456,7 +428,7 @@
               <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username }}"></div>
             {{ end }}
             <div>
-              <h3 data-current-user-ID="{{$user.ID}}">{{ $user.Username }}</h3>
+              <h3 class="align-self-start" data-current-user-ID="{{$user.ID}}">{{ $user.Username }}</h3>
               <div>
                 <button class="btn-lg btn-icotext btn-follows btn-invert-never">
                   <span class="btn-following">{{$user.Following}}</span>
@@ -856,40 +828,91 @@
               </div>
               <div class="right-panel ">
                 <div class="right-panel-content scroll-down">
-                  <div class="right-panel-container-name flex-space-between">
-                    <h4 class="right-panel-name">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
-                    {{ if ne .CurrentUser nil }}
-                    <button class="btn-sm btn-icoonly">
-                      <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
-                    </button>
-                    {{ end }} <!-- "nouser" check -->
-                  </div>
-                  {{ if ne .CurrentUser nil }}
-                  <div class="right-panel-container-pic flex-space-between">
-                    <div class="right-panel-container-pic">
-                      {{ if (ne $user.Avatar "noimage") }}
-                      <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ $user.Avatar }}"></div>
-                      {{ else }}
-                      <div class="right-panel-pic profile-pic--empty" data-name-user="{{ $user.Username }}"></div>
-                      {{ end }}
-                      <small>Edit your avatar picture</small>
-                    </div>
-                    <button class="btn-sm btn-icoonly">
-                      <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
-                    </button>
-                  </div>
-                  {{ end }} <!-- "nouser" check -->
-                  <div class="right-panel-container-bio ">
-                    <div class="right-panel-bio flex-space-between">
-                      <label for="user-bio-content" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
+                  <form action="/edituser" enctype="multipart/form-data" method="POST">
+
+
+
+                    {{/* SECTION edit user details inside right-panel */}}
+
+
+                    <div class="right-panel-container-name flex-space-between">
+                      <h4 class="right-panel-name">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
                       {{ if ne .CurrentUser nil }}
-                      <button class="btn-sm btn-icoonly">
-                        <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
-                      </button>
+                        <div id="settings-user-name" class="edit-settings">
+                          <button id="edit-user-name" class="btn-sm btn-icoonly">
+                            <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
+                          </button>
+                          <button id="submit-user-name" type="submit" name="bio" value="bio" class="btn-sm btn-icoonly">
+                            <span class="btn-success" role="contentinfo" aria-label="Submit new name"></span>
+                          </button>
+                          <button id="cancel-user-name" class="btn-sm btn-icoonly">
+                            <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing your name"></span>
+                          </button>
+                        </div>
                       {{ end }} <!-- "nouser" check -->
                     </div>
-                    <textarea id="user-bio-content" class="inactive-input" name="content">{{ $user.Description }}</textarea>
-                  </div>
+                    {{ if ne .CurrentUser nil }}
+                      <div class="cont-flex-column">
+                        <div class="right-panel-container-pic flex-space-between">
+                          <div class="right-panel-container-pic">
+                            {{ if (ne $user.Avatar "noimage") }}
+                              <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ $user.Avatar }}"></div>
+                            {{ else }}
+                              <div class="right-panel-pic profile-pic--empty" data-name-user="{{ $user.Username }}"></div>
+                            {{ end }}
+                            <small>Edit your avatar</small>
+                          </div>
+                          <div id="settings-user-avatar" class="edit-settings">
+                            <button id="edit-user-avatar" class="btn-sm btn-icoonly">
+                              <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
+                            </button>
+                            <button id="submit-user-avatar" type="submit" name="image" value="image" class="btn-sm btn-icoonly">
+                              <span class="btn-success" role="contentinfo" aria-label="Submit new avatar"></span>
+                            </button>
+                            <button id="cancel-user-avatar" class="btn-sm btn-icoonly">
+                              <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the avatar"></span>
+                            </button>
+                          </div>
+                        </div>
+                        <div id="drop-zone--user-image">
+                          <div id="uploaded-file--user-image"></div>
+                          <div class="drag-drop-text-wrapper">
+                            <span class="dragText">drag and drop your file, or</span>
+                            {{/*                 <span class="button">browse</span> */}}
+                            <input type="file" id="browse--user-image" name="file-drop" />
+                          </div>
+                        </div>
+                      </div>
+                    {{ end }} <!-- "nouser" check -->
+                    <div class="right-panel-container-bio">
+                      <div class="right-panel-bio flex-space-between">
+                        <label for="user-bio-content bio" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
+                        {{ if ne .CurrentUser nil }}
+
+                          <div id="settings-user-bio" class="edit-settings">
+                            <button id="edit-user-bio" class="btn-sm btn-icoonly">
+                              <span class="btn-edit" role="contentinfo" aria-label="Edit profile bio"></span>
+                            </button>
+                            <button id="submit-user-bio" type="submit" name="bio" value="bio" class="btn-sm btn-icoonly">
+                              <span class="btn-success" role="contentinfo" aria-label="Submit new bio"></span>
+                            </button>
+                            <button id="cancel-user-bio" class="btn-sm btn-icoonly">
+                              <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the bio"></span>
+                            </button>
+                          </div>
+
+                        {{ end }} <!-- "nouser" check -->
+                      </div>
+                      <textarea id="user-bio-content" class="inactive-input" name="content">{{ $user.Description }}</textarea>
+                      <div class="input-wrapper">
+                        <textarea id="bio" name="bio" placeholder="{{if $user.Description}}{{ $user.Description }}{{else}}update your bio{{end}}"></textarea>
+                      </div>
+                    </div>
+
+                  </form>
+
+
+
                   <div class="right-panel-container-modded-channels">
                     <div class="sidebar-block sidebar-channels">
                       <small class="padded">Modded Channels</small>

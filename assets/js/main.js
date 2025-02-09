@@ -65,7 +65,7 @@ const openEditUserModal = document.querySelector('#btn-open-edit-user-modal');
 // const openRemoveAccModal = document.querySelector('#btn-open-remove-acc-modal');
 // Get the <span> element that closes the modal
 const closeLoginModal = loginModal.getElementsByClassName("close")[0];
-const closeEditUserModal = editUserModal.getElementsByClassName("close")[0];
+// const closeEditUserModal = editUserModal.getElementsByClassName("close")[0];
 // const closeAccSettingsModal = accSettingsModal.getElementsByClassName("close")[0];
 // const closeViewStatsModal = viewStatsModal.getElementsByClassName("close")[0];
 // const closeRemoveAccModal = removeAccModal.getElementsByClassName("close")[0];
@@ -811,13 +811,11 @@ if (openLoginModal) {
     openLoginModal.addEventListener('click', () => loginModal.style.display = 'block');
 }
 openLoginModalFallback.addEventListener('click', () => loginModal.style.display = 'block');
-openEditUserModal.addEventListener('click', () => editUserModal.style.display = 'block');
 // openAccSettingsModal.addEventListener('click', () => accSettingsModal.style.display = 'block');
 // openViewStatsModal.addEventListener('click', () => viewStatsModal.style.display = 'block');
 // openRemoveAccModal.addEventListener('click', () => removeAccModal.style.display = 'block');
 // close modals
 closeLoginModal.addEventListener('click', () => loginModal.style.display = 'none');
-closeEditUserModal.addEventListener('click', () => editUserModal.style.display = 'none');
 // closeAccSettingsModal.addEventListener('click', () => accSettingsModal.style.display = 'none');
 // closeViewStatsModal.addEventListener('click', () => viewStatsModal.style.display = 'none');
 // closeRemoveAccModal.addEventListener('click', () => removeAccModal.style.display = 'none');

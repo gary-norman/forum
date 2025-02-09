@@ -31,16 +31,16 @@ func (m *RuleModel) CreateRule(rule string) (int, error) {
 	return ruleId, nil
 }
 
-// InsertRule inserts a rule:channel reference into the ChannelsRules table
+// InsertRule inserts a rule:channel reference into the ChannelRules table
 func (m *RuleModel) InsertRule(channelId, ruleId int) error {
-	stmt := "INSERT INTO ChannelsRules (ChannelID, RuleID) VALUES (?, ?)"
+	stmt := "INSERT INTO ChannelRules (ChannelID, RuleID) VALUES (?, ?)"
 	_, channelRuleErr := m.DB.Exec(stmt, channelId, ruleId)
 	return channelRuleErr
 }
 
-// InsertChannelRule adds an existing rule to the ChannelsRules table, omitting if it already exists
+// InsertChannelRule adds an existing rule to the ChannelRules table, omitting if it already exists
 func (m *RuleModel) InsertChannelRule(channelId, ruleId int) error {
-	stmt := "INSERT INTO ChannelsRules (ChannelID, RuleID) VALUES (?, ?) ON CONFLICT(ChannelID, RuleID) DO NOTHING"
+	stmt := "INSERT INTO ChannelRules (ChannelID, RuleID) VALUES (?, ?) ON CONFLICT(ChannelID, RuleID) DO NOTHING"
 	_, channelRuleErr := m.DB.Exec(stmt, channelId, ruleId)
 	return channelRuleErr
 }
@@ -52,9 +52,9 @@ func (m *RuleModel) EditRule(id int, rule string) error {
 	return editErr
 }
 
-// DeleteRule removes a rule/channel reference from the ChannelsRules table
+// DeleteRule removes a rule/channel reference from the ChannelRules table
 func (m *RuleModel) DeleteRule(channelId, ruleId int) error {
-	stmt := "DELETE FROM ChannelsRules WHERE ChannelID = ? AND RuleID = ?"
+	stmt := "DELETE FROM ChannelRules WHERE ChannelID = ? AND RuleID = ?"
 	_, deleteErr := m.DB.Exec(stmt, channelId, ruleId)
 	return deleteErr
 }
@@ -90,8 +90,8 @@ func (m *RuleModel) All() ([]models.Rule, error) {
 }
 
 func (m *RuleModel) AllForChannel(channelId int) ([]models.Rule, error) {
-	//fetch the references from ChannelsRules
-	refStmt := "SELECT RuleID FROM ChannelsRules WHERE ChannelID = ?"
+	//fetch the references from ChannelRules
+	refStmt := "SELECT RuleID FROM ChannelRules WHERE ChannelID = ?"
 	crRows, queryErr := m.DB.Query(refStmt, channelId)
 	if queryErr != nil {
 		return nil, errors.New(fmt.Sprintf(ErrorMsgs().Query, "AllForChannel", queryErr))

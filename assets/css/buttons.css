@@ -317,7 +317,9 @@ gap: 0.8rem;
   &:has(.btn-settings),
   &:has(.btn-save-active),
   &:has(.btn-save-empty),
-  &:has(.btn-edit) {
+  &:has(.btn-edit),
+  &:has(.btn-cancel),
+  &:has(.btn-success){
     padding: 0;
   }
     &:has(.btn-warning), &:has(.btn-success){
@@ -342,6 +344,11 @@ gap: 0.8rem;
 .btn-edit {
   background: url("/assets/icons/edit_16.svg") no-repeat center;
     width: 1.6rem;
+}
+
+.btn-cancel {
+  background: url("/assets/icons/close_16.svg") no-repeat center;
+  width: 1.6rem;
 }
 
 .btn-copy {

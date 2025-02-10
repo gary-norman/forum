@@ -3,7 +3,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const postControls = document.querySelectorAll('.post-controls');
     const sidebar = document.querySelector(`.sidebar`);
-    const reactionAuthorID = sidebar.querySelector('h3').getAttribute('data-current-user-ID');
+    const sidebarProfile = document.querySelector('.sidebarProfile');
+    let currentUserID;
+    if (sidebarProfile) {
+        currentUserID = sidebar.querySelector('h3').getAttribute('data-current-user-ID');
+    }
 
     postControls.forEach(singlePostControl => {
         const likeCountElement = singlePostControl.querySelector('.btn-likes');
@@ -44,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            let postData = checkData(commentID, postID, reactionAuthorID, channelID, "like")
+            let postData = checkData(commentID, postID, currentUserID, channelID, "like")
 
 
             console.log("postData: ", postData)
@@ -75,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            let postData = checkData(commentID, postID, reactionAuthorID, channelID, "dislike")
+            let postData = checkData(commentID, postID, currentUserID, channelID, "dislike")
 
             console.log("postData: ", postData)
 

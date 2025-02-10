@@ -32,7 +32,7 @@
           <button data-tooltip-name="like" class="btn-icoonly"></button>
         </div>
       </div>
-      <article class="cardContent">{{$comment.Content}}</article>
+      <pre class="cardContent">{{$comment.Content}}</pre>
       <!--  Post control buttons -->
       <div class="button-row-wrap post-controls" >
         {{$status := reactionStatus $userID 0 $comment.ID}}

@@ -2253,6 +2253,9 @@ main {
   /* Adjust the line height */
   max-height: calc(1.5em * 3);
   /* Set max height to match 3 lines */
+  hyphens: auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .title {

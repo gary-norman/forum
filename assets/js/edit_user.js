@@ -23,10 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
         editButton.addEventListener("click", function (e) {
             console.log("edit button clicked")
             block.classList.add("editing")
-
-
-
-
         })
         cancelButton.addEventListener("click", function (e) {
             console.log("cancel button clicked")

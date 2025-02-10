@@ -116,9 +116,16 @@ document.addEventListener('DOMContentLoaded', function () {
     feeds.forEach(feed => {
         feed.classList.add('feeds-wrapper-loaded')
     })
-    const joinedAndOwnedChannelContainer = document.querySelector('#sidebar-channel-block')
-    const joinedAndOwnedChannels = joinedAndOwnedChannelContainer.querySelectorAll('.sidebar-channel')
-    joinedAndOwnedChannels.forEach( channel => channel.addEventListener('click', (e) => navigateToChannel(channel)));
+
+
+    const joinedAndOwnedChannelContainer = document.querySelector('#sidebar-channel-block');
+    let joinedAndOwnedChannels;
+
+    if (joinedAndOwnedChannelContainer) {
+        joinedAndOwnedChannels = joinedAndOwnedChannelContainer.querySelectorAll('.sidebar-channel');
+        joinedAndOwnedChannels.forEach( channel => channel.addEventListener('click', (e) => navigateToChannel(channel)));
+
+    }
 
     toggleUserInteracted("add");
     actButtonContainer = document.querySelector('#activity-bar');

@@ -80,7 +80,7 @@
         </div>
         <span class="close">&times;</span>
         <div id="form-login">
-          <form id="loginForm">
+          <form id="loginForm" class="logreg-form">
             <div class="input-wrapper">
               <input
                 type="text"
@@ -169,7 +169,7 @@
         </div>
         <div id="form-register" class="display-off">
 {{/*SECTION    ---------- register form ----------*/}}
-        <form action="/register" method="POST">
+        <form class="logreg-form" action="/register" method="POST">
 {{/*          <div class="modal-header">*/}}
 {{/*            <div>register for codex</div>*/}}
 {{/*          </div>*/}}
@@ -240,35 +240,40 @@
           </form>
           <div class="reg-log">
             <small class="signup">already registered?</small>
-            <button id="btn_login-1" class="button btn-filled btn-filled-orange btn-secondary btn-pill">sign in</button>
+            <button id="btn_login-1"
+{{/*                    class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
+            >sign in</button>
           </div>
           </div>
           <div id="form-forgot" class="display-off">
-            <form>
+            <form id="resetForm" class="logreg-form">
               <p class="form-title">enter your username or email address to reset your password</p>
-              <label for="forgot_pass"></label>
-              <input
-                type="text"
-                class="input-3d"
-                id="forgot_pass"
-                name="forgot_pass"
-                placeholder="username/email"
-              />
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  class="input-3d"
+                  id="forgot_pass"
+                  name="forgot_pass"
+                  placeholder="username/email"
+                />
+                <label for="forgot_pass" class="user-label">email/username</label>
+              </div>
               <button class="btn-md btn-primary btn-action" type="submit">
                 <span>reset</span>
               </button>
-            </form>
-            <div class="reg-log">
-              <small class="signup">not what you're looking for?</small>
-              <div class="flex-align-c" style="column-gap: 0.8rem">
-                <button
-                  id="btn_login-2"
-                  class="button btn-filled btn-filled-orange btn-secondary btn-pill">sign in</button>
-                <button id="btn_register-2" class="button btn-filled btn-filled-white_orange btn-secondary btn-pill">
-                  sign up
-                </button>
+              <div class="cont-flex-column">
+                <small class="signup">not what you're looking for?</small>
+                <div class="flex-align-c">
+                  <button type="button"
+                          id="btn_login-2"
+                          {{/*                  class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
+                  >sign in</button>
+                  <button type="button" id="btn_register-2"
+                          {{/*                        class="button btn-filled btn-filled-white_orange btn-secondary btn-pill"*/}}
+                  >register</button>
+                </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>

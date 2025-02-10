@@ -417,8 +417,7 @@ a:active {
   margin: 15% auto;
   /* 15% from the top and centered */
   border: 1px solid var(--color-bg-4);
-  min-width: 25.2rem;
-  width: max(40dvw, 40rem);
+  width: max(40dvw, 25.2rem);
   /* Could be more or less, depending on screen size */
   /*font-family: SpaceGrotesk-Regular, system-ui;*/
   font-size: clamp(1.2rem, 2.4rem + -0.3dvw, 2.4rem);
@@ -583,6 +582,19 @@ a:active {
 .signup a:hover {
   text-decoration: underline rgba(167, 139, 250, 1);
 }
+.signup {
+  color: var(--color-bg-5);
+  &~div {
+    column-gap: 0.8rem; font-size: 1.2rem;
+    & button {
+    color: var(--color-fg-1);
+  }
+  }
+  &~button {
+    color: var(--color-fg-1);
+  }
+
+}
 
 .sign {
   display: block;
@@ -715,36 +727,6 @@ a:active {
       var(--color-hl-green-lab),
       var(--color-hl-pink-lab));
 }
-.container-content {
-  display: flex;
-  flex-direction: row;
-  gap: 4.8rem;
-  width: calc(100dvw - 30.4rem);
-  height: 20dvh;
-  /*border: 2px hotpink solid;*/
-}
-
-.content {
-  /* 100% of container - right panel - padding*/
-  width: calc(100% - 27.2rem - 9.6rem);
-  height: 100%;
-  z-index: var(--z-index-content);
-  padding: 0 2.4rem;
-  overflow: hidden;
-  /*border: 3px cornflowerblue solid;*/
-}
-
-.cont-flex-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.flex-align-c {
-  display: flex;
-  justify-content: center;
-  column-gap: 1.2rem;
-}
-
 /* ---------------------------------------- */
 
 /* prevent special form element styling  */
@@ -941,9 +923,15 @@ input[type='email'] {
   height: auto;
 }
 
-#loginForm {
+.logreg-form {
   /* margin-block: auto; */
   padding-block: 3rem;
+}
+#resetForm {
+  & .form-title {
+    font-size: clamp(1.2rem, 1.2rem + 0.4vw, 1.6rem);
+    width: min(80%, 25rem);
+  }
 }
 
 #bio {
@@ -961,7 +949,7 @@ input[type='email'] {
   position: relative;
 
   & input {
-    margin: 0.8rem 0 0 0;
+    /*margin: 0.8rem 0 0 0;*/
   }
 
   & .validation-icon::before {
@@ -969,7 +957,8 @@ input[type='email'] {
     content: '';
     position: absolute;
     right: 0.4rem;
-    top: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
     height: 1.6rem;
     width: 1.6rem;
     background: url('/assets/icons/form-grey.svg');
@@ -986,7 +975,7 @@ input[type='email'] {
       &::after {
         content: '';
         position: absolute;
-        bottom: -0.9rem;
+        bottom: 0;
         left: 50%;
         transform: translateX(-50%);
         background: var(--color-bg-1);
@@ -1006,7 +995,7 @@ input[type='email'] {
 
         width: max-content;
         position : absolute;
-        bottom: 0;
+        bottom: 1.2rem;
         left: 50%;
         transform: translateX(-50%);
         padding : 0.8rem;

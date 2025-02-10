@@ -837,13 +837,13 @@
                     <h4 class="right-panel-name">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
                     {{ if ne .CurrentUser nil }}
                       <div id="settings-user-name" class="edit-settings">
-                        <button id="edit-user-name" class="btn-sm btn-icoonly">
+                        <button id="edit-user-name" type="button" class="btn-sm btn-icoonly">
                           <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
                         </button>
                         <button id="submit-user-name" type="submit" name="bio" value="bio" class="btn-sm btn-icoonly">
                           <span class="btn-success" role="contentinfo" aria-label="Submit new name"></span>
                         </button>
-                        <button id="cancel-user-name" class="btn-sm btn-icoonly">
+                        <button id="cancel-user-name" type="button" class="btn-sm btn-icoonly">
                           <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing your name"></span>
                         </button>
                       </div>
@@ -863,13 +863,13 @@
                           <small>Edit your avatar</small>
                         </div>
                         <div id="settings-user-avatar" class="edit-settings">
-                          <button id="edit-user-avatar" class="btn-sm btn-icoonly">
+                          <button id="edit-user-avatar" type="button" class="btn-sm btn-icoonly">
                             <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
                           </button>
                           <button id="submit-user-avatar" type="submit" name="image" value="image" class="btn-sm btn-icoonly">
                             <span class="btn-success" role="contentinfo" aria-label="Submit new avatar"></span>
                           </button>
-                          <button id="cancel-user-avatar" class="btn-sm btn-icoonly">
+                          <button id="cancel-user-avatar" type="button" class="btn-sm btn-icoonly">
                             <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the avatar"></span>
                           </button>
                         </div>
@@ -891,13 +891,13 @@
                       {{ if ne .CurrentUser nil }}
 
                         <div id="settings-user-bio" class="edit-settings">
-                          <button id="edit-user-bio" class="btn-sm btn-icoonly">
+                          <button id="edit-user-bio" type="button" class="btn-sm btn-icoonly">
                             <span class="btn-edit" role="contentinfo" aria-label="Edit profile bio"></span>
                           </button>
                           <button id="submit-user-bio" type="submit" name="bio" value="bio" class="btn-sm btn-icoonly">
                             <span class="btn-success" role="contentinfo" aria-label="Submit new bio"></span>
                           </button>
-                          <button id="cancel-user-bio" class="btn-sm btn-icoonly">
+                          <button id="cancel-user-bio" type="button" class="btn-sm btn-icoonly">
                             <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the bio"></span>
                           </button>
                         </div>

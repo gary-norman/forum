@@ -2,6 +2,8 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const postControls = document.querySelectorAll('.post-controls');
+    const sidebar = document.querySelector(`.sidebar`);
+    const reactionAuthorID = sidebar.querySelector('h3').getAttribute('data-current-user-ID');
 
     postControls.forEach(singlePostControl => {
         const likeCountElement = singlePostControl.querySelector('.btn-likes');
@@ -9,14 +11,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const likeButton = likeCountElement.closest('button');
         const dislikeButton = dislikeCountElement.closest('button');
-        const sidebar = document.querySelector(`.sidebar`)
+
 
         const likeID = likeCountElement.getAttribute("data-like-id");
         const dislikeID = dislikeCountElement.getAttribute("data-dislike-id");
         const postID = singlePostControl.closest('.card').getAttribute('data-post-id');
         const commentID = singlePostControl.closest('.card').getAttribute('data-comment-id');
         const channelID = singlePostControl.closest('.card').getAttribute('data-channel-id');
-        const reactionAuthorID = sidebar.querySelector('h3').getAttribute('data-current-user-ID');
+
+
 
         likeButton.addEventListener('click', function(event) {
             let likeCount = parseInt(likeCountElement.textContent, 10);

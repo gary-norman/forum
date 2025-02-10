@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const allReplyForms = document.querySelectorAll('.form-reply');
 
 
-    console.log("found areas: ", textareas)
-    console.log("found replyButtons: ", replyButtons)
+    // console.log("found areas: ", textareas)
+    // console.log("found replyButtons: ", replyButtons)
 
     replyButtons.forEach(button => {
         button.addEventListener("click", function (e) {
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
         postID = textarea.closest('.card').getAttribute('data-post-id');
         commentID = textarea.closest('.card').getAttribute('data-comment-id');
 
-        console.log("found: ", textarea)
+        // console.log("found: ", textarea)
         textarea.addEventListener("input", function () {
             this.style.height = "auto"; // Reset height to recalculate
             this.style.height = this.scrollHeight + "px"; // Set height to fit content

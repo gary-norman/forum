@@ -317,12 +317,14 @@ gap: 0.8rem;
   &:has(.btn-settings),
   &:has(.btn-save-active),
   &:has(.btn-save-empty),
-  &:has(.btn-edit) {
+  &:has(.btn-edit),
+  &:has(.btn-cancel),
+  &:has(.btn-success){
     padding: 0;
   }
-    &:has(.btn-warning), &:has(.btn-success){
-        cursor        : default;
-    }
+  &:has(.btn-warning), &:has(.btn-success){
+    cursor        : default;
+  }
 }
 
 .btn-md span{
@@ -331,17 +333,31 @@ gap: 0.8rem;
 }
 
 .btn-add {
-    background : url('/assets/icons/add_circle_16.svg') no-repeat center;
+  transition: all var(--transition-dur-hover) ease-in-out;
+  background : url('/assets/icons/add_circle_16.svg') no-repeat center;
     width: 2.4rem;
 }
 .btn-minus {
-    background : url('/assets/icons/minus_circle_16.svg') no-repeat center;
+  transition: all var(--transition-dur-hover) ease-in-out;
+  background : url('/assets/icons/minus_circle_16.svg') no-repeat center;
     width: 2.4rem;
 }
 
 .btn-edit {
+  transition: all var(--transition-dur-hover) ease-in-out;
   background: url("/assets/icons/edit_16.svg") no-repeat center;
     width: 1.6rem;
+}
+
+.btn-cancel {
+  transition: all var(--transition-dur-hover) ease-in-out;
+  background: url("/assets/icons/close_16.svg") no-repeat center;
+  width: 1.6rem;
+}
+
+.btn-success {
+  transition: all var(--transition-dur-hover) ease-in-out;
+  background : url('/assets/icons/success_16.svg') no-repeat center;
 }
 
 .btn-copy {
@@ -351,10 +367,7 @@ gap: 0.8rem;
 
 }
 
-.btn-success {
-    transition: all var(--transition-dur-hover) ease-in-out;
-    background : url('/assets/icons/success_16.svg') no-repeat center;
-}
+
 
 .btn-warning {
     transition: all var(--transition-dur-hover) ease-in-out;

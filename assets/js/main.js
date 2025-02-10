@@ -52,14 +52,14 @@ let forgotVisible = false;
 // login/register modal
 const loginHeader = document.querySelector('#modal-header-logreg')
 const loginModal = document.querySelector('#container-form-login');
-const editUserModal = document.querySelector('#container-form-edit-user');
+// const editUserModal = document.querySelector('#container-form-edit-user');
 const accSettingsModal = document.querySelector('#container-form-acc-settings');
 const viewStatsModal = document.querySelector('#container-form-view-stats');
 const removeAccModal = document.querySelector('#container-form-remove-acc');
 // Get the buttons that open the modals
 const openLoginModal = document.querySelector('#btn-open-login-modal');
 const openLoginModalFallback = document.querySelector('#btn-open-login-modal-fallback');
-const openEditUserModal = document.querySelector('#btn-open-edit-user-modal');
+// const openEditUserModal = document.querySelector('#btn-open-edit-user-modal');
 // const openAccSettingsModal = document.querySelector('#btn-open-acc-settings-modal');
 // const openViewStatsModal = document.querySelector('#btn-open-view-stats-modal');
 // const openRemoveAccModal = document.querySelector('#btn-open-remove-acc-modal');
@@ -86,9 +86,14 @@ const validList = regForm.querySelector('ul');
 // adapted from https://medium.com/@cwrworksite/drag-and-drop-file-upload-with-preview-using-javascript-cd85524e4a63
 // user
 const dropAreaUser = document.querySelector('#drop-zone--user-image');
-const dropButtonUser = dropAreaUser.querySelector('.button');
-const inputUser = dropAreaUser.querySelector('input');
-const uploadedFileUser = document.querySelector('#uploaded-file--user-image');
+let dropButtonUser;
+let inputUser;
+let uploadedFileUser;
+if (dropAreaUser) {
+    dropButtonUser = dropAreaUser.querySelector('.button');
+    inputUser = dropAreaUser.querySelector('input');
+    uploadedFileUser = document.querySelector('#uploaded-file--user-image');
+}
 // post
 const dropAreaPost = document.querySelector('#drop-zone--post');
 const dropButtonPost = dropAreaPost.querySelector('.button');
@@ -111,9 +116,16 @@ document.addEventListener('DOMContentLoaded', function () {
     feeds.forEach(feed => {
         feed.classList.add('feeds-wrapper-loaded')
     })
-    const joinedAndOwnedChannelContainer = document.querySelector('#sidebar-channel-block')
-    const joinedAndOwnedChannels = joinedAndOwnedChannelContainer.querySelectorAll('.sidebar-channel')
-    joinedAndOwnedChannels.forEach( channel => channel.addEventListener('click', (e) => navigateToChannel(channel)));
+
+
+    const joinedAndOwnedChannelContainer = document.querySelector('#sidebar-channel-block');
+    let joinedAndOwnedChannels;
+
+    if (joinedAndOwnedChannelContainer) {
+        joinedAndOwnedChannels = joinedAndOwnedChannelContainer.querySelectorAll('.sidebar-channel');
+        joinedAndOwnedChannels.forEach( channel => channel.addEventListener('click', (e) => navigateToChannel(channel)));
+
+    }
 
     toggleUserInteracted("add");
     actButtonContainer = document.querySelector('#activity-bar');
@@ -746,41 +758,46 @@ joinChannelButton.addEventListener('submit', function (event) {
         });
 })
 
+if (inputUser) {
+    inputUser.addEventListener('change', function () {
+        file = this.files[0];
+        dropAreaUser.classList.add('active');
+    });
+
+    // when file is inside drag area
+    dropAreaUser.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        dropAreaUser.classList.add('active');
+        dragText.textContent = 'release to Upload';
+        dragButton.style.display = 'none';
+        // console.log('File is inside the drag area');
+    });
+// when file leaves the drag area
+    dropAreaUser.addEventListener('dragleave', () => {
+        dropAreaUser.classList.remove('active');
+        // console.log('File left the drag area');
+        dragText.textContent = 'drag your file here';
+    });
+// when file is dropped
+    dropAreaUser.addEventListener('drop', (event) => {
+        event.preventDefault();
+        dropAreaUser.classList.add('dropped');
+        // console.log('File is dropped in drag area');
+        file = event.dataTransfer.files[0]; // grab single file even if user selects multiple files
+        // console.log(file);
+        displayFile(uploadedFileUser, dropAreaUser);
+    });
+}
 // SECTION ----- drag and drop ----
 // get user image from manual click
-inputUser.addEventListener('change', function () {
-    file = this.files[0];
-    dropAreaUser.classList.add('active');
-});
+
 // get post image from manual click
 inputPost.addEventListener('change', function () {
     file = this.files[0];
     dropAreaUser.classList.add('active');
 });
 
-// when file is inside drag area
-dropAreaUser.addEventListener('dragover', (event) => {
-    event.preventDefault();
-    dropAreaUser.classList.add('active');
-    dragText.textContent = 'release to Upload';
-    dragButton.style.display = 'none';
-    // console.log('File is inside the drag area');
-});
-// when file leaves the drag area
-dropAreaUser.addEventListener('dragleave', () => {
-    dropAreaUser.classList.remove('active');
-    // console.log('File left the drag area');
-    dragText.textContent = 'drag your file here';
-});
-// when file is dropped
-dropAreaUser.addEventListener('drop', (event) => {
-    event.preventDefault();
-    dropAreaUser.classList.add('dropped');
-    // console.log('File is dropped in drag area');
-    file = event.dataTransfer.files[0]; // grab single file even if user selects multiple files
-    // console.log(file);
-    displayFile(uploadedFileUser, dropAreaUser);
-});
+
 function displayFile(uploadedFile, dropArea) {
     let fileType = file.type;
     // console.log(fileType);
@@ -811,11 +828,13 @@ if (openLoginModal) {
     openLoginModal.addEventListener('click', () => loginModal.style.display = 'block');
 }
 openLoginModalFallback.addEventListener('click', () => loginModal.style.display = 'block');
+// openEditUserModal.addEventListener('click', () => editUserModal.style.display = 'block');
 // openAccSettingsModal.addEventListener('click', () => accSettingsModal.style.display = 'block');
 // openViewStatsModal.addEventListener('click', () => viewStatsModal.style.display = 'block');
 // openRemoveAccModal.addEventListener('click', () => removeAccModal.style.display = 'block');
 // close modals
 closeLoginModal.addEventListener('click', () => loginModal.style.display = 'none');
+// closeEditUserModal.addEventListener('click', () => editUserModal.style.display = 'none');
 // closeAccSettingsModal.addEventListener('click', () => accSettingsModal.style.display = 'none');
 // closeViewStatsModal.addEventListener('click', () => viewStatsModal.style.display = 'none');
 // closeRemoveAccModal.addEventListener('click', () => removeAccModal.style.display = 'none');
@@ -823,9 +842,6 @@ window.addEventListener('click', ({ target }) => {
     switch (target) {
         case loginModal:
             loginModal.style.display = 'none';
-            break;
-        case editUserModal:
-            editUserModal.style.display = 'none';
             break;
         case accSettingsModal:
             accSettingsModal.style.display = 'none';

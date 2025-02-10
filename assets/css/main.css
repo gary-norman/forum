@@ -950,7 +950,8 @@ input[type='email'] {
 .input-wrapper {
   width: min(80%, 25rem);
   position: relative;
-  &.container-reply {
+
+  &.container-reply, &.edit-user {
     width: 100%;
     & textarea {
       resize: none;
@@ -979,8 +980,11 @@ input[type='email'] {
 }
 
 #bio {
-  width: 100%;
-  height: 22rem;
+  resize: none;
+  overflow: hidden;
+  min-width: 100%;
+  min-height: 5rem;
+  max-height: 30rem;
 }
 
 #form-register {
@@ -1189,6 +1193,9 @@ textarea.inactive-input,
 input[type='text'].inactive-input {
   pointer-events: none;
   color: var(--color-fg-4);
+  resize: none;
+  height: fit-content;
+
 }
 
 .searchbar {
@@ -1987,9 +1994,9 @@ main {
   opacity: 0;
   transition: opacity 1s;
 }
-.feeds-wrapper-loaded {
-  opacity: 1;
-}
+/*.feeds-wrapper-loaded {*/
+/*  opacity: 1;*/
+/*}*/
 
 .activity-items {
   color: var(--color-light-1-lab);
@@ -2026,6 +2033,7 @@ main {
 
   &.active-feed {
     display: flex;
+    opacity: 1;
   }
 }
 
@@ -2245,6 +2253,9 @@ main {
   /* Adjust the line height */
   max-height: calc(1.5em * 3);
   /* Set max height to match 3 lines */
+  hyphens: auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .title {
@@ -2338,6 +2349,7 @@ main {
     & form {
       width: 100%;
     }
+
     &>div {
       width: 100%;
 
@@ -2392,15 +2404,12 @@ main {
 .edit-settings {
   display: flex;
   gap: 0.8rem;
-
   & button:has(.btn-success), & button:has(.btn-cancel) {
     display: none;
   }
-
   & button:has(.btn-edit) {
     display: flex;
   }
-
   &.editing {
     & button:has(.btn-success), & button:has(.btn-cancel) {
       display: flex;

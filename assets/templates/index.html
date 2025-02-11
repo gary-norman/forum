@@ -281,8 +281,10 @@
       </div>
 {{/*SECTION     ---------- post form ---------- */}}
     <div popover id="form-post">
+      <div class="modal-header">
+        <div id="modal-header-logreg">create a post</div>
+      </div>
         <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
-          <h3 class="form-title">create a post</h3>
           <label for="channel" class="invisible">channel</label>
           <select id="channel" name="channel">
             <option selected disabled hidden>select a channel</option>
@@ -303,7 +305,7 @@
           <div id="drop-zone--post">
             <div id="uploaded-file--post"></div>
             <div class="drag-drop-text-wrapper">
-              <span class="dragText">drag and drop your file, or</span>
+              <label for="browse--post" class="dragText">drag and drop your file, or</label>
 {{/*              <span class="button">browse</span> */}}
               <input type="file" id="browse--post" name="file-drop" />
             </div>

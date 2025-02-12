@@ -634,24 +634,33 @@
               <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
               <div class="page-control">
                 <div class="page-profile">
-                  {{ if (ne .RandomUser.Avatar "noimage") }}
-                    <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ $userBasePath }}{{ .RandomUser.Avatar }}"></div>
-                  {{ else }}
-                    <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .RandomUser.Username}}"></div>
-                  {{ end }}
+                  {{ if ne .CurrentUser nil}}
+                    {{ if (ne $user.Avatar "noimage") }}
+                      <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ $userBasePath }}{{ $user.Avatar }}"></div>
+                    {{ else }}
+                      <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username}}"></div>
+                    {{ end }}
+                    {{else}}
+                      {{ if (ne .RandomUser.Avatar "noimage") }}
+                        <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ $userBasePath }}{{ .RandomUser.Avatar }}"></div>
+                      {{ else }}
+                        <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .RandomUser.Username}}"></div>
+                      {{ end }}
+                  {{end}}
                   <div class="flex-start">
-                      <h2 class="align-self-start">{{ .RandomUser.Username }}</h2>
+                      <h2 class="align-self-start">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h2>
                       <div>
                           <div class="cont-flex-column">
                             <small>following:</small>
                             <button class="btn-lg btn-icotext btn-follows btn-invert-never">
-                              <span class="btn-following">{{.RandomUser.Following}}</span>
+                              <span class="btn-following">{{ if ne .CurrentUser nil}}{{$user.Following}}{{ else }}{{.RandomUser.Following}}{{ end }}
+                                </span>
                             </button>
                           </div>
                         <div class="cont-flex-column">
                           <small>followers:</small>
                           <button class="btn-lg btn-icotext btn-follows btn-invert-never">
-                            <span class="btn-followers">{{.RandomUser.Followers}}</span>
+                            <span class="btn-followers">{{ if ne .CurrentUser nil}}{{$user.Followers}}{{ else }}{{.RandomUser.Followers}}{{ end }}</span>
                           </button>
                         </div>
 
@@ -841,7 +850,10 @@
                     <div class="cont-flex-column">
 
                       <div class="right-panel-container-name flex-space-between">
-                        <label for="name" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
+                        {{ if ne .CurrentUser nil }}
+                          <label for="bio" class="padded">Edit your bio</label>
+                            {{else}}
+                        {{ end }}
                         {{ if ne .CurrentUser nil }}
                           <div id="settings-user-name" class="edit-settings">
                             <button id="edit-user-name" type="button" class="btn-sm btn-icoonly">
@@ -903,9 +915,10 @@
 
                   <div class="right-panel-container-bio">
                     <div class="right-panel-bio flex-space-between">
-                      <label for="bio" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
+                      {{ if or $user.Description (ne .CurrentUser nil) }}
+                        <label for="bio" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
+                      {{ end }}
                       {{ if ne .CurrentUser nil }}
-
                         <div id="settings-user-bio" class="edit-settings">
                           <button id="edit-user-bio" type="button" class="btn-sm btn-icoonly">
                             <span class="btn-edit" role="contentinfo" aria-label="Edit profile bio"></span>
@@ -920,7 +933,9 @@
 
                       {{ end }} <!-- "nouser" check -->
                     </div>
-                    <pre id="user-bio-content" class="side-panel-block scroll-down">{{ $user.Description }}</pre>
+                    {{ if $user.Description }}
+                      <pre id="user-bio-content" class="side-panel-block scroll-down">{{ $user.Description }}</pre>
+                    {{end}}
                     <div class="input-wrapper edit-user ">
                       <textarea class="scroll-down" id="bio" name="bio" placeholder="{{if $user.Description}}{{else}}update your bio{{end}}">{{if $user.Description}}{{ $user.Description }}{{end}}</textarea>
                     </div>

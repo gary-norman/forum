@@ -507,10 +507,19 @@ func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Parse, "editUserDetails", err)
 		return
 	}
+	currentAvatar := user.Avatar
+	fmt.Printf("currentAvatar: %v", currentAvatar)
 	user.Avatar = GetFileName(r, "file-drop", "editUserDetails", "user")
-	description := r.FormValue("bio")
-	if description != "" {
-		user.Description = description
+	if currentAvatar != "noimage" {
+		user.Avatar = currentAvatar
+	}
+	currentDescription := r.FormValue("bio")
+	if currentDescription != "" {
+		user.Description = currentDescription
+	}
+	currentName := r.FormValue("name")
+	if currentName != "" {
+		user.Username = currentName
 	}
 	editErr := app.users.Edit(user)
 	if editErr != nil {

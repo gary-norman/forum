@@ -934,13 +934,6 @@ input[type='email'] {
   }
 }
 
-#bio {
-  resize: none;
-  overflow: hidden;
-  min-width: 100%;
-  min-height: 5rem;
-  max-height: 30rem;
-}
 
 #form-register {
   /*textarea {*/
@@ -1748,6 +1741,10 @@ hr.solid {
   align-self: flex-end;
 }
 
+.align-self-center {
+  align-self: center;
+}
+
 .margin-auto-0 {
   margin-inline: auto 0;
 }
@@ -1798,7 +1795,7 @@ hr.solid {
   }
 }
 
-#sidebar-channel-block, .sidebar-channel-block {
+#sidebar-channel-block, .side-panel-block {
   font-size: 1.6rem;
   padding: 0 1.2rem;
   gap: 1.2rem;

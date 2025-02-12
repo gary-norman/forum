@@ -838,22 +838,34 @@
 
                   <form action="/edituser" enctype="multipart/form-data" method="POST">
 
-                  <div class="right-panel-container-name flex-space-between">
-                    <h4 class="right-panel-name">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
-                    {{ if ne .CurrentUser nil }}
-                      <div id="settings-user-name" class="edit-settings">
-                        <button id="edit-user-name" type="button" class="btn-sm btn-icoonly">
-                          <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
-                        </button>
-                        <button id="submit-user-name" type="submit" name="bio" value="bio" class="btn-sm btn-icoonly">
-                          <span class="btn-success" role="contentinfo" aria-label="Submit new name"></span>
-                        </button>
-                        <button id="cancel-user-name" type="button" class="btn-sm btn-icoonly">
-                          <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing your name"></span>
-                        </button>
+                    <div class="cont-flex-column">
+
+                      <div class="right-panel-container-name flex-space-between">
+                        <label for="name" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
+                        {{ if ne .CurrentUser nil }}
+                          <div id="settings-user-name" class="edit-settings">
+                            <button id="edit-user-name" type="button" class="btn-sm btn-icoonly">
+                              <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
+                            </button>
+                            <button id="submit-user-name" type="submit" value="bio" class="btn-sm btn-icoonly">
+                              <span class="btn-success" role="contentinfo" aria-label="Submit new name"></span>
+                            </button>
+                            <button id="cancel-user-name" type="button" class="btn-sm btn-icoonly">
+                              <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing your name"></span>
+                            </button>
+                          </div>
+                        {{ end }} <!-- "nouser" check -->
+
                       </div>
-                    {{ end }} <!-- "nouser" check -->
-                  </div>
+                      <h4 id="user-name-content" class="right-panel-name">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
+                      {{ if ne .CurrentUser nil }}
+                      <div class="input-wrapper edit-user ">
+                        <textarea class="scroll-down" id="name" name="name" placeholder="{{$user.Username}}">{{$user.Username}}</textarea>
+                      </div>
+
+                      {{ end }} <!-- "nouser" check -->
+                    </div>
+
 
 
                   {{ if ne .CurrentUser nil }}
@@ -871,7 +883,7 @@
                           <button id="edit-user-avatar" type="button" class="btn-sm btn-icoonly">
                             <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
                           </button>
-                          <button id="submit-user-avatar" type="submit" name="image" value="image" class="btn-sm btn-icoonly">
+                          <button id="submit-user-avatar" type="submit" value="image" class="btn-sm btn-icoonly">
                             <span class="btn-success" role="contentinfo" aria-label="Submit new avatar"></span>
                           </button>
                           <button id="cancel-user-avatar" type="button" class="btn-sm btn-icoonly">
@@ -882,9 +894,8 @@
                       <div id="drop-zone--user-image">
                         <div id="uploaded-file--user-image"></div>
                         <div class="drag-drop-text-wrapper">
-                          <span class="dragText">drag and drop your file, or</span>
-                                           <span class="button">browse</span>
-                          <input type="file" id="browse--user-image" name="file-drop" />
+                          <div class="dragText">drag and drop your file, or</div>
+                          <input type="file" class="align-self-center" id="browse--user-image" name="file-drop" />
                         </div>
                       </div>
                     </div>
@@ -892,14 +903,14 @@
 
                   <div class="right-panel-container-bio">
                     <div class="right-panel-bio flex-space-between">
-                      <label for="user-bio-content bio" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
+                      <label for="bio" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
                       {{ if ne .CurrentUser nil }}
 
                         <div id="settings-user-bio" class="edit-settings">
                           <button id="edit-user-bio" type="button" class="btn-sm btn-icoonly">
                             <span class="btn-edit" role="contentinfo" aria-label="Edit profile bio"></span>
                           </button>
-                          <button id="submit-user-bio" type="submit" name="bio" value="bio" class="btn-sm btn-icoonly">
+                          <button id="submit-user-bio" type="submit" value="bio" class="btn-sm btn-icoonly">
                             <span class="btn-success" role="contentinfo" aria-label="Submit new bio"></span>
                           </button>
                           <button id="cancel-user-bio" type="button" class="btn-sm btn-icoonly">
@@ -909,9 +920,9 @@
 
                       {{ end }} <!-- "nouser" check -->
                     </div>
-                    <textarea id="user-bio-content" class="inactive-input" name="content">{{ $user.Description }}</textarea>
-                    <div class="input-wrapper edit-user">
-                      <textarea id="bio" name="bio" placeholder="{{if $user.Description}}{{ $user.Description }}{{else}}update your bio{{end}}"></textarea>
+                    <pre id="user-bio-content" class="side-panel-block scroll-down">{{ $user.Description }}</pre>
+                    <div class="input-wrapper edit-user ">
+                      <textarea class="scroll-down" id="bio" name="bio" placeholder="{{if $user.Description}}{{else}}update your bio{{end}}">{{if $user.Description}}{{ $user.Description }}{{end}}</textarea>
                     </div>
                   </div>
 
@@ -924,7 +935,7 @@
                   <div class="right-panel-container-modded-channels">
                     <div class="sidebar-block sidebar-channels">
                       <small class="padded">Modded Channels</small>
-                      <div class="sidebar-channel-block">
+                      <div class="side-panel-block">
                         <div class="sidebar-channel">
                           <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
                             <span class="card-pic profile-pic"></span>
@@ -1093,7 +1104,7 @@
                     </button>
                   </div>
                 {{ end }}
-                  <div class="sidebar-channel-block">
+                  <div class="side-panel-block">
                     <article>{{ .ThisChannel.Description }}</article>
                   </div>
                   <textarea id="channel-bio-content" class="inactive-input" name="content" style="display: none">{{ .ThisChannel.Description }}</textarea>
@@ -1111,7 +1122,7 @@
                   {{ else }}
                   <small class="padded">Moderators</small>
                   {{ end }}
-                  <div class="sidebar-channel-block">
+                  <div class="side-panel-block">
 {{/*                                     TODO range through moderators*/}}
                     <div class="sidebar-channel">
                       <div class="container-channel-info">
@@ -1141,7 +1152,7 @@
                   <label class="padded" for="rules-content">Channel rules</label>
                 </div>
               {{ end }}
-              <div class="sidebar-channel-block">
+              <div class="side-panel-block">
                 <ul class="sidebar-channel-ul">
                   {{ range .ThisChannelRules}}
                   <li>{{ .Rule }}</li>

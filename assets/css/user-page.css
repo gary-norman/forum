@@ -130,13 +130,55 @@
     }
 }
 
-.user-follow {
-
-    /*& img {*/
-    /*    filter   : var(--filter-invert-off_on);*/
-    /*}*/
+#drop-zone--user-image {
+    display: none;
+    &.editing {
+        display: flex;
+    }
 }
 
-.user-share {
-
+/* username displayed by default, before editing */
+#user-name-content {
+    display: flex;
+    min-height: 2.4rem;
+    margin-bottom: 1.2rem;
+    &.editing {
+        display: none;
+    }
 }
+
+/*text input, when editing name */
+#name {
+    display: none;
+    min-height: 2.4rem;
+    margin-bottom: 2.4rem;
+    &.editing {
+        display: flex;
+    }
+}
+
+#user-bio-content {
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    overflow-y: scroll;
+    white-space: pre-wrap;
+    max-height: 30.4rem;
+    &.editing {
+        display: none;
+    }
+}
+
+#bio {
+    resize: none;
+    min-width: 100%;
+    min-height: 5rem;
+    max-height: 30.4rem;
+    display: none;
+    padding: 0.8rem 1.2rem;
+    overflow-y: scroll;
+
+    &.editing {
+        display: flex;
+    }
+}
+

@@ -49,6 +49,7 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]mode
 			log.Printf(ErrorMsgs().Close, rows, "OwnedOrJoinedByCurrentUser", closeErr)
 		}
 	}()
+
 	var channels []models.Channel
 	for rows.Next() {
 		var c models.Channel

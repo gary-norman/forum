@@ -113,6 +113,7 @@ type Mod struct {
 	ID        int `json:"id"`
 	UserID    int `json:"userId"`
 	ChannelID int `json:"channelId"`
+	Created   time.Time `json:"created"`
 }
 
 type Post struct {

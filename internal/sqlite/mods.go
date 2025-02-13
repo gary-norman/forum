@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"github.com/gary-norman/forum/internal/models"
 	"log"
+  "fmt"
 )
 
 type ModModel struct {
@@ -11,7 +12,7 @@ type ModModel struct {
 }
 
 func (m *ModModel) Insert(userID, channelID int) error {
-	stmt := "INSERT INTO Mods (UserID, ChannelID) VALUES (?, ?)"
+	stmt := "INSERT INTO Mods (UserID, ChannelID, Created) VALUES (?, ?, DateTime('now'))"
 	_, err := m.DB.Exec(stmt, userID, channelID)
 	return err
 }
@@ -44,4 +45,52 @@ func (m *ModModel) All() ([]models.Mod, error) {
 	}
 
 	return Mods, nil
+}
+
+type ModIds struct {
+  UserID int `json:"userId"`
+  ChannelID int `json:"channelId"`
+}
+
+// GetModOrModdedChannelIDs returns a slice of UserID if the ChannelID is provided, and vice-versa
+func (m *ModModel) GetModOrModdedChannelIDs(ID int, column string) ([]int, error) {
+	validColumns := map[string]bool{
+		"ID":          true,
+		"UserID":     true,
+		"ChannelID":        true,
+		"Created":      true,
+  }
+  stmt := fmt.Sprintf("SELECT UserID, ChannelID FROM Mods WHERE %s = ?", column)
+
+
+	if !validColumns[column] {
+		return nil, fmt.Errorf("invalid column name: %s", column)
+	}
+	rows, queryErr := m.DB.Query(stmt, ID)
+	if queryErr != nil {
+		return nil, queryErr
+	}
+	defer func() {
+		if closeErr := rows.Close(); closeErr != nil {
+			log.Printf(ErrorMsgs().Close, rows, "ModSearch", closeErr)
+		}
+	}()
+
+  var ids []ModIds
+  for rows.Next() {
+    var m ModIds
+    if err := rows.Scan(&m.UserID, &m.ChannelID); err != nil {
+      return nil, err
+    }
+    ids = append(ids, m)
+  }
+  var returnedIds []int
+    for _, id := range ids {
+      if column == "UserID" {
+        returnedIds = append(returnedIds, id.UserID)
+      } else if column == "ChannelID" {
+        returnedIds = append(returnedIds, id.ChannelID)
+      }
+    }
+  return returnedIds, nil
 }

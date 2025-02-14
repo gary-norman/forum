@@ -801,7 +801,7 @@ input[type="email"] {
     color: var(--color-bg-4);
   }
 
-  input[type='file'] {
+  input[type="file"] {
     padding: 0;
     position: absolute;
     & .button {
@@ -1211,7 +1211,9 @@ input[type="checkbox"]:checked {
   margin-block-start: 0.8rem;
   border: 1px solid var(--color-bg-3);
   border-radius: 1rem;
-  box-shadow: rgb(0 0 0 / 16%) 0 3px 6px, rgb(0 0 0 / 23%) 0 3px 6px;
+  box-shadow:
+    rgb(0 0 0 / 16%) 0 3px 6px,
+    rgb(0 0 0 / 23%) 0 3px 6px;
   max-width: 75dvw;
   max-height: 75dvh;
   opacity: 0;
@@ -1233,7 +1235,7 @@ input[type="checkbox"]:checked {
   & select {
     margin-inline: auto;
     width: 90%;
-    padding: .4rem .4rem .4rem 1.2rem;
+    padding: 0.4rem 0.4rem 0.4rem 1.2rem;
     border: 1px solid var(--color-bg-3);
     border-radius: var(--btn-radius);
   }
@@ -1343,23 +1345,10 @@ input[type="checkbox"]:checked {
 .share-container {
   display: flex;
   flex-direction: column;
-  background: var(--color-bg-2);
   padding: 1.2rem;
   gap: 0.4rem;
-  border: 1px solid var(--color-bg-3);
-  border-radius: 1rem;
-  box-shadow: rgb(0 0 0 / 16%) 0 3px 6px, rgb(0 0 0 / 23%) 0 3px 6px;
-
-
-
-
-
-
-
-
-
-  &>label,
-  &>p {
+  & > label,
+  & > p {
     margin: 0 0 -0.8rem 0.8rem;
   }
 }
@@ -1370,8 +1359,14 @@ input[type="checkbox"]:checked {
 }
 
 .share-container {
-  flex-direction: column;
+  /* flex-direction: column; */
   padding: 1.6rem;
+  background: var(--color-bg-2);
+  border-radius: 1rem;
+  border: 1px solid var(--color-bg-3);
+  box-shadow:
+    rgb(0 0 0 / 16%) 0 3px 6px,
+    rgb(0 0 0 / 23%) 0 3px 6px;
 }
 
 [id^="share-button-"] {
@@ -1482,12 +1477,12 @@ input[type="checkbox"]:checked {
 /*  cursor: pointer;*/
 /*}*/
 .dragText,
-[id^='browse'] {
+[id^="browse"] {
   /* padding: 0.5rem 0; */
   color: var(--color-fg-1);
 }
 
-[id^='browse'] {
+[id^="browse"] {
   background: var(--color-hl-pink);
   border-radius: var(--border-radius-button);
   width: 85%;

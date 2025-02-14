@@ -456,7 +456,7 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Cookies, "delete", delCookiErr)
 	}
 	// send user confirmation
-	log.Printf(Colors.Green+"%v logged out successfully!", user)
+	log.Printf(Colors.Green+"%v logged out successfully!", user.Username)
 	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
 		"code":    http.StatusOK,
 		"message": "Logged out successfully!",
@@ -525,6 +525,9 @@ func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 	if editErr != nil {
 		log.Printf(ErrorMsgs().Edit, user.Username, "EditUserDetails", editErr)
 	}
+  if err := app.cookies.CreateCookies(w, user); err != nil {
+    log.Printf(ErrorMsgs().KeyValuePair, "error creating cookies", err)
+  }
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 

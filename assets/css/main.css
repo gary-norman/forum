@@ -756,12 +756,12 @@ a:active {
   background: var(--color-fg-2);
   border-radius: 1rem;
   padding: 0 0.4rem;
-  margin: 0.4rem;
+  /* margin: 0.4rem; */
   position: absolute;
   z-index: var(--z-index-user-label);
-  top: 0.7rem;
-  left: 15rem;
-  transform: translate(0.8rem, -0.4rem);
+  /* top: 0.7rem; */
+  /* left: 15rem; */
+  transform: translate(0.8rem, -0.3rem);
   /*transition:*/
   /*  font-size var(--transition-dur-hover) ease-in-out,*/
   /*  color var(--transition-dur-hover) ease-in-out,*/
@@ -789,7 +789,7 @@ input[type="text"],
 input[type="password"],
 input[type="email"] {
   position: relative;
-  /*margin: 0.8rem;*/
+  margin-block: 0.4rem;
   border: 1px solid var(--color-bg-4);
   font-size: 1.6rem;
   border-radius: var(--border-radius-input);
@@ -800,16 +800,6 @@ input[type="email"] {
   &::placeholder {
     color: var(--color-bg-4);
   }
-
-  input[type="file"] {
-    padding: 0;
-    position: absolute;
-    & .button {
-      background: hotpink;
-      border-radius: var(--border-radius-button);
-    }
-  }
-
   &:focus-visible {
     outline: none;
     border: 1px solid var(--color-hl-pink);
@@ -820,11 +810,20 @@ input[type="email"] {
   }
 }
 
+input[type="file"] {
+  padding: 0;
+  margin-block-end: 0.8rem;
+  & .button {
+    background: hotpink;
+    border-radius: var(--border-radius-button);
+  }
+}
+
 /* TODO use @starting-style to achieve this */
 .user-interacted > * {
-  & focus-visible ~ label {
-    flex-basis: auto;
-    position: absolute;
+  &:focus-visible ~ label {
+    /* flex-basis: auto; */
+    /* position: absolute; */
     /*background: var(--color-hl-pink);*/
     /*left: 1rem;*/
     /*font-size: 1rem;*/
@@ -1241,13 +1240,12 @@ input[type="checkbox"]:checked {
   }
 
   & input {
-    margin: 0.8rem 0;
+    /* margin: 0.8rem 0; */
     /* width: max-content; */
   }
 
   & textarea {
     overflow: visible;
-    margin: 0.8rem 0 0 0;
     padding: 0.4rem;
     resize: both;
     font-size: var(--font-sz-cards);

@@ -65,14 +65,13 @@ func (m *PostModel) All() ([]models.Post, error) {
 }
 
 func (m *PostModel) GetPostsByChannel(channel int) ([]models.Post, error) {
-	stmt := "SELECT * from posts where channelID = ? ORDER BY ID DESC"
+	stmt := "SELECT * FROM posts WHERE ChannelID = ? ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt, channel)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error:", "select")
+		log.Printf(ErrorMsgs().KeyValuePair, "Error", "select")
 		log.Printf(ErrorMsgs().Query, stmt, err)
 		return nil, err
 	}
-
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
 			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
@@ -88,15 +87,15 @@ func (m *PostModel) GetPostsByChannel(channel int) ([]models.Post, error) {
 			&p.Content,
 			&p.Images,
 			&p.Created,
-			&p.Author,
-			&p.AuthorAvatar,
 			&p.IsCommentable,
+			&p.Author,
 			&p.AuthorID,
-			&p.ChannelID,
+			&p.AuthorAvatar,
 			&p.ChannelName,
+			&p.ChannelID,
 			&p.IsFlagged)
 		if scanErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "Error:", "scan")
+			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
 			log.Printf(ErrorMsgs().Query, stmt, scanErr)
 			return nil, scanErr
 		}

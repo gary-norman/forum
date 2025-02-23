@@ -934,7 +934,6 @@
                             <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the bio"></span>
                           </button>
                         </div>
-
                       {{ end }} <!-- "nouser" check -->
                     </div>
                     {{ if $user.Description }}
@@ -944,13 +943,7 @@
                       <textarea class="scroll-down" id="bio" name="bio" placeholder="{{if $user.Description}}{{else}}update your bio{{end}}">{{if $user.Description}}{{ $user.Description }}{{end}}</textarea>
                     </div>
                   </div>
-
                   </form>
-
-
-
-
-
                   <div class="right-panel-container-modded-channels">
                     <div class="sidebar-block sidebar-channels">
                       <small class="padded">Modded Channels</small>
@@ -1077,7 +1070,7 @@
               <div id="wrapper-channel-feed" style="position: absolute; width: 100%; height: 100%">
                 <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
 {{/*                         TODO range through channel posts */}}
-                {{range .Posts}} <!-- channel page posts -->
+                {{range .ThisChannelPosts}} <!-- channel page posts -->
                   {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments) }}
                 {{end}} <!-- channel page posts -->
                 </div>

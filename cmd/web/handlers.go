@@ -158,6 +158,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "getHome > posts.GetPostsByChannel", err)
 	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "thisChannelPosts", thisChannelPosts)
 	// Retrieve total likes and dislikes for each Channel post
 	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
 	thisChannelPostsWithWrapping := app.getPostsWithWrapping(thisChannelPosts, commentsWithWrapping)

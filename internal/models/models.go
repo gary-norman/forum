@@ -70,7 +70,7 @@ type Rule struct {
 	Predefined bool      `json:"predefined"`
 }
 
-type POSTRule struct {
+type PostRule struct {
 	ID   string `json:"id"`
 	Text string `json:"text"`
 }
@@ -240,6 +240,7 @@ type TemplateData struct {
 	ThisChannelIsOwnedOrJoined bool
 	ThisChannelIsOwned         bool
 	ThisChannelRules           []Rule
+	ThisChannelPosts           []PostWithWrapping
 	OwnedChannels              []Channel
 	JoinedChannels             []Channel
 	OwnedAndJoinedChannels     []Channel

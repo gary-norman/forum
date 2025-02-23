@@ -50,24 +50,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			Replies:   []models.CommentWithWrapping{}, // Initialize with no replies
 		}
 	}
-	postsWithWrapping := make([]models.PostWithWrapping, len(posts))
-	for index, post := range posts {
-		/// Filter comments that belong to the current post based on the postID and CommentedPostID
-		var postComments []models.CommentWithWrapping
-		for _, comment := range commentsWithWrapping {
-			// Match the postID with CommentedPostID
-			if comment.Comment.CommentedPostID != nil && *comment.Comment.CommentedPostID == post.ID {
-				// For each comment, recursively assign its replies
-				commentWithReplies := getRepliesForComment(comment, commentsWithWrapping)
-				postComments = append(postComments, commentWithReplies)
-			}
-		}
-		postsWithWrapping[index] = models.PostWithWrapping{
-			Post:      post,
-			TimeSince: getTimeSince(post.Created),
-			Comments:  postComments, // Only include comments related to the current post
-		}
-	}
+	postsWithWrapping := app.getPostsWithWrapping(posts, commentsWithWrapping)
 
 	// SECTION --- user ---
 	allUsers, allUsersErr := app.users.All()
@@ -175,6 +158,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "getHome > posts.GetPostsByChannel", err)
 	}
+	// Retrieve total likes and dislikes for each Channel post
+	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
+	thisChannelPostsWithWrapping := app.getPostsWithWrapping(thisChannelPosts, commentsWithWrapping)
 
 	// SECTION -- template ---
 	templateData := models.TemplateData{
@@ -194,6 +180,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		ThisChannelIsOwned:         isOwned,
 		ThisChannelIsOwnedOrJoined: isJoinedOrOwned,
 		ThisChannelRules:           thisChannelRules,
+		ThisChannelPosts:           thisChannelPostsWithWrapping,
 		// ---------- misc ----------
 		Images:    nil,
 		Reactions: nil,
@@ -477,10 +464,10 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 
 func (app *app) getPostsLikesAndDislikes(posts []models.Post) []models.Post {
 	for i, post := range posts {
-		likes, dislikes, likesErr := app.reactions.CountReactions(post.ID, 0) // Pass 0 for CommentID if it's a post
+		likes, dislikes, err := app.reactions.CountReactions(post.ID, 0) // Pass 0 for CommentID if it's a post
 		//fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
-		if likesErr != nil {
-			log.Printf("Error counting reactions: %v", likesErr)
+		if err != nil {
+			log.Printf("Error counting reactions: %v", err)
 			likes, dislikes = 0, 0 // Default values if there is an error
 		}
 		posts[i].Likes += likes
@@ -829,6 +816,28 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
+func (app *app) getPostsWithWrapping(posts []models.Post, comments []models.CommentWithWrapping) []models.PostWithWrapping {
+	postsWithWrapping := make([]models.PostWithWrapping, len(posts))
+	for index, post := range posts {
+		/// Filter comments that belong to the current post based on the postID and CommentedPostID
+		var postComments []models.CommentWithWrapping
+		for _, comment := range comments {
+			// Match the postID with CommentedPostID
+			if comment.Comment.CommentedPostID != nil && *comment.Comment.CommentedPostID == post.ID {
+				// For each comment, recursively assign its replies
+				commentWithReplies := getRepliesForComment(comment, comments)
+				postComments = append(postComments, commentWithReplies)
+			}
+		}
+		postsWithWrapping[index] = models.PostWithWrapping{
+			Post:      post,
+			TimeSince: getTimeSince(post.Created),
+			Comments:  postComments, // Only include comments related to the current post
+		}
+	}
+	return postsWithWrapping
+}
+
 //SECTION ------- channel handlers ----------
 
 func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
@@ -967,7 +976,7 @@ func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Decode JSON into a slice of Rule structs
-	var rules []models.POSTRule
+	var rules []models.PostRule
 	if err := json.Unmarshal([]byte(rulesJSON), &rules); err != nil {
 		http.Error(w, "Invalid JSON format", http.StatusBadRequest)
 		return

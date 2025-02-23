@@ -87,7 +87,7 @@ func JsonError(messageStruct TemplateData) {
 			continue
 		}
 		if fieldType.Name == "Posts" {
-			//fmt.Printf(ErrorMsgs.KeyValuePair, "Number of posts", len(field.Interface().([]PostWithDaysAgo)))
+			//fmt.Printf(ErrorMsgs.KeyValuePair, "Number of posts", len(field.Interface().([]PostWithWrapping)))
 			continue
 		}
 		if fieldType.Name == "Images" {
@@ -106,7 +106,7 @@ func JsonError(messageStruct TemplateData) {
 	}
 }
 
-func JsonPost(messageStruct PostWithDaysAgo) {
+func JsonPost(messageStruct PostWithWrapping) {
 	ErrorMsgs := CreateErrorMessages()
 	val := reflect.ValueOf(messageStruct)
 	typ := val.Type()

@@ -110,9 +110,9 @@ type Membership struct {
 }
 
 type Mod struct {
-	ID        int `json:"id"`
-	UserID    int `json:"userId"`
-	ChannelID int `json:"channelId"`
+	ID        int       `json:"id"`
+	UserID    int       `json:"userId"`
+	ChannelID int       `json:"channelId"`
 	Created   time.Time `json:"created"`
 }
 
@@ -134,16 +134,16 @@ type Post struct {
 	Dislikes      int    `json:"dislikes"`
 }
 
-type PostWithDaysAgo struct {
+type PostWithWrapping struct {
 	Post
-	Comments  []CommentWithDaysAgo
+	Comments  []CommentWithWrapping
 	TimeSince string
 }
 
-type CommentWithDaysAgo struct {
-	Comment   Comment              // The actual comment data
-	TimeSince string               // Time since the comment was created
-	Replies   []CommentWithDaysAgo // Nested replies (which can have their own replies)
+type CommentWithWrapping struct {
+	Comment   Comment               // The actual comment data
+	TimeSince string                // Time since the comment was created
+	Replies   []CommentWithWrapping // Nested replies (which can have their own replies)
 }
 
 type Image struct {
@@ -231,7 +231,7 @@ type TemplateData struct {
 	RandomUser  User
 	CurrentUser *User
 	// ---------- posts ----------
-	Posts []PostWithDaysAgo
+	Posts []PostWithWrapping
 	// ---------- channels ----------
 	Channels                   []Channel
 	AllChannels                []Channel

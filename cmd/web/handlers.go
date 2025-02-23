@@ -31,57 +31,38 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, postsErr.Error(), 500)
 		return
 	}
-	// Retrieve total likes and dislikes for each post
-	for i, post := range posts {
-		likes, dislikes, likesErr := app.reactions.CountReactions(post.ID, 0) // Pass 0 for CommentID if it's a post
-		//fmt.Printf("PostID: %v, Likes: %v, Disikes: %v\n", posts[i].ID, likes, dislikes)
-		if likesErr != nil {
-			log.Printf("Error counting reactions: %v", likesErr)
-			likes, dislikes = 0, 0 // Default values if there is an error
-		}
-		posts[i].Likes += likes
-		posts[i].Dislikes += dislikes
-	}
 
 	comments, commentsErr := app.comments.All()
 	if commentsErr != nil {
 		//http.Error(w, commentsErr.Error(), 500)
 		log.Printf("Error counting comments: %v", commentsErr)
 	}
-
 	// Retrieve total likes and dislikes for each post
-	for i, comment := range comments {
-		likes, dislikes, likesErr := app.reactions.CountReactions(0, comment.ID) // Pass 0 for CommentID if it's a post
-		//fmt.Printf("PostID: %v, Likes: %v, Disikes: %v\n", posts[i].ID, likes, dislikes)
-		if likesErr != nil {
-			log.Printf("Error counting reactions: %v", likesErr)
-			likes, dislikes = 0, 0 // Default values if there is an error
-		}
-		comments[i].Likes += likes
-		comments[i].Dislikes += dislikes
-	}
-	//TODO ---------- change WithDaysAgo to WithWrapping ----------
-	commentsWithDaysAgo := make([]models.CommentWithDaysAgo, len(comments))
+	posts = app.getPostsLikesAndDislikes(posts)
+	// Retrieve total likes and dislikes for each comment
+	comments = app.getCommentsLikesAndDislikes(comments)
+
+	commentsWithWrapping := make([]models.CommentWithWrapping, len(comments))
 	for index, comment := range comments {
-		commentsWithDaysAgo[index] = models.CommentWithDaysAgo{
+		commentsWithWrapping[index] = models.CommentWithWrapping{
 			Comment:   comment,
 			TimeSince: getTimeSince(comment.Created),
-			Replies:   []models.CommentWithDaysAgo{}, // Initialize with no replies
+			Replies:   []models.CommentWithWrapping{}, // Initialize with no replies
 		}
 	}
-	postsWithDaysAgo := make([]models.PostWithDaysAgo, len(posts))
+	postsWithWrapping := make([]models.PostWithWrapping, len(posts))
 	for index, post := range posts {
 		/// Filter comments that belong to the current post based on the postID and CommentedPostID
-		var postComments []models.CommentWithDaysAgo
-		for _, comment := range commentsWithDaysAgo {
+		var postComments []models.CommentWithWrapping
+		for _, comment := range commentsWithWrapping {
 			// Match the postID with CommentedPostID
 			if comment.Comment.CommentedPostID != nil && *comment.Comment.CommentedPostID == post.ID {
 				// For each comment, recursively assign its replies
-				commentWithReplies := getRepliesForComment(comment, commentsWithDaysAgo)
+				commentWithReplies := getRepliesForComment(comment, commentsWithWrapping)
 				postComments = append(postComments, commentWithReplies)
 			}
 		}
-		postsWithDaysAgo[index] = models.PostWithDaysAgo{
+		postsWithWrapping[index] = models.PostWithWrapping{
 			Post:      post,
 			TimeSince: getTimeSince(post.Created),
 			Comments:  postComments, // Only include comments related to the current post
@@ -185,11 +166,15 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// get all rules for the current channel
 	thisChannelRules, err := app.rules.AllForChannel(thisChannel.ID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "getHome > AllForChannel", err)
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > rules.AllForChannel", err)
 	}
 	// TODO get channel moderators
 
 	// TODO get channel posts
+	thisChannelPosts, err := app.posts.GetPostsByChannel(thisChannel.ID)
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > posts.GetPostsByChannel", err)
+	}
 
 	// SECTION -- template ---
 	templateData := models.TemplateData{
@@ -198,7 +183,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		RandomUser:  randomUser,
 		CurrentUser: currentUser,
 		// ---------- posts ----------
-		Posts: postsWithDaysAgo,
+		Posts: postsWithWrapping,
 		// ---------- channels ----------
 		AllChannels:                allChannels,
 		ThisChannel:                thisChannel,
@@ -488,6 +473,36 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 	log.Println(fprintf)
 }
 
+//SECTION ------- reactions handlers ----------
+
+func (app *app) getPostsLikesAndDislikes(posts []models.Post) []models.Post {
+	for i, post := range posts {
+		likes, dislikes, likesErr := app.reactions.CountReactions(post.ID, 0) // Pass 0 for CommentID if it's a post
+		//fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
+		if likesErr != nil {
+			log.Printf("Error counting reactions: %v", likesErr)
+			likes, dislikes = 0, 0 // Default values if there is an error
+		}
+		posts[i].Likes += likes
+		posts[i].Dislikes += dislikes
+	}
+	return posts
+}
+
+func (app *app) getCommentsLikesAndDislikes(comments []models.Comment) []models.Comment {
+	for i, comment := range comments {
+		likes, dislikes, likesErr := app.reactions.CountReactions(0, comment.ID) // Pass 0 for PostID if it's a comment
+		//fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
+		if likesErr != nil {
+			log.Printf("Error counting reactions: %v", likesErr)
+			likes, dislikes = 0, 0 // Default values if there is an error
+		}
+		comments[i].Likes += likes
+		comments[i].Dislikes += dislikes
+	}
+	return comments
+}
+
 //SECTION ------- user handlers ----------
 
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
@@ -525,9 +540,9 @@ func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 	if editErr != nil {
 		log.Printf(ErrorMsgs().Edit, user.Username, "EditUserDetails", editErr)
 	}
-  if err := app.cookies.CreateCookies(w, user); err != nil {
-    log.Printf(ErrorMsgs().KeyValuePair, "error creating cookies", err)
-  }
+	if err := app.cookies.CreateCookies(w, user); err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "error creating cookies", err)
+	}
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
@@ -1039,9 +1054,9 @@ func getRandomUser(userSlice []models.User) models.User {
 }
 
 // getRepliesForComment Recursively fetches replies for each comment
-func getRepliesForComment(comment models.CommentWithDaysAgo, commentsWithDaysAgo []models.CommentWithDaysAgo) models.CommentWithDaysAgo {
+func getRepliesForComment(comment models.CommentWithWrapping, commentsWithDaysAgo []models.CommentWithWrapping) models.CommentWithWrapping {
 	// Find replies to the current comment
-	var replies []models.CommentWithDaysAgo
+	var replies []models.CommentWithWrapping
 	for _, possibleReply := range commentsWithDaysAgo {
 		if possibleReply.Comment.CommentedCommentID != nil && *possibleReply.Comment.CommentedCommentID == comment.Comment.ID {
 			replyWithReplies := getRepliesForComment(possibleReply, commentsWithDaysAgo) // Recursively get replies for this reply

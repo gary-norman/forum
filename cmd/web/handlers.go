@@ -36,9 +36,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error counting comments: %v", commentsErr)
 	}
 	// Retrieve total likes and dislikes for each post
-	posts = app.getPostsLikesAndDislikes(posts)
+	app.getPostsLikesAndDislikes(posts)
 	// Retrieve total likes and dislikes for each comment
-	comments = app.getCommentsLikesAndDislikes(comments)
+	app.getCommentsLikesAndDislikes(comments)
 
 	commentsWithWrapping := make([]models.CommentWithWrapping, len(comments))
 	for index, comment := range comments {
@@ -169,7 +169,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf(ErrorMsgs().KeyValuePair, "thisChannelPosts", len(thisChannelPosts))
 	// Retrieve total likes and dislikes for each Channel post
-	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
+	app.getPostsLikesAndDislikes(thisChannelPosts)
 	thisChannelPostsWithWrapping := app.getPostsWithWrapping(thisChannelPosts, commentsWithWrapping)
 
 	// SECTION -- template ---
@@ -475,7 +475,8 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 //	Dislikes(count int)
 //}
 
-func (app *app) getPostsLikesAndDislikes(posts []models.Post) []models.Post {
+// getPostsLikesAndDislikes updates the reactions of each post in the given slice
+func (app *app) getPostsLikesAndDislikes(posts []models.Post) {
 	for i, post := range posts {
 		likes, dislikes, err := app.reactions.CountReactions(post.ID, 0) // Pass 0 for CommentID if it's a post
 		// fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
@@ -483,13 +484,12 @@ func (app *app) getPostsLikesAndDislikes(posts []models.Post) []models.Post {
 			log.Printf("Error counting reactions: %v", err)
 			likes, dislikes = 0, 0 // Default values if there is an error
 		}
-		posts[i].Likes += likes
-		posts[i].Dislikes += dislikes
+		posts[i].React(likes, dislikes)
 	}
-	return posts
 }
 
-func (app *app) getCommentsLikesAndDislikes(comments []models.Comment) []models.Comment {
+// getCommentsLikesAndDislikes updates the reactions of each comment in the given slice
+func (app *app) getCommentsLikesAndDislikes(comments []models.Comment) {
 	for i, comment := range comments {
 		likes, dislikes, likesErr := app.reactions.CountReactions(0, comment.ID) // Pass 0 for PostID if it's a comment
 		// fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
@@ -497,10 +497,8 @@ func (app *app) getCommentsLikesAndDislikes(comments []models.Comment) []models.
 			log.Printf("Error counting reactions: %v", likesErr)
 			likes, dislikes = 0, 0 // Default values if there is an error
 		}
-		comments[i].Likes += likes
-		comments[i].Dislikes += dislikes
+		comments[i].React(likes, dislikes)
 	}
-	return comments
 }
 
 // SECTION ------- user handlers ----------

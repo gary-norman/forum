@@ -132,7 +132,19 @@ type Post struct {
 	IsFlagged     bool   `json:"isFlagged,omitempty"`
 	Likes         int    `json:"likes"`
 	Dislikes      int    `json:"dislikes"`
-	React         func()
+}
+
+type reactable interface {
+	*Post | *Comment
+}
+
+func (p *Post) React(likes, dislikes int) {
+	p.Likes += likes
+	p.Dislikes += dislikes
+}
+func (p *Comment) React(likes, dislikes int) {
+	p.Likes += likes
+	p.Dislikes += dislikes
 }
 
 type PostWithWrapping struct {

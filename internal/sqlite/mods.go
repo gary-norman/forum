@@ -2,9 +2,9 @@ package sqlite
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/gary-norman/forum/internal/models"
 	"log"
-  "fmt"
 )
 
 type ModModel struct {
@@ -48,20 +48,19 @@ func (m *ModModel) All() ([]models.Mod, error) {
 }
 
 type ModIds struct {
-  UserID int `json:"userId"`
-  ChannelID int `json:"channelId"`
+	UserID    int `json:"userId"`
+	ChannelID int `json:"channelId"`
 }
 
 // GetModOrModdedChannelIDs returns a slice of UserID if the ChannelID is provided, and vice-versa
 func (m *ModModel) GetModOrModdedChannelIDs(ID int, column string) ([]int, error) {
 	validColumns := map[string]bool{
-		"ID":          true,
-		"UserID":     true,
-		"ChannelID":        true,
-		"Created":      true,
-  }
-  stmt := fmt.Sprintf("SELECT UserID, ChannelID FROM Mods WHERE %s = ?", column)
-
+		"ID":        true,
+		"UserID":    true,
+		"ChannelID": true,
+		"Created":   true,
+	}
+	stmt := fmt.Sprintf("SELECT UserID, ChannelID FROM Mods WHERE %s = ?", column)
 
 	if !validColumns[column] {
 		return nil, fmt.Errorf("invalid column name: %s", column)
@@ -76,21 +75,21 @@ func (m *ModModel) GetModOrModdedChannelIDs(ID int, column string) ([]int, error
 		}
 	}()
 
-  var ids []ModIds
-  for rows.Next() {
-    var m ModIds
-    if err := rows.Scan(&m.UserID, &m.ChannelID); err != nil {
-      return nil, err
-    }
-    ids = append(ids, m)
-  }
-  var returnedIds []int
-    for _, id := range ids {
-      if column == "UserID" {
-        returnedIds = append(returnedIds, id.UserID)
-      } else if column == "ChannelID" {
-        returnedIds = append(returnedIds, id.ChannelID)
-      }
-    }
-  return returnedIds, nil
+	var ids []ModIds
+	for rows.Next() {
+		var m ModIds
+		if err := rows.Scan(&m.UserID, &m.ChannelID); err != nil {
+			return nil, err
+		}
+		ids = append(ids, m)
+	}
+	var returnedIds []int
+	for _, id := range ids {
+		if column == "UserID" {
+			returnedIds = append(returnedIds, id.UserID)
+		} else if column == "ChannelID" {
+			returnedIds = append(returnedIds, id.ChannelID)
+		}
+	}
+	return returnedIds, nil
 }

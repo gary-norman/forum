@@ -132,6 +132,7 @@ type Post struct {
 	IsFlagged     bool   `json:"isFlagged,omitempty"`
 	Likes         int    `json:"likes"`
 	Dislikes      int    `json:"dislikes"`
+	React         func()
 }
 
 type PostWithWrapping struct {

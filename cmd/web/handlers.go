@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"html/template"
 	"io"
@@ -20,10 +19,9 @@ import (
 	"github.com/gary-norman/forum/internal/models"
 )
 
-//SECTION ------- template handlers ----------
-
+// SECTION ------- template handlers ----------
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
-	//var userLoggedIn bool
+	// var userLoggedIn bool
 	userLoggedIn := true
 	// SECTION --- posts and comments ---
 	posts, postsErr := app.posts.All()
@@ -34,7 +32,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 
 	comments, commentsErr := app.comments.All()
 	if commentsErr != nil {
-		//http.Error(w, commentsErr.Error(), 500)
+		// http.Error(w, commentsErr.Error(), 500)
 		log.Printf("Error counting comments: %v", commentsErr)
 	}
 	// Retrieve total likes and dislikes for each post
@@ -58,9 +56,12 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
 	}
 
-	//attach following/follower numbers to each user
+	// attach following/follower numbers to each user
 	for _, user := range allUsers {
 		user.Followers, user.Following, allUsersErr = app.loyalty.CountUsers(user.ID)
+		if allUsersErr != nil {
+			log.Printf(ErrorMsgs().Query, "getHome> users > All > loyalty", allUsersErr)
+		}
 	}
 
 	randomUser := getRandomUser(allUsers)
@@ -71,8 +72,11 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		userLoggedIn = false
 	}
 
-	//attach following/follower numbers to the random user
+	// attach following/follower numbers to the random user
 	randomUser.Followers, randomUser.Following, currentUserErr = app.loyalty.CountUsers(randomUser.ID)
+	if currentUserErr != nil {
+		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
+	}
 
 	//validTokens := app.cookies.QueryCookies(w, r, currentUser)
 	//if validTokens == true {
@@ -93,6 +97,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 	var thisChannel models.ChannelWithDaysAgo
 	channelId, err := strconv.Atoi(r.PathValue("channelId"))
+	if err != nil {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "convert channelId", err)
+	}
 	foundChannels, err := app.channels.Search("id", channelId)
 	if err != nil {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > found channels", err)
@@ -117,9 +124,12 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	isJoinedOrOwned := false
 	isOwned := false
 
-	if userLoggedIn == true {
-		//attach following/follower numbers to currently logged-in user
+	if userLoggedIn {
+		// attach following/follower numbers to currently logged-in user
 		currentUser.Followers, currentUser.Following, currentUserErr = app.loyalty.CountUsers(currentUser.ID)
+		if currentUserErr != nil {
+			fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
+		}
 
 		currentUser.TimeSince = getTimeSince(currentUser.Created)
 		// get owned and joined channels of current user
@@ -153,12 +163,11 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 	// TODO get channel moderators
 
-	// TODO get channel posts
 	thisChannelPosts, err := app.posts.GetPostsByChannel(thisChannel.ID)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "getHome > posts.GetPostsByChannel", err)
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "thisChannelPosts", thisChannelPosts)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "thisChannelPosts", len(thisChannelPosts))
 	// Retrieve total likes and dislikes for each Channel post
 	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
 	thisChannelPostsWithWrapping := app.getPostsWithWrapping(thisChannelPosts, commentsWithWrapping)
@@ -186,7 +195,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		Images:    nil,
 		Reactions: nil,
 	}
-	//models.JsonError(templateData)
+	// models.JsonError(templateData)
 	tpl, err := GetTemplate()
 	if err != nil {
 		log.Printf(ErrorMsgs().Parse, "templates", "getHome", err)
@@ -207,8 +216,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//SECTION ------- user login handlers ----------
-
+// SECTION ------- user login handlers ----------
 func (app *app) register(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("register_user")
 	email := r.FormValue("register_email")
@@ -216,7 +224,7 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("register_password")
 	if len(username) < 5 || len(username) > 16 {
 		w.WriteHeader(http.StatusNotAcceptable)
-		err := json.NewEncoder(w).Encode(map[string]interface{}{
+		err := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusNotAcceptable,
 			"message": "username must be between 5 and 16 characters",
 		})
@@ -226,9 +234,9 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	if isValidPassword(password) != true {
+	if !isValidPassword(password) {
 		w.WriteHeader(http.StatusNotAcceptable)
-		err := json.NewEncoder(w).Encode(map[string]interface{}{
+		err := json.NewEncoder(w).Encode(map[string]any{
 			"code": http.StatusNotAcceptable,
 			"message": "password must contain at least one number and one uppercase and lowercase letter," +
 				"and at least 8 or more characters",
@@ -239,9 +247,9 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	if validEmail != true {
+	if !validEmail {
 		w.WriteHeader(http.StatusNotAcceptable)
-		err := json.NewEncoder(w).Encode(map[string]interface{}{
+		err := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusNotAcceptable,
 			"message": "please enter a valid email address",
 		})
@@ -252,9 +260,9 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	emailExists, err := app.users.QueryUserEmailExists(email)
-	if emailExists == true {
+	if emailExists {
 		w.WriteHeader(http.StatusConflict)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusConflict,
 			"message": "an account is already registered to that email address",
 			"body":    err,
@@ -266,9 +274,9 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	userExists, err := app.users.QueryUserNameExists(username)
-	if userExists == true {
+	if userExists {
 		w.WriteHeader(http.StatusConflict)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusConflict,
 			"message": "an account is already registered to that username",
 			"body":    err,
@@ -292,9 +300,9 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 
 	if insertUser != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusInternalServerError,
-			"message": errors.New(fmt.Sprintf(ErrorMsgs().Register, insertUser)),
+			"message": fmt.Errorf(ErrorMsgs().Register, insertUser),
 		})
 		if encErr != nil {
 			log.Printf(ErrorMsgs().Encode, "register: insertErr", encErr)
@@ -312,7 +320,7 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 	}
 	// Send success response
 	w.WriteHeader(http.StatusOK)
-	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+	encErr := json.NewEncoder(w).Encode(map[string]any{
 		"code":    http.StatusOK,
 		"message": "Registration successful!",
 		"body":    FormFields{Fields: formFields},
@@ -348,7 +356,7 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 	if getUserErr != nil {
 		log.Printf(ErrorMsgs().NotFound, "either", login, "login > GetUserFromLogin", getUserErr)
 		w.WriteHeader(http.StatusUnauthorized)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusUnauthorized,
 			"message": "User not found",
 		})
@@ -365,10 +373,10 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 		createCookiErr := app.cookies.CreateCookies(w, user)
 		if createCookiErr != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+			encErr := json.NewEncoder(w).Encode(map[string]any{
 				"code":    http.StatusInternalServerError,
 				"message": "Failed to create cookies",
-				"body":    errors.New(fmt.Sprintf(ErrorMsgs().Cookies, "create", createCookiErr)),
+				"body":    fmt.Errorf(ErrorMsgs().Cookies, "create", createCookiErr),
 			})
 			if encErr != nil {
 				log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
@@ -379,7 +387,7 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 		// Respond with a successful login message
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusOK,
 			"message": fmt.Sprintf("Welcome, %s! Login successful.", user.Username),
 		})
@@ -391,7 +399,7 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 		// Respond with an unsuccessful login message
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusUnauthorized,
 			"message": "incorrect password",
 		})
@@ -430,7 +438,7 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	}
 	// send user confirmation
 	log.Printf(Colors.Green+"%v logged out successfully!", user.Username)
-	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+	encErr := json.NewEncoder(w).Encode(map[string]any{
 		"code":    http.StatusOK,
 		"message": "Logged out successfully!",
 	})
@@ -440,8 +448,7 @@ func (app *app) logout(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//SECTION ------- routing handlers ----------
-
+// SECTION ------- routing handlers ----------
 func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 	login := r.FormValue("username")
 	var user *models.User
@@ -461,12 +468,17 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 	log.Println(fprintf)
 }
 
-//SECTION ------- reactions handlers ----------
+// SECTION ------- reactions handlers ----------
+
+//type reactions interface {
+//	Likes(count int)
+//	Dislikes(count int)
+//}
 
 func (app *app) getPostsLikesAndDislikes(posts []models.Post) []models.Post {
 	for i, post := range posts {
 		likes, dislikes, err := app.reactions.CountReactions(post.ID, 0) // Pass 0 for CommentID if it's a post
-		//fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
+		// fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
 		if err != nil {
 			log.Printf("Error counting reactions: %v", err)
 			likes, dislikes = 0, 0 // Default values if there is an error
@@ -480,7 +492,7 @@ func (app *app) getPostsLikesAndDislikes(posts []models.Post) []models.Post {
 func (app *app) getCommentsLikesAndDislikes(comments []models.Comment) []models.Comment {
 	for i, comment := range comments {
 		likes, dislikes, likesErr := app.reactions.CountReactions(0, comment.ID) // Pass 0 for PostID if it's a comment
-		//fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
+		// fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
 		if likesErr != nil {
 			log.Printf("Error counting reactions: %v", likesErr)
 			likes, dislikes = 0, 0 // Default values if there is an error
@@ -491,8 +503,7 @@ func (app *app) getCommentsLikesAndDislikes(comments []models.Comment) []models.
 	return comments
 }
 
-//SECTION ------- user handlers ----------
-
+// SECTION ------- user handlers ----------
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 	user, err := app.GetLoggedInUser(r)
 	if err != nil {
@@ -534,8 +545,7 @@ func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-//SECTION ------- post handlers ----------
-
+// SECTION ------- post handlers ----------
 func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
 	tpl, parseErr := template.ParseFiles("./assets/templates/posts.create.html")
 	if parseErr != nil {
@@ -633,7 +643,7 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 		// Use the error message from the Errors struct for decoding errors
 		log.Println("Error decoding JSON")
 		log.Printf(ErrorMsgs().Parse, "storeReaction", err)
-		//TODO expect: 100-continue on the request header (for all of these)
+		// TODO expect: 100-continue on the request header (for all of these)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -730,7 +740,6 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
-
 	// SECTION getting user
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
@@ -839,8 +848,7 @@ func (app *app) getPostsWithWrapping(posts []models.Post, comments []models.Comm
 	return postsWithWrapping
 }
 
-//SECTION ------- channel handlers ----------
-
+// SECTION ------- channel handlers ----------
 func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
@@ -931,7 +939,7 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	encErr := json.NewEncoder(w).Encode(map[string]interface{}{
+	encErr := json.NewEncoder(w).Encode(map[string]any{
 		"code":    http.StatusOK,
 		"message": fmt.Sprintf("Welcome to %v!", channel.Name),
 	})
@@ -941,9 +949,8 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (app *app) requestMembership(w http.ResponseWriter, r *http.Request, userID, channelID int) {
-
-}
+// func (app *app) requestMembership(w http.ResponseWriter, r *http.Request, userID, channelID int) {
+// }
 
 func (app *app) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
 	fmt.Println(Colors().Orange + "Checking if this user is a member of this channel" + Colors().Reset)
@@ -952,7 +959,7 @@ func (app *app) JoinedByCurrentUser(memberships []models.Membership) ([]models.C
 	for _, membership := range memberships {
 		channel, err := app.channels.OwnedOrJoinedByCurrentUser(membership.ChannelID, "ID")
 		if err != nil {
-			return nil, errors.New(fmt.Sprintf(ErrorMsgs().KeyValuePair, "Error calling JoinedByCurrentUser > OwnedOrJoinedByCurrentUser", err))
+			return nil, fmt.Errorf(ErrorMsgs().KeyValuePair, "Error calling JoinedByCurrentUser > OwnedOrJoinedByCurrentUser", err)
 		}
 		channels = append(channels, channel[0])
 	}
@@ -989,7 +996,7 @@ func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > id => idInt", err)
 		}
-		if found == true {
+		if found {
 			err := app.rules.DeleteRule(channelId, idInt)
 			if err != nil {
 				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > DeleteRule", err)
@@ -1009,8 +1016,7 @@ func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/channels/"+r.PathValue("channelId"), http.StatusFound)
 }
 
-//SECTION ------- helper functions ----------
-
+// SECTION ------- helper functions ----------
 func isValidPassword(password string) bool {
 	// At least 8 characters
 	if len(password) < 8 {
@@ -1028,10 +1034,7 @@ func isValidPassword(password string) bool {
 	}
 	// At least one uppercase letter
 	hasUpper, _ := regexp.MatchString(`[A-Z]`, password)
-	if !hasUpper {
-		return false
-	}
-	return true
+	return hasUpper
 }
 
 func getTimeSince(created time.Time) string {
@@ -1132,7 +1135,7 @@ func renameFileWithUUID(oldFilePath string) string {
 	// Split the file name into its base and extension
 	base := filepath.Base(oldFilePath)
 	ext := filepath.Ext(base)
-	base = base[:len(base)-len(ext)]
+	// base = base[:len(base)-len(ext)]
 
 	// Create the new file name with the UUID and extension
 	newFilePath := filepath.Join(filepath.Dir(oldFilePath), newUUID+ext)

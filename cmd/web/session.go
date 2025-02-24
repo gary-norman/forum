@@ -3,18 +3,19 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
 	"net/http"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
-var AuthErr = errors.New("not authenticated")
+var ErrAuth = errors.New("not authenticated")
 
 func (app *app) isAuthenticated(r *http.Request, username string) error {
 	Colors := models.CreateColors()
 	var user *models.User
 	user, getUserErr := app.users.GetUserByUsername(username, "isAuthenticated")
 	if getUserErr != nil {
-		return errors.New(fmt.Sprintf(ErrorMsgs().NotFound, "user", username, "isAuthenticated", getUserErr))
+		return fmt.Errorf(ErrorMsgs().NotFound, "user", username, "isAuthenticated", getUserErr)
 	}
 	// Get the Session Token from the request cookie
 	st, err := r.Cookie("session_token")
@@ -25,7 +26,7 @@ func (app *app) isAuthenticated(r *http.Request, username string) error {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "Cookie SessionToken", st.Value)
 		fmt.Printf(ErrorMsgs().KeyValuePair, "Error", err)
 		fmt.Printf(ErrorMsgs().KeyValuePair, "User SessionToken", user.SessionToken)
-		return AuthErr
+		return ErrAuth
 	}
 	csrf, _ := r.Cookie("csrf_token")
 
@@ -38,7 +39,7 @@ func (app *app) isAuthenticated(r *http.Request, username string) error {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)
 		fmt.Printf(ErrorMsgs().Divider)
 		fmt.Printf(Colors.Blue + "Authorise user: " + Colors.Red + "Failed!\n" + Colors.Reset)
-		return AuthErr
+		return ErrAuth
 	}
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Cookie SessionToken", st.Value)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Error", err)

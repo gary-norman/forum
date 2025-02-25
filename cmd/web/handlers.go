@@ -42,7 +42,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	for _, comment := range allComments {
 		comment.UpdateTimeSince()
 	}
-	app.getPostsComments(allPosts, allComments)
+
+	postsPtr := &allPosts // pointer to all posts that can be pointed to when the function is called
+	app.getPostsComments(&postsPtr, allComments)
 
 	// SECTION --- user ---
 	allUsers, allUsersErr := app.users.All()
@@ -164,7 +166,8 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf(ErrorMsgs().KeyValuePair, "thisChannelPosts", len(thisChannelPosts))
 	// Retrieve total likes and dislikes for each Channel post
 	app.getPostsLikesAndDislikes(thisChannelPosts)
-	app.getPostsComments(thisChannelPosts, allComments)
+	postsPtr = &thisChannelPosts
+	app.getPostsComments(&postsPtr, allComments)
 
 	// SECTION -- template ---
 	templateData := models.TemplateData{
@@ -818,10 +821,10 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func (app *app) getPostsComments(posts []models.Post, comments []models.Comment) {
+func (app *app) getPostsComments(posts **[]models.Post, comments []models.Comment) {
 
-	for _, post := range posts {
-		post.UpdateTimeSince()
+	for i, post := range **posts {
+		(**posts)[i].UpdateTimeSince()
 		/// Filter comments that belong to the current post based on the postID and CommentedPostID
 		var postComments []models.Comment
 		for _, comment := range comments {
@@ -832,7 +835,7 @@ func (app *app) getPostsComments(posts []models.Post, comments []models.Comment)
 				postComments = append(postComments, commentWithReplies)
 			}
 		}
-		post.AppendComments(postComments)
+		(**posts)[i].AppendComments(postComments)
 	}
 }
 
@@ -1054,6 +1057,26 @@ func getRandomUser(userSlice []models.User) models.User {
 }
 
 // getRepliesForComment Recursively fetches replies for each comment
+
+//func getRepliesForCommentOld(comment models.CommentWithWrapping, commentsWithDaysAgo []models.CommentWithWrapping) models.CommentWithWrapping {
+//	// Find replies to the current comment
+//	var replies []models.CommentWithWrapping
+//	for _, possibleReply := range commentsWithDaysAgo {
+//		if possibleReply.Comment.CommentedCommentID != nil && *possibleReply.Comment.CommentedCommentID == comment.Comment.ID {
+//			replyWithReplies := getRepliesForComment(possibleReply, commentsWithDaysAgo) // Recursively get replies for this reply
+//			replies = append(replies, replyWithReplies)
+//		}
+//	}
+//
+//	// If no replies are found, we can avoid unnecessary recursion
+//	if len(replies) > 0 {
+//		comment.Replies = replies
+//	}
+//
+//	// Return the comment with its replies
+//	return comment
+//}
+
 func getRepliesForComment(comment models.Comment, comments []models.Comment) models.Comment {
 	// Find replies to the current comment
 	var replies []models.Comment

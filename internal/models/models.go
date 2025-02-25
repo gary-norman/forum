@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -132,19 +133,45 @@ type Post struct {
 	IsFlagged     bool   `json:"isFlagged,omitempty"`
 	Likes         int    `json:"likes"`
 	Dislikes      int    `json:"dislikes"`
+	Comments      []Comment
 }
 
-type reactable interface {
-	*Post | *Comment
+//type reactable interface {
+//	*Post | *Comment
+//}
+
+func getTimeSince(created time.Time) string {
+	now := time.Now()
+	hours := now.Sub(created).Hours()
+	var timeSince string
+	if hours > 24 {
+		timeSince = fmt.Sprintf("%.0f days ago", hours/24)
+	} else if hours > 1 {
+		timeSince = fmt.Sprintf("%.0f hours ago", hours)
+	} else if minutes := now.Sub(created).Minutes(); minutes > 1 {
+		timeSince = fmt.Sprintf("%.0f minutes ago", minutes)
+	} else {
+		timeSince = "just now"
+	}
+	return timeSince
 }
 
 func (p *Post) React(likes, dislikes int) {
 	p.Likes += likes
 	p.Dislikes += dislikes
 }
-func (p *Comment) React(likes, dislikes int) {
-	p.Likes += likes
-	p.Dislikes += dislikes
+func (p *Post) UpdateTimeSince() {
+	p.TimeSince = getTimeSince(p.Created)
+}
+func (p *Post) AppendComments(commentWithReplies []Comment) {
+	p.Comments = commentWithReplies
+}
+func (c *Comment) React(likes, dislikes int) {
+	c.Likes += likes
+	c.Dislikes += dislikes
+}
+func (c *Comment) UpdateTimeSince() {
+	c.TimeSince = getTimeSince(c.Created)
 }
 
 type PostWithWrapping struct {
@@ -170,18 +197,20 @@ type Comment struct {
 	ID                 int       `json:"id"`
 	Content            string    `json:"content"`
 	Created            time.Time `json:"created"`
-	TimeSince          string    `json:"time_since"`
-	Author             string    `json:"author"`
-	AuthorID           int       `json:"author_id"`
-	AuthorAvatar       string    `json:"author_avatar"`
-	ChannelID          int       `json:"channel_id"`
-	ChannelName        string    `json:"channel_name"`
-	CommentedPostID    *int      `json:"commented_post_id,omitempty"`
-	CommentedCommentID *int      `json:"commented_comment_id,omitempty"`
-	IsCommentable      bool      `json:"is_commentable"`
-	IsFlagged          bool      `json:"is_flagged,omitempty"`
-	Likes              int       `json:"likes"`
-	Dislikes           int       `json:"dislikes"`
+	TimeSince          string
+	Author             string `json:"author"`
+	AuthorID           int    `json:"author_id"`
+	AuthorAvatar       string `json:"author_avatar"`
+	ChannelID          int    `json:"channel_id"`
+	ChannelName        string `json:"channel_name"`
+	CommentedPostID    *int   `json:"commented_post_id,omitempty"`
+	CommentedCommentID *int   `json:"commented_comment_id,omitempty"`
+	IsCommentable      bool   `json:"is_commentable"`
+	IsFlagged          bool   `json:"is_flagged,omitempty"`
+	Likes              int    `json:"likes"`
+	Dislikes           int    `json:"dislikes"`
+	Comments           []Comment
+	Replies            []Comment
 }
 
 type Reaction struct {
@@ -244,7 +273,7 @@ type TemplateData struct {
 	RandomUser  User
 	CurrentUser *User
 	// ---------- posts ----------
-	Posts []PostWithWrapping
+	Posts []Post
 	// ---------- channels ----------
 	Channels                   []Channel
 	AllChannels                []Channel
@@ -253,7 +282,7 @@ type TemplateData struct {
 	ThisChannelIsOwnedOrJoined bool
 	ThisChannelIsOwned         bool
 	ThisChannelRules           []Rule
-	ThisChannelPosts           []PostWithWrapping
+	ThisChannelPosts           []Post
 	OwnedChannels              []Channel
 	JoinedChannels             []Channel
 	OwnedAndJoinedChannels     []Channel

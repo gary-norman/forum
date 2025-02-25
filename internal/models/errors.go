@@ -106,7 +106,7 @@ func JsonError(messageStruct TemplateData) {
 	}
 }
 
-func JsonPost(messageStruct PostWithWrapping) {
+func JsonPost(messageStruct Post) {
 	ErrorMsgs := CreateErrorMessages()
 	val := reflect.ValueOf(messageStruct)
 	typ := val.Type()

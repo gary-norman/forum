@@ -174,18 +174,6 @@ func (c *Comment) UpdateTimeSince() {
 	c.TimeSince = getTimeSince(c.Created)
 }
 
-type PostWithWrapping struct {
-	Post
-	Comments  []CommentWithWrapping
-	TimeSince string
-}
-
-type CommentWithWrapping struct {
-	Comment   Comment               // The actual comment data
-	TimeSince string                // Time since the comment was created
-	Replies   []CommentWithWrapping // Nested replies (which can have their own replies)
-}
-
 type Image struct {
 	ID       string    `json:"id"`
 	Created  time.Time `json:"created"`

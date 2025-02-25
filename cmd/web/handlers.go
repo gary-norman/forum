@@ -35,16 +35,15 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all comments", err)
 	}
 	// Retrieve total likes and dislikes for each post
-	app.getPostsLikesAndDislikes(allPosts)
+	allPosts = app.getPostsLikesAndDislikes(allPosts)
 	// Retrieve total likes and dislikes for each comment
-	app.getCommentsLikesAndDislikes(allComments)
+	allComments = app.getCommentsLikesAndDislikes(allComments)
 
-	for _, comment := range allComments {
-		comment.UpdateTimeSince()
+	for i, _ := range allComments {
+		allComments[i].UpdateTimeSince()
 	}
 
-	postsPtr := &allPosts // pointer to all posts that can be pointed to when the function is called
-	app.getPostsComments(&postsPtr, allComments)
+	allPosts = app.getPostsComments(allPosts, allComments)
 
 	// SECTION --- user ---
 	allUsers, allUsersErr := app.users.All()
@@ -165,9 +164,8 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf(ErrorMsgs().KeyValuePair, "thisChannelPosts", len(thisChannelPosts))
 	// Retrieve total likes and dislikes for each Channel post
-	app.getPostsLikesAndDislikes(thisChannelPosts)
-	postsPtr = &thisChannelPosts
-	app.getPostsComments(&postsPtr, allComments)
+	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
+	app.getPostsComments(thisChannelPosts, allComments)
 
 	// SECTION -- template ---
 	templateData := models.TemplateData{
@@ -474,7 +472,7 @@ func (app *app) protected(w http.ResponseWriter, r *http.Request) {
 //}
 
 // getPostsLikesAndDislikes updates the reactions of each post in the given slice
-func (app *app) getPostsLikesAndDislikes(posts []models.Post) {
+func (app *app) getPostsLikesAndDislikes(posts []models.Post) []models.Post {
 	for i, post := range posts {
 		likes, dislikes, err := app.reactions.CountReactions(post.ID, 0) // Pass 0 for CommentID if it's a post
 		// fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
@@ -484,10 +482,11 @@ func (app *app) getPostsLikesAndDislikes(posts []models.Post) {
 		}
 		posts[i].React(likes, dislikes)
 	}
+	return posts
 }
 
 // getCommentsLikesAndDislikes updates the reactions of each comment in the given slice
-func (app *app) getCommentsLikesAndDislikes(comments []models.Comment) {
+func (app *app) getCommentsLikesAndDislikes(comments []models.Comment) []models.Comment {
 	for i, comment := range comments {
 		likes, dislikes, likesErr := app.reactions.CountReactions(0, comment.ID) // Pass 0 for PostID if it's a comment
 		// fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
@@ -497,6 +496,7 @@ func (app *app) getCommentsLikesAndDislikes(comments []models.Comment) {
 		}
 		comments[i].React(likes, dislikes)
 	}
+	return comments
 }
 
 // SECTION ------- user handlers ----------
@@ -821,10 +821,9 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func (app *app) getPostsComments(posts **[]models.Post, comments []models.Comment) {
-
-	for i, post := range **posts {
-		(**posts)[i].UpdateTimeSince()
+func (app *app) getPostsComments(posts []models.Post, comments []models.Comment) []models.Post {
+	for i, post := range posts {
+		post.UpdateTimeSince()
 		/// Filter comments that belong to the current post based on the postID and CommentedPostID
 		var postComments []models.Comment
 		for _, comment := range comments {
@@ -835,8 +834,9 @@ func (app *app) getPostsComments(posts **[]models.Post, comments []models.Commen
 				postComments = append(postComments, commentWithReplies)
 			}
 		}
-		(**posts)[i].AppendComments(postComments)
+		posts[i].AppendComments(postComments)
 	}
+	return posts
 }
 
 // SECTION ------- channel handlers ----------

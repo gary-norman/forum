@@ -744,7 +744,7 @@
                       {{/*SECTION---------- user page posts ----------*/}}
                       <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                         {{range .Posts}} <!-- user page posts -->
-                        {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser) }}
+                        {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser  "Comments" .Comments) }}
                         {{end}} <!-- user page posts -->
                       </div>
                     </div>

@@ -90,7 +90,7 @@
                 </div>
             </form>
         </div> <!-- end post card -->
-        {{ range .Comments}}
+        {{ range $post.Comments }}
             <div class="container-card-across">
                 {{ $comment := . }}
                 <div class="reply-arrow"></div>
@@ -174,13 +174,13 @@
                         </div> <!-- end comment card-->
 
                     <!-- Recursively Render Replies -->
-                    {{ if .Replies}}
+{{/*                    {{ if .Replies}}*/}}
                         {{ range .Replies }}
                                 <div class="container-card-across">
                                     {{ template "reply_level1" (dict "CurrentUser" $.CurrentUser "Comment" . ) }}
                                 </div> <!-- end container-comment-across wrapper -->
                             {{ end }} <!-- end range Replies -->
-                        {{ end }} <!-- end if Replies -->
+{{/*                        {{ end }} <!-- end if Replies -->*/}}
 
                 </div> <!-- end container-comment-down wrapper -->
             </div> <!-- end container-comment-across -->

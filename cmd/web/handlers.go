@@ -39,7 +39,10 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// Retrieve total likes and dislikes for each comment
 	allComments = app.getCommentsLikesAndDislikes(allComments)
 
-	for i, _ := range allComments {
+	for i := range allPosts {
+		allPosts[i].UpdateTimeSince()
+	}
+	for i := range allComments {
 		allComments[i].UpdateTimeSince()
 	}
 
@@ -823,10 +826,10 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 
 func (app *app) getPostsComments(posts []models.Post, comments []models.Comment) []models.Post {
 	for i, post := range posts {
-		post.UpdateTimeSince()
 		/// Filter comments that belong to the current post based on the postID and CommentedPostID
 		var postComments []models.Comment
-		for _, comment := range comments {
+		for i, comment := range comments {
+			comments[i].UpdateTimeSince()
 			// Match the postID with CommentedPostID
 			if comment.CommentedPostID != nil && *comment.CommentedPostID == post.ID {
 				// For each comment, recursively assign its replies
@@ -1057,26 +1060,6 @@ func getRandomUser(userSlice []models.User) models.User {
 }
 
 // getRepliesForComment Recursively fetches replies for each comment
-
-//func getRepliesForCommentOld(comment models.CommentWithWrapping, commentsWithDaysAgo []models.CommentWithWrapping) models.CommentWithWrapping {
-//	// Find replies to the current comment
-//	var replies []models.CommentWithWrapping
-//	for _, possibleReply := range commentsWithDaysAgo {
-//		if possibleReply.Comment.CommentedCommentID != nil && *possibleReply.Comment.CommentedCommentID == comment.Comment.ID {
-//			replyWithReplies := getRepliesForComment(possibleReply, commentsWithDaysAgo) // Recursively get replies for this reply
-//			replies = append(replies, replyWithReplies)
-//		}
-//	}
-//
-//	// If no replies are found, we can avoid unnecessary recursion
-//	if len(replies) > 0 {
-//		comment.Replies = replies
-//	}
-//
-//	// Return the comment with its replies
-//	return comment
-//}
-
 func getRepliesForComment(comment models.Comment, comments []models.Comment) models.Comment {
 	// Find replies to the current comment
 	var replies []models.Comment
@@ -1086,12 +1069,10 @@ func getRepliesForComment(comment models.Comment, comments []models.Comment) mod
 			replies = append(replies, replyWithReplies)
 		}
 	}
-
 	// If no replies are found, we can avoid unnecessary recursion
 	if len(replies) > 0 {
 		comment.Replies = replies
 	}
-
 	// Return the comment with its replies
 	return comment
 }

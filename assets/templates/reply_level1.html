@@ -8,7 +8,9 @@
   {{ end }}
 
 
-  {{ $comment := .Comment.Comment }}
+  {{- /*gotype: github.com/gary-norman/forum/internal/models.Comment*/ -}}
+
+  {{ $comment := .Comment }}
       <div class="reply-arrow"></div>
       <div class="container-card-down">
         <div class="card" data-comment-id="{{$comment.ID}}" data-channel-ID="{{$comment.ChannelID}}" data-author-ID="{{$comment.AuthorID}}">

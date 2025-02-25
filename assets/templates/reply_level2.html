@@ -7,9 +7,9 @@
     {{ $userID = .CurrentUser.ID }}
   {{ end }}
 
-  {{- /*gotype: github.com/gary-norman/forum/internal/models.CommentWithDaysAgo*/ -}}
+  {{- /*gotype: github.com/gary-norman/forum/internal/models.Comment*/ -}}
 
-  {{ $comment := .Comment.Comment }}
+  {{ $comment := .Comment }}
     {{printf "comment: %v" $comment}}
   <div class="reply-arrow"></div>
   <div class="container-card-down">

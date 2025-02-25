@@ -9,6 +9,7 @@
   /* box shadows */
   --shadow-box: 0 0.25 1rem rgb(0 0 0 / 0.5);
   --shadow-main: 0 5px 25px rgba(0 0 0 / 0.4);
+  /*TODO ---------- convert all px to rem ---------- */
   --shadow-card:
     1px 0.6px 4.1px rgba(0 0 0 / 0.018), 2.4px 1.5px 10px rgba(0 0 0 / 0.027),
     4.3px 2.7px 19px rgba(0 0 0 / 0.034),
@@ -335,8 +336,8 @@ a:active {
   display: flex;
   flex-direction: row;
   gap: 4.8rem;
-  width: calc(100dvw - 32rem);
-  height: 20dvh;
+  width: calc(100dvw - 0rem);
+  /* height: 20dvh; */
   /*border: 2px hotpink solid;*/
 }
 
@@ -2245,12 +2246,11 @@ main {
 .filters-row {
   padding-bottom: 2.4rem !important;
   position: relative;
-
   & button {
     /* position: absolute; */
     /* top : 1.2rem; */
   }
-  */ & button:nth-of-type(1) {
+  & button:nth-of-type(1) {
     /*left: 0;*/
     z-index: 0;
   }
@@ -2280,11 +2280,19 @@ main {
 }
 
 .right-panel {
+  /* display: none; */
   position: relative;
   /* Height of right panel equal to the screen size - 9.6rem padding (4.8rem top and bottom) */
   height: calc(100dvh - 9.6rem);
+  
+  
+  
+  
+  
+  
+  
 
-  .right-panel-content {
+  & .right-panel-content {
     position: sticky;
     top: 0;
     left: 0;

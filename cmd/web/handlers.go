@@ -20,35 +20,29 @@ import (
 )
 
 // SECTION ------- template handlers ----------
+
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
+	// SECTION --- posts and comments ---
 	// var userLoggedIn bool
 	userLoggedIn := true
-	// SECTION --- posts and comments ---
-	posts, postsErr := app.posts.All()
-	if postsErr != nil {
-		http.Error(w, postsErr.Error(), 500)
-		return
+	allPosts, err := app.posts.All()
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all posts", err)
 	}
 
-	comments, commentsErr := app.comments.All()
-	if commentsErr != nil {
-		// http.Error(w, commentsErr.Error(), 500)
-		log.Printf("Error counting comments: %v", commentsErr)
+	allComments, err := app.comments.All()
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all comments", err)
 	}
 	// Retrieve total likes and dislikes for each post
-	app.getPostsLikesAndDislikes(posts)
+	app.getPostsLikesAndDislikes(allPosts)
 	// Retrieve total likes and dislikes for each comment
-	app.getCommentsLikesAndDislikes(comments)
+	app.getCommentsLikesAndDislikes(allComments)
 
-	commentsWithWrapping := make([]models.CommentWithWrapping, len(comments))
-	for index, comment := range comments {
-		commentsWithWrapping[index] = models.CommentWithWrapping{
-			Comment:   comment,
-			TimeSince: getTimeSince(comment.Created),
-			Replies:   []models.CommentWithWrapping{}, // Initialize with no replies
-		}
+	for _, comment := range allComments {
+		comment.UpdateTimeSince()
 	}
-	postsWithWrapping := app.getPostsWithWrapping(posts, commentsWithWrapping)
+	app.getPostsComments(allPosts, allComments)
 
 	// SECTION --- user ---
 	allUsers, allUsersErr := app.users.All()
@@ -165,12 +159,12 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 
 	thisChannelPosts, err := app.posts.GetPostsByChannel(thisChannel.ID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "getHome > posts.GetPostsByChannel", err)
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > allPosts.GetPostsByChannel", err)
 	}
 	fmt.Printf(ErrorMsgs().KeyValuePair, "thisChannelPosts", len(thisChannelPosts))
 	// Retrieve total likes and dislikes for each Channel post
 	app.getPostsLikesAndDislikes(thisChannelPosts)
-	thisChannelPostsWithWrapping := app.getPostsWithWrapping(thisChannelPosts, commentsWithWrapping)
+	app.getPostsComments(thisChannelPosts, allComments)
 
 	// SECTION -- template ---
 	templateData := models.TemplateData{
@@ -178,8 +172,8 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		AllUsers:    allUsers,
 		RandomUser:  randomUser,
 		CurrentUser: currentUser,
-		// ---------- posts ----------
-		Posts: postsWithWrapping,
+		// ---------- allPosts ----------
+		Posts: allPosts,
 		// ---------- channels ----------
 		AllChannels:                allChannels,
 		ThisChannel:                thisChannel,
@@ -190,7 +184,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		ThisChannelIsOwned:         isOwned,
 		ThisChannelIsOwnedOrJoined: isJoinedOrOwned,
 		ThisChannelRules:           thisChannelRules,
-		ThisChannelPosts:           thisChannelPostsWithWrapping,
+		ThisChannelPosts:           thisChannelPosts,
 		// ---------- misc ----------
 		Images:    nil,
 		Reactions: nil,
@@ -217,6 +211,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 }
 
 // SECTION ------- user login handlers ----------
+
 func (app *app) register(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("register_user")
 	email := r.FormValue("register_email")
@@ -718,7 +713,6 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 	err = app.reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 	fmt.Printf("Upserting liked: %v, disliked: %v, authorID: %v, postID: %v, commentID: %v\n", reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 	if err != nil {
-		// Use your custom error message for insertion errors
 		log.Printf(ErrorMsgs().Delete, "storeReaction > app.reactions.Upsert", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -824,26 +818,22 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func (app *app) getPostsWithWrapping(posts []models.Post, comments []models.CommentWithWrapping) []models.PostWithWrapping {
-	postsWithWrapping := make([]models.PostWithWrapping, len(posts))
-	for index, post := range posts {
+func (app *app) getPostsComments(posts []models.Post, comments []models.Comment) {
+
+	for _, post := range posts {
+		post.UpdateTimeSince()
 		/// Filter comments that belong to the current post based on the postID and CommentedPostID
-		var postComments []models.CommentWithWrapping
+		var postComments []models.Comment
 		for _, comment := range comments {
 			// Match the postID with CommentedPostID
-			if comment.Comment.CommentedPostID != nil && *comment.Comment.CommentedPostID == post.ID {
+			if comment.CommentedPostID != nil && *comment.CommentedPostID == post.ID {
 				// For each comment, recursively assign its replies
 				commentWithReplies := getRepliesForComment(comment, comments)
 				postComments = append(postComments, commentWithReplies)
 			}
 		}
-		postsWithWrapping[index] = models.PostWithWrapping{
-			Post:      post,
-			TimeSince: getTimeSince(post.Created),
-			Comments:  postComments, // Only include comments related to the current post
-		}
+		post.AppendComments(postComments)
 	}
-	return postsWithWrapping
 }
 
 // SECTION ------- channel handlers ----------
@@ -950,6 +940,7 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 // func (app *app) requestMembership(w http.ResponseWriter, r *http.Request, userID, channelID int) {
 // }
 
+// JoinedByCurrentUser checks if the currently logged-in user is a member of the current channel
 func (app *app) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
 	fmt.Println(Colors().Orange + "Checking if this user is a member of this channel" + Colors().Reset)
 	fmt.Printf(ErrorMsgs().Divider)
@@ -1010,7 +1001,6 @@ func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	// TODO redirect to /channels/{{.channelID}}
 	http.Redirect(w, r, "/channels/"+r.PathValue("channelId"), http.StatusFound)
 }
 
@@ -1051,7 +1041,6 @@ func getTimeSince(created time.Time) string {
 	return timeSince
 }
 
-// TODO use interface to get and return any type
 func getRandomChannel(channelSlice []models.ChannelWithDaysAgo) models.ChannelWithDaysAgo {
 	rndInt := rand.IntN(len(channelSlice))
 	channel := channelSlice[rndInt]
@@ -1065,12 +1054,12 @@ func getRandomUser(userSlice []models.User) models.User {
 }
 
 // getRepliesForComment Recursively fetches replies for each comment
-func getRepliesForComment(comment models.CommentWithWrapping, commentsWithDaysAgo []models.CommentWithWrapping) models.CommentWithWrapping {
+func getRepliesForComment(comment models.Comment, comments []models.Comment) models.Comment {
 	// Find replies to the current comment
-	var replies []models.CommentWithWrapping
-	for _, possibleReply := range commentsWithDaysAgo {
-		if possibleReply.Comment.CommentedCommentID != nil && *possibleReply.Comment.CommentedCommentID == comment.Comment.ID {
-			replyWithReplies := getRepliesForComment(possibleReply, commentsWithDaysAgo) // Recursively get replies for this reply
+	var replies []models.Comment
+	for _, possibleReply := range comments {
+		if possibleReply.CommentedCommentID != nil && *possibleReply.CommentedCommentID == comment.ID {
+			replyWithReplies := getRepliesForComment(possibleReply, comments) // Recursively get replies for this reply
 			replies = append(replies, replyWithReplies)
 		}
 	}

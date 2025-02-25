@@ -249,6 +249,8 @@ func (m *CommentModel) All() ([]models.Comment, error) {
 	return Comments, nil
 }
 
+//TODO ---------- fix this comment ----------
+
 // GetReaction checks if a user has already reacted to a post or comment. It retrieves already existing reactions.
 func (m *CommentModel) GetComment(authorID int, reactedPostID int, reactedCommentID int) (*models.Reaction, error) {
 	var reaction models.Reaction

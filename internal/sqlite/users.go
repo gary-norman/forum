@@ -140,6 +140,7 @@ func (m *UserModel) QueryUserEmailExists(email string) (bool, error) {
 }
 
 // TODO unify these functions to accept parameters
+
 func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, error) {
 	username = strings.TrimSpace(username)
 	if m == nil || m.DB == nil {

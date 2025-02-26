@@ -52,13 +52,14 @@ type Errors struct {
 	KeyValuePair string
 	Login        string
 	NoRows       string
-	NotFound     string
-	Open         string
-	Parse        string
-	Post         string
-	Comment      string
-	Printf       string
-	Protected    string
+	// NotFound: Unable to find "v" called by "v" with error "v"
+	NotFound  string
+	Open      string
+	Parse     string
+	Post      string
+	Comment   string
+	Printf    string
+	Protected string
 	// Query: Unable to query "v" with error "v"
 	Query        string
 	Read         string

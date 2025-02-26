@@ -394,7 +394,7 @@
       </div>
 {{/*SECTION ---------- edit channel rules popover ---------- */}}
     <div popover id="form-edit-channel-rules">
-        <form id="popover-form-edit-channel-rules" action="/channels/add-rules/{{.ThisChannel.Channel.ID}}" class="wrapper-form" method="POST">
+        <form id="popover-form-edit-channel-rules" action="/channels/add-rules/{{.ThisChannel.ID}}" class="wrapper-form" method="POST">
           <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .ThisChannel.Name }}</h5>
           <span id="edit-channel-rules-title-rules-existing">current rules</span>
           <div id="rules-wrapper-existing" class="cont-flex-column">

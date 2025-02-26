@@ -85,18 +85,14 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	//}
 
 	// SECTION --- channels --
-	allChannels, allChanErr := app.channels.All()
-	if allChanErr != nil {
-		log.Printf(ErrorMsgs().Query, "channels.All", allChanErr)
+	allChannels, err := app.channels.All()
+	if err != nil {
+		log.Printf(ErrorMsgs().Query, "channels.All", err)
 	}
-	channelsWithDaysAgo := make([]models.ChannelWithDaysAgo, len(allChannels))
-	for index, channel := range allChannels {
-		channelsWithDaysAgo[index] = models.ChannelWithDaysAgo{
-			Channel:   channel,
-			TimeSince: getTimeSince(channel.Created),
-		}
+	for c := range allChannels {
+		models.UpdateTimeSince(&allChannels[c])
 	}
-	var thisChannel models.ChannelWithDaysAgo
+	var thisChannel models.Channel
 	channelId, err := strconv.Atoi(r.PathValue("channelId"))
 	if err != nil {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "convert channelId", err)
@@ -106,17 +102,14 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > found channels", err)
 	}
 	if len(foundChannels) > 0 {
-		thisChannel = models.ChannelWithDaysAgo{
-			Channel:   foundChannels[0],
-			TimeSince: getTimeSince(foundChannels[0].Created),
-		}
+		thisChannel = foundChannels[0]
 	} else {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "no channel found", "getting random channel")
-		thisChannel = getRandomChannel(channelsWithDaysAgo)
+		thisChannel = getRandomChannel(allChannels)
 	}
-	thisChannelOwnerName, ownerErr := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")
-	if ownerErr != nil {
-		log.Printf(ErrorMsgs().Query, "getHome > GetSingleUserValue", ownerErr)
+	thisChannelOwnerName, err := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")
+	if err != nil {
+		log.Printf(ErrorMsgs().Query, "getHome > GetSingleUserValue", err)
 	}
 	var ownedChannels []models.Channel
 	var joinedChannels []models.Channel
@@ -126,24 +119,22 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 
 	if userLoggedIn {
 		// attach following/follower numbers to currently logged-in user
-		currentUser.Followers, currentUser.Following, currentUserErr = app.loyalty.CountUsers(currentUser.ID)
-		if currentUserErr != nil {
+		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
+		if err != nil {
 			fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
 		}
-
-		currentUser.TimeSince = getTimeSince(currentUser.Created)
 		// get owned and joined channels of current user
 		memberships, memberErr := app.memberships.UserMemberships(currentUser.ID)
 		if memberErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
 		}
-		ownedChannels, ownedChannelsErr := app.channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
-		if ownedChannelsErr != nil {
-			log.Printf(ErrorMsgs().Query, "user owned channels", ownedChannelsErr)
+		ownedChannels, err = app.channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
+		if err != nil {
+			log.Printf(ErrorMsgs().Query, "user owned channels", err)
 		}
-		joinedChannels, joinedChannelsErr := app.JoinedByCurrentUser(memberships)
-		if joinedChannelsErr != nil {
-			log.Printf(ErrorMsgs().Query, "user joined channels", joinedChannelsErr)
+		joinedChannels, err = app.JoinedByCurrentUser(memberships)
+		if err != nil {
+			log.Printf(ErrorMsgs().Query, "user joined channels", err)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
 		isOwned = currentUser.ID == thisChannel.OwnerID
@@ -883,7 +874,7 @@ func getTimeSince(created time.Time) string {
 	return timeSince
 }
 
-func getRandomChannel(channelSlice []models.ChannelWithDaysAgo) models.ChannelWithDaysAgo {
+func getRandomChannel(channelSlice []models.Channel) models.Channel {
 	rndInt := rand.IntN(len(channelSlice))
 	channel := channelSlice[rndInt]
 	return channel

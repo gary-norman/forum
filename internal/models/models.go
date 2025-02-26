@@ -58,6 +58,7 @@ type Channel struct {
 	Banner           string    `json:"banner,omitempty"`
 	Description      string    `json:"description"`
 	Created          time.Time `json:"created"`
+	TimeSince        string
 	Rules            []Rule
 	UnsubmittedRules []string
 	Owned            bool
@@ -65,6 +66,10 @@ type Channel struct {
 	Privacy          bool `json:"privacy"`
 	IsMuted          bool `json:"isMuted"`
 	IsFlagged        bool `json:"isFlagged,omitempty"`
+}
+
+func (c *Channel) UpdateTimeSince() {
+	c.TimeSince = getTimeSince(c.Created)
 }
 
 type Rule struct {
@@ -78,10 +83,7 @@ type PostRule struct {
 	ID   string `json:"id"`
 	Text string `json:"text"`
 }
-type ChannelWithDaysAgo struct {
-	Channel
-	TimeSince string
-}
+
 type ChannelData struct {
 	ChannelName string `json:"channelName"`
 	ChannelID   string `json:"channelId"`
@@ -246,7 +248,7 @@ type TemplateData struct {
 	// ---------- channels ----------
 	Channels                   []Channel
 	AllChannels                []Channel
-	ThisChannel                ChannelWithDaysAgo
+	ThisChannel                Channel
 	ThisChannelOwnerName       string
 	ThisChannelIsOwnedOrJoined bool
 	ThisChannelIsOwned         bool

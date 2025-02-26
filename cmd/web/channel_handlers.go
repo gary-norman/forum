@@ -12,7 +12,7 @@ import (
 
 func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var thisChannel models.ChannelWithDaysAgo
+	var thisChannel models.Channel
 	channelId, err := strconv.Atoi(r.PathValue("channelId"))
 	if err != nil {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "convert channelId", err)
@@ -22,10 +22,9 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > found channels", err)
 	}
 	if len(foundChannels) > 0 {
-		thisChannel = models.ChannelWithDaysAgo{
-			Channel:   foundChannels[0],
-			TimeSince: getTimeSince(foundChannels[0].Created),
-		}
+		thisChannel = foundChannels[0]
+	} else {
+		log.Printf(ErrorMsgs().KeyValuePair, "No channels found", channelId)
 	}
 	thisChannelOwnerName, ownerErr := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")
 	if ownerErr != nil {

@@ -134,7 +134,10 @@ document.addEventListener("DOMContentLoaded", function () {
     joinedAndOwnedChannels =
       joinedAndOwnedChannelContainer.querySelectorAll(".sidebar-channel");
     joinedAndOwnedChannels.forEach((channel) =>
-      channel.addEventListener("click", (e) => navigateToChannel(channel)),
+      channel.addEventListener("click", (e) => {
+        e.preventDefault();
+        navigateToChannel(channel);
+      }),
     );
   }
 
@@ -373,8 +376,17 @@ document.addEventListener("DOMContentLoaded", () => {
 // SECTION ----- functions ------
 function navigateToChannel(channel) {
   const link = channel.getAttribute("data-channel-id");
-  window.location.href = `/channels/${link}`;
-  changePage(channelPage);
+  fetch(`/channels/${link}`,{method: 'GET',})
+      .then(response => response.json())
+      .then(data => {
+        console.log('server:', data);
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      })
+  changePage(channelPage)
+  // window.location.href = `/channels/${link}`;
+
 }
 // toggleUserInteracted toggles user-interacted class on input fields to prevent label animation before they are selected
 function toggleUserInteracted(action) {

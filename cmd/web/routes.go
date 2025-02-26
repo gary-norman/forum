@@ -21,7 +21,7 @@ func (app *app) routes() http.Handler {
 	userDataServer := http.FileServer(http.Dir("./db/userdata"))
 	mux.Handle("/db/userdata/", http.StripPrefix("/db/userdata", userDataServer))
 	mux.HandleFunc("/", app.getHome)
-	mux.HandleFunc("/channels/{channelId}", app.getHome)
+	mux.HandleFunc("/channels/{channelId}", app.getThisChannel)
 	mux.HandleFunc("GET /posts/create", app.createPost)
 	mux.HandleFunc("POST /posts/create", app.storePost)
 	mux.HandleFunc("POST /channels/create", app.storeChannel)

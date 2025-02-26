@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gary-norman/forum/internal/models"
 	"html/template"
 	"io"
 	"log"
@@ -15,9 +16,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/gary-norman/forum/internal/models"
 )
+
+var TemplateData models.TemplateData
 
 // SECTION ------- template handlers ----------
 
@@ -111,7 +112,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "no channel found", "getting random channel")
 		thisChannel = getRandomChannel(channelsWithDaysAgo)
 	}
-
 	thisChannelOwnerName, ownerErr := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")
 	if ownerErr != nil {
 		log.Printf(ErrorMsgs().Query, "getHome > GetSingleUserValue", ownerErr)
@@ -171,29 +171,29 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	app.getPostsComments(thisChannelPosts, allComments)
 
 	// SECTION -- template ---
-	templateData := models.TemplateData{
-		// ---------- users ----------
-		AllUsers:    allUsers,
-		RandomUser:  randomUser,
-		CurrentUser: currentUser,
-		// ---------- allPosts ----------
-		Posts: allPosts,
-		// ---------- channels ----------
-		AllChannels:                allChannels,
-		ThisChannel:                thisChannel,
-		ThisChannelOwnerName:       thisChannelOwnerName,
-		OwnedChannels:              ownedChannels,
-		JoinedChannels:             joinedChannels,
-		OwnedAndJoinedChannels:     ownedAndJoinedChannels,
-		ThisChannelIsOwned:         isOwned,
-		ThisChannelIsOwnedOrJoined: isJoinedOrOwned,
-		ThisChannelRules:           thisChannelRules,
-		ThisChannelPosts:           thisChannelPosts,
-		// ---------- misc ----------
-		Images:    nil,
-		Reactions: nil,
-	}
-	// models.JsonError(templateData)
+
+	// ---------- users ----------
+	TemplateData.AllUsers = allUsers
+	TemplateData.RandomUser = randomUser
+	TemplateData.CurrentUser = currentUser
+	// ---------- allPosts ----------
+	TemplateData.Posts = allPosts
+	// ---------- channels ----------
+	TemplateData.AllChannels = allChannels
+	TemplateData.ThisChannel = thisChannel
+	TemplateData.ThisChannelOwnerName = thisChannelOwnerName
+	TemplateData.OwnedChannels = ownedChannels
+	TemplateData.JoinedChannels = joinedChannels
+	TemplateData.OwnedAndJoinedChannels = ownedAndJoinedChannels
+	TemplateData.ThisChannelIsOwned = isOwned
+	TemplateData.ThisChannelIsOwnedOrJoined = isJoinedOrOwned
+	TemplateData.ThisChannelRules = thisChannelRules
+	TemplateData.ThisChannelPosts = thisChannelPosts
+	// ---------- misc ----------
+	TemplateData.Images = nil
+	TemplateData.Reactions = nil
+
+	// models.JsonError(TemplateData)
 	tpl, err := GetTemplate()
 	if err != nil {
 		log.Printf(ErrorMsgs().Parse, "templates", "getHome", err)
@@ -207,7 +207,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	execErr := t.Execute(w, templateData)
+	execErr := t.Execute(w, TemplateData)
 	if execErr != nil {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return

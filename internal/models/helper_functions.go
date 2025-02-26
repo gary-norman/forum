@@ -9,14 +9,14 @@ type TimeUpdatable interface {
 	UpdateTimeSince()
 }
 type Reactable interface {
-	React()
+	React(likes, dislikes int)
 }
 
 func UpdateTimeSince(t TimeUpdatable) {
 	t.UpdateTimeSince()
 }
-func React(r Reactable) {
-	r.React()
+func React(r Reactable, likes, dislikes int) {
+	r.React(likes, dislikes)
 }
 
 func getTimeSince(created time.Time) string {

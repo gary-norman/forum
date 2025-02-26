@@ -336,7 +336,7 @@ a:active {
   display: flex;
   flex-direction: row;
   gap: 4.8rem;
-  width: calc(100dvw - 0rem);
+  width: calc(100dvw - 32rem);
   /* height: 20dvh; */
   /*border: 2px hotpink solid;*/
 }
@@ -2284,14 +2284,6 @@ main {
   position: relative;
   /* Height of right panel equal to the screen size - 9.6rem padding (4.8rem top and bottom) */
   height: calc(100dvh - 9.6rem);
-  
-  
-  
-  
-  
-  
-  
-
   & .right-panel-content {
     position: sticky;
     top: 0;

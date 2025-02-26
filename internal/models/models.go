@@ -156,22 +156,31 @@ func getTimeSince(created time.Time) string {
 	return timeSince
 }
 
+type TimeUpdatable interface {
+	UpdateTimeSince()
+}
+
+func UpdateTimeSince(t TimeUpdatable) {
+	t.UpdateTimeSince()
+}
+
 func (p *Post) React(likes, dislikes int) {
 	p.Likes += likes
 	p.Dislikes += dislikes
-}
-func (p *Post) UpdateTimeSince() {
-	p.TimeSince = getTimeSince(p.Created)
-}
-func (p *Post) AppendComments(commentWithReplies []Comment) {
-	p.Comments = commentWithReplies
 }
 func (c *Comment) React(likes, dislikes int) {
 	c.Likes += likes
 	c.Dislikes += dislikes
 }
+func (p *Post) UpdateTimeSince() {
+	p.TimeSince = getTimeSince(p.Created)
+}
 func (c *Comment) UpdateTimeSince() {
 	c.TimeSince = getTimeSince(c.Created)
+}
+
+func (u *User) UpdateTimeSince() {
+	u.TimeSince = getTimeSince(u.Created)
 }
 
 type Image struct {

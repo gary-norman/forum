@@ -40,11 +40,11 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	allComments = app.getCommentsLikesAndDislikes(allComments)
 
 	for i := range allPosts {
-		allPosts[i].UpdateTimeSince()
+		models.UpdateTimeSince(&allPosts[i])
 	}
-	for i := range allComments {
-		allComments[i].UpdateTimeSince()
-	}
+	//for i := range allComments {
+	//	allComments[i].UpdateTimeSince()
+	//}
 
 	allPosts = app.getPostsComments(allPosts, allComments)
 
@@ -825,11 +825,11 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) getPostsComments(posts []models.Post, comments []models.Comment) []models.Post {
-	for i, post := range posts {
+	for p, post := range posts {
 		/// Filter comments that belong to the current post based on the postID and CommentedPostID
 		var postComments []models.Comment
-		for i, comment := range comments {
-			comments[i].UpdateTimeSince()
+		for c, comment := range comments {
+			comments[c].UpdateTimeSince()
 			// Match the postID with CommentedPostID
 			if comment.CommentedPostID != nil && *comment.CommentedPostID == post.ID {
 				// For each comment, recursively assign its replies
@@ -837,7 +837,7 @@ func (app *app) getPostsComments(posts []models.Post, comments []models.Comment)
 				postComments = append(postComments, commentWithReplies)
 			}
 		}
-		posts[i].AppendComments(postComments)
+		posts[p].Comments = postComments
 	}
 	return posts
 }

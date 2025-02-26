@@ -42,9 +42,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	for i := range allPosts {
 		models.UpdateTimeSince(&allPosts[i])
 	}
-	//for i := range allComments {
-	//	allComments[i].UpdateTimeSince()
-	//}
+	for i := range allComments {
+		models.UpdateTimeSince(&allComments[i])
+	}
 
 	allPosts = app.getPostsComments(allPosts, allComments)
 

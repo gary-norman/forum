@@ -20,6 +20,10 @@ type User struct {
 	Following   int  `json:"following"`
 }
 
+func (u *User) UpdateTimeSince() {
+	u.TimeSince = getTimeSince(u.Created)
+}
+
 type UserCheck struct {
 	ID             int    `json:"id"`
 	Username       string `json:"username"`
@@ -136,6 +140,14 @@ type Post struct {
 	Comments      []Comment
 }
 
+func (p *Post) UpdateTimeSince() {
+	p.TimeSince = getTimeSince(p.Created)
+}
+func (p *Post) React(likes, dislikes int) {
+	p.Likes += likes
+	p.Dislikes += dislikes
+}
+
 //type reactable interface {
 //	*Post | *Comment
 //}
@@ -159,28 +171,15 @@ func getTimeSince(created time.Time) string {
 type TimeUpdatable interface {
 	UpdateTimeSince()
 }
+type Reactable interface {
+	React()
+}
 
 func UpdateTimeSince(t TimeUpdatable) {
 	t.UpdateTimeSince()
 }
-
-func (p *Post) React(likes, dislikes int) {
-	p.Likes += likes
-	p.Dislikes += dislikes
-}
-func (c *Comment) React(likes, dislikes int) {
-	c.Likes += likes
-	c.Dislikes += dislikes
-}
-func (p *Post) UpdateTimeSince() {
-	p.TimeSince = getTimeSince(p.Created)
-}
-func (c *Comment) UpdateTimeSince() {
-	c.TimeSince = getTimeSince(c.Created)
-}
-
-func (u *User) UpdateTimeSince() {
-	u.TimeSince = getTimeSince(u.Created)
+func React(r Reactable) {
+	r.React()
 }
 
 type Image struct {
@@ -208,6 +207,14 @@ type Comment struct {
 	Dislikes           int    `json:"dislikes"`
 	Comments           []Comment
 	Replies            []Comment
+}
+
+func (c *Comment) React(likes, dislikes int) {
+	c.Likes += likes
+	c.Dislikes += dislikes
+}
+func (c *Comment) UpdateTimeSince() {
+	c.TimeSince = getTimeSince(c.Created)
 }
 
 type Reaction struct {

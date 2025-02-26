@@ -761,12 +761,6 @@
                       </div>
                       <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                         <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-                        <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
-                        <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-                        <div class="activity-items comments cont-flex-column">Yo how fat is she?</div>
-                        <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-                        <div class="activity-items comments cont-flex-column">Yo mama</div>
-                        <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
                       </div>
                     </div>
 
@@ -781,11 +775,6 @@
                         </button>
                       </div>
                       <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                        <div class="activity-items saved">You saved this post</div>
-                        <div class="activity-items saved">You saved this post</div>
-                        <div class="activity-items saved">You saved this post</div>
-                        <div class="activity-items saved">You saved this post</div>
-                        <div class="activity-items saved">You saved this post</div>
                         <div class="activity-items saved">You saved this post</div>
                       </div>
                     </div>
@@ -802,15 +791,6 @@
                       </div>
                       <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                         <div class="activity-items muted">You muted this post</div>
-                        <div class="activity-items muted">You muted this post</div>
-                        <div class="activity-items muted">You muted this post</div>
-                        <div class="activity-items muted">You muted this post</div>
-                        <div class="activity-items muted">You muted this post</div>
-                        <div class="activity-items muted">You muted this post</div>
-                        <div class="activity-items muted">You muted this post</div>
-                        <div class="activity-items muted">You muted this post</div>
-                        <div class="activity-items muted">You muted this post</div>
-                        <div class="activity-items muted">You muted this post</div>
                       </div>
                     </div>
 
@@ -826,190 +806,170 @@
                       </div>
                       <div id="activity-feed-reactions" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                         <div class="activity-items reactions">You liked this post</div>
-                        <div class="activity-items reactions">You liked this post</div>
-                        <div class="activity-items reactions">You liked this post</div>
-                        <div class="activity-items reactions">You liked this post</div>
-                        <div class="activity-items reactions">You liked this post</div>
-                        <div class="activity-items reactions">You liked this post</div>
-                        <div class="activity-items reactions">You liked this post</div>
-                        <div class="activity-items reactions">You liked this post</div>
-                        <div class="activity-items reactions">You liked this post</div>
-                        <div class="activity-items reactions">You liked this post</div>
                       </div>
                     </div>
                 </div>
-              </div>
-              <div class="right-panel ">
-                <div class="right-panel-content scroll-down">
-                  {{/* SECTION edit user details inside right-panel */}}
-
-
-                  <form action="/edituser" enctype="multipart/form-data" method="POST">
-
-                    <div class="cont-flex-column">
-
-                      <div class="right-panel-container-name flex-space-between">
-                        {{ if ne .CurrentUser nil }}
-                          <label for="bio" class="padded">Edit your bio</label>
-                            {{else}}
-                        {{ end }}
-                        {{ if ne .CurrentUser nil }}
-                          <div id="settings-user-name" class="edit-settings">
-                            <button id="edit-user-name" type="button" class="btn-sm btn-icoonly">
-                              <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
-                            </button>
-                            <button id="submit-user-name" type="submit" value="bio" class="btn-sm btn-icoonly">
-                              <span class="btn-success" role="contentinfo" aria-label="Submit new name"></span>
-                            </button>
-                            <button id="cancel-user-name" type="button" class="btn-sm btn-icoonly">
-                              <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing your name"></span>
-                            </button>
-                          </div>
-                        {{ end }} <!-- "nouser" check -->
-
-                      </div>
-                      <h4 id="user-name-content" class="right-panel-name">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
-                      {{ if ne .CurrentUser nil }}
-                      <div class="input-wrapper edit-user ">
-                        <textarea class="scroll-down" id="name" name="name" placeholder="{{$user.Username}}">{{$user.Username}}</textarea>
-                      </div>
-
-                      {{ end }} <!-- "nouser" check -->
-                    </div>
-
-
-
-                  {{ if ne .CurrentUser nil }}
-                    <div class="cont-flex-column">
-                      <div class="right-panel-container-pic flex-space-between">
-                        <div class="right-panel-container-pic">
-                          {{ if (ne $user.Avatar "noimage") }}
-                            <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ $user.Avatar }}"></div>
-                          {{ else }}
-                            <div class="right-panel-pic profile-pic--empty" data-name-user="{{ $user.Username }}"></div>
-                          {{ end }}
-                          <small>Edit your avatar</small>
-                        </div>
-                        <div id="settings-user-avatar" class="edit-settings">
-                          <button id="edit-user-avatar" type="button" class="btn-sm btn-icoonly">
-                            <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
-                          </button>
-                          <button id="submit-user-avatar" type="submit" value="image" class="btn-sm btn-icoonly">
-                            <span class="btn-success" role="contentinfo" aria-label="Submit new avatar"></span>
-                          </button>
-                          <button id="cancel-user-avatar" type="button" class="btn-sm btn-icoonly">
-                            <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the avatar"></span>
-                          </button>
-                        </div>
-                      </div>
-                      <div id="drop-zone--user-image">
-                        <div id="uploaded-file--user-image"></div>
-                        <div class="drag-drop-text-wrapper">
-                          <div class="dragText">drag and drop your file, or</div>
-                          <input type="file" class="align-self-center" id="browse--user-image" name="file-drop" />
-                        </div>
-                      </div>
-                    </div>
-                  {{ end }} <!-- "nouser" check -->
-
-                  <div class="right-panel-container-bio">
-                    <div class="right-panel-bio flex-space-between">
-                      {{ if or $user.Description (ne .CurrentUser nil) }}
-                        <label for="bio" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
-                      {{ end }}
-                      {{ if ne .CurrentUser nil }}
-                        <div id="settings-user-bio" class="edit-settings">
-                          <button id="edit-user-bio" type="button" class="btn-sm btn-icoonly">
-                            <span class="btn-edit" role="contentinfo" aria-label="Edit profile bio"></span>
-                          </button>
-                          <button id="submit-user-bio" type="submit" value="bio" class="btn-sm btn-icoonly">
-                            <span class="btn-success" role="contentinfo" aria-label="Submit new bio"></span>
-                          </button>
-                          <button id="cancel-user-bio" type="button" class="btn-sm btn-icoonly">
-                            <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the bio"></span>
-                          </button>
-                        </div>
-                      {{ end }} <!-- "nouser" check -->
-                    </div>
-                    {{ if $user.Description }}
-                      <pre id="user-bio-content" class="side-panel-block scroll-down">{{ $user.Description }}</pre>
-                    {{end}}
-                    <div class="input-wrapper edit-user ">
-                      <textarea class="scroll-down" id="bio" name="bio" placeholder="{{if $user.Description}}{{else}}update your bio{{end}}">{{if $user.Description}}{{ $user.Description }}{{end}}</textarea>
-                    </div>
-                  </div>
-                  </form>
-                  <div class="right-panel-container-modded-channels">
-                    <div class="sidebar-block sidebar-channels">
-                      <small class="padded">Modded Channels</small>
-                      <div class="side-panel-block">
-                        <div class="sidebar-channel">
-                          <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
-                            <span class="card-pic profile-pic"></span>
-                            <div>
-                              <div>/Interesting_Things</div>
-                              <div>
-                                <div class="channel-users">5.6k</div>
-                                <div class="channel-green-dot">36</div>
-                              </div>
-                            </div>
-                            {{ if ne .CurrentUser nil }}
-                            <button class="btn-sm btn-icoonly margin-auto-0">
-                              <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                            </button>
-                            {{ end }} <!-- "nouser" check -->
-                          </div>
-                        </div>
-                        <div class="sidebar-channel">
-                          <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
-                            <span class="card-pic channel-pic"></span>
-                            <div>
-                              <div>/CSS_Help</div>
-                              <div>
-                                <div class="channel-users">5.6k</div>
-                                <div class="channel-green-dot">36</div>
-                              </div>
-                            </div>
-                            {{ if ne .CurrentUser nil }}
-                            <button class="btn-sm btn-icoonly margin-auto-0">
-                              <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                            </button>
-                            {{ end }} <!-- "nouser" check -->
-                          </div>
-                        </div>
-                        <div class="sidebar-channel">
-{{/*TODO ---------- does this need <div></div> ---------- */}}
-                        <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
-                          <span class="card-pic channel-pic"></span>
-                          <div>
-                            <div>/Golang#Discussion</div>
-                            <div>
-                              <div class="channel-users">5.6k</div>
-                              <div class="channel-green-dot">36</div>
-                            </div>
-                          </div>
-                          {{ if ne .CurrentUser nil }}
-                          <button class="btn-sm btn-icoonly margin-auto-0">
-                            <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                          </button>
-                          {{ end }} <!-- "nouser" check -->
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <div class="button-row-wrap">
-                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                  <span class="btn-share">share</span>
-                </button>
-                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                  <span class="btn-report">report</span>
-                </button>
               </div>
             </div>
+            <div class="right-panel ">
+                  <div class="right-panel-content scroll-down">
+                    {{/* SECTION edit user details inside right-panel */}}
+                    <form action="/edituser" enctype="multipart/form-data" method="POST">
+                      <div class="cont-flex-column">
+                        <div class="right-panel-container-name flex-space-between">
+                          {{ if ne .CurrentUser nil }}
+                            <label for="bio" class="padded">Edit your bio</label>
+                          {{else}}
+                          {{ end }}
+                          {{ if ne .CurrentUser nil }}
+                            <div id="settings-user-name" class="edit-settings">
+                              <button id="edit-user-name" type="button" class="btn-sm btn-icoonly">
+                                <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
+                              </button>
+                              <button id="submit-user-name" type="submit" value="bio" class="btn-sm btn-icoonly">
+                                <span class="btn-success" role="contentinfo" aria-label="Submit new name"></span>
+                              </button>
+                              <button id="cancel-user-name" type="button" class="btn-sm btn-icoonly">
+                                <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing your name"></span>
+                              </button>
+                            </div>
+                          {{ end }} <!-- "nouser" check -->
+                        </div>
+                        <h4 id="user-name-content" class="right-panel-name">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
+                        {{ if ne .CurrentUser nil }}
+                          <div class="input-wrapper edit-user ">
+                            <textarea class="scroll-down" id="name" name="name" placeholder="{{$user.Username}}">{{$user.Username}}</textarea>
+                          </div>
+                        {{ end }} <!-- "nouser" check -->
+                      </div>
+                      {{ if ne .CurrentUser nil }}
+                        <div class="cont-flex-column">
+                          <div class="right-panel-container-pic flex-space-between">
+                            <div class="right-panel-container-pic">
+                              {{ if (ne $user.Avatar "noimage") }}
+                                <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ $user.Avatar }}"></div>
+                              {{ else }}
+                                <div class="right-panel-pic profile-pic--empty" data-name-user="{{ $user.Username }}"></div>
+                              {{ end }}
+                              <small>Edit your avatar</small>
+                            </div>
+                            <div id="settings-user-avatar" class="edit-settings">
+                              <button id="edit-user-avatar" type="button" class="btn-sm btn-icoonly">
+                                <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
+                              </button>
+                              <button id="submit-user-avatar" type="submit" value="image" class="btn-sm btn-icoonly">
+                                <span class="btn-success" role="contentinfo" aria-label="Submit new avatar"></span>
+                              </button>
+                              <button id="cancel-user-avatar" type="button" class="btn-sm btn-icoonly">
+                                <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the avatar"></span>
+                              </button>
+                            </div>
+                          </div>
+                          <div id="drop-zone--user-image">
+                            <div id="uploaded-file--user-image"></div>
+                            <div class="drag-drop-text-wrapper">
+                              <div class="dragText">drag and drop your file, or</div>
+                              <input type="file" class="align-self-center" id="browse--user-image" name="file-drop" />
+                            </div>
+                          </div>
+                        </div>
+                      {{ end }} <!-- "nouser" check -->
+                      <div class="right-panel-container-bio">
+                        <div class="right-panel-bio flex-space-between">
+                          {{ if or $user.Description (ne .CurrentUser nil) }}
+                            <label for="bio" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
+                          {{ end }}
+                          {{ if ne .CurrentUser nil }}
+                            <div id="settings-user-bio" class="edit-settings">
+                              <button id="edit-user-bio" type="button" class="btn-sm btn-icoonly">
+                                <span class="btn-edit" role="contentinfo" aria-label="Edit profile bio"></span>
+                              </button>
+                              <button id="submit-user-bio" type="submit" value="bio" class="btn-sm btn-icoonly">
+                                <span class="btn-success" role="contentinfo" aria-label="Submit new bio"></span>
+                              </button>
+                              <button id="cancel-user-bio" type="button" class="btn-sm btn-icoonly">
+                                <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the bio"></span>
+                              </button>
+                            </div>
+                          {{ end }} <!-- "nouser" check -->
+                        </div>
+                        {{ if $user.Description }}
+                          <pre id="user-bio-content" class="side-panel-block scroll-down">{{ $user.Description }}</pre>
+                        {{end}}
+                        <div class="input-wrapper edit-user ">
+                          <textarea class="scroll-down" id="bio" name="bio" placeholder="{{if $user.Description}}{{else}}update your bio{{end}}">{{if $user.Description}}{{ $user.Description }}{{end}}</textarea>
+                        </div>
+                      </div>
+                    </form>
+                    <div class="right-panel-container-modded-channels">
+                      <div class="sidebar-block sidebar-channels">
+                        <small class="padded">Modded Channels</small>
+                        <div class="side-panel-block">
+                          <div class="sidebar-channel">
+                            <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
+                              <span class="card-pic profile-pic"></span>
+                              <div>
+                                <div>/Interesting_Things</div>
+                                <div>
+                                  <div class="channel-users">5.6k</div>
+                                  <div class="channel-green-dot">36</div>
+                                </div>
+                              </div>
+                              {{ if ne .CurrentUser nil }}
+                                <button class="btn-sm btn-icoonly margin-auto-0">
+                                  <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                                </button>
+                              {{ end }} <!-- "nouser" check -->
+                            </div>
+                          </div>
+                          <div class="sidebar-channel">
+                            <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
+                              <span class="card-pic channel-pic"></span>
+                              <div>
+                                <div>/CSS_Help</div>
+                                <div>
+                                  <div class="channel-users">5.6k</div>
+                                  <div class="channel-green-dot">36</div>
+                                </div>
+                              </div>
+                              {{ if ne .CurrentUser nil }}
+                                <button class="btn-sm btn-icoonly margin-auto-0">
+                                  <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                                </button>
+                              {{ end }} <!-- "nouser" check -->
+                            </div>
+                          </div>
+                          <div class="sidebar-channel">
+                            <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
+                              <span class="card-pic channel-pic"></span>
+                              <div>
+                                <div>/Golang#Discussion</div>
+                                <div>
+                                  <div class="channel-users">5.6k</div>
+                                  <div class="channel-green-dot">36</div>
+                                </div>
+                              </div>
+                              {{ if ne .CurrentUser nil }}
+                                <button class="btn-sm btn-icoonly margin-auto-0">
+                                  <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
+                                </button>
+                              {{ end }} <!-- "nouser" check -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="button-row-wrap">
+                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                        <span class="btn-share">share</span>
+                      </button>
+                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                        <span class="btn-report">report</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
           </div>
-        </div>
-      </div>
 {{/*SECTION ---------- channel page ----------*/}}
           <div id="channel-page" class="feeds-wrapper">
         <div class="banner">

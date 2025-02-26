@@ -1,9 +1,8 @@
-package handlers
+package main
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gary-norman/forum/cmd/web"
 	"github.com/gary-norman/forum/internal/models"
 	"log"
 	"net/http"
@@ -11,32 +10,32 @@ import (
 	"strings"
 )
 
-func (app *main.app) getThisChannel(w http.ResponseWriter, r *http.Request) {
+func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var thisChannel models.ChannelWithDaysAgo
 	channelId, err := strconv.Atoi(r.PathValue("channelId"))
 	if err != nil {
-		fmt.Printf(main.ErrorMsgs().KeyValuePair, "convert channelId", err)
+		fmt.Printf(ErrorMsgs().KeyValuePair, "convert channelId", err)
 	}
 	foundChannels, err := app.channels.Search("id", channelId)
 	if err != nil {
-		fmt.Printf(main.ErrorMsgs().KeyValuePair, "getHome > found channels", err)
+		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > found channels", err)
 	}
 	if len(foundChannels) > 0 {
 		thisChannel = models.ChannelWithDaysAgo{
 			Channel:   foundChannels[0],
-			TimeSince: main.getTimeSince(foundChannels[0].Created),
+			TimeSince: getTimeSince(foundChannels[0].Created),
 		}
 	}
 	thisChannelOwnerName, ownerErr := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")
 	if ownerErr != nil {
-		log.Printf(main.ErrorMsgs().Query, "getHome > GetSingleUserValue", ownerErr)
+		log.Printf(ErrorMsgs().Query, "getHome > GetSingleUserValue", ownerErr)
 	}
-	main.TemplateData.ThisChannel = thisChannel
-	main.TemplateData.ThisChannelOwnerName = thisChannelOwnerName
+	TemplateData.ThisChannel = thisChannel
+	TemplateData.ThisChannelOwnerName = thisChannelOwnerName
 }
 
-func (app *main.app) storeChannel(w http.ResponseWriter, r *http.Request) {
+func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
 		w.WriteHeader(http.StatusUnauthorized)
@@ -45,7 +44,7 @@ func (app *main.app) storeChannel(w http.ResponseWriter, r *http.Request) {
 	parseErr := r.ParseMultipartForm(10 << 20)
 	if parseErr != nil {
 		http.Error(w, parseErr.Error(), 400)
-		log.Printf(main.ErrorMsgs().Parse, "storeChannel", parseErr)
+		log.Printf(ErrorMsgs().Parse, "storeChannel", parseErr)
 		return
 	}
 
@@ -62,7 +61,7 @@ func (app *main.app) storeChannel(w http.ResponseWriter, r *http.Request) {
 	if r.PostForm.Get("privacy") == "on" {
 		createChannelData.Privacy = true
 	}
-	createChannelData.Avatar = main.GetFileName(r, "file-drop", "storeChannel", "channel")
+	createChannelData.Avatar = GetFileName(r, "file-drop", "storeChannel", "channel")
 
 	insertErr := app.channels.Insert(
 		createChannelData.OwnerID,
@@ -76,14 +75,14 @@ func (app *main.app) storeChannel(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if insertErr != nil {
-		log.Printf(main.ErrorMsgs().Post, insertErr)
+		log.Printf(ErrorMsgs().Post, insertErr)
 		http.Error(w, insertErr.Error(), 500)
 		return
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func (app *main.app) storeMembership(w http.ResponseWriter, r *http.Request) {
+func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 	user, getUserErr := app.GetLoggedInUser(r)
 	if getUserErr != nil {
 		w.WriteHeader(http.StatusUnauthorized)
@@ -91,20 +90,20 @@ func (app *main.app) storeMembership(w http.ResponseWriter, r *http.Request) {
 	}
 	if parseErr := r.ParseForm(); parseErr != nil {
 		http.Error(w, parseErr.Error(), 400)
-		log.Printf(main.ErrorMsgs().Parse, "storeMembership", parseErr)
+		log.Printf(ErrorMsgs().Parse, "storeMembership", parseErr)
 		return
 	}
 	fmt.Printf("user: %v", user.Username)
 	// get channelID
 	joinedChannelID, convErr := strconv.Atoi(r.PostForm.Get("channelId"))
 	if convErr != nil {
-		log.Printf(main.ErrorMsgs().Convert, r.PostForm.Get("channelId"), "StoreMembership > GetChannelID", convErr)
+		log.Printf(ErrorMsgs().Convert, r.PostForm.Get("channelId"), "StoreMembership > GetChannelID", convErr)
 		log.Printf("Unable to convert %v to integer\n", r.PostForm.Get("channelId"))
 	}
 	// get slice of channels (in this case it is only 1, but the function still returns a slice)
 	channels, err := app.channels.Search("id", joinedChannelID)
 	if err != nil {
-		log.Printf(main.ErrorMsgs().Query, "channel", err)
+		log.Printf(ErrorMsgs().Query, "channel", err)
 	}
 	// get the channel object
 	channel := channels[0]
@@ -119,7 +118,7 @@ func (app *main.app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		createMembershipData.ChannelID,
 	)
 	if insertErr != nil {
-		log.Printf(main.ErrorMsgs().Post, insertErr)
+		log.Printf(ErrorMsgs().Post, insertErr)
 		http.Error(w, insertErr.Error(), 500)
 		return
 	}
@@ -131,7 +130,7 @@ func (app *main.app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		"message": fmt.Sprintf("Welcome to %v!", channel.Name),
 	})
 	if encErr != nil {
-		log.Printf(main.ErrorMsgs().Encode, "storeMembership: Accepted", encErr)
+		log.Printf(ErrorMsgs().Encode, "storeMembership: Accepted", encErr)
 		return
 	}
 }
@@ -140,35 +139,35 @@ func (app *main.app) storeMembership(w http.ResponseWriter, r *http.Request) {
 // }
 
 // JoinedByCurrentUser checks if the currently logged-in user is a member of the current channel
-func (app *main.app) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
-	fmt.Println(main.Colors().Orange + "Checking if this user is a member of this channel" + main.Colors().Reset)
-	fmt.Printf(main.ErrorMsgs().Divider)
+func (app *app) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
+	fmt.Println(Colors().Orange + "Checking if this user is a member of this channel" + Colors().Reset)
+	fmt.Printf(ErrorMsgs().Divider)
 	var channels []models.Channel
 	for _, membership := range memberships {
 		channel, err := app.channels.OwnedOrJoinedByCurrentUser(membership.ChannelID, "ID")
 		if err != nil {
-			return nil, fmt.Errorf(main.ErrorMsgs().KeyValuePair, "Error calling JoinedByCurrentUser > OwnedOrJoinedByCurrentUser", err)
+			return nil, fmt.Errorf(ErrorMsgs().KeyValuePair, "Error calling JoinedByCurrentUser > OwnedOrJoinedByCurrentUser", err)
 		}
 		channels = append(channels, channel[0])
 	}
 	if len(channels) > 0 {
-		fmt.Println(main.Colors().Green + "Current user is a member of this channel" + main.Colors().Reset)
+		fmt.Println(Colors().Green + "Current user is a member of this channel" + Colors().Reset)
 	} else {
-		fmt.Println(main.Colors().Red + "Current user is not a member of this channel" + main.Colors().Reset)
+		fmt.Println(Colors().Red + "Current user is not a member of this channel" + Colors().Reset)
 	}
 	return channels, nil
 }
 
-func (app *main.app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
+func (app *app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
 	channelId, err := strconv.Atoi(r.PathValue("channelId"))
 	if err != nil {
-		log.Printf(main.ErrorMsgs().KeyValuePair, "CreateAndInsertRule > convert channelId to int", err)
+		log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > convert channelId to int", err)
 	}
 
 	// Get the "rules" input value
 	rulesJSON := r.FormValue("rules")
 	if rulesJSON == "" { // TODO send this message to the user
-		log.Printf(main.ErrorMsgs().KeyValuePair, "message to user", "you have not added or removed any rules")
+		log.Printf(ErrorMsgs().KeyValuePair, "message to user", "you have not added or removed any rules")
 	}
 
 	// Decode JSON into a slice of Rule structs
@@ -182,21 +181,21 @@ func (app *main.app) CreateAndInsertRule(w http.ResponseWriter, r *http.Request)
 		id, found := strings.CutPrefix(rule.ID, "existing-channel-rule-")
 		idInt, err := strconv.Atoi(id)
 		if err != nil {
-			log.Printf(main.ErrorMsgs().KeyValuePair, "CreateAndInsertRule > id => idInt", err)
+			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > id => idInt", err)
 		}
 		if found {
 			err := app.rules.DeleteRule(channelId, idInt)
 			if err != nil {
-				log.Printf(main.ErrorMsgs().KeyValuePair, "CreateAndInsertRule > DeleteRule", err)
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > DeleteRule", err)
 			}
 		} else {
 			ruleId, err := app.rules.CreateRule(rule.Text)
 			if err != nil {
-				log.Printf(main.ErrorMsgs().KeyValuePair, "CreateAndInsertRule > CreateRule", err)
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > CreateRule", err)
 			}
 			err = app.rules.InsertRule(channelId, ruleId)
 			if err != nil {
-				log.Printf(main.ErrorMsgs().KeyValuePair, "CreateAndInsertRule > InsertRule", err)
+				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > InsertRule", err)
 			}
 		}
 	}

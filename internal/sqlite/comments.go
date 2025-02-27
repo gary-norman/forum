@@ -52,8 +52,9 @@ func (m *CommentModel) Insert(comment models.Comment) error {
 
 	// Define the SQL statement
 	stmt1 := `INSERT INTO Comments 
-		(Content, Created, Author, AuthorID, AuthorAvatar, ChannelName, ChannelID, CommentedPostID, CommentedCommentID, IsCommentable, IsFlagged)
-		VALUES (?, DateTime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+		(Content, Created, Author, AuthorID, AuthorAvatar, ChannelName, ChannelID, CommentedPostID, 
+CommentedCommentID, IsCommentable, IsFlagged, IsReply)
+		VALUES (?, DateTime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
 	// Execute the query, dereferencing the pointers for reactionID values
 	_, err = tx.Exec(stmt1,
@@ -66,7 +67,9 @@ func (m *CommentModel) Insert(comment models.Comment) error {
 		&comment.CommentedPostID,
 		&comment.CommentedCommentID,
 		&comment.IsCommentable,
-		&comment.IsFlagged)
+		&comment.IsFlagged,
+		&comment.IsReply,
+	)
 	//fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, parentPostID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Insert query: %w", err)
@@ -193,6 +196,91 @@ func (m *CommentModel) Delete(commentID int) error {
 	}
 
 	return err
+}
+
+func (m *CommentModel) GetCommentByPostID(id int) ([]models.Comment, error) {
+	if m == nil {
+		log.Println("Error: DB is nil")
+		return nil, fmt.Errorf("database connection is not initialized")
+	}
+	stmt := "SELECT * FROM Comments WHERE CommentedPostID = ? ORDER BY ID DESC"
+	rows, err := m.DB.Query(stmt, id)
+	if err != nil {
+		log.Printf(ErrorMsgs().Query, stmt, err)
+		return nil, err
+	}
+	defer func() {
+		if closeErr := rows.Close(); closeErr != nil {
+			log.Printf(ErrorMsgs().Close, rows, "GetCommentByPostID", closeErr)
+		}
+	}()
+	var comments []models.Comment
+	for rows.Next() {
+		c := models.Comment{}
+		scanErr := rows.Scan(
+			&c.ID,
+			&c.Content,
+			&c.Created,
+			&c.AuthorID,
+			&c.ChannelID,
+			&c.IsReply,
+			&c.CommentedPostID,
+			&c.CommentedCommentID,
+			&c.IsFlagged,
+			&c.Author,
+			&c.AuthorAvatar,
+			&c.ChannelName,
+			&c.IsCommentable,
+		)
+		if scanErr != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
+			return nil, scanErr
+		}
+		comments = append(comments, c)
+	}
+	return comments, nil
+}
+func (m *CommentModel) GetCommentByCommentID(id int) ([]models.Comment, error) {
+	if m == nil {
+		log.Println("Error: DB is nil")
+		return nil, fmt.Errorf("database connection is not initialized")
+	}
+	stmt := "SELECT * FROM Comments WHERE CommentedCommentID = ? ORDER BY ID DESC"
+	rows, err := m.DB.Query(stmt, id)
+	if err != nil {
+		log.Printf(ErrorMsgs().Query, stmt, err)
+		return nil, err
+	}
+	defer func() {
+		if closeErr := rows.Close(); closeErr != nil {
+			log.Printf(ErrorMsgs().Close, rows, "GetCommentByCommentID", closeErr)
+		}
+	}()
+	var comments []models.Comment
+	for rows.Next() {
+		c := models.Comment{}
+		scanErr := rows.Scan(
+			&c.ID,
+			&c.Content,
+			&c.Created,
+			&c.AuthorID,
+			&c.ChannelID,
+			&c.IsReply,
+			&c.CommentedPostID,
+			&c.CommentedCommentID,
+			&c.IsFlagged,
+			&c.Author,
+			&c.AuthorAvatar,
+			&c.ChannelName,
+			&c.IsCommentable,
+		)
+		if scanErr != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
+			return nil, scanErr
+		}
+		comments = append(comments, c)
+	}
+	return comments, nil
 }
 
 func (m *CommentModel) All() ([]models.Comment, error) {

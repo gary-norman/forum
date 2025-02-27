@@ -30,8 +30,29 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	if ownerErr != nil {
 		log.Printf(ErrorMsgs().Query, "getHome > GetSingleUserValue", ownerErr)
 	}
+	// get all rules for the current channel
+	thisChannelRules, err := app.rules.AllForChannel(thisChannel.ID)
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > rules.AllForChannel", err)
+	}
+	// TODO get channel moderators
+
+	thisChannelPosts, err := app.posts.GetPostsByChannel(thisChannel.ID)
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > allPosts.GetPostsByChannel", err)
+	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "thisChannelPosts", len(thisChannelPosts))
+	// Retrieve total likes and dislikes for each Channel post
+	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
+	thisChannelPosts, err = app.getPostsComments(thisChannelPosts)
+	if err != nil {
+		log.Printf(ErrorMsgs().NotFound, "thisChannelPosts comments", "getThisChannel", err)
+	}
+
 	TemplateData.ThisChannel = thisChannel
 	TemplateData.ThisChannelOwnerName = thisChannelOwnerName
+	TemplateData.ThisChannelRules = thisChannelRules
+	TemplateData.ThisChannelPosts = thisChannelPosts
 }
 
 func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {

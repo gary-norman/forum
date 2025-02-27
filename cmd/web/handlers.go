@@ -29,24 +29,17 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all posts", err)
 	}
-
-	allComments, err := app.comments.All()
-	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all comments", err)
-	}
 	// Retrieve total likes and dislikes for each post
 	allPosts = app.getPostsLikesAndDislikes(allPosts)
-	// Retrieve total likes and dislikes for each comment
-	allComments = app.getCommentsLikesAndDislikes(allComments)
 
 	for p := range allPosts {
 		models.UpdateTimeSince(&allPosts[p])
 	}
-	for c := range allComments {
-		models.UpdateTimeSince(&allComments[c])
-	}
 
-	allPosts = app.getPostsComments(allPosts, allComments)
+	allPosts, err = app.getPostsComments(allPosts)
+	if err != nil {
+		log.Printf(ErrorMsgs().NotFound, "allPosts comments", "getHome", err)
+	}
 
 	// SECTION --- user ---
 	allUsers, allUsersErr := app.users.All()
@@ -147,21 +140,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		}
 		isJoinedOrOwned = isOwned || joined
 	}
-	// get all rules for the current channel
-	thisChannelRules, err := app.rules.AllForChannel(thisChannel.ID)
-	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "getHome > rules.AllForChannel", err)
-	}
-	// TODO get channel moderators
-
-	thisChannelPosts, err := app.posts.GetPostsByChannel(thisChannel.ID)
-	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "getHome > allPosts.GetPostsByChannel", err)
-	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "thisChannelPosts", len(thisChannelPosts))
-	// Retrieve total likes and dislikes for each Channel post
-	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
-	app.getPostsComments(thisChannelPosts, allComments)
 
 	// SECTION -- template ---
 
@@ -180,8 +158,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	TemplateData.OwnedAndJoinedChannels = ownedAndJoinedChannels
 	TemplateData.ThisChannelIsOwned = isOwned
 	TemplateData.ThisChannelIsOwnedOrJoined = isJoinedOrOwned
-	TemplateData.ThisChannelRules = thisChannelRules
-	TemplateData.ThisChannelPosts = thisChannelPosts
 	// ---------- misc ----------
 	TemplateData.Images = nil
 	TemplateData.Reactions = nil
@@ -792,6 +768,7 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 		CommentedCommentID: &commentID,
 		IsCommentable:      true,
 		IsFlagged:          false,
+		IsReply:            false,
 		Author:             user.Username,
 		AuthorID:           user.ID,
 		AuthorAvatar:       user.Avatar,
@@ -817,22 +794,24 @@ func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func (app *app) getPostsComments(posts []models.Post, comments []models.Comment) []models.Post {
+func (app *app) getPostsComments(posts []models.Post) ([]models.Post, error) {
 	for p, post := range posts {
+		comments, err := app.comments.GetCommentByPostID(post.ID)
+		if err != nil {
+			return nil, err
+		}
+		comments = app.getCommentsLikesAndDislikes(comments)
 		/// Filter comments that belong to the current post based on the postID and CommentedPostID
 		var postComments []models.Comment
 		for c, comment := range comments {
-			comments[c].UpdateTimeSince()
-			// Match the postID with CommentedPostID
-			if comment.CommentedPostID != nil && *comment.CommentedPostID == post.ID {
-				// For each comment, recursively assign its replies
-				commentWithReplies := getRepliesForComment(comment, comments)
-				postComments = append(postComments, commentWithReplies)
-			}
+			models.UpdateTimeSince(&comments[c])
+			// For each comment, recursively assign its replies
+			commentWithReplies := app.getRepliesForComment(comment)
+			postComments = append(postComments, commentWithReplies)
 		}
 		posts[p].Comments = postComments
 	}
-	return posts
+	return posts, nil
 }
 
 // SECTION ------- channel handlers ----------
@@ -887,16 +866,16 @@ func getRandomUser(userSlice []models.User) models.User {
 }
 
 // getRepliesForComment Recursively fetches replies for each comment
-func getRepliesForComment(comment models.Comment, comments []models.Comment) models.Comment {
+func (app *app) getRepliesForComment(comment models.Comment) models.Comment {
 	// Find replies to the current comment
 	var replies []models.Comment
-	for _, possibleReply := range comments {
-		if possibleReply.CommentedCommentID != nil && *possibleReply.CommentedCommentID == comment.ID {
-			replyWithReplies := getRepliesForComment(possibleReply, comments) // Recursively get replies for this reply
-			replies = append(replies, replyWithReplies)
-		}
+	comments, _ := app.comments.GetCommentByCommentID(comment.ID)
+	comments = app.getCommentsLikesAndDislikes(comments)
+	for r, possibleReply := range comments {
+		models.UpdateTimeSince(&comments[r])
+		replyWithReplies := app.getRepliesForComment(possibleReply) // Recursively get replies for this reply
+		replies = append(replies, replyWithReplies)
 	}
-	// If no replies are found, we can avoid unnecessary recursion
 	if len(replies) > 0 {
 		comment.Replies = replies
 	}

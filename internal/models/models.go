@@ -169,6 +169,7 @@ type Comment struct {
 	CommentedPostID    *int   `json:"commented_post_id,omitempty"`
 	CommentedCommentID *int   `json:"commented_comment_id,omitempty"`
 	IsCommentable      bool   `json:"is_commentable"`
+	IsReply            bool   `json:"is_reply"`
 	IsFlagged          bool   `json:"is_flagged,omitempty"`
 	Likes              int    `json:"likes"`
 	Dislikes           int    `json:"dislikes"`

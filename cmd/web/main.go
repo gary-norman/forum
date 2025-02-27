@@ -147,7 +147,7 @@ func main() {
 			fmt.Printf(ErrorMsgs().ConnInit, srv.Addr, "srv.ListenAndServe")
 			log.Fatalf("HTTP server error: %v", err)
 		}
-		log.Printf("Stopped serving new connections.")
+		log.Printf(Colors().Green + "Stopped serving new connections." + Colors().Reset)
 	}()
 
 	// set up a channel to listen for kill or interrupt

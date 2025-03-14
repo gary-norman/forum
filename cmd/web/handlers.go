@@ -64,8 +64,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf(ErrorMsgs().NotFound, "current user", "getHome", "_")
 		userLoggedIn = false
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUser", currentUser)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUser ST", currentUser.Login.SessionToken)
 	//currentUser, currentUserErr := app.GetLoggedInUser(r)
 	//if currentUserErr != nil {
 	//	log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)

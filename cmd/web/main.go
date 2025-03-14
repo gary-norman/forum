@@ -103,6 +103,35 @@ func initializeApp() (*app, func(), error) {
 	return appInstance, cleanup, nil
 }
 
+// Create a custom key type to avoid conflicts in context
+type contextKey string
+
+const userContextKey = contextKey("currentUser")
+
+// Middleware to add the user to the request context
+func withUser(next http.Handler, app *app) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		currentUser, err := app.GetLoggedInUser(r)
+		if err != nil {
+			log.Printf(ErrorMsgs().NotFound, "user", "withUser", err)
+			currentUser = nil
+		}
+
+		// Store user in context
+		ctx := context.WithValue(r.Context(), userContextKey, currentUser)
+		fmt.Printf(ErrorMsgs().KeyValuePair, "userCTX", ctx.Value(userContextKey))
+		// Pass modified request with context to the next handler
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+// getUserFromContext retrieves the user from the context
+func getUserFromContext(ctx context.Context) (*models.User, bool) {
+	user, ok := ctx.Value(userContextKey).(*models.User)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "userCTX", user)
+	return user, ok
+}
+
 func main() {
 	// Load templates at startup
 

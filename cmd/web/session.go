@@ -15,7 +15,7 @@ func (app *app) isAuthenticated(r *http.Request, username string) error {
 	var user *models.User
 	user, getUserErr := app.users.GetUserByUsername(username, "isAuthenticated")
 	if getUserErr != nil {
-		return fmt.Errorf(ErrorMsgs().NotFound, "user", username, "isAuthenticated", getUserErr)
+		return fmt.Errorf(ErrorMsgs().NotFound, username, "isAuthenticated", getUserErr)
 	}
 	// Get the Session Token from the request cookie
 	st, err := r.Cookie("session_token")

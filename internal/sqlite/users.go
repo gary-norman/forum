@@ -81,12 +81,12 @@ func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, erro
 	fmt.Printf(Colors.Blue+"username called by %v:"+Colors.White+" %v\n"+Colors.Reset, calledBy, username)
 	usernameExists, queryUserErr := m.QueryUserNameExists(username)
 	if queryUserErr != nil {
-		log.Printf(ErrorMsgs().NotFound, "username", username, "GetUserFromLogin", queryUserErr)
+		log.Printf(ErrorMsgs().NotFound, username, "GetUserFromLogin", queryUserErr)
 	}
 	fmt.Printf(Colors.Blue+"usernameExists called by %v:"+Colors.White+" %v\n"+Colors.Reset, calledBy, usernameExists)
 	emailExists, queryEmailErr := m.QueryUserEmailExists(email)
 	if queryEmailErr != nil {
-		log.Printf(ErrorMsgs().NotFound, "email", email, "GetUserFromLogin", queryEmailErr)
+		log.Printf(ErrorMsgs().NotFound, email, "GetUserFromLogin", queryEmailErr)
 	}
 	var user *models.User
 	if usernameExists != true && emailExists != true {

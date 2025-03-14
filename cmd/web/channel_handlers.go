@@ -13,6 +13,12 @@ import (
 func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var thisChannel models.Channel
+	userLoggedIn := true
+	currentUser, ok := getUserFromContext(r.Context())
+	if !ok {
+		fmt.Printf(ErrorMsgs().NotFound, "current user", "getThisChannel", "_")
+		userLoggedIn = false
+	}
 	channelId, err := strconv.Atoi(r.PathValue("channelId"))
 	if err != nil {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "convert channelId", err)
@@ -48,11 +54,50 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf(ErrorMsgs().NotFound, "thisChannelPosts comments", "getThisChannel", err)
 	}
+	isOwned := currentUser.ID == thisChannel.OwnerID
+
+	var ownedChannels []models.Channel
+	var joinedChannels []models.Channel
+	var ownedAndJoinedChannels []models.Channel
+	isJoinedOrOwned := false
+
+	if userLoggedIn {
+		// attach following/follower numbers to currently logged-in user
+		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
+		if err != nil {
+			fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
+		}
+		// get owned and joined channels of current user
+		memberships, memberErr := app.memberships.UserMemberships(currentUser.ID)
+		if memberErr != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+		}
+		ownedChannels, err = app.channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
+		if err != nil {
+			log.Printf(ErrorMsgs().Query, "user owned channels", err)
+		}
+		joinedChannels, err = app.JoinedByCurrentUser(memberships)
+		if err != nil {
+			log.Printf(ErrorMsgs().Query, "user joined channels", err)
+		}
+		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+		joined := false
+		for _, channel := range joinedChannels {
+			if thisChannel.ID == channel.ID {
+				joined = true
+				break
+			}
+		}
+		isJoinedOrOwned = isOwned || joined
+	}
 
 	TemplateData.ThisChannel = thisChannel
 	TemplateData.ThisChannelOwnerName = thisChannelOwnerName
 	TemplateData.ThisChannelRules = thisChannelRules
 	TemplateData.ThisChannelPosts = thisChannelPosts
+	TemplateData.ThisChannelIsOwned = isOwned
+	TemplateData.OwnedAndJoinedChannels = ownedAndJoinedChannels
+	TemplateData.ThisChannelIsOwnedOrJoined = isJoinedOrOwned
 }
 
 func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {

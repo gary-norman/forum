@@ -59,13 +59,20 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	randomUser := getRandomUser(allUsers)
-	currentUser, currentUserErr := app.GetLoggedInUser(r)
-	if currentUserErr != nil {
-		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
-		log.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
+	currentUser, ok := getUserFromContext(r.Context())
+	if !ok {
+		fmt.Printf(ErrorMsgs().NotFound, "current user", "getHome", "_")
 		userLoggedIn = false
 	}
-
+	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUser", currentUser)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "currentUser ST", currentUser.Login.SessionToken)
+	//currentUser, currentUserErr := app.GetLoggedInUser(r)
+	//if currentUserErr != nil {
+	//	log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
+	//	log.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
+	//	userLoggedIn = false
+	//}
+	var currentUserErr error
 	// attach following/follower numbers to the random user
 	randomUser.Followers, randomUser.Following, currentUserErr = app.loyalty.CountUsers(randomUser.ID)
 	if currentUserErr != nil {
@@ -85,31 +92,10 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	for c := range allChannels {
 		models.UpdateTimeSince(&allChannels[c])
 	}
-	var thisChannel models.Channel
-	channelId, err := strconv.Atoi(r.PathValue("channelId"))
-	if err != nil {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "convert channelId", err)
-	}
-	foundChannels, err := app.channels.Search("id", channelId)
-	if err != nil {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > found channels", err)
-	}
-	if len(foundChannels) > 0 {
-		thisChannel = foundChannels[0]
-	} else {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "no channel found", "getting random channel")
-		thisChannel = getRandomChannel(allChannels)
-	}
-	thisChannelOwnerName, err := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")
-	if err != nil {
-		log.Printf(ErrorMsgs().Query, "getHome > GetSingleUserValue", err)
-	}
+
 	var ownedChannels []models.Channel
 	var joinedChannels []models.Channel
 	var ownedAndJoinedChannels []models.Channel
-	isJoinedOrOwned := false
-	isOwned := false
-
 	if userLoggedIn {
 		// attach following/follower numbers to currently logged-in user
 		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
@@ -130,15 +116,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Query, "user joined channels", err)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
-		isOwned = currentUser.ID == thisChannel.OwnerID
-		joined := false
-		for _, channel := range joinedChannels {
-			if thisChannel.ID == channel.ID {
-				joined = true
-				break
-			}
-		}
-		isJoinedOrOwned = isOwned || joined
 	}
 
 	// SECTION -- template ---
@@ -146,18 +123,14 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// ---------- users ----------
 	TemplateData.AllUsers = allUsers
 	TemplateData.RandomUser = randomUser
-	TemplateData.CurrentUser = currentUser
+	TemplateData.CurrentUser = *currentUser
 	// ---------- allPosts ----------
 	TemplateData.Posts = allPosts
 	// ---------- channels ----------
 	TemplateData.AllChannels = allChannels
-	TemplateData.ThisChannel = thisChannel
-	TemplateData.ThisChannelOwnerName = thisChannelOwnerName
 	TemplateData.OwnedChannels = ownedChannels
 	TemplateData.JoinedChannels = joinedChannels
 	TemplateData.OwnedAndJoinedChannels = ownedAndJoinedChannels
-	TemplateData.ThisChannelIsOwned = isOwned
-	TemplateData.ThisChannelIsOwnedOrJoined = isJoinedOrOwned
 	// ---------- misc ----------
 	TemplateData.Images = nil
 	TemplateData.Reactions = nil
@@ -322,7 +295,7 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 
 	user, getUserErr := app.users.GetUserFromLogin(login, "login")
 	if getUserErr != nil {
-		log.Printf(ErrorMsgs().NotFound, "either", login, "login > GetUserFromLogin", getUserErr)
+		log.Printf(ErrorMsgs().NotFound, login, "login > GetUserFromLogin", getUserErr)
 		w.WriteHeader(http.StatusUnauthorized)
 		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusUnauthorized,
@@ -475,11 +448,11 @@ func (app *app) getCommentsLikesAndDislikes(comments []models.Comment) []models.
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 	user, err := app.GetLoggedInUser(r)
 	if err != nil {
-		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", err)
+		log.Printf(ErrorMsgs().NotFound, "current user", "GetLoggedInUser", err)
 		return
 	}
 	if user.Username == "" {
-		log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", err)
+		log.Printf(ErrorMsgs().NotFound, "current user", "GetLoggedInUser", err)
 		return
 	}
 

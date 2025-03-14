@@ -474,7 +474,7 @@
                 <li id="btn-open-view-stats-modal">view stats</li>
                 <li id="btn-open-remove-acc-modal">remove your account</li>
               </ul>
-              {{ if ne .CurrentUser nil }}
+              {{ if ne (isValZero .CurrentUser.Login.SessionToken) true }}
               <form action="/logout" method="POST">
                 <div id="logout" class="sidebar-option logout">Log Out</div>
               </form>
@@ -485,7 +485,7 @@
             </div>
             <hr class="solid" />
   {{/*SECTION ---------- sidebar channels ---------- */}}
-            {{if ne .CurrentUser nil}}
+            {{if ne (isValZero .CurrentUser.Login.SessionToken) true}}
             <div class="sidebar-block sidebar-channels">
               <div class="flex-space-between" style="margin-bottom: -0.8rem;">
                 <small class="padded">Your Channels</small>

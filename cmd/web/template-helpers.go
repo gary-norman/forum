@@ -23,6 +23,7 @@ func (app *app) init() {
 		"compareAsInts":  CompareAsInts,
 		"reactionStatus": app.reactions.GetReactionStatus,
 		"dict":           dict,
+		"isValZero":      isValZero,
 	}).ParseGlob("assets/templates/*.html"))
 }
 
@@ -94,6 +95,10 @@ func dict(values ...interface{}) map[string]interface{} {
 		m[key] = values[i+1]
 	}
 	return m
+}
+
+func isValZero(val string) bool {
+	return len(val) == 0
 }
 
 // Increment Function to increment an integer for go templates

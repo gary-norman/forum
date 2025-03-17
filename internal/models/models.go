@@ -243,7 +243,7 @@ type TemplateData struct {
 	// ---------- users ----------
 	AllUsers    []User
 	RandomUser  User
-	CurrentUser User
+	CurrentUser *User
 	// ---------- posts ----------
 	Posts []Post
 	// ---------- channels ----------

@@ -40,6 +40,7 @@ type app struct {
 func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
 }
+
 func Colors() *models.Colors {
 	return models.CreateColors()
 }
@@ -96,7 +97,7 @@ func initializeApp() (*app, func(), error) {
 		if err := db.Close(); err != nil {
 			log.Printf("Error closing DB: %v", err)
 		} else {
-			log.Println("Database closed successfully.")
+			log.Println(Colors().Green + "Database closed successfully." + Colors().Reset)
 		}
 	}
 
@@ -111,9 +112,13 @@ const userContextKey = contextKey("currentUser")
 // Middleware to add the user to the request context
 func withUser(next http.Handler, app *app) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		currentUser, err := app.GetLoggedInUser(r)
+		var currentUser *models.User
+
+		user, err := app.GetLoggedInUser(r)
 		if err != nil {
-			currentUser = nil
+			log.Printf(ErrorMsgs().KeyValuePair, "No logged in user", "passing empty user")
+		} else {
+			currentUser = user
 		}
 
 		// Store user in context
@@ -126,7 +131,10 @@ func withUser(next http.Handler, app *app) http.Handler {
 // getUserFromContext retrieves the user from the context
 func getUserFromContext(ctx context.Context) (*models.User, bool) {
 	user, ok := ctx.Value(userContextKey).(*models.User)
-	return user, ok
+	if !ok || user == nil {
+		return nil, false
+	}
+	return user, true
 }
 
 func main() {

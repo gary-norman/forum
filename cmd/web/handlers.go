@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
 	"html/template"
 	"io"
 	"log"
@@ -15,6 +14,8 @@ import (
 	"regexp"
 	"strconv"
 	"time"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 var TemplateData models.TemplateData
@@ -61,7 +62,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	randomUser := getRandomUser(allUsers)
 	currentUser, ok := getUserFromContext(r.Context())
 	if !ok {
-		fmt.Printf(ErrorMsgs().NotFound, "current user", "getHome", "_")
 		userLoggedIn = false
 	}
 	//currentUser, currentUserErr := app.GetLoggedInUser(r)
@@ -121,7 +121,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	// ---------- users ----------
 	TemplateData.AllUsers = allUsers
 	TemplateData.RandomUser = randomUser
-	TemplateData.CurrentUser = *currentUser
+	TemplateData.CurrentUser = currentUser
 	// ---------- allPosts ----------
 	TemplateData.Posts = allPosts
 	// ---------- channels ----------

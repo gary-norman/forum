@@ -27,6 +27,9 @@ WORKDIR /app
 COPY --from=builder /app/bin/codex /app/codex
 COPY --from=builder /app/schema.sql /app/schema.sql
 COPY --from=builder /app/assets /app/assets
+COPY --from=builder /app/robots.txt /app/robots.txt
+COPY --from=builder /app/README.md /app/README.md
+COPY --from=builder /app/LICENSE /app/LICENSE
 
 # Create the database directory and initialize the database
 RUN mkdir -p /app/db && sqlite3 /app/db/forum_database.db < /app/schema.sql

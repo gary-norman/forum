@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y sqlite3 libsqlite3-dev rsync && rm -rf 
 
 # Copy all files except hidden directories and bin
 COPY . /tmp/app
-RUN rsync -a --exclude='.*' --exclude='bin' /tmp/app/ /app && rm -rf /tmp/app
+RUN rsync -a --exclude='audit' --exclude='diagrams' --exclude='Dockerfile' --exclude='identifier.sqlite' --exclude='docker-compose.yml' --exclude='.*' --exclude='bin' /tmp/app/ /app && rm -rf /tmp/app
 
 # Build the application
 RUN make build
@@ -24,7 +24,12 @@ RUN apt-get update && apt-get install -y sqlite3 libsqlite3-0 && rm -rf /var/lib
 WORKDIR /app
 
 # Copy the built application from the builder stage
-COPY --from=builder /app /app
+COPY --from=builder /app/bin/codex /app/codex
+COPY --from=builder /app/schema.sql /app/schema.sql
+COPY --from=builder /app/assets /app/assets
+
+# Create the database directory and initialize the database
+RUN mkdir -p /app/db && sqlite3 /app/db/forum_database.db < /app/schema.sql
 
 # Run the application
-CMD ["make", "run"]
+CMD ["/app/codex"]

@@ -4,9 +4,10 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
 	"strings"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 type UserModel struct {
@@ -75,7 +76,7 @@ func (m *UserModel) Delete(user *models.User) error {
 func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, error) {
 	Colors := models.CreateColors()
 	if m == nil || m.DB == nil {
-		return nil, errors.New(fmt.Sprintf(ErrorMsgs().UserModel, "GetUserFromLogin", login))
+		return nil, fmt.Errorf(ErrorMsgs().UserModel, "GetUserFromLogin", login)
 	}
 	username, email := login, login
 	fmt.Printf(Colors.Blue+"username called by %v:"+Colors.White+" %v\n"+Colors.Reset, calledBy, username)
@@ -89,16 +90,16 @@ func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, erro
 		log.Printf(ErrorMsgs().NotFound, email, "GetUserFromLogin", queryEmailErr)
 	}
 	var user *models.User
-	if usernameExists != true && emailExists != true {
-		return nil, errors.New(fmt.Sprintf("Username & Email: %v do not exist", login))
+	if !usernameExists && !emailExists {
+		return nil, fmt.Errorf("username & email: %v do not exist", login)
 	}
 	var failure string
-	if usernameExists == true {
+	if usernameExists {
 		user, _ = m.GetUserByUsername(username, "GetUserFromLogin")
 		failure = "email"
 	}
 
-	if emailExists == true {
+	if emailExists {
 		user, _ = m.GetUserByEmail(email, "GetUserFromLogin")
 		failure = "username"
 	}
@@ -110,7 +111,7 @@ func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, erro
 func (m *UserModel) QueryUserNameExists(username string) (bool, error) {
 	Colors := models.CreateColors()
 	if m == nil || m.DB == nil {
-		return false, errors.New(fmt.Sprintf(ErrorMsgs().UserModel, "QueryUserNameExists", username))
+		return false, fmt.Errorf(ErrorMsgs().UserModel, "QueryUserNameExists", username)
 	}
 	var count int
 	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Username = ?", username).Scan(&count)
@@ -120,13 +121,13 @@ func (m *UserModel) QueryUserNameExists(username string) (bool, error) {
 	if count > 0 {
 		return true, nil
 	}
-	return false, errors.New(fmt.Sprintf(Colors.Red+"Username does not exist: "+Colors.White+"%v"+Colors.Reset, username))
+	return false, fmt.Errorf(Colors.Red+"Username does not exist: "+Colors.White+"%v"+Colors.Reset, username)
 }
 
 func (m *UserModel) QueryUserEmailExists(email string) (bool, error) {
 	Colors := models.CreateColors()
 	if m == nil || m.DB == nil {
-		return false, errors.New(fmt.Sprintf(ErrorMsgs().UserModel, "QueryUserEmailExists", email))
+		return false, fmt.Errorf(ErrorMsgs().UserModel, "QueryUserEmailExists", email)
 	}
 	var count int
 	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE EmailAddress = ?", email).Scan(&count)
@@ -136,7 +137,7 @@ func (m *UserModel) QueryUserEmailExists(email string) (bool, error) {
 	if count > 0 {
 		return true, nil
 	}
-	return false, errors.New(fmt.Sprintf(Colors.Red+"Email does not exist: "+Colors.White+"%v"+Colors.Reset, email))
+	return false, fmt.Errorf(Colors.Red+"Email does not exist: "+Colors.White+"%v"+Colors.Reset, email)
 }
 
 // TODO unify these functions to accept parameters
@@ -144,7 +145,7 @@ func (m *UserModel) QueryUserEmailExists(email string) (bool, error) {
 func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, error) {
 	username = strings.TrimSpace(username)
 	if m == nil || m.DB == nil {
-		log.Printf(fmt.Sprintf(ErrorMsgs().UserModel, "GetUserByUsername", username))
+		log.Printf(ErrorMsgs().UserModel, "GetUserByUsername", username)
 	}
 	// Query to fetch user data by username
 	stmt, prepErr := m.DB.Prepare("SELECT * FROM Users WHERE Username = ? LIMIT 1")
@@ -187,7 +188,7 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 func (m *UserModel) GetUserByEmail(email, calledBy string) (*models.User, error) {
 	email = strings.TrimSpace(email)
 	if m == nil || m.DB == nil {
-		log.Printf(fmt.Sprintf(ErrorMsgs().UserModel, "GetUserByEmail", email))
+		log.Printf(ErrorMsgs().UserModel, "GetUserByEmail", email)
 	}
 	// Query to fetch user data by username
 	stmt, prepErr := m.DB.Prepare("SELECT ID, HashedPassword, EmailAddress FROM Users WHERE EmailAddress = ? LIMIT 1")
@@ -247,7 +248,7 @@ func (m *UserModel) GetSingleUserValue(ID int, searchColumn, outputColumn string
 	)
 	rows, queryErr := m.DB.Query(stmt, ID)
 	if queryErr != nil {
-		return "", errors.New(fmt.Sprintf(ErrorMsgs().Query, "GetSingleUserValue", queryErr))
+		return "", fmt.Errorf(ErrorMsgs().Query, "GetSingleUserValue", queryErr)
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
@@ -296,7 +297,7 @@ func (m *UserModel) All() ([]models.User, error) {
 	stmt := "SELECT * FROM Users ORDER BY ID DESC"
 	rows, queryErr := m.DB.Query(stmt)
 	if queryErr != nil {
-		return nil, errors.New(fmt.Sprintf(ErrorMsgs().Query, "Users", queryErr))
+		return nil, fmt.Errorf(ErrorMsgs().Query, "Users", queryErr)
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
@@ -316,7 +317,7 @@ func (m *UserModel) All() ([]models.User, error) {
 	}
 
 	if queryErr = rows.Err(); queryErr != nil {
-		return nil, errors.New(fmt.Sprintf(ErrorMsgs().Query, "Users", queryErr))
+		return nil, fmt.Errorf(ErrorMsgs().Query, "Users", queryErr)
 	}
 
 	return Users, nil

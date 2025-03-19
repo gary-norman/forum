@@ -64,23 +64,13 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		userLoggedIn = false
 	}
-	//currentUser, currentUserErr := app.GetLoggedInUser(r)
-	//if currentUserErr != nil {
-	//	log.Printf(ErrorMsgs().NotFound, "user", "current user", "GetLoggedInUser", currentUserErr)
-	//	log.Printf(ErrorMsgs().KeyValuePair, "Current user", currentUser)
-	//	userLoggedIn = false
-	//}
+
 	var currentUserErr error
 	// attach following/follower numbers to the random user
 	randomUser.Followers, randomUser.Following, currentUserErr = app.loyalty.CountUsers(randomUser.ID)
 	if currentUserErr != nil {
 		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
 	}
-
-	//validTokens := app.cookies.QueryCookies(w, r, currentUser)
-	//if validTokens == true {
-	//	userLoggedIn = true
-	//}
 
 	// SECTION --- channels --
 	allChannels, err := app.channels.All()

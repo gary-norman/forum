@@ -3,7 +3,7 @@
 :root {
   /* fonts */
   --font-sz-title: clamp(1.8rem, 2rem + 0.65vw, 2.2rem);
-  --font-sz-popover-title: clamp(1rem, 1rem + 0.5vw, 1.2rem);
+  --font-sz-popover-title: clamp(1rem, 1rem + 0.5vw, 1.5rem);
   --font-sz-main: clamp(1rem, 1.2rem + -0vw, 1.6rem);
   --font-sz-cards: clamp(0.8rem, 1rem + 0.65vw, 1.2rem);
   /* box shadows */
@@ -73,6 +73,9 @@
   --z-index-form-container: -200;
   /* --- blurs ---*/
   --blur-modal: blur(0.4rem);
+  
+  
+  
 
   @media (prefers-color-scheme: light) {
     .branding {
@@ -905,6 +908,7 @@ input[type="file"] {
   margin-inline: auto;
   padding-block: 0.8rem;
   height: 2rem;
+  text-align: center;
 }
 .input-wrapper {
   width: min(80%, 25rem);
@@ -2285,7 +2289,7 @@ main {
   /* Height of right panel equal to the screen size - 9.6rem padding (4.8rem top and bottom) */
   height: calc(100dvh - 9.6rem);
   & .right-panel-content {
-    position: sticky;
+    /* position: sticky; */
     top: 0;
     left: 0;
     width: 28rem;
@@ -2302,6 +2306,9 @@ main {
     align-items: center;
     gap: 1.2rem;
     align-self: stretch;
+    
+    
+    
 
     & form {
       width: 100%;

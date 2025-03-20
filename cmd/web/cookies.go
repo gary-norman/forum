@@ -47,7 +47,7 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 	return nil
 }
 
-// GetLoggedInUser gets the currently logged in user from the session token and returns the user's struct
+// GetLoggedInUser gets the currently logged-in user from the session token and returns the user's struct
 func (app *app) GetLoggedInUser(r *http.Request) (*models.User, error) {
 	// Get the username from the request cookie
 	userCookie, getCookieErr := r.Cookie("username")

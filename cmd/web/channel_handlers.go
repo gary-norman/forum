@@ -101,8 +101,8 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
-	user, getUserErr := app.GetLoggedInUser(r)
-	if getUserErr != nil {
+	user, ok := getUserFromContext(r.Context())
+	if !ok {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
@@ -148,8 +148,8 @@ func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
-	user, getUserErr := app.GetLoggedInUser(r)
-	if getUserErr != nil {
+	user, ok := getUserFromContext(r.Context())
+	if !ok {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}

@@ -434,17 +434,13 @@ func (app *app) getCommentsLikesAndDislikes(comments []models.Comment) []models.
 
 // SECTION ------- user handlers ----------
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
-	user, err := app.GetLoggedInUser(r)
-	if err != nil {
-		log.Printf(ErrorMsgs().NotFound, "current user", "GetLoggedInUser", err)
-		return
-	}
-	if user.Username == "" {
-		log.Printf(ErrorMsgs().NotFound, "current user", "GetLoggedInUser", err)
+	user, ok := getUserFromContext(r.Context())
+	if !ok {
+		log.Printf(ErrorMsgs().KeyValuePair, "user not found in context", "editUserDetails")
 		return
 	}
 
-	err = r.ParseMultipartForm(10 << 20)
+	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
 		http.Error(w, err.Error(), 400)
 		log.Printf(ErrorMsgs().Parse, "editUserDetails", err)
@@ -491,8 +487,8 @@ func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
-	user, getUserErr := app.GetLoggedInUser(r)
-	if getUserErr != nil {
+	user, ok := getUserFromContext(r.Context())
+	if !ok {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
@@ -669,9 +665,9 @@ func (app *app) storeReaction(w http.ResponseWriter, r *http.Request) {
 
 func (app *app) storeComment(w http.ResponseWriter, r *http.Request) {
 	// SECTION getting user
-	user, getUserErr := app.GetLoggedInUser(r)
-	if getUserErr != nil {
-		http.Error(w, getUserErr.Error(), http.StatusUnauthorized)
+	user, ok := getUserFromContext(r.Context())
+	if !ok {
+		http.Error(w, "No user found in context", http.StatusUnauthorized)
 		return
 	}
 

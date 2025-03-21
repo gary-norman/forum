@@ -149,7 +149,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 func (app *app) register(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("register_user")
 	email := r.FormValue("register_email")
-	validEmail, _ := regexp.MatchString(`[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$`, email)
+	validEmail, _ := regexp.MatchString(`^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$`, email)
 	password := r.FormValue("register_password")
 	if len(username) < 5 || len(username) > 16 {
 		w.WriteHeader(http.StatusNotAcceptable)
@@ -231,7 +231,7 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusInternalServerError,
-			"message": fmt.Errorf(ErrorMsgs().Register, insertUser),
+			"message": "registration failed!",
 		})
 		if encErr != nil {
 			log.Printf(ErrorMsgs().Encode, "register: insertErr", encErr)
@@ -251,7 +251,7 @@ func (app *app) register(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	encErr := json.NewEncoder(w).Encode(map[string]any{
 		"code":    http.StatusOK,
-		"message": "Registration successful!",
+		"message": "registration successful!",
 		"body":    FormFields{Fields: formFields},
 	})
 	if encErr != nil {

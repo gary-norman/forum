@@ -82,7 +82,7 @@
           <div id="login-title" class="popover-title">
           </div>
         <div id="form-login">
-          <form id="loginForm" class="logreg-form">
+          <form id="login-form" class="logreg-form">
             <div class="input-wrapper">
               <input
                 type="text"
@@ -171,7 +171,7 @@
         </div>
         <div id="form-register" class="display-off">
 {{/*SECTION    ---------- register form ----------*/}}
-        <form class="logreg-form" action="/register" method="POST">
+        <form id="register-form" class="logreg-form" action="/register" method="POST">
 {{/*          <div class="modal-header">*/}}
 {{/*            <div>register for codex</div>*/}}
 {{/*          </div>*/}}
@@ -210,7 +210,7 @@
               id="register_password"
               name="register_password"
               placeholder="password"
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+{{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
               required
             />
             <label for="register_password" class="user-label">password</label>
@@ -229,14 +229,14 @@
               id="register_password-rpt"
               name="register_password-rpt"
               placeholder="repeat password"
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+{{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
               required
             />
             <label for="register_password-rpt" class="user-label">repeat password</label>
             <span class="validation-icon"></span>
             <span class="validation-tooltip"></span>
             </div>
-            <button class="btn-md btn-primary btn-action btn-register-submit" type="submit">
+            <button id="register" class="btn-md btn-primary btn-action btn-register-submit" type="submit">
               <span>register</span>
             </button>
           </form>

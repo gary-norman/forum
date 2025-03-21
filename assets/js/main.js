@@ -27,15 +27,16 @@ const sidebarOption = document.querySelector("#sidebar-options");
 const sidebarOptionsList = document.querySelector(".sidebar-options-list");
 // login/register buttons
 // TODO overhaul the naming of these buttons
+const registerForm = document.querySelector("#register-form")
 const loginTitle = document.querySelector("#login-title");
-const loginForm = document.querySelector("#loginForm");
+const loginForm = document.querySelector("#login-form");
 const loginFormButton = document.querySelector("#login");
 const loginFormUser = document.querySelector("#login_username");
 const loginFormPassword = document.querySelector("#login_password");
 const logoutFormButton = document.querySelector("#logout");
-const btnLogin = document.querySelectorAll('[id^="btn_login-"]');
-const btnRegister = document.querySelectorAll('[id^="btn_register-"]');
-const btnForgot = document.querySelector("#btn_forgot");
+const btnsLogin = document.querySelectorAll('[id^="btn_login-"]');
+const btnsRegister = document.querySelectorAll('[id^="btn_register-"]');
+const btnsForgot = document.querySelector("#btn_forgot");
 // join channel
 const joinChannelButton = document.querySelector("#join-channel-btn");
 //input fields with fancy animations
@@ -709,6 +710,59 @@ sidebarOption.addEventListener("click", function (event) {
   sidebarOptionsList.classList.toggle("ul-reverse");
 });
 
+// --- register ---
+
+if (registerForm) {
+  registerForm.addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent the default form submission
+    const form = event.target;
+    const formData = new FormData(form); // Collect form data
+    fetch("/register", {
+      method: "POST",
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
+      body: formData,
+      // body: JSON.stringify({
+      //   register_user: document.getElementById("register_user").value,
+      //   register_email: document.getElementById("register_email").value,
+      //   register_password: document.getElementById("register_password").value,
+      // }),
+      cache: "no-store",
+      }
+    )
+    .then((response) => {
+      if (response.ok) {
+        return response.json(); // Parse JSON response
+      } else {
+        throw new Error("Registration failed.");
+      }
+    })
+      .then((data) => {
+        if (data.message === "registration failed!") {
+          showNotification(
+            "login-title",
+            "",
+            data.message,
+            false,
+          );
+        }
+        else {
+          showNotification(
+            "login-title",
+            "",
+            data.message,
+            true,
+          );
+          setTimeout(() => {window.location.href = "/"}, 2000);
+        }
+      })
+      .catch((error) => {
+        console.error("Registration failed:", error);
+      });
+  });
+}
+
 // --- login ---
 if (loginForm) {
   loginForm.addEventListener("submit", function (event) {
@@ -751,7 +805,7 @@ if (loginForm) {
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Login failed:", error);
         // showMainNotification("An error occurred during login.");
       });
   });
@@ -943,13 +997,13 @@ if (rightPanelButtons) {
   );
 }
 // login / register / forgot
-btnLogin.forEach((button) =>
+btnsLogin.forEach((button) =>
   button.addEventListener("click", (e) => logReg(e.target.id)),
 );
-btnRegister.forEach((button) =>
+btnsRegister.forEach((button) =>
   button.addEventListener("click", (e) => logReg(e.target.id)),
 );
-btnForgot.addEventListener("click", forgot);
+btnsForgot.addEventListener("click", forgot);
 // TODO get these working
 // validate password
 regPass.addEventListener("input", validatePass);

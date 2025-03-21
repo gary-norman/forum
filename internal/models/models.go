@@ -261,6 +261,8 @@ type TemplateData struct {
 	// ---------- misc ----------
 	Images    []Image
 	Reactions []Reaction
+	ThisPost  Post
+	ThisUser  User
 }
 type Session struct {
 	Username string

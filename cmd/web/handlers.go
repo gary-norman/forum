@@ -41,6 +41,25 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().NotFound, "allPosts comments", "getHome", err)
 	}
 
+	// SECTION --- currently opened post ---
+
+	var thisPost models.Post
+	var foundPosts []models.Post
+	//postId, err := strconv.Atoi(r.PathValue("postId"))
+	postId := "13"
+	if err != nil {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "convert postID", err)
+	}
+	foundPosts, err = app.posts.FindCurrentPost("id", postId)
+	if err != nil {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost", err)
+	}
+	if len(foundPosts) > 0 {
+		thisPost = foundPosts[0]
+	} else {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "no post found", "returning none")
+	}
+
 	// SECTION --- user ---
 	allUsers, allUsersErr := app.users.All()
 	if allUsersErr != nil {
@@ -147,8 +166,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	TemplateData.AllUsers = allUsers
 	TemplateData.RandomUser = randomUser
 	TemplateData.CurrentUser = currentUser
-	// ---------- allPosts ----------
+	// ---------- posts ----------
 	TemplateData.Posts = allPosts
+	TemplateData.ThisPost = thisPost
 	// ---------- channels ----------
 	TemplateData.AllChannels = allChannels
 	TemplateData.ThisChannel = thisChannel

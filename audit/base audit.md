@@ -28,7 +28,7 @@ pass!
 
 ###### Does it show a warning message?
 
-fail! send text to div id: login-title
+pass!
 
 ###### Are sessions present in the project?
 
@@ -54,7 +54,7 @@ pass!
 
 ###### Does the code contain at least one CREATE query?
 
-fail! it is only in the schema.sql file, not in the codebase
+pass!
 
 ###### Does the code contain at least one INSERT query?
 

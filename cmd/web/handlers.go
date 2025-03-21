@@ -283,11 +283,13 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 
 	user, getUserErr := app.users.GetUserFromLogin(login, "login")
 	if getUserErr != nil {
+		// Respond with an unsuccessful login message
+		w.Header().Set("Content-Type", "application/json")
 		log.Printf(ErrorMsgs().NotFound, login, "login > GetUserFromLogin", getUserErr)
-		w.WriteHeader(http.StatusUnauthorized)
+		w.WriteHeader(http.StatusOK)
 		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusUnauthorized,
-			"message": "User not found",
+			"message": "user not found",
 		})
 		if encErr != nil {
 			log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
@@ -304,7 +306,7 @@ func (app *app) login(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			encErr := json.NewEncoder(w).Encode(map[string]any{
 				"code":    http.StatusInternalServerError,
-				"message": "Failed to create cookies",
+				"message": "failed to create cookies",
 				"body":    fmt.Errorf(ErrorMsgs().Cookies, "create", createCookiErr),
 			})
 			if encErr != nil {

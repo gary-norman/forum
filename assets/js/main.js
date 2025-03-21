@@ -797,6 +797,10 @@ if (loginForm) {
       .then((data) => {
         if (data.message === "incorrect password") {
           showNotification("login-title", "", data.message, false);
+        } else if (data.message === "user not found") {
+          showNotification("login-title", "", data.message, false);
+        } else if (data.message === "failed to create cookies") {
+          showNotification("login-title", "", data.message, false);
         } else {
           showNotification("login-title", "", data.message, true);
           setTimeout(() => {

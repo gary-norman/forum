@@ -40,7 +40,7 @@
                 {{ template "post-controls" (dict "Post" $post "CurrentUser" $.CurrentUser) }}
             </div>
             <!--  Reply / Submit Comment form -->
-            <form class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
+            <form name="replyForm" class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
                 <div class="cont-flex-row flex-end">
                     <div class="input-wrapper container-reply">
                         <textarea id="comment-form-textarea-{{$post.ID}}" name="content" placeholder="Type a reply..."></textarea>
@@ -86,7 +86,7 @@
                                 {{ template "comment-controls" (dict "Post" $post "Comment" $comment "CurrentUser" $.CurrentUser) }}
                             </div>
                             <!--  Reply / Submit Comment form -->
-                            <form class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
+                            <form name="replyForm" class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
                                 <div class="cont-flex-row flex-end">
                                     <div class="input-wrapper container-reply">
                                         <textarea id="comment-form-textarea-{{$comment.ID}}" name="content" placeholder="Type a reply..."></textarea>

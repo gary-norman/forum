@@ -428,6 +428,12 @@ gap: 0.8rem;
 &:hover {
     border: .15rem solid var(--color-secondary-hover);
 }
+&.inactive{
+  pointer-events: none;
+  &:hover {
+    border: 0.15rem solid var(--color-bg-4);
+  }
+}
 &.active{
     border: .15rem solid var(--color-secondary-active);
 }

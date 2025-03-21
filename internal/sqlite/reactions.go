@@ -44,6 +44,7 @@ func (m *ReactionModel) GetReactionStatus(authorID, reactedPostID, reactedCommen
 	if m == nil || m.DB == nil {
 		return ReactionStatus{}, fmt.Errorf("reaction model or database is nil")
 	}
+
 	liked, disliked, err := m.WhichReaction(authorID, reactedPostID, reactedCommentID)
 	if err != nil {
 		return ReactionStatus{}, err

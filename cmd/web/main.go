@@ -138,20 +138,6 @@ func getUserFromContext(ctx context.Context) (*models.User, bool) {
 }
 
 func main() {
-	// Load templates at startup
-
-	//tpl, err := GetTemplate()
-	//if err != nil {
-	//	log.Printf(ErrorMsgs().Parse, "./assets/templates/index.html", "main", err)
-	//	return
-	//}
-	//
-	//t := tpl.Lookup("index.html")
-	//if t == nil {
-	//	log.Printf("Template not found: index.html")
-	//	return
-	//}
-
 	// Initialize the app
 	app, cleanup, err := initializeApp()
 	if err != nil {

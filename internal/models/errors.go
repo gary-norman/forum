@@ -35,20 +35,21 @@ func CreateColors() *Colors {
 }
 
 type Errors struct {
-	Close        string
-	ConnClose    string
-	ConnInit     string
-	ConnConn     string
-	ConnSuccess  string
-	Convert      string
-	Cookies      string
-	CreateFile   string
-	Delete       string
-	Divider      string
-	Edit         string
-	Encode       string
-	Execute      string
-	Insert       string
+	Close       string
+	ConnClose   string
+	ConnInit    string
+	ConnConn    string
+	ConnSuccess string
+	Convert     string
+	Cookies     string
+	CreateFile  string
+	Delete      string
+	Divider     string
+	Edit        string
+	Encode      string
+	Execute     string
+	Insert      string
+	// KeyValuePair: "v" (blue), "v" (white)
 	KeyValuePair string
 	Login        string
 	NoRows       string
@@ -64,13 +65,14 @@ type Errors struct {
 	Query        string
 	Read         string
 	RetrieveFile string
-	Register     string
-	SaveFile     string
-	Shutdown     string
-	Unmarshal    string
-	Update       string
-	UserModel    string
-	Write        string
+	// Register: unable to register "v" with error "v"
+	Register  string
+	SaveFile  string
+	Shutdown  string
+	Unmarshal string
+	Update    string
+	UserModel string
+	Write     string
 }
 type Message struct {
 	Name, Text string

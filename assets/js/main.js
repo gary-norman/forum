@@ -27,7 +27,7 @@ const sidebarOption = document.querySelector("#sidebar-options");
 const sidebarOptionsList = document.querySelector(".sidebar-options-list");
 // login/register buttons
 // TODO overhaul the naming of these buttons
-const registerForm = document.querySelector("#register-form")
+const registerForm = document.querySelector("#register-form");
 const loginTitle = document.querySelector("#login-title");
 const loginForm = document.querySelector("#login-form");
 const loginFormButton = document.querySelector("#login");
@@ -117,10 +117,25 @@ const feeds = document.querySelectorAll(".feeds-wrapper");
 // ------
 let file;
 let filename;
-// document.addEventListener('DOMContentLoaded', () => {
-//
-//
-// });
+
+// post channel selection dropdown
+document.addEventListener("DOMContentLoaded", () => {
+  const dropdownToggle = document.querySelector(".dropdown-toggle");
+  const wrapperDropdown = document.querySelector(".wrapper-dropdown");
+
+  dropdownToggle.addEventListener("click", () => {
+    const isActive = dropdownToggle.classList.toggle("active");
+
+    if (isActive) {
+      dropdownToggle.style.background = "var(--color-hl-pink)";
+      wrapperDropdown.style.display = "block";
+    } else {
+      dropdownToggle.style.background = "";
+      wrapperDropdown.style.display = "none";
+    }
+  });
+});
+
 document.addEventListener("DOMContentLoaded", function () {
   feeds.forEach((feed) => {
     feed.classList.add("feeds-wrapper-loaded");
@@ -377,17 +392,16 @@ document.addEventListener("DOMContentLoaded", () => {
 // SECTION ----- functions ------
 function navigateToChannel(channel) {
   const link = channel.getAttribute("data-channel-id");
-  fetch(`/channels/${link}`,{method: 'GET',})
-      .then(response => response.json())
-      .then(data => {
-        console.log('server:', data);
-      })
-      .catch(error => {
-        console.error("Error:", error);
-      })
-  changePage(channelPage)
+  fetch(`/channels/${link}`, { method: "GET" })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("server:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+  changePage(channelPage);
   // window.location.href = `/channels/${link}`;
-
 }
 // toggleUserInteracted toggles user-interacted class on input fields to prevent label animation before they are selected
 function toggleUserInteracted(action) {
@@ -729,32 +743,22 @@ if (registerForm) {
       //   register_password: document.getElementById("register_password").value,
       // }),
       cache: "no-store",
-      }
-    )
-    .then((response) => {
-      if (response.ok) {
-        return response.json(); // Parse JSON response
-      } else {
-        throw new Error("Registration failed.");
-      }
     })
+      .then((response) => {
+        if (response.ok) {
+          return response.json(); // Parse JSON response
+        } else {
+          throw new Error("Registration failed.");
+        }
+      })
       .then((data) => {
         if (data.message === "registration failed!") {
-          showNotification(
-            "login-title",
-            "",
-            data.message,
-            false,
-          );
-        }
-        else {
-          showNotification(
-            "login-title",
-            "",
-            data.message,
-            true,
-          );
-          setTimeout(() => {window.location.href = "/"}, 2000);
+          showNotification("login-title", "", data.message, false);
+        } else {
+          showNotification("login-title", "", data.message, true);
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 2000);
         }
       })
       .catch((error) => {

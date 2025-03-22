@@ -73,9 +73,6 @@
   --z-index-form-container: -200;
   /* --- blurs ---*/
   --blur-modal: blur(0.4rem);
-  
-  
-  
 
   @media (prefers-color-scheme: light) {
     .branding {
@@ -363,6 +360,32 @@ a:active {
   display: flex;
   justify-content: center;
   column-gap: 1.2rem;
+}
+
+.flex-align-l {
+  display: flex;
+  column-gap: 1.2rem;
+}
+
+.post-channel-dropdown {
+  /* width: 100%; */
+  /* padding-inline: 3rem; */
+}
+
+.wrapper-dropdown {
+  display: none;
+}
+
+.dropdown-toggle {
+  border: 1px solid var(--color-bg-3);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--border-radius-input);
+  &:hover {
+    border: 1px solid var(--color-hl-pink);
+  }
+  &:active {
+    background: var(--color-hl-pink);
+  }
 }
 
 /*SECTION ----notifications ---*/
@@ -780,9 +803,9 @@ textarea,
 input,
 button {
   background: transparent;
-  padding: 0;
-  margin: 0;
-  -webkit-appearance: none;
+  /* padding: 0; */
+  /* margin: 0; */
+  /* -webkit-appearance: none; */
   -moz-appearance: none;
   appearance: none;
   border: none;
@@ -821,6 +844,10 @@ input[type="file"] {
     background: hotpink;
     border-radius: var(--border-radius-button);
   }
+}
+
+.checkbox-visible {
+  appearance: auto;
 }
 
 /* TODO use @starting-style to achieve this */
@@ -2306,9 +2333,6 @@ main {
     align-items: center;
     gap: 1.2rem;
     align-self: stretch;
-    
-    
-    
 
     & form {
       width: 100%;

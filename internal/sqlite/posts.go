@@ -2,22 +2,32 @@ package sqlite
 
 import (
 	"database/sql"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 type PostModel struct {
 	DB *sql.DB
 }
 
-func (m *PostModel) Insert(title, content, images, author, channel, authorAvatar string, channelID, authorID int, commentable, isFlagged bool) error {
-	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, ChannelName, AuthorAvatar, ChannelID, AuthorID, IsCommentable, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?, ?, ?)"
-	_, err := m.DB.Exec(stmt, title, content, images, author, channel, authorAvatar, channelID, authorID, commentable, isFlagged)
-	return err
+func (m *PostModel) Insert(title, content, images, author, authorAvatar string, authorID int, commentable, isFlagged bool) (int, error) {
+	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, AuthorAvatar, AuthorID, IsCommentable, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
+	result, err := m.DB.Exec(stmt, title, content, images, author, authorAvatar, authorID, commentable, isFlagged)
+	if err != nil {
+		return 0, err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(id), nil
 }
 
 func (m *PostModel) All() ([]models.Post, error) {
-	stmt := "SELECT ID, Title, Content, Images, Created, Author, AuthorAvatar, IsCommentable, AuthorID, ChannelID, ChannelName, IsFlagged FROM Posts ORDER BY ID DESC"
+	stmt := "SELECT * FROM Posts ORDER BY ID DESC"
 	rows, selectErr := m.DB.Query(stmt)
 	if selectErr != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "Error:", "select")
@@ -44,8 +54,6 @@ func (m *PostModel) All() ([]models.Post, error) {
 			&p.AuthorAvatar,
 			&p.IsCommentable,
 			&p.AuthorID,
-			&p.ChannelID,
-			&p.ChannelName,
 			&p.IsFlagged)
 		if scanErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "Error:", "scan")
@@ -91,8 +99,6 @@ func (m *PostModel) GetPostsByChannel(channel int) ([]models.Post, error) {
 			&p.Author,
 			&p.AuthorID,
 			&p.AuthorAvatar,
-			&p.ChannelName,
-			&p.ChannelID,
 			&p.IsFlagged)
 		if scanErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")

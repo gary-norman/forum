@@ -526,8 +526,6 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 		Author:        user.Username,
 		AuthorID:      user.ID,
 		AuthorAvatar:  user.Avatar,
-		ChannelName:   "channelName",
-		ChannelID:     0,
 		IsCommentable: false,
 		IsFlagged:     false,
 	}
@@ -539,14 +537,12 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	/*createPostData.ChannelName = channelData.ChannelName
 	createPostData.ChannelID, _ = strconv.Atoi(channelData.ChannelID)*/
 
-	insertErr := app.posts.Insert(
+	postID, insertErr := app.posts.Insert(
 		createPostData.Title,
 		createPostData.Content,
 		createPostData.Images,
 		createPostData.Author,
-		createPostData.ChannelName,
 		createPostData.AuthorAvatar,
-		createPostData.ChannelID,
 		createPostData.AuthorID,
 		createPostData.IsCommentable,
 		createPostData.IsFlagged,
@@ -565,10 +561,10 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 			log.Printf("Unable to convert %v to integer\n", channels[c])
 			continue
 		}
-		postToChannelErr := app.channels.AddPostToChannel(channelID, insertErr)
+		postToChannelErr := app.channels.AddPostToChannel(channelID, postID)
 		if postToChannelErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "channelID", channelID)
-			log.Printf(ErrorMsgs().KeyValuePair, "postID", insertErr)
+			log.Printf(ErrorMsgs().KeyValuePair, "postID", postID)
 			log.Printf(ErrorMsgs().KeyValuePair, "postToChannelErr", postToChannelErr)
 			http.Error(w, postToChannelErr.Error(), 500)
 			return

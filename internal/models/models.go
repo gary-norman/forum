@@ -133,17 +133,23 @@ type Post struct {
 	Author        string `json:"author"`
 	AuthorID      int    `json:"authorId"`
 	AuthorAvatar  string `json:"authorAvatar"`
-	ChannelID     int    `json:"channelId"`
-	ChannelName   string `json:"channelName"`
 	IsFlagged     bool   `json:"isFlagged,omitempty"`
 	Likes         int    `json:"likes"`
 	Dislikes      int    `json:"dislikes"`
 	Comments      []Comment
 }
 
+type PostChannel struct {
+	ID        int       `json:"id"`
+	PostID    int       `json:"postId"`
+	ChannelID int       `json:"channelId"`
+	Created   time.Time `json:"created"`
+}
+
 func (p *Post) UpdateTimeSince() {
 	p.TimeSince = getTimeSince(p.Created)
 }
+
 func (p *Post) React(likes, dislikes int) {
 	p.Likes += likes
 	p.Dislikes += dislikes
@@ -181,6 +187,7 @@ func (c *Comment) React(likes, dislikes int) {
 	c.Likes += likes
 	c.Dislikes += dislikes
 }
+
 func (c *Comment) UpdateTimeSince() {
 	c.TimeSince = getTimeSince(c.Created)
 }

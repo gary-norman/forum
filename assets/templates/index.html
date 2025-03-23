@@ -285,20 +285,20 @@
         <div id="modal-header-logreg">create a post</div>
       </div>
         <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
-          <!-- <label for="channel" class="invisible">channel</label> -->
-          <!-- <select id="channel" name="channel" multiple> -->
-          <!--   <option selected disabled hidden>select a channel</option> -->
-          <!--   {{ range .OwnedAndJoinedChannels }} -->
-          <!--   <option value='{"channelName":"{{ .Name }}", "channelID":"{{ .ID }}"}'>{{ .Name }}</option> -->
-          <!--   {{ end }} -->
-          <!-- </select> -->
+{{/*          <label for="channel" class="invisible">channel</label>*/}}
+{{/*          <select id="channel" name="channel" multiple>*/}}
+{{/*          <option selected disabled hidden>select a channel</option>*/}}
+{{/*          {{ range .OwnedAndJoinedChannels }}*/}}
+{{/*          <option value='{"channelName":"{{ .Name }}", "channelID":"{{ .ID }}"}'>{{ .Name }}</option>*/}}
+{{/*          {{ end }}*/}}
+{{/*          </select>*/}}
           <div class="dropdown-toggle">
             select channel(s)
           </div>
           <div class="wrapper-dropdown">
             {{ range .OwnedAndJoinedChannels}}
             <div class="flex-align-l post-channel-dropdown">
-              <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="channel" value="{{ .ID }}">
+              <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="channel[]" value="{{ .ID }}">
               <label for="post-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
             </div>
             {{ end }}

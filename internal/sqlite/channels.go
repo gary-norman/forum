@@ -170,3 +170,11 @@ func (m *ChannelModel) Search(column string, value interface{}) ([]models.Channe
 
 	return channels, nil
 }
+
+func (m *ChannelModel) AddPostToChannel(channelID, postID int) {
+	stmt := "INSERT INTO PostChannels (ChannelID, PostID, Created) VALUES (?, ?, DateTime('now'))"
+	_, err := m.DB.Exec(stmt, channelID, postID)
+	if err != nil {
+		log.Fatal(err)
+	}
+}

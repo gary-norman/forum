@@ -136,6 +136,7 @@ type Post struct {
 	IsFlagged     bool   `json:"isFlagged,omitempty"`
 	Likes         int    `json:"likes"`
 	Dislikes      int    `json:"dislikes"`
+	CommentsCount int    `json:"commentsCount"`
 	Comments      []Comment
 }
 
@@ -268,6 +269,8 @@ type TemplateData struct {
 	// ---------- misc ----------
 	Images    []Image
 	Reactions []Reaction
+	ThisPost  Post
+	ThisUser  User
 }
 type Session struct {
 	Username string

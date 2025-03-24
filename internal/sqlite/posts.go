@@ -116,3 +116,65 @@ func (m *PostModel) GetPostsByChannel(channel int) ([]models.Post, error) {
 
 	return Posts, nil
 }
+
+// Search queries the database for any post column that contains the values and returns that post
+func (m *PostModel) FindCurrentPost(column string, value interface{}) ([]models.Post, error) {
+	// Validate column name to prevent SQL injection
+	validColumns := map[string]bool{
+		"id":            true,
+		"title":         true,
+		"content":       true,
+		"images":        true,
+		"created":       true,
+		"isCommentable": true,
+		"author":        true,
+		"authorID":      true,
+		"authorAvatar":  true,
+		"channelName":   true,
+		"channelID":     true,
+		"isFlagged":     true,
+	}
+
+	if !validColumns[column] {
+		return nil, fmt.Errorf("invalid column name: %s", column)
+	}
+
+	// Base query
+	query := fmt.Sprintf("SELECT id, title, content, images, created, isCommentable, author, authorID, authorAvatar, channelName, channelID, isFlagged FROM posts WHERE %s = ? LIMIT 1", column)
+
+	row := m.DB.QueryRow(query, value)
+
+	// Parse result into a single post
+	var posts []models.Post
+	var post models.Post
+	var avatar, images sql.NullString
+
+	err := row.Scan(
+		&post.ID,
+		&post.Title,
+		&post.Content,
+		&images,
+		&post.Created,
+		&post.IsCommentable,
+		&post.Author,
+		&post.AuthorID,
+		&avatar,
+		&post.ChannelName,
+		&post.ChannelID,
+		&post.IsFlagged,
+	)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil // No post found
+		}
+		return nil, err
+	}
+
+	post.AuthorAvatar = avatar.String
+	post.Images = images.String
+
+	posts = append(posts, post)
+
+	return posts, nil
+}

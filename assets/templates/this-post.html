@@ -1,4 +1,4 @@
-{{ define "post" }}
+{{ define "this-post" }}
     {{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
     {{ $channelBasePath := "db/userdata/images/channel-images/" }}
     {{ $postBasePath := "db/userdata/images/post-images/" }}
@@ -9,6 +9,7 @@
         {{ $userID = .CurrentUser.ID }}
     {{ end }}
     {{ $post := .Post }}
+
     <div class="container-card-down">
         <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">
             <div class="container-post-info">

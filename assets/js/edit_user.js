@@ -31,20 +31,35 @@ document.addEventListener('DOMContentLoaded', function () {
         const submitButton = block.querySelector('[id^="submit-user"]')
         const cancelButton = block.querySelector('[id^="cancel-user"]')
         editButton.addEventListener("click", function (e) {
-            block.classList.add("editing")
+            block.classList.add("editing");
+            userSettingBlocks.forEach(otherBlock => {
+                if (block !== otherBlock) {
+                    otherBlock.classList.remove("editing");
+                }
+            })
 
             switch (editButton.id) {
                 case "edit-user-name":
                     nameContent.classList.add('editing');
                     nameInput.classList.add('editing');
+                    bioContent.classList.remove('editing');
+                    bioInput.classList.remove('editing');
+                    dragDropImage.classList.remove('editing');
                     nameInput.focus();
                     break;
                 case "edit-user-avatar":
-                    dragDropImage.classList.add('editing')
+                    dragDropImage.classList.add('editing');
+                    nameContent.classList.remove('editing');
+                    nameInput.classList.remove('editing');
+                    bioContent.classList.remove('editing');
+                    bioInput.classList.remove('editing');
                     break;
                 case "edit-user-bio":
                     bioContent.classList.add('editing');
                     bioInput.classList.add('editing');
+                    nameInput.classList.remove('editing');
+                    nameContent.classList.remove('editing');
+                    dragDropImage.classList.remove('editing');
                     bioInput.focus();
                     break;
                 default:

@@ -2,6 +2,8 @@ package sqlite
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 	"log"
 
 	"github.com/gary-norman/forum/internal/models"
@@ -12,8 +14,8 @@ type PostModel struct {
 }
 
 func (m *PostModel) Insert(title, content, images, author, authorAvatar string, authorID int, commentable, isFlagged bool) (int, error) {
-	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, AuthorAvatar, AuthorID, IsCommentable, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
-	result, err := m.DB.Exec(stmt, title, content, images, author, authorAvatar, authorID, commentable, isFlagged)
+	stmt := "INSERT INTO Posts (Title, Content, Images, Created, IsCommentable, Author, AuthorID, AuthorAvatar, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
+	result, err := m.DB.Exec(stmt, title, content, images, commentable, author, authorID, authorAvatar, isFlagged)
 	if err != nil {
 		return 0, err
 	}
@@ -50,10 +52,10 @@ func (m *PostModel) All() ([]models.Post, error) {
 			&p.Content,
 			&p.Images,
 			&p.Created,
-			&p.Author,
-			&p.AuthorAvatar,
 			&p.IsCommentable,
+			&p.Author,
 			&p.AuthorID,
+			&p.AuthorAvatar,
 			&p.IsFlagged)
 		if scanErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "Error:", "scan")
@@ -159,8 +161,6 @@ func (m *PostModel) FindCurrentPost(column string, value interface{}) ([]models.
 		&post.Author,
 		&post.AuthorID,
 		&avatar,
-		&post.ChannelName,
-		&post.ChannelID,
 		&post.IsFlagged,
 	)
 

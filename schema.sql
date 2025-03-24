@@ -119,9 +119,7 @@ CREATE TABLE Posts (
   IsFlagged BOOLEAN,
   FOREIGN KEY (Author) REFERENCES Users(Username),
   FOREIGN KEY (AuthorID) REFERENCES Users(ID),
-  FOREIGN KEY (AuthorAvatar) REFERENCES Users(Avatar),
-  FOREIGN KEY (ChannelName) REFERENCES Channels(Name),
-  FOREIGN KEY (ChannelID) REFERENCES Channels(ID)
+  FOREIGN KEY (AuthorAvatar) REFERENCES Users(Avatar)
 );
 
 CREATE TABLE PostChannels (

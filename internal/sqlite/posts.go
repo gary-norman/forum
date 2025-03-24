@@ -52,13 +52,13 @@ func (m *PostModel) All() ([]models.Post, error) {
 			&p.Content,
 			&p.Images,
 			&p.Created,
-			&p.Author,
-			&p.AuthorAvatar,
 			&p.IsCommentable,
+			&p.Author,
 			&p.AuthorID,
+			&p.AuthorAvatar,
 			&p.IsFlagged)
 		if scanErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "Error:", "scan")
+			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
 			log.Printf(ErrorMsgs().Query, stmt, scanErr)
 			return nil, scanErr
 		}

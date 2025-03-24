@@ -42,8 +42,12 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().NotFound, "allPosts comments", "getHome", err)
 	}
 
-	for _, post := range allPosts {
-		post.ChannelID = app.channels.GetChannelID(post.ID)
+	for p := range allPosts {
+		channelID, err := app.channels.GetChannelIdFromPost(allPosts[p].ID)
+		if err != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "getHome > channelID", err)
+		}
+		allPosts[p].ChannelID = channelID
 	}
 
 	// SECTION --- currently opened post ---
@@ -60,6 +64,9 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost", err)
 	}
 	foundPosts, err = app.getPostsComments(foundPosts)
+	if err != nil {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost comments", err)
+	}
 	if len(foundPosts) > 0 {
 		thisPost = foundPosts[0]
 	} else {
@@ -76,8 +83,8 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// attach following/follower numbers to each user
-	for _, user := range allUsers {
-		user.Followers, user.Following, allUsersErr = app.loyalty.CountUsers(user.ID)
+	for u := range allUsers {
+		allUsers[u].Followers, allUsers[u].Following, allUsersErr = app.loyalty.CountUsers(allUsers[u].ID)
 		if allUsersErr != nil {
 			log.Printf(ErrorMsgs().Query, "getHome> users > All > loyalty", allUsersErr)
 		}
@@ -105,10 +112,10 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		models.UpdateTimeSince(&allChannels[c])
 	}
 
-	for _, post := range allPosts {
+	for p := range allPosts {
 		for _, channel := range allChannels {
-			if channel.ID == post.ChannelID {
-				post.ChannelName = channel.Name
+			if channel.ID == allPosts[p].ChannelID {
+				allPosts[p].ChannelName = channel.Name
 			}
 		}
 	}

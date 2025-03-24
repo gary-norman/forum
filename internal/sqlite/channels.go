@@ -200,3 +200,23 @@ func (m *ChannelModel) GetPostsFromChannel(channelID int) ([]int, error) {
 
 	return postIDs, nil
 }
+
+func (m *ChannelModel) GetChannelIdFromPost(postID int) (int, error) {
+	var channelIDs []int
+	stmt := "SELECT ChannelID FROM PostChannels WHERE PostID = ?"
+	rows, err := m.DB.Query(stmt, postID)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var channelID int
+		if err := rows.Scan(&channelID); err != nil {
+			return 0, err
+		}
+		channelIDs = append(channelIDs, channelID)
+	}
+
+	return channelIDs[0], nil
+}

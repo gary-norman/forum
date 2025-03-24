@@ -181,11 +181,22 @@ func (m *ChannelModel) AddPostToChannel(channelID, postID int) error {
 	return nil
 }
 
-func (m *ChannelModel) GetPostsFromChannel(channelID int) error {
+func (m *ChannelModel) GetPostsFromChannel(channelID int) ([]int, error) {
+	var postIDs []int
 	stmt := "SELECT PostID FROM PostChannels WHERE ChannelID = ?"
-	_, err := m.DB.Exec(stmt, channelID)
+	rows, err := m.DB.Query(stmt, channelID)
 	if err != nil {
-		return err
+		return postIDs, err
 	}
-	return nil
+	defer rows.Close()
+
+	for rows.Next() {
+		var postID int
+		if err := rows.Scan(&postID); err != nil {
+			return postIDs, err
+		}
+		postIDs = append(postIDs, postID)
+	}
+
+	return postIDs, nil
 }

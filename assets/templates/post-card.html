@@ -9,7 +9,9 @@
     {{ end }}
     {{ $post := .Post }}
     <div class="container-card-down">
-        <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">
+        {{/*         TODO Missing channel info due to restructuring*/}}
+{{/*        <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">*/}}
+        <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="$post.ChannelID" data-author-ID="{{$post.AuthorID}}">
             <div class="container-post-info">
                 {{ if (ne $post.AuthorAvatar "noimage") }}
                     <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $post.AuthorAvatar }}"></span>
@@ -19,7 +21,9 @@
                 <div>
                     <small class="small-bold">{{$post.Author}}</small>
                     <div>
-                        <small>{{$post.ChannelName}}</small>
+                        {{/*         TODO Missing channel info due to restructuring*/}}
+{{/*                        <small>{{$post.ChannelName}}</small>*/}}
+                        <small>$post.ChannelName</small>
                         <small>-</small>
                         <small>{{$post.TimeSince}}</small>
                         <small>PostID: {{$post.ID}}</small>
@@ -46,14 +50,16 @@
                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                     <span class="btn-reply">{{$post.CommentsCount}}</span>
                 </button>
-                <button id="share-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}" popovertarget="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                <button id="share-button-channel-post-{{$post.ID}}" popovertarget="share-container-channel-post-{{$post.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+{{/*                <button id="share-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}" popovertarget="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
                     <span class="btn-share">share</span>
                 </button>
                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                     <span class="btn-report">report</span>
                 </button>
                 <!--  Share modal -->
-                <div popover id="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}" class="scrollable-user">
+                <div popover id="share-container-channel-post-{{$post.ID}}" class="scrollable-user">
+{{/*                <div popover id="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}" class="scrollable-user">*/}}
                     <div class="share-container">
                         <div class="button-row">
                             <a href="/" target="_blank" class="share-logo facebook"></a>
@@ -64,13 +70,15 @@
                             <a href="/" target="_blank" class="share-logo telegram"></a>
                         </div>
                         <div class="flex-space-between">
-                            <label class="padded" for="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}">Copy URL link</label>
+                            <label class="padded" for="copy-url-channel-post-{{$post.ID}}">Copy URL link</label>
+{{/*                            <label class="padded" for="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}">Copy URL link</label>*/}}
                             <button class="btn-sm btn-icoonly">
                                 <span class="btn-copy" aria-label="Copy URL link"></span>
                             </button>
                         </div>
                         <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
-                               id="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}" name="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}"/>
+                               id="copy-url-channel-post-{{$post.ID}}" name="copy-url-channel-post-{{$post.ID}}"/>
+{{/*                               id="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}" name="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}"/>*/}}
                     </div>
                 </div>
             </div>
@@ -83,7 +91,8 @@
                     </div>
                     <!-- Hidden input to store the postID -->
                     <input type="hidden" name="postID" value="{{$post.ID}}">
-                    <input type="hidden" name="channel" value='{"channelName": "{{$post.ChannelName}}", "channelID": "{{$post.ChannelID}}"}'>
+                    <input type="hidden" name="channel" value='{"channelName": "$post.ChannelName", "channelID": "$post.ChannelID"}'>
+{{/*                    <input type="hidden" name="channel" value='{"channelName": "{{$post.ChannelName}}", "channelID": "{{$post.ChannelID}}"}'>*/}}
                     <button class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
                         <span class="btn-reply-comment">comment</span>
                     </button>

@@ -11,7 +11,8 @@
     {{ $post := .Post }}
 
     <div class="container-card-down">
-        <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">
+        <div class="card" data-post-id="{{$post.ID}}"  data-author-ID="{{$post.AuthorID}}">
+{{/*        <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">*/}}
             <div class="container-post-info">
                 {{ if (ne $post.AuthorAvatar "noimage") }}
                     <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $post.AuthorAvatar }}"></span>
@@ -21,7 +22,9 @@
                 <div>
                     <small class="small-bold">{{$post.Author}}</small>
                     <div>
-                        <small>{{$post.ChannelName}}</small>
+                        {{/*         TODO Missing channel info due to restructuring*/}}
+                        <small>$post.ChannelName</small>
+{{/*                        <small>{{$post.ChannelName}}</small>*/}}
                         <small>-</small>
                         <small>{{$post.TimeSince}}</small>
                         <small>PostID: {{$post.ID}}</small>
@@ -49,7 +52,9 @@
                     </div>
                     <!-- Hidden input to store the postID -->
                     <input type="hidden" name="postID" value="{{$post.ID}}">
-                    <input type="hidden" name="channel" value='{"channelName": "{{$post.ChannelName}}", "channelID": "{{$post.ChannelID}}"}'>
+                    {{/*         TODO Missing channel info due to restructuring*/}}
+{{/*                    <input type="hidden" name="channel" value='{"channelName": "{{$post.ChannelName}}", "channelID": "{{$post.ChannelID}}"}'>*/}}
+                    <input type="hidden" name="channel" value='{"channelName": "$post.ChannelName", "channelID": "$post.ChannelID"}'>
                     <button class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
                         <span class="btn-reply-comment">comment</span>
                     </button>

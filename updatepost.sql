@@ -1,5 +1,5 @@
 
-CREATE TABLE Posts Posts_New (
+CREATE TABLE Posts_New (
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   Title TEXT NOT NULL,
   Content TEXT NOT NULL,
@@ -12,9 +12,7 @@ CREATE TABLE Posts Posts_New (
   IsFlagged BOOLEAN,
   FOREIGN KEY (Author) REFERENCES Users(Username),
   FOREIGN KEY (AuthorID) REFERENCES Users(ID),
-  FOREIGN KEY (AuthorAvatar) REFERENCES Users(Avatar),
-  FOREIGN KEY (ChannelName) REFERENCES Channels(Name),
-  FOREIGN KEY (ChannelID) REFERENCES Channels(ID)
+  FOREIGN KEY (AuthorAvatar) REFERENCES Users(Avatar)
 );
 
 INSERT INTO Posts_New (ID, Title, Content, Images, Created, IsCommentable, Author, AuthorID, AuthorAvatar, IsFlagged)

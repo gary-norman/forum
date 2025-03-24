@@ -116,8 +116,6 @@ CREATE TABLE Posts (
   Author TEXT NOT NULL,
   AuthorID INTEGER NOT NULL,
   AuthorAvatar TEXT,
-  ChannelName TEXT NOT NULL,
-  ChannelID INTEGER NOT NULL,
   IsFlagged BOOLEAN,
   FOREIGN KEY (Author) REFERENCES Users(Username),
   FOREIGN KEY (AuthorID) REFERENCES Users(ID),

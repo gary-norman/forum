@@ -8,6 +8,7 @@
         {{ $userID = .CurrentUser.ID }}
     {{ end }}
     {{ $post := .Post }}
+
     <div class="container-card-down">
         <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">
             <div class="container-post-info">

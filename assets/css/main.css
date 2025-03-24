@@ -344,6 +344,7 @@ a:active {
 .content {
   /* 100% of container - right panel - padding*/
   width: calc(100% - 27.2rem - 9.6rem);
+  max-width: 80rem;
   height: 100%;
   z-index: var(--z-index-content);
   padding: 0 2.4rem;

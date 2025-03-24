@@ -138,6 +138,7 @@ type Post struct {
 	IsFlagged     bool   `json:"isFlagged,omitempty"`
 	Likes         int    `json:"likes"`
 	Dislikes      int    `json:"dislikes"`
+	CommentsCount int    `json:"commentsCount"`
 	Comments      []Comment
 }
 

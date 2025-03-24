@@ -46,7 +46,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	var thisPost models.Post
 	var foundPosts []models.Post
 	//postId, err := strconv.Atoi(r.PathValue("postId"))
-	postId := "13"
+	postId := "15" // TODO --- using 15 as default until i got the function working ---
 	if err != nil {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "convert postID", err)
 	}
@@ -54,6 +54,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost", err)
 	}
+	foundPosts, err = app.getPostsComments(foundPosts)
 	if len(foundPosts) > 0 {
 		thisPost = foundPosts[0]
 	} else {
@@ -823,13 +824,16 @@ func (app *app) getPostsComments(posts []models.Post) ([]models.Post, error) {
 		comments = app.getCommentsLikesAndDislikes(comments)
 		/// Filter comments that belong to the current post based on the postID and CommentedPostID
 		var postComments []models.Comment
+		var commentsCount int
 		for c, comment := range comments {
 			models.UpdateTimeSince(&comments[c])
 			// For each comment, recursively assign its replies
 			commentWithReplies := app.getRepliesForComment(comment)
 			postComments = append(postComments, commentWithReplies)
+			commentsCount = len(postComments)
 		}
 		posts[p].Comments = postComments
+		posts[p].CommentsCount = commentsCount
 	}
 	return posts, nil
 }

@@ -1,0 +1,16 @@
+#post-page {
+    /*position: relative;*/
+    width: 100%;
+    display: none;
+    padding: 2.4rem 0 12.4rem 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.4rem;
+    flex: 1 0 0;
+    align-self: stretch;
+
+    &.active-feed {
+        display: flex;
+        opacity: 1;
+    }
+}

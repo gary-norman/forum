@@ -7,12 +7,12 @@
 {{ if ne .CurrentUser nil }}
   {{ $userID = .CurrentUser.ID }}
 {{ end }}
-{{ $post := .Post }}
-<div id="post-page" class="feeds-wrapper">
+{{ $post := .ThisPost }}
+<div id="post-page" class="active-feed feeds-wrapper">
   <div class="container-content">
     <div class="content">
       {{/*SECTION ---------- user page activity feed ----------*/}}
-      {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser  "Comments" .Comments)  }}
+      {{ template "this-post" (dict "Post" .ThisPost "CurrentUser" $.CurrentUser  "Comments" .Comments )  }}
     </div>
   </div>
 </div> <!-- end post-page wrapper -->

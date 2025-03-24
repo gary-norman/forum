@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/assets/css/text_effects.css" />
     <link rel="stylesheet" href="/assets/css/user-page.css" />
     <link rel="stylesheet" href="/assets/css/channel-page.css" />
+    <link rel="stylesheet" href="/assets/css/this-post.css" />
     <link rel="stylesheet" href="/assets/css/main_effects.css">
     <link rel="stylesheet" href="/assets/css/buttons.css" />
     <link rel="stylesheet" href="/assets/css/main_effects.css">
@@ -633,11 +634,8 @@
             </div>
           </div>
 
-{{/*SECTION ---------- post page ---------- */}}
-          {{ template "post-page" (dict "Post" .ThisPost "CurrentUser" $.CurrentUser ) }}
-
 {{/*SECTION ---------- search results page ---------- */}}
-          <div id="search-results-page" class=" feeds-wrapper">
+          <div id="search-results-page" class="feeds-wrapper">
             <div class="banner">
               <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
               <div class="page-control">
@@ -975,6 +973,10 @@
               </div>
             </div>
           </div>
+
+{{/*SECTION ---------- post page ---------- */}}
+          {{ template "post-page" (dict "ThisPost" .ThisPost "CurrentUser" $.CurrentUser ) }}
+
 
 {{/*SECTION ---------- user page ---------- */}}
           <div id="user-page" class="active-feed feeds-wrapper">
@@ -1489,6 +1491,8 @@
                 </div>
               </div>
             </div>
+
+
         </main>
       </div>
     </div>

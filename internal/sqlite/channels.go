@@ -180,3 +180,12 @@ func (m *ChannelModel) AddPostToChannel(channelID, postID int) error {
 	}
 	return nil
 }
+
+func (m *ChannelModel) GetPostsFromChannel(channelID int) error {
+	stmt := "SELECT PostID FROM PostChannels WHERE ChannelID = ?"
+	_, err := m.DB.Exec(stmt, channelID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

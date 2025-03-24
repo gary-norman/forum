@@ -133,6 +133,8 @@ type Post struct {
 	Author        string `json:"author"`
 	AuthorID      int    `json:"authorId"`
 	AuthorAvatar  string `json:"authorAvatar"`
+	ChannelID     int    `json:"channelId"`
+	ChannelName   string `json:"channelName"`
 	IsFlagged     bool   `json:"isFlagged,omitempty"`
 	Likes         int    `json:"likes"`
 	Dislikes      int    `json:"dislikes"`

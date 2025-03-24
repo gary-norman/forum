@@ -14,8 +14,8 @@ type PostModel struct {
 }
 
 func (m *PostModel) Insert(title, content, images, author, authorAvatar string, authorID int, commentable, isFlagged bool) (int, error) {
-	stmt := "INSERT INTO Posts (Title, Content, Images, Created, IsCommentable, Author, AuthorID, AuthorAvatar, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
-	result, err := m.DB.Exec(stmt, title, content, images, commentable, author, authorID, authorAvatar, isFlagged)
+	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, AuthorAvatar, AuthorID, IsCommentable, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
+	result, err := m.DB.Exec(stmt, title, content, images, author, authorAvatar, authorID, commentable, isFlagged)
 	if err != nil {
 		return 0, err
 	}
@@ -52,10 +52,10 @@ func (m *PostModel) All() ([]models.Post, error) {
 			&p.Content,
 			&p.Images,
 			&p.Created,
-			&p.IsCommentable,
 			&p.Author,
-			&p.AuthorID,
 			&p.AuthorAvatar,
+			&p.IsCommentable,
+			&p.AuthorID,
 			&p.IsFlagged)
 		if scanErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "Error:", "scan")
@@ -110,11 +110,11 @@ func (m *PostModel) GetPostsByChannel(channel int) ([]models.Post, error) {
 		Posts = append(Posts, p)
 	}
 
-	if rowsErr := rows.Err(); rowsErr != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error:", "rows")
-		log.Printf(ErrorMsgs().Query, stmt, rowsErr)
-		return nil, rowsErr
-	}
+	// if rowsErr := rows.Err(); rowsErr != nil {
+	// 	log.Printf(ErrorMsgs().KeyValuePair, "Error:", "rows")
+	// 	log.Printf(ErrorMsgs().Query, stmt, rowsErr)
+	// 	return nil, rowsErr
+	// }
 
 	return Posts, nil
 }
@@ -163,7 +163,6 @@ func (m *PostModel) FindCurrentPost(column string, value interface{}) ([]models.
 		&avatar,
 		&post.IsFlagged,
 	)
-
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil // No post found
@@ -173,7 +172,6 @@ func (m *PostModel) FindCurrentPost(column string, value interface{}) ([]models.
 
 	post.AuthorAvatar = avatar.String
 	post.Images = images.String
-
 	posts = append(posts, post)
 
 	return posts, nil

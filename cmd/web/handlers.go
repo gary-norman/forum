@@ -42,11 +42,15 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().NotFound, "allPosts comments", "getHome", err)
 	}
 
+	for _, post := range allPosts {
+		post.ChannelID = app.channels.GetChannelID(post.ID)
+	}
+
 	// SECTION --- currently opened post ---
 
 	var thisPost models.Post
 	var foundPosts []models.Post
-	//postId, err := strconv.Atoi(r.PathValue("postId"))
+	// postId, err := strconv.Atoi(r.PathValue("postId"))
 	postId := "15" // TODO --- using 15 as default until i got the function working ---
 	if err != nil {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "convert postID", err)
@@ -99,6 +103,14 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 	for c := range allChannels {
 		models.UpdateTimeSince(&allChannels[c])
+	}
+
+	for _, post := range allPosts {
+		for _, channel := range allChannels {
+			if channel.ID == post.ChannelID {
+				post.ChannelName = channel.Name
+			}
+		}
 	}
 
 	var ownedChannels []models.Channel

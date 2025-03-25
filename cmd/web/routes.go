@@ -27,6 +27,7 @@ func (app *app) routes() http.Handler {
 	mux.Handle("/", withUser(http.HandlerFunc(app.getHome), app))
 	mux.Handle("/channels/{channelId}", withUser(http.HandlerFunc(app.getThisChannel), app))
 	mux.HandleFunc("GET /posts/create", app.createPost)
+	mux.Handle("GET /posts/{postId}", withUser(http.HandlerFunc(app.getThisPost), app))
 	mux.Handle("POST /posts/create", withUser(http.HandlerFunc(app.storePost), app))
 	mux.Handle("POST /channels/create", withUser(http.HandlerFunc(app.storeChannel), app))
 	mux.HandleFunc("/posts/create", func(w http.ResponseWriter, r *http.Request) {

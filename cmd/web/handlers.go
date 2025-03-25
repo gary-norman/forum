@@ -54,11 +54,11 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 
 	var thisPost models.Post
 	var posts []models.Post
-	// postId, err := strconv.Atoi(r.PathValue("postId"))
-	postId := 15 // TODO --- using 15 as default until i got the function working ---
-	// if err != nil {
-	// 	fmt.Printf(ErrorMsgs().KeyValuePair, "convert postID", err)
-	// }
+	postId, err := strconv.Atoi(r.PathValue("postId"))
+	// postId := 15 // TODO --- using 15 as default until i got the function working ---
+	if err != nil {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "convert postID", err)
+	}
 	// foundPosts, err = app.posts.FindCurrentPost("id", postId)
 	// if err != nil {
 	// 	fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost", err)

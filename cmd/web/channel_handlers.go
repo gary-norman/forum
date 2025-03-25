@@ -3,11 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
@@ -42,12 +43,18 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().KeyValuePair, "getHome > rules.AllForChannel", err)
 	}
 	// TODO get channel moderators
-
-	thisChannelPosts, err := app.posts.GetPostsByChannel(thisChannel.ID)
+	var thisChannelPosts []models.Post
+	thisChannelPostIDs, err := app.channels.GetPostIDsFromChannel(thisChannel.ID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "getHome > allPosts.GetPostsByChannel", err)
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > channels.GetPostIDsFromChannel", err)
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "thisChannelPosts", len(thisChannelPosts))
+	for _, postID := range thisChannelPostIDs {
+		post, err := app.posts.GetPostByID(postID)
+		if err != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "getHome > allPosts.GetPostByID", err)
+		}
+		thisChannelPosts = append(thisChannelPosts, post)
+	}
 	// Retrieve total likes and dislikes for each Channel post
 	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
 	thisChannelPosts, err = app.getPostsComments(thisChannelPosts)

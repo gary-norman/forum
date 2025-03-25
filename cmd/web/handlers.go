@@ -43,35 +43,46 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for p := range allPosts {
-		channelID, err := app.channels.GetChannelIdFromPost(allPosts[p].ID)
+		channelIDs, err := app.channels.GetChannelIdFromPost(allPosts[p].ID)
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > channelID", err)
 		}
-		allPosts[p].ChannelID = channelID
+		allPosts[p].ChannelID = channelIDs[0]
 	}
 
 	// SECTION --- currently opened post ---
 
 	var thisPost models.Post
-	var foundPosts []models.Post
+	var posts []models.Post
 	// postId, err := strconv.Atoi(r.PathValue("postId"))
-	postId := "15" // TODO --- using 15 as default until i got the function working ---
+	postId := 15 // TODO --- using 15 as default until i got the function working ---
+	// if err != nil {
+	// 	fmt.Printf(ErrorMsgs().KeyValuePair, "convert postID", err)
+	// }
+	// foundPosts, err = app.posts.FindCurrentPost("id", postId)
+	// if err != nil {
+	// 	fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost", err)
+	// }
+	// foundPosts, err = app.getPostsComments(foundPosts)
+	// if err != nil {
+	// 	fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost comments", err)
+	// }
+	// if len(foundPosts) > 0 {
+	// 	thisPost = foundPosts[0]
+	// } else {
+	// 	fmt.Printf(ErrorMsgs().KeyValuePair, "no post found", "returning none")
+	// }
+	// INFO this could probably be avastly simplified by writing directly to foundPosts & thisPost, but I'm erring on the side of caution
+	post, err := app.posts.GetPostByID(postId)
 	if err != nil {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "convert postID", err)
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost", err)
 	}
-	foundPosts, err = app.posts.FindCurrentPost("id", postId)
+	posts = append(posts, post)
+	foundPosts, err := app.getPostsComments(posts)
 	if err != nil {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost", err)
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost comments", err)
 	}
-	foundPosts, err = app.getPostsComments(foundPosts)
-	if err != nil {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost comments", err)
-	}
-	if len(foundPosts) > 0 {
-		thisPost = foundPosts[0]
-	} else {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "no post found", "returning none")
-	}
+	thisPost = foundPosts[0]
 
 	// SECTION --- user ---
 	allUsers, allUsersErr := app.users.All()

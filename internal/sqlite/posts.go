@@ -66,7 +66,7 @@ func (m *PostModel) All() ([]models.Post, error) {
 	}
 
 	if rowsErr := rows.Err(); rowsErr != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error:", "rows")
+		log.Printf(ErrorMsgs().KeyValuePair, "Error", "rows")
 		log.Printf(ErrorMsgs().Query, stmt, rowsErr)
 		return nil, rowsErr
 	}
@@ -119,6 +119,30 @@ func (m *PostModel) GetPostsByChannel(channel int) ([]models.Post, error) {
 	return Posts, nil
 }
 
+func (m *PostModel) GetPostByID(id int) (models.Post, error) {
+	stmt := "SELECT * FROM Posts WHERE ID = ?"
+	row := m.DB.QueryRow(stmt, id)
+	p := models.Post{}
+	err := row.Scan(
+		&p.ID,
+		&p.Title,
+		&p.Content,
+		&p.Images,
+		&p.Created,
+		&p.IsCommentable,
+		&p.Author,
+		&p.AuthorID,
+		&p.AuthorAvatar,
+		&p.IsFlagged)
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
+		log.Printf(ErrorMsgs().Query, stmt, err)
+		return p, err
+	}
+
+	return p, nil
+}
+
 // Search queries the database for any post column that contains the values and returns that post
 func (m *PostModel) FindCurrentPost(column string, value interface{}) ([]models.Post, error) {
 	// Validate column name to prevent SQL injection
@@ -132,8 +156,6 @@ func (m *PostModel) FindCurrentPost(column string, value interface{}) ([]models.
 		"author":        true,
 		"authorID":      true,
 		"authorAvatar":  true,
-		"channelName":   true,
-		"channelID":     true,
 		"isFlagged":     true,
 	}
 
@@ -142,7 +164,7 @@ func (m *PostModel) FindCurrentPost(column string, value interface{}) ([]models.
 	}
 
 	// Base query
-	query := fmt.Sprintf("SELECT id, title, content, images, created, isCommentable, author, authorID, authorAvatar, channelName, channelID, isFlagged FROM posts WHERE %s = ? LIMIT 1", column)
+	query := fmt.Sprintf("SELECT id, title, content, images, created, isCommentable, author, authorID, authorAvatar,  isFlagged FROM posts WHERE %s = ? LIMIT 1", column)
 
 	row := m.DB.QueryRow(query, value)
 
@@ -165,6 +187,7 @@ func (m *PostModel) FindCurrentPost(column string, value interface{}) ([]models.
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
+			fmt.Println("No post found")
 			return nil, nil // No post found
 		}
 		return nil, err

@@ -134,13 +134,13 @@ pass!
 
 ###### Are you forbidden from liking a post?
 
-fail!
+pass!
 
 ##### Enter the forum as a non-registered user and try to dislike a comment
 
 ###### Are you forbidden from disliking a comment?
 
-fail!
+pass!
 
 ##### Enter the forum as a registered user, go to a post and try to create a comment for it
 
@@ -152,7 +152,7 @@ pass!
 
 ###### Were you forbidden from creating the empty comment?
 
-fail!
+pass!
 
 ##### Enter the forum as a registered user and try to create a post
 
@@ -170,7 +170,7 @@ pass!
 
 ###### Were you able to choose several categories for that post?
 
-fail????
+pass!
 
 ##### Try creating a post as a registered user and try to choose a category for that post
 

@@ -9,7 +9,7 @@
     {{ end }}
     {{ $post := .Post }}
     <div class="container-card-down">
-        <div id="link-post-post" class="card" data-postId="{{$post.ID}}">
+        <div id="link-post-post" class="card" data-postId="{{ $post.ID }}">
             <div class="container-post-info">
                 {{ if (ne $post.AuthorAvatar "noimage") }}
                     <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $post.AuthorAvatar }}"></span>
@@ -17,9 +17,9 @@
                     <span class="card-pic profile-pic--empty" data-name-user="{{ $post.Author }}"></span>
                 {{ end }}
                 <div>
-                    <small id="link-post-author" data-authorId="{{$post.AuthorID}}" class="small-bold">{{$post.Author}}</small>
+                    <small id="link-post-author" data-authorId="{{ $post.AuthorID }}" class="small-bold">{{ $post.Author }}</small>
                     <div>
-                        <small id="link-post-channel" data-channelId="$post.ChannelID">{{$post.ChannelName}}</small>
+          <small id="link-post-channel" data-channelId=" {{$post.ChannelID" }}>{{ $post.ChannelName }}</small>
                         <small>-</small>
                         <small>{{$post.TimeSince}}</small>
                         <!-- <small>PostID: {{$post.ID}}</small> -->

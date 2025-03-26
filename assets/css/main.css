@@ -221,7 +221,8 @@ small {
 a,
 a:visited,
 a:link,
-a:active {
+a:active,
+.link {
   text-decoration: none;
   cursor: var(--cursor-pointer);
   /*color: inherit;*/

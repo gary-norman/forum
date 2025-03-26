@@ -390,7 +390,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // SECTION ----- functions ------
-function navigateToChannel(channel) {
+export function navigateToChannel(channel) {
   const link = channel.getAttribute("data-channel-id");
   fetch(`/channels/${link}`, { method: "GET" })
     .then((response) => response.json())
@@ -403,6 +403,35 @@ function navigateToChannel(channel) {
   changePage(channelPage);
   // window.location.href = `/channels/${link}`;
 }
+
+export function navigateToPost(post) {
+  const link = channel.getAttribute("data-post-id");
+  fetch(`/posts/${link}`, { method: "GET" })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("server:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+  changePage(postPage);
+  // window.location.href = `/channels/${link}`;
+}
+
+export function navigateToAuthor(author) {
+  const link = channel.getAttribute("data-author-id");
+  fetch(`/authors/${link}`, { method: "GET" })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("server:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+  changePage(authorPage);
+  // window.location.href = `/channels/${link}`;
+}
+
 // toggleUserInteracted toggles user-interacted class on input fields to prevent label animation before they are selected
 function toggleUserInteracted(action) {
   styledInputs.forEach((input) => {

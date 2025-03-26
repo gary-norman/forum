@@ -34,5 +34,16 @@ func (app *app) getThisPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost comments", err)
 	}
+	foundPosts = app.getPostsLikesAndDislikes(foundPosts)
 	thisPost = foundPosts[0]
+
+	if userLoggedIn {
+		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
+		if err != nil {
+			fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
+		}
+	}
+
+	TemplateData.ThisPost = thisPost
+	TemplateData.CurrentUser = currentUser
 }

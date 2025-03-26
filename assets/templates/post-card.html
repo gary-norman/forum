@@ -17,9 +17,9 @@
                     <span class="card-pic profile-pic--empty" data-name-user="{{ $post.Author }}"></span>
                 {{ end }}
                 <div>
-                    <small id="link-post-author-{{ $post.AuthorID }}" data-authorid="{{ $post.AuthorID }}" class="small-bold link">{{ $post.Author }}</small>
+                    <small id="link-post-author-{{ $post.AuthorID }}" data-author-id="{{ $post.AuthorID }}" class="small-bold link">{{ $post.Author }}</small>
                     <div>
-          <small id="link-post-channelID-{{ $post.ChannelID }}" class="link" data-channelid="{{ $post.ChannelID }}">{{ $post.ChannelName }}</small>
+          <small id="link-post-channelID-{{ $post.ChannelID }}" class="link" data-channel-id="{{ $post.ChannelID }}">{{ $post.ChannelName }}</small>
                         <small>-</small>
                         <small>{{$post.TimeSince}}</small>
                         <!-- <small>PostID: {{$post.ID}}</small> -->
@@ -29,7 +29,7 @@
                     <button data-tooltip-name="like" class="btn-icoonly"></button>
                 </div>
             </div>
-            <h4 id="link-post-post-{{ $post.ID }}" class="link" data-postid="{{ $post.ID }}">{{$post.Title}}</h4>
+            <h4 id="link-post-post-{{ $post.ID }}" class="link" data-post-id="{{ $post.ID }}">{{$post.Title}}</h4>
             {{ if ne $post.Images "noimage" }}
                 <img src={{$postBasePath}}{{$post.Images}} class="post-image" alt="Post Image">
             {{ end }}

@@ -221,6 +221,27 @@ func (m *UserModel) GetUserByEmail(email, calledBy string) (*models.User, error)
 	return &user, nil
 }
 
+func (m *UserModel) GetUserByID(ID int) (models.User, error) {
+	stmt := "SELECT * FROM Users WHERE ID = ?"
+	row := m.DB.QueryRow(stmt, ID)
+	u := models.User{}
+	err := row.Scan(
+		&u.ID,
+		&u.Username,
+		&u.Avatar,
+		&u.Banner,
+		&u.Description,
+		&u.Usertype,
+		&u.Created,
+		&u.IsFlagged)
+	if err != nil {
+		log.Printf(ErrorMsgs().Query, "GetUserFromId", err)
+		return u, err
+	}
+	models.UpdateTimeSince(&u)
+	return u, nil
+}
+
 // TODO accept an interface for any given value
 
 // GetSingleUserValue returns the string of the column specified in output, which should be entered in all lower case

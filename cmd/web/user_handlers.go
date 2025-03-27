@@ -4,7 +4,42 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 )
+
+func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	userLoggedIn := true
+	currentUser, ok := getUserFromContext(r.Context())
+	if !ok {
+		fmt.Printf(ErrorMsgs().NotFound, "currentUser", "getThisUser", "_")
+		userLoggedIn = false
+	}
+
+	userId, err := strconv.Atoi(r.PathValue("userId"))
+	if err != nil {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "convert userID", err)
+	}
+	thisUser, err := app.users.GetUserByID(userId)
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > thisUser", err)
+	}
+	thisUser.Followers, thisUser.Following, err = app.loyalty.CountUsers(thisUser.ID)
+	if err != nil {
+		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisUser loyalty", err)
+	}
+
+	if userLoggedIn {
+		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
+		if err != nil {
+			fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
+		}
+	}
+
+	TemplateData.ThisUser = thisUser
+	TemplateData.CurrentUser = currentUser
+}
 
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 	user, ok := getUserFromContext(r.Context())

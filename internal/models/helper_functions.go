@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -15,6 +16,7 @@ type Reactable interface {
 func UpdateTimeSince(t TimeUpdatable) {
 	t.UpdateTimeSince()
 }
+
 func React(r Reactable, likes, dislikes int) {
 	r.React(likes, dislikes)
 }
@@ -33,4 +35,12 @@ func getTimeSince(created time.Time) string {
 		timeSince = "just now"
 	}
 	return timeSince
+}
+
+func GetIntFromPathValue(value string) (int, error) {
+	intValue, err := strconv.Atoi(value)
+	if err != nil {
+		return 0, err
+	}
+	return intValue, nil
 }

@@ -17,41 +17,50 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	userLoggedIn := true
 	currentUser, ok := getUserFromContext(r.Context())
 	if !ok {
-		fmt.Printf(ErrorMsgs().NotFound, "current user", "getThisChannel", "_")
+		log.Printf(ErrorMsgs().NotFound, "current user", "getThisChannel", "_")
+		http.Error(w, `{"error": "User not found"}`, http.StatusContinue)
 		userLoggedIn = false
 	}
-	channelId, err := strconv.Atoi(r.PathValue("channelId"))
+	channelId, err := models.GetIntFromPathValue(r.PathValue("channelId"))
 	if err != nil {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "convert channelId", err)
+		fmt.Printf(ErrorMsgs().KeyValuePair, "getIntFromPathValue", err)
+		http.Error(w, "channelId must be an integer", http.StatusBadRequest)
+		return
 	}
 	foundChannels, err := app.channels.Search("id", channelId)
 	if err != nil {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > found channels", err)
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > found channels", err)
 	}
 	if len(foundChannels) > 0 {
 		thisChannel = foundChannels[0]
 	} else {
 		log.Printf(ErrorMsgs().KeyValuePair, "No channels found", channelId)
+		http.Error(w, "No channels found", http.StatusBadRequest)
+		return
 	}
 	thisChannelOwnerName, ownerErr := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")
 	if ownerErr != nil {
 		log.Printf(ErrorMsgs().Query, "getHome > GetSingleUserValue", ownerErr)
+		http.Error(w, "Error getting channel owner", http.StatusInternalServerError)
 	}
 	// get all rules for the current channel
 	thisChannelRules, err := app.rules.AllForChannel(thisChannel.ID)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "getHome > rules.AllForChannel", err)
+		http.Error(w, "Error getting rules", http.StatusInternalServerError)
 	}
 	// TODO get channel moderators
 	var thisChannelPosts []models.Post
 	thisChannelPostIDs, err := app.channels.GetPostIDsFromChannel(thisChannel.ID)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "getHome > channels.GetPostIDsFromChannel", err)
+		http.Error(w, "Error getting post IDs", http.StatusInternalServerError)
 	}
 	for _, postID := range thisChannelPostIDs {
 		post, err := app.posts.GetPostByID(postID)
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > allPosts.GetPostByID", err)
+			http.Error(w, "Error getting post", http.StatusInternalServerError)
 		}
 		thisChannelPosts = append(thisChannelPosts, post)
 	}
@@ -60,32 +69,36 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	thisChannelPosts, err = app.getPostsComments(thisChannelPosts)
 	if err != nil {
 		log.Printf(ErrorMsgs().NotFound, "thisChannelPosts comments", "getThisChannel", err)
+		http.Error(w, "Error getting comments", http.StatusInternalServerError)
 	}
-	isOwned := currentUser.ID == thisChannel.OwnerID
 
-	var ownedChannels []models.Channel
-	var joinedChannels []models.Channel
-	var ownedAndJoinedChannels []models.Channel
+	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
 	isJoinedOrOwned := false
+	isOwned := false
 
 	if userLoggedIn {
+		isOwned = currentUser.ID == thisChannel.OwnerID
 		// attach following/follower numbers to currently logged-in user
 		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
 		if err != nil {
-			fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
+			log.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
+			http.Error(w, "Error getting user loyalty", http.StatusInternalServerError)
 		}
 		// get owned and joined channels of current user
 		memberships, memberErr := app.memberships.UserMemberships(currentUser.ID)
 		if memberErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+			http.Error(w, "Error getting user memberships", http.StatusInternalServerError)
 		}
 		ownedChannels, err = app.channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
 		if err != nil {
 			log.Printf(ErrorMsgs().Query, "user owned channels", err)
+			http.Error(w, "Error getting user owned channels", http.StatusInternalServerError)
 		}
 		joinedChannels, err = app.JoinedByCurrentUser(memberships)
 		if err != nil {
 			log.Printf(ErrorMsgs().Query, "user joined channels", err)
+			http.Error(w, "Error getting user joined channels", http.StatusInternalServerError)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
 		joined := false

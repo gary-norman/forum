@@ -79,23 +79,23 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
-			http.Error(w, "Error getting user loyalty", http.StatusInternalServerError)
+			http.Error(w, `{"error": "Error getting user loyalty"}`, http.StatusInternalServerError)
 		}
 		// get owned and joined channels of current user
 		memberships, memberErr := app.memberships.UserMemberships(currentUser.ID)
 		if memberErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
-			http.Error(w, "Error getting user memberships", http.StatusInternalServerError)
+			http.Error(w, `{"error": "Error getting user memberships"}`, http.StatusInternalServerError)
 		}
 		ownedChannels, err = app.channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
 		if err != nil {
 			log.Printf(ErrorMsgs().Query, "user owned channels", err)
-			http.Error(w, "Error getting user owned channels", http.StatusInternalServerError)
+			http.Error(w, `{"error": "Error getting user owned channels"}`, http.StatusInternalServerError)
 		}
 		joinedChannels, err = app.JoinedByCurrentUser(memberships)
 		if err != nil {
 			log.Printf(ErrorMsgs().Query, "user joined channels", err)
-			http.Error(w, "Error getting user joined channels", http.StatusInternalServerError)
+			http.Error(w, `{"error": "Error getting user joined channels"}`, http.StatusInternalServerError)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
 		joined := false

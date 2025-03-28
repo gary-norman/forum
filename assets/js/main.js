@@ -18,6 +18,8 @@ let actButtonsAll;
 // activity feeds
 let activityFeeds;
 let activityFeedsContentAll;
+// sidebar butons
+const goHome = document.querySelector("#btn-go-home");
 // right panel buttons
 let rightPanelButtons;
 // sidebar elements
@@ -751,6 +753,11 @@ function changePage(page) {
   });
 }
 // SECTION ---- event listeners -----
+
+// --- go home ---
+goHome.addEventListener("click", () => {
+  changePage(homePage);
+});
 
 // --- select page ---
 selectDropdown.addEventListener("change", () => {

@@ -392,15 +392,25 @@ document.addEventListener("DOMContentLoaded", () => {
 // SECTION ----- functions ------
 export function navigateToChannel(channel) {
   const link = channel.getAttribute("data-channel-id");
+  if (!link) {
+    console.error("Channel ID is missing");
+    return;
+  }
   fetch(`/channels/${link}`, { method: "GET" })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      console.log("response: ", response);
+      return response.json();
+    })
     .then((data) => {
       console.log("server:", data);
+      changePage(channelPage);
     })
     .catch((error) => {
       console.error("Error:", error);
     });
-  changePage(channelPage);
   // window.location.href = `/channels/${link}`;
 }
 
@@ -728,12 +738,15 @@ function getCSRFToken() {
 // and change the edit button to submit
 
 function changePage(page) {
+  const pageId = page.id;
   pages.forEach((element) => {
-    console.log("elementID: ", element.id, "selectedPage: ", page);
-    if (element.id === page) {
+    if (element.id === pageId) {
       element.classList.add("active-feed");
+      console.log("set", element.id, "to active-feed");
     } else {
+      console.log("page:", pageId);
       element.classList.remove("active-feed");
+      console.log("removed active-feed from", element.id);
     }
   });
 }

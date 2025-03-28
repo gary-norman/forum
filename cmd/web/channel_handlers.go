@@ -13,63 +13,60 @@ import (
 
 func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var thisChannel models.Channel
+
 	userLoggedIn := true
 	currentUser, ok := getUserFromContext(r.Context())
 	if !ok {
 		log.Printf(ErrorMsgs().NotFound, "current user", "getThisChannel", "_")
-		http.Error(w, `{"error": "User not found"}`, http.StatusContinue)
 		userLoggedIn = false
 	}
+
+	// Parse channelId from the request
 	channelId, err := models.GetIntFromPathValue(r.PathValue("channelId"))
 	if err != nil {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "getIntFromPathValue", err)
-		http.Error(w, "channelId must be an integer", http.StatusBadRequest)
+		http.Error(w, `{"error": "channelId must be an integer"}`, http.StatusBadRequest)
 		return
 	}
+
+	// Fetch the channel
 	foundChannels, err := app.channels.Search("id", channelId)
-	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "getHome > found channels", err)
-	}
-	if len(foundChannels) > 0 {
-		thisChannel = foundChannels[0]
-	} else {
-		log.Printf(ErrorMsgs().KeyValuePair, "No channels found", channelId)
-		http.Error(w, "No channels found", http.StatusBadRequest)
+	if err != nil || len(foundChannels) == 0 {
+		http.Error(w, `{"error": "Channel not found"}`, http.StatusNotFound)
 		return
 	}
+	thisChannel := foundChannels[0]
+
+	// Fetch the channel owner
 	thisChannelOwnerName, ownerErr := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")
 	if ownerErr != nil {
-		log.Printf(ErrorMsgs().Query, "getHome > GetSingleUserValue", ownerErr)
-		http.Error(w, "Error getting channel owner", http.StatusInternalServerError)
+		http.Error(w, `{"error": "Error getting channel owner"}`, http.StatusInternalServerError)
+		return
 	}
-	// get all rules for the current channel
+
+	// Fetch channel rules
 	thisChannelRules, err := app.rules.AllForChannel(thisChannel.ID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "getHome > rules.AllForChannel", err)
-		http.Error(w, "Error getting rules", http.StatusInternalServerError)
+		http.Error(w, `{"error": "Error getting channel rules"}`, http.StatusInternalServerError)
+		return
 	}
-	// TODO get channel moderators
-	var thisChannelPosts []models.Post
+
+	// Fetch channel posts
+	thisChannelPosts := []models.Post{}
 	thisChannelPostIDs, err := app.channels.GetPostIDsFromChannel(thisChannel.ID)
-	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "getHome > channels.GetPostIDsFromChannel", err)
-		http.Error(w, "Error getting post IDs", http.StatusInternalServerError)
-	}
-	for _, postID := range thisChannelPostIDs {
-		post, err := app.posts.GetPostByID(postID)
-		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > allPosts.GetPostByID", err)
-			http.Error(w, "Error getting post", http.StatusInternalServerError)
+	if err == nil {
+		for _, postID := range thisChannelPostIDs {
+			post, err := app.posts.GetPostByID(postID)
+			if err == nil {
+				thisChannelPosts = append(thisChannelPosts, post)
+			}
 		}
-		thisChannelPosts = append(thisChannelPosts, post)
 	}
+
 	// Retrieve total likes and dislikes for each Channel post
 	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
 	thisChannelPosts, err = app.getPostsComments(thisChannelPosts)
 	if err != nil {
-		log.Printf(ErrorMsgs().NotFound, "thisChannelPosts comments", "getThisChannel", err)
-		http.Error(w, "Error getting comments", http.StatusInternalServerError)
+		http.Error(w, `{"error": "Error getting comments" }`, http.StatusInternalServerError)
 	}
 
 	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
@@ -118,6 +115,18 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	TemplateData.ThisChannelIsOwned = isOwned
 	TemplateData.OwnedAndJoinedChannels = ownedAndJoinedChannels
 	TemplateData.ThisChannelIsOwnedOrJoined = isJoinedOrOwned
+
+	// Prepare the response
+	response := map[string]any{
+		"channel":   thisChannel.Name,
+		"ownerName": thisChannelOwnerName,
+		"posts":     len(thisChannelPosts),
+	}
+
+	// Write the response as JSON
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, `{"error": "Error encoding response"}`, http.StatusInternalServerError)
+	}
 }
 
 func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {

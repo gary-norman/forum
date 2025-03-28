@@ -130,9 +130,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	var ownedChannels []models.Channel
-	var joinedChannels []models.Channel
-	var ownedAndJoinedChannels []models.Channel
+	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
 	if userLoggedIn {
 		// attach following/follower numbers to currently logged-in user
 		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)

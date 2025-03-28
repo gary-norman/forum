@@ -4,8 +4,6 @@ const linkPostPosts = document.querySelectorAll('[id^="link-post-post"]');
 const linkPostAuthors = document.querySelectorAll('[id^="link-post-author"]');
 const linkPostChannels = document.querySelectorAll('[id^="link-post-channel"]');
 
-// TODO: change these to forEach
-
 document.addEventListener("DOMContentLoaded", () => {
   linkPostPosts.forEach((post) => {
     post.addEventListener("click", (e) => {

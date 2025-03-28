@@ -740,13 +740,16 @@ function getCSRFToken() {
 // and change the edit button to submit
 
 function changePage(page) {
-  const pageId = page.id;
+  let pageId = page;
+  // console.log("type", typeof page);
+  if (typeof page != "string") {
+    pageId = page.id;
+  }
   pages.forEach((element) => {
     if (element.id === pageId) {
       element.classList.add("active-feed");
       console.log("set", element.id, "to active-feed");
     } else {
-      console.log("page:", pageId);
       element.classList.remove("active-feed");
       console.log("removed active-feed from", element.id);
     }

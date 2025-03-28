@@ -35,6 +35,7 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	thisChannel := foundChannels[0]
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Fetching channel", thisChannel.Name)
 
 	// Fetch the channel owner
 	thisChannelOwnerName, ownerErr := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")
@@ -62,6 +63,33 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	for p := range thisChannelPosts {
+		models.UpdateTimeSince(&thisChannelPosts[p])
+	}
+
+	allChannels, err := app.channels.All()
+	if err != nil {
+		http.Error(w, `{"error": "Error getting all channels"}`, http.StatusInternalServerError)
+	}
+	for c := range allChannels {
+		models.UpdateTimeSince(&allChannels[c])
+	}
+
+	for p := range thisChannelPosts {
+		channelIDs, err := app.channels.GetChannelIdFromPost(thisChannelPosts[p].ID)
+		if err != nil {
+			http.Error(w, `{"error": "Error getting channel ID from post"}`, http.StatusInternalServerError)
+		}
+		thisChannelPosts[p].ChannelID = channelIDs[0]
+	}
+
+	for p := range thisChannelPosts {
+		for _, channel := range allChannels {
+			if channel.ID == thisChannelPosts[p].ChannelID {
+				thisChannelPosts[p].ChannelName = channel.Name
+			}
+		}
+	}
 	// Retrieve total likes and dislikes for each Channel post
 	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
 	thisChannelPosts, err = app.getPostsComments(thisChannelPosts)
@@ -115,6 +143,8 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	TemplateData.ThisChannelIsOwned = isOwned
 	TemplateData.OwnedAndJoinedChannels = ownedAndJoinedChannels
 	TemplateData.ThisChannelIsOwnedOrJoined = isJoinedOrOwned
+
+	fmt.Printf(ErrorMsgs().KeyValuePair, "TemplateData.ThisChannel", TemplateData.ThisChannel.Name)
 
 	// Prepare the response
 	response := map[string]any{

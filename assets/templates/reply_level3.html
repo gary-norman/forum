@@ -74,8 +74,8 @@
       <form class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
         <div class="cont-flex-row flex-end">
           <div class="input-wrapper container-reply">
-            <textarea id="comment-form-textarea-{{$comment.ID}}" name="content" placeholder="Type a reply..."></textarea>
-            <label for="comment-form-textarea-{{$comment.ID}}" class="user-label">Reply</label>
+            <textarea id="comment-form-textarea-reply3-{{$comment.ID}}" name="content" placeholder="Type a reply..."></textarea>
+            <label for="comment-form-textarea-reply3-{{$comment.ID}}" class="user-label">Reply</label>
           </div>
           <!-- Hidden input to store the commentID (if replying to a comment) -->
           <input type="hidden" name="commentID" value="{{$comment.ID}}">

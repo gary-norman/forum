@@ -72,9 +72,9 @@
                                 <span class="btn-copy" aria-label="Copy URL link"></span>
                             </button>
                         </div>
-                        <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
-                               id="copy-url-channel-post-{{$post.ID}}" name="copy-url-channel-post-{{$post.ID}}"/>
-{{/*                               id="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}" name="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}"/>*/}}
+              <input value="https://localhost:8989/post/{{ $post.ID }}" readonly type="text"
+                               id="copy-url-channel-post-{{ $post.ID }}" name="copy-url-channel-post-{{ $post.ID }}"/>
+{{/*                               id="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}" name="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}"/>*/}}
                     </div>
                 </div>
             </div>
@@ -82,8 +82,8 @@
             <form class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
                 <div class="cont-flex-row flex-end">
                     <div class="input-wrapper container-reply">
-                        <textarea id="comment-form-textarea-{{$post.ID}}" name="content" placeholder="Type a reply..."></textarea>
-                        <label for="comment-form-textarea-{{$post.ID}}" class="user-label">Reply</label>
+                        <textarea id="comment-form-textarea-postcard-{{$post.ID}}" name="content" placeholder="Type a reply..."></textarea>
+                        <label for="comment-form-textarea-postcard-{{$post.ID}}" class="user-label">Reply</label>
                     </div>
                     <!-- Hidden input to store the postID -->
                     <input type="hidden" name="postID" value="{{$post.ID}}">

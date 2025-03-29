@@ -914,7 +914,7 @@
                         <pre id="user-bio-content" class="side-panel-block scroll-down">{{ $user.Description }}</pre>
                       {{end}}
                       <div class="input-wrapper edit-user ">
-                        <textarea class="scroll-down" id="bio" name="bio" placeholder="{{if $user.Description}}{{else}}update your bio{{end}}">{{if $user.Description}}{{ $user.Description }}{{end}}</textarea>
+                        <textarea class="scroll-down" id="user-bio-reactions" name="bio" placeholder="{{if $user.Description}}{{else}}update your bio{{end}}">{{if $user.Description}}{{ $user.Description }}{{end}}</textarea>
                       </div>
                     </div>
                   </form>
@@ -924,7 +924,7 @@
                       <div class="side-panel-block">
                         <div class="sidebar-channel">
                           <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
-                            {{/* TODO range through modded channels}}
+                            {{/* TODO range through modded channels */}}
                             <span class="card-pic profile-pic" data-image-channel=""></span>
                             <div>
                               <div>/Interesting_Things</div>
@@ -1259,7 +1259,7 @@
                           <pre id="user-bio-content" class="side-panel-block scroll-down">{{ $user.Description }}</pre>
                         {{end}}
                         <div class="input-wrapper edit-user ">
-                          <textarea class="scroll-down" id="bio" name="bio" placeholder="{{if $user.Description}}{{else}}update your bio{{end}}">{{if $user.Description}}{{ $user.Description }}{{end}}</textarea>
+                          <textarea class="scroll-down" id="user-bio-edit-content" name="bio" placeholder="{{if $user.Description}}{{else}}update your bio{{end}}">{{if $user.Description}}{{ $user.Description }}{{end}}</textarea>
                         </div>
                       </div>
                     </form>
@@ -1269,7 +1269,7 @@
                         <div class="side-panel-block">
                           <div class="sidebar-channel">
                             <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
-                            {{/* TODO range through modded channels}}
+                            {{/* TODO range through modded channels */}}
                             <span class="card-pic profile-pic" data-image-channel=""></span>
                               <div>
                                 <div>/Interesting_Things</div>
@@ -1347,7 +1347,7 @@
                 <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}"></div>
                 {{ end }}
                 <div class="flex-start">
-                  <h2 {{ if (eq .ThisChannel.Privacy true) }}class="private-channel align-self-start"{{ end }}>/{{ .ThisChannel.Name }}</h2>
+                  <h2 {{ if (eq .ThisChannel.Privacy true) }} class="private-channel align-self-start"{{ end }}>/{{ .ThisChannel.Name }}</h2>
                   <div>
                     <button class="btn-md btn-icotext btn-follows btn-invert-never">
                       <span class="btn-channel-users">13.8k</span>

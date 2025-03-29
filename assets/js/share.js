@@ -87,10 +87,10 @@ document.addEventListener("DOMContentLoaded", function () {
       // console.log("post ID ✔️")
     }
 
-    //get all components needed
-    console.table(shareModal);
-    console.table(shareButton);
+    // console.table(shareModal);
+    // console.table(shareButton);
 
+    //get all components needed
     if (shareModal != null) {
       let label = shareModal.querySelector("label");
       let icon = shareModal.querySelector("button");

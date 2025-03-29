@@ -100,6 +100,7 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
 	isJoinedOrOwned := false
 	isOwned := false
+	isJoined := false
 
 	if userLoggedIn {
 		isOwned = currentUser.ID == thisChannel.OwnerID
@@ -126,14 +127,13 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, `{"error": "Error getting user joined channels"}`, http.StatusInternalServerError)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
-		joined := false
 		for _, channel := range joinedChannels {
 			if thisChannel.ID == channel.ID {
-				joined = true
+				isJoined = true
 				break
 			}
 		}
-		isJoinedOrOwned = isOwned || joined
+		isJoinedOrOwned = isOwned || isJoined
 	}
 
 	TemplateData.ThisChannel = thisChannel
@@ -149,8 +149,10 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	// Prepare the response
 	response := map[string]any{
 		"channel":   thisChannel.Name,
-		"ownerName": thisChannelOwnerName,
 		"posts":     len(thisChannelPosts),
+		"owned":     isOwned,
+		"ownerName": thisChannelOwnerName,
+		"joined":    isJoined,
 	}
 
 	// Write the response as JSON

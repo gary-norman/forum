@@ -393,6 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // SECTION ----- functions ------
 export function navigateToChannel(channel) {
+  console.time("navchan");
   const link = channel.getAttribute("data-channel-id");
   if (!link) {
     console.error("Channel ID is missing");
@@ -403,16 +404,17 @@ export function navigateToChannel(channel) {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      console.log("response: ", response);
+      console.table(response);
       return response.json();
     })
     .then((data) => {
-      console.log("server:", data);
+      console.table(data);
       changePage(channelPage);
     })
     .catch((error) => {
       console.error("Error:", error);
     });
+  console.timeEnd("navchan");
   // window.location.href = `/channels/${link}`;
 }
 

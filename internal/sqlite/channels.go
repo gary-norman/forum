@@ -19,44 +19,27 @@ func (m *ChannelModel) Insert(ownerID int, name, description, avatar, banner str
 }
 
 func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]models.Channel, error) {
-	validColumns := map[string]bool{
-		"ID":          true,
-		"OwnerID":     true,
-		"Name":        true,
-		"Avatar":      true,
-		"Banner":      true,
-		"Description": true,
-		"Created":     true,
-		"Privacy":     true,
-		"IsFlagged":   true,
-		"IsMuted":     true,
+	// Validate column name to prevent SQL injection
+	if !isValidColumn(column) {
+		return nil, fmt.Errorf("invalid column name provided: %s", column)
 	}
 
-	if !validColumns[column] {
-		return nil, fmt.Errorf("invalid column name: %s", column)
-	}
+	// Base query
+	query := "SELECT id, ownerId, name, avatar, banner, description, created, privacy, isMuted, isFlagged FROM channels WHERE " + column + " = ?"
 
-	// Safely construct the query
-	stmt := fmt.Sprintf(
-		"SELECT ID, OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted FROM Channels WHERE %s = ?",
-		column,
-	)
-	rows, queryErr := m.DB.Query(stmt, ID)
-	if queryErr != nil {
-		return nil, queryErr
+	// Execute the query
+	rows, err := m.DB.Query(query, ID)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %w", err)
 	}
-	defer func() {
-		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "OwnedOrJoinedByCurrentUser", closeErr)
-		}
-	}()
+	defer rows.Close()
 
-	var channels []models.Channel
+	// Parse results
+	channels := make([]models.Channel, 0) // Pre-allocate slice
 	for rows.Next() {
-		var c models.Channel
-		scanErr := rows.Scan(&c.ID, &c.OwnerID, &c.Name, &c.Avatar, &c.Banner, &c.Description, &c.Created, &c.Privacy, &c.IsFlagged, &c.IsMuted)
-		if scanErr != nil {
-			return nil, scanErr
+		c, err := parseChannelRow(rows)
+		if err != nil {
+			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
 		if column == "OwnerID" {
 			fmt.Printf(ErrorMsgs().KeyValuePair, "updating Owned of", c.Name)
@@ -70,12 +53,14 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]mode
 		}
 		channels = append(channels, c)
 	}
-	if rowsErr := rows.Err(); rowsErr != nil {
-		return nil, rowsErr
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating rows: %w", err)
 	}
 	if column == "OwnerID" {
 		fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned by current user", len(channels))
 	}
+
 	return channels, nil
 }
 
@@ -110,8 +95,41 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 }
 
 // Search queries the database for any channel column that contains the value and returns a slice of matching channels
-func (m *ChannelModel) Search(column string, value interface{}) ([]models.Channel, error) {
+
+func (m *ChannelModel) SearchChannelsByColumn(column string, value interface{}) ([]models.Channel, error) {
 	// Validate column name to prevent SQL injection
+	if !isValidColumn(column) {
+		return nil, fmt.Errorf("invalid column name provided: %s", column)
+	}
+
+	// Base query
+	query := "SELECT id, ownerId, name, avatar, banner, description, created, privacy, isMuted, isFlagged FROM channels WHERE " + column + " = ?"
+
+	// Execute the query
+	rows, err := m.DB.Query(query, value)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %w", err)
+	}
+	defer rows.Close()
+
+	// Parse results
+	channels := make([]models.Channel, 0) // Pre-allocate slice
+	for rows.Next() {
+		channel, err := parseChannelRow(rows)
+		if err != nil {
+			return nil, fmt.Errorf("error parsing row: %w", err)
+		}
+		channels = append(channels, channel)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating rows: %w", err)
+	}
+
+	return channels, nil
+}
+
+func isValidColumn(column string) bool {
 	validColumns := map[string]bool{
 		"id":          true,
 		"ownerId":     true,
@@ -124,52 +142,31 @@ func (m *ChannelModel) Search(column string, value interface{}) ([]models.Channe
 		"isMuted":     true,
 		"isFlagged":   true,
 	}
+	return validColumns[column]
+}
 
-	if !validColumns[column] {
-		return nil, fmt.Errorf("invalid column name: %s", column)
+func parseChannelRow(rows *sql.Rows) (models.Channel, error) {
+	var channel models.Channel
+	var avatar, banner sql.NullString
+
+	if err := rows.Scan(
+		&channel.ID,
+		&channel.OwnerID,
+		&channel.Name,
+		&avatar,
+		&banner,
+		&channel.Description,
+		&channel.Created,
+		&channel.Privacy,
+		&channel.IsMuted,
+		&channel.IsFlagged,
+	); err != nil {
+		return channel, err
 	}
 
-	// Base query
-	query := fmt.Sprintf("SELECT id, ownerId, name, avatar, banner, description, created, privacy, isMuted, isFlagged FROM channels WHERE %s = ?", column)
-
-	// Execute the query
-	rows, err := m.DB.Query(query, value)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	// Parse results
-	var channels []models.Channel
-	for rows.Next() {
-		var channel models.Channel
-		var avatar, banner sql.NullString
-
-		if err := rows.Scan(
-			&channel.ID,
-			&channel.OwnerID,
-			&channel.Name,
-			&avatar,
-			&banner,
-			&channel.Description,
-			&channel.Created,
-			&channel.Privacy,
-			&channel.IsMuted,
-			&channel.IsFlagged,
-		); err != nil {
-			return nil, err
-		}
-
-		channel.Avatar = avatar.String
-		channel.Banner = banner.String
-		channels = append(channels, channel)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return channels, nil
+	channel.Avatar = avatar.String
+	channel.Banner = banner.String
+	return channel, nil
 }
 
 func (m *ChannelModel) AddPostToChannel(channelID, postID int) error {
@@ -219,4 +216,15 @@ func (m *ChannelModel) GetChannelIdFromPost(postID int) ([]int, error) {
 	}
 
 	return channelIDs, nil
+}
+
+func (m *ChannelModel) GetChannelNameFromID(id int) (string, error) {
+	var name string
+	stmt := "SELECT Name FROM Channels WHERE ID = ?"
+	row := m.DB.QueryRow(stmt, id)
+	if err := row.Scan(&name); err != nil {
+		return "", err
+	}
+
+	return name, nil
 }

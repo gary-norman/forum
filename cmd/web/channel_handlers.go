@@ -29,7 +29,7 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch the channel
-	foundChannels, err := app.channels.Search("id", channelId)
+	foundChannels, err := app.channels.SearchChannelsByColumn("id", channelId)
 	if err != nil || len(foundChannels) == 0 {
 		http.Error(w, `{"error": "Channel not found"}`, http.StatusNotFound)
 		return
@@ -161,6 +161,21 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *app) GetChannelInfoFromPostID(postID int) (int, string, error) {
+	channelIDs, err := app.channels.GetChannelIdFromPost(postID)
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "GetChannelInfoFromPostId > GetChannelIdFromPost", err)
+		return 0, "", err
+	}
+	channelID := channelIDs[0]
+	channelName, err := app.channels.GetChannelNameFromID(channelID)
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "GetChannelInfoFromPostId > GetChannelNameFromPost", err)
+		return 0, "", err
+	}
+	return channelID, channelName, nil
+}
+
 func (app *app) storeChannel(w http.ResponseWriter, r *http.Request) {
 	user, ok := getUserFromContext(r.Context())
 	if !ok {
@@ -227,7 +242,7 @@ func (app *app) storeMembership(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Unable to convert %v to integer\n", r.PostForm.Get("channelId"))
 	}
 	// get slice of channels (in this case it is only 1, but the function still returns a slice)
-	channels, err := app.channels.Search("id", joinedChannelID)
+	channels, err := app.channels.SearchChannelsByColumn("id", joinedChannelID)
 	if err != nil {
 		log.Printf(ErrorMsgs().Query, "channel", err)
 	}

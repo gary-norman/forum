@@ -405,7 +405,6 @@ export function navigateToChannel(channel) {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      console.table(response);
       return response.json();
     })
     .then((data) => {
@@ -431,7 +430,6 @@ export function navigateToPost(post) {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      console.table(response);
       return response.json();
     })
     .then((data) => {
@@ -452,17 +450,16 @@ export function navigateToAuthor(author) {
     console.error("Author ID is missing");
     return;
   }
-  fetch(`/authors/${link}`, { method: "GET" })
+  fetch(`/users/${link}`, { method: "GET" })
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      console.table(response);
       return response.json();
     })
     .then((data) => {
       console.table(data);
-      changePage(authorPage);
+      changePage(userPage);
     })
     .catch((error) => {
       console.error("Error:", error);

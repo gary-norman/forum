@@ -1,44 +1,62 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	userLoggedIn := true
-	currentUser, ok := getUserFromContext(r.Context())
-	if !ok {
-		fmt.Printf(ErrorMsgs().NotFound, "currentUser", "getThisUser", "_")
-		userLoggedIn = false
+	// userLoggedIn := true
+	// currentUser, ok := getUserFromContext(r.Context())
+	// if !ok {
+	// 	fmt.Printf(ErrorMsgs().NotFound, "currentUser", "getThisUser", "_")
+	// 	userLoggedIn = false
+	// }
+
+	// Parse User ID from URL
+	userId, err := models.GetIntFromPathValue(r.PathValue("userId"))
+	if err != nil {
+		http.Error(w, `{"error": "invalid user ID"}`, http.StatusBadRequest)
 	}
 
-	userId, err := strconv.Atoi(r.PathValue("userId"))
-	if err != nil {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "convert userID", err)
-	}
+	// Fetch the user
 	thisUser, err := app.users.GetUserByID(userId)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "getHome > thisUser", err)
+		http.Error(w, `{"error": "user not found"}`, http.StatusNotFound)
 	}
+
+	// Fetch user loyalty
 	thisUser.Followers, thisUser.Following, err = app.loyalty.CountUsers(thisUser.ID)
 	if err != nil {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisUser loyalty", err)
+		http.Error(w, `{"error": "error fetching user loyalty"}`, http.StatusInternalServerError)
 	}
 
-	if userLoggedIn {
-		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
-		if err != nil {
-			fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
-		}
-	}
+	// if userLoggedIn {
+	// 	currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
+	// 	if err != nil {
+	// 		fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
+	// 	}
+	// }
 
 	TemplateData.ThisUser = thisUser
-	TemplateData.CurrentUser = currentUser
+	// TemplateData.CurrentUser = currentUser
+
+	response := map[string]any{
+		"user":      thisUser.Username,
+		"followers": thisUser.Followers,
+		"following": thisUser.Following,
+	}
+
+	// Write the response as JSON
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, `{"error": "error encoding JSON"}`, http.StatusInternalServerError)
+	}
 }
 
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {

@@ -11,6 +11,7 @@ import (
 
 func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	var thisUser models.User
 
 	// userLoggedIn := true
 	// currentUser, ok := getUserFromContext(r.Context())
@@ -26,15 +27,18 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch the user
-	thisUser, err := app.users.GetUserByID(userId)
+	user, err := app.users.GetUserByID(userId)
 	if err != nil {
 		http.Error(w, `{"error": "user not found"}`, http.StatusNotFound)
 	}
 
 	// Fetch user loyalty
-	thisUser.Followers, thisUser.Following, err = app.loyalty.CountUsers(thisUser.ID)
-	if err != nil {
-		http.Error(w, `{"error": "error fetching user loyalty"}`, http.StatusInternalServerError)
+	if err == nil {
+		thisUser = user
+		thisUser.Followers, thisUser.Following, err = app.loyalty.CountUsers(thisUser.ID)
+		if err != nil {
+			http.Error(w, `{"error": "error fetching user loyalty"}`, http.StatusInternalServerError)
+		}
 	}
 
 	// if userLoggedIn {
@@ -46,6 +50,8 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 
 	TemplateData.ThisUser = thisUser
 	// TemplateData.CurrentUser = currentUser
+
+	fmt.Printf(ErrorMsgs().KeyValuePair, "TemplateData.ThisUser", TemplateData.ThisUser.Username)
 
 	response := map[string]any{
 		"user":      thisUser.Username,

@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   linkPostPosts.forEach((post) => {
     post.addEventListener("click", (e) => {
       e.preventDefault();
+      console.log("clicked post");
       navigateToPost(post);
     });
   });
@@ -15,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   linkPostAuthors.forEach((author) => {
     author.addEventListener("click", (e) => {
       e.preventDefault();
+      console.log("clicked author");
       navigateToAuthor(author);
     });
   });
@@ -22,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   linkPostChannels.forEach((channel) => {
     channel.addEventListener("click", (e) => {
       e.preventDefault();
+      console.log("clicked channel");
       navigateToChannel(channel);
     });
   });

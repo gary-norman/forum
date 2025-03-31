@@ -102,7 +102,7 @@ func (m *ChannelModel) SearchChannelsByColumn(column string, value interface{}) 
 	}
 
 	// Base query
-	query := "SELECT id, ownerId, name, avatar, banner, description, created, privacy, isMuted, isFlagged FROM channels WHERE " + column + " = ?"
+	query := "SELECT ID, OwnerId, Name, Avatar, Banner, Description, Created, Privacy, IsMuted, IsFlagged FROM channels WHERE " + column + " = ?"
 
 	// Execute the query
 	rows, err := m.DB.Query(query, value)
@@ -130,16 +130,16 @@ func (m *ChannelModel) SearchChannelsByColumn(column string, value interface{}) 
 
 func isValidColumn(column string) bool {
 	validColumns := map[string]bool{
-		"id":          true,
-		"ownerId":     true,
-		"name":        true,
-		"avatar":      true,
-		"banner":      true,
-		"description": true,
-		"created":     true,
-		"privacy":     true,
-		"isMuted":     true,
-		"isFlagged":   true,
+		"ID":          true,
+		"OwnerID":     true,
+		"Name":        true,
+		"Avatar":      true,
+		"Banner":      true,
+		"Description": true,
+		"Created":     true,
+		"Privacy":     true,
+		"IsMuted":     true,
+		"IsFlagged":   true,
 	}
 	return validColumns[column]
 }

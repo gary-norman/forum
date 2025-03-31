@@ -4,6 +4,7 @@ import {
   pages,
   selectActiveFeed,
   userPage,
+  postPage,
 } from "./share.js";
 
 // variables
@@ -419,30 +420,54 @@ export function navigateToChannel(channel) {
 }
 
 export function navigateToPost(post) {
-  const link = channel.getAttribute("data-post-id");
+  console.time("navpost");
+  const link = post.getAttribute("data-post-id");
+  if (!link) {
+    console.error("Post ID is missing");
+    return;
+  }
   fetch(`/posts/${link}`, { method: "GET" })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      console.table(response);
+      return response.json();
+    })
     .then((data) => {
-      console.log("server:", data);
+      console.table(data);
+      changePage(postPage);
     })
     .catch((error) => {
       console.error("Error:", error);
     });
-  changePage(postPage);
+  console.timeEnd("navpost");
   // window.location.href = `/channels/${link}`;
 }
 
 export function navigateToAuthor(author) {
-  const link = channel.getAttribute("data-author-id");
+  console.time("navauthor");
+  const link = author.getAttribute("data-author-id");
+  if (!link) {
+    console.error("Author ID is missing");
+    return;
+  }
   fetch(`/authors/${link}`, { method: "GET" })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      console.table(response);
+      return response.json();
+    })
     .then((data) => {
-      console.log("server:", data);
+      console.table(data);
+      changePage(authorPage);
     })
     .catch((error) => {
       console.error("Error:", error);
     });
-  changePage(authorPage);
+  console.timeEnd("navauthor");
   // window.location.href = `/channels/${link}`;
 }
 

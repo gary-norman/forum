@@ -2,7 +2,8 @@ const link = encodeURI(window.location.href);
 export const homePage = document.getElementById("home-page");
 export const userPage = document.getElementById("user-page");
 export const channelPage = document.getElementById("channel-page");
-export const pages = [homePage, userPage, channelPage];
+export const postPage = document.getElementById("post-page");
+export const pages = [homePage, userPage, channelPage, postPage];
 
 // TODO Add logic that positions the modal above the button if there's not enough space under
 const commentMsg = encodeURIComponent(

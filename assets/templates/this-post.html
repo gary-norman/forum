@@ -11,8 +11,7 @@
     {{ $post := .Post }}
 
     <div class="container-card-down">
-        <div class="card" data-post-id="{{$post.ID}}"  data-author-ID="{{$post.AuthorID}}">
-{{/*        <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">*/}}
+       <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">
             <div class="container-post-info">
                 {{ if (ne $post.AuthorAvatar "noimage") }}
                     <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $post.AuthorAvatar }}"></span>
@@ -38,7 +37,7 @@
             <pre class="cardContent">{{$post.Content}}</pre>
             <!--  Post control buttons -->
             <div class="button-row-wrap post-controls" >
-                {{ template "post-controls" (dict "Post" $post "CurrentUser" $.CurrentUser) }}
+                {{ template "post-controls" (dict "Post" $post "CurrentUser" $.CurrentUser "Instance" "this-post") }}
             </div>
             <!--  Reply / Submit Comment form -->
             <form name="replyForm" class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">

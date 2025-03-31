@@ -6,26 +6,18 @@
   {{ end }}
   {{ $post := .Post }}
   {{$status := reactionStatus $userID $post.ID 0}}
-  <button class="btn-md btn-secondary btn-icotext btn-filled btn-action
-                {{if $status.Liked}}active{{end}}
-                {{ if eq $user nil}}inactive{{ end }}" >
+  <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}} {{ if eq $user nil}}inactive{{ end }}">
     <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{$post.Likes}}</span>
   </button>
-  <button class="btn-md btn-secondary btn-icotext btn-filled btn-action
-                {{if $status.Disliked}}active{{end}}
-                {{ if eq $user nil}}inactive{{ end }}" >
+  <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}} {{ if eq $user nil}}inactive{{ end }}" >
     <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
   </button>
   {{ if ne $user nil}}
-    {{/*         TODO Missing channel info due to restructuring*/}}
-    <button id="reply-button-channel-post-{{$post.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-{{/*    <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-      <span class="btn-reply">reply</span>
-    </button>
+  <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{.Instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+    <span class="btn-reply">reply</span>
+  </button>
   {{ end }}
-  {{/*         TODO Missing channel info due to restructuring*/}}
-  <button id="share-button-channel-post-{{$post.ID}}" popovertarget="share-container-channel-post-{{$post.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-{{/*  <button id="share-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}" popovertarget="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
+  <button id="share-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{.Instance}}" popovertarget="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
     <span class="btn-share">share</span>
   </button>
   {{ if ne $user nil}}
@@ -34,9 +26,7 @@
     </button>
   {{ end }}
   <!--  Share modal -->
-  {{/*         TODO Missing channel info due to restructuring*/}}
-  <div popover id="share-container-channel-post-{{$post.ID}}" class="scrollable-user">
-{{/*  <div popover id="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}" class="scrollable-user">*/}}
+    <div popover id="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{.Instance}}" class="scrollable-user">
     <div class="share-container">
       <div class="button-row">
         <a href="/" target="_blank" class="share-logo facebook"></a>
@@ -47,16 +37,12 @@
         <a href="/" target="_blank" class="share-logo telegram"></a>
       </div>
       <div class="flex-space-between">
-        <label class="padded" for="copy-url-channel-post-{{$post.ID}}">Copy URL link</label>
-{{/*         TODO Missing channel info due to restructuring*/}}
-{{/*        <label class="padded" for="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}">Copy URL link</label>*/}}
+      <label class="padded" for="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}">Copy URL link</label>
         <button class="btn-sm btn-icoonly">
           <span class="btn-copy" aria-label="Copy URL link"></span>
         </button>
       </div>
-      {{/*         TODO Missing channel info due to restructuring*/}}
-      <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-channel-post-{{$post.ID}}" name="copy-url-channel-post-{{$post.ID}}"/>
-{{/*      <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}" name="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}"/>*/}}
+      <input value="https://localhost:8989/posts/{{$post.ID}}" readonly type="text" id="copy-url-channel-post-{{$post.ID}}-{{.Instance}}" name="copy-url-channel-post-{{$post.ID}}"/>
     </div>
   </div>
 {{ end}}

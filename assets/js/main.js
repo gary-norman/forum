@@ -775,7 +775,6 @@ function changePage(page) {
       console.log("set", element.id, "to active-feed");
     } else {
       element.classList.remove("active-feed");
-      console.log("removed active-feed from", element.id);
     }
   });
 }

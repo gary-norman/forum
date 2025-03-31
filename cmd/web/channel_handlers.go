@@ -29,7 +29,7 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch the channel
-	foundChannels, err := app.channels.SearchChannelsByColumn("id", channelId)
+	foundChannels, err := app.channels.SearchChannelsByColumn("ID", channelId)
 	if err != nil || len(foundChannels) == 0 {
 		http.Error(w, `{"error": "Channel not found"}`, http.StatusNotFound)
 		return
@@ -98,9 +98,9 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
-	isJoinedOrOwned := false
-	isOwned := false
 	isJoined := false
+	isOwned := false
+	isJoinedOrOwned := false
 
 	if userLoggedIn {
 		isOwned = currentUser.ID == thisChannel.OwnerID

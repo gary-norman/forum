@@ -59,6 +59,8 @@ func (app *app) getThisPost(w http.ResponseWriter, r *http.Request) {
 	TemplateData.ThisPost = thisPost
 	// TemplateData.CurrentUser = currentUser
 
+	fmt.Printf(ErrorMsgs().KeyValuePair, "TemplateData.ThisPost", TemplateData.ThisPost.Title)
+
 	response := map[string]any{
 		"post":        thisPost.Title,
 		"content":     thisPost.Content,

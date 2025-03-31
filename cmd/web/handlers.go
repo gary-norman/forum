@@ -161,7 +161,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	TemplateData.CurrentUser = currentUser
 	// ---------- posts ----------
 	TemplateData.Posts = allPosts
-	// TemplateData.ThisPost = thisPost
 	// ---------- channels ----------
 	TemplateData.AllChannels = allChannels
 	TemplateData.OwnedChannels = ownedChannels

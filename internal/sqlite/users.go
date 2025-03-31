@@ -228,12 +228,16 @@ func (m *UserModel) GetUserByID(ID int) (models.User, error) {
 	err := row.Scan(
 		&u.ID,
 		&u.Username,
+		&u.Email,
 		&u.Avatar,
 		&u.Banner,
 		&u.Description,
 		&u.Usertype,
 		&u.Created,
-		&u.IsFlagged)
+		&u.IsFlagged,
+		&u.SessionToken,
+		&u.CSRFToken,
+		&u.HashedPassword)
 	if err != nil {
 		log.Printf(ErrorMsgs().Query, "GetUserFromId", err)
 		return u, err

@@ -87,15 +87,15 @@ document.addEventListener("DOMContentLoaded", function () {
     cancelButton.addEventListener("click", function (e) {
       block.classList.remove("editing");
 
-      switch (cancelButton.id) {
-        case "cancel-user-name":
+      switch (true) {
+        case cancelButton.id.startsWith("cancel-user-name");
           nameContent.classList.remove("editing");
           nameInput.classList.remove("editing");
           break;
-        case "cancel-user-avatar":
+        case cancelButton.id.startsWith("cancel-user-avatar");
           dragDropImage.classList.remove("editing");
           break;
-        case "cancel-user-bio":
+        case cancelButton.id.startsWith("cancel-user-bio");
           bioContent.classList.remove("editing");
           bioInput.classList.remove("editing");
           break;

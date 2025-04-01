@@ -395,6 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // SECTION ----- functions ------
 export function navigateToChannel(channel) {
   console.time("navchan");
+  debugger;
   const link = channel.getAttribute("data-channel-id");
   if (!link) {
     console.error("Channel ID is missing");
@@ -420,6 +421,7 @@ export function navigateToChannel(channel) {
 
 export function navigateToPost(post) {
   console.time("navpost");
+  debugger;
   const link = post.getAttribute("data-post-id");
   if (!link) {
     console.error("Post ID is missing");
@@ -445,6 +447,7 @@ export function navigateToPost(post) {
 
 export function navigateToAuthor(author) {
   console.time("navauthor");
+  debugger;
   const link = author.getAttribute("data-author-id");
   if (!link) {
     console.error("Author ID is missing");

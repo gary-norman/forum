@@ -48,18 +48,17 @@
         <option id="btn-show-user" value="user-page">user page</option>
         <option id="btn-show-channels" value="channel-page">channels</option>
       </select>
-      <form class="wrapper-search">
-        <search>
-          <label for="search"></label>
-          <input
-            type="text"
-            class="searchbar"
-            id="search"
-            name="search"
-            placeholder="Search"
-          />
+        <search class="wrapper-search">
+          <form>
+            <input
+              type="text"
+              class="searchbar"
+              id="search"
+              name="search"
+              placeholder="Search"
+            />
+          </form>
         </search>
-      </form>
       <div class="flex-align-c">
         <button popovertarget="form-post" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
           <span class="btn-posts">post</span>
@@ -596,7 +595,7 @@
                     </div>
                   </div>
                   <div class="like-button">
-                    <button data-tooltip-name="like" class="btn-icoonly"></button>
+                    <button data-tooltip-name-"like" aria-label="like button class="btn-icoonly"></button>
                   </div>
                 </div>
                 <h4>{{.Title}}</h4>

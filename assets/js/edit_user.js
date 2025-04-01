@@ -88,14 +88,14 @@ document.addEventListener("DOMContentLoaded", function () {
       block.classList.remove("editing");
 
       switch (true) {
-        case cancelButton.id.startsWith("cancel-user-name");
+        case cancelButton.id.startsWith("cancel-user-name"):
           nameContent.classList.remove("editing");
           nameInput.classList.remove("editing");
           break;
-        case cancelButton.id.startsWith("cancel-user-avatar");
+        case cancelButton.id.startsWith("cancel-user-avatar"):
           dragDropImage.classList.remove("editing");
           break;
-        case cancelButton.id.startsWith("cancel-user-bio");
+        case cancelButton.id.startsWith("cancel-user-bio"):
           bioContent.classList.remove("editing");
           bioInput.classList.remove("editing");
           break;
@@ -124,4 +124,3 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
-

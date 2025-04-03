@@ -148,11 +148,12 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 
 	// Prepare the response
 	response := map[string]any{
-		"channel":   thisChannel.Name,
-		"posts":     len(thisChannelPosts),
-		"owned":     isOwned,
-		"ownerName": thisChannelOwnerName,
-		"joined":    isJoined,
+		"code":       http.StatusOK,
+		"channel":    thisChannel.Name,
+		"postsCount": len(thisChannelPosts),
+		"isOwned":    isOwned,
+		"ownerName":  thisChannelOwnerName,
+		"isJoined":   isJoined,
 	}
 
 	// Write the response as JSON

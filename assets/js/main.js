@@ -393,82 +393,52 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // SECTION ----- functions ------
+function fetchAndNavigate(url, page, errorMessage) {
+  fetch(url, { method: "GET" })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.table(data);
+      changePage(page);
+    })
+    .catch((error) => {
+      console.error(errorMessage, error);
+    });
+}
+
 export function navigateToChannel(channel) {
-  console.time("navchan");
-  debugger;
   const link = channel.getAttribute("data-channel-id");
   if (!link) {
     console.error("Channel ID is missing");
     return;
   }
-  fetch(`/channels/${link}`, { method: "GET" })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.table(data);
-      changePage(channelPage);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-  console.timeEnd("navchan");
-  // window.location.href = `/channels/${link}`;
+  fetchAndNavigate(
+    `/channels/${link}`,
+    channelPage,
+    "Error navigating to channel:",
+  );
 }
 
 export function navigateToPost(post) {
-  console.time("navpost");
-  debugger;
   const link = post.getAttribute("data-post-id");
   if (!link) {
     console.error("Post ID is missing");
     return;
   }
-  fetch(`/posts/${link}`, { method: "GET" })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.table(data);
-      changePage(postPage);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-  console.timeEnd("navpost");
-  // window.location.href = `/channels/${link}`;
+  fetchAndNavigate(`/posts/${link}`, postPage, "Error navigating to post:");
 }
 
 export function navigateToAuthor(author) {
-  console.time("navauthor");
-  debugger;
   const link = author.getAttribute("data-author-id");
   if (!link) {
     console.error("Author ID is missing");
     return;
   }
-  fetch(`/users/${link}`, { method: "GET" })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.table(data);
-      changePage(userPage);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-  console.timeEnd("navauthor");
-  // window.location.href = `/channels/${link}`;
+  fetchAndNavigate(`/users/${link}`, userPage, "Error navigating to author:");
 }
 
 // toggleUserInteracted toggles user-interacted class on input fields to prevent label animation before they are selected

@@ -592,7 +592,16 @@ function toggleColorScheme() {
   const newScheme = currentScheme === "light" ? "dark" : "light";
   // Set the new color scheme
   document.documentElement.setAttribute("color-scheme", newScheme);
+  localStorage.setItem("color-scheme", newScheme);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const savedScheme = localStorage.getItem("color-scheme");
+  if (savedScheme) {
+    document.documentElement.setAttribute("color-scheme", savedScheme);
+  }
+});
+
 function toggleDarkMode() {
   const checkbox = document.querySelector("#darkmode-checkbox");
   checkbox.checked = !checkbox.checked;

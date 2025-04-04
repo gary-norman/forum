@@ -9,6 +9,7 @@
     {{ end }}
     {{ $post := .Post }}
     {{ $instance := .Instance }}
+    {{ $isPostPage := .IsPostPage}}
     <div class="container-card-down">
         <div class="card">
             <div class="container-post-info">
@@ -44,8 +45,9 @@
                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
                     <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
                 </button>
+      {{ if (eq $IsPostPage "true") }}
                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                    <span class="btn-reply">{{$post.CommentsCount}}</span>
+                    <span class="btn-reply">reply</span>
                 </button>
                 <button id="share-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{.Instance}}" popovertarget="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{.Instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                     <span class="btn-share">share</span>
@@ -90,6 +92,11 @@
                     </button>
                 </div>
             </form>
+      {{ else }}
+                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                    <span class="btn-reply">{{$post.CommentsCount}}</span>
+                </button>
+      {{ end }}
         </div> <!-- end post card -->
     </div> <!-- end container-comments wrapper -->
 {{end}} <!-- end define block -->

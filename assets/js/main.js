@@ -705,7 +705,7 @@ function confirmPass() {
   regPassRpt.classList.remove("pass-nomatch");
 }
 // showMainNotification changes the element ID to provide feedback to user
-function showMainNotification(message) {
+function showMainNotification(message, timeout = 2500) {
   const notification = document.getElementById("notification-main");
   const notificationContent = document.getElementById(
     "notification-main-content",
@@ -714,7 +714,7 @@ function showMainNotification(message) {
   notification.style.display = "flex";
   setTimeout(() => {
     notification.style.display = "none";
-  }, 2500); // Hide after 3 seconds
+  }, timeout); // Hide after 3 seconds
 }
 // showNotification changes the element ID to provide feedback to user
 function showNotification(elementID, messageOld, messageNew, success) {

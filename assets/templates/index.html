@@ -741,7 +741,7 @@
                     </div>
                     <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
                       {{range .Posts}} <!-- user page activity posts -->
-                      {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Instance" "search-page-activity") }}
+                      {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Instance" "search-page-activity" "IsPostPage" "false") }}
                       {{end}} <!-- user page activity POSTS -->
                     </div>
                     {{/*SECTION ------- activity posts ---------- */}}
@@ -760,7 +760,7 @@
                       {{/*SECTION---------- user page posts ----------*/}}
                       <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                         {{range .Posts}} <!-- user page posts -->
-                        {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser  "Comments" .Comments "Instance" "search-page") }}
+                        {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser  "Comments" .Comments "Instance" "search-page" "IsPostPage" "false") }}
                         {{end}} <!-- user page posts -->
                       </div>
                     </div>
@@ -990,7 +990,7 @@
           </div>
 
 {{/*SECTION ---------- post page ---------- */}}
-          {{ template "post-page" (dict "ThisPost" .ThisPost "CurrentUser" $.CurrentUser ) }}
+          {{ template "post-page" (dict "ThisPost" .ThisPost "CurrentUser" $.CurrentUser "IsPostPage" "true" ) }}
 
 
 {{/*SECTION ---------- user page ---------- */}}
@@ -1086,7 +1086,7 @@
                       </div>
                       <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
                         {{range .Posts}} <!-- user page activity posts -->
-                          {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Instance" "user-page-activity") }}
+                          {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Instance" "user-page-activity" "IsPostPage" "false") }}
                         {{end}} <!-- user page activity POSTS -->
                       </div>
                     {{/*SECTION ------- activity posts ---------- */}}
@@ -1105,7 +1105,7 @@
                       {{/*SECTION---------- user page posts ----------*/}}
                       <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                         {{range .Posts}} <!-- user page posts -->
-                        {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments "Instance" "user-page") }}
+                        {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments "Instance" "user-page" "IsPostPage" "false") }}
                         {{end}} <!-- user page posts -->
                       </div>
                     </div>
@@ -1390,7 +1390,7 @@
                 <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
 {{/*                         TODO range through channel posts */}}
                 {{range .ThisChannelPosts}} <!-- channel page posts -->
-                  {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments "Instance" "channel-page") }}
+                  {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments "Instance" "channel-page" "IsPostPage" "false") }}
                 {{end}} <!-- channel page posts -->
                 </div>
               </div>

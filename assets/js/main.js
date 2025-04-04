@@ -595,6 +595,7 @@ function toggleColorScheme() {
   localStorage.setItem("color-scheme", newScheme);
 }
 
+// Apply persisted color scheme on page load
 document.addEventListener("DOMContentLoaded", () => {
   const savedScheme = localStorage.getItem("color-scheme");
   if (savedScheme) {
@@ -733,7 +734,11 @@ function getCSRFToken() {
   const match = document.cookie
     .split("; ")
     .find((row) => row.startsWith("csrf_token"));
-  return match ? match.substring("csrf_token=".length) : null;
+  if (!match) {
+    console.warn("CSRF token not found in cookies");
+    return null;
+  }
+  return match.substring("csrf_token=".length);
 }
 
 // sendRequest('/protected', 'GET').then((response) => {

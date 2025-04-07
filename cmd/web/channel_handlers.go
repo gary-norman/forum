@@ -71,20 +71,43 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	thisChannel.Joined = isJoined
+
+	members, membershipsErr := app.memberships.GetNumberOfChannelMembers(thisChannel.ID)
+	if membershipsErr != nil {
+		http.Error(w, `{"error": "Error getting channel memberships"}`, http.StatusInternalServerError)
+		return
+	}
+
+	rules, rulesErr := app.rules.AllForChannel(thisChannel.ID)
+	if rulesErr != nil {
+		http.Error(w, `{"error": "Error getting channel rules"}`, http.StatusInternalServerError)
+		return
+	}
+
 	// Prepare JSON response
 	response := map[string]any{
-		"channel":   thisChannel.Name,
-		"id":        thisChannel.ID,
-		"posts":     len(thisChannelPosts),
-		"owned":     isOwned,
-		"ownerName": thisChannelOwnerName,
-		"joined":    isJoined,
-		"privacy":   false,
+		"channel":          thisChannel,
+		"channelPosts":     thisChannelPosts,
+		"channelOwned":     isOwned,
+		"channelOwnerName": thisChannelOwnerName,
+		"channelJoined":    isJoined,
+		"channelMembers":   members,
+		"channelRules":     rules,
 	}
 
 	// Write JSON response
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		http.Error(w, `{"error": "Error encoding response"}`, http.StatusInternalServerError)
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		// Handle error
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(jsonResponse)
+	if err != nil {
+		return
 	}
 }
 

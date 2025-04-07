@@ -507,7 +507,7 @@
               </div>
               <div id="sidebar-channel-block">
                 {{ range .OwnedAndJoinedChannels }}
-                <div class="sidebar-channel" data-channel-desc="{{ .Description }}" data-channel-id="{{ .ID }}">
+                <div class="sidebar-channel" data-channelDesc="{{ .Description }}" data-channelId="{{ .ID }}">
                   <div class="container-channel-info">
                     {{ if (ne .Avatar "noimage") }}
                     <span class="card-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .Avatar }}"></span>
@@ -1334,17 +1334,191 @@
           </div>
           </div>
 
-{{/*SECTION ---------- channel page ----------*/}}
-          <div id="channel-page" class="feeds-wrapper">
+{{/*SECTION ---------- channel page using GO server rendering (for initial load)----------*/}}
+{{/*          <div id="channel-page" class="feeds-wrapper">*/}}
+{{/*            <div class="banner">*/}}
+{{/*              <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">*/}}
+{{/*              <div class="page-control">*/}}
+{{/*                <div class="page-profile">*/}}
+{{/*                  {{ if (ne .ThisChannel.Avatar "noimage") }}*/}}
+{{/*                    <div class="sidebar-pic profile-pic" data-image-user="{{ $channelBasePath }}{{ .ThisChannel.Avatar }}"></div>*/}}
+{{/*                  {{ else }}*/}}
+{{/*                    <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}"></div>*/}}
+{{/*                  {{ end }}*/}}
+{{/*                  <div class="flex-start">*/}}
+{{/*                    <h2 {{ if (eq .ThisChannel.Privacy true) }} class="private-channel align-self-start"{{ end }}>/{{ .ThisChannel.Name }}</h2>*/}}
+{{/*                    <div>*/}}
+{{/*                      <button class="btn-md btn-icotext btn-follows btn-invert-never">*/}}
+{{/*                        <span class="btn-channel-users">13.8k</span>*/}}
+{{/*                      </button>*/}}
+{{/*                      <button class="btn-md btn-icotext btn-follows btn-invert-never" style="position: relative">*/}}
+{{/*                        <span class="btn-channel-green-dot">37</span>*/}}
+{{/*                      </button>*/}}
+{{/*                    </div>*/}}
+{{/*                  </div>*/}}
+{{/*                </div>*/}}
+{{/*                <div class="page-buttons">*/}}
+{{/*                  {{ if (eq .ThisChannelIsOwnedOrJoined false) }}*/}}
+{{/*                    <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">*/}}
+{{/*                      <span class="btn-posts">join</span>*/}}
+{{/*                    </button>*/}}
+{{/*                  {{ end }}*/}}
+{{/*                  <div class="user-following"></div>*/}}
+{{/*                  <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">*/}}
+{{/*                    <img src="/assets/icons/share_16.svg" alt="share button">*/}}
+{{/*                  </button>*/}}
+{{/*                  {{ if (eq .ThisChannelIsOwnedOrJoined false) }}*/}}
+{{/*                    <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">*/}}
+{{/*                      <img src="/assets/icons/heart-empty_24.svg" alt="like button">*/}}
+{{/*                    </button>*/}}
+{{/*                  {{ end }}*/}}
+{{/*                </div>*/}}
+{{/*              </div>*/}}
+{{/*            </div>*/}}
+{{/*            <div class="container-content">*/}}
+{{/*              <div class="content">*/}}
+{{/*                <div class="filters-row button-row">*/}}
+{{/*                  <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
+{{/*                    <span class="btn-sort">sort</span>*/}}
+{{/*                  </button>*/}}
+{{/*                  <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
+{{/*                    <span class="btn-filters">filters</span>*/}}
+{{/*                  </button>*/}}
+{{/*                </div>*/}}
+{{/*                */}}{{/*SECTION ---------- channel page feed ---------- */}}
+{{/*                <div id="wrapper-channel-feed" style="position: absolute; width: 100%; height: 100%">*/}}
+{{/*                  <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">*/}}
+{{/*                    */}}{{/*                         TODO range through channel posts */}}
+{{/*                    {{range .ThisChannelPosts}} <!-- channel page posts -->*/}}
+{{/*                    {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments "Instance" "channel-page") }}*/}}
+{{/*                    {{end}} <!-- channel page posts -->*/}}
+{{/*                  </div>*/}}
+{{/*                </div>*/}}
+{{/*              </div>*/}}
+{{/*              */}}{{/*SECTION ------------ user right panel ------------ */}}
+{{/*              <div class="right-panel ">*/}}
+{{/*                <div class="right-panel-content scroll-down">*/}}
+{{/*                  <div class="right-panel-container-name flex-space-between">*/}}
+{{/*                    <div class="cont-flex-column">*/}}
+{{/*                      <h4 class="right-panel-name">/{{ .ThisChannel.Name }}</h4>*/}}
+{{/*                      <small>created by {{ if (eq .ThisChannel.OwnerID $user.ID) }}you {{ else }} {{ .ThisChannelOwnerName }} {{ end }}{{ .ThisChannel.TimeSince}}</small>*/}}
+{{/*                    </div>*/}}
+{{/*                    {{ if (eq .ThisChannelIsOwnedOrJoined true) }}*/}}
+{{/*                      <button id="right-panel-channel--edit-channel-name" class="btn-sm btn-icoonly">*/}}
+{{/*                        <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>*/}}
+{{/*                      </button>*/}}
+{{/*                    {{ end }}*/}}
+{{/*                  </div>*/}}
+{{/*                  */}}{{/*SECTION ----------- edit channel image ----------- */}}
+{{/*                  {{ if (eq .ThisChannelIsOwnedOrJoined true) }}*/}}
+{{/*                    <div class="right-panel-container-pic flex-space-between">*/}}
+{{/*                      <div class="right-panel-container-pic">*/}}
+{{/*                        {{ if (ne .ThisChannel.Avatar "noimage") }}*/}}
+{{/*                          <div class="right-panel-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .ThisChannel.Avatar}}"></div>*/}}
+{{/*                        {{ else }}*/}}
+{{/*                          <div class="right-panel-pic profile-pic--empty" data-name-channel="{{ .ThisChannel.Name }}"></div>*/}}
+{{/*                        {{ end }}*/}}
+{{/*                        <small>Edit channel picture</small>*/}}
+{{/*                      </div>*/}}
+{{/*                      <button id="right-panel-channel--edit-channel-picture" class="btn-sm btn-icoonly">*/}}
+{{/*                        <span class="btn-edit" role="contentinfo" aria-label="Edit channel picture"></span>*/}}
+{{/*                      </button>*/}}
+{{/*                    </div>*/}}
+{{/*                  {{ end }}*/}}
+{{/*                  <div class="right-panel-container-bio ">*/}}
+{{/*                    */}}{{/*SECTION ----------- edit channel bio ----------- */}}
+{{/*                    {{ if (eq .ThisChannelIsOwnedOrJoined true) }}*/}}
+{{/*                      <div class="right-panel-bio flex-space-between">*/}}
+{{/*                        <label for="channel-bio-content" class="padded">Edit channel bio</label>*/}}
+{{/*                        <button id="right-panel-channel--edit-channel-bio" class="btn-sm btn-icoonly">*/}}
+{{/*                          <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>*/}}
+{{/*                        </button>*/}}
+{{/*                      </div>*/}}
+{{/*                    {{ end }}*/}}
+{{/*                    <div class="side-panel-block">*/}}
+{{/*                      <article>{{ .ThisChannel.Description }}</article>*/}}
+{{/*                    </div>*/}}
+{{/*                    <textarea id="channel-bio-content" class="inactive-input" name="content" style="display: none">{{ .ThisChannel.Description }}</textarea>*/}}
+{{/*                  </div>*/}}
+{{/*                  <div class="right-panel-container-moderators">*/}}
+{{/*                    <div class="sidebar-block sidebar-channels">*/}}
+{{/*                      */}}{{/*SECTION ----------- edit channel mods ----------- */}}
+{{/*                      {{ if (eq .ThisChannelIsOwnedOrJoined true) }}*/}}
+{{/*                        <div class="right-panel-bio flex-space-between">*/}}
+{{/*                          <label for="channel-bio-content" class="padded">Edit moderators</label>*/}}
+{{/*                          <button id="right-panel-channel--edit-channel-mods" class="btn-sm btn-icoonly">*/}}
+{{/*                            <span class="btn-edit" role="contentinfo" aria-label="Edit channel moderators"></span>*/}}
+{{/*                          </button>*/}}
+{{/*                        </div>*/}}
+{{/*                      {{ else }}*/}}
+{{/*                        <small class="padded">Moderators</small>*/}}
+{{/*                      {{ end }}*/}}
+{{/*                      <div class="side-panel-block">*/}}
+{{/*                        */}}{{/*                                     TODO range through moderators*/}}
+{{/*                        <div class="sidebar-channel">*/}}
+{{/*                          <div class="container-channel-info">*/}}
+{{/*                            <span class="card-pic mod-pic"></span>*/}}
+{{/*                            <div>*/}}
+{{/*                              <div>Other_one55</div>*/}}
+{{/*                            </div>*/}}
+{{/*                            <button class="btn-sm btn-icoonly margin-auto-0">*/}}
+{{/*                              <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>*/}}
+{{/*                            </button>*/}}
+{{/*                          </div>*/}}
+{{/*                        </div>*/}}
+{{/*                      </div>*/}}
+{{/*                    </div>*/}}
+{{/*                  </div>*/}}
+{{/*                  <div id="right-panel-container-rules">*/}}
+{{/*                    */}}{{/*SECTION ----------- edit channel rules ----------- */}}
+{{/*                    {{ if (eq .ThisChannelIsOwnedOrJoined true) }}*/}}
+{{/*                      <div class="right-panel-bio flex-space-between ">*/}}
+{{/*                        <label class="padded" for="rules-content">Edit channel rules</label>*/}}
+{{/*                        <button popovertarget="form-edit-channel-rules" id="right-panel-channel--edit-channel-rules" class="btn-sm btn-icoonly">*/}}
+{{/*                          <span class="btn-edit" role="contentinfo" aria-label="Edit channel rules"></span>*/}}
+{{/*                        </button>*/}}
+{{/*                      </div>*/}}
+{{/*                    {{ else }}*/}}
+{{/*                      <div class="right-panel-bio flex-space-between ">*/}}
+{{/*                        <label class="padded" for="rules-content">Channel rules</label>*/}}
+{{/*                      </div>*/}}
+{{/*                    {{ end }}*/}}
+{{/*                    <div class="side-panel-block">*/}}
+{{/*                      <ul class="sidebar-channel-ul">*/}}
+{{/*                        {{ range .ThisChannelRules}}*/}}
+{{/*                          <li>{{ .Rule }}</li>*/}}
+{{/*                        {{ end }}*/}}
+{{/*                      </ul>*/}}
+{{/*                      <textarea id="rules-content" class="inactive-input" name="content" style="display: none">Placeholder text... Placeholder text...</textarea>*/}}
+{{/*                    </div>*/}}
+{{/*                  </div>*/}}
+{{/*                  <div class="button-row-wrap">*/}}
+{{/*                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
+{{/*                      <span class="btn-share">share</span>*/}}
+{{/*                    </button>*/}}
+{{/*                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
+{{/*                      <span class="btn-mute">mute</span>*/}}
+{{/*                    </button>*/}}
+{{/*                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
+{{/*                      <span class="btn-report">report</span>*/}}
+{{/*                    </button>*/}}
+{{/*                  </div>*/}}
+{{/*                </div>*/}}
+{{/*              </div>*/}}
+{{/*            </div>*/}}
+{{/*          </div>      */}}
+
+{{/*SECTION ---------- channel page using AJAX ----------*/}}
+          <div id="channel-page" data-channel-base-path="{{ $channelBasePath }}" class="feeds-wrapper" >
         <div class="banner">
           <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
             <div class="page-control">
               <div class="page-profile">
-                {{ if (ne .ThisChannel.Avatar "noimage") }}
-                <div class="sidebar-pic profile-pic" data-image-user="{{ $channelBasePath }}{{ .ThisChannel.Avatar }}"></div>
+                {{ if (ne .ThisChannel.Avatar "noimage")}}
+                  <div class="sidebar-pic profile-pic" data-image-user="{{ $channelBasePath }}{{ .ThisChannel.Avatar }}"></div>
                 {{ else }}
-                <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}"></div>
-                {{ end }}
+                  <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}"></div>
+                  {{ end }}
                 <div class="flex-start">
                   <h2 {{ if (eq .ThisChannel.Privacy true) }} class="private-channel align-self-start"{{ end }}>/{{ .ThisChannel.Name }}</h2>
                   <div>

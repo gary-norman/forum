@@ -396,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
 export function navigateToChannel(channel) {
   console.time("navchan");
 
-  const channelId = channel.getAttribute("data-channel-id");
+  const channelId = channel.dataset.channelid;
   if (!channelId) {
     console.error("Channel ID is missing");
     return;
@@ -410,7 +410,7 @@ export function navigateToChannel(channel) {
         return response.json();
       })
       .then(data => {
-        console.log("Fetched Channel Data:", data); // ✅ Debugging log
+        changePage(channelPage);
         updateChannelUI(data);
       })
       .catch(error => {
@@ -426,104 +426,84 @@ function updateChannelUI(data) {
     return;
   }
 
-  // Debugging: Check which properties exist
-  console.log("Channel Properties:", Object.keys(data));
+  // Accessing all required properties
+  const channelID = data.channel.id;
+  const channelName = data.channel.name || "Unnamed Channel";
+  const isOwned = data.channelOwned;
+  const ownerName = data.channelOwnerName;
+  const ownerID = data.channel.ownerId
+  const isJoined = data.channelJoined;
+  const channelPosts = data.channelPosts;
+  const avatar = data.channel.avatar || null;
+  const banner = data.channel.banner || null;
+  const description = data.channel.description || "No description available.";
+  const created = data.channel.created
+  const membersCount = data.channelMembers || "0";
+  const isMuted = !!data.channel.isMuted;
+  const isFlagged = !!data.channel.isFlagged;
+  const isPrivate = !!data.channel.privacy;
+  const rulesArray = Array.isArray(data.channelRules) ? data.channelRules : [];
 
-  // ✅ Safely accessing properties (avoiding undefined errors)
-  const channelName = data.name || "Unnamed Channel";
-  const isPrivate = !!data.privacy; // Ensure it's a boolean
-  const ownerName = data.owned ? "you" : data.ownerName || "Unknown Owner";
-  const avatarUrl = data.avatar && data.avatar !== "noimage" ? data.avatar : null;
-  const bannerUrl = data.banner || "/assets/images/user-banner.jpeg";
-  const descriptionText = data.description || "No description available.";
-  const membersCount = data.members || "0";
-  const onlineCount = data.onlineMembers || "0";
-  const isMuted = !!data.isMuted;
-  const isFlagged = !!data.isFlagged;
-  const rulesArray = Array.isArray(data.rules) ? data.rules : [];
+  console.log("JSON response:" +
+      "\nchannelID: ", channelID,
+      "\nchannelName: ", channelName,
+      "\nisOwned ", isOwned,
+      "\nownerName: ", ownerName,
+      "\nownerID: ", ownerID,
+      "\nisJoined: ", isJoined,
+      "\nchannelPosts: ", channelPosts,
+      "\navatar: ", avatar,
+      "\nbanner: ", banner,
+      "\ndescription: ", description,
+      "\ncreated: ", created,
+      "\nmembersCount: ", membersCount,
+      "\nisMuted: ", isMuted,
+      "\nisFlagged: ", isFlagged,
+      "\nisPrivate: ", isPrivate,
+      "\nrulesArray: ", rulesArray)
 
-  // ✅ Update channel name & privacy status
-  const channelTitle = document.querySelector(".flex-start h2");
-  if (channelTitle) {
-    channelTitle.textContent = `/${channelName}`;
-    channelTitle.classList.toggle("private-channel", isPrivate);
-  }
 
-  // ✅ Update owner information
-  const ownerInfo = document.querySelector(".right-panel-container-name small");
-  if (ownerInfo) {
-    ownerInfo.textContent = `created by ${ownerName} ${data.timeSince || ""}`;
-  }
+  const channelPlaceholder = document.getElementById('channel-page');
+  const channelBasePath = channelPlaceholder.getAttribute("data-channel-base-path");
+  let avatarData;
+  const profilePicElement = channelPlaceholder.querySelector(".profile-pic");
+  const profilePicEmptyElement = channelPlaceholder.querySelector(".profile-pic--empty");
 
-  // ✅ Update avatar
-  const avatarDiv = document.querySelector(".right-panel-pic.profile-pic");
-  if (avatarDiv) {
-    if (avatarUrl) {
-      avatarDiv.style.backgroundImage = `url(${avatarUrl})`;
-      avatarDiv.classList.remove("profile-pic--empty");
-    } else {
-      avatarDiv.style.backgroundImage = "none";
-      avatarDiv.classList.add("profile-pic--empty");
-      avatarDiv.setAttribute("data-name-channel", channelName);
+  if (profilePicElement) {
+    avatarData = profilePicElement.dataset.imageChannel;
+    console.log("Using channel avatar data")
+    if (data.channel.avatar !== avatarData) {
+      // Update the data-avatar attribute if it changed from the json response.
+      channelPlaceholder.querySelector(".sidebar-pic").textContent = channelBasePath + data.channel.avatar;
     }
+  } else if (profilePicEmptyElement) {
+    channelPlaceholder.querySelector(".sidebar-pic").textContent = "";
   }
 
-  // ✅ Update banner image
-  const bannerImg = document.querySelector(".page-banner");
-  if (bannerImg) {
-    bannerImg.src = bannerUrl;
+  const name = channelPlaceholder.dataset.channelName;
+
+
+  // SECTION Channel Banner
+  // Modify existing values based on the JSON response
+
+
+  if (data.channel.name !== name) {
+    // Update the data-name attribute if it changed from the json response.
+    channelPlaceholder.querySelector("h2").textContent = data.channel.name;
   }
 
-  // ✅ Update description
-  const descriptionArticle = document.querySelector(".side-panel-block article");
-  if (descriptionArticle) {
-    descriptionArticle.textContent = descriptionText;
+  // Example: Update the html based on the json response.
+  if (data.channel.avatar !== "noimage") {
+    // Update the existing div.
+    channelPlaceholder.dataset.imageUser = `{{channelBasePath}}{data.channel.avatar}`;
+  } else {
+    // Update the existing div.
+    channelPlaceholder.innerHTML = `<div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="${data.channel.Name}"></div>`;
   }
 
-  // ✅ Update rules
-  const rulesList = document.querySelector(".sidebar-channel-ul");
-  if (rulesList) {
-    rulesList.innerHTML = ""; // Clear existing rules
-    if (rulesArray.length > 0) {
-      rulesArray.forEach(rule => {
-        const li = document.createElement("li");
-        li.textContent = rule;
-        rulesList.appendChild(li);
-      });
-    } else {
-      rulesList.innerHTML = "<li>No rules specified.</li>";
-    }
-  }
 
-  // ✅ Update join/mute/report button states
-  const joinButton = document.querySelector(".btn-join-channel");
-  if (joinButton) {
-    joinButton.style.display = data.joined ? "none" : "inline-block";
-  }
-
-  const muteButton = document.querySelector(".btn-mute");
-  if (muteButton) {
-    muteButton.textContent = isMuted ? "unmute" : "mute";
-  }
-
-  const reportButton = document.querySelector(".btn-report");
-  if (reportButton) {
-    reportButton.textContent = isFlagged ? "flagged" : "report";
-  }
-
-  // ✅ Update user counts
-  const channelUsers = document.querySelector(".btn-channel-users");
-  if (channelUsers) {
-    channelUsers.textContent = membersCount;
-  }
-
-  const onlineUsers = document.querySelector(".btn-channel-green-dot");
-  if (onlineUsers) {
-    onlineUsers.textContent = onlineCount;
-  }
-
-  // ✅ Update URL without reloading
-  window.history.pushState({}, "", `/channels/${data.id}`);
+  // Update URL without reloading
+  window.history.pushState({}, "", `/channels/${channelID}`);
 }
 
 

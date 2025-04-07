@@ -139,5 +139,6 @@ func (m *RuleModel) AllForChannel(channelId int) ([]models.Rule, error) {
 			Rules = append(Rules, r)
 		}
 	}
+
 	return Rules, nil
 }

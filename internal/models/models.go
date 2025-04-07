@@ -68,6 +68,14 @@ type Channel struct {
 	IsFlagged        bool `json:"isFlagged,omitempty"`
 }
 
+type ChannelResponse struct {
+	Channel          Channel `json:"channel"`
+	ChannelPosts     []Post  `json:"channelPosts"`
+	ChannelOwned     bool    `json:"channelOwned"`
+	ChannelOwnerName string  `json:"channelOwnerName"`
+	ChannelJoined    bool    `json:"channelJoined"`
+}
+
 func (c *Channel) UpdateTimeSince() {
 	c.TimeSince = getTimeSince(c.Created)
 }

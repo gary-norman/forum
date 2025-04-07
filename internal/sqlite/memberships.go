@@ -17,6 +17,20 @@ func (m *MembershipModel) Insert(userID, channelID int) error {
 	return err
 }
 
+func (m *MembershipModel) GetNumberOfChannelMembers(channelID int) (int, error) {
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Checking number of memberships for ChannelID", channelID)
+	stmt := "SELECT COUNT(*) FROM Memberships WHERE ChannelID = ?"
+	row := m.DB.QueryRow(stmt, channelID) // Use QueryRow
+
+	var count int
+	err := row.Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
 func (m *MembershipModel) UserMemberships(userID int) ([]models.Membership, error) {
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Checking memberships for UserID", userID)
 	stmt := "SELECT ID, UserID, ChannelID, Created FROM Memberships WHERE UserID = ?"

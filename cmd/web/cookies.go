@@ -25,18 +25,27 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 		Value:    sessionToken,
 		Expires:  expires,
 		HttpOnly: true,
+		// INFO added for HTTPS functionality
+		Secure:   true,                    // Ensure cookie is sent over HTTPS only
+		SameSite: http.SameSiteStrictMode, // Add SameSite attribute
 	})
 	http.SetCookie(w, &http.Cookie{
 		Name:     "username",
 		Value:    user.Username,
 		Expires:  expires,
 		HttpOnly: true,
+		// INFO added for HTTPS functionality
+		Secure:   true,                    // Ensure cookie is sent over HTTPS only
+		SameSite: http.SameSiteStrictMode, // Add SameSite attribute
 	})
 	http.SetCookie(w, &http.Cookie{
 		Name:     "csrf_token",
 		Value:    csrfToken,
 		Expires:  expires,
 		HttpOnly: false,
+		// INFO added for HTTPS functionality
+		Secure:   true,                    // Ensure cookie is sent over HTTPS only
+		SameSite: http.SameSiteStrictMode, // Add SameSite attribute
 	})
 	// Store tokens in the database
 	err := m.UpdateCookies(user, sessionToken, csrfToken)
@@ -161,18 +170,27 @@ func (m *CookieModel) DeleteCookies(w http.ResponseWriter, user *models.User) er
 		Value:    "",
 		Expires:  expires,
 		HttpOnly: true,
+		// INFO added for HTTPS functionality
+		Secure:   true,
+		SameSite: http.SameSiteStrictMode,
 	})
 	http.SetCookie(w, &http.Cookie{
 		Name:     "username",
 		Value:    "",
 		Expires:  expires,
 		HttpOnly: true,
+		// INFO added for HTTPS functionality
+		Secure:   true,
+		SameSite: http.SameSiteStrictMode,
 	})
 	http.SetCookie(w, &http.Cookie{
 		Name:     "csrf_token",
 		Value:    "",
 		Expires:  expires,
 		HttpOnly: false,
+		// INFO added for HTTPS functionality
+		Secure:   true,
+		SameSite: http.SameSiteStrictMode,
 	})
 	return err
 }

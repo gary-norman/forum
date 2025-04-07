@@ -1,0 +1,4 @@
+codex.local {
+    reverse_proxy localhost:8989  # Your Go app running locally on port 8989
+    tls kamilornal@gmail.com     # Use Let's Encrypt for automatic TLS/SSL certs
+}

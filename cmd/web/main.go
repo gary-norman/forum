@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -161,11 +160,12 @@ func main() {
 	go func() {
 		// Log server listening messages
 		log.Printf(ErrorMsgs().KeyValuePair, "Starting server on port", port)
-		address := "http://localhost" + addr
+		address := "https://localhost" + addr
 		log.Printf(ErrorMsgs().ConnSuccess, address)
-		if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-			fmt.Printf(ErrorMsgs().ConnInit, srv.Addr, "srv.ListenAndServe")
-			log.Fatalf("HTTP server error: %v", err)
+		// Use ListenAndServeTLS for HTTPS
+		log.Println("Starting HTTPS server on :8989 with manual certs")
+		if err := srv.ListenAndServeTLS("cmd/certs/server.crt", "cmd/certs/server.key"); err != nil {
+			log.Fatalf("HTTPS server error: %v", err)
 		}
 		log.Printf(Colors().Green + "Stopped serving new connections." + Colors().Reset)
 	}()

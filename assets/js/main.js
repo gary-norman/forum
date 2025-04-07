@@ -395,29 +395,139 @@ document.addEventListener("DOMContentLoaded", () => {
 // SECTION ----- functions ------
 export function navigateToChannel(channel) {
   console.time("navchan");
-  debugger;
-  const link = channel.getAttribute("data-channel-id");
-  if (!link) {
+
+  const channelId = channel.getAttribute("data-channel-id");
+  if (!channelId) {
     console.error("Channel ID is missing");
     return;
   }
-  fetch(`/channels/${link}`, { method: "GET" })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.table(data);
-      changePage(channelPage);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+
+  fetch(`/channels/${channelId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Fetched Channel Data:", data); // ✅ Debugging log
+        updateChannelUI(data);
+      })
+      .catch(error => {
+        console.error("Error fetching channel:", error);
+      });
+
   console.timeEnd("navchan");
-  // window.location.href = `/channels/${link}`;
 }
+
+function updateChannelUI(data) {
+  if (!data || typeof data !== "object") {
+    console.error("Invalid channel data received:", data);
+    return;
+  }
+
+  // Debugging: Check which properties exist
+  console.log("Channel Properties:", Object.keys(data));
+
+  // ✅ Safely accessing properties (avoiding undefined errors)
+  const channelName = data.name || "Unnamed Channel";
+  const isPrivate = !!data.privacy; // Ensure it's a boolean
+  const ownerName = data.owned ? "you" : data.ownerName || "Unknown Owner";
+  const avatarUrl = data.avatar && data.avatar !== "noimage" ? data.avatar : null;
+  const bannerUrl = data.banner || "/assets/images/user-banner.jpeg";
+  const descriptionText = data.description || "No description available.";
+  const membersCount = data.members || "0";
+  const onlineCount = data.onlineMembers || "0";
+  const isMuted = !!data.isMuted;
+  const isFlagged = !!data.isFlagged;
+  const rulesArray = Array.isArray(data.rules) ? data.rules : [];
+
+  // ✅ Update channel name & privacy status
+  const channelTitle = document.querySelector(".flex-start h2");
+  if (channelTitle) {
+    channelTitle.textContent = `/${channelName}`;
+    channelTitle.classList.toggle("private-channel", isPrivate);
+  }
+
+  // ✅ Update owner information
+  const ownerInfo = document.querySelector(".right-panel-container-name small");
+  if (ownerInfo) {
+    ownerInfo.textContent = `created by ${ownerName} ${data.timeSince || ""}`;
+  }
+
+  // ✅ Update avatar
+  const avatarDiv = document.querySelector(".right-panel-pic.profile-pic");
+  if (avatarDiv) {
+    if (avatarUrl) {
+      avatarDiv.style.backgroundImage = `url(${avatarUrl})`;
+      avatarDiv.classList.remove("profile-pic--empty");
+    } else {
+      avatarDiv.style.backgroundImage = "none";
+      avatarDiv.classList.add("profile-pic--empty");
+      avatarDiv.setAttribute("data-name-channel", channelName);
+    }
+  }
+
+  // ✅ Update banner image
+  const bannerImg = document.querySelector(".page-banner");
+  if (bannerImg) {
+    bannerImg.src = bannerUrl;
+  }
+
+  // ✅ Update description
+  const descriptionArticle = document.querySelector(".side-panel-block article");
+  if (descriptionArticle) {
+    descriptionArticle.textContent = descriptionText;
+  }
+
+  // ✅ Update rules
+  const rulesList = document.querySelector(".sidebar-channel-ul");
+  if (rulesList) {
+    rulesList.innerHTML = ""; // Clear existing rules
+    if (rulesArray.length > 0) {
+      rulesArray.forEach(rule => {
+        const li = document.createElement("li");
+        li.textContent = rule;
+        rulesList.appendChild(li);
+      });
+    } else {
+      rulesList.innerHTML = "<li>No rules specified.</li>";
+    }
+  }
+
+  // ✅ Update join/mute/report button states
+  const joinButton = document.querySelector(".btn-join-channel");
+  if (joinButton) {
+    joinButton.style.display = data.joined ? "none" : "inline-block";
+  }
+
+  const muteButton = document.querySelector(".btn-mute");
+  if (muteButton) {
+    muteButton.textContent = isMuted ? "unmute" : "mute";
+  }
+
+  const reportButton = document.querySelector(".btn-report");
+  if (reportButton) {
+    reportButton.textContent = isFlagged ? "flagged" : "report";
+  }
+
+  // ✅ Update user counts
+  const channelUsers = document.querySelector(".btn-channel-users");
+  if (channelUsers) {
+    channelUsers.textContent = membersCount;
+  }
+
+  const onlineUsers = document.querySelector(".btn-channel-green-dot");
+  if (onlineUsers) {
+    onlineUsers.textContent = onlineCount;
+  }
+
+  // ✅ Update URL without reloading
+  window.history.pushState({}, "", `/channels/${data.id}`);
+}
+
+
+
 
 export function navigateToPost(post) {
   console.time("navpost");

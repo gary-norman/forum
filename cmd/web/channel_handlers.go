@@ -35,19 +35,11 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	thisChannel := foundChannels[0]
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Fetching channel", thisChannel.Name)
 
 	// Fetch the channel owner
 	thisChannelOwnerName, ownerErr := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")
 	if ownerErr != nil {
 		http.Error(w, `{"error": "Error getting channel owner"}`, http.StatusInternalServerError)
-		return
-	}
-
-	// Fetch channel rules
-	thisChannelRules, err := app.rules.AllForChannel(thisChannel.ID)
-	if err != nil {
-		http.Error(w, `{"error": "Error getting channel rules"}`, http.StatusInternalServerError)
 		return
 	}
 
@@ -63,99 +55,34 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	for p := range thisChannelPosts {
-		models.UpdateTimeSince(&thisChannelPosts[p])
-	}
-
-	allChannels, err := app.channels.All()
-	if err != nil {
-		http.Error(w, `{"error": "Error getting all channels"}`, http.StatusInternalServerError)
-	}
-	for c := range allChannels {
-		models.UpdateTimeSince(&allChannels[c])
-	}
-
-	for p := range thisChannelPosts {
-		channelIDs, err := app.channels.GetChannelIdFromPost(thisChannelPosts[p].ID)
-		if err != nil {
-			http.Error(w, `{"error": "Error getting channel ID from post"}`, http.StatusInternalServerError)
-		}
-		thisChannelPosts[p].ChannelID = channelIDs[0]
-	}
-
-	for p := range thisChannelPosts {
-		for _, channel := range allChannels {
-			if channel.ID == thisChannelPosts[p].ChannelID {
-				thisChannelPosts[p].ChannelName = channel.Name
-			}
-		}
-	}
-	// Retrieve total likes and dislikes for each Channel post
-	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
-	thisChannelPosts, err = app.getPostsComments(thisChannelPosts)
-	if err != nil {
-		http.Error(w, `{"error": "Error getting comments" }`, http.StatusInternalServerError)
-	}
-
-	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
+	isOwned := userLoggedIn && currentUser.ID == thisChannel.OwnerID
 	isJoined := false
-	isOwned := false
-	isJoinedOrOwned := false
 
+	// Check if the user has joined the channel
 	if userLoggedIn {
-		isOwned = currentUser.ID == thisChannel.OwnerID
-		// attach following/follower numbers to currently logged-in user
-		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
-		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
-			http.Error(w, `{"error": "Error getting user loyalty"}`, http.StatusInternalServerError)
-		}
-		// get owned and joined channels of current user
-		memberships, memberErr := app.memberships.UserMemberships(currentUser.ID)
-		if memberErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
-			http.Error(w, `{"error": "Error getting user memberships"}`, http.StatusInternalServerError)
-		}
-		ownedChannels, err = app.channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
-		if err != nil {
-			log.Printf(ErrorMsgs().Query, "user owned channels", err)
-			http.Error(w, `{"error": "Error getting user owned channels"}`, http.StatusInternalServerError)
-		}
-		joinedChannels, err = app.JoinedByCurrentUser(memberships)
-		if err != nil {
-			log.Printf(ErrorMsgs().Query, "user joined channels", err)
-			http.Error(w, `{"error": "Error getting user joined channels"}`, http.StatusInternalServerError)
-		}
-		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
-		for _, channel := range joinedChannels {
-			if thisChannel.ID == channel.ID {
-				isJoined = true
-				break
+		memberships, err := app.memberships.UserMemberships(currentUser.ID)
+		if err == nil {
+			for _, channel := range memberships {
+				if channel.ID == thisChannel.ID {
+					isJoined = true
+					break
+				}
 			}
 		}
-		isJoinedOrOwned = isOwned || isJoined
 	}
 
-	TemplateData.ThisChannel = thisChannel
-	TemplateData.ThisChannelOwnerName = thisChannelOwnerName
-	TemplateData.ThisChannelRules = thisChannelRules
-	TemplateData.ThisChannelPosts = thisChannelPosts
-	TemplateData.ThisChannelIsOwned = isOwned
-	TemplateData.OwnedAndJoinedChannels = ownedAndJoinedChannels
-	TemplateData.ThisChannelIsOwnedOrJoined = isJoinedOrOwned
-
-	fmt.Printf(ErrorMsgs().KeyValuePair, "TemplateData.ThisChannel", TemplateData.ThisChannel.Name)
-
-	// Prepare the response
+	// Prepare JSON response
 	response := map[string]any{
 		"channel":   thisChannel.Name,
+		"id":        thisChannel.ID,
 		"posts":     len(thisChannelPosts),
 		"owned":     isOwned,
 		"ownerName": thisChannelOwnerName,
 		"joined":    isJoined,
+		"privacy":   false,
 	}
 
-	// Write the response as JSON
+	// Write JSON response
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		http.Error(w, `{"error": "Error encoding response"}`, http.StatusInternalServerError)
 	}

@@ -85,6 +85,8 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO check if the currently logged-in user is a member of the channel and if the channel is private. Do not pass response if the user isn't a member and it's private. Security!
+
 	// Prepare JSON response
 	response := map[string]any{
 		"channel":          thisChannel,

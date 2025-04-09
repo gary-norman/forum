@@ -4,21 +4,31 @@
 
 ###### Was the post created successfully?
 
+pass!
+
 ##### Try creating a post with a JPEG image.
 
 ###### Was the post created successfully?
+
+pass!
 
 ##### Try creating a post with a GIF image.
 
 ###### Was the post created successfully?
 
+pass!
+
 ##### Try to create a post with an image larger than 20mb at your choice.
 
 ###### Were you warned that this was not possible?
 
+pass!
+
 ##### Try navigating through the site and come back to one of the created posts.
 
 ###### Can you still see the image associated to that post?
+
+pass!
 
 ###### As an auditor, is this project up to every standard? If not, why are you failing the project?(Empty Work, Incomplete Work, Invalid compilation, Cheating, Crashing, Leaks)
 

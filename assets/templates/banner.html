@@ -1,0 +1,73 @@
+{{ define "banner"}}
+
+{{/*
+component banner
+page type
+    channel
+    user
+banner-image
+base path
+privacy
+user/channelInfo component (left/right)
+
+
+
+
+component userInfo
+name
+avatar
+following counter
+followers counter
+isFollowed
+isSaved
+
+component channelInfo
+name
+avatar
+members counter
+online counter
+isJoined
+type - "header-sidebar", "header-main", "list-item"
+isSaved
+
+*/}}
+    <div class="banner">
+        <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
+        <div class="page-control">
+            <div class="page-profile">
+                {{ if (ne .ThisChannel.Avatar "noimage")}}
+                    <div class="sidebar-pic profile-pic" data-image-user="{{ $channelBasePath }}{{ .ThisChannel.Avatar }}"></div>
+                {{ else }}
+                    <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}"></div>
+                {{ end }}
+                <div class="flex-start">
+                    <h2 {{ if (eq .ThisChannel.Privacy true) }} class="private-channel align-self-start"{{ end }}>/{{ .ThisChannel.Name }}</h2>
+                    <div>
+                        <button class="btn-md btn-icotext btn-follows btn-invert-never">
+                            <span class="btn-channel-users">13.8k</span>
+                        </button>
+                        <button class="btn-md btn-icotext btn-follows btn-invert-never" style="position: relative">
+                            <span class="btn-channel-green-dot">37</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="page-buttons">
+                {{ if (eq .ThisChannelIsOwnedOrJoined false) }}
+                    <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+                        <span class="btn-posts">join</span>
+                    </button>
+                {{ end }}
+                <div class="user-following"></div>
+                <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
+                    <img src="/assets/icons/share_16.svg" alt="share button">
+                </button>
+                {{ if (eq .ThisChannelIsOwnedOrJoined false) }}
+                    <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
+                        <img src="/assets/icons/heart-empty_24.svg" alt="like button">
+                    </button>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+{{ end }}

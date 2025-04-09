@@ -486,10 +486,9 @@ function updateChannelUI(data) {
   // SECTION Channel Banner
   // Modify existing values based on the JSON response
 
-
   if (data.channel.name !== name) {
     // Update the data-name attribute if it changed from the json response.
-    channelPlaceholder.querySelector("h2").textContent = data.channel.name;
+    channelPlaceholder.querySelector("h2").textContent ="/" + data.channel.name;
   }
 
   // Example: Update the html based on the json response.
@@ -498,7 +497,6 @@ function updateChannelUI(data) {
     channelPlaceholder.dataset.imageUser = `{{channelBasePath}}{data.channel.avatar}`;
   } else {
     // Update the existing div.
-    channelPlaceholder.innerHTML = `<div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="${data.channel.Name}"></div>`;
   }
 
 

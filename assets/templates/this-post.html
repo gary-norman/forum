@@ -1,203 +1,116 @@
-{{ define "this-post" }} {{- /*gotype:
-github.com/gary-norman/forum/internal/models.Post*/ -}} {{ $channelBasePath :=
-"db/userdata/images/channel-images/" }} {{ $postBasePath :=
-"db/userdata/images/post-images/" }} {{ $userBasePath :=
-"db/userdata/images/user-images/" }} {{ $userID := 0 }}
-<!-- Default value for logged out users -->
-{{ $user := .CurrentUser }} {{ if ne .CurrentUser nil }} {{ $userID =
-.CurrentUser.ID }} {{ end }} {{ $post := .Post }}
-
-<div class="container-card-down">
-  <div
-    class="card"
-    data-post-id="{{$post.ID}}"
-    data-channel-ID="{{$post.ChannelID}}"
-    data-author-ID="{{$post.AuthorID}}"
-  >
-    <div class="container-post-info">
-      {{ if (ne $post.AuthorAvatar "noimage") }}
-      <span
-        class="card-pic profile-pic"
-        data-image-auth="{{ $userBasePath }}{{ $post.AuthorAvatar }}"
-      ></span>
-      {{ else }}
-      <span
-        class="card-pic profile-pic--empty"
-        data-name-user="{{ $post.Author }}"
-      ></span>
-      {{ end }}
-      <div>
-        <small
-          id="link-post-author-this-{{ $post.AuthorID }}"
-          data-author-id="{{ $post.AuthorID }}"
-          class="small-bold link"
-          >{{ $post.Author }}</small
-        >
-        <div>
-          <small
-            id="link-post-channelID-this-{{ $post.ChannelID }}"
-            class="link"
-            data-channel-id="{{ $post.ChannelID }}"
-            >{{ $post.ChannelName }}</small
-          >
-          <small>-</small>
-          <small>{{$post.TimeSince}}</small>
-        </div>
-      </div>
-      <div class="like-button">
-        <button data-tooltip-name="like" aria-label="like button" class="btn-icoonly"></button>
-      </div>
-    </div>
-    <h4>{{$post.Title}}</h4>
-    {{ if ne $post.Images "noimage" }}
-    <img
-      src="{{$postBasePath}}{{$post.Images}}"
-      class="post-image"
-      alt="Post Image"
-    />
+{{ define "this-post" }}
+    {{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
+    {{ $channelBasePath := "db/userdata/images/channel-images/" }}
+    {{ $postBasePath := "db/userdata/images/post-images/" }}
+    {{ $userBasePath := "db/userdata/images/user-images/" }}
+    {{ $userID := 0 }} <!-- Default value for logged out users -->
+    {{ $user := .CurrentUser }}
+    {{ if ne .CurrentUser nil }}
+        {{ $userID = .CurrentUser.ID }}
     {{ end }}
-    <p class="cardContent">{{$post.Content}}</p>
-    <!--  Post control buttons -->
-    <div class="button-row-wrap post-controls">
-      {{ template "post-controls" (dict "Post" $post "CurrentUser" $.CurrentUser
-      "Instance" "this-post") }}
-    </div>
-    <!--  Reply / Submit Comment form -->
-    <form
-      name="replyForm"
-      class="form-reply"
-      action="/store-comment"
-      enctype="multipart/form-data"
-      method="POST"
-    >
-      <div class="cont-flex-row flex-end">
-        <div class="input-wrapper container-reply">
-          <textarea
-            id="comment-form-textarea-thispostcard-{{$post.ID}}"
-            name="content"
-            placeholder="Type a reply..."
-          ></textarea>
-          <label
-            for="comment-form-textarea-thispostcard-{{$post.ID}}"
-            class="user-label"
-            >Reply</label
-          >
-        </div>
-        <!-- Hidden input to store the postID -->
-        <input type="hidden" name="postID" value="{{$post.ID}}" />
-        <input
-          type="hidden"
-          name="channel"
-          value='{"channelName": "{{$post.ChannelName}}", "channelID": "{{$post.ChannelID}}"}'
-        />
-        <button
-          class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff"
-        >
-          <span class="btn-reply-comment">comment</span>
-        </button>
-      </div>
-    </form>
-  </div>
-  <!-- end post card -->
-  {{ range $post.Comments }}
-  <div class="container-card-across">
-    {{ $comment := . }}
-    <div class="reply-arrow"></div>
-    <div class="container-card-down">
-      <div
-        class="card"
-        data-comment-id="{{$comment.ID}}"
-        data-channel-ID="{{$comment.ChannelID}}"
-        data-author-ID="{{$comment.AuthorID}}"
-      >
-        <div class="container-post-info">
-          {{ if (ne $comment.AuthorAvatar "noimage") }}
-          <span
-            class="card-pic profile-pic"
-            data-image-auth="{{ $userBasePath }}{{ $comment.AuthorAvatar }}"
-          ></span>
-          {{ else }}
-          <span
-            class="card-pic profile-pic--empty"
-            data-name-user="{{ $comment.Author }}"
-          ></span>
-          {{ end }}
-          <div>
-            <small class="small-bold">{{$comment.Author}}</small>
-            <div>
-              <small>{{$comment.ChannelName}}</small>
-              <small>-</small>
-              <small>{{.TimeSince}}</small>
-              <small>commentID: {{$comment.ID}}</small>
-            </div>
-          </div>
-          <div class="like-button">
-            <button data-tooltip-name="like" aria-label="like button" class="btn-icoonly"></button>
-          </div>
-        </div>
-        <pre class="cardContent">{{$comment.Content}}</pre>
-        <!--  Post control buttons -->
-        <div class="button-row-wrap post-controls">
-          {{ template "comment-controls" (dict "Post" $post "Comment" $comment
-          "CurrentUser" $.CurrentUser) }}
-        </div>
-        <!--  Reply / Submit Comment form -->
-        <form
-          name="replyForm"
-          class="form-reply"
-          action="/store-comment"
-          enctype="multipart/form-data"
-          method="POST"
-        >
-          <div class="cont-flex-row flex-end">
-            <div class="input-wrapper container-reply">
-              <textarea
-                id="comment-form-textarea-thispostcomments-{{$comment.ID}}"
-                name="content"
-                placeholder="Type a reply..."
-              ></textarea>
-              <label
-                for="comment-form-textarea-thispostcomments-{{$comment.ID}}"
-                class="user-label"
-                >Reply</label
-              >
-            </div>
-            <!-- Hidden input to store the commentID (if replying to a comment) -->
-            <input type="hidden" name="commentID" value="{{$comment.ID}}" />
-            <input
-              type="hidden"
-              name="channel"
-              value='{"channelName": "{{$comment.ChannelName}}", "channelID": "{{$comment.ChannelID}}"}'
-            />
-            <button
-              type="submit"
-              class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff"
-            >
-              <span class="btn-reply-comment">comment</span>
-            </button>
-          </div>
-        </form>
-      </div>
-      <!-- end comment card-->
+    {{ $post := .Post }}
 
-      <!-- Recursively Render Replies -->
-      {{/* {{ if .Replies}}*/}} {{ range .Replies }}
-      <div class="container-card-across">
-        {{ template "reply_level1" (dict "CurrentUser" $.CurrentUser "Comment" .
-        ) }}
-      </div>
-      <!-- end container-comment-across wrapper -->
-      {{ end }}
-      <!-- end range Replies -->
-      {{/* {{ end }}
-      <!-- end if Replies -->*/}}
-    </div>
-    <!-- end container-comment-down wrapper -->
-  </div>
-  <!-- end container-comment-across -->
-  {{end}}
-  <!-- range .Comments -->
-</div>
-<!-- end container-comments wrapper -->
-{{end}}
-<!-- end define block -->
+    <div class="container-card-down">
+       <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">
+            <div class="container-post-info">
+                {{ if (ne $post.AuthorAvatar "noimage") }}
+                    <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $post.AuthorAvatar }}"></span>
+                {{ else }}
+                    <span class="card-pic profile-pic--empty" data-name-user="{{ $post.Author }}"></span>
+                {{ end }}
+                <div>
+                    <small id="link-post-author-this-{{ $post.AuthorID }}" data-author-id="{{ $post.AuthorID }}" class="small-bold link">{{ $post.Author }}</small>
+                    <div>
+          <small id="link-post-channelID-this-{{ $post.ChannelID }}" class="link" data-channel-id="{{ $post.ChannelID }}">{{ $post.ChannelName }}</small>
+                        <small>-</small>
+                        <small>{{$post.TimeSince}}</small>
+                    </div>
+                </div>
+                <div class="like-button">
+                    <button data-tooltip-name="like" aria-label="like button" class="btn-icoonly"></button>
+                </div>
+            </div>
+            <h4>{{$post.Title}}</h4>
+            {{ if ne $post.Images "noimage" }}
+                <img src={{$postBasePath}}{{$post.Images}} class="post-image" alt="Post Image">
+            {{ end }}
+            <pre class="cardContent">{{$post.Content}}</pre>
+            <!--  Post control buttons -->
+            <div class="button-row-wrap post-controls" >
+                {{ template "post-controls" (dict "Post" $post "CurrentUser" $.CurrentUser "Instance" "this-post") }}
+            </div>
+            <!--  Reply / Submit Comment form -->
+            <form name="replyForm" class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
+                <div class="cont-flex-row flex-end">
+                    <div class="input-wrapper container-reply">
+                        <textarea id="comment-form-textarea-thispostcard-{{$post.ID}}" name="content" placeholder="Type a reply..."></textarea>
+                        <label for="comment-form-textarea-thispostcard-{{$post.ID}}" class="user-label">Reply</label>
+                    </div>
+                    <!-- Hidden input to store the postID -->
+                    <input type="hidden" name="postID" value="{{$post.ID}}">
+                    <input type="hidden" name="channel" value='{"channelName": "{{$post.ChannelName}}", "channelID": "{{$post.ChannelID}}"}'>
+                    <button class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+                        <span class="btn-reply-comment">comment</span>
+                    </button>
+                </div>
+            </form>
+        </div> <!-- end post card -->
+        {{ range $post.Comments }}
+            <div class="container-card-across">
+                {{ $comment := . }}
+                <div class="reply-arrow"></div>
+                <div class="container-card-down">
+                    <div class="card" data-comment-id="{{$comment.ID}}" data-channel-ID="{{$comment.ChannelID}}" data-author-ID="{{$comment.AuthorID}}">
+                            <div class="container-post-info">
+                                {{ if (ne $comment.AuthorAvatar "noimage") }}
+                                    <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $comment.AuthorAvatar }}"></span>
+                                {{ else }}
+                                    <span class="card-pic profile-pic--empty" data-name-user="{{ $comment.Author }}"></span>
+                                {{ end }}
+                                <div>
+                                    <small class="small-bold">{{$comment.Author}}</small>
+                                    <div>
+                                        <small>{{$comment.ChannelName}}</small>
+                                        <small>-</small>
+                                        <small>{{.TimeSince}}</small>
+                                        <small>commentID: {{$comment.ID}}</small>
+                                    </div>
+                                </div>
+                                <div class="like-button">
+                                    <button data-tooltip-name="like" class="btn-icoonly"></button>
+                                </div>
+                            </div>
+                            <pre class="cardContent">{{$comment.Content}}</pre>
+                            <!--  Post control buttons -->
+                            <div class="button-row-wrap post-controls" >
+                                {{ template "comment-controls" (dict "Post" $post "Comment" $comment "CurrentUser" $.CurrentUser) }}
+                            </div>
+                            <!--  Reply / Submit Comment form -->
+                            <form name="replyForm" class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
+                                <div class="cont-flex-row flex-end">
+                                    <div class="input-wrapper container-reply">
+                                        <textarea id="comment-form-textarea-thispostcomments-{{$comment.ID}}" name="content" placeholder="Type a reply..."></textarea>
+                                        <label for="comment-form-textarea-thispostcomments-{{$comment.ID}}" class="user-label">Reply</label>
+                                    </div>
+                                    <!-- Hidden input to store the commentID (if replying to a comment) -->
+                                    <input type="hidden" name="commentID" value="{{$comment.ID}}">
+                                    <input type="hidden" name="channel" value='{"channelName": "{{$comment.ChannelName}}", "channelID": "{{$comment.ChannelID}}"}'>
+                                    <button type="submit" class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+                                        <span class="btn-reply-comment">comment</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div> <!-- end comment card-->
+                    <!-- Recursively Render Replies -->
+{{/*                    {{ if .Replies}}*/}}
+                        {{ range .Replies }}
+                                <div class="container-card-across">
+                                    {{ template "reply_level1" (dict "CurrentUser" $.CurrentUser "Comment" . ) }}
+                                </div> <!-- end container-comment-across wrapper -->
+                            {{ end }} <!-- end range Replies -->
+{{/*                        {{ end }} <!-- end if Replies -->*/}}
+                </div> <!-- end container-comment-down wrapper -->
+            </div> <!-- end container-comment-across -->
+        {{end}} <!-- range .Comments -->
+    </div> <!-- end container-comments wrapper -->
+{{end}} <!-- end define block -->

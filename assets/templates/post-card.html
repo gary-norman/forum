@@ -45,7 +45,7 @@
                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
                     <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
                 </button>
-      {{ if (eq $IsPostPage "true") }}
+      {{ if (eq $isPostPage "true") }}
                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                     <span class="btn-reply">reply</span>
                 </button>

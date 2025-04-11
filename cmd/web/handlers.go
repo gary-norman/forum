@@ -22,6 +22,7 @@ var TemplateData models.TemplateData
 // SECTION ------- template handlers ----------
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
+	start := time.Now()
 	// SECTION --- posts and comments ---
 	// var userLoggedIn bool
 	userLoggedIn := true
@@ -189,6 +190,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return
 	}
+	log.Printf(ErrorMsgs().KeyValuePair, "GetHome Render time:", time.Since(start))
 }
 
 // SECTION ------- user login handlers ----------

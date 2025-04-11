@@ -14,7 +14,6 @@ var Template *template.Template
 
 // init Function to initialise the custom template functions
 func (app *app) init() {
-
 	Template = template.Must(template.New("").Funcs(template.FuncMap{
 		"random":         RandomInt,
 		"increment":      Increment,
@@ -33,7 +32,7 @@ func CheckSameName(firstString, secondString string) bool {
 }
 
 // CompareAsInts converts both arguments to integers using ConvertToInt and compares them
-func CompareAsInts(a, b interface{}) bool {
+func CompareAsInts(a, b any) bool {
 	intA, errA := ConvertToInt(a)
 	intB, errB := ConvertToInt(b)
 
@@ -47,7 +46,7 @@ func CompareAsInts(a, b interface{}) bool {
 }
 
 // ConvertToInt converts different variable types into an int
-func ConvertToInt(value interface{}) (int, error) {
+func ConvertToInt(value any) (int, error) {
 	switch v := value.(type) {
 	case int:
 		return v, nil

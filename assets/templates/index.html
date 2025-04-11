@@ -741,7 +741,7 @@
                     </div>
                     <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
                       {{range .Posts}} <!-- user page activity posts -->
-                      {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Instance" "search-page-activity" "IsPostPage" "false") }}
+                      {{ template "post-card" (dict "Post" . "CurrentUser" $.CurrentUser "Instance" "search-page-activity" "IsPostPage" "false") }}
                       {{end}} <!-- user page activity POSTS -->
                     </div>
                     {{/*SECTION ------- activity posts ---------- */}}
@@ -760,7 +760,7 @@
                       {{/*SECTION---------- user page posts ----------*/}}
                       <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                         {{range .Posts}} <!-- user page posts -->
-                        {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser  "Comments" .Comments "Instance" "search-page" "IsPostPage" "false") }}
+                        {{ template "post-card" (dict "Post" . "CurrentUser" $.CurrentUser  "Comments" .Comments "Instance" "search-page" "IsPostPage" "false") }}
                         {{end}} <!-- user page posts -->
                       </div>
                     </div>
@@ -1086,7 +1086,7 @@
                       </div>
                       <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
                         {{range .Posts}} <!-- user page activity posts -->
-                          {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Instance" "user-page-activity" "IsPostPage" "false") }}
+                          {{ template "post-card" (dict "Post" . "CurrentUser" $.CurrentUser "Instance" "user-page-activity" "IsPostPage" "false") }}
                         {{end}} <!-- user page activity POSTS -->
                       </div>
                     {{/*SECTION ------- activity posts ---------- */}}
@@ -1105,7 +1105,7 @@
                       {{/*SECTION---------- user page posts ----------*/}}
                       <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
                         {{range .Posts}} <!-- user page posts -->
-                        {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments "Instance" "user-page" "IsPostPage" "false") }}
+                        {{ template "post-card" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments "Instance" "user-page" "IsPostPage" "false") }}
                         {{end}} <!-- user page posts -->
                       </div>
                     </div>
@@ -1336,45 +1336,9 @@
 
 {{/*SECTION ---------- channel page ----------*/}}
           <div id="channel-page" class="feeds-wrapper">
-        <div class="banner">
-          <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
-            <div class="page-control">
-              <div class="page-profile">
-                {{ if (ne .ThisChannel.Avatar "noimage") }}
-                <div class="sidebar-pic profile-pic" data-image-user="{{ $channelBasePath }}{{ .ThisChannel.Avatar }}"></div>
-                {{ else }}
-                <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}"></div>
-                {{ end }}
-                <div class="flex-start">
-                  <h2 {{ if (eq .ThisChannel.Privacy true) }} class="private-channel align-self-start"{{ end }}>/{{ .ThisChannel.Name }}</h2>
-                  <div>
-                    <button class="btn-md btn-icotext btn-follows btn-invert-never">
-                      <span class="btn-channel-users">13.8k</span>
-                    </button>
-                    <button class="btn-md btn-icotext btn-follows btn-invert-never" style="position: relative">
-                      <span class="btn-channel-green-dot">37</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="page-buttons">
-                {{ if (eq .ThisChannelIsOwnedOrJoined false) }}
-                <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
-                  <span class="btn-posts">join</span>
-                </button>
-                {{ end }}
-                  <div class="user-following"></div>
-                  <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
-                    <img src="/assets/icons/share_16.svg" alt="share button">
-                  </button>
-                {{ if (eq .ThisChannelIsOwnedOrJoined false) }}
-                  <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
-                    <img src="/assets/icons/heart-empty_24.svg" alt="like button">
-                  </button>
-                {{ end }}
-              </div>
+            <div id="channel-page-banner" class="banner">
+              {{/*banner html will be injected here*/}}
             </div>
-          </div>
           <div class="container-content">
             <div class="content">
               <div class="filters-row button-row">
@@ -1388,10 +1352,10 @@
 {{/*SECTION ---------- channel page feed ---------- */}}
               <div id="wrapper-channel-feed" style="position: absolute; width: 100%; height: 100%">
                 <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-{{/*                         TODO range through channel posts */}}
-                {{range .ThisChannelPosts}} <!-- channel page posts -->
-                  {{ template "post" (dict "Post" . "CurrentUser" $.CurrentUser "Comments" .Comments "Instance" "channel-page" "IsPostPage" "false") }}
-                {{end}} <!-- channel page posts -->
+                  <div id="posts-container">
+                      <p>*** posts container ***</p>
+                    <!-- Fetched and rendered posts will be inserted here -->
+                  </div>
                 </div>
               </div>
             </div>
@@ -1403,14 +1367,14 @@
                     <h4 class="right-panel-name">/{{ .ThisChannel.Name }}</h4>
                     <small>created by {{ if (eq .ThisChannel.OwnerID $user.ID) }}you {{ else }} {{ .ThisChannelOwnerName }} {{ end }}{{ .ThisChannel.TimeSince}}</small>
                   </div>
-                  {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
+                  {{ if (eq .IsJoinedOrOwned true) }}
                     <button id="right-panel-channel--edit-channel-name" class="btn-sm btn-icoonly">
                       <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
                     </button>
                   {{ end }}
                 </div>
 {{/*SECTION ----------- edit channel image ----------- */}}
-                {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
+                {{ if (eq .IsJoinedOrOwned true) }}
                 <div class="right-panel-container-pic flex-space-between">
                   <div class="right-panel-container-pic">
                     {{ if (ne .ThisChannel.Avatar "noimage") }}
@@ -1425,9 +1389,9 @@
                   </button>
                 </div>
                 {{ end }}
-                <div class="right-panel-container-bio ">
 {{/*SECTION ----------- edit channel bio ----------- */}}
-                {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
+                <div class="right-panel-container-bio ">
+                {{ if (eq .IsJoinedOrOwned true) }}
                   <div class="right-panel-bio flex-space-between">
                     <label for="channel-bio-content" class="padded">Edit channel bio</label>
                     <button id="right-panel-channel--edit-channel-bio" class="btn-sm btn-icoonly">
@@ -1440,10 +1404,10 @@
                   </div>
                   <textarea id="channel-bio-content" class="inactive-input" name="content" style="display: none">{{ .ThisChannel.Description }}</textarea>
                 </div>
+{{/*SECTION ----------- edit channel mods ----------- */}}
                 <div class="right-panel-container-moderators">
                   <div class="sidebar-block sidebar-channels">
-{{/*SECTION ----------- edit channel mods ----------- */}}
-                  {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
+                  {{ if (eq .IsJoinedOrOwned true) }}
                   <div class="right-panel-bio flex-space-between">
                     <label for="channel-bio-content" class="padded">Edit moderators</label>
                     <button id="right-panel-channel--edit-channel-mods" class="btn-sm btn-icoonly">
@@ -1469,9 +1433,9 @@
                   </div>
                 </div>
               </div>
-              <div id="right-panel-container-rules">
 {{/*SECTION ----------- edit channel rules ----------- */}}
-              {{ if (eq .ThisChannelIsOwnedOrJoined true) }}
+              <div id="right-panel-container-rules">
+              {{ if (eq .IsJoinedOrOwned true) }}
                 <div class="right-panel-bio flex-space-between ">
                   <label class="padded" for="rules-content">Edit channel rules</label>
                   <button popovertarget="form-edit-channel-rules" id="right-panel-channel--edit-channel-rules" class="btn-sm btn-icoonly">
@@ -1507,8 +1471,6 @@
                 </div>
               </div>
             </div>
-
-
         </main>
       </div>
     </div>

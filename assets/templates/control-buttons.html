@@ -1,0 +1,136 @@
+{{ define "control-buttons" }}
+{{ $userID := 0 }} {{/* Default value for logged out users */}}
+  {{ $root := .root}}
+  {{ $user := $root.CurrentUser }}
+  {{ $calledBy := .calledBy}}
+  {{ $instance := .Instance}}
+  {{ if ne .CurrentUser nil }}
+    {{ $userID = .CurrentUser.ID }}
+  {{ end }}
+
+    <div class="button-row-wrap {{ if ne $calledBy "right-panel"}}post-controls{{end}}">
+  {{ if ne $calledBy "right-panel"}} {{/* buttons NOT present in right-panel */}}
+        {{ if eq $calledBy "post-card"}}
+          {{ $post := .Post }}
+          {{$status := reactionStatus $userID $post.ID 0}}
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}} {{ if eq $user nil}}inactive{{ end }}">
+            <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{$post.Likes}}</span>
+          </button>
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}} {{ if eq $user nil}}inactive{{ end }}" >
+            <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
+          </button>
+          {{ if ne $user nil}}
+            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+              <span class="btn-report">report</span>
+            </button>
+            {{ if eq $user.ID $post.AuthorID}}
+              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+                <span class="btn-edit">edit</span>
+              </button>
+            {{ end}}
+            {{ if eq $instance "post-page"}}
+              <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                <span class="btn-reply">reply</span>
+              </button>
+            {{ else }}
+              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                <span class="btn-reply">{{$post.CommentsCount}}</span>
+              </button>
+            {{ end }}
+          {{ end }}<!-- end of ne $user nil -->
+          <button id="share-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" popovertarget="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+            <span class="btn-share">share</span>
+          </button>
+          <div popover id="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="scrollable-user">
+            <div class="share-container">
+              <div class="button-row">
+                <a href="/" target="_blank" class="share-logo facebook"></a>
+                <a href="/" target="_blank" class="share-logo twitter"></a>
+                <a href="/" target="_blank" class="share-logo linkedin"></a>
+                <a href="/" target="_blank" class="share-logo reddit"></a>
+                <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                <a href="/" target="_blank" class="share-logo telegram"></a>
+              </div>
+              <div class="flex-space-between">
+                <label class="padded" for="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}-{{$instance}}">Copy URL link</label>
+                <button class="btn-sm btn-icoonly">
+                  <span class="btn-copy" aria-label="Copy URL link"></span>
+                </button>
+              </div>
+              <input value="https://localhost:8989/posts/{{ $post.ID }}" readonly type="text"
+                     id="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}-{{$instance}}" name="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}-{{$instance}}"/>
+            </div>
+          </div>
+        {{ end }} <!-- end of eq $calledBy "post-card" -->
+
+        {{ if eq $calledBy "comment-card"}}
+          {{ $post := .Post }}
+          {{ $comment := .Comment }}
+          {{$status := reactionStatus $userID 0 $comment.ID}}
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+            <span class="btn-likes" data-like-ID="user-{{$comment.ID}}">{{$comment.Likes}}</span>
+          </button>
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+            <span class="btn-dislikes" data-dislike-ID="user-{{$comment.ID}}">{{$comment.Dislikes}}</span>
+          </button>
+          {{ if ne $user nil}}
+            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+              <span class="btn-report">report</span>
+            </button>
+            {{ if eq $user.ID $comment.AuthorID}}
+              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+                <span class="btn-edit">edit</span>
+              </button>
+            {{ end}}
+            {{ if ne $calledBy "reply_level1"}}
+              <button id="reply-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+                <span class="btn-reply">reply</span>
+              </button>
+            {{ end }}
+          {{ end }}<!-- end of ne $user nil -->
+          <button id="share-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" popovertarget="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+            <span class="btn-share">share</span>
+          </button>
+          <!--  Share modal -->
+          <div popover id="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="scrollable-user">
+            <div class="share-container">
+              <div class="button-row">
+                <a href="/" target="_blank" class="share-logo facebook"></a>
+                <a href="/" target="_blank" class="share-logo twitter"></a>
+                <a href="/" target="_blank" class="share-logo linkedin"></a>
+                <a href="/" target="_blank" class="share-logo reddit"></a>
+                <a href="/" target="_blank" class="share-logo whatsapp"></a>
+                <a href="/" target="_blank" class="share-logo telegram"></a>
+              </div>
+              <div class="flex-space-between">
+                <label class="padded" for="copy-url-channel-{{$post.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}">Copy URL link</label>
+                <button class="btn-sm btn-icoonly">
+                  <span class="btn-copy" aria-label="Copy URL link"></span>
+                </button>
+              </div>
+              <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text"
+                     id="copy-url-channel-{{$post.ChannelName}}-comment-{{$comment.ID}}-{{$instance}}" name="copy-url-channel-{{$post.ChannelName}}-comment-{{$comment.ID}}"/>
+            </div>
+          </div>
+
+        {{ end }} <!-- end of eq $calledBy "comment-card" -->
+      {{ end }}<!-- end to buttons NOT present in right-panel -->
+
+
+    {{ if eq $calledBy "right-panel"}}
+      {{ if and (ne $user nil) (eq $instance "user-page")}}
+{{/*          TODO when user is an administrator, button prepared; needs admin check*/}}
+{{/*        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >*/}}
+{{/*          <span class="btn-ban">ban</span>*/}}
+{{/*        </button>*/}}
+        {{ if eq $instance "channel-page"}}
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+            <span class="btn-mute">mute</span>
+          </button>
+        {{ end }}
+      {{ end }} <!-- end of eq $calledBy "right-panel" -->
+
+    {{ end }}
+
+  </div>
+{{ end}}

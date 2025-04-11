@@ -271,6 +271,11 @@ gap: 0.8rem;
     background: url("/assets/icons/mute_16.svg") no-repeat center;
   }
 }
+.btn-ban {
+  &::before {
+    background: url("/assets/icons/ban_16.svg") no-repeat center;
+  }
+}
 .btn-submit {
   &::before {
     background: url("/assets/icons/send_16.svg") no-repeat center;

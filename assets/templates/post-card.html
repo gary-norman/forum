@@ -32,7 +32,7 @@
                 <img src="{{ .root.ImagePaths.Post }}/{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
             {{ end }}
             <p class="cardContent">{{$post.Content}}</p>
-            {{/* template "control-buttons" (dict "Post" .  "root" $ "CalledBy" "post-card" "Instance" "channel-page")*/}}
+            {{ template "control-buttons" (dict "Post" .  "root" $ "CalledBy" "post-card" "Instance" "channel-page")}}
             <!--  Post control buttons -->
         </div> <!-- end post card -->
     </div> <!-- end container-comments wrapper -->

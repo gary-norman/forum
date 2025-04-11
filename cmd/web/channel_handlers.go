@@ -143,6 +143,8 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		User:    "db/userdata/images/user-images",
 	}
 
+	// post := thisChannelPosts[0]
+
 	data := models.ChannelPage{
 		TestString:             "This is a test string",
 		CurrentUser:            currentUser,
@@ -160,8 +162,6 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Channel page avatar", thisChannel.Avatar)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Channel page posts", len(thisChannelPosts))
-	// post := thisChannelPosts[0]
-	// models.UpdateTimeSince(&post)
 
 	// data := models.ChannelPageBanner{
 	// 	TestString:             "This is a test string",

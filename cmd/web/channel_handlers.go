@@ -137,29 +137,37 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		isJoinedOrOwned = isOwned || isJoined
 	}
 
-	// data := models.PostCardData{
-	// 	ThisChannel:                thisChannel,
-	// 	ThisChannelOwnerName:       thisChannelOwnerName,
-	// 	ThisChannelRules:           thisChannelRules,
-	// 	ThisChannelPosts:           thisChannelPosts,
-	// 	ThisChannelIsOwned:         isOwned,
-	// 	OwnedAndJoinedChannels:     ownedAndJoinedChannels,
-	// 	IsJoinedOrOwned: isJoinedOrOwned,
-	// 	IsPostPage:                 false,
-	// 	Instance:                   "channel-page",
-	// }
+	paths := models.ImagePaths{
+		Channel: "db/userdata/images/channel-images",
+		Post:    "db/userdata/images/post-images",
+		User:    "db/userdata/images/user-images",
+	}
+
+	data := models.ChannelPage{
+		CurrentUser:            currentUser,
+		ThisChannel:            thisChannel,
+		ThisChannelOwnerName:   thisChannelOwnerName,
+		ThisChannelRules:       thisChannelRules,
+		ThisChannelPosts:       thisChannelPosts,
+		ThisChannelIsOwned:     isOwned,
+		OwnedAndJoinedChannels: ownedAndJoinedChannels,
+		IsJoinedOrOwned:        isJoinedOrOwned,
+		IsPostPage:             false,
+		Instance:               "channel-page",
+		ImagePaths:             paths,
+	}
 
 	post := thisChannelPosts[0]
 	models.UpdateTimeSince(&post)
 
-	data := models.ChannelPageBanner{
-		TestString:             "This is a test string",
-		ThisChannel:            thisChannel,
-		OwnedAndJoinedChannels: ownedAndJoinedChannels,
-		IsJoinedOrOwned:        isJoinedOrOwned,
-		ThisChannelOwnerName:   thisChannelOwnerName,
-		ThisChannelRules:       thisChannelRules,
-	}
+	// data := models.ChannelPageBanner{
+	// 	TestString:             "This is a test string",
+	// 	ThisChannel:            thisChannel,
+	// 	OwnedAndJoinedChannels: ownedAndJoinedChannels,
+	// 	IsJoinedOrOwned:        isJoinedOrOwned,
+	// 	ThisChannelOwnerName:   thisChannelOwnerName,
+	// 	ThisChannelRules:       thisChannelRules,
+	// }
 
 	// data := models.Postplus{
 	//   ID: post.ID,
@@ -186,16 +194,16 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("DATA:", data)
 	// fmt.Println("POST COUNT:", len(data.ThisChannelPosts))
 	// Render the `post-card.html` subtemplate
-	var renderedChannelPageBanner bytes.Buffer
-	postsErr := Template.ExecuteTemplate(&renderedChannelPageBanner, "channel-page-banner", data)
+	var renderedChannelPage bytes.Buffer
+	postsErr := Template.ExecuteTemplate(&renderedChannelPage, "channel-page", data)
 	if postsErr != nil {
-		http.Error(w, "Error rendering channel-page-banner", http.StatusInternalServerError)
+		http.Error(w, "Error rendering channel-page", http.StatusInternalServerError)
 		return
 	}
 
 	// Send the pre-rendered HTML as JSON
 	response := map[string]string{
-		"postsHTML": renderedChannelPageBanner.String(),
+		"postsHTML": renderedChannelPage.String(),
 	}
 	log.Printf(ErrorMsgs().KeyValuePair, len(thisChannelPosts), thisChannel.Name)
 	json.NewEncoder(w).Encode(response)

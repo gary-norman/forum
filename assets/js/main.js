@@ -415,7 +415,7 @@ function fetchChannelData(channelId) {
   fetch(`/channels/${channelId}`)
     .then((response) => response.json())
     .then((data) => {
-      document.getElementById("channel-page-banner").innerHTML = data.postsHTML;
+      document.getElementById("channel-page").innerHTML = data.postsHTML;
     })
     .catch((error) => console.error("Error fetching channel data:", error));
 }

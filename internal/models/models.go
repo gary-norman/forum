@@ -72,6 +72,15 @@ func (c *Channel) UpdateTimeSince() {
 	c.TimeSince = getTimeSince(c.Created)
 }
 
+type ChannelPageBanner struct {
+	TestString             string
+	ThisChannel            Channel
+	OwnedAndJoinedChannels []Channel
+	IsJoinedOrOwned        bool
+	ThisChannelOwnerName   string
+	ThisChannelRules       []Rule
+}
+
 type Rule struct {
 	ID         int       `json:"id"`
 	Rule       string    `json:"rule"`
@@ -141,7 +150,39 @@ type Post struct {
 	CommentsCount int    `json:"commentsCount"`
 	Comments      []Comment
 }
-
+type Postplus struct {
+	ID            int       `json:"id"`
+	Title         string    `json:"title"`
+	Content       string    `json:"content"`
+	Images        string    `json:"images,omitempty"` // Store JSON as string
+	Created       time.Time `json:"created"`
+	TimeSince     string
+	IsCommentable bool   `json:"commentable"`
+	Author        string `json:"author"`
+	AuthorID      int    `json:"authorId"`
+	AuthorAvatar  string `json:"authorAvatar"`
+	ChannelID     int    `json:"channelId"`
+	ChannelName   string `json:"channelName"`
+	IsFlagged     bool   `json:"isFlagged,omitempty"`
+	Likes         int    `json:"likes"`
+	Dislikes      int    `json:"dislikes"`
+	CommentsCount int    `json:"commentsCount"`
+	Comments      []Comment
+	IsPostPage    bool
+	Instance      string
+}
+type PostCardData struct {
+	ThisChannelPosts       []Post
+	ThisChannelOwnerName   string
+	ThisChannel            Channel
+	ThisChannelIsOwned     bool
+	ThisChannelIsJoined    bool
+	OwnedAndJoinedChannels []Channel
+	ThisChannelRules       []Rule
+	IsJoinedOrOwned        bool
+	IsPostPage             bool
+	Instance               string
+}
 type PostChannel struct {
 	ID        int       `json:"id"`
 	PostID    int       `json:"postId"`
@@ -257,17 +298,17 @@ type TemplateData struct {
 	// ---------- posts ----------
 	Posts []Post
 	// ---------- channels ----------
-	Channels                   []Channel
-	AllChannels                []Channel
-	ThisChannel                Channel
-	ThisChannelOwnerName       string
-	ThisChannelIsOwnedOrJoined bool
-	ThisChannelIsOwned         bool
-	ThisChannelRules           []Rule
-	ThisChannelPosts           []Post
-	OwnedChannels              []Channel
-	JoinedChannels             []Channel
-	OwnedAndJoinedChannels     []Channel
+	Channels               []Channel
+	AllChannels            []Channel
+	ThisChannel            Channel
+	ThisChannelOwnerName   string
+	IsJoinedOrOwned        bool
+	ThisChannelIsOwned     bool
+	ThisChannelRules       []Rule
+	ThisChannelPosts       []Post
+	OwnedChannels          []Channel
+	JoinedChannels         []Channel
+	OwnedAndJoinedChannels []Channel
 	// ---------- misc ----------
 	Images    []Image
 	Reactions []Reaction

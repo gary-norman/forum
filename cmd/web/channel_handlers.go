@@ -144,6 +144,7 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := models.ChannelPage{
+		TestString:             "This is a test string",
 		CurrentUser:            currentUser,
 		ThisChannel:            thisChannel,
 		ThisChannelOwnerName:   thisChannelOwnerName,
@@ -157,8 +158,10 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		ImagePaths:             paths,
 	}
 
-	post := thisChannelPosts[0]
-	models.UpdateTimeSince(&post)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Channel page avatar", thisChannel.Avatar)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Channel page posts", len(thisChannelPosts))
+	// post := thisChannelPosts[0]
+	// models.UpdateTimeSince(&post)
 
 	// data := models.ChannelPageBanner{
 	// 	TestString:             "This is a test string",
@@ -191,8 +194,6 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	//   Instance: "channel-page",
 	// }
 
-	fmt.Println("DATA:", data)
-	// fmt.Println("POST COUNT:", len(data.ThisChannelPosts))
 	// Render the `post-card.html` subtemplate
 	var renderedChannelPage bytes.Buffer
 	postsErr := Template.ExecuteTemplate(&renderedChannelPage, "channel-page", data)

@@ -410,17 +410,28 @@ function fetchAndNavigate(url, page, errorMessage) {
     });
 }
 
+function fetchChannelData(channelId) {
+  console.log("Fetching channel data for ID:", channelId);
+  fetch(`/channels/${channelId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById("channel-page-banner").innerHTML = data.postsHTML;
+    })
+    .catch((error) => console.error("Error fetching channel data:", error));
+}
+
 export function navigateToChannel(channel) {
   const link = channel.getAttribute("data-channel-id");
   if (!link) {
     console.error("Channel ID is missing");
     return;
   }
-  fetchAndNavigate(
-    `/channels/${link}`,
-    channelPage,
-    "Error navigating to channel:",
-  );
+
+  // Change page view to channel page
+  changePage(channelPage);
+
+  // Now fetch and inject the updated channel data
+  fetchChannelData(link);
 }
 
 export function navigateToPost(post) {

@@ -1,4 +1,4 @@
-{{ define "post" }}
+{{ define "post-card" }}
     {{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
     {{ $channelBasePath := "db/userdata/images/channel-images/" }}
     {{ $postBasePath := "db/userdata/images/post-images/" }}
@@ -11,7 +11,7 @@
     {{ $instance := .Instance }}
     {{ $isPostPage := .IsPostPage}}
     <div class="container-card-down">
-        <div class="card">
+        <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">
             <div class="container-post-info">
                 {{ if (ne $post.AuthorAvatar "noimage") }}
                     <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $post.AuthorAvatar }}"></span>
@@ -76,7 +76,6 @@
                                id="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}-{{.Instance}}" name="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}"/>
                     </div>
                 </div>
-            </div>
             <!--  Reply / Submit Comment form -->
             <form class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
                 <div class="cont-flex-row flex-end">
@@ -97,6 +96,7 @@
                     <span class="btn-reply">{{$post.CommentsCount}}</span>
                 </button>
       {{ end }}
+            </div>
         </div> <!-- end post card -->
     </div> <!-- end container-comments wrapper -->
 {{end}} <!-- end define block -->

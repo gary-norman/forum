@@ -11,7 +11,7 @@
       <div class="right-panel-container-name flex-space-between">
         <div class="cont-flex-column">
           <h4 class="right-panel-name">/{{ .ThisChannel.Name }}</h4>
-          <small>created by {{ if (eq .ThisChannel.OwnerID $user.ID) }}you {{ else }} {{ .ThisChannelOwnerName }} {{ end }}{{ .ThisChannel.TimeSince}}</small>
+          <small>created by {{ if (eq .ThisChannel.OwnerID $userID) }}you {{ else }} {{ .ThisChannelOwnerName }} {{ end }}{{ .ThisChannel.TimeSince}}</small>
         </div>
         {{ if (eq .IsJoinedOrOwned true) }}
           <button id="right-panel-channel--edit-channel-name" class="btn-sm btn-icoonly">

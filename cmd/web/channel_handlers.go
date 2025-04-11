@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -136,30 +137,68 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		isJoinedOrOwned = isOwned || isJoined
 	}
 
-	TemplateData.ThisChannel = thisChannel
-	TemplateData.ThisChannelOwnerName = thisChannelOwnerName
-	TemplateData.ThisChannelRules = thisChannelRules
-	TemplateData.ThisChannelPosts = thisChannelPosts
-	TemplateData.ThisChannelIsOwned = isOwned
-	TemplateData.OwnedAndJoinedChannels = ownedAndJoinedChannels
-	TemplateData.ThisChannelIsOwnedOrJoined = isJoinedOrOwned
+	// data := models.PostCardData{
+	// 	ThisChannel:                thisChannel,
+	// 	ThisChannelOwnerName:       thisChannelOwnerName,
+	// 	ThisChannelRules:           thisChannelRules,
+	// 	ThisChannelPosts:           thisChannelPosts,
+	// 	ThisChannelIsOwned:         isOwned,
+	// 	OwnedAndJoinedChannels:     ownedAndJoinedChannels,
+	// 	IsJoinedOrOwned: isJoinedOrOwned,
+	// 	IsPostPage:                 false,
+	// 	Instance:                   "channel-page",
+	// }
 
-	fmt.Printf(ErrorMsgs().KeyValuePair, "TemplateData.ThisChannel", TemplateData.ThisChannel.Name)
+	post := thisChannelPosts[0]
+	models.UpdateTimeSince(&post)
 
-	// Prepare the response
-	response := map[string]any{
-		"code":       http.StatusOK,
-		"channel":    thisChannel.Name,
-		"postsCount": len(thisChannelPosts),
-		"isOwned":    isOwned,
-		"ownerName":  thisChannelOwnerName,
-		"isJoined":   isJoined,
+	data := models.ChannelPageBanner{
+		TestString:             "This is a test string",
+		ThisChannel:            thisChannel,
+		OwnedAndJoinedChannels: ownedAndJoinedChannels,
+		IsJoinedOrOwned:        isJoinedOrOwned,
+		ThisChannelOwnerName:   thisChannelOwnerName,
+		ThisChannelRules:       thisChannelRules,
 	}
 
-	// Write the response as JSON
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		http.Error(w, `{"error": "Error encoding response"}`, http.StatusInternalServerError)
+	// data := models.Postplus{
+	//   ID: post.ID,
+	//   Title: post.Title,
+	//   Content: post.Content,
+	//   Images: post.Images,
+	//   Created: post.Created,
+	//   TimeSince: post.TimeSince,
+	//   IsCommentable: post.IsCommentable,
+	//   Author: post.Author,
+	//   AuthorID: post.AuthorID,
+	//   AuthorAvatar: post.AuthorAvatar,
+	//   ChannelID: thisChannel.ID,
+	//   ChannelName: thisChannel.Name,
+	//   IsFlagged: post.IsFlagged,
+	//   Likes: post.Likes,
+	//   Dislikes: post.Dislikes,
+	//   CommentsCount: post.CommentsCount,
+	//   Comments: post.Comments,
+	//   IsPostPage: false,
+	//   Instance: "channel-page",
+	// }
+
+	fmt.Println("DATA:", data)
+	// fmt.Println("POST COUNT:", len(data.ThisChannelPosts))
+	// Render the `post-card.html` subtemplate
+	var renderedChannelPageBanner bytes.Buffer
+	postsErr := Template.ExecuteTemplate(&renderedChannelPageBanner, "channel-page-banner", data)
+	if postsErr != nil {
+		http.Error(w, "Error rendering channel-page-banner", http.StatusInternalServerError)
+		return
 	}
+
+	// Send the pre-rendered HTML as JSON
+	response := map[string]string{
+		"postsHTML": renderedChannelPageBanner.String(),
+	}
+	log.Printf(ErrorMsgs().KeyValuePair, len(thisChannelPosts), thisChannel.Name)
+	json.NewEncoder(w).Encode(response)
 }
 
 func (app *app) GetChannelInfoFromPostID(postID int) (int, string, error) {

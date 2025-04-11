@@ -1,0 +1,17 @@
+{{ define "channel-page-feed" }}
+  {{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
+  {{ $channelBasePath := "db/userdata/images/channel-images/" }}
+  {{ $postBasePath := "db/userdata/images/post-images/" }}
+  {{ $userBasePath := "db/userdata/images/user-images/" }}
+  {{ $userID := 0 }} <!-- Defaault value for logged out users -->
+  {{ if ne .CurrentUser nil }}
+    {{ $userID = .CurrentUser.ID }}
+  {{ end }}
+  <div id="wrapper-channel-feed" style="position: absolute; width: 100%; height: 100%">
+    <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+    {{ range .ThisChannelPosts }}
+    {{ template "post-card" }}
+    {{ end }}
+    </div>
+  </div>
+{{ end }} <!-- end define block -->

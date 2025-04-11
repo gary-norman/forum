@@ -171,7 +171,9 @@ type Postplus struct {
 	IsPostPage    bool
 	Instance      string
 }
-type PostCardData struct {
+type ChannelPage struct {
+	TestString             string
+	CurrentUser            *User
 	ThisChannelPosts       []Post
 	ThisChannelOwnerName   string
 	ThisChannel            Channel
@@ -182,6 +184,7 @@ type PostCardData struct {
 	IsJoinedOrOwned        bool
 	IsPostPage             bool
 	Instance               string
+	ImagePaths
 }
 type PostChannel struct {
 	ID        int       `json:"id"`
@@ -289,6 +292,12 @@ type Notify struct {
 //LoginOk:      "Logged in successfully!",
 //LoginFail:    "Unable to log in.",
 //}
+
+type ImagePaths struct {
+	Channel string
+	Post    string
+	User    string
+}
 
 type TemplateData struct {
 	// ---------- users ----------

@@ -130,20 +130,20 @@ let filename;
 const newContentLoaded = new CustomEvent('newContentLoaded');
 
 
-// document.addEventListener('DOMContentLoaded', listenToInjectedPages);
-// document.addEventListener('newContentLoaded', listenToInjectedPages);
-//
-// function listenToInjectedPages() {
-//   document.addEventListener('newContentLoaded', listenToDropdowns);
-//   document.addEventListener('newContentLoaded', listenToPageSetup);
-//   document.addEventListener('newContentLoaded', listenToRules);
-//   document.addEventListener('newContentLoaded', listenToShare);
-//   document.addEventListener('newContentLoaded', listenToLikeDislike);
-//   document.addEventListener('newContentLoaded', listenToNavigationLinks);
-//   document.addEventListener('newContentLoaded', listenToReplies);
-//   document.addEventListener('newContentLoaded', listenToEditDetails);
-//   document.addEventListener('newContentLoaded', listenToChannelLinks);
-// }
+document.addEventListener('DOMContentLoaded', listenToInjectedPages);
+document.addEventListener('newContentLoaded', listenToInjectedPages);
+
+function listenToInjectedPages() {
+  document.addEventListener('newContentLoaded', listenToDropdowns);
+  document.addEventListener('newContentLoaded', listenToPageSetup);
+  document.addEventListener('newContentLoaded', listenToRules);
+  document.addEventListener('newContentLoaded', listenToShare);
+  document.addEventListener('newContentLoaded', listenToLikeDislike);
+  document.addEventListener('newContentLoaded', listenToNavigationLinks);
+  document.addEventListener('newContentLoaded', listenToReplies);
+  document.addEventListener('newContentLoaded', listenToEditDetails);
+  document.addEventListener('newContentLoaded', listenToChannelLinks);
+}
 
 // INFO was inside a DOMContentLoaded function
 function listenToChannelLinks() {

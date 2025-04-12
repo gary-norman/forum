@@ -115,7 +115,7 @@
 To get a local copy up and running follow these simple example steps.
 
 
-This is an example of how to list things you need to use the software and how to install them.
+<!-- This is an example of how to list things you need to use the software and how to install them. -->
 * npm
   ```sh
   npm install npm@latest -g
@@ -147,7 +147,7 @@ This is an example of how to list things you need to use the software and how to
 
 <!-- USAGE EXAMPLES -->
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+<!-- Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources. -->
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
@@ -200,7 +200,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Gary Norman - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Kamil Ornal - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
 
 Project Link: [https://github.com/gary.norman/forum](https://github.com/gary.norman/forum)
 

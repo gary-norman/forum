@@ -201,6 +201,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 
 Gary Norman - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+
 Kamil Ornal - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
 
 Project Link: [https://github.com/gary.norman/forum](https://github.com/gary.norman/forum)

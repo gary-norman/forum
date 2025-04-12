@@ -5,7 +5,12 @@ import {
   selectActiveFeed,
   userPage,
   postPage,
+  listenToShare,
 } from "./share.js";
+import {listenToLikeDislike} from "./reactions.js";
+import {listenToNavigationLinks} from "./posts.js";
+import {listenToEditDetails} from "./edit_user.js";
+import {listenToReplies} from "./comments.js";
 
 // variables
 //user information
@@ -121,8 +126,49 @@ const feeds = document.querySelectorAll(".feeds-wrapper");
 let file;
 let filename;
 
+// Create a new custom event
+const newContentLoaded = new CustomEvent('newContentLoaded');
+
+
+// document.addEventListener('DOMContentLoaded', listenToInjectedPages);
+// document.addEventListener('newContentLoaded', listenToInjectedPages);
+//
+// function listenToInjectedPages() {
+//   document.addEventListener('newContentLoaded', listenToDropdowns);
+//   document.addEventListener('newContentLoaded', listenToPageSetup);
+//   document.addEventListener('newContentLoaded', listenToRules);
+//   document.addEventListener('newContentLoaded', listenToShare);
+//   document.addEventListener('newContentLoaded', listenToLikeDislike);
+//   document.addEventListener('newContentLoaded', listenToNavigationLinks);
+//   document.addEventListener('newContentLoaded', listenToReplies);
+//   document.addEventListener('newContentLoaded', listenToEditDetails);
+//   document.addEventListener('newContentLoaded', listenToChannelLinks);
+// }
+
+// INFO was inside a DOMContentLoaded function
+function listenToChannelLinks() {
+  const joinedAndOwnedChannelContainer = document.querySelector(
+      "#sidebar-channel-block",
+  );
+
+  console.log(joinedAndOwnedChannelContainer)
+  let joinedAndOwnedChannels;
+
+  if (joinedAndOwnedChannelContainer) {
+    joinedAndOwnedChannels =
+        joinedAndOwnedChannelContainer.querySelectorAll(".sidebar-channel");
+    joinedAndOwnedChannels.forEach((channel) =>
+        channel.addEventListener("click", (e) => {
+          e.preventDefault();
+          navigateToChannel(channel);
+        }),
+    );
+  }
+}
+
 // post channel selection dropdown
-document.addEventListener("DOMContentLoaded", () => {
+// INFO was a DOMContentLoaded function
+function listenToDropdowns() {
   const dropdownToggle = document.querySelector(".dropdown-toggle");
   const wrapperDropdown = document.querySelector(".wrapper-dropdown");
 
@@ -137,28 +183,15 @@ document.addEventListener("DOMContentLoaded", () => {
       wrapperDropdown.style.display = "none";
     }
   });
-});
+}
 
-document.addEventListener("DOMContentLoaded", function () {
+// INFO was a DOMContentLoaded function
+function listenToPageSetup() {
   feeds.forEach((feed) => {
     feed.classList.add("feeds-wrapper-loaded");
   });
 
-  const joinedAndOwnedChannelContainer = document.querySelector(
-    "#sidebar-channel-block",
-  );
-  let joinedAndOwnedChannels;
 
-  if (joinedAndOwnedChannelContainer) {
-    joinedAndOwnedChannels =
-      joinedAndOwnedChannelContainer.querySelectorAll(".sidebar-channel");
-    joinedAndOwnedChannels.forEach((channel) =>
-      channel.addEventListener("click", (e) => {
-        e.preventDefault();
-        navigateToChannel(channel);
-      }),
-    );
-  }
 
   toggleUserInteracted("add");
   actButtonContainer = document.querySelector("#activity-bar");
@@ -173,23 +206,23 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
   activityFeedsContentAll = activityFeeds.querySelectorAll(
-    '[id^="activity-feed-"]',
+      '[id^="activity-feed-"]',
   );
   // Log the buttons for debugging purposes (optional)
   if (actButtonsAll) {
     actButtonsAll.forEach((button) =>
-      button.addEventListener("click", (e) => {
-        toggleFeed(
-          document.getElementById("activity-" + e.target.id),
-          document.getElementById("activity-feed-" + e.target.id),
-          e.target,
-        );
-        // console.log('activity-' + e.target.id);
-      }),
+        button.addEventListener("click", (e) => {
+          toggleFeed(
+              document.getElementById("activity-" + e.target.id),
+              document.getElementById("activity-feed-" + e.target.id),
+              e.target,
+          );
+          // console.log('activity-' + e.target.id);
+        }),
     );
     // right panel buttons
     rightPanelButtons = document.querySelectorAll(
-      '[id^="right-panel-channel--"]',
+        '[id^="right-panel-channel--"]',
     );
   }
 
@@ -204,10 +237,12 @@ document.addEventListener("DOMContentLoaded", function () {
     console.error("getInitialFromAttribute is not defined");
   }
   // console.log("activity buttons:", actButtonsAll)
-});
 
+}
+
+// INFO was a DOMContentLoaded function
 // ------- channel rules -------
-document.addEventListener("DOMContentLoaded", () => {
+function listenToRules() {
   const addButton = document.querySelector("#add-unsubmitted-rule");
   const submitButton = document.querySelector("#edit-channel-rules-btn");
   const addedRulesWrapper = document.querySelector("#rules-wrapper-added");
@@ -215,16 +250,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputField = document.querySelector("#create-unsubmitted-rule");
   const hiddenInput = document.querySelector("#rules-hidden-input");
   const existingRulesContainer = document.querySelector(
-    "#rules-wrapper-existing",
+      "#rules-wrapper-existing",
   );
   let existingRules = existingRulesContainer.querySelectorAll(
-    '[id^="existing-channel-rule-"]',
+      '[id^="existing-channel-rule-"]',
   );
 
   existingRules.forEach((element) =>
-    element.addEventListener("click", (e) => {
-      removeExistingRule(e.target.id);
-    }),
+      element.addEventListener("click", (e) => {
+        removeExistingRule(e.target.id);
+      }),
   );
 
   let rulesList = [];
@@ -240,12 +275,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const ruleId = `ruleItem-${addRuleCounter++}`;
       createRuleItem(ruleId, ruleText, "add");
 
-      rulesList.push({ id: ruleId, text: ruleText });
+      rulesList.push({id: ruleId, text: ruleText});
       updateHiddenInput();
 
       inputField.value = "";
     }
   }
+
   function removeExistingRule(ruleId) {
     const item = document.getElementById(ruleId);
     const ruleText = item.innerText.trim();
@@ -254,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (ruleText) {
       console.log("remove rule: ", ruleId);
       createRuleItem(ruleId, ruleText, "remove");
-      rulesList.push({ id: ruleId, text: ruleText });
+      rulesList.push({id: ruleId, text: ruleText});
       updateHiddenInput();
     }
     console.log("removing ", item);
@@ -322,15 +358,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     editInput.addEventListener("blur", () =>
-      saveEditedRule(ruleId, editInput.value),
+        saveEditedRule(ruleId, editInput.value),
     );
   }
 
   function saveEditedRule(ruleId, newText) {
     if (!newText.trim())
       return cancelEdit(
-        ruleId,
-        rulesList.find((r) => r.id === ruleId)?.text || "",
+          ruleId,
+          rulesList.find((r) => r.id === ruleId)?.text || "",
       );
 
     const ruleIndex = rulesList.findIndex((rule) => rule.id === ruleId);
@@ -364,12 +400,12 @@ document.addEventListener("DOMContentLoaded", () => {
       existingRulesContainer.appendChild(ruleTextSpan);
 
       existingRules = existingRulesContainer.querySelectorAll(
-        '[id^="existing-channel-rule-"]',
+          '[id^="existing-channel-rule-"]',
       );
       existingRules.forEach((element) =>
-        element.addEventListener("click", (e) => {
-          removeExistingRule(e.target.id);
-        }),
+          element.addEventListener("click", (e) => {
+            removeExistingRule(e.target.id);
+          }),
       );
     }
 
@@ -390,7 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   }
-});
+}
 
 // SECTION ----- functions ------
 function fetchAndNavigate(url, page, errorMessage) {
@@ -412,10 +448,14 @@ function fetchAndNavigate(url, page, errorMessage) {
 
 function fetchChannelData(channelId) {
   console.log("Fetching channel data for ID:", channelId);
+
   fetch(`/channels/${channelId}`)
     .then((response) => response.json())
     .then((data) => {
       document.getElementById("channel-page").innerHTML = data.postsHTML;
+
+      // Dispatch the event on the document (or any other appropriate ancestor)
+      document.dispatchEvent(newContentLoaded);
     })
     .catch((error) => console.error("Error fetching channel data:", error));
 }

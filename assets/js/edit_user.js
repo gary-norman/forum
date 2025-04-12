@@ -1,5 +1,5 @@
 // INFO was a DOMContentLoaded function
-export function listenToEditUser() {
+export function listenToEditDetails() {
   const userSettingBlocks = document.querySelectorAll('[id^="settings-user-"]');
   const nameInput = document.querySelector("#name");
   const nameContent = document.querySelector("#user-name-content");

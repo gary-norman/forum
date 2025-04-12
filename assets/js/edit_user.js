@@ -1,3 +1,4 @@
+// INFO was a DOMContentLoaded function
 function listenToEditUser() {
   const userSettingBlocks = document.querySelectorAll('[id^="settings-user-"]');
   const nameInput = document.querySelector("#name");

@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", function () {
+// INFO was a DOMContentLoaded function
+function listenToReplies() {
     let postID;
     let commentID;
     let msg;
@@ -18,11 +19,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             allReplyForms.forEach(form => {
                 if (form !== targetForm)
-                form.classList.remove('replying');
+                    form.classList.remove('replying');
             });
 
             setTimeout(() => {
-                if ( targetForm.classList.contains('replying')) {
+                if (targetForm.classList.contains('replying')) {
                     targetForm.classList.remove('replying');
                     const textarea = targetForm.querySelector('[id^="comment-form-textarea-"]');
                     textarea.value = '';
@@ -37,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     })
 
-    textareas.forEach(textarea  => {
+    textareas.forEach(textarea => {
         postID = textarea.closest('.card').getAttribute('data-post-id');
         commentID = textarea.closest('.card').getAttribute('data-comment-id');
 
@@ -63,7 +64,4 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     })
-
-
-});
-
+}

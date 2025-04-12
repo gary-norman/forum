@@ -4,7 +4,7 @@
   {{ if ne .CurrentUser nil }}
     {{ $userID = .CurrentUser.ID }}
   {{ end }}
-  <div id="wrapper-channel-feed" style="position: absolute; width: 100%; height: 100%">
+  <div id="wrapper-channel-feed" style="position: absolute; width: 60%; height: 100%">
     <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
     {{ range .ThisChannelPosts }}
       {{ template "post-card" (dict "Post" . "root" $ "Instance" "channel-page") }}

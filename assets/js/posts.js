@@ -5,7 +5,7 @@ const linkPostAuthors = document.querySelectorAll('[id^="link-post-author"]');
 const linkPostChannels = document.querySelectorAll('[id^="link-post-channel"]');
 
 // INFO was a DOMContentLoaded function
-function listenToNavigationLinks()  {
+export function listenToNavigationLinks()  {
     linkPostPosts.forEach((post) => {
       post.addEventListener("click", (e) => {
         e.preventDefault();

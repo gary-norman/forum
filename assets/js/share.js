@@ -49,27 +49,7 @@ export function selectActiveFeed() {
 }
 
 // INFO was a DOMContentLoaded function
-function listenToActivityBar() {
-  const activityBar = document.getElementById("activity-bar");
-  if (activityBar) {
-    activityButtons = activityBar.querySelectorAll("button");
-  }
-
-  activityButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      //set timeout due to the animation timeout when switching between activity feeds in main.js
-      setTimeout(() => {
-        // console.log('Before selectActiveFeed:', scrollWindow);
-        selectActiveFeed();
-        // console.log('After selectActiveFeed:', scrollWindow);
-        attachScrollListener(shareButton, shareModal);
-      }, 500);
-    });
-  });
-}
-
-// INFO was a DOMContentLoaded function
-function listenToShare() {
+export function listenToShare() {
   let postID, commentID, channelID, msg, title;
   selectActiveFeed();
   const buttonControls = document.querySelectorAll('[class$="-controls"]');
@@ -145,6 +125,23 @@ function listenToShare() {
         // }, 200);
       });
     }
+
+    const activityBar = document.getElementById("activity-bar");
+    if (activityBar) {
+      activityButtons = activityBar.querySelectorAll("button");
+    }
+
+    activityButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        //set timeout due to the animation timeout when switching between activity feeds in main.js
+        setTimeout(() => {
+          // console.log('Before selectActiveFeed:', scrollWindow);
+          selectActiveFeed();
+          // console.log('After selectActiveFeed:', scrollWindow);
+          attachScrollListener(shareButton, shareModal);
+        }, 500);
+      });
+    });
 
     // TODO check api's of sites and fix title/message
     //if postID present, make msg = postMsg, if commentID present, make msg = commentMsg

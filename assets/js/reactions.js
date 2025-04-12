@@ -1,6 +1,6 @@
 
 // INFO was a DOMContentLoaded function
-function listenToLikeDislike(){
+export function listenToLikeDislike(){
     const postControls = document.querySelectorAll('.post-controls');
     const sidebar = document.querySelector(`.sidebar`);
     const sidebarProfile = document.querySelector('.sidebarProfile');

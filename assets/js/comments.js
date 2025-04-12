@@ -1,5 +1,5 @@
 // INFO was a DOMContentLoaded function
-function listenToReplies() {
+export function listenToReplies() {
     let postID;
     let commentID;
     let msg;

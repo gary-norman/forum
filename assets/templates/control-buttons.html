@@ -3,7 +3,7 @@
   {{ $root := .root}}
   {{ $user := $root.CurrentUser }}
   {{ $calledBy := .calledBy}}
-  {{ $instance := .Instance}}
+  {{ $instance := $root.Instance}}
   {{ if ne $user nil }}
     {{ $userID = $user.ID }}
   {{ end }}
@@ -11,9 +11,14 @@
     <div class="button-row-wrap {{ if ne $calledBy "right-panel"}}post-controls{{end}}">
   {{ if ne $calledBy "right-panel"}} {{/* buttons NOT present in right-panel */}}
         {{ if eq $calledBy "post-card"}}
-          {{ $post := .Post }}
-          {{$status := .root.reactionStatus $userID $post.ID 0}}
-          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}} {{ if eq $user nil}}inactive{{ end }}">
+            <p>Post: {{ .Post}}</p>
+            {{ $post := .Post }}
+            <p>test2</p>
+
+            {{$status := reactionStatus $userID $post.ID 0}}
+            <p>test3</p>
+
+            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}} {{ if eq $user nil}}inactive{{ end }}">
             <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{$post.Likes}}</span>
           </button>
           <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}} {{ if eq $user nil}}inactive{{ end }}" >
@@ -64,7 +69,9 @@
         {{ end }} <!-- end of eq $calledBy "post-card" -->
 
         {{ if eq $calledBy "comment-card"}}
-          {{ $post := .Post }}
+            <p>test2</p>
+
+            {{ $post := .Post }}
           {{ $comment := .Comment }}
           {{$status := reactionStatus $userID 0 $comment.ID}}
           <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
@@ -118,19 +125,21 @@
 
 
     {{ if eq $calledBy "right-panel"}}
-      {{ if and (ne $user nil) (eq $instance "user-page")}}
-{{/*          TODO when user is an administrator, button prepared; needs admin check*/}}
+        {{ if ne $user nil }}
+            {{/*          TODO when user is an administrator, button prepared; needs admin check*/}}
+            {{if eq $instance "user-page"}}
 {{/*        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >*/}}
 {{/*          <span class="btn-ban">ban</span>*/}}
 {{/*        </button>*/}}
-        {{ if eq $instance "channel-page"}}
-          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-            <span class="btn-mute">mute</span>
-          </button>
-        {{ end }}
-      {{ end }} <!-- end of eq $calledBy "right-panel" -->
-
-    {{ end }}
-
-  </div>
+            {{ else if eq $instance "channel-page"}}
+                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                    <span class="btn-mute">mute</span>
+                </button>
+                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+                    <span class="btn-report">report</span>
+                </button>
+            {{ end }} <!-- end of if "user-page" or "channel-page" -->
+        {{ end }} <!-- end of if ne $user nil -->
+    {{ end }} <!-- end of eq $calledBy "right-panel" -->
+  </div> <!-- end of div button-row-wrap -->
 {{ end}}

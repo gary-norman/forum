@@ -4,7 +4,6 @@
   {{ if ne .CurrentUser nil }}
     {{ $userID = .CurrentUser.ID }}
   {{ end }}
-  {{ $calledBy := "right-panel" }}
   <div class="right-panel ">
     <div class="right-panel-content scroll-down">
       <div class="right-panel-container-name flex-space-between">
@@ -24,16 +23,6 @@
       {{ template "channel-edit-bio" . }}
       {{ template "channel-edit-mods" . }}
       {{ template "channel-edit-rules" . }}
-      {{ template "control-buttons" (dict "root" . "calledBy" $calledBy "Instance" "channel-page") }}
-
-    <div class="button-row-wrap">
-      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-        <span class="btn-share">share</span>
-      </button>
-
-      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-        <span class="btn-report">report</span>
-      </button>
-    </div>
+      {{ template "control-buttons" (dict "root" . "calledBy" "right-panel") }}
   </div>
 {{ end }}

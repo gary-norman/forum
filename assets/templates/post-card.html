@@ -5,7 +5,8 @@
         {{ $userID = .CurrentUser.ID }}
     {{ end }}
     {{ $post := .Post }}
-    {{ $instance := .Instance }}
+    {{ $root := .root }}
+    {{ $instance := $root.Instance }}
     <div class="container-card-down">
         <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">
             <div class="container-post-info">
@@ -32,7 +33,7 @@
                 <img src="{{ .root.ImagePaths.Post }}/{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
             {{ end }}
             <p class="cardContent">{{$post.Content}}</p>
-            {{ template "control-buttons" (dict "Post" .  "root" $ "CalledBy" "post-card" "Instance" "channel-page")}}
+            {{ template "control-buttons" (dict "Post" $post  "root" $ "calledBy" "post-card" )}}
             <!--  Post control buttons -->
         </div> <!-- end post card -->
     </div> <!-- end container-comments wrapper -->

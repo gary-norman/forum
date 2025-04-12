@@ -24,7 +24,7 @@
       {{ template "channel-edit-bio" . }}
       {{ template "channel-edit-mods" . }}
       {{ template "channel-edit-rules" . }}
-      {{ template "control-buttons" . dict ( $calledBy $calledBy )}}
+      {{ template "control-buttons" (dict "root" . "calledBy" $calledBy "Instance" "channel-page") }}
 
     <div class="button-row-wrap">
       <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">

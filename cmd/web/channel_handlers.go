@@ -37,6 +37,7 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	}
 	thisChannel := foundChannels[0]
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Fetching channel", thisChannel.Name)
+	models.UpdateTimeSince(&thisChannel)
 
 	// Fetch the channel owner
 	thisChannelOwnerName, ownerErr := app.users.GetSingleUserValue(thisChannel.OwnerID, "ID", "username")

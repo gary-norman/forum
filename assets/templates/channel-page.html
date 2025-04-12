@@ -4,7 +4,8 @@
   {{ if ne .CurrentUser nil }}
     {{ $userID = .CurrentUser.ID }}
   {{ end }}
-{{ template "channel-page-banner" . }}
+
+    {{ template "channel-page-banner" . }}
     <div class="container-content">
       <div class="content">
         {{ template "filters-row" . }}

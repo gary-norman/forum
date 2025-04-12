@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+function listenToEditUser() {
   const userSettingBlocks = document.querySelectorAll('[id^="settings-user-"]');
   const nameInput = document.querySelector("#name");
   const nameContent = document.querySelector("#user-name-content");
@@ -123,4 +123,4 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
-});
+}

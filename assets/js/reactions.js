@@ -1,6 +1,6 @@
 
-document.addEventListener('DOMContentLoaded', function () {
-
+// INFO was a DOMContentLoaded function
+function listenToLikeDislike(){
     const postControls = document.querySelectorAll('.post-controls');
     const sidebar = document.querySelector(`.sidebar`);
     const sidebarProfile = document.querySelector('.sidebarProfile');
@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     postControls.forEach(singlePostControl => {
+
         const likeCountElement = singlePostControl.querySelector('.btn-likes');
         const dislikeCountElement = singlePostControl.querySelector('.btn-dislikes');
 
@@ -24,8 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const channelID = singlePostControl.closest('.card').getAttribute('data-channel-id');
 
 
-
-        likeButton.addEventListener('click', function(event) {
+        likeButton.addEventListener('click', function (event) {
             let likeCount = parseInt(likeCountElement.textContent, 10);
             let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
 
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
             fetchData(postData, "like");
         });
 
-        dislikeButton.addEventListener('click', function(event) {
+        dislikeButton.addEventListener('click', function (event) {
             let likeCount = parseInt(likeCountElement.textContent, 10);
             let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
 
@@ -87,8 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
             fetchData(postData, "dislike");
         });
     });
-
-});
+}
 
 function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {
     let postData;

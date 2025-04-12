@@ -156,7 +156,6 @@ document.addEventListener("DOMContentLoaded", function () {
       channel.addEventListener("click", (e) => {
         e.preventDefault();
         navigateToChannel(channel);
-        getUserProfileImageFromAttribute();
       }),
     );
   }

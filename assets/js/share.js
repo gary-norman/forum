@@ -17,11 +17,6 @@ const postTitle = encodeURIComponent("Post Title Here");
 let activityButtons;
 let scrollWindow;
 
-const activityBar = document.getElementById("activity-bar");
-if (activityBar) {
-  activityButtons = activityBar.querySelectorAll("button");
-}
-
 export function selectActiveFeed() {
   const activePage = pages.find((page) =>
     page.classList.contains("active-feed"),
@@ -53,14 +48,31 @@ export function selectActiveFeed() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+// INFO was a DOMContentLoaded function
+function listenToActivityBar() {
+  const activityBar = document.getElementById("activity-bar");
+  if (activityBar) {
+    activityButtons = activityBar.querySelectorAll("button");
+  }
+
+  activityButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      //set timeout due to the animation timeout when switching between activity feeds in main.js
+      setTimeout(() => {
+        // console.log('Before selectActiveFeed:', scrollWindow);
+        selectActiveFeed();
+        // console.log('After selectActiveFeed:', scrollWindow);
+        attachScrollListener(shareButton, shareModal);
+      }, 500);
+    });
+  });
+}
+
+// INFO was a DOMContentLoaded function
+function listenToShare() {
   let postID, commentID, channelID, msg, title;
   selectActiveFeed();
-  let defaultShareButton, defaultShareModal;
   const buttonControls = document.querySelectorAll('[class$="-controls"]');
-  // if (!scrollWindow.hasScrollListener) {
-  //     attachScrollListener(shareButton, shareModal);
-  // }
 
   buttonControls.forEach((singleControl) => {
     postID = singleControl.closest(".card").getAttribute("data-post-id");
@@ -72,18 +84,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (postID === null) {
       shareModal = singleControl.querySelector(
-        `[id^="share-container-channel-${channelID}-comment-${commentID}"]`,
+          `[id^="share-container-channel-${channelID}-comment-${commentID}"]`,
       );
       shareButton = singleControl.querySelector(
-        `[id^="share-button-channel-${channelID}-comment-${commentID}"]`,
+          `[id^="share-button-channel-${channelID}-comment-${commentID}"]`,
       );
       // console.log("comment ID ✔️")
     } else if (commentID === null) {
       shareModal = singleControl.querySelector(
-        `[id^="share-container-channel-${channelID}-post-${postID}"]`,
+          `[id^="share-container-channel-${channelID}-post-${postID}"]`,
       );
       shareButton = singleControl.querySelector(
-        `[id^="share-button-channel-${channelID}-post-${postID}"]`,
+          `[id^="share-button-channel-${channelID}-post-${postID}"]`,
       );
       // console.log("post ID ✔️")
     }
@@ -125,18 +137,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
-    activityButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        //set timeout due to the animation timeout when switching between activity feeds in main.js
-        setTimeout(() => {
-          // console.log('Before selectActiveFeed:', scrollWindow);
-          selectActiveFeed();
-          // console.log('After selectActiveFeed:', scrollWindow);
-          attachScrollListener(shareButton, shareModal);
-        }, 500);
-      });
-    });
-
     if (shareButton != null) {
       shareButton.addEventListener("click", (e) => {
         // setTimeout(() => {
@@ -165,20 +165,21 @@ document.addEventListener("DOMContentLoaded", function () {
     // TODO check https works
     const twitter = singleControl.querySelector(".twitter");
     twitter.href = `https://twitter.com/share?&url=${link}&text=${msg}&hashtags=javascript,programming`;
-
+    // TODO check https works
     const linkedIn = singleControl.querySelector(".linkedin");
     linkedIn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${link}`;
     // TODO check https works
     const reddit = singleControl.querySelector(".reddit");
     reddit.href = `https://www.reddit.com/submit?url=${link}&title=${title}`;
-
+    // TODO check https works
     const whatsapp = singleControl.querySelector(".whatsapp");
     whatsapp.href = `https://api.whatsapp.com/send?text=${msg}: ${link}`;
-
+    // TODO check https works
     const telegram = singleControl.querySelector(".telegram");
     telegram.href = `https://telegram.me/share/url?url=${link}&text=${msg}`;
+    // TODO check https works
   });
-});
+}
 
 function attachScrollListener(shareButton, shareModal) {
   // console.log("attaching listener to:", scrollWindow)

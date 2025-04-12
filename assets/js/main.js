@@ -142,11 +142,11 @@ function listenToInjectedPages() {
   document.addEventListener('newContentLoaded', listenToNavigationLinks);
   document.addEventListener('newContentLoaded', listenToReplies);
   document.addEventListener('newContentLoaded', listenToEditDetails);
-  document.addEventListener('newContentLoaded', listenToChannelLinks);
+  // document.addEventListener('newContentLoaded', listenToChannelLinks);
 }
 
 // INFO was inside a DOMContentLoaded function
-function listenToChannelLinks() {
+document.addEventListener('DOMContentLoaded', () => {
   const joinedAndOwnedChannelContainer = document.querySelector(
       "#sidebar-channel-block",
   );
@@ -164,7 +164,8 @@ function listenToChannelLinks() {
         }),
     );
   }
-}
+});
+
 
 // post channel selection dropdown
 // INFO was a DOMContentLoaded function

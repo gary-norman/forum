@@ -130,19 +130,38 @@ let filename;
 const newContentLoaded = new CustomEvent('newContentLoaded');
 
 
+window.addEventListener("load", (event) => {
+  console.log("fired load");
+});
+
+document.addEventListener("readystatechange", (event) => {
+  console.log("fired readystatechange: ", document.readyState);
+});
+
+document.addEventListener("DOMContentLoaded", (event) => {
+  console.log("fired DOMContentLoaded");
+});
+
+document.addEventListener("newContentLoaded", (event) => {
+  console.log("fired newContentLoaded");
+});
+
 document.addEventListener('DOMContentLoaded', listenToInjectedPages);
 document.addEventListener('newContentLoaded', listenToInjectedPages);
 
 function listenToInjectedPages() {
-  document.addEventListener('newContentLoaded', listenToDropdowns);
-  document.addEventListener('newContentLoaded', listenToPageSetup);
-  document.addEventListener('newContentLoaded', listenToRules);
-  document.addEventListener('newContentLoaded', listenToShare);
-  document.addEventListener('newContentLoaded', listenToLikeDislike);
-  document.addEventListener('newContentLoaded', listenToNavigationLinks);
-  document.addEventListener('newContentLoaded', listenToReplies);
-  document.addEventListener('newContentLoaded', listenToEditDetails);
+  console.log("firing listening to injected")
+  // document.addEventListener('newContentLoaded', listenToDropdowns);
+  // document.addEventListener('newContentLoaded', listenToPageSetup);
+  // document.addEventListener('newContentLoaded', listenToRules);
+  // document.addEventListener('newContentLoaded', listenToShare);
+  // document.addEventListener('newContentLoaded', listenToLikeDislike);
+  // document.addEventListener('newContentLoaded', listenToNavigationLinks);
+  // document.addEventListener('newContentLoaded', listenToReplies);
+  // document.addEventListener('newContentLoaded', listenToEditDetails);
   // document.addEventListener('newContentLoaded', listenToChannelLinks);
+  listenToShare();
+  listenToLikeDislike();
 }
 
 // INFO was inside a DOMContentLoaded function

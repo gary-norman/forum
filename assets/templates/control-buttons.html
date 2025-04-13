@@ -7,7 +7,13 @@
     {{ if ne $user nil }}
     {{ $userID = $user.ID }}
     {{ end }}
-    <div class="button-row-wrap {{ if ne $calledBy "right-panel"}}post-controls{{end}}">
+    {{ $post := .Post }}
+    {{ $comment := .Comment }}
+    <div class="button-row-wrap
+    {{ if ne $calledBy "right-panel"}} post-controls {{end}}"
+    {{ if eq $calledBy "post-card" }} data-post-id="{{$post.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{$post.AuthorID}}"
+{{/*    {{ else if eq $calledBy "comment-card"}} data-comment-id="{{$comment.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{comment.AuthorID}}"*/}}
+    {{ end }}>
         {{ if ne $calledBy "right-panel"}} {{/* buttons NOT present in right-panel */}}
             {{ if eq $calledBy "post-card"}}
                 {{/*            <p>Post: {{ .Post}}</p>*/}}
@@ -59,15 +65,14 @@
                             </button>
                         </div>
                         <input value="https://localhost:8989/posts/{{ $post.ID }}" readonly type="text"
-                     id="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}-{{$instance}}" name="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}-{{$instance}}"/>
+                     id="copy-url-channel-{{ $post.ChannelID }}-post-{{ $post.ID }}-{{$instance}}" name="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}-{{$instance}}"/>
                     </div> <!-- end of div share-container -->
                 </div> <!-- end of div popover -->
             {{ end }} <!-- end of eq $calledBy "post-card" -->
             {{ if eq $calledBy "comment-card"}}
-                <p>test2</p>
-                {{ $post := .Post }}
-                {{ $comment := .Comment }}
                 {{$status := reactionStatus $userID 0 $comment.ID}}
+                <div style="display: none;" class="data-div" data-post-id="{{$comment.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$comment.AuthorID}}"></div>
+
                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
                     <span class="btn-likes" data-like-ID="user-{{$comment.ID}}">{{$comment.Likes}}</span>
                 </button>

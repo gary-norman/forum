@@ -474,6 +474,8 @@ function fetchChannelData(channelId) {
 
       // Dispatch the event on the document (or any other appropriate ancestor)
       document.dispatchEvent(newContentLoaded);
+      // Update URL without reloading
+      window.history.pushState({}, "", `/channels/${channelId}`);
     })
     .catch((error) => console.error("Error fetching channel data:", error));
 }
@@ -490,6 +492,8 @@ export function navigateToChannel(channel) {
 
   // Now fetch and inject the updated channel data
   fetchChannelData(link);
+
+
 }
 
 export function navigateToPost(post) {

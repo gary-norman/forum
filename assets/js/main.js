@@ -128,19 +128,19 @@ let filename;
 const newContentLoaded = new CustomEvent('newContentLoaded');
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  console.log("fired DOMContentLoaded");
+  // console.log("fired DOMContentLoaded");
+  UpdateUI();
 });
 
 document.addEventListener("newContentLoaded", (event) => {
-  console.log("fired newContentLoaded");
+  // console.log("fired newContentLoaded");
+  UpdateUI();
 });
 
-document.addEventListener('DOMContentLoaded', listenToInjectedPages);
-document.addEventListener('newContentLoaded', listenToInjectedPages);
 
-function listenToInjectedPages() {
+function UpdateUI() {
 
-  console.log("firing listening to injected")
+  // console.log("updating UI");
     listenToDropdowns();
     listenToRules();
     listenToReplies();
@@ -159,7 +159,7 @@ function listenToChannelLinks() {
       "#sidebar-channel-block",
   );
 
-  console.log(joinedAndOwnedChannelContainer)
+  // console.log(joinedAndOwnedChannelContainer)
   let joinedAndOwnedChannels;
 
   if (joinedAndOwnedChannelContainer) {

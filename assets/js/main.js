@@ -29,8 +29,6 @@ const goHome = document.querySelector("#btn-go-home");
 // right panel buttons
 let rightPanelButtons;
 // sidebar elements
-const userProfileImage = document.querySelectorAll(".profile-pic");
-const userProfileImageEmpty = document.querySelectorAll(".profile-pic--empty");
 const sidebarOption = document.querySelector("#sidebar-options");
 const sidebarOptionsList = document.querySelector(".sidebar-options-list");
 // login/register buttons
@@ -152,18 +150,17 @@ document.addEventListener('newContentLoaded', listenToInjectedPages);
 function listenToInjectedPages() {
 
   console.log("firing listening to injected")
-    // listenToDropdowns();
-    listenToPageSetup();
-    // listenToRules();
-    // listenToShare();
-    // listenToLikeDislike();
+    listenToDropdowns();
 
+    listenToRules();
     listenToReplies();
     listenToEditDetails();
     listenToChannelLinks();
     listenToShare();
     listenToLikeDislike();
     listenToNavigationLinks();
+    listenToPageSetup();
+  getUserProfileImageFromAttribute();
 }
 
 // INFO was inside a DOMContentLoaded function
@@ -213,8 +210,6 @@ function listenToPageSetup() {
   feeds.forEach((feed) => {
     feed.classList.add("feeds-wrapper-loaded");
   });
-
-
 
   toggleUserInteracted("add");
   actButtonContainer = document.querySelector("#activity-bar");
@@ -576,7 +571,8 @@ function getRandomInt(max) {
 }
 
 function getUserProfileImageFromAttribute() {
-  console.log()
+  const userProfileImage = document.querySelectorAll(".profile-pic");
+  console.log("updating profile images")
   for (let i = 0; i < userProfileImage.length; i++) {
     let attArr = ["user", "auth", "channel"];
     attArr[0] = userProfileImage[i].getAttribute("data-image-user");
@@ -608,6 +604,7 @@ function getUserProfileImageFromAttribute() {
 }
 
 function getInitialFromAttribute() {
+  const userProfileImageEmpty = document.querySelectorAll(".profile-pic--empty");
   // console.log('getInitialFromAttribute running...')
   // console.log('Elements found: ', userProfileImageEmpty.length)
   const colorsArr = [

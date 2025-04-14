@@ -127,15 +127,6 @@ let filename;
 // Create a new custom event
 const newContentLoaded = new CustomEvent('newContentLoaded');
 
-
-window.addEventListener("load", (event) => {
-  console.log("fired load");
-});
-
-document.addEventListener("readystatechange", (event) => {
-  console.log("fired readystatechange: ", document.readyState);
-});
-
 document.addEventListener("DOMContentLoaded", (event) => {
   console.log("fired DOMContentLoaded");
 });
@@ -151,7 +142,6 @@ function listenToInjectedPages() {
 
   console.log("firing listening to injected")
     listenToDropdowns();
-
     listenToRules();
     listenToReplies();
     listenToEditDetails();
@@ -160,7 +150,7 @@ function listenToInjectedPages() {
     listenToLikeDislike();
     listenToNavigationLinks();
     listenToPageSetup();
-  getUserProfileImageFromAttribute();
+    // getUserProfileImageFromAttribute();
 }
 
 // INFO was inside a DOMContentLoaded function
@@ -472,10 +462,12 @@ function fetchChannelData(channelId) {
     .then((data) => {
       document.getElementById("channel-page").innerHTML = data.postsHTML;
 
+
+      // Update URL without reloading
+      // window.history.pushState({}, "", `/channels/${channelId}`);
+
       // Dispatch the event on the document (or any other appropriate ancestor)
       document.dispatchEvent(newContentLoaded);
-      // Update URL without reloading
-      window.history.pushState({}, "", `/channels/${channelId}`);
     })
     .catch((error) => console.error("Error fetching channel data:", error));
 }
@@ -576,7 +568,6 @@ function getRandomInt(max) {
 
 function getUserProfileImageFromAttribute() {
   const userProfileImage = document.querySelectorAll(".profile-pic");
-  console.log("updating profile images")
   for (let i = 0; i < userProfileImage.length; i++) {
     let attArr = ["user", "auth", "channel"];
     attArr[0] = userProfileImage[i].getAttribute("data-image-user");

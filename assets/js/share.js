@@ -50,13 +50,10 @@ export function selectActiveFeed() {
 
 // INFO was a DOMContentLoaded function
 export function listenToShare() {
-  console.log("listenToSHare turning on")
   let postID, commentID, channelID, msg, title;
   selectActiveFeed();
   // const buttonControls = document.querySelectorAll('[class$="-controls"]');
   const buttonControls = document.querySelectorAll('[class*="post-controls"]');
-
-  console.log("buttonControls: ", buttonControls)
 
   buttonControls.forEach((singleControl) => {
 
@@ -64,10 +61,10 @@ export function listenToShare() {
     commentID = singleControl.getAttribute("data-comment-id");
     channelID = singleControl.getAttribute("data-channel-id");
 
-    console.log('buttonControls:', buttonControls)
-    console.log('PostID:', postID)
-    console.log('CommentID:', commentID)
-    console.log('ChannelID:', channelID)
+    // console.log('buttonControls:', buttonControls)
+    // console.log('PostID:', postID)
+    // console.log('CommentID:', commentID)
+    // console.log('ChannelID:', channelID)
     let shareModal;
     let shareButton;
 
@@ -90,8 +87,8 @@ export function listenToShare() {
     }
 
 
-    console.log(shareModal);
-    console.log(shareButton);
+    // console.log(shareModal);
+    // console.log(shareButton);
 
     //get all components needed
     if (shareModal != null) {

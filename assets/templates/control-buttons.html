@@ -10,7 +10,7 @@
     {{ $post := .Post }}
     {{ $comment := .Comment }}
     <div class="button-row-wrap
-    {{ if ne $calledBy "right-panel"}} post-controls {{end}}"
+    {{ if ne $calledBy "right-panel"}} post-controls{{end}}"
     {{ if eq $calledBy "post-card" }} data-post-id="{{$post.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{$post.AuthorID}}"
 {{/*    {{ else if eq $calledBy "comment-card"}} data-comment-id="{{$comment.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{comment.AuthorID}}"*/}}
     {{ end }}>

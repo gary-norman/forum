@@ -990,7 +990,9 @@
           </div>
 
 {{/*SECTION ---------- post page ---------- */}}
-          {{ template "post-page" (dict "ThisPost" .ThisPost "CurrentUser" $.CurrentUser "IsPostPage" "true" ) }}
+          <div id="post-page" class="feeds-wrapper">
+{{/*            {{ template "post-page" (dict "ThisPost" .ThisPost "CurrentUser" $.CurrentUser "IsPostPage" "true" ) }}*/}}
+          </div> <!-- end post-page wrapper -->
 
 
 {{/*SECTION ---------- user page ---------- */}}

@@ -150,22 +150,24 @@ document.addEventListener('DOMContentLoaded', listenToInjectedPages);
 document.addEventListener('newContentLoaded', listenToInjectedPages);
 
 function listenToInjectedPages() {
+
   console.log("firing listening to injected")
-  // document.addEventListener('newContentLoaded', listenToDropdowns);
-  // document.addEventListener('newContentLoaded', listenToPageSetup);
-  // document.addEventListener('newContentLoaded', listenToRules);
-  // document.addEventListener('newContentLoaded', listenToShare);
-  // document.addEventListener('newContentLoaded', listenToLikeDislike);
-  // document.addEventListener('newContentLoaded', listenToNavigationLinks);
-  // document.addEventListener('newContentLoaded', listenToReplies);
-  // document.addEventListener('newContentLoaded', listenToEditDetails);
-  // document.addEventListener('newContentLoaded', listenToChannelLinks);
-  listenToShare();
-  listenToLikeDislike();
+    // listenToDropdowns();
+    listenToPageSetup();
+    // listenToRules();
+    // listenToShare();
+    // listenToLikeDislike();
+
+    listenToReplies();
+    listenToEditDetails();
+    listenToChannelLinks();
+    listenToShare();
+    listenToLikeDislike();
+    listenToNavigationLinks();
 }
 
 // INFO was inside a DOMContentLoaded function
-document.addEventListener('DOMContentLoaded', () => {
+function listenToChannelLinks() {
   const joinedAndOwnedChannelContainer = document.querySelector(
       "#sidebar-channel-block",
   );
@@ -183,7 +185,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }),
     );
   }
-});
+}
+
 
 
 // post channel selection dropdown
@@ -573,6 +576,7 @@ function getRandomInt(max) {
 }
 
 function getUserProfileImageFromAttribute() {
+  console.log()
   for (let i = 0; i < userProfileImage.length; i++) {
     let attArr = ["user", "auth", "channel"];
     attArr[0] = userProfileImage[i].getAttribute("data-image-user");

@@ -464,7 +464,7 @@ function fetchChannelData(channelId) {
 
 
       // Update URL without reloading
-      // window.history.pushState({}, "", `/channels/${channelId}`);
+      window.history.pushState({}, "", `/channels/${channelId}`);
 
       // Dispatch the event on the document (or any other appropriate ancestor)
       document.dispatchEvent(newContentLoaded);

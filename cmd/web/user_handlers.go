@@ -81,7 +81,7 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Creating", "response")
 	response := map[string]string{
-		"userHTML": renderedUserPage.String(),
+		"usersHTML": renderedUserPage.String(),
 	}
 
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Writing", "JSON response")

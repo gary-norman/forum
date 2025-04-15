@@ -1,19 +1,27 @@
 import {
-  channelPage,
-  homePage,
+  // channelPage,
+  // homePage,
+  // userPage,
+  // postPage,
   pages,
   selectActiveFeed,
-  userPage,
-  postPage,
+  data,
   listenToShare,
 } from "./share.js";
-import {listenToLikeDislike} from "./reactions.js";
-import {listenToNavigationLinks} from "./posts.js";
-import {listenToEditDetails} from "./edit_user.js";
-import {listenToReplies} from "./comments.js";
+import { listenToLikeDislike } from "./reactions.js";
+import { listenToNavigationLinks } from "./posts.js";
+import { listenToEditDetails } from "./edit_user.js";
+import { listenToReplies } from "./comments.js";
 
 // variables
 //user information
+const homePageUserContainer = document.querySelector("#home-page-users");
+homePageUserContainer.addEventListener("click", (e) => {
+  console.log("clicked ", e.target);
+  if (e.target.matches(".card")) {
+    navigateToPage("user", e.target);
+  }
+});
 
 // dark mode
 const switchDl = document.querySelector("#switch-dl");
@@ -127,7 +135,7 @@ let file;
 let filename;
 
 // Create a new custom event
-const newContentLoaded = new CustomEvent('newContentLoaded');
+const newContentLoaded = new CustomEvent("newContentLoaded");
 
 
 window.addEventListener("load", (event) => {
@@ -165,26 +173,25 @@ function listenToInjectedPages() {
 }
 
 // INFO was inside a DOMContentLoaded function
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   const joinedAndOwnedChannelContainer = document.querySelector(
-      "#sidebar-channel-block",
+    "#sidebar-channel-block",
   );
 
-  console.log(joinedAndOwnedChannelContainer)
+  console.log(joinedAndOwnedChannelContainer);
   let joinedAndOwnedChannels;
 
   if (joinedAndOwnedChannelContainer) {
     joinedAndOwnedChannels =
-        joinedAndOwnedChannelContainer.querySelectorAll(".sidebar-channel");
+      joinedAndOwnedChannelContainer.querySelectorAll(".sidebar-channel");
     joinedAndOwnedChannels.forEach((channel) =>
-        channel.addEventListener("click", (e) => {
-          e.preventDefault();
-          navigateToChannel(channel);
-        }),
+      channel.addEventListener("click", (e) => {
+        e.preventDefault();
+        navigateToChannel(channel);
+      }),
     );
   }
 });
-
 
 // post channel selection dropdown
 // INFO was a DOMContentLoaded function
@@ -211,8 +218,6 @@ function listenToPageSetup() {
     feed.classList.add("feeds-wrapper-loaded");
   });
 
-
-
   toggleUserInteracted("add");
   actButtonContainer = document.querySelector("#activity-bar");
   if (!actButtonContainer) {
@@ -226,23 +231,23 @@ function listenToPageSetup() {
     return;
   }
   activityFeedsContentAll = activityFeeds.querySelectorAll(
-      '[id^="activity-feed-"]',
+    '[id^="activity-feed-"]',
   );
   // Log the buttons for debugging purposes (optional)
   if (actButtonsAll) {
     actButtonsAll.forEach((button) =>
-        button.addEventListener("click", (e) => {
-          toggleFeed(
-              document.getElementById("activity-" + e.target.id),
-              document.getElementById("activity-feed-" + e.target.id),
-              e.target,
-          );
-          // console.log('activity-' + e.target.id);
-        }),
+      button.addEventListener("click", (e) => {
+        toggleFeed(
+          document.getElementById("activity-" + e.target.id),
+          document.getElementById("activity-feed-" + e.target.id),
+          e.target,
+        );
+        // console.log('activity-' + e.target.id);
+      }),
     );
     // right panel buttons
     rightPanelButtons = document.querySelectorAll(
-        '[id^="right-panel-channel--"]',
+      '[id^="right-panel-channel--"]',
     );
   }
 
@@ -257,7 +262,6 @@ function listenToPageSetup() {
     console.error("getInitialFromAttribute is not defined");
   }
   // console.log("activity buttons:", actButtonsAll)
-
 }
 
 // INFO was a DOMContentLoaded function
@@ -270,16 +274,16 @@ function listenToRules() {
   const inputField = document.querySelector("#create-unsubmitted-rule");
   const hiddenInput = document.querySelector("#rules-hidden-input");
   const existingRulesContainer = document.querySelector(
-      "#rules-wrapper-existing",
+    "#rules-wrapper-existing",
   );
   let existingRules = existingRulesContainer.querySelectorAll(
-      '[id^="existing-channel-rule-"]',
+    '[id^="existing-channel-rule-"]',
   );
 
   existingRules.forEach((element) =>
-      element.addEventListener("click", (e) => {
-        removeExistingRule(e.target.id);
-      }),
+    element.addEventListener("click", (e) => {
+      removeExistingRule(e.target.id);
+    }),
   );
 
   let rulesList = [];
@@ -295,7 +299,7 @@ function listenToRules() {
       const ruleId = `ruleItem-${addRuleCounter++}`;
       createRuleItem(ruleId, ruleText, "add");
 
-      rulesList.push({id: ruleId, text: ruleText});
+      rulesList.push({ id: ruleId, text: ruleText });
       updateHiddenInput();
 
       inputField.value = "";
@@ -310,7 +314,7 @@ function listenToRules() {
     if (ruleText) {
       console.log("remove rule: ", ruleId);
       createRuleItem(ruleId, ruleText, "remove");
-      rulesList.push({id: ruleId, text: ruleText});
+      rulesList.push({ id: ruleId, text: ruleText });
       updateHiddenInput();
     }
     console.log("removing ", item);
@@ -378,15 +382,15 @@ function listenToRules() {
     });
 
     editInput.addEventListener("blur", () =>
-        saveEditedRule(ruleId, editInput.value),
+      saveEditedRule(ruleId, editInput.value),
     );
   }
 
   function saveEditedRule(ruleId, newText) {
     if (!newText.trim())
       return cancelEdit(
-          ruleId,
-          rulesList.find((r) => r.id === ruleId)?.text || "",
+        ruleId,
+        rulesList.find((r) => r.id === ruleId)?.text || "",
       );
 
     const ruleIndex = rulesList.findIndex((rule) => rule.id === ruleId);
@@ -420,12 +424,12 @@ function listenToRules() {
       existingRulesContainer.appendChild(ruleTextSpan);
 
       existingRules = existingRulesContainer.querySelectorAll(
-          '[id^="existing-channel-rule-"]',
+        '[id^="existing-channel-rule-"]',
       );
       existingRules.forEach((element) =>
-          element.addEventListener("click", (e) => {
-            removeExistingRule(e.target.id);
-          }),
+        element.addEventListener("click", (e) => {
+          removeExistingRule(e.target.id);
+        }),
       );
     }
 
@@ -466,18 +470,30 @@ function fetchAndNavigate(url, page, errorMessage) {
     });
 }
 
-function fetchChannelData(channelId) {
-  console.log("Fetching channel data for ID:", channelId);
+function fetchData(entity, Id) {
+  console.log(`Fetching ${entity} data for ID: `, Id);
 
-  fetch(`/channels/${channelId}`)
+  fetch(`/${entity}s/${Id}`)
     .then((response) => response.json())
     .then((data) => {
-      document.getElementById("channel-page").innerHTML = data.postsHTML;
+      document.getElementById(`${entity}-page`).innerHTML =
+        `data.${entity}sHTML`;
 
       // Dispatch the event on the document (or any other appropriate ancestor)
       document.dispatchEvent(newContentLoaded);
     })
-    .catch((error) => console.error("Error fetching channel data:", error));
+    .catch((error) => console.error(`Error fetching ${entity} data: `, error));
+}
+
+export function navigateToPage(dest, entity) {
+  const link = entity.getAttribute(`data-${dest}-id`);
+  const page = entity + "Page";
+  if (!link) {
+    console.error(`${dest} ID is missing`);
+    return;
+  }
+  changePage(page);
+  fetchData(dest, link);
 }
 
 export function navigateToChannel(channel) {
@@ -491,7 +507,7 @@ export function navigateToChannel(channel) {
   changePage(channelPage);
 
   // Now fetch and inject the updated channel data
-  fetchChannelData(link);
+  fetchData("channel", link);
 }
 
 export function navigateToPost(post) {
@@ -500,16 +516,19 @@ export function navigateToPost(post) {
     console.error("Post ID is missing");
     return;
   }
-  fetchAndNavigate(`/posts/${link}`, postPage, "Error navigating to post:");
+  changePage(postPage);
+  fetchData("post", link);
 }
 
-export function navigateToAuthor(author) {
-  const link = author.getAttribute("data-author-id");
+export function navigateToUser(user) {
+  const link = user.getAttribute("data-author-id");
   if (!link) {
     console.error("Author ID is missing");
     return;
   }
-  fetchAndNavigate(`/users/${link}`, userPage, "Error navigating to author:");
+
+  changePage(userPage);
+  fetchData("user", link);
 }
 
 // toggleUserInteracted toggles user-interacted class on input fields to prevent label animation before they are selected

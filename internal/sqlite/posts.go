@@ -74,6 +74,44 @@ func (m *PostModel) All() ([]models.Post, error) {
 	return Posts, nil
 }
 
+func (m *PostModel) GetPostsByUserID(user int) ([]models.Post, error) {
+	stmt := "SELECT * FROM posts WHERE AuthorID = ? ORDER BY ID DESC"
+	rows, err := m.DB.Query(stmt, user)
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "Error", "select")
+		log.Printf(ErrorMsgs().Query, stmt, err)
+		return nil, err
+	}
+	defer func() {
+		if closeErr := rows.Close(); closeErr != nil {
+			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+		}
+	}()
+
+	var Posts []models.Post
+	for rows.Next() {
+		p := models.Post{}
+		scanErr := rows.Scan(
+			&p.ID,
+			&p.Title,
+			&p.Content,
+			&p.Images,
+			&p.Created,
+			&p.IsCommentable,
+			&p.Author,
+			&p.AuthorID,
+			&p.AuthorAvatar,
+			&p.IsFlagged)
+		if scanErr != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
+			log.Printf(ErrorMsgs().Query, stmt, scanErr)
+			return nil, scanErr
+		}
+		Posts = append(Posts, p)
+	}
+	return Posts, nil
+}
+
 func (m *PostModel) GetPostsByChannel(channel int) ([]models.Post, error) {
 	stmt := "SELECT * FROM posts WHERE ChannelID = ? ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt, channel)

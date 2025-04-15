@@ -4,7 +4,7 @@
   {{ if ne .CurrentUser nil }}
     {{ $userID = .CurrentUser.ID }}
   {{ end }}
-  {{/* template "user-page-banner" . */}}
+  {{ template "user-page-banner" . }}
   <div class="container-content">
     <div class="content">
       <div id="activity-bar" class="button-row above-activity">
@@ -43,9 +43,9 @@
             </button>
           </div>
           <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-            {{/*range .Posts*/}} <!-- user page activity posts -->
-              {{/* template "post-card" (dict "Post" . "root" $ "CurrentUser" $.CurrentUser "Instance" "user-page-activity" "calledBy" "user-page") */}}
-            {{/*end*/}} <!-- user page activity POSTS -->
+            {{ range .Posts }} <!-- user page activity posts -->
+              {{ template "post-card" (dict "Post" . "root" $ "CurrentUser" $.CurrentUser "Instance" "user-page-activity" "calledBy" "user-page") }}
+            {{ end }} <!-- user page activity POSTS -->
           </div>
         </div>
         {{/*SECTION ------- activity posts ---------- */}}

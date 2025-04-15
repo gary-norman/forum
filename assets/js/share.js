@@ -12,6 +12,12 @@ export const pages = [
   data["postPage"],
 ];
 
+pages.forEach((page) => {
+  console.log("type: ", typeof page);
+  console.log("page: ", page);
+  console.log("classList: ", page.classList);
+});
+
 // TODO Add logic that positions the modal above the button if there's not enough space under
 const commentMsg = encodeURIComponent(
   "Hey, I found this comment, you need to see it!",
@@ -24,17 +30,19 @@ const postTitle = encodeURIComponent("Post Title Here");
 let activityButtons;
 let scrollWindow;
 
+console.log(data["homePage"]);
+
 export function selectActiveFeed() {
   const activePage = pages.find((page) =>
     page.classList.contains("active-feed"),
   );
 
   switch (activePage) {
-    case data["homePage"]:
+    case data["home-page"]:
       // scrollWindow = homePage.querySelector(`#home-feed`);
       // console.log("scrollWindow:", scrollWindow)
       break;
-    case data["userPage"]:
+    case data["user-page"]:
       const userFeeds = Array.from(
         document.querySelectorAll('[id^="activity-feed-"]'),
       );
@@ -45,7 +53,7 @@ export function selectActiveFeed() {
       scrollWindow = activeFeed;
       // console.log(scrollWindow)
       break;
-    case data["channelPage"]:
+    case data["channel-page"]:
       scrollWindow = channelPage.querySelector(`#channel-feed`);
       // console.log(scrollWindow)
       break;
@@ -156,8 +164,6 @@ export function listenToShare() {
         });
       });
     }
-
-
 
     // TODO check api's of sites and fix title/message
     //if postID present, make msg = postMsg, if commentID present, make msg = commentMsg

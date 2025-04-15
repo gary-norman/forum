@@ -1,9 +1,16 @@
 const link = encodeURI(window.location.href);
-export const homePage = document.getElementById("home-page");
-export const userPage = document.getElementById("user-page");
-export const channelPage = document.getElementById("channel-page");
-export const postPage = document.getElementById("post-page");
-export const pages = [homePage, userPage, channelPage, postPage];
+export const data = {
+  homePage: document.getElementById("home-page"),
+  userPage: document.getElementById("user-page"),
+  channelPage: document.getElementById("channel-page"),
+  postPage: document.getElementById("post-page"),
+};
+export const pages = [
+  data["homePage"],
+  data["userPage"],
+  data["channelPage"],
+  data["postPage"],
+];
 
 // TODO Add logic that positions the modal above the button if there's not enough space under
 const commentMsg = encodeURIComponent(
@@ -23,11 +30,11 @@ export function selectActiveFeed() {
   );
 
   switch (activePage) {
-    case homePage:
+    case data["homePage"]:
       scrollWindow = homePage.querySelector(`#home-feed`);
       // console.log("scrollWindow:", scrollWindow)
       break;
-    case userPage:
+    case data["userPage"]:
       const userFeeds = Array.from(
         document.querySelectorAll('[id^="activity-feed-"]'),
       );
@@ -38,7 +45,7 @@ export function selectActiveFeed() {
       scrollWindow = activeFeed;
       // console.log(scrollWindow)
       break;
-    case channelPage:
+    case data["channelPage"]:
       scrollWindow = channelPage.querySelector(`#channel-feed`);
       // console.log(scrollWindow)
       break;
@@ -72,18 +79,18 @@ export function listenToShare() {
 
     if (postID === null) {
       shareModal = singleControl.querySelector(
-          `[id^="share-container-channel-${channelID}-comment-${commentID}"]`,
+        `[id^="share-container-channel-${channelID}-comment-${commentID}"]`,
       );
       shareButton = singleControl.querySelector(
-          `[id^="share-button-channel-${channelID}-comment-${commentID}"]`,
+        `[id^="share-button-channel-${channelID}-comment-${commentID}"]`,
       );
       // console.log("comment ID ✔️")
     } else if (commentID === null) {
       shareModal = singleControl.querySelector(
-          `[id^="share-container-channel-${channelID}-post-${postID}"]`,
+        `[id^="share-container-channel-${channelID}-post-${postID}"]`,
       );
       shareButton = singleControl.querySelector(
-          `[id^="share-button-channel-${channelID}-post-${postID}"]`,
+        `[id^="share-button-channel-${channelID}-post-${postID}"]`,
       );
       // console.log("post ID ✔️")
     }

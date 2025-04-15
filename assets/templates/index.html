@@ -38,316 +38,316 @@
     <div id="notification-main">
       <div id="notification-main-content"></div>
     </div>
-    <maint class="wrapper-main">
-{{/*SECTION ---------- header -----------*/}}
-    <header class="header">
-      <div class="branding"></div>
-      <label for="pagedrop"></label>
-      <select name="pagedrop" id="pagedrop" class="button">
-        <option id="btn-show-home" value="home-page">home</option>
-        <option id="btn-show-user" value="user-page">user page</option>
-        <option id="btn-show-channels" value="channel-page">channels</option>
-      </select>
-        <search class="wrapper-search">
-          <form>
-            <input
-              type="text"
-              class="searchbar"
-              id="search"
-              name="search"
-              placeholder="Search"
-            />
-          </form>
-        </search>
-      <div class="flex-align-c">
-        <button popovertarget="form-post" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
-          <span class="btn-posts">post</span>
-        </button>
-        <button class="btn-md btn-secondary btn-icotext btn-filled btn-filled-fancy btn-action-secondary btn-invert-onoff_offoff">
-          <span
-            class="btn-notifications"
-            role="contentinfo"
-            aria-description="Notifications, with a bell icon"
-            >notifications</span
-          >
-        </button>
-      </div>
-    </header>
-{{/*SECTION    ---------- login modal ----------*/}}
-    <div aria-modal="true" id="container-form-login" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div id="modal-header-logreg">sign in to codex</div>
-        </div>
-        <span class="close">&times;</span>
-          <div id="login-title" class="popover-title">
-          </div>
-        <div id="form-login">
-          <form id="login-form" class="logreg-form">
-            <div class="input-wrapper">
+    <main class="wrapper-main">
+      {{/*SECTION ---------- header -----------*/}}
+      <header class="header">
+        <div class="branding"></div>
+        <label for="pagedrop"></label>
+        <select name="pagedrop" id="pagedrop" class="button">
+          <option id="btn-show-home" value="home-page">home</option>
+          <option id="btn-show-user" value="user-page">user page</option>
+          <option id="btn-show-channels" value="channel-page">channels</option>
+        </select>
+          <search class="wrapper-search">
+            <form>
               <input
                 type="text"
-                class="input-3d"
-                id="loginFormUser"
-                name="username"
-                placeholder="username/email"
-                required
+                class="searchbar"
+                id="search"
+                name="search"
+                placeholder="Search"
               />
-              <label for="loginFormUser" class="user-label">username</label>
-            </div>
-            <div class="input-wrapper">
-              <input
-                type="password"
-                class="input-3d"
-                id="loginFormPassword"
-                name="password"
-                placeholder="password"
-                required
-              />
-              <label for="loginFormPassword" class="user-label">password</label>
-            </div>
-            <div class="remember-forgot">
-              <div class="cont-flex-row flex-center" style="column-gap: 0.4rem">
-                <div class="allow-comments">
-                  <input type="checkbox" id="login-remember-checkbox" name="privacy"/>
-                  <span class="allow-comments-fx"></span>
-                </div>
-                <label for="login-remember-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">remember me</label>
-              </div>
-              <div class="forgot">
-                <span id="btn_forgot">forgot password?</span>
-              </div>
-            </div>
-
-            <button type="submit" id="login" class="btn-md btn-primary btn-action">
-              <span>sign in</span>
-            </button>
-          </form>
-          <div class="social-message">
-            <div class="line"></div>
-            <p class="message">sign in with social accounts</p>
-            <div class="line"></div>
-          </div>
-          <div class="social-icons">
-            <button aria-label="Log in with Google" class="icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                class="w-5 h-5 fill-current"
-              >
-                <path
-                  d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"
-                ></path>
-              </svg>
-            </button>
-            <button aria-label="Log in with Twitter" class="icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                class="w-5 h-5 fill-current"
-              >
-                <path
-                  d="M31.937 6.093c-1.177 0.516-2.437 0.871-3.765 1.032 1.355-0.813 2.391-2.099 2.885-3.631-1.271 0.74-2.677 1.276-4.172 1.579-1.192-1.276-2.896-2.079-4.787-2.079-3.625 0-6.563 2.937-6.563 6.557 0 0.521 0.063 1.021 0.172 1.495-5.453-0.255-10.287-2.875-13.52-6.833-0.568 0.964-0.891 2.084-0.891 3.303 0 2.281 1.161 4.281 2.916 5.457-1.073-0.031-2.083-0.328-2.968-0.817v0.079c0 3.181 2.26 5.833 5.26 6.437-0.547 0.145-1.131 0.229-1.724 0.229-0.421 0-0.823-0.041-1.224-0.115 0.844 2.604 3.26 4.5 6.14 4.557-2.239 1.755-5.077 2.801-8.135 2.801-0.521 0-1.041-0.025-1.563-0.088 2.917 1.86 6.36 2.948 10.079 2.948 12.067 0 18.661-9.995 18.661-18.651 0-0.276 0-0.557-0.021-0.839 1.287-0.917 2.401-2.079 3.281-3.396z"
-                ></path>
-              </svg>
-            </button>
-            <button aria-label="Log in with GitHub" class="icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                class="w-5 h-5 fill-current"
-              >
-                <path
-                  d="M16 0.396c-8.839 0-16 7.167-16 16 0 7.073 4.584 13.068 10.937 15.183 0.803 0.151 1.093-0.344 1.093-0.772 0-0.38-0.009-1.385-0.015-2.719-4.453 0.964-5.391-2.151-5.391-2.151-0.729-1.844-1.781-2.339-1.781-2.339-1.448-0.989 0.115-0.968 0.115-0.968 1.604 0.109 2.448 1.645 2.448 1.645 1.427 2.448 3.744 1.74 4.661 1.328 0.14-1.031 0.557-1.74 1.011-2.135-3.552-0.401-7.287-1.776-7.287-7.907 0-1.751 0.62-3.177 1.645-4.297-0.177-0.401-0.719-2.031 0.141-4.235 0 0 1.339-0.427 4.4 1.641 1.281-0.355 2.641-0.532 4-0.541 1.36 0.009 2.719 0.187 4 0.541 3.043-2.068 4.381-1.641 4.381-1.641 0.859 2.204 0.317 3.833 0.161 4.235 1.015 1.12 1.635 2.547 1.635 4.297 0 6.145-3.74 7.5-7.296 7.891 0.556 0.479 1.077 1.464 1.077 2.959 0 2.14-0.020 3.864-0.020 4.385 0 0.416 0.28 0.916 1.104 0.755 6.4-2.093 10.979-8.093 10.979-15.156 0-8.833-7.161-16-16-16z"
-                ></path>
-              </svg>
-            </button>
-          </div>
-          <div class="reg-log">
-            <small class="signup">don't have an account?</small>
-            <button id="btn_register-1"
-{{/*              class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
-            >register</button>
-          </div>
+            </form>
+          </search>
+        <div class="flex-align-c">
+          <button popovertarget="form-post" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+            <span class="btn-posts">post</span>
+          </button>
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-filled-fancy btn-action-secondary btn-invert-onoff_offoff">
+            <span
+              class="btn-notifications"
+              role="contentinfo"
+              aria-description="Notifications, with a bell icon"
+              >notifications</span
+            >
+          </button>
         </div>
-        <div id="form-register" class="display-off">
-{{/*SECTION    ---------- register form ----------*/}}
-        <form id="register-form" class="logreg-form" action="/register" method="POST">
-{{/*          <div class="modal-header">*/}}
-{{/*            <div>register for codex</div>*/}}
-{{/*          </div>*/}}
-{{/* ---------- username ---------- */}}
-          <div class="input-wrapper">
-            <input
-              type="text"
-              id="register_user"
-              name="register_user"
-              placeholder="username"
-              pattern="\w{5,16}"
-              required
-            />
-            <label for="register_user" class="user-label">username</label>
-            <span class="validation-icon"></span>
-            <span class="validation-tooltip"></span>
+      </header>
+{{/*SECTION    ---------- login modal ----------*/}}
+      <div aria-modal="true" id="container-form-login" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div id="modal-header-logreg">sign in to codex</div>
           </div>
-{{/* ---------- email ---------- */}}
-          <div class="input-wrapper">
-            <input
-              type="email"
-              id="register_email"
-              name="register_email"
-              placeholder="email address"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-              required
-            />
-            <label for="register_email" class="user-label">email</label>
-            <span class="validation-icon"></span>
-            <span class="validation-tooltip"></span>
-          </div>
-{{/* ---------- password ---------- */}}
-          <div class="input-wrapper">
-            <input
-              type="password"
-              id="register_password"
-              name="register_password"
-              placeholder="password"
-{{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
-              required
-            />
-            <label for="register_password" class="user-label">password</label>
-            <span class="validation-icon"></span>
-            <ul class="validation-list ul-forwards">
-              <li id="li-valid-num">1 number</li>
-              <li id="li-valid-upper">1 uppercase letter</li>
-              <li id="li-valid-lower">1 lowercase letter</li>
-              <li id="li-valid-8">8 or more characters</li>
-            </ul>
-          </div>
-{{/* ---------- repeat password ---------- */}}
-          <div class="input-wrapper">
-            <input
-              type="password"
-              id="register_password-rpt"
-              name="register_password-rpt"
-              placeholder="repeat password"
-{{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
-              required
-            />
-            <label for="register_password-rpt" class="user-label">repeat password</label>
-            <span class="validation-icon"></span>
-            <span class="validation-tooltip"></span>
+          <span class="close">&times;</span>
+            <div id="login-title" class="popover-title">
             </div>
-            <button id="register" class="btn-md btn-primary btn-action btn-register-submit" type="submit">
-              <span>register</span>
-            </button>
-          </form>
-          <div class="reg-log">
-            <small class="signup">already registered?</small>
-            <button id="btn_login-1"
-{{/*                    class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
-            >sign in</button>
-          </div>
-          </div>
-          <div id="form-forgot" class="display-off">
-            <form id="resetForm" class="logreg-form">
-              <p class="form-title">enter your username or email address to reset your password</p>
+          <div id="form-login">
+            <form id="login-form" class="logreg-form">
               <div class="input-wrapper">
                 <input
                   type="text"
                   class="input-3d"
-                  id="forgot_pass"
-                  name="forgot_pass"
+                  id="loginFormUser"
+                  name="username"
                   placeholder="username/email"
+                  required
                 />
-                <label for="forgot_pass" class="user-label">email/username</label>
+                <label for="loginFormUser" class="user-label">username</label>
               </div>
-              <button class="btn-md btn-primary btn-action" type="submit">
-                <span>reset</span>
-              </button>
-              <div class="cont-flex-column">
-                <small class="signup">not what you're looking for?</small>
-                <div class="flex-align-c">
-                  <button type="button"
-                          id="btn_login-2"
-                          {{/*                  class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
-                  >sign in</button>
-                  <button type="button" id="btn_register-2"
-                          {{/*                        class="button btn-filled btn-filled-white_orange btn-secondary btn-pill"*/}}
-                  >register</button>
+              <div class="input-wrapper">
+                <input
+                  type="password"
+                  class="input-3d"
+                  id="loginFormPassword"
+                  name="password"
+                  placeholder="password"
+                  required
+                />
+                <label for="loginFormPassword" class="user-label">password</label>
+              </div>
+              <div class="remember-forgot">
+                <div class="cont-flex-row flex-center" style="column-gap: 0.4rem">
+                  <div class="allow-comments">
+                    <input type="checkbox" id="login-remember-checkbox" name="privacy"/>
+                    <span class="allow-comments-fx"></span>
+                  </div>
+                  <label for="login-remember-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">remember me</label>
+                </div>
+                <div class="forgot">
+                  <span id="btn_forgot">forgot password?</span>
                 </div>
               </div>
+
+              <button type="submit" id="login" class="btn-md btn-primary btn-action">
+                <span>sign in</span>
+              </button>
             </form>
+            <div class="social-message">
+              <div class="line"></div>
+              <p class="message">sign in with social accounts</p>
+              <div class="line"></div>
+            </div>
+            <div class="social-icons">
+              <button aria-label="Log in with Google" class="icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 32 32"
+                  class="w-5 h-5 fill-current"
+                >
+                  <path
+                    d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"
+                  ></path>
+                </svg>
+              </button>
+              <button aria-label="Log in with Twitter" class="icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 32 32"
+                  class="w-5 h-5 fill-current"
+                >
+                  <path
+                    d="M31.937 6.093c-1.177 0.516-2.437 0.871-3.765 1.032 1.355-0.813 2.391-2.099 2.885-3.631-1.271 0.74-2.677 1.276-4.172 1.579-1.192-1.276-2.896-2.079-4.787-2.079-3.625 0-6.563 2.937-6.563 6.557 0 0.521 0.063 1.021 0.172 1.495-5.453-0.255-10.287-2.875-13.52-6.833-0.568 0.964-0.891 2.084-0.891 3.303 0 2.281 1.161 4.281 2.916 5.457-1.073-0.031-2.083-0.328-2.968-0.817v0.079c0 3.181 2.26 5.833 5.26 6.437-0.547 0.145-1.131 0.229-1.724 0.229-0.421 0-0.823-0.041-1.224-0.115 0.844 2.604 3.26 4.5 6.14 4.557-2.239 1.755-5.077 2.801-8.135 2.801-0.521 0-1.041-0.025-1.563-0.088 2.917 1.86 6.36 2.948 10.079 2.948 12.067 0 18.661-9.995 18.661-18.651 0-0.276 0-0.557-0.021-0.839 1.287-0.917 2.401-2.079 3.281-3.396z"
+                  ></path>
+                </svg>
+              </button>
+              <button aria-label="Log in with GitHub" class="icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 32 32"
+                  class="w-5 h-5 fill-current"
+                >
+                  <path
+                    d="M16 0.396c-8.839 0-16 7.167-16 16 0 7.073 4.584 13.068 10.937 15.183 0.803 0.151 1.093-0.344 1.093-0.772 0-0.38-0.009-1.385-0.015-2.719-4.453 0.964-5.391-2.151-5.391-2.151-0.729-1.844-1.781-2.339-1.781-2.339-1.448-0.989 0.115-0.968 0.115-0.968 1.604 0.109 2.448 1.645 2.448 1.645 1.427 2.448 3.744 1.74 4.661 1.328 0.14-1.031 0.557-1.74 1.011-2.135-3.552-0.401-7.287-1.776-7.287-7.907 0-1.751 0.62-3.177 1.645-4.297-0.177-0.401-0.719-2.031 0.141-4.235 0 0 1.339-0.427 4.4 1.641 1.281-0.355 2.641-0.532 4-0.541 1.36 0.009 2.719 0.187 4 0.541 3.043-2.068 4.381-1.641 4.381-1.641 0.859 2.204 0.317 3.833 0.161 4.235 1.015 1.12 1.635 2.547 1.635 4.297 0 6.145-3.74 7.5-7.296 7.891 0.556 0.479 1.077 1.464 1.077 2.959 0 2.14-0.020 3.864-0.020 4.385 0 0.416 0.28 0.916 1.104 0.755 6.4-2.093 10.979-8.093 10.979-15.156 0-8.833-7.161-16-16-16z"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <div class="reg-log">
+              <small class="signup">don't have an account?</small>
+              <button id="btn_register-1"
+  {{/*              class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
+              >register</button>
+            </div>
+          </div>
+          <div id="form-register" class="display-off">
+  {{/*SECTION    ---------- register form ----------*/}}
+          <form id="register-form" class="logreg-form" action="/register" method="POST">
+  {{/*          <div class="modal-header">*/}}
+  {{/*            <div>register for codex</div>*/}}
+  {{/*          </div>*/}}
+  {{/* ---------- username ---------- */}}
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="register_user"
+                name="register_user"
+                placeholder="username"
+                pattern="\w{5,16}"
+                required
+              />
+              <label for="register_user" class="user-label">username</label>
+              <span class="validation-icon"></span>
+              <span class="validation-tooltip"></span>
+            </div>
+  {{/* ---------- email ---------- */}}
+            <div class="input-wrapper">
+              <input
+                type="email"
+                id="register_email"
+                name="register_email"
+                placeholder="email address"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                required
+              />
+              <label for="register_email" class="user-label">email</label>
+              <span class="validation-icon"></span>
+              <span class="validation-tooltip"></span>
+            </div>
+  {{/* ---------- password ---------- */}}
+            <div class="input-wrapper">
+              <input
+                type="password"
+                id="register_password"
+                name="register_password"
+                placeholder="password"
+  {{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
+                required
+              />
+              <label for="register_password" class="user-label">password</label>
+              <span class="validation-icon"></span>
+              <ul class="validation-list ul-forwards">
+                <li id="li-valid-num">1 number</li>
+                <li id="li-valid-upper">1 uppercase letter</li>
+                <li id="li-valid-lower">1 lowercase letter</li>
+                <li id="li-valid-8">8 or more characters</li>
+              </ul>
+            </div>
+  {{/* ---------- repeat password ---------- */}}
+            <div class="input-wrapper">
+              <input
+                type="password"
+                id="register_password-rpt"
+                name="register_password-rpt"
+                placeholder="repeat password"
+  {{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
+                required
+              />
+              <label for="register_password-rpt" class="user-label">repeat password</label>
+              <span class="validation-icon"></span>
+              <span class="validation-tooltip"></span>
+              </div>
+              <button id="register" class="btn-md btn-primary btn-action btn-register-submit" type="submit">
+                <span>register</span>
+              </button>
+            </form>
+            <div class="reg-log">
+              <small class="signup">already registered?</small>
+              <button id="btn_login-1"
+  {{/*                    class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
+              >sign in</button>
+            </div>
+            </div>
+            <div id="form-forgot" class="display-off">
+              <form id="resetForm" class="logreg-form">
+                <p class="form-title">enter your username or email address to reset your password</p>
+                <div class="input-wrapper">
+                  <input
+                    type="text"
+                    class="input-3d"
+                    id="forgot_pass"
+                    name="forgot_pass"
+                    placeholder="username/email"
+                  />
+                  <label for="forgot_pass" class="user-label">email/username</label>
+                </div>
+                <button class="btn-md btn-primary btn-action" type="submit">
+                  <span>reset</span>
+                </button>
+                <div class="cont-flex-column">
+                  <small class="signup">not what you're looking for?</small>
+                  <div class="flex-align-c">
+                    <button type="button"
+                            id="btn_login-2"
+                            {{/*                  class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
+                    >sign in</button>
+                    <button type="button" id="btn_register-2"
+                            {{/*                        class="button btn-filled btn-filled-white_orange btn-secondary btn-pill"*/}}
+                    >register</button>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
 {{/*SECTION     ---------- post form ---------- */}}
-    <div popover id="form-post">
-      <div class="modal-header">
-        <div id="modal-header-logreg">create a post</div>
-      </div>
-        <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
-{{/*          <label for="channel" class="invisible">channel</label>*/}}
-{{/*          <select id="channel" name="channel" multiple>*/}}
-{{/*          <option selected disabled hidden>select a channel</option>*/}}
-{{/*          {{ range .OwnedAndJoinedChannels }}*/}}
-{{/*          <option value='{"channelName":"{{ .Name }}", "channelID":"{{ .ID }}"}'>{{ .Name }}</option>*/}}
-{{/*          {{ end }}*/}}
-{{/*          </select>*/}}
-          <div class="dropdown-toggle">
-            select channel(s)
-          </div>
-          <div class="wrapper-dropdown">
-            {{ range .OwnedAndJoinedChannels}}
-            <div class="flex-align-l post-channel-dropdown">
-              <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="channel[]" value="{{ .ID }}">
-              <label for="post-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
+      <div popover id="form-post">
+        <div class="modal-header">
+          <div id="modal-header-logreg">create a post</div>
+        </div>
+          <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
+  {{/*          <label for="channel" class="invisible">channel</label>*/}}
+  {{/*          <select id="channel" name="channel" multiple>*/}}
+  {{/*          <option selected disabled hidden>select a channel</option>*/}}
+  {{/*          {{ range .OwnedAndJoinedChannels }}*/}}
+  {{/*          <option value='{"channelName":"{{ .Name }}", "channelID":"{{ .ID }}"}'>{{ .Name }}</option>*/}}
+  {{/*          {{ end }}*/}}
+  {{/*          </select>*/}}
+            <div class="dropdown-toggle">
+              select channel(s)
             </div>
-            {{ end }}
-          </div>
-          <div class="input-wrapper">
-          <input type="text" id="title" name="title" placeholder="title" required>
-            <label for="title" class="user-label">title</label>
-          </div>
-{{/*  FIXME ---------- fix resize issue ---------- */}}
-          <div class="input-wrapper">
-            <textarea id="content" name="content" placeholder="post"></textarea>
-            <label for="content" class="user-label">post</label>
-          </div>
-          <p>upload an image (optional)</p>
-          <div id="drop-zone--post">
-            <div id="uploaded-file--post"></div>
-            <div class="drag-drop-text-wrapper">
-              <label for="browse--post" class="dragText">drag and drop your file, or</label>
-{{/*              <span class="button">browse</span> */}}
-              <input type="file" id="browse--post" name="file-drop" />
+            <div class="wrapper-dropdown">
+              {{ range .OwnedAndJoinedChannels}}
+              <div class="flex-align-l post-channel-dropdown">
+                <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="channel[]" value="{{ .ID }}">
+                <label for="post-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
+              </div>
+              {{ end }}
             </div>
-          </div>
-          <div class="cont-flex-row flex-center">
-            <div class="allow-comments">
-            <input type="checkbox" id="allow-comments-checkbox" name="commentable"/>
-            <span class="allow-comments-fx"></span>
-{{/*              <span class="darklight-border"></span>*/}}
+            <div class="input-wrapper">
+            <input type="text" id="title" name="title" placeholder="title" required>
+              <label for="title" class="user-label">title</label>
             </div>
-            <label for="allow-comments-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Allow comments</label>
-          </div>
-{{/*FIXME ---------- fix these buttons ---------- */}}
-          <div class="cont-flex-row flex-center">
-            <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
-              <span>create post</span>
-            </button>
-            <a href="/" class="button btn-md btn-secondary btn-action btn-filled">cancel</a>
-          </div>
-        </form>
-      </div>
+  {{/*  FIXME ---------- fix resize issue ---------- */}}
+            <div class="input-wrapper">
+              <textarea id="content" name="content" placeholder="post"></textarea>
+              <label for="content" class="user-label">post</label>
+            </div>
+            <p>upload an image (optional)</p>
+            <div id="drop-zone--post">
+              <div id="uploaded-file--post"></div>
+              <div class="drag-drop-text-wrapper">
+                <label for="browse--post" class="dragText">drag and drop your file, or</label>
+  {{/*              <span class="button">browse</span> */}}
+                <input type="file" id="browse--post" name="file-drop" />
+              </div>
+            </div>
+            <div class="cont-flex-row flex-center">
+              <div class="allow-comments">
+              <input type="checkbox" id="allow-comments-checkbox" name="commentable"/>
+              <span class="allow-comments-fx"></span>
+  {{/*              <span class="darklight-border"></span>*/}}
+              </div>
+              <label for="allow-comments-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Allow comments</label>
+            </div>
+  {{/*FIXME ---------- fix these buttons ---------- */}}
+            <div class="cont-flex-row flex-center">
+              <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
+                <span>create post</span>
+              </button>
+              <a href="/" class="button btn-md btn-secondary btn-action btn-filled">cancel</a>
+            </div>
+          </form>
+        </div>
 {{/*SECTION    ---------- create channel popover ---------- */}}
-    <div popover id="form-channel">
+      <div popover id="form-channel">
         <form class="wrapper-form" enctype="multipart/form-data" action="/channels/create" method="POST">
           <h3 class="form-title">create a channel</h3>
           <div class="input-wrapper">
             <input type="text" id="channel-name" name="name" placeholder="channel name" required>
             <label for="channel-name" class="user-label">channel name</label>
           </div>
-{{/*FIXME ---------- fix resize issue ---------- */}}
+  {{/*FIXME ---------- fix resize issue ---------- */}}
           <div class="input-wrapper">
             <textarea id="channel-desc" name="description" placeholder="description"></textarea>
             <label for="channel-desc" class="user-label">description</label>
@@ -357,7 +357,7 @@
             <div id="uploaded-file--channel"></div>
             <div class="drag-drop-text-wrapper">
               <span class="dragText">drag and drop your file, or</span>
-{{/*              <span class="button">browse</span> */}}
+  {{/*              <span class="button">browse</span> */}}
               <input type="file" id="browse--channel" name="file-drop" />
             </div>
           </div>
@@ -365,11 +365,11 @@
             <label class="allow-comments">
               <input type="checkbox" id="channel-privacy-checkbox" name="privacy"/>
               <span class="allow-comments-fx"></span>
-{{/*              <span class="darklight-border"></span>*/}}
+  {{/*              <span class="darklight-border"></span>*/}}
             </label>
             <label for="channel-privacy-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Private</label>
           </div>
-{{/*FIXME ---------- fix these buttons ---------- */}}
+  {{/*FIXME ---------- fix these buttons ---------- */}}
           <div class="cont-flex-row flex-center">
             <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>create</span>
@@ -379,7 +379,7 @@
         </form>
       </div>
 {{/*SECTION ---------- join channel popover ---------- */}}
-    <div popover id="form-join-channel">
+      <div popover id="form-join-channel">
         <form action="/channels/join" class="wrapper-form" method="POST">
           <h5 id="join-channel-title" class="form-title">join {{ .ThisChannel.Name }}</h5>
           <span id="join-agree" class="text-join-channel">check the agree checkbox to agree to the rules of this channel</span>
@@ -388,14 +388,14 @@
               <input id="join-channel-id" type="hidden" value="{{ .ThisChannel.ID }}" name="channelId" />
               <input type="checkbox" id="rules-agree-checkbox" name="agree" required/>
               <span class="allow-comments-fx"></span>
-{{/*              <span class="darklight-border"></span> */}}
+  {{/*              <span class="darklight-border"></span> */}}
             </label>
             <label for="rules-agree-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">agree</label>
           </div>
           {{ if (eq .ThisChannel.Privacy true) }}
           <span class="text-join-channel">this channel is private. Your request will be sent to the moderators for approval.</span>
           {{ end }}
-{{/*FIXME ---------- fix these buttons ----------*/}}
+  {{/*FIXME ---------- fix these buttons ----------*/}}
           <div class="cont-flex-row flex-center">
             <button id="join-channel-btn" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>join</span>
@@ -405,7 +405,7 @@
         </form>
       </div>
 {{/*SECTION ---------- edit channel rules popover ---------- */}}
-    <div popover id="form-edit-channel-rules">
+      <div popover id="form-edit-channel-rules">
         <form id="popover-form-edit-channel-rules" action="/channels/add-rules/{{.ThisChannel.ID}}" class="wrapper-form" method="POST">
           <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .ThisChannel.Name }}</h5>
           <span id="edit-channel-rules-title-rules-existing">current rules</span>
@@ -439,7 +439,7 @@
         </form>
       </div>
       <div class="main-content">
-{{/*SECTION     ---------- sidebar ---------- */}}
+  {{/*SECTION     ---------- sidebar ---------- */}}
         <aside class="sidebar">
           {{ if ne .CurrentUser nil }}
           <div class="sidebarProfile">
@@ -541,468 +541,67 @@
           </div>
         </aside>
         <main>
-{{/*SECTION ---------- homepage feed mask ---------- */}}
+          {{/*SECTION ---------- homepage feed mask ---------- */}}
           <div class="container-homepage-feed-mask" style="z-index: 0; min-height: 100% !important">
-        <svg height="100dvh" width="100dvw" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="home-mask-gradient" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stop-color="black" />+
-{{/*                   <stop offset="6%" stop-color="black" /> */}}
-              <stop offset="2%" stop-color="white" />
-              <stop offset="100%" stop-color="white" />
-            </linearGradient>
-            <linearGradient id="user-mask-gradient" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stop-color="black" />
-{{/*                   <stop offset="1%" stop-color="black" />*/}}
-              <stop offset="2%" stop-color="white" />
-              <stop offset="100%" stop-color="white" />
-            </linearGradient>
-          </defs>
-          <mask id="homepage-feed-mask">
-            <rect width="100%" height="100%" fill="url(#home-mask-gradient)"/>
-          </mask>
-          <mask id="userpage-feed-mask">
-            <rect width="100%" height="100%" fill="url(#user-mask-gradient)"/>
-          </mask>
-          <mask id="postpage-feed-mask">
-            <rect width="100%" height="100%" fill="url(#user-mask-gradient)"/>
-          </mask>
-        </svg>
-      </div>
-{{/*SECTION ---------- homepage ---------- */}}
-          <div id="home-page" class="feeds-wrapper">
-          <div class="button-row above-posts button-row-homepage">
-            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-              <span class="btn-sort">sort</span>
-            </button>
-            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-              <span class="btn-filters">filters</span>
-            </button>
+            <svg height="100dvh" width="100dvw" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="home-mask-gradient" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="black" />+
+      {{/*                   <stop offset="6%" stop-color="black" /> */}}
+                  <stop offset="2%" stop-color="white" />
+                  <stop offset="100%" stop-color="white" />
+                </linearGradient>
+                <linearGradient id="user-mask-gradient" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="black" />
+      {{/*                   <stop offset="1%" stop-color="black" />*/}}
+                  <stop offset="2%" stop-color="white" />
+                  <stop offset="100%" stop-color="white" />
+                </linearGradient>
+              </defs>
+              <mask id="homepage-feed-mask">
+                <rect width="100%" height="100%" fill="url(#home-mask-gradient)"/>
+              </mask>
+              <mask id="userpage-feed-mask">
+                <rect width="100%" height="100%" fill="url(#user-mask-gradient)"/>
+              </mask>
+              <mask id="postpage-feed-mask">
+                <rect width="100%" height="100%" fill="url(#user-mask-gradient)"/>
+              </mask>
+            </svg>
           </div>
-          <div class="scrollable-home scrollable no-scrollbar">
-            <div id="home-feed">
-{{/*SECTION ---------- homepage channels ---------- */}}
-              {{range .Channels}} <!-- homepage channels -->
-              <div class="card" data-post-id="{{.ID}}" data-channel-ID="{{.ChannelID}}" data-author-ID="{{.AuthorID}}">
-                <div class="container-post-info">
-                  <span class="card-pic profile-pic" data-image-channel="{{ $channelBasePath }}{{ .Channel.Avatar }}"></span>
-                  <div>
-                    <small class="small-bold">{{.Author}}</small>
-                    <div>
-                      <small>{{.ChannelName}}</small>
-                      <small>-</small>
-                      <small>{{.TimeSince}}</small>
-                    </div>
-                  </div>
-                  <div class="like-button">
-                    <button data-tooltip-name="like" aria-label="like button" class="btn-icoonly"></button>
-                  </div>
+          {{/*SECTION ---------- homepage ---------- */}}
+          <div id="home-page" class="feeds-wrapper active-feed" style="z-index: 1000">
+            <div class="button-row above-posts button-row-homepage">
+              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                <span class="btn-sort">sort</span>
+              </button>
+              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                <span class="btn-filters">filters</span>
+              </button>
+            </div>
+            <div class="scrollable-home scrollable no-scrollbar">
+              <div id="home-feed">
+                <div id="home-page-users" class="cont-grid-4x-10rem link" style="margin-block-start: 10rem">
+                  {{ range .AllUsers }}
+                  <div data-user-id="{{ .ID }}" class="card">{{ .Username }}</div>
+                  {{ end }}
                 </div>
-                <h4>{{.Title}}</h4>
-                {{ if .Images }}
-                <img src={{$postBasePath}}{{.Images}} class="post-image" alt="Post Image">
-                {{ else }}
-                {{ end }}
-                <article class="cardContent">{{.Content}}</article>
-                  <div class="button-row post-controls" >
-                    {{$status := reactionStatus .AuthorID .ChannelID .ID 0}}
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}">
-                      <span class="btn-likes" data-like-ID="user-{{.ID}}">{{.Likes}}</span>
-                    </button>
-{{/*                     TODO invertoff */}}
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-                      <span class="btn-dislikes" data-dislike-ID="user-{{.ID}}">{{.Dislikes}}</span>
-                    </button>
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                      <span class="btn-reply">reply</span>
-                    </button>
-                    <button id="share-button-{{.ID}}-home" popovertarget="share-container-{{.ID}}-home" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                      <span class="btn-share">share</span>
-                    </button>
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                      <span class="btn-report">report</span>
-                    </button>
-                    <div popover id="share-container-{{.ID}}-home" class="scrollable-user">
-                      <div class="share-container">
-                        <div class="button-row">
-                          <a href="/" target="_blank" class="share-logo facebook"></a>
-                          <a href="/" target="_blank" class="share-logo twitter"></a>
-                          <a href="/" target="_blank" class="share-logo linkedin"></a>
-                          <a href="/" target="_blank" class="share-logo reddit"></a>
-                          <a href="/" target="_blank" class="share-logo whatsapp"></a>
-                          <a href="/" target="_blank" class="share-logo telegram"></a>
-                        </div>
-                        <div class="flex-space-between">
-                          <label class="padded" for="copy-url-{{.ID}}-home">Copy URL link</label>
-                          <button class="btn-sm btn-icoonly">
-                            <span class="btn-copy" aria-label="Copy URL link"></span>
-                          </button>
-                        </div>
-                        <input value="https://localhost:8989/URL-exampleasdasdasdsad" readonly type="text" id="copy-url-{{.ID}}-home" name="copy-url-{{.ID}}-home"/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {{end}} <!-- homepage channels -->
               </div>
             </div>
           </div>
-
-{{/*SECTION ---------- search results page ---------- */}}
+          {{/* search-results page */}}
           <div id="search-results-page" class="feeds-wrapper">
-            <div class="banner">
-              <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
-              <div class="page-control">
-                <div class="page-profile">
-                  {{ if ne .CurrentUser nil}}
-                    {{ if (ne $user.Avatar "noimage") }}
-                      <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ $userBasePath }}{{ $user.Avatar }}"></div>
-                    {{ else }}
-                      <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username}}"></div>
-                    {{ end }}
-                  {{else}}
-                    {{ if (ne .RandomUser.Avatar "noimage") }}
-                      <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ $userBasePath }}{{ .RandomUser.Avatar }}"></div>
-                    {{ else }}
-                      <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .RandomUser.Username}}"></div>
-                    {{ end }}
-                  {{end}}
-                  <div class="flex-start">
-                    <h2 class="align-self-start">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h2>
-                    <div>
-                      <div class="cont-flex-column">
-                        <small>following:</small>
-                        <button class="btn-lg btn-icotext btn-follows btn-invert-never">
-                              <span class="btn-following">{{ if ne .CurrentUser nil}}{{$user.Following}}{{ else }}{{.RandomUser.Following}}{{ end }}
-                                </span>
-                        </button>
-                      </div>
-                      <div class="cont-flex-column">
-                        <small>followers:</small>
-                        <button class="btn-lg btn-icotext btn-follows btn-invert-never">
-                          <span class="btn-followers">{{ if ne .CurrentUser nil}}{{$user.Followers}}{{ else }}{{.RandomUser.Followers}}{{ end }}</span>
-                        </button>
-                      </div>
-
-{{/*                    </div>*/}}
-{{/*                  </div>*/}}
-{{/*                </div>*/}}
-{{/*                <div class="page-buttons">*/}}
-{{/*                  <button class="btn-lg btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">*/}}
-{{/*                    <span class="btn-follow">follow</span>*/}}
-{{/*                  </button>*/}}
-{{/*                  <div class="user-following"></div>*/}}
-{{/*                  <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">*/}}
-{{/*                    <img src="/assets/icons/share_16.svg" alt="share button">*/}}
-{{/*                  </button>*/}}
-{{/*                  <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">*/}}
-{{/*                    <img src="/assets/icons/heart-empty_24.svg" alt="like button">*/}}
-{{/*                  </button>*/}}
-{{/*                </div>*/}}
-{{/*              </div>*/}}
-{{/*            </div>*/}}
-{{/*            <div class="container-content">*/}}
-{{/*              <div class="content">*/}}
-{{/*                <div id="activity-bar" class="button-row above-activity">*/}}
-{{/*                  <button id="activity" class="btn-lg btn-secondary btn-icotext btn-activity btn-active">*/}}
-{{/*                    <span class="btn-clock">activity</span>*/}}
-{{/*                  </button>*/}}
-{{/*                  <button id="posts" class="btn-lg btn-secondary btn-icotext btn-activity">*/}}
-{{/*                    <span class="btn-posts">posts</span>*/}}
-{{/*                  </button>*/}}
-{{/*                  <button id="comments" class="btn-lg btn-secondary btn-icotext btn-activity">*/}}
-{{/*                    <span class="btn-comment">comments</span>*/}}
-{{/*                  </button>*/}}
-{{/*                  <button id="saved" class="btn-lg btn-secondary btn-invert-never btn-icotext btn-activity">*/}}
-{{/*                    <span class="btn-heart-empty">saved</span>*/}}
-{{/*                  </button>*/}}
-{{/*                  <button id="muted" class="btn-lg btn-secondary btn-icotext btn-activity">*/}}
-{{/*                    <span class="btn-mute">muted</span>*/}}
-{{/*                  </button>*/}}
-{{/*                  <button id="reactions" class="btn-lg btn-secondary btn-invert-never btn-icotext btn-activity">*/}}
-{{/*                    <span class="btn-likes">reactions</span>*/}}
-{{/*                  </button>*/}}
-{{/*                </div>*/}}
-{{/*                */}}{{/*SECTION ---------- user page activity feed ----------*/}}
-{{/*                <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%">*/}}
-
-{{/*                  */}}{{/*SECTION ------- activity activity ---------- */}}
-{{/*                  <div id="activity-activity">*/}}
-{{/*                    <div class="filters-row button-row">*/}}
-{{/*                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                        <span class="btn-sort">sort</span>*/}}
-{{/*                      </button>*/}}
-{{/*                      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                        <span class="btn-filters">filters</span>*/}}
-{{/*                      </button>*/}}
-{{/*                      <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                        <span class="btn-sort">scroll</span>*/}}
-{{/*                      </button>*/}}
-{{/*                    </div>*/}}
-{{/*                    <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">*/}}
-{{/*                      {{range .Posts}} <!-- user page activity posts -->*/}}
-{{/*                      {{ template "post-card" (dict "Post" . "CurrentUser" $.CurrentUser "Instance" "search-page-activity" "IsPostPage" "false") }}*/}}
-{{/*                      {{end}} <!-- user page activity POSTS -->*/}}
-{{/*                    </div>*/}}
-{{/*                    */}}{{/*SECTION ------- activity posts ---------- */}}
-{{/*                    <div id="activity-posts">*/}}
-{{/*                      <div class="filters-row button-row hide-feed">*/}}
-{{/*                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                          <span class="btn-sort">sort</span>*/}}
-{{/*                        </button>*/}}
-{{/*                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                          <span class="btn-filters">filters</span>*/}}
-{{/*                        </button>*/}}
-{{/*                        <button id="scroll-test-1" class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                          <span class="btn-sort">scroll</span>*/}}
-{{/*                        </button>*/}}
-{{/*                      </div>*/}}
-{{/*                      */}}{{/*SECTION---------- user page posts ----------*/}}
-{{/*                      <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">*/}}
-{{/*                        {{range .Posts}} <!-- user page posts -->*/}}
-{{/*                        {{ template "post-card" (dict "Post" . "CurrentUser" $.CurrentUser  "Comments" .Comments "Instance" "search-page" "IsPostPage" "false") }}*/}}
-{{/*                        {{end}} <!-- user page posts -->*/}}
-{{/*                      </div>*/}}
-{{/*                    </div>*/}}
-
-{{/*                    */}}{{/*SECTION ------- activity comments ---------- */}}
-{{/*                    <div id="activity-comments">*/}}
-{{/*                      <div class="filters-row button-row hide-feed">*/}}
-{{/*                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                          <span class="btn-sort">sort</span>*/}}
-{{/*                        </button>*/}}
-{{/*                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                          <span class="btn-filters">filters</span>*/}}
-{{/*                        </button>*/}}
-{{/*                      </div>*/}}
-{{/*                      <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">*/}}
-{{/*                        <div class="activity-items comments cont-flex-column">Yo mama so fat</div>*/}}
-{{/*                      </div>*/}}
-{{/*                    </div>*/}}
-
-{{/*                    */}}{{/*SECTION ------- saved activities ---------- */}}
-{{/*                    <div id="activity-saved">*/}}
-{{/*                      <div class="filters-row button-row hide-feed">*/}}
-{{/*                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                          <span class="btn-sort">sort</span>*/}}
-{{/*                        </button>*/}}
-{{/*                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                          <span class="btn-filters">filters</span>*/}}
-{{/*                        </button>*/}}
-{{/*                      </div>*/}}
-{{/*                      <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">*/}}
-{{/*                        <div class="activity-items saved">You saved this post</div>*/}}
-{{/*                      </div>*/}}
-{{/*                    </div>*/}}
-
-{{/*                    */}}{{/*SECTION ------- muted activities ---------- */}}
-{{/*                    <div id="activity-muted">*/}}
-{{/*                      <div class="filters-row button-row hide-feed">*/}}
-{{/*                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                          <span class="btn-sort">sort</span>*/}}
-{{/*                        </button>*/}}
-{{/*                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
-{{/*                          <span class="btn-filters">filters</span>*/}}
-{{/*                        </button>*/}}
-{{/*                      </div>*/}}
-{{/*                      <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">*/}}
-{{/*                        <div class="activity-items muted">You muted this post</div>*/}}
-{{/*                      </div>*/}}
-{{/*                    </div>*/}}
-
-                    {{/*SECTION ------- actvity reactions ---------- */}}
-                    <div id="activity-reactions">
-                      <div class="filters-row button-row hide-feed">
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                          <span class="btn-sort">sort</span>
-                        </button>
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                          <span class="btn-filters">filters</span>
-                        </button>
-                      </div>
-                      <div id="activity-feed-reactions" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-                        <div class="activity-items reactions">You liked this post</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="right-panel ">
-                <div class="right-panel-content scroll-down">
-                  {{/* SECTION edit user details inside right-panel */}}
-                  <form action="/edituser" enctype="multipart/form-data" method="POST">
-                    <div class="cont-flex-column">
-                      <div class="right-panel-container-name flex-space-between">
-                        {{ if ne .CurrentUser nil }}
-                          <label for="bio" class="padded">Edit your username</label>
-                        {{else}}
-                        {{ end }}
-                        {{ if ne .CurrentUser nil }}
-                          <div id="settings-user-name" class="edit-settings">
-                            <button id="edit-user-name-search" type="button" class="btn-sm btn-icoonly">
-                              <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
-                            </button>
-                            <button id="submit-user-name-search" type="submit" value="bio" class="btn-sm btn-icoonly">
-                              <span class="btn-success" role="contentinfo" aria-label="Submit new name"></span>
-                            </button>
-                            <button id="cancel-user-name-search" type="button" class="btn-sm btn-icoonly">
-                              <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing your name"></span>
-                            </button>
-                          </div>
-                        {{ end }} <!-- "nouser" check -->
-                      </div>
-                      <h4 id="user-name-content" class="right-panel-name">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h4>
-                      {{ if ne .CurrentUser nil }}
-                        <div class="input-wrapper edit-user ">
-                          <textarea class="scroll-down" id="name-search" name="name" placeholder="{{$user.Username}}">{{$user.Username}}</textarea>
-                        </div>
-                      {{ end }} <!-- "nouser" check -->
-                    </div>
-                    {{ if ne .CurrentUser nil }}
-                      <div class="cont-flex-column">
-                        <div class="right-panel-container-pic flex-space-between">
-                          <div class="right-panel-container-pic">
-                            {{ if (ne $user.Avatar "noimage") }}
-                              <div class="right-panel-pic profile-pic" data-image-user="{{ $userBasePath }}{{ $user.Avatar }}"></div>
-                            {{ else }}
-                              <div class="right-panel-pic profile-pic--empty" data-name-user="{{ $user.Username }}"></div>
-                            {{ end }}
-                            <small>Edit your avatar</small>
-                          </div>
-                          <div id="settings-user-avatar" class="edit-settings">
-                            <button id="edit-user-avatar-search" type="button" class="btn-sm btn-icoonly">
-                              <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
-                            </button>
-                            <button id="submit-user-avatar-search" type="submit" value="image" class="btn-sm btn-icoonly">
-                              <span class="btn-success" role="contentinfo" aria-label="Submit new avatar"></span>
-                            </button>
-                            <button id="cancel-user-avatar-search" type="button" class="btn-sm btn-icoonly">
-                              <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the avatar"></span>
-                            </button>
-                          </div>
-                        </div>
-                        <div id="drop-zone--user-image">
-                          <div id="uploaded-file--user-image"></div>
-                          <div class="drag-drop-text-wrapper">
-                            <div class="dragText">drag and drop your file, or</div>
-                            <input type="file" class="align-self-center" id="browse--user-image-search" name="file-drop" />
-                          </div>
-                        </div>
-                      </div>
-                    {{ end }} <!-- "nouser" check -->
-                    <div class="right-panel-container-bio">
-                      <div class="right-panel-bio flex-space-between">
-                        {{ if or $user.Description (ne .CurrentUser nil) }}
-                          <label for="bio" class="padded">{{ if ne .CurrentUser nil }}Edit your bio{{ else }}User bio{{ end }}</label>
-                        {{ end }}
-                        {{ if ne .CurrentUser nil }}
-                          <div id="settings-user-bio" class="edit-settings">
-                            <button id="edit-user-bio-search" type="button" class="btn-sm btn-icoonly">
-                              <span class="btn-edit" role="contentinfo" aria-label="Edit profile bio"></span>
-                            </button>
-                            <button id="submit-user-bio-search" type="submit" value="bio" class="btn-sm btn-icoonly">
-                              <span class="btn-success" role="contentinfo" aria-label="Submit new bio"></span>
-                            </button>
-                            <button id="cancel-user-bio-search" type="button" class="btn-sm btn-icoonly">
-                              <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the bio"></span>
-                            </button>
-                          </div>
-                        {{ end }} <!-- "nouser" check -->
-                      </div>
-                      {{ if $user.Description }}
-                        <pre id="user-bio-content" class="side-panel-block scroll-down">{{ $user.Description }}</pre>
-                      {{end}}
-                      <div class="input-wrapper edit-user ">
-                        <textarea class="scroll-down" id="user-bio-reactions" name="bio" placeholder="{{if $user.Description}}{{else}}update your bio{{end}}">{{if $user.Description}}{{ $user.Description }}{{end}}</textarea>
-                      </div>
-                    </div>
-                  </form>
-                  <div class="right-panel-container-modded-channels">
-                    <div class="sidebar-block sidebar-channels">
-                      <small class="padded">Modded Channels</small>
-                      <div class="side-panel-block">
-                        <div class="sidebar-channel">
-                          <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
-                            {{/* TODO range through modded channels */}}
-                            <span class="card-pic profile-pic" data-image-channel=""></span>
-                            <div>
-                              <div>/Interesting_Things</div>
-                              <div>
-                                <div class="channel-users">5.6k</div>
-                                <div class="channel-green-dot">36</div>
-                              </div>
-                            </div>
-                            {{ if ne .CurrentUser nil }}
-                              <button class="btn-sm btn-icoonly margin-auto-0">
-                                <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                              </button>
-                            {{ end }} <!-- "nouser" check -->
-                          </div>
-                        </div>
-                        <div class="sidebar-channel">
-                          <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
-                            <span class="card-pic channel-pic"></span>
-                            <div>
-                              <div>/CSS_Help</div>
-                              <div>
-                                <div class="channel-users">5.6k</div>
-                                <div class="channel-green-dot">36</div>
-                              </div>
-                            </div>
-                            {{ if ne .CurrentUser nil }}
-                              <button class="btn-sm btn-icoonly margin-auto-0">
-                                <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                              </button>
-                            {{ end }} <!-- "nouser" check -->
-                          </div>
-                        </div>
-                        <div class="sidebar-channel">
-                          <div class="container-channel-info {{ if (eq .CurrentUser nil) }}flex-start{{end}}">
-                            <span class="card-pic channel-pic"></span>
-                            <div>
-                              <div>/Golang#Discussion</div>
-                              <div>
-                                <div class="channel-users">5.6k</div>
-                                <div class="channel-green-dot">36</div>
-                              </div>
-                            </div>
-                            {{ if ne .CurrentUser nil }}
-                              <button class="btn-sm btn-icoonly margin-auto-0">
-                                <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                              </button>
-                            {{ end }} <!-- "nouser" check -->
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="button-row-wrap">
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                      <span class="btn-share">share</span>
-                    </button>
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                      <span class="btn-report">report</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
-
-{{/*SECTION ---------- post page ---------- */}}
           {{ template "post-page" (dict "ThisPost" .ThisPost "CurrentUser" $.CurrentUser "IsPostPage" "true" ) }}
-
-
-            {{/* user page */}}
-            <div id="user-page" class="feeds-wrapper">
-            </div>
-            {{/* channel page */}}
-            <div id="channel-page" class="feeds-wrapper">
-            </div>
+          {{/* user page */}}
+          <div id="user-page" class="feeds-wrapper">
+          </div>
+          {{/* channel page */}}
+          <div id="channel-page" class="feeds-wrapper">
           </div>
         </main>
       </div>
-    </div>
+    </main>
   </body>
 </html>
 

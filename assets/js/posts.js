@@ -1,9 +1,4 @@
-import {
-  navigateToPage,
-  navigateToChannel,
-  navigateToPost,
-  navigateToUser,
-} from "./main.js";
+import { navigateToPage } from "./main.js";
 
 const linkPosts = document.querySelectorAll('[id^="link-post-"]');
 const linkPostPosts = document.querySelectorAll('[id^="link-post-post"]');

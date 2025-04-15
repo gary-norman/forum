@@ -18,6 +18,14 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+func ErrorMsgs() *models.Errors {
+	return models.CreateErrorMessages()
+}
+
+func Colors() *models.Colors {
+	return models.CreateColors()
+}
+
 type app struct {
 	db             *sql.DB // Store DB reference for cleanup
 	users          *sqlite.UserModel
@@ -35,24 +43,8 @@ type app struct {
 	muted          *sqlite.MutedChannelModel
 	cookies        *CookieModel
 	rules          *sqlite.RuleModel
+	paths          models.ImagePaths
 }
-
-func ErrorMsgs() *models.Errors {
-	return models.CreateErrorMessages()
-}
-
-func Colors() *models.Colors {
-	return models.CreateColors()
-}
-
-//// Global template variable
-//var tpl *template.Template
-//
-//func loadTemplates() error {
-//	var err error
-//	tpl, err = template.ParseFiles("assets/templates/index.html")
-//	return err
-//}
 
 func newApp(db *sql.DB) *app {
 	return &app{
@@ -72,6 +64,12 @@ func newApp(db *sql.DB) *app {
 		muted:          &sqlite.MutedChannelModel{DB: db},
 		cookies:        &CookieModel{DB: db}, // Not in sqlite, handled separately
 		rules:          &sqlite.RuleModel{DB: db},
+
+		paths: models.ImagePaths{
+			Channel: "db/userdata/images/channel-images",
+			Post:    "db/userdata/images/post-images",
+			User:    "db/userdata/images/user-images",
+		},
 	}
 }
 

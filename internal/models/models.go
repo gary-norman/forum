@@ -23,6 +23,13 @@ func (u *User) UpdateTimeSince() {
 	u.TimeSince = getTimeSince(u.Created)
 }
 
+type UserPage struct {
+	CurrentUser *User
+	ThisUser    User
+	Posts       []Post
+	ImagePaths
+}
+
 type UserCheck struct {
 	ID             int    `json:"id"`
 	Username       string `json:"username"`
@@ -70,6 +77,22 @@ type Channel struct {
 
 func (c *Channel) UpdateTimeSince() {
 	c.TimeSince = getTimeSince(c.Created)
+}
+
+type ChannelPage struct {
+	TestString             string
+	CurrentUser            *User
+	ThisChannelPosts       []Post
+	ThisChannelOwnerName   string
+	ThisChannel            Channel
+	ThisChannelIsOwned     bool
+	ThisChannelIsJoined    bool
+	OwnedAndJoinedChannels []Channel
+	ThisChannelRules       []Rule
+	IsJoinedOrOwned        bool
+	IsPostPage             bool
+	Instance               string
+	ImagePaths
 }
 
 type ChannelPageBanner struct {
@@ -171,21 +194,7 @@ type Postplus struct {
 	IsPostPage    bool
 	Instance      string
 }
-type ChannelPage struct {
-	TestString             string
-	CurrentUser            *User
-	ThisChannelPosts       []Post
-	ThisChannelOwnerName   string
-	ThisChannel            Channel
-	ThisChannelIsOwned     bool
-	ThisChannelIsJoined    bool
-	OwnedAndJoinedChannels []Channel
-	ThisChannelRules       []Rule
-	IsJoinedOrOwned        bool
-	IsPostPage             bool
-	Instance               string
-	ImagePaths
-}
+
 type PostChannel struct {
 	ID        int       `json:"id"`
 	PostID    int       `json:"postId"`
@@ -323,6 +332,7 @@ type TemplateData struct {
 	Reactions []Reaction
 	ThisPost  Post
 	ThisUser  User
+	ImagePaths
 }
 type Session struct {
 	Username string

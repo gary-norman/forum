@@ -460,22 +460,52 @@ function fetchAndNavigate(url, page, errorMessage) {
 }
 
 function fetchData(entity, Id) {
-  console.log(`Fetching ${entity} data for ID: `, Id);
+  console.log(`Fetching ${entity} data for ID:`, Id);
 
   fetch(`/${entity}s/${Id}`)
-    .then((response) => response.json())
-    .then((data) => {
-      document.getElementById(`${entity}-page`).innerHTML =
-        data[`${entity}sHTML`];
-
-      // Update URL without reloading
-      // window.history.pushState({}, "", `/channels/${Id}`);
-
-      // Dispatch the event on the document (or any other appropriate ancestor)
-      document.dispatchEvent(newContentLoaded);
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
     })
-    .catch((error) => console.error(`Error fetching ${entity} data: `, error));
+    .then((data) => {
+      const content = data[`${entity}sHTML`];
+      const target = document.getElementById(`${entity}-page`);
+      if (target && content) {
+        target.innerHTML = content;
+
+        // Update URL for SPA routing
+        // window.history.pushState({}, "", `/${entity}s/${Id}`);
+        // window.history.pushState({}, "", `?id=${Id}`);
+
+        // Dispatch custom event
+        const newContentLoaded = new Event("newContentLoaded");
+        document.dispatchEvent(newContentLoaded);
+      } else {
+        console.warn("Target element or content missing");
+      }
+    })
+    .catch((error) => console.error(`Error fetching ${entity} data:`, error));
 }
+
+// function fetchData(entity, Id) {
+//   console.log(`Fetching ${entity} data for ID: `, Id);
+//
+//   fetch(`/${entity}s/${Id}`)
+//     .then((response) => response.json())
+//     .then((data) => {
+//       document.getElementById(`${entity}-page`).innerHTML =
+//         data[`${entity}sHTML`];
+//
+//       // Dispatch the event on the document (or any other appropriate ancestor)
+//       document.dispatchEvent(newContentLoaded);
+//
+//       // Update URL without reloading
+//       window.history.pushState({}, "", `/channels/${Id}`);
+//     })
+//     .catch((error) => console.error(`Error fetching ${entity} data: `, error));
+// }
 
 export function navigateToPage(dest, entity) {
   const link = entity.getAttribute(`data-${dest}-id`);
@@ -487,41 +517,6 @@ export function navigateToPage(dest, entity) {
   }
   changePage(page);
   fetchData(dest, link);
-}
-
-export function navigateToChannel(channel) {
-  const link = channel.getAttribute("data-channel-id");
-  if (!link) {
-    console.error("Channel ID is missing");
-    return;
-  }
-
-  // Change page view to channel page
-  changePage(channelPage);
-
-  // Now fetch and inject the updated channel data
-  fetchData("channel", link);
-}
-
-export function navigateToPost(post) {
-  const link = post.getAttribute("data-post-id");
-  if (!link) {
-    console.error("Post ID is missing");
-    return;
-  }
-  changePage(postPage);
-  fetchData("post", link);
-}
-
-export function navigateToUser(user) {
-  const link = user.getAttribute("data-author-id");
-  if (!link) {
-    console.error("Author ID is missing");
-    return;
-  }
-
-  changePage(userPage);
-  fetchData("user", link);
 }
 
 // toggleUserInteracted toggles user-interacted class on input fields to prevent label animation before they are selected

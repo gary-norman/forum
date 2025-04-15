@@ -51,7 +51,7 @@ export function listenToReplies() {
     // Get the form by its name
     let replyForms = document.querySelectorAll('form[name="replyForm"]'); // Returns a NodeList
 
-    console.log("reply forms:", replyForms)
+    // console.log("reply forms:", replyForms)
 
     replyForms.forEach(form => {
         // Add submit event listener

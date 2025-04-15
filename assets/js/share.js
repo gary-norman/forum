@@ -143,19 +143,21 @@ export function listenToShare() {
     const activityBar = document.getElementById("activity-bar");
     if (activityBar) {
       activityButtons = activityBar.querySelectorAll("button");
+
+      activityButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          //set timeout due to the animation timeout when switching between activity feeds in main.js
+          setTimeout(() => {
+            // console.log('Before selectActiveFeed:', scrollWindow);
+            selectActiveFeed();
+            // console.log('After selectActiveFeed:', scrollWindow);
+            attachScrollListener(shareButton, shareModal);
+          }, 500);
+        });
+      });
     }
 
-    activityButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        //set timeout due to the animation timeout when switching between activity feeds in main.js
-        setTimeout(() => {
-          // console.log('Before selectActiveFeed:', scrollWindow);
-          selectActiveFeed();
-          // console.log('After selectActiveFeed:', scrollWindow);
-          attachScrollListener(shareButton, shareModal);
-        }, 500);
-      });
-    });
+
 
     // TODO check api's of sites and fix title/message
     //if postID present, make msg = postMsg, if commentID present, make msg = commentMsg

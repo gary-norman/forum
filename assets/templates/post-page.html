@@ -8,14 +8,11 @@
   {{ $userID = .CurrentUser.ID }}
 {{ end }}
 {{ $post := .ThisPost }}
-<div id="post-page" class="feeds-wrapper">
+
   <div class="container-content">
     <div class="content scrollable-user scrollable no-scrollbar">
-
         {{/*SECTION ---------- user page activity feed ----------*/}}
         {{ template "this-post" (dict "Post" .ThisPost "CurrentUser" $.CurrentUser  "Comments" .Comments )  }}
-
     </div>
   </div>
-</div> <!-- end post-page wrapper -->
 {{end}} <!-- end define block -->

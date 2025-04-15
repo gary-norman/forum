@@ -37,8 +37,6 @@ const goHome = document.querySelector("#btn-go-home");
 // right panel buttons
 let rightPanelButtons;
 // sidebar elements
-const userProfileImage = document.querySelectorAll(".profile-pic");
-const userProfileImageEmpty = document.querySelectorAll(".profile-pic--empty");
 const sidebarOption = document.querySelector("#sidebar-options");
 const sidebarOptionsList = document.querySelector(".sidebar-options-list");
 // login/register buttons
@@ -137,43 +135,34 @@ let filename;
 // Create a new custom event
 const newContentLoaded = new CustomEvent("newContentLoaded");
 
-
-window.addEventListener("load", (event) => {
-  console.log("fired load");
-});
-
-document.addEventListener("readystatechange", (event) => {
-  console.log("fired readystatechange: ", document.readyState);
-});
-
 document.addEventListener("DOMContentLoaded", (event) => {
-  console.log("fired DOMContentLoaded");
+  // console.log("fired DOMContentLoaded");
+  UpdateUI();
 });
 
 document.addEventListener("newContentLoaded", (event) => {
-  console.log("fired newContentLoaded");
+  // console.log("fired newContentLoaded");
+  UpdateUI();
 });
 
-document.addEventListener('DOMContentLoaded', listenToInjectedPages);
-document.addEventListener('newContentLoaded', listenToInjectedPages);
 
-function listenToInjectedPages() {
-  console.log("firing listening to injected")
-  // document.addEventListener('newContentLoaded', listenToDropdowns);
-  // document.addEventListener('newContentLoaded', listenToPageSetup);
-  // document.addEventListener('newContentLoaded', listenToRules);
-  // document.addEventListener('newContentLoaded', listenToShare);
-  // document.addEventListener('newContentLoaded', listenToLikeDislike);
-  // document.addEventListener('newContentLoaded', listenToNavigationLinks);
-  // document.addEventListener('newContentLoaded', listenToReplies);
-  // document.addEventListener('newContentLoaded', listenToEditDetails);
-  // document.addEventListener('newContentLoaded', listenToChannelLinks);
-  listenToShare();
-  listenToLikeDislike();
+function UpdateUI() {
+
+  // console.log("updating UI");
+    listenToDropdowns();
+    listenToRules();
+    listenToReplies();
+    listenToEditDetails();
+    listenToChannelLinks();
+    listenToShare();
+    listenToLikeDislike();
+    listenToNavigationLinks();
+    listenToPageSetup();
+    // getUserProfileImageFromAttribute();
 }
 
 // INFO was inside a DOMContentLoaded function
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   const joinedAndOwnedChannelContainer = document.querySelector(
     "#sidebar-channel-block",
   );
@@ -191,7 +180,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }),
     );
   }
-});
+}
+
 
 // post channel selection dropdown
 // INFO was a DOMContentLoaded function
@@ -479,6 +469,10 @@ function fetchData(entity, Id) {
       document.getElementById(`${entity}-page`).innerHTML =
         `data.${entity}sHTML`;
 
+
+      // Update URL without reloading
+      window.history.pushState({}, "", `/channels/${channelId}`);
+
       // Dispatch the event on the document (or any other appropriate ancestor)
       document.dispatchEvent(newContentLoaded);
     })
@@ -592,6 +586,7 @@ function getRandomInt(max) {
 }
 
 function getUserProfileImageFromAttribute() {
+  const userProfileImage = document.querySelectorAll(".profile-pic");
   for (let i = 0; i < userProfileImage.length; i++) {
     let attArr = ["user", "auth", "channel"];
     attArr[0] = userProfileImage[i].getAttribute("data-image-user");
@@ -623,6 +618,7 @@ function getUserProfileImageFromAttribute() {
 }
 
 function getInitialFromAttribute() {
+  const userProfileImageEmpty = document.querySelectorAll(".profile-pic--empty");
   // console.log('getInitialFromAttribute running...')
   // console.log('Elements found: ', userProfileImageEmpty.length)
   const colorsArr = [

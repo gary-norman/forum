@@ -66,6 +66,7 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 		ThisUser:    thisUser,
 		Posts:       posts,
 		ImagePaths:  app.paths,
+		Instance:    "user-page",
 	}
 
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Data", data)
@@ -88,7 +89,6 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		http.Error(w, `{"error": "error encoding JSON"}`, http.StatusInternalServerError)
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "response", response)
 }
 
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {

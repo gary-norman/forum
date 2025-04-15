@@ -28,6 +28,7 @@ type UserPage struct {
 	ThisUser    User
 	Posts       []Post
 	ImagePaths
+	Instance string
 }
 
 type UserCheck struct {

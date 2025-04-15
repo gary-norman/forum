@@ -138,12 +138,6 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		isJoinedOrOwned = isOwned || isJoined
 	}
 
-	paths := models.ImagePaths{
-		Channel: "db/userdata/images/channel-images",
-		Post:    "db/userdata/images/post-images",
-		User:    "db/userdata/images/user-images",
-	}
-
 	data := models.ChannelPage{
 		TestString:             "This is a test string",
 		CurrentUser:            currentUser,
@@ -156,43 +150,12 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		IsJoinedOrOwned:        isJoinedOrOwned,
 		IsPostPage:             false,
 		Instance:               "channel-page",
-		ImagePaths:             paths,
+		ImagePaths:             app.paths,
 	}
 
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Channel page avatar", thisChannel.Avatar)
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Channel page posts", len(thisChannelPosts))
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Paths", paths)
-
-	// data := models.ChannelPageBanner{
-	// 	TestString:             "This is a test string",
-	// 	ThisChannel:            thisChannel,
-	// 	OwnedAndJoinedChannels: ownedAndJoinedChannels,
-	// 	IsJoinedOrOwned:        isJoinedOrOwned,
-	// 	ThisChannelOwnerName:   thisChannelOwnerName,
-	// 	ThisChannelRules:       thisChannelRules,
-	// }
-
-	// data := models.Postplus{
-	//   ID: post.ID,
-	//   Title: post.Title,
-	//   Content: post.Content,
-	//   Images: post.Images,
-	//   Created: post.Created,
-	//   TimeSince: post.TimeSince,
-	//   IsCommentable: post.IsCommentable,
-	//   Author: post.Author,
-	//   AuthorID: post.AuthorID,
-	//   AuthorAvatar: post.AuthorAvatar,
-	//   ChannelID: thisChannel.ID,
-	//   ChannelName: thisChannel.Name,
-	//   IsFlagged: post.IsFlagged,
-	//   Likes: post.Likes,
-	//   Dislikes: post.Dislikes,
-	//   CommentsCount: post.CommentsCount,
-	//   Comments: post.Comments,
-	//   IsPostPage: false,
-	//   Instance: "channel-page",
-	// }
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Paths", app.paths)
 
 	// Render the `post-card.html` subtemplate
 	var renderedChannelPage bytes.Buffer
@@ -204,10 +167,13 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 
 	// Send the pre-rendered HTML as JSON
 	response := map[string]string{
-		"postsHTML": renderedChannelPage.String(),
+		"channelsHTML": renderedChannelPage.String(),
 	}
-	log.Printf(ErrorMsgs().KeyValuePair, len(thisChannelPosts), thisChannel.Name)
-	json.NewEncoder(w).Encode(response)
+
+	// Write the response as JSON
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, `{"error": "error encoding JSON"}`, http.StatusInternalServerError)
+	}
 }
 
 func (app *app) GetChannelInfoFromPostID(postID int) (int, string, error) {

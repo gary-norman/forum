@@ -9,7 +9,7 @@
   <div class="page-control">
     <div class="page-profile">
       {{ if (ne .ThisChannel.Avatar "noimage") }}
-      <div class="sidebar-pic profile-pic" data-image-user="{{ .ImagePaths.Channel }}/{{ .ThisChannel.Avatar }}">
+      <div class="sidebar-pic profile-pic" data-image-user="{{ .ImagePaths.Channel }}{{ .ThisChannel.Avatar }}">
       </div>
       {{ else }}
       <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}">

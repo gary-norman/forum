@@ -16,12 +16,14 @@ import { listenToReplies } from "./comments.js";
 // variables
 //user information
 const homePageUserContainer = document.querySelector("#home-page-users");
-homePageUserContainer.addEventListener("click", (e) => {
-  console.log("clicked ", e.target);
-  if (e.target.matches(".card")) {
-    navigateToPage("user", e.target);
-  }
-});
+if (homePageUserContainer !== null) {
+  homePageUserContainer.addEventListener("click", (e) => {
+    console.log("clicked ", e.target);
+    if (e.target.matches(".card")) {
+      navigateToPage("user", e.target);
+    }
+  });
+}
 
 // dark mode
 const switchDl = document.querySelector("#switch-dl");
@@ -145,24 +147,22 @@ document.addEventListener("newContentLoaded", (event) => {
   UpdateUI();
 });
 
-
 function UpdateUI() {
-
   // console.log("updating UI");
-    listenToDropdowns();
-    listenToRules();
-    listenToReplies();
-    listenToEditDetails();
-    listenToChannelLinks();
-    listenToShare();
-    listenToLikeDislike();
-    listenToNavigationLinks();
-    listenToPageSetup();
-    // getUserProfileImageFromAttribute();
+  listenToDropdowns();
+  listenToRules();
+  listenToReplies();
+  listenToEditDetails();
+  listenToChannelLinks();
+  listenToShare();
+  listenToLikeDislike();
+  listenToNavigationLinks();
+  listenToPageSetup();
+  // getUserProfileImageFromAttribute();
 }
 
 // INFO was inside a DOMContentLoaded function
-document.addEventListener('DOMContentLoaded', () => {
+function listenToChannelLinks() {
   const joinedAndOwnedChannelContainer = document.querySelector(
     "#sidebar-channel-block",
   );
@@ -176,12 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
     joinedAndOwnedChannels.forEach((channel) =>
       channel.addEventListener("click", (e) => {
         e.preventDefault();
-        navigateToChannel(channel);
+        navigateToPage("channel", channel);
       }),
     );
   }
 }
-
 
 // post channel selection dropdown
 // INFO was a DOMContentLoaded function
@@ -467,11 +466,10 @@ function fetchData(entity, Id) {
     .then((response) => response.json())
     .then((data) => {
       document.getElementById(`${entity}-page`).innerHTML =
-        `data.${entity}sHTML`;
-
+        data[`${entity}sHTML`];
 
       // Update URL without reloading
-      window.history.pushState({}, "", `/channels/${channelId}`);
+      // window.history.pushState({}, "", `/channels/${Id}`);
 
       // Dispatch the event on the document (or any other appropriate ancestor)
       document.dispatchEvent(newContentLoaded);
@@ -481,7 +479,8 @@ function fetchData(entity, Id) {
 
 export function navigateToPage(dest, entity) {
   const link = entity.getAttribute(`data-${dest}-id`);
-  const page = entity + "Page";
+  console.log("link: ", link);
+  const page = dest + "Page";
   if (!link) {
     console.error(`${dest} ID is missing`);
     return;
@@ -618,7 +617,9 @@ function getUserProfileImageFromAttribute() {
 }
 
 function getInitialFromAttribute() {
-  const userProfileImageEmpty = document.querySelectorAll(".profile-pic--empty");
+  const userProfileImageEmpty = document.querySelectorAll(
+    ".profile-pic--empty",
+  );
   // console.log('getInitialFromAttribute running...')
   // console.log('Elements found: ', userProfileImageEmpty.length)
   const colorsArr = [
@@ -837,12 +838,18 @@ function getCSRFToken() {
 // and change the edit button to submit
 
 function changePage(page) {
-  let pageId = page;
-  // console.log("type", typeof page);
+  console.log("page: ", page);
+  let pageId;
   if (typeof page != "string") {
     pageId = page.id;
+  } else {
+    const pageSlice = page.slice(0, -4);
+    pageId = pageSlice + "-page";
   }
   pages.forEach((element) => {
+    console.log("page", page);
+    console.log("pageId: ", pageId);
+    console.log("element.id: ", element.id);
     if (element.id === pageId) {
       element.classList.add("active-feed");
       console.log("set", element.id, "to active-feed");
@@ -855,7 +862,7 @@ function changePage(page) {
 
 // --- go home ---
 goHome.addEventListener("click", () => {
-  changePage(homePage);
+  changePage(data["homePage"]);
 });
 
 // --- select page ---

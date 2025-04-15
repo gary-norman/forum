@@ -19,7 +19,7 @@ export function listenToNavigationLinks() {
       const prefix = "link-post-";
       const entity = fullID.slice(prefix.length);
       console.log("clicked ", entity);
-      navigateToPage(entity);
+      navigateToPage("page", entity);
     });
   });
 

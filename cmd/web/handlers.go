@@ -155,22 +155,23 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// SECTION -- template ---
-
-	// ---------- users ----------
-	TemplateData.AllUsers = allUsers
-	TemplateData.RandomUser = randomUser
-	TemplateData.CurrentUser = currentUser
-	// ---------- posts ----------
-	TemplateData.Posts = allPosts
-	// ---------- channels ----------
-	TemplateData.AllChannels = allChannels
-	TemplateData.OwnedChannels = ownedChannels
-	TemplateData.JoinedChannels = joinedChannels
-	TemplateData.OwnedAndJoinedChannels = ownedAndJoinedChannels
-	// ---------- misc ----------
-	TemplateData.Images = nil
-	TemplateData.Reactions = nil
-
+	TemplateData := models.TemplateData{
+		// ---------- users ----------
+		AllUsers:    allUsers,
+		RandomUser:  randomUser,
+		CurrentUser: currentUser,
+		// ---------- posts ----------
+		Posts: allPosts,
+		// ---------- channels ----------
+		AllChannels:            allChannels,
+		OwnedChannels:          ownedChannels,
+		JoinedChannels:         joinedChannels,
+		OwnedAndJoinedChannels: ownedAndJoinedChannels,
+		// ---------- misc ----------
+		Images:     nil,
+		Reactions:  nil,
+		ImagePaths: app.paths,
+	}
 	// models.JsonError(TemplateData)
 	tpl, err := GetTemplate()
 	if err != nil {

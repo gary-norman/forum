@@ -12,7 +12,7 @@
         <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">
             <div class="container-post-info">
                 {{ if (ne $post.AuthorAvatar "noimage") }}
-                    <span class="card-pic profile-pic" data-image-user="{{ $root.ImagePaths.User }}/{{ $post.AuthorAvatar }} "role="presentation"></span>
+      <span class="card-pic profile-pic" data-image-user="{{ $root.ImagePaths.User }}{{ $post.AuthorAvatar }} "role="presentation"></span>
                 {{ else }}
                     <span class="card-pic profile-pic--empty" data-name-user="{{ $post.Author }}"></span>
                 {{ end }}
@@ -31,7 +31,7 @@
             </div>
             <h4 id="link-post-post-{{ $post.ID }}-{{ .Instance }}" class="link" data-post-id="{{ $post.ID }}">{{$post.Title}}</h4>
             {{ if ne $post.Images "noimage" }}
-                <img src="{{ $root.ImagePaths.Post }}/{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
+                <img src="{{ $root.ImagePaths.Post }}{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
             {{ end }}
             <p class="cardContent">{{$post.Content}}</p>
 

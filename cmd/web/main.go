@@ -66,9 +66,9 @@ func newApp(db *sql.DB) *app {
 		rules:          &sqlite.RuleModel{DB: db},
 
 		paths: models.ImagePaths{
-			Channel: "db/userdata/images/channel-images",
-			Post:    "db/userdata/images/post-images",
-			User:    "db/userdata/images/user-images",
+			Channel: "db/userdata/images/channel-images/",
+			Post:    "db/userdata/images/post-images/",
+			User:    "db/userdata/images/user-images/",
 		},
 	}
 }

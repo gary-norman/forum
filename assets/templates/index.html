@@ -22,6 +22,17 @@
     <script type="module" src="/assets/js/comments.js" defer></script>
     <script type="module" src="/assets/js/edit_user.js" defer></script>
     <script type="module" src="/assets/js/posts.js" defer></script>
+    <script type="module" src="/assets/js/fetch_and_navigate.js" defer></script>
+    <script type="module" src="/assets/js/colour_scheme.js" defer></script>
+    <script type="module" src="/assets/js/authentication.js" defer></script>
+    <script type="module" src="/assets/js/channel_rules.js" defer></script>
+    <script type="module" src="/assets/js/file_uploader.js" defer></script>
+    <script type="module" src="/assets/js/helper_functions.js" defer></script>
+    <script type="module" src="/assets/js/join_channel.js" defer></script>
+    <script type="module" src="/assets/js/navigation.js" defer></script>
+    <script type="module" src="/assets/js/notifications.js" defer></script>
+    <script type="module" src="/assets/js/popups.js" defer></script>
+    <script type="module" src="/assets/js/update_UI_elements.js" defer></script>
     <title>&lt; codex &gt;</title>
     <title>{{- /*gotype: github.com/gary-norman/forum/internal/models.TemplateData*/ -}}</title>
   </head>
@@ -42,12 +53,6 @@
       {{/*SECTION ---------- header -----------*/}}
       <header class="header">
         <div class="branding"></div>
-        <label for="pagedrop"></label>
-        <select name="pagedrop" id="pagedrop" class="button">
-          <option id="btn-show-home" value="home-page">home</option>
-          <option id="btn-show-user" value="user-page">user page</option>
-          <option id="btn-show-channels" value="channel-page">channels</option>
-        </select>
           <search class="wrapper-search">
             <form>
               <input

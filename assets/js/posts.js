@@ -1,4 +1,4 @@
-import { navigateToPage } from "./main.js";
+import { navigateToPage } from "./fetch_and_navigate.js";
 
 const linkPosts = document.querySelectorAll('[id^="link-post-"]');
 const linkPostPosts = document.querySelectorAll('[id^="link-post-post"]');

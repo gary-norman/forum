@@ -138,19 +138,22 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		isJoinedOrOwned = isOwned || isJoined
 	}
 
-	data := models.ChannelPage{
-		TestString:             "This is a test string",
-		CurrentUser:            currentUser,
-		ThisChannel:            thisChannel,
-		ThisChannelOwnerName:   thisChannelOwnerName,
-		ThisChannelRules:       thisChannelRules,
-		ThisChannelPosts:       thisChannelPosts,
-		ThisChannelIsOwned:     isOwned,
+	bannerData := models.PageBanner{
+		OwnerName:              thisChannelOwnerName,
 		OwnedAndJoinedChannels: ownedAndJoinedChannels,
 		IsJoinedOrOwned:        isJoinedOrOwned,
-		IsPostPage:             false,
-		Instance:               "channel-page",
-		ImagePaths:             app.paths,
+		ThisChannel:            thisChannel,
+		ThisChannelRules:       thisChannelRules,
+	}
+
+	data := models.ChannelPage{
+		CurrentUser:        currentUser,
+		ThisChannelPosts:   thisChannelPosts,
+		ThisChannelIsOwned: isOwned,
+		IsPostPage:         false,
+		Instance:           "channel-page",
+		ImagePaths:         app.paths,
+		PageBanner:         bannerData,
 	}
 
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Channel page avatar", thisChannel.Avatar)

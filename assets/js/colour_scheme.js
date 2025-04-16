@@ -2,6 +2,9 @@ export function toggleColorScheme() {
     // dark mode
     const darkSwitch = document.querySelector("#sidebar-option-darkmode");
 
+    // switchDl.addEventListener('click', toggleColorScheme);
+    darkSwitch.addEventListener("click", toggleDarkMode);
+
     // Get the current color scheme
     const currentScheme = document.documentElement.getAttribute("color-scheme");
     // Toggle between light and dark

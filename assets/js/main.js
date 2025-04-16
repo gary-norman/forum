@@ -518,6 +518,7 @@ function getRandomInt(max) {
 }
 
 function getUserProfileImageFromAttribute() {
+  console.log("updating pictures")
   const userProfileImage = document.querySelectorAll(".profile-pic");
   for (let i = 0; i < userProfileImage.length; i++) {
     let attArr = ["user", "auth", "channel"];
@@ -1007,8 +1008,7 @@ function displayFile(uploadedFile, dropArea) {
   }
 }
 
-// switchDl.addEventListener('click', toggleColorScheme);
-darkSwitch.addEventListener("click", toggleDarkMode);
+
 
 // open modals
 // TODO refactor the open and close modals

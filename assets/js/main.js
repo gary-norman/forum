@@ -1,9 +1,5 @@
 import {
-  // channelPage,
-  // homePage,
-  // userPage,
-  // postPage,
-  pages,
+   pages,
   selectActiveFeed,
   data,
   listenToShare,
@@ -12,6 +8,7 @@ import { listenToLikeDislike } from "./reactions.js";
 import { listenToNavigationLinks } from "./posts.js";
 import { listenToEditDetails } from "./edit_user.js";
 import { listenToReplies } from "./comments.js";
+import {saveColourScheme} from "./colour_scheme.js";
 
 // variables
 //user information
@@ -25,9 +22,7 @@ if (homePageUserContainer !== null) {
   });
 }
 
-// dark mode
-const switchDl = document.querySelector("#switch-dl");
-const darkSwitch = document.querySelector("#sidebar-option-darkmode");
+
 // activity buttons
 let actButtonContainer;
 let actButtonsAll;
@@ -38,17 +33,10 @@ let activityFeedsContentAll;
 const goHome = document.querySelector("#btn-go-home");
 // right panel buttons
 let rightPanelButtons;
-// sidebar elements
-const sidebarOption = document.querySelector("#sidebar-options");
-const sidebarOptionsList = document.querySelector(".sidebar-options-list");
 // login/register buttons
 // TODO overhaul the naming of these buttons
 const registerForm = document.querySelector("#register-form");
-const loginTitle = document.querySelector("#login-title");
 const loginForm = document.querySelector("#login-form");
-const loginFormButton = document.querySelector("#login");
-const loginFormUser = document.querySelector("#login_username");
-const loginFormPassword = document.querySelector("#login_password");
 const logoutFormButton = document.querySelector("#logout");
 const btnsLogin = document.querySelectorAll('[id^="btn_login-"]');
 const btnsRegister = document.querySelectorAll('[id^="btn_register-"]');
@@ -67,10 +55,6 @@ const popovers = document.querySelectorAll("[popover]");
 const formLogin = document.querySelector("#form-login");
 const formRegister = document.querySelector("#form-register");
 const formForgot = document.querySelector("#form-forgot");
-const formEditUser = document.querySelector("#form-edit-user");
-const formAccSettings = document.querySelector("#form-acc-settings");
-const formViewStats = document.querySelector("#form-view-stats");
-const formRemoveAcc = document.querySelector("#form-remove-acc");
 let forgotVisible = false;
 // login/register modal
 const loginHeader = document.querySelector("#modal-header-logreg");
@@ -84,22 +68,10 @@ const openLoginModal = document.querySelector("#btn-open-login-modal");
 const openLoginModalFallback = document.querySelector(
   "#btn-open-login-modal-fallback",
 );
-// const openEditUserModal = document.querySelector('#btn-open-edit-user-modal');
-// const openAccSettingsModal = document.querySelector('#btn-open-acc-settings-modal');
-// const openViewStatsModal = document.querySelector('#btn-open-view-stats-modal');
-// const openRemoveAccModal = document.querySelector('#btn-open-remove-acc-modal');
 // Get the <span> element that closes the modal
 const closeLoginModal = loginModal.getElementsByClassName("close")[0];
-// const closeEditUserModal = editUserModal.getElementsByClassName("close")[0];
-// const closeAccSettingsModal = accSettingsModal.getElementsByClassName("close")[0];
-// const closeViewStatsModal = viewStatsModal.getElementsByClassName("close")[0];
-// const closeRemoveAccModal = removeAccModal.getElementsByClassName("close")[0];
 // registration form
 const regForm = document.querySelector("#form-register");
-const regFormInputs = regForm.querySelectorAll("input");
-const regFormSpans = regForm.querySelectorAll("span");
-const regFormIcons = regForm.querySelectorAll(".validation-icon");
-const regFormTooltips = regForm.querySelectorAll(".validation-tooltip");
 const regPass = document.querySelector("#register_password");
 const liValidNum = document.querySelector("#li-valid-num");
 const liValidUpper = document.querySelector("#li-valid-upper");
@@ -158,6 +130,7 @@ function UpdateUI() {
   listenToLikeDislike();
   listenToNavigationLinks();
   listenToPageSetup();
+  saveColourScheme();
   // getUserProfileImageFromAttribute();
 }
 
@@ -442,22 +415,6 @@ function listenToRules() {
 }
 
 // SECTION ----- functions ------
-function fetchAndNavigate(url, page, errorMessage) {
-  fetch(url, { method: "GET" })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.table(data);
-      changePage(page);
-    })
-    .catch((error) => {
-      console.error(errorMessage, error);
-    });
-}
 
 function fetchData(entity, Id) {
   console.log(`Fetching ${entity} data for ID:`, Id);
@@ -477,7 +434,6 @@ function fetchData(entity, Id) {
 
         // Update URL for SPA routing
         // window.history.pushState({}, "", `/${entity}s/${Id}`);
-        // window.history.pushState({}, "", `?id=${Id}`);
 
         // Dispatch custom event
         const newContentLoaded = new Event("newContentLoaded");
@@ -488,24 +444,6 @@ function fetchData(entity, Id) {
     })
     .catch((error) => console.error(`Error fetching ${entity} data:`, error));
 }
-
-// function fetchData(entity, Id) {
-//   console.log(`Fetching ${entity} data for ID: `, Id);
-//
-//   fetch(`/${entity}s/${Id}`)
-//     .then((response) => response.json())
-//     .then((data) => {
-//       document.getElementById(`${entity}-page`).innerHTML =
-//         data[`${entity}sHTML`];
-//
-//       // Dispatch the event on the document (or any other appropriate ancestor)
-//       document.dispatchEvent(newContentLoaded);
-//
-//       // Update URL without reloading
-//       window.history.pushState({}, "", `/channels/${Id}`);
-//     })
-//     .catch((error) => console.error(`Error fetching ${entity} data: `, error));
-// }
 
 export function navigateToPage(dest, entity) {
   const link = entity.getAttribute(`data-${dest}-id`);
@@ -615,8 +553,8 @@ function getInitialFromAttribute() {
   const userProfileImageEmpty = document.querySelectorAll(
     ".profile-pic--empty",
   );
-  // console.log('getInitialFromAttribute running...')
-  // console.log('Elements found: ', userProfileImageEmpty.length)
+  const userProfileImage = document.querySelectorAll(".profile-pic");
+
   const colorsArr = [
     ["var(--color-hl-blue)", "var(--color-light-1)"],
     ["var(--color-hl-green)", "var(--color-dark-1)"],
@@ -667,29 +605,6 @@ function getInitialFromAttribute() {
   }
 }
 
-function toggleColorScheme() {
-  // Get the current color scheme
-  const currentScheme = document.documentElement.getAttribute("color-scheme");
-  // Toggle between light and dark
-  const newScheme = currentScheme === "light" ? "dark" : "light";
-  // Set the new color scheme
-  document.documentElement.setAttribute("color-scheme", newScheme);
-  localStorage.setItem("color-scheme", newScheme);
-}
-
-// Apply persisted color scheme on page load
-document.addEventListener("DOMContentLoaded", () => {
-  const savedScheme = localStorage.getItem("color-scheme");
-  if (savedScheme) {
-    document.documentElement.setAttribute("color-scheme", savedScheme);
-  }
-});
-
-function toggleDarkMode() {
-  const checkbox = document.querySelector("#darkmode-checkbox");
-  checkbox.checked = !checkbox.checked;
-  console.log("toggle dark mode");
-}
 // toggle the various feeds on user-page
 function toggleFeed(targetFeed, targetFeedContent, targetButton) {
   const timeOut = 400;
@@ -823,15 +738,6 @@ function getCSRFToken() {
   return match.substring("csrf_token=".length);
 }
 
-// sendRequest('/protected', 'GET').then((response) => {
-//     console.log('Use of protected route successful:', response);
-//     })
-//     .catch((error) => {
-//         console.error('Use of protected route failed:', error);
-// });
-// switch the <p> elements in right panel to <textarea> for editing
-// and change the edit button to submit
-
 function changePage(page) {
   console.log("page: ", page);
   let pageId;
@@ -842,12 +748,12 @@ function changePage(page) {
     pageId = pageSlice + "-page";
   }
   pages.forEach((element) => {
-    console.log("page", page);
-    console.log("pageId: ", pageId);
-    console.log("element.id: ", element.id);
+    // console.log("page", page);
+    // console.log("pageId: ", pageId);
+    // console.log("element.id: ", element.id);
     if (element.id === pageId) {
       element.classList.add("active-feed");
-      console.log("set", element.id, "to active-feed");
+      // console.log("set", element.id, "to active-feed");
     } else {
       element.classList.remove("active-feed");
     }
@@ -865,13 +771,6 @@ selectDropdown.addEventListener("change", () => {
   const selectedValue = selectDropdown.value;
   console.log("selectedValue: ", selectedValue);
   changePage(selectedValue);
-});
-
-// --- sidebar options dropdown ---
-sidebarOption.addEventListener("click", function (event) {
-  sidebarOptionsList.classList.toggle("sidebar-options-reveal");
-  sidebarOptionsList.classList.toggle("ul-forwards");
-  sidebarOptionsList.classList.toggle("ul-reverse");
 });
 
 // --- register ---
@@ -1083,6 +982,9 @@ inputPost.addEventListener("change", function () {
   dropAreaUser.classList.add("active");
 });
 
+}
+
+
 function displayFile(uploadedFile, dropArea) {
   let fileType = file.type;
   // console.log(fileType);
@@ -1127,23 +1029,11 @@ closeLoginModal.addEventListener(
   "click",
   () => (loginModal.style.display = "none"),
 );
-// closeEditUserModal.addEventListener('click', () => editUserModal.style.display = 'none');
-// closeAccSettingsModal.addEventListener('click', () => accSettingsModal.style.display = 'none');
-// closeViewStatsModal.addEventListener('click', () => viewStatsModal.style.display = 'none');
-// closeRemoveAccModal.addEventListener('click', () => removeAccModal.style.display = 'none');
+
 window.addEventListener("click", ({ target }) => {
   switch (target) {
     case loginModal:
       loginModal.style.display = "none";
-      break;
-    case accSettingsModal:
-      accSettingsModal.style.display = "none";
-      break;
-    case viewStatsModal:
-      viewStatsModal.style.display = "none";
-      break;
-    case removeAccModal:
-      removeAccModal.style.display = "none";
       break;
   }
 });

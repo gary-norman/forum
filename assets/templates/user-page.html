@@ -7,47 +7,11 @@
   {{ template "user-page-banner" . }}
   <div class="container-content">
     <div class="content">
-      <div id="activity-bar" class="button-row above-activity">
-        <button id="activity" class="btn-lg btn-secondary btn-icotext btn-activity btn-active">
-          <span class="btn-clock">activity</span>
-        </button>
-        <button id="posts" class="btn-lg btn-secondary btn-icotext btn-activity">
-          <span class="btn-posts">posts</span>
-        </button>
-        <button id="comments" class="btn-lg btn-secondary btn-icotext btn-activity">
-          <span class="btn-comment">comments</span>
-        </button>
-        <button id="saved" class="btn-lg btn-secondary btn-invert-never btn-icotext btn-activity">
-          <span class="btn-heart-empty">saved</span>
-        </button>
-        <button id="muted" class="btn-lg btn-secondary btn-icotext btn-activity">
-          <span class="btn-mute">muted</span>
-        </button>
-        <button id="reactions" class="btn-lg btn-secondary btn-invert-never btn-icotext btn-activity">
-          <span class="btn-likes">reactions</span>
-        </button>
-      </div>
+    {{ template "user-page-activity-bar" }}
       {{/*SECTION ---------- user page activity feed ----------*/}}
       <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%">
         {{/*SECTION ------- activity activity ---------- */}}
-        <div id="activity-activity">
-          <div class="filters-row button-row">
-            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-              <span class="btn-sort">sort</span>
-            </button>
-            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-              <span class="btn-filters">filters</span>
-            </button>
-            <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-              <span class="btn-sort">scroll</span>
-            </button>
-          </div>
-          <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-            {{ range .Posts }} <!-- user page activity posts -->
-              {{ template "post-card" (dict "Post" . "root" $ "CurrentUser" $.CurrentUser "Instance" "user-page-activity" "calledBy" "user-page") }}
-            {{ end }} <!-- user page activity POSTS -->
-          </div>
-        </div>
+      {{ template "user-page-activity-activity" . }}
         {{/*SECTION ------- activity posts ---------- */}}
         <div id="activity-posts">
           <div class="filters-row button-row hide-feed">

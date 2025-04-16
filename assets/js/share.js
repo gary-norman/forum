@@ -1,3 +1,6 @@
+import {activePage} from "./main.js";
+
+
 const link = encodeURI(window.location.href);
 export const data = {
   homePage: document.getElementById("home-page"),
@@ -13,9 +16,9 @@ export const pages = [
 ];
 
 pages.forEach((page) => {
-  console.log("type: ", typeof page);
-  console.log("page: ", page);
-  console.log("classList: ", page.classList);
+  // console.log("type: ", typeof page);
+  // console.log("page: ", page);
+  // console.log("classList: ", page.classList);
 });
 
 // TODO Add logic that positions the modal above the button if there's not enough space under
@@ -30,20 +33,17 @@ const postTitle = encodeURIComponent("Post Title Here");
 let activityButtons;
 let scrollWindow;
 
-console.log(data["homePage"]);
+// console.log(data["homePage"]);
 
 export function selectActiveFeed() {
-  const activePage = pages.find((page) =>
-    page.classList.contains("active-feed"),
-  );
 
   switch (activePage) {
-    case data["home-page"]:
+    case "home-page":
       console.log("ON HOME PAGE BITCH")
       // scrollWindow = homePage.querySelector(`#home-feed`);
       // console.log("scrollWindow:", scrollWindow)
       break;
-    case data["user-page"]:
+    case "user-page":
       console.log("ON USER PAGE BITCH")
       const userFeeds = Array.from(
         document.querySelectorAll('[id^="activity-feed-"]'),
@@ -55,14 +55,19 @@ export function selectActiveFeed() {
       scrollWindow = activeFeed;
       // console.log(scrollWindow)
       break;
-    case data["channel-page"]:
+    case "channel-page":
       console.log("ON CHANNEL PAGE BITCH")
 
-      scrollWindow = data["channel-page"].querySelector(`#channel-feed`);
+      scrollWindow = data.channelPage.querySelector(`#channel-feed`);
+      // console.log(scrollWindow)
+      break;
+    case "post-page":
+      console.log("ON POST PAGE BITCH")
+
       // console.log(scrollWindow)
       break;
     default:
-      console.log(`No active feed.`);
+      console.log(`No active feed BITCH.`);
       break;
   }
 }

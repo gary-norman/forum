@@ -47,11 +47,9 @@ export function listenToLikeDislike(){
                     dislikeButton.classList.remove('active');
                 }
             }
-
             let postData = checkData(commentID, postID, currentUserID, channelID, "like")
 
-
-            console.log("postData: ", postData)
+            // console.table(postData)
 
             fetchData(postData, "like");
         });
@@ -80,9 +78,7 @@ export function listenToLikeDislike(){
             }
 
             let postData = checkData(commentID, postID, currentUserID, channelID, "dislike")
-
-            console.log("postData: ", postData)
-
+            // console.table(postData)
 
             fetchData(postData, "dislike");
         });

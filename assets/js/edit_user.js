@@ -13,9 +13,9 @@ export function listenToEditDetails() {
   };
   // const contents = [bioContent, nameContent]
 
-  console.log("bioContent", bioContent);
-  console.log("nameContent", nameContent);
-  console.log("inputs", inputs);
+  // console.log("bioContent", bioContent);
+  // console.log("nameContent", nameContent);
+  // console.log("inputs", inputs);
 
   inputs.forEach((input) => {
     if (input) {

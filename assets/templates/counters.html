@@ -1,0 +1,54 @@
+{{ define "counters"}}
+    {{ $userID := 0 }} {{/* Default value for logged out users */}}
+    {{ $user := .CurrentUser }}
+    {{ if ne .CurrentUser nil }}
+        {{ $userID = .CurrentUser.ID }}
+    {{ end }}
+    {{ $post := .Post }}
+    {{ $root := .root}}
+    {{ $instance := $root.Instance }}
+    {{ $calledBy := .calledBy }}
+
+
+    {{ if and (eq $calledBy "info--header") (eq $instance "channel-page") }}
+    {{ else if and (eq $calledBy "info--list-item") (eq $instance "channel-page") }}
+
+    {{ else if and (eq $calledBy "info--header") (eq $instance "user-page") }}
+    {{ else if and (eq $calledBy "info--list-item") (eq $instance "user-page") }}
+
+    {{ else if and (eq $calledBy "info--header") (eq $instance "sidebar") }}
+    {{ else if and (eq $calledBy "info--list-item") (eq $instance "sidebar") }}
+    {{ end }}
+    <div>
+        <div class="cont-flex-column">
+            <small>following:</small>
+            <button class="btn-lg btn-icotext btn-follows btn-invert-never">
+                              <span class="btn-following">{{ if ne .CurrentUser nil}}{{$user.Following}}{{ else }}{{.RandomUser.Following}}{{ end }}
+                                </span>
+            </button>
+        </div>
+        <div class="cont-flex-column">
+            <small>followers:</small>
+            <button class="btn-lg btn-icotext btn-follows btn-invert-never">
+                <span class="btn-followers">{{ if ne .CurrentUser nil}}{{$user.Followers}}{{ else }}{{.RandomUser.Followers}}{{ end }}</span>
+            </button>
+        </div>
+
+    </div>
+
+    <div>
+        <button class="btn-md btn-icotext btn-follows btn-invert-never">
+            <span class="btn-channel-users">13.8k</span>
+        </button>
+        <button
+                class="btn-md btn-icotext btn-follows btn-invert-never"
+                style="position: relative"
+        >
+            <span class="btn-channel-green-dot">37</span>
+        </button>
+    </div>
+
+
+
+
+{{ end }}

@@ -1,0 +1,50 @@
+{{ define "info"}}
+{{ $userID := 0 }} {{/* Default value for logged out users */}}
+{{ $user := .CurrentUser }}
+{{ if ne .CurrentUser nil }}
+    {{ $userID = .CurrentUser.ID }}
+{{ end }}
+{{ $post := .Post }}
+{{ $root := .root}}
+{{ $instance := $root.Instance }}
+{{ $calledBy := .calledBy }}
+    {{ if eq $calledBy "channel-page-banner" }}
+        {{ if (ne .ThisChannel.Avatar "noimage") }}
+            <div class="sidebar-pic profile-pic" data-image-user="{{ .ImagePaths.Channel }}/{{ .ThisChannel.Avatar }}">
+            </div>
+        {{ else }}
+            <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}">
+            </div>
+        {{ end }}
+        <div class="flex-start">
+            <h2 {{ if (eq .ThisChannel.Privacy true) }} class="private-channel align-self-start" {{ end }}>/{{ .ThisChannel.Name }}</h2>
+            {{ template "counters" "calledBy "}}
+        </div>
+    {{ else if eq $calledBy "user-page-banner"}}
+        {{ if ne .CurrentUser nil}}
+            {{ if (ne $user.Avatar "noimage") }}
+                <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ $root.ImagePaths.User }}/{{ $user.Avatar }}"></div>
+            {{ else }}
+                <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username}}"></div>
+            {{ end }}
+        {{else}}
+            {{ if (ne .RandomUser.Avatar "noimage") }}
+                <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ .ImagePaths.User }}/{{ .RandomUser.Avatar }}"></div>
+            {{ else }}
+                <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .RandomUser.Username}}"></div>
+            {{ end }}
+        {{end}}
+        <div class="flex-start">
+            <h2 class="align-self-start">{{ if ne .CurrentUser nil}}{{ $user.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h2>
+            {{ template "counters"}}
+        </div>
+
+    {{ end }}
+
+
+
+
+
+
+
+{{ end }}

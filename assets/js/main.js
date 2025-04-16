@@ -974,13 +974,15 @@ if (inputUser) {
   });
 }
 // SECTION ----- drag and drop ----
-// get user image from manual click
+
+function fileUploader() {
+  // get user image from manual click
 
 // get post image from manual click
-inputPost.addEventListener("change", function () {
-  file = this.files[0];
-  dropAreaUser.classList.add("active");
-});
+  inputPost.addEventListener("change", function () {
+    file = this.files[0];
+    dropAreaUser.classList.add("active");
+  });
 
 }
 

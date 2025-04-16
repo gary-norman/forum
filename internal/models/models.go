@@ -317,6 +317,7 @@ type TemplateData struct {
 	ThisUser  User
 	ImagePaths
 }
+
 type Session struct {
 	Username string
 	Expires  time.Time

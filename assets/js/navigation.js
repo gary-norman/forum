@@ -33,7 +33,9 @@ export function listenToChannelLinks() {
 function navigateEntity(e) {
     if (!(e.target.getAttribute("data-dest"))) {
         const parent = e.target.closest(".card");
-        navigateToPage("post", parent);
+        if (parent) {
+            navigateToPage("post", parent);
+        }
         return;
     }
     if (e.target.matches(".link")) {

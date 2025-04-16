@@ -29,6 +29,7 @@ type UserPage struct {
 	Posts       []Post
 	ImagePaths
 	Instance string
+	PageBanner
 }
 
 type UserCheck struct {
@@ -81,27 +82,21 @@ func (c *Channel) UpdateTimeSince() {
 }
 
 type ChannelPage struct {
-	TestString             string
-	CurrentUser            *User
-	ThisChannelPosts       []Post
-	ThisChannelOwnerName   string
-	ThisChannel            Channel
-	ThisChannelIsOwned     bool
-	ThisChannelIsJoined    bool
-	OwnedAndJoinedChannels []Channel
-	ThisChannelRules       []Rule
-	IsJoinedOrOwned        bool
-	IsPostPage             bool
-	Instance               string
+	CurrentUser         *User
+	ThisChannelPosts    []Post
+	ThisChannelIsOwned  bool
+	ThisChannelIsJoined bool
+	IsPostPage          bool
+	Instance            string
 	ImagePaths
+	PageBanner
 }
 
-type ChannelPageBanner struct {
-	TestString             string
+type PageBanner struct {
 	ThisChannel            Channel
 	OwnedAndJoinedChannels []Channel
 	IsJoinedOrOwned        bool
-	ThisChannelOwnerName   string
+	OwnerName              string
 	ThisChannelRules       []Rule
 }
 
@@ -174,26 +169,13 @@ type Post struct {
 	CommentsCount int    `json:"commentsCount"`
 	Comments      []Comment
 }
-type Postplus struct {
-	ID            int       `json:"id"`
-	Title         string    `json:"title"`
-	Content       string    `json:"content"`
-	Images        string    `json:"images,omitempty"` // Store JSON as string
-	Created       time.Time `json:"created"`
-	TimeSince     string
-	IsCommentable bool   `json:"commentable"`
-	Author        string `json:"author"`
-	AuthorID      int    `json:"authorId"`
-	AuthorAvatar  string `json:"authorAvatar"`
-	ChannelID     int    `json:"channelId"`
-	ChannelName   string `json:"channelName"`
-	IsFlagged     bool   `json:"isFlagged,omitempty"`
-	Likes         int    `json:"likes"`
-	Dislikes      int    `json:"dislikes"`
-	CommentsCount int    `json:"commentsCount"`
-	Comments      []Comment
-	IsPostPage    bool
-	Instance      string
+
+type PostPage struct {
+	ThisPost    Post
+	CurrentUser *User
+	ImagePaths
+	Instance string
+	PageBanner
 }
 
 type PostChannel struct {

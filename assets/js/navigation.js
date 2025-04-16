@@ -30,10 +30,18 @@ export function listenToChannelLinks() {
     }
 }
 
-document.addEventListener("click", (e) => {
-    console.log("e.target", e.target)
+function navigateEntity(e) {
+    if (!(e.target.getAttribute("data-dest"))) {
+        const parent = e.target.closest(".card");
+        navigateToPage("post", parent);
+        return;
+    }
     if (e.target.matches(".link")) {
+
         const dest = e.target.getAttribute("data-dest");
         navigateToPage(dest, e.target);
     }
-})
+}
+
+document.addEventListener("click", navigateEntity, {capture: false});
+

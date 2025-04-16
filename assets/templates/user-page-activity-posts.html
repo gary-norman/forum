@@ -1,0 +1,21 @@
+{{ define "user-page-activity-posts" }}
+  <div id="activity-posts">
+    <div class="filters-row button-row hide-feed">
+      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+        <span class="btn-sort">sort</span>
+      </button>
+      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+        <span class="btn-filters">filters</span>
+      </button>
+      <button id="scroll-test-1" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+        <span class="btn-sort">scroll</span>
+      </button>
+    </div>
+    {{/*SECTION---------- user page posts ----------*/}}
+    <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+      {{/*range .Posts*/}} <!-- user page posts -->
+        {{/* template "post-card" (dict "Post" . "root" $ "CurrentUser" $.CurrentUser "Instance" "user-page-activity" "calledBy" "user-page") */}}
+      {{/*end*/}} <!-- user page posts -->
+    </div>
+  </div>
+{{ end }}

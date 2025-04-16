@@ -8,6 +8,8 @@
 {{ $root := .root}}
 {{ $instance := $root.Instance }}
 {{ $calledBy := .calledBy }}
+
+{{/*    add data-user-id, class"link" and data-dest="user"... etc to all links, */}}
     {{ if eq $calledBy "channel-page-banner" }}
         {{ if (ne .ThisChannel.Avatar "noimage") }}
             <div class="sidebar-pic profile-pic" data-image-user="{{ .ImagePaths.Channel }}/{{ .ThisChannel.Avatar }}">

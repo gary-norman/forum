@@ -9,17 +9,17 @@
     {{ $instance := $root.Instance }}
     <div class="container-card-down">
 {{/*        <p>{{$root.ImagePaths.User}}</p>*/}}
-        <div class="card" data-post-id="{{$post.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$post.AuthorID}}">
+        <div class="card link" data-post-id="{{$post.ID}}" data-dest="post" data-channel-ID="{{$post.ChannelID}}" data-user-id="{{$post.AuthorID}}">
             <div class="container-post-info">
                 {{ if (ne $post.AuthorAvatar "noimage") }}
-      <span class="card-pic profile-pic" data-image-user="{{ $root.ImagePaths.User }}{{ $post.AuthorAvatar }} "role="presentation"></span>
+      <span class="card-pic profile-pic link" data-dest="user" data-image-user="{{ $root.ImagePaths.User }}{{ $post.AuthorAvatar }}" data-user-id="{{ $post.AuthorID }}" role="presentation"></span>
                 {{ else }}
-                    <span class="card-pic profile-pic--empty" data-name-user="{{ $post.Author }}"></span>
+                    <span class="card-pic profile-pic--empty link" data-dest="user" data-name-user="{{ $post.Author }}" data-user-id="{{ $post.AuthorID }}"></span>
                 {{ end }}
                 <div>
-                    <small id="link-post-author-{{ $post.AuthorID }}-{{.Instance}}" data-author-id="{{ $post.AuthorID }}" class="small-bold link">{{ $post.Author }}</small>
+                    <small id="link-post-user-{{ $post.AuthorID }}-{{.Instance}}" data-dest="user" data-user-id="{{ $post.AuthorID }}" class="small-bold link">{{ $post.Author }}</small>
                     <div>
-          <small id="link-post-channelID-{{ $post.ChannelID }}-{{.Instance}}" class="link" data-channel-id="{{ $post.ChannelID }}">{{ $post.ChannelName }}</small>
+          <small id="link-post-channelID-{{ $post.ChannelID }}-{{.Instance}}" data-dest="channel" class="link" data-channel-id="{{ $post.ChannelID }}">{{ $post.ChannelName }}</small>
                         <small>-</small>
                         <small>{{$post.TimeSince}}</small>
                         <!-- <small>PostID: {{$post.ID}}</small> -->

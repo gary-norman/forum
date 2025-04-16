@@ -29,3 +29,11 @@ export function listenToChannelLinks() {
         );
     }
 }
+
+document.addEventListener("click", (e) => {
+    console.log("e.target", e.target)
+    if (e.target.matches(".link")) {
+        const dest = e.target.getAttribute("data-dest");
+        navigateToPage(dest, e.target);
+    }
+})

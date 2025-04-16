@@ -2,6 +2,11 @@ import {modifyActivePage, newContentLoaded} from "./main.js";
 import {pages} from "./share.js";
 
 export function navigateToPage(dest, entity) {
+    // dest is a string - "channel"
+    // entity is the template element
+    console.log("dest:", dest);
+    console.log("entity:", entity);
+
     const link = entity.getAttribute(`data-${dest}-id`);
     // console.log("link: ", link);
     const page = dest + "Page";
@@ -39,7 +44,7 @@ export function changePage(page) {
 }
 
 function fetchData(entity, Id) {
-    // console.log(`Fetching ${entity} data for ID:`, Id);
+    console.log(`Fetching ${entity} data for ID:`, Id);
 
     fetch(`/${entity}s/${Id}`)
         .then((response) => {

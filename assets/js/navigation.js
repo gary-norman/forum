@@ -15,7 +15,7 @@ export function listenToChannelLinks() {
         "#sidebar-channel-block",
     );
 
-    console.log(joinedAndOwnedChannelContainer);
+    // console.log(joinedAndOwnedChannelContainer);
     let joinedAndOwnedChannels;
 
     if (joinedAndOwnedChannelContainer) {

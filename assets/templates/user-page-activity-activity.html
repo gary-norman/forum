@@ -1,0 +1,20 @@
+{{ define "user-page-activity-activity" }}
+  <div id="activity-activity">
+    <div class="filters-row button-row">
+      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+        <span class="btn-sort">sort</span>
+      </button>
+      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+        <span class="btn-filters">filters</span>
+      </button>
+      <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+        <span class="btn-sort">scroll</span>
+      </button>
+    </div>
+    <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+      {{ range .Posts }} <!-- user page activity posts -->
+        {{ template "post-card" (dict "Post" . "root" $ "CurrentUser" $.CurrentUser "Instance" "user-page-activity" "calledBy" "user-page") }}
+      {{ end }} <!-- user page activity POSTS -->
+    </div>
+  </div>
+{{ end }}

@@ -87,8 +87,8 @@ func RandomInt(max int) int {
 }
 
 // dict allows 2 parameters to be passed to the {{template}} in the tmpl
-func dict(values ...interface{}) map[string]interface{} {
-	m := make(map[string]interface{})
+func dict(values ...any) map[string]any {
+	m := make(map[string]any)
 	for i := 0; i < len(values); i += 2 {
 		key, _ := values[i].(string)
 		m[key] = values[i+1]

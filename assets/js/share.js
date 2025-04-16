@@ -39,10 +39,12 @@ export function selectActiveFeed() {
 
   switch (activePage) {
     case data["home-page"]:
+      console.log("ON HOME PAGE BITCH")
       // scrollWindow = homePage.querySelector(`#home-feed`);
       // console.log("scrollWindow:", scrollWindow)
       break;
     case data["user-page"]:
+      console.log("ON USER PAGE BITCH")
       const userFeeds = Array.from(
         document.querySelectorAll('[id^="activity-feed-"]'),
       );
@@ -54,7 +56,9 @@ export function selectActiveFeed() {
       // console.log(scrollWindow)
       break;
     case data["channel-page"]:
-      scrollWindow = channelPage.querySelector(`#channel-feed`);
+      console.log("ON CHANNEL PAGE BITCH")
+
+      scrollWindow = data["channel-page"].querySelector(`#channel-feed`);
       // console.log(scrollWindow)
       break;
     default:
@@ -65,22 +69,21 @@ export function selectActiveFeed() {
 
 // INFO was a DOMContentLoaded function
 export function listenToShare() {
-  console.log("listenToSHare turning on");
   let postID, commentID, channelID, msg, title;
   selectActiveFeed();
   const buttonControls = document.querySelectorAll('[class$="-controls"]');
 
-  console.log("buttonControls: ", buttonControls);
+  // console.log("buttonControls: ", buttonControls);
 
   buttonControls.forEach((singleControl) => {
     postID = singleControl.getAttribute("data-post-id");
     commentID = singleControl.getAttribute("data-comment-id");
     channelID = singleControl.getAttribute("data-channel-id");
 
-    console.log("buttonControls:", buttonControls);
-    console.log("PostID:", postID);
-    console.log("CommentID:", commentID);
-    console.log("ChannelID:", channelID);
+    // console.log("buttonControls:", buttonControls);
+    // console.log("PostID:", postID);
+    // console.log("CommentID:", commentID);
+    // console.log("ChannelID:", channelID);
     let shareModal;
     let shareButton;
 
@@ -102,8 +105,8 @@ export function listenToShare() {
       // console.log("post ID ✔️")
     }
 
-    console.log(shareModal);
-    console.log(shareButton);
+    // console.log(shareModal);
+    // console.log(shareButton);
 
     //get all components needed
     if (shareModal != null) {
@@ -179,24 +182,26 @@ export function listenToShare() {
     // console.log("message:", msg)
     // console.log("title:", title)
 
-    const fb = singleControl.querySelector(".facebook");
-    fb.href = `https://www.facebook.com/share.php?u=${link}`;
-    // TODO check https works
-    const twitter = singleControl.querySelector(".twitter");
-    twitter.href = `https://twitter.com/share?&url=${link}&text=${msg}&hashtags=javascript,programming`;
-    // TODO check https works
-    const linkedIn = singleControl.querySelector(".linkedin");
-    linkedIn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${link}`;
-    // TODO check https works
-    const reddit = singleControl.querySelector(".reddit");
-    reddit.href = `https://www.reddit.com/submit?url=${link}&title=${title}`;
-    // TODO check https works
-    const whatsapp = singleControl.querySelector(".whatsapp");
-    whatsapp.href = `https://api.whatsapp.com/send?text=${msg}: ${link}`;
-    // TODO check https works
-    const telegram = singleControl.querySelector(".telegram");
-    telegram.href = `https://telegram.me/share/url?url=${link}&text=${msg}`;
-    // TODO check https works
+    if (singleControl) {
+      const fb = singleControl.querySelector(".facebook");
+      fb.href = `https://www.facebook.com/share.php?u=${link}`;
+      // TODO check https works
+      const twitter = singleControl.querySelector(".twitter");
+      twitter.href = `https://twitter.com/share?&url=${link}&text=${msg}&hashtags=javascript,programming`;
+      // TODO check https works
+      const linkedIn = singleControl.querySelector(".linkedin");
+      linkedIn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${link}`;
+      // TODO check https works
+      const reddit = singleControl.querySelector(".reddit");
+      reddit.href = `https://www.reddit.com/submit?url=${link}&title=${title}`;
+      // TODO check https works
+      const whatsapp = singleControl.querySelector(".whatsapp");
+      whatsapp.href = `https://api.whatsapp.com/send?text=${msg}: ${link}`;
+      // TODO check https works
+      const telegram = singleControl.querySelector(".telegram");
+      telegram.href = `https://telegram.me/share/url?url=${link}&text=${msg}`;
+      // TODO check https works
+    }
   });
 }
 
@@ -230,19 +235,19 @@ function scrollToPost(postId) {
     // Calculate the position relative to the container
     const scrollOffset =
       postRect.top - containerRect.top + container.scrollTop - 40;
-    console.log("FIRST:");
-    console.log("containerRect:, ", containerRect);
-    console.log("postRect:, ", postRect);
+    // console.log("FIRST:");
+    // console.log("containerRect:, ", containerRect);
+    // console.log("postRect:, ", postRect);
 
     container.scrollTo({
       top: scrollOffset,
       behavior: "smooth", // Smooth scrolling animation
     });
-    console.log("THEN:");
-    console.log("containerRect:, ", containerRect);
-    console.log("postRect:, ", postRect);
-    console.log("container.scrollTop:, ", container.scrollTop);
-    console.log("scrollOffset", scrollOffset);
+    // console.log("THEN:");
+    // console.log("containerRect:, ", containerRect);
+    // console.log("postRect:, ", postRect);
+    // console.log("container.scrollTop:, ", container.scrollTop);
+    // console.log("scrollOffset", scrollOffset);
 
     post.classList.add("card-selected");
 
@@ -308,10 +313,10 @@ function copyToClipboard(input) {
         throw new Error("Fallback copy failed");
       }
       console.log("Text copied to clipboard (fallback method)!");
-      return Promise.resolve(); // ✅ Return a resolved Promise
+      return Promise.resolve(); //
     } catch (err) {
       console.error("Fallback copy failed:", err);
-      return Promise.reject(err); // ✅ Return a rejected Promise
+      return Promise.reject(err); //
     }
   }
 }

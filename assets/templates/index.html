@@ -480,12 +480,6 @@
               </label>
               </div>
               <div class="sidebar-option settings" id="sidebar-options">Settings</div>
-              <ul class="sidebar-options-list ul-reverse">
-                <li id="btn-open-edit-user-modal">edit your profile</li>
-                <li id="btn-open-acc-settings-modal">account settings</li>
-                <li id="btn-open-view-stats-modal">view stats</li>
-                <li id="btn-open-remove-acc-modal">remove your account</li>
-              </ul>
             {{ if ne .CurrentUser nil }}
               <form action="/logout" method="POST">
                 <div id="logout" class="sidebar-option logout">Log Out</div>

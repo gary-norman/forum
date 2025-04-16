@@ -26,6 +26,7 @@ if (homePageUserContainer !== null) {
 // activity buttons
 let actButtonContainer;
 let actButtonsAll;
+export let activePage;
 // activity feeds
 let activityFeeds;
 let activityFeedsContentAll;
@@ -140,7 +141,7 @@ function listenToChannelLinks() {
     "#sidebar-channel-block",
   );
 
-  console.log(joinedAndOwnedChannelContainer);
+  // console.log(joinedAndOwnedChannelContainer);
   let joinedAndOwnedChannels;
 
   if (joinedAndOwnedChannelContainer) {
@@ -181,37 +182,31 @@ function listenToPageSetup() {
   });
 
   toggleUserInteracted("add");
-  actButtonContainer = document.querySelector("#activity-bar");
-  if (!actButtonContainer) {
-    console.error("Activity bar not found");
-    return;
-  }
-  actButtonsAll = actButtonContainer.querySelectorAll("button");
-  activityFeeds = document.querySelector("#user-activity-feeds");
-  if (!activityFeeds) {
-    console.error("User activity feeds not found");
-    return;
-  }
-  activityFeedsContentAll = activityFeeds.querySelectorAll(
-    '[id^="activity-feed-"]',
-  );
-  // Log the buttons for debugging purposes (optional)
-  if (actButtonsAll) {
+  if (activePage === "user-page") {
+    actButtonContainer = document.querySelector("#activity-bar");
+    actButtonsAll = actButtonContainer.querySelectorAll("button");
+    activityFeeds = document.querySelector("#user-activity-feeds");
+    activityFeedsContentAll = activityFeeds.querySelectorAll(
+        '[id^="activity-feed-"]',
+    );
+    // Log the buttons for debugging purposes (optional)
     actButtonsAll.forEach((button) =>
-      button.addEventListener("click", (e) => {
-        toggleFeed(
-          document.getElementById("activity-" + e.target.id),
-          document.getElementById("activity-feed-" + e.target.id),
-          e.target,
-        );
-        // console.log('activity-' + e.target.id);
-      }),
+        button.addEventListener("click", (e) => {
+          toggleFeed(
+              document.getElementById("activity-" + e.target.id),
+              document.getElementById("activity-feed-" + e.target.id),
+              e.target,
+          );
+          console.log('activity-' + e.target.id);
+        }),
     );
-    // right panel buttons
-    rightPanelButtons = document.querySelectorAll(
-      '[id^="right-panel-channel--"]',
-    );
+    // // right panel buttons
+    // rightPanelButtons = document.querySelectorAll(
+    //     '[id^="right-panel-channel--"]',
+    // );
   }
+
+
 
   if (typeof getUserProfileImageFromAttribute === "function") {
     getUserProfileImageFromAttribute();
@@ -417,7 +412,7 @@ function listenToRules() {
 // SECTION ----- functions ------
 
 function fetchData(entity, Id) {
-  console.log(`Fetching ${entity} data for ID:`, Id);
+  // console.log(`Fetching ${entity} data for ID:`, Id);
 
   fetch(`/${entity}s/${Id}`)
     .then((response) => {
@@ -447,14 +442,16 @@ function fetchData(entity, Id) {
 
 export function navigateToPage(dest, entity) {
   const link = entity.getAttribute(`data-${dest}-id`);
-  console.log("link: ", link);
+  // console.log("link: ", link);
   const page = dest + "Page";
+  activePage = dest + "-page";
   if (!link) {
     console.error(`${dest} ID is missing`);
     return;
   }
   changePage(page);
   fetchData(dest, link);
+
 }
 
 // toggleUserInteracted toggles user-interacted class on input fields to prevent label animation before they are selected
@@ -518,7 +515,6 @@ function getRandomInt(max) {
 }
 
 function getUserProfileImageFromAttribute() {
-  console.log("updating pictures")
   const userProfileImage = document.querySelectorAll(".profile-pic");
   for (let i = 0; i < userProfileImage.length; i++) {
     let attArr = ["user", "auth", "channel"];
@@ -740,7 +736,7 @@ function getCSRFToken() {
 }
 
 function changePage(page) {
-  console.log("page: ", page);
+  // console.log("page: ", page);
   let pageId;
   if (typeof page != "string") {
     pageId = page.id;

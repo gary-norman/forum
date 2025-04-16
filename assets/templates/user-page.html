@@ -15,19 +15,7 @@
         {{/*SECTION ------- activity posts ---------- */}}
       {{ template "user-page-activity-posts" . }}
         {{/*SECTION ------- activity comments ---------- */}}
-        <div id="activity-comments">
-          <div class="filters-row button-row hide-feed">
-            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-              <span class="btn-sort">sort</span>
-            </button>
-            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-              <span class="btn-filters">filters</span>
-            </button>
-          </div>
-          <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-            <div class="activity-items comments cont-flex-column">Yo mama so fat</div>
-          </div>
-        </div>
+      {{ template "user-page-activity-comments" . }}
         {{/*SECTION ------- saved activities ---------- */}}
         <div id="activity-saved">
           <div class="filters-row button-row hide-feed">

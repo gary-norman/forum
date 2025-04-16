@@ -83,26 +83,26 @@ func JsonError(messageStruct TemplateData) {
 	val := reflect.ValueOf(messageStruct)
 	typ := val.Type()
 
-	for i := 0; i < val.NumField(); i++ {
+	for i := range val.NumField() {
 		field := val.Field(i)
 		fieldType := typ.Field(i)
 		if fieldType.Name == "CurrentUser" {
 			continue
 		}
 		if fieldType.Name == "Posts" {
-			//fmt.Printf(ErrorMsgs.KeyValuePair, "Number of posts", len(field.Interface().([]PostWithWrapping)))
+			// fmt.Printf(ErrorMsgs.KeyValuePair, "Number of posts", len(field.Interface().([]PostWithWrapping)))
 			continue
 		}
 		if fieldType.Name == "Images" {
-			//fmt.Printf(ErrorMsgs.KeyValuePair, "Number of images", len(field.Interface().([]Image)))
+			// fmt.Printf(ErrorMsgs.KeyValuePair, "Number of images", len(field.Interface().([]Image)))
 			continue
 		}
 		if fieldType.Name == "Comments" {
-			//fmt.Printf(ErrorMsgs.KeyValuePair, "Number of comments", len(field.Interface().([]Comment)))
+			// fmt.Printf(ErrorMsgs.KeyValuePair, "Number of comments", len(field.Interface().([]Comment)))
 			continue
 		}
 		if fieldType.Name == "Reactions" {
-			//fmt.Printf(ErrorMsgs.KeyValuePair, "Number of reactions", len(field.Interface().([]Reaction)))
+			// fmt.Printf(ErrorMsgs.KeyValuePair, "Number of reactions", len(field.Interface().([]Reaction)))
 			continue
 		}
 		fmt.Printf(ErrorMsgs.KeyValuePair, fieldType.Name, field.Interface())
@@ -114,7 +114,7 @@ func JsonPost(messageStruct Post) {
 	val := reflect.ValueOf(messageStruct)
 	typ := val.Type()
 
-	for i := 0; i < val.NumField(); i++ {
+	for i := range val.NumField() {
 		field := val.Field(i)
 		fieldType := typ.Field(i)
 		fmt.Printf(ErrorMsgs.KeyValuePair, fieldType.Name, field.Interface())

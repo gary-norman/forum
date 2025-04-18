@@ -2,7 +2,7 @@ import {listenToReplies} from "./comments.js";
 import {listenToEditDetails} from "./edit_user.js";
 import {listenToShare, selectActiveFeed} from "./share.js";
 import {listenToLikeDislike} from "./reactions.js";
-import {listenToNavigationLinks} from "./posts.js";
+import {listenToDropdowns} from "./post.js";
 import {saveColourScheme} from "./colour_scheme.js";
 import {activePage} from "./main.js";
 import {getRandomInt} from "./helper_functions.js";
@@ -23,7 +23,7 @@ export function UpdateUI() {
     listenToEditDetails();
     listenToShare();
     listenToLikeDislike();
-    listenToNavigationLinks();
+    listenToDropdowns();
     listenToPageSetup();
     saveColourScheme();
     updateProfileImages();

@@ -1532,11 +1532,7 @@ input[type="checkbox"]:checked {
   border: 1px dashed var(--color-hl-pink);
 }
 
-.wrapper-search {
-  display: flex;
-  flex-grow: 2;
-  justify-content: center;
-}
+
 
 /* --- Codex branding --- */
 
@@ -2119,6 +2115,55 @@ main {
     rgba(0, 0, 0, 0.16) 0 3px 6px,
     rgba(0, 0, 0, 0.23) 0 3px 6px;
   /* z-index: 100; a positive z-index breaks the before */
+
+  &.result-card {
+    flex-direction: row;
+    gap: 0.8rem;
+    padding: 0.4rem 1.2rem;
+  }
+}
+
+
+
+.wrapper-search {
+  display: flex;
+  flex-grow: 2;
+  justify-content: center;
+  max-width: 48.4rem;
+  position: relative;
+
+  & #search {
+
+  }
+
+  & #search-results-page {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    max-width: 48.4rem;
+    gap: 0.4rem;
+    top: 5.2rem;
+    min-height: 20rem;
+    background: darkslategray;
+    z-index: 999999;
+    width: 100%;
+
+    & > * {
+      width: 100%;
+
+      & #result-channels, #result-users {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+        & .result-cards {
+          display: flex;
+          flex-direction: column;
+          gap: 0.2rem;
+        }
+      }
+    }
+  }
+
 }
 
 .container-card-down {

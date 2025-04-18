@@ -42,14 +42,14 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]mode
 			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
 		if column == "OwnerID" {
-			fmt.Printf(ErrorMsgs().KeyValuePair, "updating Owned of", c.Name)
+			//fmt.Printf(ErrorMsgs().KeyValuePair, "updating Owned of", c.Name)
 			c.Owned = true
-			fmt.Printf(ErrorMsgs().KeyValuePair, "Owned", c.Owned)
+			//fmt.Printf(ErrorMsgs().KeyValuePair, "Owned", c.Owned)
 		}
 		if column == "ID" {
-			fmt.Printf(ErrorMsgs().KeyValuePair, "updating Joined of", c.Name)
+			//fmt.Printf(ErrorMsgs().KeyValuePair, "updating Joined of", c.Name)
 			c.Joined = true
-			fmt.Printf(ErrorMsgs().KeyValuePair, "Joined", c.Joined)
+			//fmt.Printf(ErrorMsgs().KeyValuePair, "Joined", c.Joined)
 		}
 		channels = append(channels, c)
 	}
@@ -58,7 +58,7 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]mode
 		return nil, fmt.Errorf("error iterating rows: %w", err)
 	}
 	if column == "OwnerID" {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned by current user", len(channels))
+		//fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned by current user", len(channels))
 	}
 
 	return channels, nil
@@ -90,7 +90,7 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Total channels", len(Channels))
+	//fmt.Printf(ErrorMsgs().KeyValuePair, "Total channels", len(Channels))
 	return Channels, nil
 }
 

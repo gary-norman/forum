@@ -1,0 +1,30 @@
+{{ define "search-box" }}
+    <div class="results-recent">
+
+    </div>
+    <hr class="solid"/>
+    <div id="results-channels">
+        <h4>Channels</h4>
+        <div data-result-channel-cards-container class="result-cards">
+            <div class="card result-card">
+                <span data-result-channel-avatar class="card-pic profile-pic" data-image-channel="{{ $.ImagePaths.Channel }}{{ .Avatar }}"></span>
+                <p data-result-channel-name>{{ .Channel.Name }}</p>
+            </div>
+        </div>
+    </div>
+    <hr class="solid"/>
+    <div id="results-users">
+        <h4>Users</h4>
+        <div data-result-user-cards-container class="result-cards">
+            <div class="card result-card">
+                <span data-result-user-avatar class="card-pic profile-pic" data-image-user="{{ $.ImagePaths.User }}{{ .Avatar }}"></span>
+                <p data-result-user-name>{{ .User.Username }}</p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{{ end }}

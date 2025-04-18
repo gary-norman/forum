@@ -22,6 +22,7 @@
     <script type="module" src="/assets/js/comments.js" defer></script>
     <script type="module" src="/assets/js/edit_user.js" defer></script>
     <script type="module" src="/assets/js/post.js" defer></script>
+    <script type="module" src="/assets/js/search.js" defer></script>
     <script type="module" src="/assets/js/fetch_and_navigate.js" defer></script>
     <script type="module" src="/assets/js/colour_scheme.js" defer></script>
     <script type="module" src="/assets/js/authentication.js" defer></script>
@@ -53,16 +54,20 @@
       {{/*SECTION ---------- header -----------*/}}
       <header class="header">
         <div class="branding"></div>
-          <search class="wrapper-search">
-            <form>
-              <input
+          <search class="wrapper-search input-wrapper">
+{{/*            <form>*/}}
+              <input data-search
                 type="text"
                 class="searchbar"
                 id="search"
                 name="search"
                 placeholder="Search"
               />
-            </form>
+
+            {{/*SECTION ---------- search results box ---------- */}}
+            <div id="search-results-page">
+            </div>
+{{/*            </form>*/}}
           </search>
         <div class="flex-align-c">
           <button popovertarget="form-post" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
@@ -588,9 +593,7 @@
               </div>
             </div>
           </div>
-          {{/* search-results page */}}
-          <div id="search-results-page" class="feeds-wrapper">
-          </div>
+
 
           {{/*SECTION ---------- post page ---------- */}}
           <div id="post-page" class="feeds-wrapper">

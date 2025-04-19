@@ -206,11 +206,20 @@ small,
   &.padded {
     padding: 0 1.2rem;
   }
+  &.sticky {
+    position: sticky;
+    top: 0;
+    background: var(--color-bg-2);
+    padding: 1.2rem 2rem;
+    z-index: var(--z-index-above);
+  }
 }
 
 small {
   font-family: SpaceGrotesk-Regular, system-ui;
   font-weight: normal;
+
+
 }
 
 .small-bold {
@@ -2139,7 +2148,8 @@ main {
     max-width: 48.4rem;
     gap: 1.2rem;
     top: 5.2rem;
-    padding: 1.6rem 0.8rem;
+    padding: 0;
+    /*padding: 1.6rem 0.8rem;*/
     min-height: 20rem;
     max-height: 40rem;
     background: var(--color-bg-2);
@@ -2154,13 +2164,14 @@ main {
     & > *, & #result-channels, & #result-users, & #result-posts{
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 0.4rem;
       width: 100%;
 
       & .result-cards {
         display: flex;
         flex-direction: column;
         gap: 0.2rem;
+        padding: 0 1.2rem;
 
          & .result-card {
            display: flex;

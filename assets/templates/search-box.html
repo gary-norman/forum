@@ -1,29 +1,25 @@
 {{ define "search-box" }}
-    <div class="results-recent">
+{{/*    <div class="results-recent">*/}}
 
-    </div>
-    <hr class="solid"/>
+{{/*    </div>*/}}
+{{/*    <hr class="solid"/>*/}}
     <div id="results-channels">
         <small class="padded">Channels</small>
         <div data-result-channel-cards-container class="result-cards">
-            <div class="result-card">
-                <span data-result-channel-avatar class="card-pic profile-pic" data-image-channel="{{ $.ImagePaths.Channel }}{{ .Avatar }}"></span>
-                <p data-result-channel-name>{{ .Channel.Name }}</p>
-            </div>
         </div>
     </div>
     <hr class="solid"/>
     <div id="results-users">
         <small class="padded">Users</small>
         <div data-result-user-cards-container class="result-cards">
-            <div class="result-card">
-                <span data-result-user-avatar class="card-pic profile-pic" data-image-user="{{ $.ImagePaths.User }}{{ .Avatar }}"></span>
-                <p data-result-user-name>{{ .User.Username }}</p>
-            </div>
         </div>
     </div>
-
-
+    <hr class="solid"/>
+    <div id="results-posts">
+        <small class="padded">Posts</small>
+        <div data-result-post-cards-container class="result-cards">
+        </div>
+    </div>
 
 
 

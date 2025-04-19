@@ -65,11 +65,32 @@
               />
 
             {{/*SECTION ---------- search results box ---------- */}}
-            <div id="search-results-page">
+            <div id="search-results-page" class="card scrollable scroll-down hide">
               {{ template "search-box"}}
             </div>
 {{/*            </form>*/}}
           </search>
+        <template data-result-user-cards-template>
+          <div class="result-card link" data-dest="user" data-post-id="">
+            <span data-result-user-avatar class="card-pic profile-pic" ></span>
+            <p data-result-user-name></p>
+          </div>
+        </template>
+
+        <template data-result-channel-cards-template>
+          <div class="result-card link" data-dest="channel" data-channel-id="">
+            <span data-result-channel-avatar class="card-pic profile-pic" ></span>
+            <p data-result-channel-name></p>
+          </div>
+        </template>
+
+        <template data-result-post-cards-template>
+          <div class="result-card link result-post" data-dest="post" data-post-id="">
+            <p data-result-post-title class="p-bold"></p>
+            <p data-result-post-content ></p>
+          </div>
+        </template>
+
         <div class="flex-align-c">
           <button popovertarget="form-post" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
             <span class="btn-posts">post</span>
@@ -575,7 +596,7 @@
             </svg>
           </div>
           {{/*SECTION ---------- homepage ---------- */}}
-          <div id="home-page" class="feeds-wrapper active-feed" style="z-index: 1000">
+          <div id="home-page" class="feeds-wrapper active-feed">
             <div class="button-row above-posts button-row-homepage">
               <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                 <span class="btn-sort">sort</span>

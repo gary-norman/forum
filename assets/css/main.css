@@ -347,7 +347,7 @@ a:active,
   width: calc(100% - 27.2rem - 9.6rem);
   max-width: 80rem;
   height: 100%;
-  z-index: var(--z-index-content);
+  /*z-index: var(--z-index-content);*/
   padding: 0 2.4rem;
   overflow: hidden;
   /*border: 3px cornflowerblue solid;*/
@@ -2116,11 +2116,7 @@ main {
     rgba(0, 0, 0, 0.23) 0 3px 6px;
   /* z-index: 100; a positive z-index breaks the before */
 
-  &.result-card {
-    flex-direction: row;
-    gap: 0.8rem;
-    padding: 0.4rem 1.2rem;
-  }
+
 }
 
 
@@ -2141,26 +2137,52 @@ main {
     flex-direction: column;
     position: absolute;
     max-width: 48.4rem;
-    gap: 0.4rem;
+    gap: 1.2rem;
     top: 5.2rem;
+    padding: 1.6rem 0.8rem;
     min-height: 20rem;
-    background: darkslategray;
-    z-index: 999999;
+    max-height: 40rem;
+    background: var(--color-bg-2);
+    border: 1px solid var(--color-bg-4);
+    box-shadow:
+            rgb(0 0 0 / 23%) 0 3px 6px,
+            rgb(0 0 0 / 35%) 0 3px 6px;
+    z-index: var(--z-index-modal);
     width: 100%;
 
-    & > * {
+
+    & > *, & #result-channels, & #result-users, & #result-posts{
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
       width: 100%;
 
-      & #result-channels, #result-users {
+      & .result-cards {
         display: flex;
         flex-direction: column;
-        gap: 0.1rem;
-        & .result-cards {
-          display: flex;
-          flex-direction: column;
-          gap: 0.2rem;
+        gap: 0.2rem;
+
+         & .result-card {
+           display: flex;
+           flex-direction: row;
+           gap: 0.8rem;
+           padding: 1.2rem 0.8rem;
+           border-radius: 0.4rem;
+
+           &:hover {
+             background: var(--color-bg-1);
+
+           }
+
+           &.result-post {
+             flex-direction: column;
+             gap: 0.2rem;
+           }
+
         }
       }
+    }
+
     }
   }
 
@@ -2343,13 +2365,13 @@ main {
   background: var(--color-bg-1);
   background: transparent;
   width: calc(100vw - 3rem - 1.2rem - 32rem);
-  z-index: var(--z-index-above);
+  /*z-index: var(--z-index-above);*/
 }
 
 .above-activity {
   position: sticky;
   width: calc(100vw - 3rem - 1.2rem - 32rem);
-  z-index: var(--z-index-above);
+  /*z-index: var(--z-index-above);*/
 }
 
 .post-controls {

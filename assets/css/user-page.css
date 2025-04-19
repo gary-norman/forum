@@ -144,7 +144,7 @@
   }
 }
 .hide-feed, .hide {
-  display: none;
+  display: none !important;
   & button {
   }
 }

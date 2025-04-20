@@ -14,6 +14,7 @@ type PostModel struct {
 }
 
 func (m *PostModel) Insert(title, content, images, author, authorAvatar string, authorID int, commentable, isFlagged bool) (int, error) {
+
 	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, AuthorAvatar, AuthorID, IsCommentable, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
 	result, err := m.DB.Exec(stmt, title, content, images, author, authorAvatar, authorID, commentable, isFlagged)
 	if err != nil {
@@ -24,6 +25,7 @@ func (m *PostModel) Insert(title, content, images, author, authorAvatar string, 
 	if err != nil {
 		return 0, err
 	}
+	//fmt.Printf(ErrorMsgs().KeyValuePair, "Inserting a new post with ID: ", id)
 
 	return int(id), nil
 }

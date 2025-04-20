@@ -30,20 +30,23 @@ export function listenToChannelLinks() {
     }
 }
 
-function navigateEntity(e) {
-    if (!(e.target.getAttribute("data-dest"))) {
-        const parent = e.target.closest(".card");
+function navigateToEntity(e) {
+    const hasDestination = e.target.getAttribute("data-dest");
+    const isButton = e.target.nodeName.toLowerCase() === "button";
+
+    if ((hasDestination || !isButton) || (isButton && hasDestination) ) {
+        const parent = e.target.closest(".link");
         if (parent) {
-            navigateToPage("post", parent);
+            const dest = parent.getAttribute("data-dest");
+            navigateToPage(dest, parent);
         }
         return;
     }
     if (e.target.matches(".link")) {
-
         const dest = e.target.getAttribute("data-dest");
         navigateToPage(dest, e.target);
     }
 }
 
-document.addEventListener("click", navigateEntity, {capture: false});
+document.addEventListener("click", navigateToEntity, {capture: false});
 

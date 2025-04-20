@@ -2,7 +2,6 @@ package sqlite
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/gary-norman/forum/internal/models"
 	"log"
 )
@@ -18,7 +17,7 @@ func (m *MembershipModel) Insert(userID, channelID int) error {
 }
 
 func (m *MembershipModel) UserMemberships(userID int) ([]models.Membership, error) {
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Checking memberships for UserID", userID)
+	//fmt.Printf(ErrorMsgs().KeyValuePair, "Checking memberships for UserID", userID)
 	stmt := "SELECT ID, UserID, ChannelID, Created FROM Memberships WHERE UserID = ?"
 	rows, queryErr := m.DB.Query(stmt, userID)
 	if queryErr != nil {
@@ -41,7 +40,7 @@ func (m *MembershipModel) UserMemberships(userID int) ([]models.Membership, erro
 	if rowsErr := rows.Err(); rowsErr != nil {
 		return nil, rowsErr
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Channels joined by current user", len(memberships))
+	//fmt.Printf(ErrorMsgs().KeyValuePair, "Channels joined by current user", len(memberships))
 	return memberships, nil
 }
 

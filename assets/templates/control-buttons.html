@@ -33,7 +33,7 @@
                         <span class="btn-reply">reply</span>
                     </button>
                 {{ else }}
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" data-dest="post" data-post-id="{{$post.ID}}">
                         <span class="btn-reply">{{$post.CommentsCount}}</span>
                     </button>
                 {{ end }}

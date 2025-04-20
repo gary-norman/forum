@@ -143,8 +143,8 @@
     }
   }
 }
-.hide-feed {
-  display: none;
+.hide-feed, .hide {
+  display: none !important;
   & button {
   }
 }

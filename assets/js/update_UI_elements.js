@@ -2,7 +2,7 @@ import {listenToReplies} from "./comments.js";
 import {listenToEditDetails} from "./edit_user.js";
 import {listenToShare, selectActiveFeed} from "./share.js";
 import {listenToLikeDislike} from "./reactions.js";
-import {listenToNavigationLinks} from "./posts.js";
+import {listenToDropdowns} from "./post.js";
 import {saveColourScheme} from "./colour_scheme.js";
 import {activePage} from "./main.js";
 import {getRandomInt} from "./helper_functions.js";
@@ -23,7 +23,7 @@ export function UpdateUI() {
     listenToEditDetails();
     listenToShare();
     listenToLikeDislike();
-    listenToNavigationLinks();
+    listenToDropdowns();
     listenToPageSetup();
     saveColourScheme();
     updateProfileImages();
@@ -44,7 +44,6 @@ export function updateProfileImages() {
     } else {
         console.error("getInitialFromAttribute is not defined");
     }
-    // console.log("activity buttons:", actButtonsAll)
 }
 
 function resetInputStyle() {
@@ -88,17 +87,17 @@ export function toggleUserInteracted(action) {
             });
         }
     });
-
-
 }
 
 function getUserProfileImageFromAttribute() {
     const userProfileImage = document.querySelectorAll(".profile-pic");
+
     for (let i = 0; i < userProfileImage.length; i++) {
         let attArr = ["user", "auth", "channel"];
         attArr[0] = userProfileImage[i].getAttribute("data-image-user");
         attArr[1] = userProfileImage[i].getAttribute("data-image-auth");
         attArr[2] = userProfileImage[i].getAttribute("data-image-channel");
+
         // console.table(attArr)
         if (attArr[0]) {
             // Ensure the `data-image-user` attribute has a value
@@ -170,6 +169,7 @@ function getInitialFromAttribute() {
                 "data-initial",
                 Array.from(`${attArr[2]}`)[0],
             );
+
             // console.log('attArr[1]');
         } else {
             console.warn(

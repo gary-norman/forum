@@ -21,7 +21,8 @@
     <script type="module" src="/assets/js/share.js" defer></script>
     <script type="module" src="/assets/js/comments.js" defer></script>
     <script type="module" src="/assets/js/edit_user.js" defer></script>
-    <script type="module" src="/assets/js/posts.js" defer></script>
+    <script type="module" src="/assets/js/post.js" defer></script>
+    <script type="module" src="/assets/js/search.js" defer></script>
     <script type="module" src="/assets/js/fetch_and_navigate.js" defer></script>
     <script type="module" src="/assets/js/colour_scheme.js" defer></script>
     <script type="module" src="/assets/js/authentication.js" defer></script>
@@ -53,17 +54,43 @@
       {{/*SECTION ---------- header -----------*/}}
       <header class="header">
         <div class="branding"></div>
-          <search class="wrapper-search">
-            <form>
-              <input
+          <search class="wrapper-search input-wrapper">
+{{/*            <form>*/}}
+              <input data-search
                 type="text"
                 class="searchbar"
                 id="search"
                 name="search"
                 placeholder="Search"
               />
-            </form>
+
+            {{/*SECTION ---------- search results box ---------- */}}
+            <div id="search-results-page" class="card scrollable scroll-down hide">
+              {{ template "search-box"}}
+            </div>
+{{/*            </form>*/}}
           </search>
+        <template data-result-channel-cards-template>
+          <div class="result-card link" data-dest="channel" data-channel-id="">
+            <span data-result-channel-avatar data-image-channel="" class="card-pic profile-pic" ></span>
+            <p data-result-channel-name></p>
+          </div>
+        </template>
+
+        <template data-result-user-cards-template>
+          <div class="result-card link" data-dest="user" data-post-id="">
+            <span data-result-user-avatar data-image-user="" class="card-pic profile-pic" ></span>
+            <p data-result-user-name></p>
+          </div>
+        </template>
+
+        <template data-result-post-cards-template>
+          <div class="result-card link result-post" data-dest="post" data-post-id="">
+            <p data-result-post-title class="p-bold"></p>
+            <small data-result-post-content ></small>
+          </div>
+        </template>
+
         <div class="flex-align-c">
           <button popovertarget="form-post" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
             <span class="btn-posts">post</span>
@@ -569,7 +596,7 @@
             </svg>
           </div>
           {{/*SECTION ---------- homepage ---------- */}}
-          <div id="home-page" class="feeds-wrapper active-feed" style="z-index: 1000">
+          <div id="home-page" class="feeds-wrapper active-feed">
             <div class="button-row above-posts button-row-homepage">
               <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                 <span class="btn-sort">sort</span>
@@ -588,9 +615,7 @@
               </div>
             </div>
           </div>
-          {{/* search-results page */}}
-          <div id="search-results-page" class="feeds-wrapper">
-          </div>
+
 
           {{/*SECTION ---------- post page ---------- */}}
           <div id="post-page" class="feeds-wrapper">

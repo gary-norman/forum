@@ -1,11 +1,16 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
 	"math/rand"
+	"net/http"
 	"strconv"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 // FIXME figure out where to put this
@@ -23,7 +28,48 @@ func (app *app) init() {
 		"reactionStatus": app.reactions.GetReactionStatus,
 		"dict":           dict,
 		"isValZero":      isValZero,
+		"fprint": func(s string, v any) string {
+			fmt.Printf("%s: %v\n", s, v)
+			return ""
+		},
+		"debugPanic": func(v interface{}) (string, error) {
+			return "", fmt.Errorf("TEMPLATE PANIC: %#v", v)
+		},
+		"or":  func(a, b bool) bool { return a || b },
+		"not": func(a bool) bool { return !a },
 	}).ParseGlob("assets/templates/*.html"))
+}
+
+type PageModel interface {
+	GetInstance() string
+}
+
+type PageWithInstance interface {
+	GetInstance() string
+}
+
+func renderPageData[T PageModel](w http.ResponseWriter, data T) {
+	var renderedPage bytes.Buffer
+	instance := data.GetInstance()
+	HTMLstr := models.ToHTMLVar(instance)
+
+	err := Template.ExecuteTemplate(&renderedPage, instance, data)
+	if err != nil {
+		errorStr := fmt.Sprintf("Error rendering %v: %v", instance, err)
+		log.Printf(errorStr)
+		http.Error(w, errorStr, http.StatusInternalServerError)
+		return
+	}
+
+	// Send the pre-rendered HTML as JSON
+	response := map[string]string{
+		HTMLstr: renderedPage.String(),
+	}
+
+	// Write the response as JSON
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, `{"error": "error encoding JSON"}`, http.StatusInternalServerError)
+	}
 }
 
 // CheckSameName Function to check if the member and artist names are the same, for go templates

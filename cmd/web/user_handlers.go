@@ -1,8 +1,6 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -52,6 +50,16 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 		// http.Error(w, `{"error": "error fetching user posts"}`, http.StatusInternalServerError)
 	}
 
+	// Fetch channel name for posts
+	for p := range posts {
+		posts[p].ChannelID, posts[p].ChannelName, err = app.GetChannelInfoFromPostID(posts[p].ID)
+		if err != nil {
+			http.Error(w, `{"error": "error fetching channel info"}`, http.StatusInternalServerError)
+		}
+
+		models.UpdateTimeSince(&posts[p])
+	}
+
 	if userLoggedIn {
 		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
 		if err != nil {
@@ -59,36 +67,17 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Writing", "data")
+	models.UpdateTimeSince(&thisUser)
 
 	data := models.UserPage{
 		CurrentUser: currentUser,
+		Instance:    "user-page",
 		ThisUser:    thisUser,
 		Posts:       posts,
 		ImagePaths:  app.paths,
-		Instance:    "user-page",
 	}
 
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Data", data)
-
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Rendering", "renderedUserPage")
-	var renderedUserPage bytes.Buffer
-	userErr := Template.ExecuteTemplate(&renderedUserPage, "user-page", data)
-	if userErr != nil {
-		http.Error(w, "Error rendering user page", http.StatusInternalServerError)
-		return
-	}
-
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Creating", "response")
-	response := map[string]string{
-		"usersHTML": renderedUserPage.String(),
-	}
-
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Writing", "JSON response")
-	// Write the response as JSON
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		http.Error(w, `{"error": "error encoding JSON"}`, http.StatusInternalServerError)
-	}
+	renderPageData(w, data)
 }
 
 func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {

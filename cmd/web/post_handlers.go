@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -16,12 +15,12 @@ func (app *app) getThisPost(w http.ResponseWriter, r *http.Request) {
 	var thisPost models.Post
 	var posts []models.Post
 
-	// userLoggedIn := true
-	// currentUser, ok := getUserFromContext(r.Context())
-	// if !ok {
-	// 	fmt.Printf(ErrorMsgs().NotFound, "currentUser", "getThisPost", "_")
-	// 	userLoggedIn = false
-	// }
+	userLoggedIn := true
+	currentUser, ok := getUserFromContext(r.Context())
+	if !ok {
+		fmt.Printf(ErrorMsgs().NotFound, "currentUser", "getThisPost", "_")
+		userLoggedIn = false
+	}
 
 	// Parse post ID from URL
 	postId, err := models.GetIntFromPathValue(r.PathValue("postId"))
@@ -49,32 +48,22 @@ func (app *app) getThisPost(w http.ResponseWriter, r *http.Request) {
 
 	models.UpdateTimeSince(&thisPost)
 
-	// if userLoggedIn {
-	// 	currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
-	// 	if err != nil {
-	//      http.Error(w, `{"error": "error fetching user loyalty"}`, http.StatusInternalServerError)
-	// 	}
-	// }
-
-	TemplateData.ThisPost = thisPost
-	// TemplateData.CurrentUser = currentUser
-
-	fmt.Printf(ErrorMsgs().KeyValuePair, "TemplateData.ThisPost", TemplateData.ThisPost.Title)
-
-	response := map[string]any{
-		"post":        thisPost.Title,
-		"content":     thisPost.Content,
-		"likes":       thisPost.Likes,
-		"dislikes":    thisPost.Dislikes,
-		"channelID":   thisPost.ChannelID,
-		"channelName": thisPost.ChannelName,
-		"timeSince":   thisPost.TimeSince,
+	if userLoggedIn {
+		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
+		if err != nil {
+			http.Error(w, `{"error": "error fetching user loyalty"}`, http.StatusInternalServerError)
+		}
 	}
 
-	// Write the response as JSON
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		http.Error(w, `{"error": "error encoding JSON"}`, http.StatusInternalServerError)
+	data := models.PostPage{
+		CurrentUser: currentUser,
+		Instance:    "post-page",
+		ThisPost:    thisPost,
+		OwnerName:   thisPost.Author,
+		ImagePaths:  app.paths,
 	}
+
+	renderPageData(w, data)
 }
 
 func (app *app) createPost(w http.ResponseWriter, r *http.Request) {

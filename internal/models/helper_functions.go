@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -43,4 +44,13 @@ func GetIntFromPathValue(value string) (int, error) {
 		return 0, err
 	}
 	return intValue, nil
+}
+
+func ToHTMLVar(s string) string {
+	parts := strings.Split(s, "-")
+	if len(parts) == 0 {
+		return ""
+	}
+	// Add "s" for plural and append "HTML"
+	return parts[0] + "sHTML"
 }

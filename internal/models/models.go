@@ -23,15 +23,6 @@ func (u *User) UpdateTimeSince() {
 	u.TimeSince = getTimeSince(u.Created)
 }
 
-type UserPage struct {
-	CurrentUser *User
-	ThisUser    User
-	Posts       []Post
-	ImagePaths
-	Instance string
-	PageBanner
-}
-
 type UserCheck struct {
 	ID             int    `json:"id"`
 	Username       string `json:"username"`
@@ -82,22 +73,44 @@ func (c *Channel) UpdateTimeSince() {
 }
 
 type ChannelPage struct {
-	CurrentUser         *User
-	ThisChannelPosts    []Post
-	ThisChannelIsOwned  bool
-	ThisChannelIsJoined bool
-	IsPostPage          bool
-	Instance            string
+	CurrentUser            *User
+	Instance               string
+	ThisChannel            Channel
+	OwnerName              string
+	IsOwned                bool
+	IsJoined               bool
+	Rules                  []Rule
+	Posts                  []Post
+	OwnedAndJoinedChannels []Channel
 	ImagePaths
-	PageBanner
 }
 
+func (p ChannelPage) GetInstance() string { return p.Instance }
+
+type PostPage struct {
+	CurrentUser *User
+	Instance    string
+	ThisPost    Post
+	OwnerName   string
+	ImagePaths
+}
+
+func (p PostPage) GetInstance() string { return p.Instance }
+
+type UserPage struct {
+	CurrentUser *User
+	Instance    string
+	ThisUser    User
+	OwnerName   string
+	Posts       []Post
+	ImagePaths
+}
+
+func (p UserPage) GetInstance() string { return p.Instance }
+
 type PageBanner struct {
-	ThisChannel            Channel
-	OwnedAndJoinedChannels []Channel
-	IsJoinedOrOwned        bool
-	OwnerName              string
-	ThisChannelRules       []Rule
+	IsJoinedOrOwned  bool
+	ThisChannelRules []Rule
 }
 
 type Rule struct {
@@ -168,14 +181,6 @@ type Post struct {
 	Dislikes      int    `json:"dislikes"`
 	CommentsCount int    `json:"commentsCount"`
 	Comments      []Comment
-}
-
-type PostPage struct {
-	ThisPost    Post
-	CurrentUser *User
-	ImagePaths
-	Instance string
-	PageBanner
 }
 
 type PostChannel struct {

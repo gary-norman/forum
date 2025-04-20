@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -65,10 +64,6 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	for p := range thisChannelPosts {
-		models.UpdateTimeSince(&thisChannelPosts[p])
-	}
-
 	allChannels, err := app.channels.All()
 	if err != nil {
 		http.Error(w, `{"error": "Error getting all channels"}`, http.StatusInternalServerError)
@@ -77,21 +72,16 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 		models.UpdateTimeSince(&allChannels[c])
 	}
 
+	// Fetch channel name and timesince for posts
 	for p := range thisChannelPosts {
-		channelIDs, err := app.channels.GetChannelIdFromPost(thisChannelPosts[p].ID)
+		thisChannelPosts[p].ChannelID, thisChannelPosts[p].ChannelName, err = app.GetChannelInfoFromPostID(thisChannelPosts[p].ID)
 		if err != nil {
-			http.Error(w, `{"error": "Error getting channel ID from post"}`, http.StatusInternalServerError)
+			http.Error(w, `{"error": "error fetching channel info"}`, http.StatusInternalServerError)
 		}
-		thisChannelPosts[p].ChannelID = channelIDs[0]
+
+		models.UpdateTimeSince(&thisChannelPosts[p])
 	}
 
-	for p := range thisChannelPosts {
-		for _, channel := range allChannels {
-			if channel.ID == thisChannelPosts[p].ChannelID {
-				thisChannelPosts[p].ChannelName = channel.Name
-			}
-		}
-	}
 	// Retrieve total likes and dislikes for each Channel post
 	thisChannelPosts = app.getPostsLikesAndDislikes(thisChannelPosts)
 	thisChannelPosts, err = app.getPostsComments(thisChannelPosts)
@@ -102,7 +92,6 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
 	isJoined := false
 	isOwned := false
-	isJoinedOrOwned := false
 
 	if userLoggedIn {
 		isOwned = currentUser.ID == thisChannel.OwnerID
@@ -135,48 +124,21 @@ func (app *app) getThisChannel(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
-		isJoinedOrOwned = isOwned || isJoined
-	}
-
-	bannerData := models.PageBanner{
-		OwnerName:              thisChannelOwnerName,
-		OwnedAndJoinedChannels: ownedAndJoinedChannels,
-		IsJoinedOrOwned:        isJoinedOrOwned,
-		ThisChannel:            thisChannel,
-		ThisChannelRules:       thisChannelRules,
 	}
 
 	data := models.ChannelPage{
-		CurrentUser:        currentUser,
-		ThisChannelPosts:   thisChannelPosts,
-		ThisChannelIsOwned: isOwned,
-		IsPostPage:         false,
-		Instance:           "channel-page",
-		ImagePaths:         app.paths,
-		PageBanner:         bannerData,
+		CurrentUser:            currentUser,
+		Instance:               "channel-page",
+		ThisChannel:            thisChannel,
+		OwnerName:              thisChannelOwnerName,
+		IsOwned:                isOwned,
+		IsJoined:               isJoined,
+		Rules:                  thisChannelRules,
+		Posts:                  thisChannelPosts,
+		OwnedAndJoinedChannels: ownedAndJoinedChannels,
+		ImagePaths:             app.paths,
 	}
-
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Channel page avatar", thisChannel.Avatar)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Channel page posts", len(thisChannelPosts))
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Paths", app.paths)
-
-	// Render the `post-card.html` subtemplate
-	var renderedChannelPage bytes.Buffer
-	postsErr := Template.ExecuteTemplate(&renderedChannelPage, "channel-page", data)
-	if postsErr != nil {
-		http.Error(w, "Error rendering channel-page", http.StatusInternalServerError)
-		return
-	}
-
-	// Send the pre-rendered HTML as JSON
-	response := map[string]string{
-		"channelsHTML": renderedChannelPage.String(),
-	}
-
-	// Write the response as JSON
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		http.Error(w, `{"error": "error encoding JSON"}`, http.StatusInternalServerError)
-	}
+	renderPageData(w, data)
 }
 
 func (app *app) GetChannelInfoFromPostID(postID int) (int, string, error) {

@@ -56,8 +56,8 @@ function fetchData(entity, Id) {
     .then((data) => {
       const content = data[`${entity}sHTML`];
       const target = document.getElementById(`${entity}-page`);
-      console.log("target: ", target);
-      console.log("content: ", content);
+      // console.log("target: ", target);
+      // console.log("content: ", content);
       if (target && content) {
         target.innerHTML = content;
 

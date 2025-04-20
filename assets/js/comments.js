@@ -1,4 +1,6 @@
 // INFO was a DOMContentLoaded function
+import {activePage} from "./main.js";
+
 export function listenToReplies() {
     let postID;
     let commentID;
@@ -9,59 +11,62 @@ export function listenToReplies() {
     const allReplyForms = document.querySelectorAll('.form-reply');
 
 
-    replyButtons.forEach(button => {
-        button.addEventListener("click", function (e) {
-            const card = button.closest('.card');
-            const channelID = card.getAttribute('data-channel-id');
-            const postID = card.getAttribute('data-post-id');
-            const commentID = card.getAttribute('data-comment-id');
-            const targetForm = card.querySelector('.form-reply');
+    if (activePage === "post-page") {
 
-            allReplyForms.forEach(form => {
-                if (form !== targetForm)
-                    form.classList.remove('replying');
-            });
+        replyButtons.forEach(button => {
+            button.addEventListener("click", function (e) {
+                const card = button.closest('.card');
+                const channelID = card.getAttribute('data-channel-id');
+                const postID = card.getAttribute('data-post-id');
+                const commentID = card.getAttribute('data-comment-id');
+                const targetForm = card.querySelector('.form-reply');
 
-            setTimeout(() => {
-                if (targetForm.classList.contains('replying')) {
-                    targetForm.classList.remove('replying');
-                    const textarea = targetForm.querySelector('[id^="comment-form-textarea-"]');
-                    textarea.value = '';
-                    textarea.style.height = "5rem";
-                } else {
-                    targetForm.classList.add('replying');
-                }
+                allReplyForms.forEach(form => {
+                    if (form !== targetForm)
+                        form.classList.remove('replying');
+                });
+
+                setTimeout(() => {
+                    if (targetForm.classList.contains('replying')) {
+                        targetForm.classList.remove('replying');
+                        const textarea = targetForm.querySelector('[id^="comment-form-textarea-"]');
+                        textarea.value = '';
+                        textarea.style.height = "5rem";
+                    } else {
+                        targetForm.classList.add('replying');
+                    }
 
 
-            }, 200);
+                }, 200);
 
+            })
         })
-    })
 
-    textareas.forEach(textarea => {
-        postID = textarea.closest('.card').getAttribute('data-post-id');
-        commentID = textarea.closest('.card').getAttribute('data-comment-id');
+        textareas.forEach(textarea => {
+            postID = textarea.closest('.card').getAttribute('data-post-id');
+            commentID = textarea.closest('.card').getAttribute('data-comment-id');
 
-        textarea.addEventListener("input", function () {
-            this.style.height = "auto"; // Reset height to recalculate
-            this.style.height = this.scrollHeight + "px"; // Set height to fit content
-        });
-    })
+            textarea.addEventListener("input", function () {
+                this.style.height = "auto"; // Reset height to recalculate
+                this.style.height = this.scrollHeight + "px"; // Set height to fit content
+            });
+        })
 
-    // Get the form by its name
-    let replyForms = document.querySelectorAll('form[name="replyForm"]'); // Returns a NodeList
+        // Get the form by its name
+        let replyForms = document.querySelectorAll('form[name="replyForm"]'); // Returns a NodeList
 
-    // console.log("reply forms:", replyForms)
+        // console.log("reply forms:", replyForms)
 
-    replyForms.forEach(form => {
-        // Add submit event listener
-        form.addEventListener("submit", function (event) {
-            let content = form["content"].value.trim(); // Trim spaces
+        replyForms.forEach(form => {
+            // Add submit event listener
+            form.addEventListener("submit", function (event) {
+                let content = form["content"].value.trim(); // Trim spaces
 
-            if (content === "") {
-                alert("Reply cannot be empty!");
-                event.preventDefault(); // Stop form submission
-            }
-        });
-    })
+                if (content === "") {
+                    alert("Reply cannot be empty!");
+                    event.preventDefault(); // Stop form submission
+                }
+            });
+        })
+    }
 }

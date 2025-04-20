@@ -1583,10 +1583,10 @@ input[type="checkbox"]:checked {
 hr.solid {
   /*width         : calc(100% - 2.4rem);*/
   align-self: center;
-  /*border: none;*/
-  background-color: var(--color-bg-3);
+  border: none;
+  background-color: var(--color-bg-5);
   /* hardcoded as works for both */
-  height: 0.1rem;
+  height: 0.2rem;
   border-radius: 0.3rem;
 }
 
@@ -2149,68 +2149,81 @@ main {
     gap: 1.2rem;
     top: 5.2rem;
     padding: 0 0 0.8rem 0;
-    /*padding: 1.6rem 0.8rem;*/
-    min-height: 20rem;
-    max-height: 40rem;
+    max-height: 52rem;
+    overflow: auto;
     background: var(--color-bg-2);
     border: 1px solid var(--color-bg-4);
-    box-shadow:
-            rgb(0 0 0 / 23%) 0 3px 6px,
-            rgb(0 0 0 / 35%) 0 3px 6px;
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: rgb(0 0 0 / 23%) 0 3px 6px,
+    rgb(0 0 0 / 35%) 0 3px 6px;
     z-index: var(--z-index-modal);
     width: 100%;
 
+    /*& > div:first-child > :nth-of-type(div) > {*/
+    /*  margin-top: 12rem;*/
+    /*}*/
 
-    & > *, & #result-channels, & #result-users, & #result-posts{
+    /*& > div:last-child {*/
+    /*  margin-top: 0;*/
+    /*}*/
+
+    & .solid {
+      /*color: var(--color-fg-4);*/
+      width: calc(100% - 2.4rem);
+    }
+
+    & > *:not(hr), & #result-channels, & #result-users, & #result-posts {
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
       width: 100%;
 
-      &.solid {
-        width: calc(100% - 2.4rem);
-      }
-
       & .result-cards {
         display: flex;
+        position: relative;
         flex-direction: column;
         gap: 0.2rem;
         padding: 0 0.8rem;
 
-         & .result-card {
-           display: flex;
-           flex-direction: row;
-           gap: 0.8rem;
-           padding: 1.2rem 1.2rem;
-           border-radius: 0.4rem;
+        & .result-card {
+          position: relative;
+          display: flex;
+          flex-direction: row;
+          gap: 0.8rem;
+          padding: 1.2rem 1.2rem;
+          border-radius: 0.4rem;
 
-           &:hover {
-             background: var(--color-bg-1);
+          & .profile-pic, .profile-pic--empty {
+            border: 1px solid var(--color-bg-4);
+          }
 
-           }
+          &:hover {
+            background: var(--color-bg-1);
 
-           &.result-post {
-             flex-direction: column;
-             gap: 0.4rem;
+            & .profile-pic, .profile-pic--empty {
+              border: 1px solid var(--color-bg-5);
+            }
+          }
 
-             & p, small {
-               max-width: 90ch;
-               max-height: 8ch;
-               text-overflow: ellipsis;
-               overflow: hidden;
-               display: -webkit-box;
-               -webkit-line-clamp: 2; /* Specify the number of lines */
-               -webkit-box-orient: vertical;
-             }
-           }
+          &.result-post {
+            flex-direction: column;
+            gap: 0.4rem;
 
+            & p, small {
+              max-width: 90ch;
+              max-height: 8ch;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 2; /* Specify the number of lines */
+              -webkit-box-orient: vertical;
+            }
+          }
         }
       }
     }
-
-    }
   }
-
 }
 
 .container-card-down {

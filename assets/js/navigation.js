@@ -30,8 +30,11 @@ export function listenToChannelLinks() {
     }
 }
 
-function navigateEntity(e) {
-    if (!(e.target.getAttribute("data-dest"))) {
+function navigateToEntity(e) {
+    const hasDestination = e.target.getAttribute("data-dest");
+    const isButton = e.target.nodeName.toLowerCase() === "button";
+
+    if ((hasDestination || !isButton) || (isButton && hasDestination) ) {
         const parent = e.target.closest(".link");
         if (parent) {
             const dest = parent.getAttribute("data-dest");
@@ -45,5 +48,5 @@ function navigateEntity(e) {
     }
 }
 
-document.addEventListener("click", navigateEntity, {capture: false});
+document.addEventListener("click", navigateToEntity, {capture: false});
 

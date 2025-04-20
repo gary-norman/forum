@@ -11,6 +11,9 @@ const userResultsContainer = document.getElementById("results-users");
 const channelResultsContainer = document.getElementById("results-channels");
 const postResultsContainer = document.getElementById("results-posts");
 const resultsContainer = document.getElementById("search-results-page");
+const dividers = document.querySelectorAll(`hr`);
+
+
 let isFocus = false;
 let isValue = false;
 
@@ -20,7 +23,6 @@ let channels = [];
 let posts = [];
 
 document.addEventListener("click", (e) => {
-    console.log("e.target: ", e.target)
     if (e.target !== searchInput) {
         resultsContainer.classList.add("hide");
     } else if (e.target === searchInput && isValue ){
@@ -31,54 +33,88 @@ document.addEventListener("click", (e) => {
 searchInput.addEventListener("input", e => {
     const value = e.target.value.toLowerCase();
     let anyUserVisible, anyChannelVisible, anyPostVisible = false;
+    let anyVisible = (anyUserVisible || anyChannelVisible || anyPostVisible);
     isValue = value !== "";
     isFocus = false;
+
+
 
     searchInput.addEventListener("focus", () => {
         isFocus = true;
     })
 
-    resultsContainer.classList.toggle("hide", !(isFocus || isValue))
+    resultsContainer.classList.toggle("hide", !(isFocus || isValue));
+
+
+    dividers.forEach(divider => {
+        divider.classList.toggle("hide", !anyVisible)
+    })
 
     users.forEach(user => {
         const isVisible = user.username.toLowerCase().includes(value);
         user.element.classList.toggle("hide", !isVisible)
         if (isVisible) {
             anyUserVisible = true;
+            anyVisible = (anyUserVisible || anyChannelVisible || anyPostVisible);
         }
     });
-
-    // Hide the parent container if no users are visible
-    if (userResultsContainer) {
-        userResultsContainer.classList.toggle("hide", !anyUserVisible);
-    }
 
     channels.forEach(channel => {
         const isVisible = channel.name.toLowerCase().includes(value);
         channel.element.classList.toggle("hide", !isVisible)
         if (isVisible) {
             anyChannelVisible = true;
+            anyVisible = (anyUserVisible || anyChannelVisible || anyPostVisible);
         }
     })
+
+
+    posts.forEach(post => {
+        const isVisible = post.title.toLowerCase().includes(value) || post.content.toLowerCase().includes(value);
+        post.element.classList.toggle("hide", !isVisible)
+        if (isVisible) {
+            anyPostVisible = true;
+            anyVisible = (anyUserVisible || anyChannelVisible || anyPostVisible);
+        }
+    })
+
+
+    // Hide the parent container if no users are visible
+    if (userResultsContainer) {
+        userResultsContainer.classList.toggle("hide", !anyUserVisible);
+    }
 
     // Hide the parent container if no channels are visible
     if (channelResultsContainer) {
         channelResultsContainer.classList.toggle("hide", !anyChannelVisible);
     }
 
-    posts.forEach(post => {
-        const isVisible = post.title.toLowerCase().includes(value) ||  post.content.toLowerCase().includes(value);
-        post.element.classList.toggle("hide", !isVisible)
-        if (isVisible) {
-            anyPostVisible = true;
-        }
-    })
-
     // Hide the parent container if no posts are visible
     if (postResultsContainer) {
         postResultsContainer.classList.toggle("hide", !anyPostVisible);
     }
 
+    const calcHeight = `${Math.max(7, calculateVisibleChildrenHeight(resultsContainer))}rem`;
+
+    if (!anyVisible) {
+        //Prepare No results paragraph
+        const noResults = document.createElement('p');
+        noResults.textContent = "Search input doesn't match any items!";
+        noResults.classList.add('no-result');
+        noResults.style.padding = "2.4rem 2.4rem"
+        noResults.style.textAlign = 'center';
+        resultsContainer.appendChild(noResults);
+        resultsContainer.style.padding = "0"
+    } else {
+        const noResults = resultsContainer.querySelectorAll(".no-result");
+        if (noResults) {
+            noResults.forEach(paragraph => {
+                resultsContainer.removeChild(paragraph);
+            })
+        }
+    }
+
+    resultsContainer.style.height = calcHeight;
 })
 
 fetch("/search")
@@ -105,10 +141,7 @@ fetch("/search")
                 // console.log("added a placeholder image for channel: ", channel.name);
             } else {
                 avatar.setAttribute("data-image-user", `${imageAttr + user.avatar}` );
-                // console.log("updated an image for channel: ", channel.name);
-                // console.log("updated \"data-image-channel\": ", `${imageAttr + channel.avatar}`);
             }
-            updateProfileImages();
 
             userCardContainer.append(card)
             return { username: user.username, avatar: user.avatar, element: card }
@@ -130,10 +163,7 @@ fetch("/search")
                 // console.log("added a placeholder image for channel: ", channel.name);
             } else {
                 avatar.setAttribute("data-image-channel", `${imageAttr + channel.avatar}` );
-                // console.log("updated an image for channel: ", channel.name);
-                // console.log("updated \"data-image-channel\": ", `${imageAttr + channel.avatar}`);
             }
-            updateProfileImages();
 
             channelCardContainer.append(card)
             return { name: channel.name, avatar: channel.avatar, element: card }
@@ -152,21 +182,47 @@ fetch("/search")
             postCardContainer.append(card)
             return { title: post.title, content: post.content, element: card }
         })
+
+        updateProfileImages();
     })
     .catch((error) => console.error(`Error fetching response data:`, error));
 
-// function checkImage(entity) {
-//
-//     if (entity.avatar === "noimage") {
-//         entity.classList.add("profile-pic--empty")
-//         entity.classList.remove("profile-pic")
-//         entity.setAttribute("data-name-channel", entity.name);
-//         console.log("added a placeholder image for channel: ", entity.name);
-//     } else {
-//         entity.setAttribute("data-image-channel", `${imageAttr + entity.avatar}` );
-//         console.log("updated an image for channel: ", entity.name);
-//     }
-//
-//     card.setAttribute("data-user-id", id)
-//     avatar.setAttribute("data-image-user", `${imageAttr + user.avatar}` );
-// }
+
+function containsElement(parentChildren, elementToCheck) {
+    for (let i = 0; i < parentChildren.length; i++) {
+        if (parentChildren[i] === elementToCheck) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function calculateVisibleChildrenHeight(resultsContainer) {
+    if (!resultsContainer) {
+        console.error(`Container with ID "${resultsContainer}" not found.`);
+        return 0;
+    }
+
+    let totalVisibleHeight = 0;
+    const children = resultsContainer.children;
+
+    for (let i = 0; i < children.length; i++) {
+        const element = children[i];
+        const isVisible = element.classList.contains("hide");
+
+        if (!isVisible) {
+            // Check if the element is visible
+            const style = window.getComputedStyle(element);
+
+            // Get the element's height (including padding and border)
+            totalVisibleHeight += element.offsetHeight;
+
+            // If you want to include margins as well, you can add:
+            const marginTop = parseInt(style.marginTop) || 0;
+            const marginBottom = parseInt(style.marginBottom) || 0;
+            totalVisibleHeight += marginTop + marginBottom;
+        }
+    }
+
+    return Math.min(400, totalVisibleHeight) / 10 + 1;
+}

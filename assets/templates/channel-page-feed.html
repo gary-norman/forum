@@ -1,14 +1,11 @@
 {{ define "channel-page-feed" }}
-  {{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
-  {{ $userID := 0 }} <!-- Defaault value for logged out users -->
-  {{ if ne .CurrentUser nil }}
-    {{ $userID = .CurrentUser.ID }}
-  {{ end }}
+{{ $userID := .UserID }}
+{{ $dot := .dot }}
   <div id="wrapper-channel-feed" style="position: absolute; width: 60%; height: 100%">
     <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
-    {{ range .ThisChannelPosts }}
-      {{ template "post-card" (dict "Post" . "root" $ "Instance" $.Instance "calledBy" "post-card") }}
+    {{ range $dot.Posts }}
+      {{ template "post-card" (dict "Post" . "dot" $dot "UserID" $userID "Instance" $.Instance "calledBy" $.Instance) }}
     {{ end }}
     </div>
   </div>
-{{ end }} <!-- end define block -->
+{{ end }}

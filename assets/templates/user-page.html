@@ -1,13 +1,8 @@
 {{ define "user-page" }}
-  {{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
-  {{ $userID := 0 }} <!-- Default value for logged out users -->
-  {{ if ne .CurrentUser nil }}
-    {{ $userID = .CurrentUser.ID }}
-  {{ end }}
   {{ template "user-page-banner" . }}
   <div class="container-content">
     <div class="content">
-    {{ template "user-page-activity-bar" }}
+    {{ template "user-page-activity-bar" . }}
       {{/*SECTION ---------- user page activity feed ----------*/}}
       <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%">
         {{/*SECTION ------- activity activity ---------- */}}

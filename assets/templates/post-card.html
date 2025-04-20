@@ -1,42 +1,52 @@
 {{ define "post-card" }}
-    {{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
-    {{ $userID := 0 }} {{/* Default value for logged out users */}}
-    {{ if ne .CurrentUser nil }}
-        {{ $userID = .CurrentUser.ID }}
-    {{ end }}
-    {{ $post := .Post }}
-    {{ $root := .root}}
-    {{ $instance := $root.Instance }}
-    <div class="container-card-down">
-{{/*        <p>{{$root.ImagePaths.User}}</p>*/}}
-        <div class="card link" data-post-id="{{$post.ID}}" data-dest="post" data-channel-ID="{{$post.ChannelID}}" data-user-id="{{$post.AuthorID}}">
-            <div class="container-post-info">
-                {{ if (ne $post.AuthorAvatar "noimage") }}
-      <span class="card-pic profile-pic link" data-dest="user" data-image-user="{{ $root.ImagePaths.User }}{{ $post.AuthorAvatar }}" data-user-id="{{ $post.AuthorID }}" role="presentation"></span>
-                {{ else }}
-                    <span class="card-pic profile-pic--empty link" data-dest="user" data-name-user="{{ $post.Author }}" data-user-id="{{ $post.AuthorID }}"></span>
-                {{ end }}
-                <div>
-                    <small id="link-post-user-{{ $post.AuthorID }}-{{.Instance}}" data-dest="user" data-user-id="{{ $post.AuthorID }}" class="small-bold link">{{ $post.Author }}</small>
-                    <div>
-          <small id="link-post-channelID-{{ $post.ChannelID }}-{{.Instance}}" data-dest="channel" class="link" data-channel-id="{{ $post.ChannelID }}">{{ $post.ChannelName }}</small>
-                        <small>-</small>
-                        <small>{{$post.TimeSince}}</small>
-                        <!-- <small>PostID: {{$post.ID}}</small> -->
-                    </div>
-                </div>
-                <div class="like-button">
-                    <button data-tooltip-name="like" aria-label="like button" class="btn-icoonly"></button>
-                </div>
-            </div>
-            <h4 id="link-post-post-{{ $post.ID }}-{{ .Instance }}" class="link" data-post-id="{{ $post.ID }}">{{$post.Title}}</h4>
-            {{ if ne $post.Images "noimage" }}
-                <img src="{{ $root.ImagePaths.Post }}{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
-            {{ end }}
-            <p class="cardContent">{{$post.Content}}</p>
-
-            {{ template "control-buttons" (dict "Post" $post  "root" $root "calledBy" "post-card" )}}
-            <!--  Post control buttons -->
-        </div> <!-- end post card -->
-    </div> <!-- end container-comments wrapper -->
-{{end}} <!-- end define block -->
+{{ $userID := .UserID }}
+{{ $post := .Post }}
+{{ fprint "post-card.ID" $post.ID }}
+{{ $dot := .dot}}
+{{ $instance := $dot.Instance }}
+<div class="container-card-down">
+  <div class="card link" data-post-id="{{ $post.ID }}" data-dest="post" data-channel-ID="{{ $post.ChannelID }}" data-user-id="{{$post.AuthorID}}">
+    <div class="container-post-info">
+      {{ if (ne $post.AuthorAvatar "noimage") }}
+        <span class="card-pic profile-pic link" data-dest="user" data-image-user="{{ $dot.ImagePaths.User }}{{ $post.AuthorAvatar }}" data-user-id="{{ $post.AuthorID }}" role="presentation"></span>
+      {{ else }}
+        <span class="card-pic profile-pic--empty link" data-dest="user" data-name-user="{{ $post.Author }}" data-user-id="{{ $post.AuthorID }}"></span>
+      {{ end }}
+      <div>
+        <small id="link-post-user-{{ $post.AuthorID }}-{{$instance}}" data-dest="user" data-user-id="{{ $post.AuthorID }}" class="small-bold link">{{ $post.Author }}</small>
+          <div>
+            <small id="link-post-channelID-{{ $post.ChannelID }}-{{ $instance }}" data-dest="channel" class="link" data-channel-id="{{ $post.ChannelID }}">{{ $post.ChannelName }}</small>
+            <small>-</small>
+            <small>{{$post.TimeSince}}</small>
+        </div>
+      </div>
+      <div class="like-button">
+        <button data-tooltip-name="like" aria-label="like button" class="btn-icoonly"></button>
+      </div>
+    </div>
+      <h4 id="link-post-post-{{ $post.ID }}-{{ .Instance }}" class="link" data-post-id="{{ $post.ID }}">{{$post.Title}}</h4>
+      {{ if ne $post.Images "noimage" }}
+        <img src="{{ $dot.ImagePaths.Post }}{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
+      {{ end }}
+      <p class="cardContent">{{$post.Content}}</p>
+      {{ template "control-buttons" (dict "Post" $post "dot" $dot "userID" $userID "calledBy" "post-card" )}}
+    </div> 
+  {{ if eq $instance "post-page" }}
+    <!--  Reply / Submit Comment form -->
+    <form name="replyForm" class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
+      <div class="cont-flex-row flex-end">
+        <div class="input-wrapper container-reply">
+          <textarea id="comment-form-textarea-thispostcard-{{$post.ID}}" name="content" placeholder="Type a reply..."></textarea>
+          <label for="comment-form-textarea-thispostcard-{{$post.ID}}" class="user-label">Reply</label>
+        </div>
+        <!-- Hidden input to store the postID -->
+        <input type="hidden" name="postID" value="{{$post.ID}}">
+        <input type="hidden" name="channel" value='{"channelName": "{{$post.ChannelName}}", "channelID": "{{$post.ChannelID}}"}'>
+        <button class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+          <span class="btn-reply-comment">comment</span>
+        </button>
+      </div>
+    </form>
+  {{ end }}
+  </div>
+{{end}}

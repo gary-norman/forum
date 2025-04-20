@@ -1,16 +1,15 @@
 {{ define "channel-page" }}
-  {{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
-  {{ $userID := 0 }} <!-- Default value for logged out users -->
-  {{ if ne .CurrentUser nil }}
-    {{ $userID = .CurrentUser.ID }}
+  {{ $userID := 0 }} {{/* Default value for logged out users */}}
+  {{ with .CurrentUser }}
+    {{ $userID = .ID }}
   {{ end }}
 
     {{ template "channel-page-banner" . }}
     <div class="container-content">
       <div class="content">
         {{ template "filters-row" . }}
-        {{ template "channel-page-feed" . }}
-      </div>
-      {{ template "right-panel" . }}
+      {{ template "channel-page-feed" (dict "dot" . "UserID" $userID) }}
     </div>
-{{ end }} <!-- end define block -->
+    {{ template "right-panel" (dict "dot" . "UserID" $userID) }}
+  </div>
+{{ end }}

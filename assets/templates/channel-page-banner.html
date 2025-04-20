@@ -1,5 +1,4 @@
 {{ define "channel-page-banner" }}
-  {{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
   <div id="channel-page-banner" class="banner">
     <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image"/>
     <div class="page-control">
@@ -15,11 +14,10 @@
           <h2 {{ if (eq .ThisChannel.Privacy true) }} class="private-channel align-self-start" {{ end }}>
             /{{ .ThisChannel.Name }}
           </h2>
-
         </div>
       </div>
       <div class="page-buttons">
-        {{ if (eq .IsJoinedOrOwned false) }}
+        {{ if or (not .IsOwned) (not .IsJoined) }}
         <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
           <span class="btn-posts">join</span>
         </button>
@@ -28,7 +26,7 @@
         <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
           <img src="/assets/icons/share_16.svg" alt="share button" />
         </button>
-        {{ if (eq .IsJoinedOrOwned false) }}
+        {{ if or (not .IsOwned) (not .IsJoined) }}
         <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
           <img src="/assets/icons/heart-empty_24.svg" alt="like button" />
         </button>

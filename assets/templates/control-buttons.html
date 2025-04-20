@@ -1,14 +1,17 @@
 {{ define "control-buttons" }}
-    {{ $userID := 0 }} {{/* Default value for logged out users */}}
-    {{ $root := .root}}
-    {{ $user := $root.CurrentUser }}
-    {{ $calledBy := .calledBy}}
-    {{ $instance := $root.Instance}}
-    {{ if ne $user nil }}
-    {{ $userID = $user.ID }}
-    {{ end }}
-    {{ $post := .Post }}
-    {{ $comment := .Comment }}
+{{ $dot := .dot}}
+{{ $user := $dot.CurrentUser }}
+{{ $userID := .userID }}
+{{ $calledBy := .calledBy}}
+{{ $instance := $dot.Instance}}
+{{ $post := .Post }}
+{{ with .Post }}
+  {{ $post := . }}
+{{ end }}
+{{ $comment := .Comment }}
+{{ with .Comment }}
+  {{ $comment := . }}
+{{ end }}
     <div class="button-row-wrap
     {{ if ne $calledBy "right-panel"}} post-controls{{end}}"
     {{ if eq $calledBy "post-card" }} data-post-id="{{$post.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{$post.AuthorID}}"

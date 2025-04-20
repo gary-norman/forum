@@ -1,26 +1,35 @@
-{{ define "user-page-banner" -}}
-<div id="user-page-banner" class="banner">
-  <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image">
+{{ define "post-page-banner" -}}
+<div id="post-page-banner" class="banner">
+  <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="Post Banner Image">
   <div class="page-control">
     <div class="page-profile">
+      {{ if ne .CurrentUser nil }}
         {{ if (ne .ThisUser.Avatar "noimage") }}
           <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ .ImagePaths.User }}{{ .ThisUser.Avatar }}"></div>
         {{ else }}
           <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisUser.Username}}"></div>
         {{ end }}
+      {{else}}
+        {{ if (ne .RandomUser.Avatar "noimage") }}
+          <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ .ImagePaths.User }}{{ .RandomUser.Avatar }}"></div>
+        {{ else }}
+          <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .RandomUser.Username}}"></div>
+      {{ end }}
+      {{end}}
       <div class="flex-start">
-          <h2 class="align-self-start">{{ .ThisUser.Username }}</h2>
+          <h2 class="align-self-start">{{ if ne .CurrentUser nil}}{{ .ThisUser.Username }}{{ else }}{{ .RandomUser.Username }}{{ end }}</h2>
           <div>
               <div class="cont-flex-column">
                 <small>following:</small>
                 <button class="btn-lg btn-icotext btn-follows btn-invert-never">
-                  <span class="btn-following">{{.ThisUser.Following}}</span>
+                  <span class="btn-following">{{ if ne .CurrentUser nil}}{{.ThisUser.Following}}{{ else }}{{.RandomUser.Following}}{{ end }}
+                    </span>
                 </button>
               </div>
             <div class="cont-flex-column">
               <small>followers:</small>
               <button class="btn-lg btn-icotext btn-follows btn-invert-never">
-                <span class="btn-followers">{{.ThisUser.Followers}}</span>
+                <span class="btn-followers">{{ if ne .CurrentUser nil}}{{.ThisUser.Followers}}{{ else }}{{.RandomUser.Followers}}{{ end }}</span>
               </button>
             </div>
           </div>

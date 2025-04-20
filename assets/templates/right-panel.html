@@ -1,29 +1,25 @@
 {{ define "right-panel" }}
-  {{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
-  {{ $userID := 0 }} <!-- Default value for logged out users -->
-  {{ $b := .PageBanner }}
-  {{ if ne .CurrentUser nil }}
-    {{ $userID = .CurrentUser.ID }}
-  {{ end }}
+{{ $dot := .dot }}
+{{ $userID := .userID }}
   <div class="right-panel ">
     <div class="right-panel-content scroll-down">
       <div class="right-panel-container-name flex-space-between">
         <div class="cont-flex-column">
-          <h4 class="right-panel-name">/{{ $b.ThisChannel.Name }}</h4>
-          <small>created by {{ if (eq $b.ThisChannel.OwnerID $userID) }}you {{ else }} {{ $b.OwnerName }} {{ end }}{{ $b.ThisChannel.TimeSince}}</small>
+          <h4 class="right-panel-name">/{{ $dot.ThisChannel.Name }}</h4>
+          <small>created by {{ if (eq $dot.ThisChannel.OwnerID $userID) }}you {{ else }} {{ $dot.OwnerName }} {{ end }}{{ $dot.ThisChannel.TimeSince}}</small>
         </div>
-        {{ if (eq $b.IsJoinedOrOwned true) }}
+        {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}
           <button id="right-panel-channel--edit-channel-name" class="btn-sm btn-icoonly">
             <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
           </button>
         {{ end }}
       </div>
-      {{ if (eq $b.IsJoinedOrOwned true) }}
-        {{ template "channel-edit-image" . }}
+        {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}
+        {{ template "channel-edit-image" (dict "dot" $dot "UserID" $userID) }}
       {{ end }}
-      {{ template "channel-edit-bio" . }}
-      {{ template "channel-edit-mods" . }}
-      {{ template "channel-edit-rules" . }}
-      {{ template "control-buttons" (dict "root" . "calledBy" "right-panel") }}
+      {{ template "channel-edit-bio" (dict "dot" $dot "UserID" $userID) }}
+      {{ template "channel-edit-mods" (dict "dot" $dot "UserID" $userID) }}
+      {{ template "channel-edit-rules" (dict "dot" $dot "UserID" $userID) }}
+      {{ template "control-buttons" (dict "dot" $dot "userID" $userID "calledBy" "right-panel") }}
   </div>
 {{ end }}

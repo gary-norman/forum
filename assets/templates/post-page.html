@@ -1,18 +1,7 @@
 {{ define "post-page" }}
-{{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
-{{ $channelBasePath := "db/userdata/images/channel-images/" }}
-{{ $postBasePath := "db/userdata/images/post-images/" }}
-{{ $userBasePath := "db/userdata/images/user-images/" }}
-{{ $userID := 0 }} <!-- Default value for logged out users -->
-{{ if ne .CurrentUser nil }}
-  {{ $userID = .CurrentUser.ID }}
-{{ end }}
-{{ $post := .ThisPost }}
-
-  <div class="container-content">
-    <div class="content scrollable-user scrollable no-scrollbar">
-        {{/*SECTION ---------- user page activity feed ----------*/}}
-        {{ template "this-post" (dict "Post" .ThisPost "CurrentUser" $.CurrentUser  "Comments" .Comments )  }}
+  <div class="container-content" role="main">
+    <div class="content scrollable-user scrollable no-scrollbar" aria-labelledby="post-title">
+        {{ template "this-post" . }}
     </div>
   </div>
-{{end}} <!-- end define block -->
+{{end}}

@@ -1,15 +1,12 @@
 {{ define "channel-edit-image" }}
-  {{- /*gotype: github.com/gary-norman/forum/internal/models.Post*/ -}}
-  {{ $userID := 0 }} <!-- Default value for logged out users -->
-  {{ if ne .CurrentUser nil }}
-    {{ $userID = .CurrentUser.ID }}
-  {{ end }}
+  {{ $userID := .userID }}
+{{ $dot := .dot }}
   <div class="right-panel-container-pic flex-space-between">
     <div class="right-panel-container-pic">
-      {{ if (ne .ThisChannel.Avatar "noimage") }}
-      <div class="right-panel-pic profile-pic" data-image-channel="{{ .ImagePaths.Channel }}{{ .ThisChannel.Avatar}}"></div>
+      {{ if (ne $dot.ThisChannel.Avatar "noimage") }}
+      <div class="right-panel-pic profile-pic" data-image-channel="{{ $dot.ImagePaths.Channel }}{{ $dot.ThisChannel.Avatar}}"></div>
       {{ else }}
-      <div class="right-panel-pic profile-pic--empty" data-name-channel="{{ .ThisChannel.Name }}"></div>
+      <div class="right-panel-pic profile-pic--empty" data-name-channel="{{ $dot.ThisChannel.Name }}"></div>
       {{ end }}
       <small>Edit channel picture</small>
     </div>

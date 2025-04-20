@@ -94,7 +94,10 @@ searchInput.addEventListener("input", e => {
         postResultsContainer.classList.toggle("hide", !anyPostVisible);
     }
 
-    const calcHeight = `${Math.max(7, calculateVisibleChildrenHeight(resultsContainer))}rem`;
+    let calcHeight = `${Math.max(7, calculateVisibleChildrenHeight(resultsContainer))}rem`;
+    if (calcHeight === "7.8rem") {
+        calcHeight = "7rem"
+    }
 
     if (!anyVisible) {
         //Prepare No results paragraph
@@ -103,7 +106,13 @@ searchInput.addEventListener("input", e => {
         noResults.classList.add('no-result');
         noResults.style.padding = "2.4rem 2.4rem"
         noResults.style.textAlign = 'center';
-        resultsContainer.appendChild(noResults);
+
+        const noResultsGroup = resultsContainer.querySelectorAll(".no-result");
+
+        if (noResultsGroup.length === 0) {
+            resultsContainer.appendChild(noResults);
+        }
+
         resultsContainer.style.padding = "0"
     } else {
         const noResults = resultsContainer.querySelectorAll(".no-result");

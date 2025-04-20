@@ -24,7 +24,7 @@
         <button data-tooltip-name="like" aria-label="like button" class="btn-icoonly"></button>
       </div>
     </div>
-      <h4 id="link-post-post-{{ $post.ID }}-{{ .Instance }}" class="link" data-post-id="{{ $post.ID }}">{{$post.Title}}</h4>
+      <h4 id="link-post-post-{{ $post.ID }}-{{ .Instance }}">{{$post.Title}}</h4>
       {{ if ne $post.Images "noimage" }}
         <img src="{{ $dot.ImagePaths.Post }}{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
       {{ end }}

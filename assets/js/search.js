@@ -1,3 +1,5 @@
+import {updateProfileImages} from "./update_UI_elements.js";
+
 const searchInput = document.querySelector("[data-search]");
 const userCardContainer = document.querySelector("[data-result-user-cards-container]");
 const channelCardContainer = document.querySelector("[data-result-channel-cards-container]");
@@ -74,7 +76,6 @@ searchInput.addEventListener("input", e => {
 
     // Hide the parent container if no posts are visible
     if (postResultsContainer) {
-        console.log("posts container visible")
         postResultsContainer.classList.toggle("hide", !anyPostVisible);
     }
 
@@ -88,7 +89,6 @@ fetch("/search")
         return response.json();
     })
     .then((data) => {
-        console.table(data)
         users = data.users.map(user => {
             const card = userCardTemplate.content.cloneNode(true).children[0];
             const avatar = card.querySelector("[data-result-user-avatar]");
@@ -97,9 +97,18 @@ fetch("/search")
             const id = user.id;
 
             name.textContent = user.username;
-            avatar.style.background = `url('${imageAttr + user.avatar}') no-repeat center`;
-            avatar.style.backgroundSize = "cover";
             card.setAttribute("data-user-id", id)
+            if (user.avatar === "noimage") {
+                avatar.classList.add("profile-pic--empty")
+                avatar.classList.remove("profile-pic")
+                avatar.setAttribute("data-name-user", user.name);
+                // console.log("added a placeholder image for channel: ", channel.name);
+            } else {
+                avatar.setAttribute("data-image-user", `${imageAttr + user.avatar}` );
+                // console.log("updated an image for channel: ", channel.name);
+                // console.log("updated \"data-image-channel\": ", `${imageAttr + channel.avatar}`);
+            }
+            updateProfileImages();
 
             userCardContainer.append(card)
             return { username: user.username, avatar: user.avatar, element: card }
@@ -112,10 +121,19 @@ fetch("/search")
             const imageAttr = "db/userdata/images/channel-images/";
             const id = channel.id;
 
-            name.textContent = channel.name;
-            avatar.style.background = `url('${imageAttr + channel.avatar}') no-repeat center`;
-            avatar.style.backgroundSize = "cover";
-            card.setAttribute("data-channel-id", id)
+            name.textContent = "/" + channel.name;
+            card.setAttribute("data-channel-id", id);
+            if (channel.avatar === "noimage") {
+                avatar.classList.add("profile-pic--empty")
+                avatar.classList.remove("profile-pic")
+                avatar.setAttribute("data-name-channel", channel.name);
+                // console.log("added a placeholder image for channel: ", channel.name);
+            } else {
+                avatar.setAttribute("data-image-channel", `${imageAttr + channel.avatar}` );
+                // console.log("updated an image for channel: ", channel.name);
+                // console.log("updated \"data-image-channel\": ", `${imageAttr + channel.avatar}`);
+            }
+            updateProfileImages();
 
             channelCardContainer.append(card)
             return { name: channel.name, avatar: channel.avatar, element: card }
@@ -136,3 +154,19 @@ fetch("/search")
         })
     })
     .catch((error) => console.error(`Error fetching response data:`, error));
+
+// function checkImage(entity) {
+//
+//     if (entity.avatar === "noimage") {
+//         entity.classList.add("profile-pic--empty")
+//         entity.classList.remove("profile-pic")
+//         entity.setAttribute("data-name-channel", entity.name);
+//         console.log("added a placeholder image for channel: ", entity.name);
+//     } else {
+//         entity.setAttribute("data-image-channel", `${imageAttr + entity.avatar}` );
+//         console.log("updated an image for channel: ", entity.name);
+//     }
+//
+//     card.setAttribute("data-user-id", id)
+//     avatar.setAttribute("data-image-user", `${imageAttr + user.avatar}` );
+// }

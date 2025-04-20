@@ -44,7 +44,6 @@ export function updateProfileImages() {
     } else {
         console.error("getInitialFromAttribute is not defined");
     }
-    // console.log("activity buttons:", actButtonsAll)
 }
 
 function resetInputStyle() {
@@ -88,17 +87,17 @@ export function toggleUserInteracted(action) {
             });
         }
     });
-
-
 }
 
 function getUserProfileImageFromAttribute() {
     const userProfileImage = document.querySelectorAll(".profile-pic");
+
     for (let i = 0; i < userProfileImage.length; i++) {
         let attArr = ["user", "auth", "channel"];
         attArr[0] = userProfileImage[i].getAttribute("data-image-user");
         attArr[1] = userProfileImage[i].getAttribute("data-image-auth");
         attArr[2] = userProfileImage[i].getAttribute("data-image-channel");
+
         // console.table(attArr)
         if (attArr[0]) {
             // Ensure the `data-image-user` attribute has a value
@@ -115,6 +114,10 @@ function getUserProfileImageFromAttribute() {
             userProfileImage[i].style.background =
                 `url('${attArr[2]}') no-repeat center`;
             userProfileImage[i].style.backgroundSize = "cover"; // Add `cover` for background sizing
+            if (userProfileImage[i].parentNode.classList.contains("result-card")) {
+                console.log("updating", userProfileImage[i].parentNode.children[1].textContent, "to ", `url('${attArr[2]}')`, "with parent: ", userProfileImage[i].parentNode);
+            }
+
         } else {
             console.warn(
                 "No data-image- attribute value found for element:",
@@ -170,6 +173,7 @@ function getInitialFromAttribute() {
                 "data-initial",
                 Array.from(`${attArr[2]}`)[0],
             );
+
             // console.log('attArr[1]');
         } else {
             console.warn(

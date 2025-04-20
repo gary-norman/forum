@@ -19,8 +19,6 @@ import (
 
 var TemplateData models.TemplateData
 
-// SECTION ------- template handlers ----------
-
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 	// SECTION --- posts and comments ---
@@ -47,43 +45,13 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > channelID", err)
 		}
-		allPosts[p].ChannelID = channelIDs[0]
+		if len(allPosts) > 0 && len(channelIDs) > 0 {
+			allPosts[p].ChannelID = channelIDs[0]
+		} else {
+			fmt.Printf(ErrorMsgs().KeyValuePair, "error fetching posts", "no posts or channel IDs found")
+		}
 	}
 
-	// SECTION --- currently opened post ---
-
-	// var thisPost models.Post
-	// var posts []models.Post
-	// postId, err := strconv.Atoi(r.PathValue("postId"))
-	// // postId := 15 // TODO --- using 15 as default until i got the function working ---
-	// if err != nil {
-	// 	fmt.Printf(ErrorMsgs().KeyValuePair, "convert postID", err)
-	// }
-	// // foundPosts, err = app.posts.FindCurrentPost("id", postId)
-	// // if err != nil {
-	// // 	fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost", err)
-	// // }
-	// // foundPosts, err = app.getPostsComments(foundPosts)
-	// // if err != nil {
-	// // 	fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost comments", err)
-	// // }
-	// // if len(foundPosts) > 0 {
-	// // 	thisPost = foundPosts[0]
-	// // } else {
-	// // 	fmt.Printf(ErrorMsgs().KeyValuePair, "no post found", "returning none")
-	// // }
-	// // INFO this could probably be avastly simplified by writing directly to foundPosts & thisPost, but I'm erring on the side of caution
-	// post, err := app.posts.GetPostByID(postId)
-	// if err != nil {
-	// 	log.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost", err)
-	// }
-	// posts = append(posts, post)
-	// foundPosts, err := app.getPostsComments(posts)
-	// if err != nil {
-	// 	log.Printf(ErrorMsgs().KeyValuePair, "getHome > thisPost comments", err)
-	// }
-	// thisPost = foundPosts[0]
-	//
 	// SECTION --- user ---
 	allUsers, allUsersErr := app.users.All()
 	if allUsersErr != nil {

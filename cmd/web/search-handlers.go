@@ -50,7 +50,6 @@ func (app *app) search(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().KeyValuePair, "User is not logged in. CurrentUser: ", currentUser)
 	}
 
-	// Structure the response
 	searchResults := map[string]interface{}{
 		"users":    allUsers,
 		"channels": allChannels,
@@ -65,5 +64,4 @@ func (app *app) search(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf(ErrorMsgs().KeyValuePair, "Search data fetched in:", time.Since(start))
-	log.Printf(ErrorMsgs().KeyValuePair, "Search data:", searchResults)
 }

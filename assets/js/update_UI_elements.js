@@ -114,10 +114,6 @@ function getUserProfileImageFromAttribute() {
             userProfileImage[i].style.background =
                 `url('${attArr[2]}') no-repeat center`;
             userProfileImage[i].style.backgroundSize = "cover"; // Add `cover` for background sizing
-            if (userProfileImage[i].parentNode.classList.contains("result-card")) {
-                console.log("updating", userProfileImage[i].parentNode.children[1].textContent, "to ", `url('${attArr[2]}')`, "with parent: ", userProfileImage[i].parentNode);
-            }
-
         } else {
             console.warn(
                 "No data-image- attribute value found for element:",

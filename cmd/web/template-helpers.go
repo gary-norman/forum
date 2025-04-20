@@ -28,15 +28,10 @@ func (app *app) init() {
 		"reactionStatus": app.reactions.GetReactionStatus,
 		"dict":           dict,
 		"isValZero":      isValZero,
-		"fprint": func(s string, v any) string {
-			fmt.Printf("%s: %v\n", s, v)
-			return ""
-		},
-		"debugPanic": func(v interface{}) (string, error) {
-			return "", fmt.Errorf("TEMPLATE PANIC: %#v", v)
-		},
-		"or":  func(a, b bool) bool { return a || b },
-		"not": func(a bool) bool { return !a },
+		"fprint":         fprint,
+		"debugPanic":     debugPanic,
+		"or":             or,
+		"not":            not,
 	}).ParseGlob("assets/templates/*.html"))
 }
 
@@ -44,9 +39,22 @@ type PageModel interface {
 	GetInstance() string
 }
 
-type PageWithInstance interface {
-	GetInstance() string
+// fprint takes a string and an interface and prints them to the console
+func fprint(s string, v any) string {
+	fmt.Printf(ErrorMsgs().KeyValuePair, s, v)
+	return ""
 }
+
+// debugPanic takes an interface and returns a string and an error
+func debugPanic(v any) (string, error) {
+	return "", fmt.Errorf("TEMPLATE PANIC: %#v", v)
+}
+
+// or takes two boolean values and returns true if either is true
+func or(a, b bool) bool { return a || b }
+
+// not takes a boolean value and returns its negation
+func not(a bool) bool { return !a }
 
 func renderPageData[T PageModel](w http.ResponseWriter, data T) {
 	var renderedPage bytes.Buffer
@@ -72,7 +80,7 @@ func renderPageData[T PageModel](w http.ResponseWriter, data T) {
 	}
 }
 
-// CheckSameName Function to check if the member and artist names are the same, for go templates
+// CheckSameName Function to check if  2 strings are identical, for go templates
 func CheckSameName(firstString, secondString string) bool {
 	return firstString == secondString
 }

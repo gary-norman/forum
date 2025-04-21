@@ -317,12 +317,15 @@ type TemplateData struct {
 	JoinedChannels         []Channel
 	OwnedAndJoinedChannels []Channel
 	// ---------- misc ----------
+	Instance  string
 	Images    []Image
 	Reactions []Reaction
 	ThisPost  Post
 	ThisUser  User
 	ImagePaths
 }
+
+func (p TemplateData) GetInstance() string { return p.Instance }
 
 type Session struct {
 	Username string

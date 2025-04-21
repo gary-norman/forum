@@ -6,7 +6,8 @@
 {{ $post := .ThisPost }}
 {{ $dot := . }}
 {{ with .ThisPost }}
-  {{ template "post-card" (dict "dot" $dot "Post" $post "UserID" $userID "calledBy" $dot.Instance) }}
+  {{ template "post-card" (dict "dot" $dot "Post" $post "UserID" $userID "calledBy" "this-post") }}
+
 {{ end }}
   {{ range $post.Comments }}
   <div class="container-card-across">

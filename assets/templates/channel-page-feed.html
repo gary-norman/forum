@@ -4,7 +4,7 @@
   <div id="wrapper-channel-feed" style="position: absolute; width: 60%; height: 100%">
     <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
     {{ range $dot.Posts }}
-      {{ template "post-card" (dict "Post" . "dot" $dot "UserID" $userID "Instance" $.Instance "calledBy" $.Instance) }}
+      {{ template "post-card" (dict "Post" . "dot" $dot "UserID" $userID "Instance" $.Instance "calledBy" "channel-page-feed") }}
     {{ end }}
     </div>
   </div>

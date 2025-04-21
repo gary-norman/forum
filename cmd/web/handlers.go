@@ -145,6 +145,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		JoinedChannels:         joinedChannels,
 		OwnedAndJoinedChannels: ownedAndJoinedChannels,
 		// ---------- misc ----------
+		Instance:   "home-page",
 		Images:     nil,
 		Reactions:  nil,
 		ImagePaths: app.paths,
@@ -169,10 +170,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Printf(ErrorMsgs().KeyValuePair, "GetHome Render time:", time.Since(start))
-}
-
-func (app *app) goHome(w http.ResponseWriter, r *http.Request) {
-
 }
 
 // SECTION ------- user login handlers ----------

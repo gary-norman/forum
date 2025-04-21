@@ -52,5 +52,6 @@ func ToHTMLVar(s string) string {
 		return ""
 	}
 	// Add "s" for plural and append "HTML"
+
 	return parts[0] + "sHTML"
 }

@@ -20,37 +20,8 @@ import (
 var TemplateData models.TemplateData
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
-	start := time.Now()
-	// SECTION --- posts and comments ---
-	// var userLoggedIn bool
+	var userPosts []models.Post
 	userLoggedIn := true
-	allPosts, err := app.posts.All()
-	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all posts", err)
-	}
-	// Retrieve total likes and dislikes for each post
-	allPosts = app.getPostsLikesAndDislikes(allPosts)
-
-	for p := range allPosts {
-		models.UpdateTimeSince(&allPosts[p])
-	}
-
-	allPosts, err = app.getPostsComments(allPosts)
-	if err != nil {
-		log.Printf(ErrorMsgs().NotFound, "allPosts comments", "getHome", err)
-	}
-
-	for p := range allPosts {
-		channelIDs, err := app.channels.GetChannelIdFromPost(allPosts[p].ID)
-		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > channelID", err)
-		}
-		if len(allPosts) > 0 && len(channelIDs) > 0 {
-			allPosts[p].ChannelID = channelIDs[0]
-		} else {
-			fmt.Printf(ErrorMsgs().KeyValuePair, "error fetching posts", "no posts or channel IDs found")
-		}
-	}
 
 	// SECTION --- user ---
 	allUsers, allUsersErr := app.users.All()
@@ -80,6 +51,37 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 	randomUser.Followers, randomUser.Following, currentUserErr = app.loyalty.CountUsers(randomUser.ID)
 	if currentUserErr != nil {
 		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
+	}
+
+	start := time.Now()
+	// SECTION --- posts and comments ---
+
+	allPosts, err := app.posts.All()
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all posts", err)
+	}
+	// Retrieve total likes and dislikes for each post
+	allPosts = app.getPostsLikesAndDislikes(allPosts)
+
+	for p := range allPosts {
+		models.UpdateTimeSince(&allPosts[p])
+	}
+
+	allPosts, err = app.getPostsComments(allPosts)
+	if err != nil {
+		log.Printf(ErrorMsgs().NotFound, "allPosts comments", "getHome", err)
+	}
+
+	for p := range allPosts {
+		channelIDs, err := app.channels.GetChannelIdFromPost(allPosts[p].ID)
+		if err != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "getHome > channelID", err)
+		}
+		if len(allPosts) > 0 && len(channelIDs) > 0 {
+			allPosts[p].ChannelID = channelIDs[0]
+		} else {
+			fmt.Printf(ErrorMsgs().KeyValuePair, "error fetching posts", "no posts or channel IDs found")
+		}
 	}
 
 	// SECTION --- channels --
@@ -122,6 +124,12 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
 	}
 
+	if userLoggedIn {
+		userPosts = app.getUserPosts(currentUser, allPosts)
+	} else {
+		userPosts = allPosts
+	}
+
 	// SECTION -- template ---
 	TemplateData := models.TemplateData{
 		// ---------- users ----------
@@ -129,7 +137,8 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		RandomUser:  randomUser,
 		CurrentUser: currentUser,
 		// ---------- posts ----------
-		Posts: allPosts,
+		Posts:     allPosts,
+		UserPosts: userPosts,
 		// ---------- channels ----------
 		AllChannels:            allChannels,
 		OwnedChannels:          ownedChannels,
@@ -160,6 +169,10 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Printf(ErrorMsgs().KeyValuePair, "GetHome Render time:", time.Since(start))
+}
+
+func (app *app) goHome(w http.ResponseWriter, r *http.Request) {
+
 }
 
 // SECTION ------- user login handlers ----------

@@ -233,5 +233,5 @@ function calculateVisibleChildrenHeight(resultsContainer) {
         }
     }
 
-    return Math.min(400, totalVisibleHeight) / 10 + 1;
+    return Math.min(320, totalVisibleHeight) / 10 + 1;
 }

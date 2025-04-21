@@ -1,11 +1,13 @@
 import {changePage, navigateToPage} from "./fetch_and_navigate.js";
 import {data} from "./share.js";
+import {modifyActivePage} from "./main.js";
 
 // sidebar butons
 const goHome = document.querySelector("#btn-go-home");
 
 // --- go home ---
 goHome.addEventListener("click", () => {
+    modifyActivePage("home");
     changePage(data["homePage"]);
 });
 

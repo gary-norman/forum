@@ -12,7 +12,6 @@ func (app *app) getUserPosts(user *models.User, allPosts []models.Post) []models
 	}
 	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
 	var postsInUserChannels []models.Post
-	log.Printf(ErrorMsgs().KeyValuePair, "Home page - user.ID", user.ID)
 
 	memberships, memberErr := app.memberships.UserMemberships(user.ID)
 	if memberErr != nil {
@@ -31,8 +30,6 @@ func (app *app) getUserPosts(user *models.User, allPosts []models.Post) []models
 	if len(ownedAndJoinedChannels) == 0 {
 		return allPosts
 	}
-
-	log.Printf(ErrorMsgs().KeyValuePair, "Home page - userChannels", ownedAndJoinedChannels)
 
 	// Create a set of user's channel IDs for efficient lookup
 	userChannelIDSet := make(map[int]bool)

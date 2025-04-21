@@ -597,23 +597,7 @@
           </div>
           {{/*SECTION ---------- homepage ---------- */}}
           <div id="home-page" class="feeds-wrapper active-feed">
-            <div class="button-row above-posts button-row-homepage">
-              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                <span class="btn-sort">sort</span>
-              </button>
-              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                <span class="btn-filters">filters</span>
-              </button>
-            </div>
-            <div class="scrollable-home scrollable no-scrollbar">
-              <div id="home-feed">
-                <div id="home-page-users" class="cont-grid-4x-10rem link" style="margin-block-start: 10rem">
-                  {{ range .AllUsers }}
-                  <div data-user-id="{{ .ID }}" class="card">{{ .Username }}</div>
-                  {{ end }}
-                </div>
-              </div>
-            </div>
+            {{ template "home-page" (dict "dot" $ "UserPosts" .UserPosts "CurrentUser" $.CurrentUser "Instance" "home-page" ) }}
           </div>
 
 

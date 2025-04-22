@@ -1,30 +1,37 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/gary-norman/forum/internal/app"
+	mw "github.com/gary-norman/forum/internal/http/middleware"
 )
 
-func (app *app) search(w http.ResponseWriter, r *http.Request) {
+type SearchHandler struct {
+	App *app.App
+}
+
+func (s *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 
 	// SECTION --- channels --
-	allChannels, err := app.channels.All()
+	allChannels, err := s.App.Channels.All()
 	if err != nil {
 		log.Printf(ErrorMsgs().Query, "channels.All", err)
 	}
 
 	// SECTION --- posts ---
 	// var userLoggedIn bool
-	allPosts, err := app.posts.All()
+	allPosts, err := s.App.Posts.All()
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all posts", err)
 	}
 
 	for p := range allPosts {
-		channelIDs, err := app.channels.GetChannelIdFromPost(allPosts[p].ID)
+		channelIDs, err := s.App.Channels.GetChannelIdFromPost(allPosts[p].ID)
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > channelID", err)
 		}
@@ -40,12 +47,12 @@ func (app *app) search(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// SECTION --- user ---
-	allUsers, allUsersErr := app.users.All()
+	allUsers, allUsersErr := s.App.Users.All()
 	if allUsersErr != nil {
 		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
 	}
 
-	currentUser, ok := getUserFromContext(r.Context())
+	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
 		log.Printf(ErrorMsgs().KeyValuePair, "User is not logged in. CurrentUser: ", currentUser)
 	}

@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"fmt"
@@ -7,16 +7,26 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gary-norman/forum/internal/app"
+	mw "github.com/gary-norman/forum/internal/http/middleware"
 	"github.com/gary-norman/forum/internal/models"
+	"github.com/gary-norman/forum/internal/view"
 )
 
-func (app *app) getThisPost(w http.ResponseWriter, r *http.Request) {
+type PostHandler struct {
+	App      *app.App
+	Channel  *ChannelHandler
+	Comment  *CommentHandler
+	Reaction *ReactionHandler
+}
+
+func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var thisPost models.Post
 	var posts []models.Post
 
 	userLoggedIn := true
-	currentUser, ok := getUserFromContext(r.Context())
+	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
 		fmt.Printf(ErrorMsgs().NotFound, "currentUser", "getThisPost", "_")
 		userLoggedIn = false
@@ -29,19 +39,19 @@ func (app *app) getThisPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch the post
-	post, err := app.posts.GetPostByID(postId)
+	post, err := p.App.Posts.GetPostByID(postId)
 	if err != nil {
 		http.Error(w, `{"error": "post not found"}`, http.StatusNotFound)
 	}
 	posts = append(posts, post)
-	foundPosts, err := app.getPostsComments(posts)
+	foundPosts, err := p.Comment.GetPostsComments(posts)
 	if err != nil {
 		http.Error(w, `{"error": "error fetching post comments"}`, http.StatusInternalServerError)
 	}
-	foundPosts = app.getPostsLikesAndDislikes(foundPosts)
+	foundPosts = p.Reaction.GetPostsLikesAndDislikes(foundPosts)
 	thisPost = foundPosts[0]
 
-	thisPost.ChannelID, thisPost.ChannelName, err = app.GetChannelInfoFromPostID(thisPost.ID)
+	thisPost.ChannelID, thisPost.ChannelName, err = p.Channel.GetChannelInfoFromPostID(thisPost.ID)
 	if err != nil {
 		http.Error(w, `{"error": "error fetching channel info"}`, http.StatusInternalServerError)
 	}
@@ -49,7 +59,7 @@ func (app *app) getThisPost(w http.ResponseWriter, r *http.Request) {
 	models.UpdateTimeSince(&thisPost)
 
 	if userLoggedIn {
-		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
+		currentUser.Followers, currentUser.Following, err = p.App.Loyalty.CountUsers(currentUser.ID)
 		if err != nil {
 			http.Error(w, `{"error": "error fetching user loyalty"}`, http.StatusInternalServerError)
 		}
@@ -60,13 +70,13 @@ func (app *app) getThisPost(w http.ResponseWriter, r *http.Request) {
 		Instance:    "post-page",
 		ThisPost:    thisPost,
 		OwnerName:   thisPost.Author,
-		ImagePaths:  app.paths,
+		ImagePaths:  p.App.Paths,
 	}
 
-	renderPageData(w, data)
+	view.RenderPageData(w, data)
 }
 
-func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
+func (p *PostHandler) CreatePost(w http.ResponseWriter, r *http.Request) {
 	tpl, parseErr := template.ParseFiles("./assets/templates/posts.create.html")
 	if parseErr != nil {
 		http.Error(w, parseErr.Error(), 500)
@@ -81,8 +91,8 @@ func (app *app) createPost(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
-	user, ok := getUserFromContext(r.Context())
+func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
+	user, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
@@ -130,7 +140,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 	/*createPostData.ChannelName = channelData.ChannelName
 	createPostData.ChannelID, _ = strconv.Atoi(channelData.ChannelID)*/
 
-	postID, insertErr := app.posts.Insert(
+	postID, insertErr := p.App.Posts.Insert(
 		createPostData.Title,
 		createPostData.Content,
 		createPostData.Images,
@@ -154,7 +164,7 @@ func (app *app) storePost(w http.ResponseWriter, r *http.Request) {
 			log.Printf("Unable to convert %v to integer\n", channels[c])
 			continue
 		}
-		postToChannelErr := app.channels.AddPostToChannel(channelID, postID)
+		postToChannelErr := p.App.Channels.AddPostToChannel(channelID, postID)
 		if postToChannelErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "channelID", channelID)
 			log.Printf(ErrorMsgs().KeyValuePair, "postID", postID)

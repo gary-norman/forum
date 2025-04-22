@@ -1,19 +1,24 @@
-package main
+package handlers
 
 import (
 	"errors"
 	"fmt"
 	"net/http"
 
+	"github.com/gary-norman/forum/internal/app"
 	"github.com/gary-norman/forum/internal/models"
 )
 
 var ErrAuth = errors.New("not authenticated")
 
-func (app *app) isAuthenticated(r *http.Request, username string) error {
+type SessionHandler struct {
+	App *app.App
+}
+
+func (s *SessionHandler) IsAuthenticated(r *http.Request, username string) error {
 	Colors := models.CreateColors()
 	var user *models.User
-	user, getUserErr := app.users.GetUserByUsername(username, "isAuthenticated")
+	user, getUserErr := s.App.Users.GetUserByUsername(username, "isAuthenticated")
 	if getUserErr != nil {
 		return fmt.Errorf(ErrorMsgs().NotFound, username, "isAuthenticated", getUserErr)
 	}

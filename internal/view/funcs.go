@@ -1,42 +1,17 @@
-package main
+package view
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
 	"math/rand"
-	"net/http"
 	"strconv"
 
 	"github.com/gary-norman/forum/internal/models"
 )
 
-// FIXME figure out where to put this
-
-var Template *template.Template
-
-// init Function to initialise the custom template functions
-func (app *app) init() {
-	Template = template.Must(template.New("").Funcs(template.FuncMap{
-		"random":         RandomInt,
-		"increment":      Increment,
-		"decrement":      Decrement,
-		"same":           CheckSameName,
-		"compareAsInts":  CompareAsInts,
-		"reactionStatus": app.reactions.GetReactionStatus,
-		"dict":           dict,
-		"isValZero":      isValZero,
-		"fprint":         fprint,
-		"debugPanic":     debugPanic,
-		"or":             or,
-		"not":            not,
-	}).ParseGlob("assets/templates/*.html"))
-}
-
-type PageModel interface {
-	GetInstance() string
+func ErrorMsgs() *models.Errors {
+	return models.CreateErrorMessages()
 }
 
 // fprint takes a string and an interface and prints them to the console
@@ -55,30 +30,6 @@ func or(a, b bool) bool { return a || b }
 
 // not takes a boolean value and returns its negation
 func not(a bool) bool { return !a }
-
-func renderPageData[T PageModel](w http.ResponseWriter, data T) {
-	var renderedPage bytes.Buffer
-	instance := data.GetInstance()
-	HTMLstr := models.ToHTMLVar(instance)
-
-	err := Template.ExecuteTemplate(&renderedPage, instance, data)
-	if err != nil {
-		errorStr := fmt.Sprintf("Error rendering %v: %v", instance, err)
-		log.Printf(errorStr)
-		http.Error(w, errorStr, http.StatusInternalServerError)
-		return
-	}
-
-	// Send the pre-rendered HTML as JSON
-	response := map[string]string{
-		HTMLstr: renderedPage.String(),
-	}
-
-	// Write the response as JSON
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		http.Error(w, `{"error": "error encoding JSON"}`, http.StatusInternalServerError)
-	}
-}
 
 // CheckSameName Function to check if  2 strings are identical, for go templates
 func CheckSameName(firstString, secondString string) bool {

@@ -1,13 +1,14 @@
-package main
+package sqlite
 
 import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 type CookieModel struct {
@@ -45,29 +46,6 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 		return err
 	}
 	return nil
-}
-
-// GetLoggedInUser gets the currently logged-in user from the session token and returns the user's struct
-func (app *app) GetLoggedInUser(r *http.Request) (*models.User, error) {
-	// Get the username from the request cookie
-	userCookie, getCookieErr := r.Cookie("username")
-	if getCookieErr != nil {
-		log.Printf(ErrorMsgs().Cookies, "get", getCookieErr)
-		return nil, getCookieErr
-	}
-	var username string
-	if userCookie != nil {
-		username = userCookie.Value
-	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Username", username)
-	if username == "" {
-		return nil, errors.New("no user is logged in")
-	}
-	user, getUserErr := app.users.GetUserByUsername(username, "GetLoggedInUser")
-	if getUserErr != nil {
-		return nil, getUserErr
-	}
-	return user, nil
 }
 
 func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user *models.User) bool {

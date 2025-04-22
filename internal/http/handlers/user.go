@@ -1,19 +1,30 @@
-package main
+package handlers
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/gary-norman/forum/internal/app"
+	mw "github.com/gary-norman/forum/internal/http/middleware"
 	"github.com/gary-norman/forum/internal/models"
+	"github.com/gary-norman/forum/internal/view"
 )
 
-func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
+type UserHandler struct {
+	App      *app.App
+	Reaction *ReactionHandler
+	Comment  *CommentHandler
+	Channel  *ChannelHandler
+}
+
+func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var thisUser models.User
 
 	userLoggedIn := true
-	currentUser, ok := getUserFromContext(r.Context())
+	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
 		log.Printf(ErrorMsgs().NotFound, "currentUser", "getThisUser", "_")
 		userLoggedIn = false
@@ -27,7 +38,7 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch the user
-	user, err := app.users.GetUserByID(userId)
+	user, err := u.App.Users.GetUserByID(userId)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "error fetching user", err)
 		// http.Error(w, `{"error": "user not found"}`, http.StatusNotFound)
@@ -36,7 +47,7 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 	// Fetch user loyalty
 	if err == nil {
 		thisUser = user
-		thisUser.Followers, thisUser.Following, err = app.loyalty.CountUsers(thisUser.ID)
+		thisUser.Followers, thisUser.Following, err = u.App.Loyalty.CountUsers(thisUser.ID)
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "error fetching user loyalty", err)
 			// http.Error(w, `{"error": "error fetching user loyalty"}`, http.StatusInternalServerError)
@@ -44,7 +55,7 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch user posts
-	posts, err := app.posts.GetPostsByUserID(thisUser.ID)
+	posts, err := u.App.Posts.GetPostsByUserID(thisUser.ID)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "error fetching user posts", err)
 		// http.Error(w, `{"error": "error fetching user posts"}`, http.StatusInternalServerError)
@@ -52,7 +63,7 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch channel name for posts
 	for p := range posts {
-		posts[p].ChannelID, posts[p].ChannelName, err = app.GetChannelInfoFromPostID(posts[p].ID)
+		posts[p].ChannelID, posts[p].ChannelName, err = u.Channel.GetChannelInfoFromPostID(posts[p].ID)
 		if err != nil {
 			http.Error(w, `{"error": "error fetching channel info"}`, http.StatusInternalServerError)
 		}
@@ -61,7 +72,7 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if userLoggedIn {
-		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
+		currentUser.Followers, currentUser.Following, err = u.App.Loyalty.CountUsers(currentUser.ID)
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
 		}
@@ -74,14 +85,37 @@ func (app *app) getThisUser(w http.ResponseWriter, r *http.Request) {
 		Instance:    "user-page",
 		ThisUser:    thisUser,
 		Posts:       posts,
-		ImagePaths:  app.paths,
+		ImagePaths:  u.App.Paths,
 	}
 
-	renderPageData(w, data)
+	view.RenderPageData(w, data)
 }
 
-func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
-	user, ok := getUserFromContext(r.Context())
+// GetLoggedInUser gets the currently logged-in user from the session token and returns the user's struct
+func (u *UserHandler) GetLoggedInUser(r *http.Request) (*models.User, error) {
+	// Get the username from the request cookie
+	userCookie, getCookieErr := r.Cookie("username")
+	if getCookieErr != nil {
+		log.Printf(ErrorMsgs().Cookies, "get", getCookieErr)
+		return nil, getCookieErr
+	}
+	var username string
+	if userCookie != nil {
+		username = userCookie.Value
+	}
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Username", username)
+	if username == "" {
+		return nil, errors.New("no user is logged in")
+	}
+	user, getUserErr := u.App.Users.GetUserByUsername(username, "GetLoggedInUser")
+	if getUserErr != nil {
+		return nil, getUserErr
+	}
+	return user, nil
+}
+
+func (u *UserHandler) EditUserDetails(w http.ResponseWriter, r *http.Request) {
+	user, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
 		log.Printf(ErrorMsgs().KeyValuePair, "user not found in context", "editUserDetails")
 		return
@@ -107,11 +141,11 @@ func (app *app) editUserDetails(w http.ResponseWriter, r *http.Request) {
 	if currentName != "" {
 		user.Username = currentName
 	}
-	editErr := app.users.Edit(user)
+	editErr := u.App.Users.Edit(user)
 	if editErr != nil {
 		log.Printf(ErrorMsgs().Edit, user.Username, "EditUserDetails", editErr)
 	}
-	if err := app.cookies.CreateCookies(w, user); err != nil {
+	if err := u.App.Cookies.CreateCookies(w, user); err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "error creating cookies", err)
 	}
 	http.Redirect(w, r, "/", http.StatusFound)

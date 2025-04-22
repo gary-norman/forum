@@ -6,11 +6,6 @@ import (
 	mw "github.com/gary-norman/forum/internal/http/middleware"
 )
 
-// type RouteHandler struct {
-// 	App  *app.App
-// 	Main *MainHandler
-// }
-
 func (r *RouteHandler) Routes() http.Handler {
 	s := r
 	mux := http.NewServeMux()

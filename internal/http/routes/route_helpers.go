@@ -57,11 +57,12 @@ func NewPostHandler(app *app.App, channel *h.ChannelHandler, comment *h.CommentH
 	}
 }
 
-func NewHomeHandler(app *app.App, channel *h.ChannelHandler, comment *h.CommentHandler, reaction *h.ReactionHandler) *h.HomeHandler {
+func NewHomeHandler(app *app.App, channel *h.ChannelHandler, comment *h.CommentHandler, post *h.PostHandler, reaction *h.ReactionHandler) *h.HomeHandler {
 	return &h.HomeHandler{
 		App:      app,
 		Channel:  channel,
 		Comment:  comment,
+		Post:     post,
 		Reaction: reaction,
 	}
 }
@@ -96,7 +97,7 @@ func NewRouteHandler(app *app.App) *RouteHandler {
 	channelHandler := NewChannelHandler(app, commentHandler, reactionHandler)
 	userHandler := NewUserHandler(app, channelHandler, commentHandler, reactionHandler)
 	postHandler := NewPostHandler(app, channelHandler, commentHandler, reactionHandler)
-	homeHandler := NewHomeHandler(app, channelHandler, commentHandler, reactionHandler)
+	homeHandler := NewHomeHandler(app, channelHandler, commentHandler, postHandler, reactionHandler)
 	searchHandler := NewSearchHandler(app)
 
 	// Step 3: Return fully wired router
@@ -112,46 +113,3 @@ func NewRouteHandler(app *app.App) *RouteHandler {
 		User:     userHandler,
 	}
 }
-
-// func NewRouteHandler(app *app.App) *RouteHandler {
-// 	// Step 1: create empty structs
-// 	commentHandler := &h.CommentHandler{App: app}
-// 	reactionHandler := &h.ReactionHandler{App: app}
-// 	channelHandler := &h.ChannelHandler{App: app}
-// 	userHandler := &h.UserHandler{App: app}
-// 	postHandler := &h.PostHandler{App: app}
-// 	homeHandler := &h.HomeHandler{App: app}
-// 	sessionHandler := &h.SessionHandler{App: app}
-// 	authHandler := &h.AuthHandler{App: app, Session: sessionHandler}
-// 	searchHandler := &h.SearchHandler{App: app}
-//
-// 	// Step 2: wire up shared dependencies
-// 	commentHandler.Reaction = reactionHandler
-//
-// 	channelHandler.Comment = commentHandler
-// 	channelHandler.Reaction = reactionHandler
-//
-// 	userHandler.Channel = channelHandler
-// 	userHandler.Comment = commentHandler
-// 	userHandler.Reaction = reactionHandler
-//
-// 	postHandler.Channel = channelHandler
-// 	postHandler.Comment = commentHandler
-// 	postHandler.Reaction = reactionHandler
-//
-// 	homeHandler.Channel = channelHandler
-// 	homeHandler.Comment = commentHandler
-// 	homeHandler.Reaction = reactionHandler
-//
-// 	return &RouteHandler{
-// 		App:      app,
-// 		Auth:     authHandler,
-// 		Channel:  channelHandler,
-// 		Home:     homeHandler,
-// 		Post:     postHandler,
-// 		Reaction: reactionHandler,
-// 		Search:   searchHandler,
-// 		Session:  sessionHandler,
-// 		User:     userHandler,
-// 	}
-// }

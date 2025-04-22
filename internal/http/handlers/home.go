@@ -15,6 +15,7 @@ import (
 type HomeHandler struct {
 	App      *app.App
 	Reaction *ReactionHandler
+	Post     *PostHandler
 	Comment  *CommentHandler
 	Channel  *ChannelHandler
 }
@@ -25,6 +26,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 	// SECTION --- posts and comments ---
 	// var userLoggedIn bool
+	var userPosts []models.Post
 	userLoggedIn := true
 	allPosts, err := h.App.Posts.All()
 	if err != nil {
@@ -124,10 +126,17 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
 	}
 
+	if userLoggedIn {
+		userPosts = h.Post.GetUserPosts(currentUser, allPosts)
+	} else {
+		userPosts = allPosts
+	}
+
 	// SECTION -- template ---
 	TemplateData := models.TemplateData{
 		// ---------- users ----------
 		AllUsers:    allUsers,
+		UserPosts:   userPosts,
 		RandomUser:  randomUser,
 		CurrentUser: currentUser,
 		// ---------- posts ----------

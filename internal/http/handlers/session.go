@@ -28,32 +28,32 @@ func (s *SessionHandler) IsAuthenticated(r *http.Request, username string) error
 		return errors.New("no session token")
 	}
 	if err != nil || st.Value == "" || st.Value != user.SessionToken {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "Cookie SessionToken", st.Value)
-		fmt.Printf(ErrorMsgs().KeyValuePair, "Error", err)
-		fmt.Printf(ErrorMsgs().KeyValuePair, "User SessionToken", user.SessionToken)
+		// fmt.Printf(ErrorMsgs().KeyValuePair, "Cookie SessionToken", st.Value)
+		// fmt.Printf(ErrorMsgs().KeyValuePair, "Error", err)
+		// fmt.Printf(ErrorMsgs().KeyValuePair, "User SessionToken", user.SessionToken)
 		return ErrAuth
 	}
-	csrf, _ := r.Cookie("csrf_token")
+	// csrf, _ := r.Cookie("csrf_token")
 
 	// Get the CSRF Token from the headers
 	csrfToken := r.Header.Get("x-csrf-token")
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Header", r.Header)
+	// fmt.Printf(ErrorMsgs().KeyValuePair, "Header", r.Header)
 	if csrfToken == "" || csrfToken != user.CSRFToken {
-		fmt.Printf(ErrorMsgs().KeyValuePair, "Cookie csrfToken", csrf.Value)
-		fmt.Printf(ErrorMsgs().KeyValuePair, "Header csrfToken", csrfToken)
-		fmt.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)
-		fmt.Printf(ErrorMsgs().Divider)
+		// fmt.Printf(ErrorMsgs().KeyValuePair, "Cookie csrfToken", csrf.Value)
+		// fmt.Printf(ErrorMsgs().KeyValuePair, "Header csrfToken", csrfToken)
+		// fmt.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)
+		// fmt.Printf(ErrorMsgs().Divider)
 		fmt.Printf(Colors.Blue + "Authorise user: " + Colors.Red + "Failed!\n" + Colors.Reset)
 		return ErrAuth
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Cookie SessionToken", st.Value)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Error", err)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "User SessionToken", user.SessionToken)
-	fmt.Printf(ErrorMsgs().Divider)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Cookie csrfToken", csrf.Value)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Header csrfToken", csrfToken)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)
-	fmt.Printf(ErrorMsgs().Divider)
+	// fmt.Printf(ErrorMsgs().KeyValuePair, "Cookie SessionToken", st.Value)
+	// fmt.Printf(ErrorMsgs().KeyValuePair, "Error", err)
+	// fmt.Printf(ErrorMsgs().KeyValuePair, "User SessionToken", user.SessionToken)
+	// fmt.Printf(ErrorMsgs().Divider)
+	// fmt.Printf(ErrorMsgs().KeyValuePair, "Cookie csrfToken", csrf.Value)
+	// fmt.Printf(ErrorMsgs().KeyValuePair, "Header csrfToken", csrfToken)
+	// fmt.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)
+	// fmt.Printf(ErrorMsgs().Divider)
 	fmt.Printf(Colors.Blue + "Authorise user: " + Colors.Green + "Success!\n" + Colors.Reset)
 	return nil
 }

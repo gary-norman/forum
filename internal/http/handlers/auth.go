@@ -1,0 +1,270 @@
+package handlers
+
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"regexp"
+
+	"github.com/gary-norman/forum/internal/app"
+	"github.com/gary-norman/forum/internal/models"
+)
+
+type AuthHandler struct {
+	App     *app.App
+	Session *SessionHandler
+}
+
+func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
+	username := r.FormValue("register_user")
+	email := r.FormValue("register_email")
+	validEmail, _ := regexp.MatchString(`^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$`, email)
+	password := r.FormValue("register_password")
+	if len(username) < 5 || len(username) > 16 {
+		w.WriteHeader(http.StatusNotAcceptable)
+		err := json.NewEncoder(w).Encode(map[string]any{
+			"code":    http.StatusNotAcceptable,
+			"message": "username must be between 5 and 16 characters",
+		})
+		if err != nil {
+			log.Printf(ErrorMsgs().Encode, "register: username", err)
+			return
+		}
+		return
+	}
+	if !IsValidPassword(password) {
+		w.WriteHeader(http.StatusNotAcceptable)
+		err := json.NewEncoder(w).Encode(map[string]any{
+			"code": http.StatusNotAcceptable,
+			"message": "password must contain at least one number and one uppercase and lowercase letter," +
+				"and at least 8 or more characters",
+		})
+		if err != nil {
+			log.Printf(ErrorMsgs().Encode, "register: password", err)
+			return
+		}
+		return
+	}
+	if !validEmail {
+		w.WriteHeader(http.StatusNotAcceptable)
+		err := json.NewEncoder(w).Encode(map[string]any{
+			"code":    http.StatusNotAcceptable,
+			"message": "please enter a valid email address",
+		})
+		if err != nil {
+			log.Printf(ErrorMsgs().Encode, "register: validEmail", err)
+			return
+		}
+		return
+	}
+	emailExists, err := h.App.Users.QueryUserEmailExists(email)
+	if emailExists {
+		w.WriteHeader(http.StatusConflict)
+		encErr := json.NewEncoder(w).Encode(map[string]any{
+			"code":    http.StatusConflict,
+			"message": "an account is already registered to that email address",
+			"body":    err,
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "register: emailExists", encErr)
+			return
+		}
+		return
+	}
+	userExists, err := h.App.Users.QueryUserNameExists(username)
+	if userExists {
+		w.WriteHeader(http.StatusConflict)
+		encErr := json.NewEncoder(w).Encode(map[string]any{
+			"code":    http.StatusConflict,
+			"message": "an account is already registered to that username",
+			"body":    err,
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "register: userExists", encErr)
+			return
+		}
+		return
+	}
+	hashedPassword, _ := models.HashPassword(password)
+	insertUser := h.App.Users.Insert(
+		username,
+		email,
+		hashedPassword,
+		"",
+		"",
+		"noimage",
+		"default.png",
+		"")
+
+	if insertUser != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		encErr := json.NewEncoder(w).Encode(map[string]any{
+			"code":    http.StatusInternalServerError,
+			"message": "registration failed!",
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "register: insertErr", encErr)
+			return
+		}
+		return
+	}
+	type FormFields struct {
+		Fields map[string][]string `json:"formValues"`
+	}
+	formFields := make(map[string][]string)
+	for field, value := range r.Form {
+		fieldName := field
+		formFields[fieldName] = append(formFields[fieldName], value...)
+	}
+	// Send success response
+	w.WriteHeader(http.StatusOK)
+	encErr := json.NewEncoder(w).Encode(map[string]any{
+		"code":    http.StatusOK,
+		"message": "registration successful!",
+		"body":    FormFields{Fields: formFields},
+	})
+	if encErr != nil {
+		log.Printf(ErrorMsgs().Encode, "register: send success", encErr)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
+	Colors := models.CreateColors()
+	// Parse JSON from the request body
+	var credentials struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	err := json.NewDecoder(r.Body).Decode(&credentials)
+	if err != nil {
+		log.Printf("Failed to parse request body: %v", err)
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	login := credentials.Username
+	password := credentials.Password
+	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n"+Colors.Reset, login)
+	fmt.Printf(ErrorMsgs().Divider)
+
+	user, getUserErr := h.App.Users.GetUserFromLogin(login, "login")
+	if getUserErr != nil {
+		// Respond with an unsuccessful login message
+		w.Header().Set("Content-Type", "application/json")
+		log.Printf(ErrorMsgs().NotFound, login, "login > GetUserFromLogin", getUserErr)
+		w.WriteHeader(http.StatusOK)
+		encErr := json.NewEncoder(w).Encode(map[string]any{
+			"code":    http.StatusUnauthorized,
+			"message": "user not found",
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
+			return
+		}
+		return
+	}
+
+	if models.CheckPasswordHash(password, user.HashedPassword) {
+		fmt.Printf(Colors.Green+"Passwords for %v match\n"+Colors.Reset, user.Username)
+		// Set Session Token and CSRF Token cookies
+		createCookiErr := h.App.Cookies.CreateCookies(w, user)
+		if createCookiErr != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			encErr := json.NewEncoder(w).Encode(map[string]any{
+				"code":    http.StatusInternalServerError,
+				"message": "failed to create cookies",
+				"body":    fmt.Errorf(ErrorMsgs().Cookies, "create", createCookiErr),
+			})
+			if encErr != nil {
+				log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
+				return
+			}
+			return
+		}
+		// Respond with a successful login message
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		encErr := json.NewEncoder(w).Encode(map[string]any{
+			"code":    http.StatusOK,
+			"message": fmt.Sprintf("Welcome, %s! Login successful.", user.Username),
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "login: success", encErr)
+			return
+		}
+	} else {
+		// Respond with an unsuccessful login message
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		encErr := json.NewEncoder(w).Encode(map[string]any{
+			"code":    http.StatusUnauthorized,
+			"message": "incorrect password",
+		})
+		if encErr != nil {
+			log.Printf(ErrorMsgs().Encode, "login: fail", encErr)
+			return
+		}
+	}
+}
+
+func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
+	Colors := models.CreateColors()
+	// Retrieve the cookie
+	cookie, cookiErr := r.Cookie("username")
+	if cookiErr != nil {
+		http.Error(w, "User not logged in", http.StatusUnauthorized)
+		return
+	}
+	username := cookie.Value
+	if username == "" {
+		log.Printf(ErrorMsgs().KeyValuePair, "aborting logout:", "no user is logged in")
+		return
+	}
+	fmt.Printf(Colors.Orange+"Attempting logout for "+Colors.White+"%v\n"+Colors.Reset, username)
+	fmt.Printf(ErrorMsgs().Divider)
+	var user *models.User
+	user, getUserErr := h.App.Users.GetUserByUsername(username, "logout")
+	if getUserErr != nil {
+		log.Printf("GetUserByUsername for %v failed with error: %v", username, getUserErr)
+	}
+
+	// Delete the Session Token and CSRF Token cookies
+	delCookiErr := h.App.Cookies.DeleteCookies(w, user)
+	if delCookiErr != nil {
+		log.Printf(ErrorMsgs().Cookies, "delete", delCookiErr)
+	}
+	// send user confirmation
+	log.Printf(Colors.Green+"%v logged out successfully!", user.Username)
+	encErr := json.NewEncoder(w).Encode(map[string]any{
+		"code":    http.StatusOK,
+		"message": "Logged out successfully!",
+	})
+	if encErr != nil {
+		log.Printf(ErrorMsgs().Encode, "logout: success", encErr)
+		return
+	}
+}
+
+// SECTION ------- routing handlers ----------
+func (h *AuthHandler) Protected(w http.ResponseWriter, r *http.Request) {
+	login := r.FormValue("username")
+	var user *models.User
+	user, getUserErr := h.App.Users.GetUserFromLogin(login, "protected")
+	if getUserErr != nil {
+		log.Printf("protected route for %v failed with error: %v", login, getUserErr)
+	}
+	if authErr := h.Session.IsAuthenticated(r, user.Username); authErr != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+	fprintf, err := fmt.Fprintf(w, "CSRF Valildation successful! Welcome, %s", user.Username)
+	if err != nil {
+		log.Print(ErrorMsgs().Protected, user.Username, err)
+		return
+	}
+	log.Println(fprintf)
+}

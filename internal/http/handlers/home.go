@@ -136,11 +136,11 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	TemplateData := models.TemplateData{
 		// ---------- users ----------
 		AllUsers:    allUsers,
-		UserPosts:   userPosts,
 		RandomUser:  randomUser,
 		CurrentUser: currentUser,
 		// ---------- posts ----------
-		Posts: allPosts,
+		Posts:     allPosts,
+		UserPosts: userPosts,
 		// ---------- channels ----------
 		AllChannels:            allChannels,
 		OwnedChannels:          ownedChannels,

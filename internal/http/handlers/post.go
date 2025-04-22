@@ -20,6 +20,48 @@ type PostHandler struct {
 	Reaction *ReactionHandler
 }
 
+// getUserPosts returns a slice of Posts that belong to channels the user follows. If no user is logged in, it returns all posts
+func (p *PostHandler) GetUserPosts(user *models.User, allPosts []models.Post) []models.Post {
+	if user == nil {
+		return allPosts
+	}
+	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
+	var postsInUserChannels []models.Post
+
+	memberships, memberErr := p.App.Memberships.UserMemberships(user.ID)
+	if memberErr != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+	}
+	ownedChannels, ownedErr := p.App.Channels.OwnedOrJoinedByCurrentUser(user.ID, "OwnerID")
+	if ownedErr != nil {
+		log.Printf(ErrorMsgs().Query, "user owned channels", ownedErr)
+	}
+	joinedChannels, joinedErr := p.Channel.JoinedByCurrentUser(memberships)
+	if joinedErr != nil {
+		log.Printf(ErrorMsgs().Query, "user joined channels", joinedErr)
+	}
+	ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+
+	if len(ownedAndJoinedChannels) == 0 {
+		return allPosts
+	}
+
+	// Create a set of user's channel IDs for efficient lookup
+	userChannelIDSet := make(map[int]bool)
+	for _, membership := range ownedAndJoinedChannels {
+		userChannelIDSet[membership.ID] = true
+	}
+
+	// Iterate over all the posts and check if their ChannelID is in the user's channel set
+	for _, post := range allPosts {
+		if _, exists := userChannelIDSet[post.ChannelID]; exists {
+			postsInUserChannels = append(postsInUserChannels, post)
+		}
+	}
+
+	return postsInUserChannels
+}
+
 func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var thisPost models.Post

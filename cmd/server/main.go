@@ -29,7 +29,7 @@ func Colors() *models.Colors {
 
 func main() {
 	// Initialize the app
-	a, cleanup, err := app.InitializeApp()
+	appInstance, cleanup, err := app.InitializeApp()
 	if err != nil {
 		log.Fatalf("Failed to initialize app: %v", err)
 	}
@@ -37,28 +37,26 @@ func main() {
 
 	// instantiate temphelper with the initialized app and initialise the templates
 	th := view.TempHelper{
-		App: a,
+		App: appInstance,
 	}
 	th.Init()
 
 	// Create the RouteHandler with a pointer to the app
-	rh := h.NewRouteHandler(a)
+	rh := h.NewRouteHandler(appInstance)
+	mux := rh.Routes()
 
-	// Handle shutdown signals (Ctrl+C, system shutdown)
-	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 	port := 8989
 	addr := fmt.Sprintf(":%d", port)
 	srv := &http.Server{
 		Addr:    addr,
-		Handler: rh.Routes(),
+		Handler: mux,
 	}
+	// Log server listening messages
+	address := "http://localhost" + addr
+	log.Printf(ErrorMsgs().KeyValuePair, "Starting server on port", port)
+	log.Printf(ErrorMsgs().ConnSuccess, address)
 
 	go func() {
-		// Log server listening messages
-		log.Printf(ErrorMsgs().KeyValuePair, "Starting server on port", port)
-		address := "http://localhost" + addr
-		log.Printf(ErrorMsgs().ConnSuccess, address)
 		if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
 			fmt.Printf(ErrorMsgs().ConnInit, srv.Addr, "srv.ListenAndServe")
 			log.Fatalf("HTTP server error: %v", err)
@@ -66,15 +64,16 @@ func main() {
 		log.Printf(Colors().Green + "Stopped serving new connections." + Colors().Reset)
 	}()
 
-	// set up a channel to listen for kill or interrupt
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
-	<-sigChan
+	// Handle shutdown signals (Ctrl+C, system shutdown)
+	shutdownSignal := make(chan os.Signal, 1)
+	signal.Notify(shutdownSignal, os.Interrupt, syscall.SIGTERM)
+	<-shutdownSignal
 
 	// create cancellation signal and timeout
 	shutdownCtx, shutdownRelease := context.WithTimeout(context.Background(), 10*time.Second)
 	defer shutdownRelease()
 	// shut down the server
+	log.Println("Shutting down gracefully...")
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Fatalf(ErrorMsgs().Shutdown, err)
 	}

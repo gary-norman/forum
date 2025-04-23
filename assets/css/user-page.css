@@ -64,8 +64,8 @@
   transition: height 400ms ease-in-out;
 }
 .collapsible-expanded {
-  height: calc(100% - 30rem - 4.8rem);
-  padding-bottom: 3.2rem;
+  /*height: calc(100% - 30rem - 4.8rem);*/
+  padding-bottom: 6rem;
 }
 
 .banner {
@@ -134,7 +134,6 @@
   background: limegreen;
 }
 #user-activity-feeds {
-  height: 100%;
   width: 100%;
   & > * {
     width: 100%;

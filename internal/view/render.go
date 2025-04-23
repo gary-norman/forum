@@ -27,5 +27,6 @@ func (t *TempHelper) Init() {
 		"debugPanic":     debugPanic,
 		"or":             or,
 		"not":            not,
+		"PrintType":      PrintType,
 	}).ParseGlob("assets/templates/*.html"))
 }

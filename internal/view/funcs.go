@@ -52,7 +52,7 @@ func CompareAsInts(a, b any) bool {
 }
 
 func PrintType(elem any) string {
-	str := fmt.Sprintf("Type of %v:", elem)
+	str := fmt.Sprintf("Type of %v", elem)
 	fmt.Printf(ErrorMsgs().KeyValuePair, str, reflect.TypeOf(elem))
 	return ""
 }

@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"math/rand"
+	"reflect"
 	"strconv"
 
 	"github.com/gary-norman/forum/internal/models"
@@ -48,6 +49,12 @@ func CompareAsInts(a, b any) bool {
 	}
 
 	return intA == intB
+}
+
+func PrintType(elem any) string {
+	str := fmt.Sprintf("Type of %v:", elem)
+	fmt.Printf(ErrorMsgs().KeyValuePair, str, reflect.TypeOf(elem))
+	return ""
 }
 
 // ConvertToInt converts different variable types into an int

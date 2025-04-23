@@ -15,16 +15,18 @@ func (r Rule) TableName() string { return "rules" }
 func (r Rule) GetID() int64      { return r.ID }
 func (r *Rule) SetID(id int64)   { r.ID = id }
 
+// TODO figure out the use of strings/int64s for this
 type PostRule struct {
-	ID      int64     `db:"id"`
+	ID      string    `db:"id"`
+	Rule    string    `db:"rule"`
 	RuleID  string    `db:"rule"`
-	PostID  int64     `db:"postId"`
+	PostID  string    `db:"postId"`
 	Created time.Time `db:"created"`
 }
 
-func (pr PostRule) TableName() string { return "post_rules" }
-func (pr PostRule) GetID() int64      { return pr.ID }
-func (pr *PostRule) SetID(id int64)   { pr.ID = id }
+func (pr PostRule) TableName() string { return "postRules" }
+func (pr PostRule) GetID() string     { return pr.ID }
+func (pr *PostRule) SetID(id string)  { pr.ID = id }
 
 type ChannelRule struct {
 	ID        int64     `db:"id"`

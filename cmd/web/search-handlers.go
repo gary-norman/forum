@@ -4,11 +4,10 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"time"
 )
 
 func (app *app) search(w http.ResponseWriter, r *http.Request) {
-	start := time.Now()
+	//start := time.Now()
 
 	// SECTION --- channels --
 	allChannels, err := app.channels.All()
@@ -45,11 +44,6 @@ func (app *app) search(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
 	}
 
-	currentUser, ok := getUserFromContext(r.Context())
-	if !ok {
-		log.Printf(ErrorMsgs().KeyValuePair, "User is not logged in. CurrentUser: ", currentUser)
-	}
-
 	searchResults := map[string]interface{}{
 		"users":    allUsers,
 		"channels": allChannels,
@@ -63,5 +57,5 @@ func (app *app) search(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf(ErrorMsgs().KeyValuePair, "Search data fetched in:", time.Since(start))
+	//log.Printf(ErrorMsgs().KeyValuePair, "Search data fetched in:", time.Since(start))
 }

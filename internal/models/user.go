@@ -5,27 +5,31 @@ import (
 )
 
 type User struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
+	ID       int64  `db:"id"`
+	Username string `db:"username"`
 	Login
-	Avatar      string    `json:"avatar,omitempty"` // Store UUID as string
-	Banner      string    `json:"banner,omitempty"` // Store UUID as string
-	Description string    `json:"description,omitempty"`
-	Usertype    string    `json:"usertype"`
-	Created     time.Time `json:"created"`
+	Avatar      string    `db:"avatar,omitempty"` // Store UUID as string
+	Banner      string    `db:"banner,omitempty"` // Store UUID as string
+	Description string    `db:"description,omitempty"`
+	Usertype    string    `db:"usertype"`
+	Created     time.Time `db:"created"`
 	TimeSince   string
-	IsFlagged   bool `json:"isFlagged,omitempty"`
-	Followers   int  `json:"followers"`
-	Following   int  `json:"following"`
+	IsFlagged   bool `db:"isFlagged,omitempty"`
+	Followers   int  `db:"followers"`
+	Following   int  `db:"following"`
 }
+
+func (u User) TableName() string { return "users" }
+func (u User) GetID() int64      { return u.ID }
+func (u *User) SetID(id int64)   { u.ID = id }
 
 func (u *User) UpdateTimeSince() {
 	u.TimeSince = getTimeSince(u.Created)
 }
 
 type UserCheck struct {
-	ID             int    `json:"id"`
-	Username       string `json:"username"`
+	ID             int64  `db:"id"`
+	Username       string `db:"username"`
 	Email          string
 	HashedPassword string
 }

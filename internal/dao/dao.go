@@ -14,6 +14,38 @@ type DAO[T models.DBModel] struct {
 	DB *sql.DB
 }
 
+func (dao *DAO[T]) All(ctx context.Context) ([]T, error) {
+	var model T
+	query := fmt.Sprintf("SELECT * FROM %s", model.TableName())
+
+	rows, err := dao.DB.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	return scanRowsToStructs[T](rows)
+}
+
+func (dao *DAO[T]) GetByID(ctx context.Context, id int64) (*T, error) {
+	var model T
+	query := fmt.Sprintf("SELECT * FROM %s WHERE id = ?", model.TableName())
+
+	rows, err := dao.DB.QueryContext(ctx, query, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	results, err := scanRowsToStructs[T](rows)
+	if err != nil {
+		return nil, err
+	}
+	if len(results) == 0 {
+		return nil, sql.ErrNoRows
+	}
+	return &results[0], nil
+}
+
 func (dao *DAO[T]) Insert(ctx context.Context, model T) error {
 	val := reflect.ValueOf(model)
 	typ := reflect.TypeOf(model)
@@ -42,16 +74,24 @@ func (dao *DAO[T]) Insert(ctx context.Context, model T) error {
 	return err
 }
 
-func (dao *DAO[T]) All(ctx context.Context) ([]T, error) {
+func (dao *DAO[T]) Delete(ctx context.Context, id int64) (*T, error) {
 	var model T
-	query := fmt.Sprintf("SELECT * FROM %s", model.TableName())
+	query := fmt.Sprintf("DELETE FROM %s WHERE id = ?", model.TableName())
 
-	rows, err := dao.DB.QueryContext(ctx, query)
+	rows, err := dao.DB.QueryContext(ctx, query, id)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
-	return scanRowsToStructs[T](rows)
+	result, err := scanRowsToStructs[T](rows)
+	if err != nil {
+		return nil, err
+	}
+	if len(result) == 0 {
+		return nil, fmt.Errorf("no rows returned after delete")
+	}
+	return &result[0], nil
 }
 
 func scanRowsToStructs[T any](rows *sql.Rows) ([]T, error) {

@@ -67,7 +67,7 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	postID, commentID := 0, 0
+	var postID, commentID int64
 
 	if reactionData.ReactedPostID != nil {
 		// log.Println("ReactedPostID:", *reactionData.ReactedPostID)

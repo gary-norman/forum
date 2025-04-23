@@ -26,6 +26,8 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 	// SECTION --- posts and comments ---
 	// var userLoggedIn bool
+	fmt.Println(Colors().Orange + "GetHome" + Colors().Reset)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Context", r.Context())
 	var userPosts []models.Post
 	userLoggedIn := true
 	allPosts, err := h.App.Posts.All()

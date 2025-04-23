@@ -22,7 +22,8 @@ type ChannelHandler struct {
 
 func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-
+	fmt.Println(Colors().Orange + "GetThisChannel" + Colors().Reset)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Context", r.Context())
 	userLoggedIn := true
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
@@ -150,7 +151,7 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 	view.RenderPageData(w, data)
 }
 
-func (c *ChannelHandler) GetChannelInfoFromPostID(postID int) (int, string, error) {
+func (c *ChannelHandler) GetChannelInfoFromPostID(postID int64) (int64, string, error) {
 	channelIDs, err := c.App.Channels.GetChannelIdFromPost(postID)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "GetChannelInfoFromPostId > GetChannelIdFromPost", err)
@@ -225,7 +226,7 @@ func (c *ChannelHandler) StoreMembership(w http.ResponseWriter, r *http.Request)
 	}
 	fmt.Printf("user: %v", user.Username)
 	// get channelID
-	joinedChannelID, convErr := strconv.Atoi(r.PostForm.Get("channelId"))
+	joinedChannelID, convErr := strconv.ParseInt(r.PostForm.Get("channelId"), 10, 64)
 	if convErr != nil {
 		log.Printf(ErrorMsgs().Convert, r.PostForm.Get("channelId"), "StoreMembership > GetChannelID", convErr)
 		log.Printf("Unable to convert %v to integer\n", r.PostForm.Get("channelId"))
@@ -265,7 +266,7 @@ func (c *ChannelHandler) StoreMembership(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-// func (app *App) requestMembership(w http.ResponseWriter, r *http.Request, userID, channelID int) {
+// func (app *App) requestMembership(w http.ResponseWriter, r *http.Request, userID, channelID int64) {
 // }
 
 // JoinedByCurrentUser checks if the currently logged-in user is a member of the current channel
@@ -289,7 +290,7 @@ func (c *ChannelHandler) JoinedByCurrentUser(memberships []models.Membership) ([
 }
 
 func (c *ChannelHandler) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
-	channelId, err := strconv.Atoi(r.PathValue("channelId"))
+	channelId, err := strconv.ParseInt(r.PathValue("channelId"), 10, 64)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > convert channelId to int", err)
 	}
@@ -309,7 +310,7 @@ func (c *ChannelHandler) CreateAndInsertRule(w http.ResponseWriter, r *http.Requ
 
 	for _, rule := range rules {
 		id, found := strings.CutPrefix(rule.ID, "existing-channel-rule-")
-		idInt, err := strconv.Atoi(id)
+		idInt, err := strconv.ParseInt(id, 10, 64)
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > id => idInt", err)
 		}
@@ -319,7 +320,7 @@ func (c *ChannelHandler) CreateAndInsertRule(w http.ResponseWriter, r *http.Requ
 				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > DeleteRule", err)
 			}
 		} else {
-			ruleId, err := c.App.Rules.CreateRule(rule.Text)
+			ruleId, err := c.App.Rules.CreateRule(rule.Rule)
 			if err != nil {
 				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > CreateRule", err)
 			}

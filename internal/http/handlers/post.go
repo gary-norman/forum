@@ -47,7 +47,7 @@ func (p *PostHandler) GetUserPosts(user *models.User, allPosts []models.Post) []
 	}
 
 	// Create a set of user's channel IDs for efficient lookup
-	userChannelIDSet := make(map[int]bool)
+	userChannelIDSet := make(map[int64]bool)
 	for _, membership := range ownedAndJoinedChannels {
 		userChannelIDSet[membership.ID] = true
 	}
@@ -200,7 +200,7 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for c := range channels {
-		channelID, convErr := strconv.Atoi(channels[c])
+		channelID, convErr := strconv.ParseInt(channels[c], 10, 64)
 		if convErr != nil {
 			log.Printf(ErrorMsgs().Convert, channels[c], "StorePost > GetChannelID", convErr)
 			log.Printf("Unable to convert %v to integer\n", channels[c])

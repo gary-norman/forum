@@ -2,15 +2,16 @@ package sqlite
 
 import (
 	"database/sql"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 type SavedModel struct {
 	DB *sql.DB
 }
 
-func (m *SavedModel) Insert(postID, commentID, channelID int) error {
+func (m *SavedModel) Insert(postID, commentID, channelID int64) error {
 	stmt := "INSERT INTO Bookmarks (PostID, CommentID, ChannelID, Created) VALUES (?, ?, ?, DateTime('now'))"
 	_, err := m.DB.Exec(stmt, postID, commentID, channelID)
 	return err

@@ -38,8 +38,8 @@ func getTimeSince(created time.Time) string {
 	return timeSince
 }
 
-func GetIntFromPathValue(value string) (int, error) {
-	intValue, err := strconv.Atoi(value)
+func GetIntFromPathValue(value string) (int64, error) {
+	intValue, err := strconv.ParseInt(value, 10, 64)
 	if err != nil {
 		return 0, err
 	}

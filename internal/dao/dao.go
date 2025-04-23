@@ -22,7 +22,7 @@ func (dao *DAO[T]) Insert(ctx context.Context, model T) error {
 	var placeholders []string
 	var args []any
 
-	for i := 0; i < typ.NumField(); i++ {
+	for i := range typ.NumField() {
 		field := typ.Field(i)
 		tag := field.Tag.Get("db")
 		if tag == "" || tag == "-" {
@@ -40,4 +40,39 @@ func (dao *DAO[T]) Insert(ctx context.Context, model T) error {
 
 	_, err := dao.DB.ExecContext(ctx, query, args...)
 	return err
+}
+
+func (dao *DAO[T]) All(ctx context.Context) ([]T, error) {
+	var model T
+	query := fmt.Sprintf("SELECT * FROM %s", model.TableName())
+
+	rows, err := dao.DB.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	columns, _ := rows.Columns()
+	var results []T
+
+	for rows.Next() {
+		var model T
+		dest := make([]any, len(columns))
+		val := reflect.ValueOf(&model).Elem()
+
+		for i, col := range columns {
+			field := val.FieldByNameFunc(func(name string) bool {
+				field, _ := val.Type().FieldByName(name)
+				return field.Tag.Get("db") == col
+			})
+			dest[i] = field.Addr().Interface()
+		}
+
+		if err := rows.Scan(dest...); err != nil {
+			return nil, err
+		}
+		results = append(results, model)
+	}
+
+	return results, nil
 }

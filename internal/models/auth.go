@@ -3,9 +3,23 @@ package models
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"golang.org/x/crypto/bcrypt"
 	"log"
+	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
+
+type Login struct {
+	Email          string
+	HashedPassword string
+	SessionToken   string
+	CSRFToken      string
+}
+
+type Session struct {
+	Username string
+	Expires  time.Time
+}
 
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)

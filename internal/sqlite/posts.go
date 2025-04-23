@@ -13,7 +13,7 @@ type PostModel struct {
 	DB *sql.DB
 }
 
-func (m *PostModel) Insert(title, content, images, author, authorAvatar string, authorID int, commentable, isFlagged bool) (int, error) {
+func (m *PostModel) Insert(title, content, images, author, authorAvatar string, authorID int64, commentable, isFlagged bool) (int64, error) {
 	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, AuthorAvatar, AuthorID, IsCommentable, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
 	result, err := m.DB.Exec(stmt, title, content, images, author, authorAvatar, authorID, commentable, isFlagged)
 	if err != nil {
@@ -26,7 +26,7 @@ func (m *PostModel) Insert(title, content, images, author, authorAvatar string, 
 	}
 	// fmt.Printf(ErrorMsgs().KeyValuePair, "Inserting a new post with ID: ", id)
 
-	return int(id), nil
+	return int64(id), nil
 }
 
 func (m *PostModel) All() ([]models.Post, error) {

@@ -24,9 +24,9 @@ type Post struct {
 	Comments      []Comment
 }
 
-func (p Post) TableName() string { return "posts" }
-func (p Post) GetID() int64      { return p.ID }
-func (p *Post) SetID(id int64)   { p.ID = id }
+func (*Post) TableName() string { return "posts" }
+func (p Post) GetID() int64     { return p.ID }
+func (p *Post) SetID(id int64)  { p.ID = id }
 
 func (p *Post) UpdateTimeSince() {
 	p.TimeSince = getTimeSince(p.Created)

@@ -221,7 +221,7 @@ func (m *UserModel) GetUserByEmail(email, calledBy string) (*models.User, error)
 	return &user, nil
 }
 
-func (m *UserModel) GetUserByID(ID int) (models.User, error) {
+func (m *UserModel) GetUserByID(ID int64) (models.User, error) {
 	stmt := "SELECT * FROM Users WHERE ID = ?"
 	row := m.DB.QueryRow(stmt, ID)
 	u := models.User{}
@@ -249,7 +249,7 @@ func (m *UserModel) GetUserByID(ID int) (models.User, error) {
 // TODO accept an interface for any given value
 
 // GetSingleUserValue returns the string of the column specified in output, which should be entered in all lower case
-func (m *UserModel) GetSingleUserValue(ID int, searchColumn, outputColumn string) (string, error) {
+func (m *UserModel) GetSingleUserValue(ID int64, searchColumn, outputColumn string) (string, error) {
 	validColumns := map[string]bool{
 		"ID":             true,
 		"Username":       true,

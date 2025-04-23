@@ -14,7 +14,6 @@ type PostModel struct {
 }
 
 func (m *PostModel) Insert(title, content, images, author, authorAvatar string, authorID int, commentable, isFlagged bool) (int, error) {
-
 	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, AuthorAvatar, AuthorID, IsCommentable, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
 	result, err := m.DB.Exec(stmt, title, content, images, author, authorAvatar, authorID, commentable, isFlagged)
 	if err != nil {
@@ -25,7 +24,7 @@ func (m *PostModel) Insert(title, content, images, author, authorAvatar string, 
 	if err != nil {
 		return 0, err
 	}
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "Inserting a new post with ID: ", id)
+	// fmt.Printf(ErrorMsgs().KeyValuePair, "Inserting a new post with ID: ", id)
 
 	return int(id), nil
 }
@@ -76,7 +75,7 @@ func (m *PostModel) All() ([]models.Post, error) {
 	return Posts, nil
 }
 
-func (m *PostModel) GetPostsByUserID(user int) ([]models.Post, error) {
+func (m *PostModel) GetPostsByUserID(user int64) ([]models.Post, error) {
 	stmt := "SELECT * FROM posts WHERE AuthorID = ? ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt, user)
 	if err != nil {
@@ -114,7 +113,7 @@ func (m *PostModel) GetPostsByUserID(user int) ([]models.Post, error) {
 	return Posts, nil
 }
 
-func (m *PostModel) GetPostsByChannel(channel int) ([]models.Post, error) {
+func (m *PostModel) GetPostsByChannel(channel int64) ([]models.Post, error) {
 	stmt := "SELECT * FROM posts WHERE ChannelID = ? ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt, channel)
 	if err != nil {
@@ -159,7 +158,7 @@ func (m *PostModel) GetPostsByChannel(channel int) ([]models.Post, error) {
 	return Posts, nil
 }
 
-func (m *PostModel) GetPostByID(id int) (models.Post, error) {
+func (m *PostModel) GetPostByID(id int64) (models.Post, error) {
 	stmt := "SELECT * FROM Posts WHERE ID = ?"
 	row := m.DB.QueryRow(stmt, id)
 	p := models.Post{}
@@ -184,7 +183,7 @@ func (m *PostModel) GetPostByID(id int) (models.Post, error) {
 }
 
 // Search queries the database for any post column that contains the values and returns that post
-func (m *PostModel) FindCurrentPost(column string, value interface{}) ([]models.Post, error) {
+func (m *PostModel) FindCurrentPost(column string, value any) ([]models.Post, error) {
 	// Validate column name to prevent SQL injection
 	validColumns := map[string]bool{
 		"id":            true,

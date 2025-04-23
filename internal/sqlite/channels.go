@@ -12,13 +12,13 @@ type ChannelModel struct {
 	DB *sql.DB
 }
 
-func (m *ChannelModel) Insert(ownerID int, name, description, avatar, banner string, privacy, isFlagged, isMuted bool) error {
+func (m *ChannelModel) Insert(ownerID int64, name, description, avatar, banner string, privacy, isFlagged, isMuted bool) error {
 	stmt := "INSERT INTO Channels (OwnerID, Name, Description, Created, Avatar, Banner, Privacy, IsFlagged, IsMuted) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
 	_, err := m.DB.Exec(stmt, ownerID, name, description, avatar, banner, privacy, isFlagged, isMuted)
 	return err
 }
 
-func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]models.Channel, error) {
+func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int64, column string) ([]models.Channel, error) {
 	// Validate column name to prevent SQL injection
 	if !isValidColumn(column) {
 		return nil, fmt.Errorf("invalid column name provided: %s", column)
@@ -42,14 +42,14 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]mode
 			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
 		if column == "OwnerID" {
-			//fmt.Printf(ErrorMsgs().KeyValuePair, "updating Owned of", c.Name)
+			// fmt.Printf(ErrorMsgs().KeyValuePair, "updating Owned of", c.Name)
 			c.Owned = true
-			//fmt.Printf(ErrorMsgs().KeyValuePair, "Owned", c.Owned)
+			// fmt.Printf(ErrorMsgs().KeyValuePair, "Owned", c.Owned)
 		}
 		if column == "ID" {
-			//fmt.Printf(ErrorMsgs().KeyValuePair, "updating Joined of", c.Name)
+			// fmt.Printf(ErrorMsgs().KeyValuePair, "updating Joined of", c.Name)
 			c.Joined = true
-			//fmt.Printf(ErrorMsgs().KeyValuePair, "Joined", c.Joined)
+			// fmt.Printf(ErrorMsgs().KeyValuePair, "Joined", c.Joined)
 		}
 		channels = append(channels, c)
 	}
@@ -58,7 +58,7 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int, column string) ([]mode
 		return nil, fmt.Errorf("error iterating rows: %w", err)
 	}
 	if column == "OwnerID" {
-		//fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned by current user", len(channels))
+		// fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned by current user", len(channels))
 	}
 
 	return channels, nil
@@ -90,7 +90,7 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "Total channels", len(Channels))
+	// fmt.Printf(ErrorMsgs().KeyValuePair, "Total channels", len(Channels))
 	return Channels, nil
 }
 
@@ -168,7 +168,7 @@ func parseChannelRow(rows *sql.Rows) (models.Channel, error) {
 	return channel, nil
 }
 
-func (m *ChannelModel) AddPostToChannel(channelID, postID int) error {
+func (m *ChannelModel) AddPostToChannel(channelID, postID int64) error {
 	stmt := "INSERT INTO PostChannels (ChannelID, PostID, Created) VALUES (?, ?, DateTime('now'))"
 	_, err := m.DB.Exec(stmt, channelID, postID)
 	if err != nil {
@@ -177,8 +177,8 @@ func (m *ChannelModel) AddPostToChannel(channelID, postID int) error {
 	return nil
 }
 
-func (m *ChannelModel) GetPostIDsFromChannel(channelID int) ([]int, error) {
-	var postIDs []int
+func (m *ChannelModel) GetPostIDsFromChannel(channelID int64) ([]int64, error) {
+	var postIDs []int64
 	stmt := "SELECT PostID FROM PostChannels WHERE ChannelID = ?"
 	rows, err := m.DB.Query(stmt, channelID)
 	if err != nil {
@@ -187,7 +187,7 @@ func (m *ChannelModel) GetPostIDsFromChannel(channelID int) ([]int, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var postID int
+		var postID int64
 		if err := rows.Scan(&postID); err != nil {
 			return postIDs, err
 		}
@@ -197,8 +197,8 @@ func (m *ChannelModel) GetPostIDsFromChannel(channelID int) ([]int, error) {
 	return postIDs, nil
 }
 
-func (m *ChannelModel) GetChannelIdFromPost(postID int) ([]int, error) {
-	var channelIDs []int
+func (m *ChannelModel) GetChannelIdFromPost(postID int64) ([]int64, error) {
+	var channelIDs []int64
 	stmt := "SELECT ChannelID FROM PostChannels WHERE PostID = ?"
 	rows, err := m.DB.Query(stmt, postID)
 	if err != nil {
@@ -207,7 +207,7 @@ func (m *ChannelModel) GetChannelIdFromPost(postID int) ([]int, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var channelID int
+		var channelID int64
 		if err := rows.Scan(&channelID); err != nil {
 			return channelIDs, err
 		}
@@ -217,7 +217,7 @@ func (m *ChannelModel) GetChannelIdFromPost(postID int) ([]int, error) {
 	return channelIDs, nil
 }
 
-func (m *ChannelModel) GetChannelNameFromID(id int) (string, error) {
+func (m *ChannelModel) GetChannelNameFromID(id int64) (string, error) {
 	var name string
 	stmt := "SELECT Name FROM Channels WHERE ID = ?"
 	row := m.DB.QueryRow(stmt, id)

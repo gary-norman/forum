@@ -61,13 +61,13 @@ func (h *CommentHandler) StoreComment(w http.ResponseWriter, r *http.Request) {
 	commentIDStr := r.PostForm.Get("commentID")
 
 	// Convert postIDStr to an integer
-	postID, postConvErr := strconv.Atoi(postIDStr)
+	postID, postConvErr := strconv.ParseInt(postIDStr, 10, 64)
 	if postConvErr != nil {
 		log.Printf("Error converting postID: %v", postID)
 	}
 
 	// Convert commentIDStr to an integer
-	commentID, commentConvErr := strconv.Atoi(commentIDStr)
+	commentID, commentConvErr := strconv.ParseInt(commentIDStr, 10, 64)
 	if commentConvErr != nil {
 		log.Printf("Error converting commentID: %v", commentID)
 	}
@@ -87,7 +87,7 @@ func (h *CommentHandler) StoreComment(w http.ResponseWriter, r *http.Request) {
 		ChannelID:          0,
 	}
 
-	commentData.ChannelID, _ = strconv.Atoi(channelData.ChannelID)
+	commentData.ChannelID, _ = strconv.ParseInt(channelData.ChannelID, 10, 64)
 
 	// Log the values
 	fmt.Printf("commentData.CommentedPostID: %v\n", *commentData.CommentedPostID)

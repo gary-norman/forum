@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 type CommentModel struct {
@@ -23,10 +24,10 @@ func (m *CommentModel) Upsert(comment models.Comment) error {
 
 	if exists {
 		// If the reaction exists, update it
-		//fmt.Println("Updating a reaction which already exists (reactions.go :53)")
+		// fmt.Println("Updating a reaction which already exists (reactions.go :53)")
 		return m.Update(comment)
 	}
-	//fmt.Println("Inserting a reaction (reactions.go :56)")
+	// fmt.Println("Inserting a reaction (reactions.go :56)")
 
 	return m.Insert(comment)
 }
@@ -34,7 +35,7 @@ func (m *CommentModel) Upsert(comment models.Comment) error {
 func (m *CommentModel) Insert(comment models.Comment) error {
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	//fmt.Println("Beginning INSERT INTO transaction")
+	// fmt.Println("Beginning INSERT INTO transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Insert in Comments: %w", err)
 	}
@@ -70,14 +71,14 @@ CommentedCommentID, IsCommentable, IsFlagged, IsReply)
 		&comment.IsFlagged,
 		&comment.IsReply,
 	)
-	//fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, parentPostID)
+	// fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, parentPostID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Insert query: %w", err)
 	}
 
 	// Commit the transaction
 	err = tx.Commit()
-	//fmt.Println("Committing INSERT INTO transaction")
+	// fmt.Println("Committing INSERT INTO transaction")
 	if err != nil {
 		return fmt.Errorf("failed to commit transaction for Insert in Comments: %w", err)
 	}
@@ -92,7 +93,7 @@ func (m *CommentModel) Update(comment models.Comment) error {
 
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	//fmt.Println("Beginning UPDATE transaction")
+	// fmt.Println("Beginning UPDATE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Insert in Comments: %w", err)
 	}
@@ -125,14 +126,14 @@ func (m *CommentModel) Update(comment models.Comment) error {
 		&comment.AuthorID,
 		&comment.CommentedPostID,
 		&comment.CommentedCommentID)
-	//fmt.Printf("Updating Comments, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
+	// fmt.Printf("Updating Comments, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
 	if err != nil {
 		return fmt.Errorf("failed to execute Update query: %w", err)
 	}
 
 	// Commit the transaction
 	err = tx.Commit()
-	//fmt.Println("Committing UPDATE transaction")
+	// fmt.Println("Committing UPDATE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to commit transaction for Update in Comments: %w", err)
 	}
@@ -161,10 +162,10 @@ func (m *CommentModel) Exists(comment models.Comment) (bool, error) {
 }
 
 // Delete removes a comment from the database by ID
-func (m *CommentModel) Delete(commentID int) error {
+func (m *CommentModel) Delete(commentID int64) error {
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	//fmt.Println("Beginning DELETE transaction")
+	// fmt.Println("Beginning DELETE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Delete in Comments: %w", err)
 	}
@@ -183,14 +184,14 @@ func (m *CommentModel) Delete(commentID int) error {
 	stmt1 := `DELETE FROM Comments WHERE ID = ?`
 	// Execute the query, dereferencing the pointers for ID values
 	_, err = m.DB.Exec(stmt1, commentID)
-	//fmt.Printf("Deleting from Reactions where commentID: %v\n", commentID)
+	// fmt.Printf("Deleting from Reactions where commentID: %v\n", commentID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Delete query: %w", err)
 	}
 
 	// Commit the transaction
 	err = tx.Commit()
-	//fmt.Println("Committing DELETE transaction")
+	// fmt.Println("Committing DELETE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to commit transaction for Delete in Comments: %w", err)
 	}
@@ -198,7 +199,7 @@ func (m *CommentModel) Delete(commentID int) error {
 	return err
 }
 
-func (m *CommentModel) GetCommentByPostID(id int) ([]models.Comment, error) {
+func (m *CommentModel) GetCommentByPostID(id int64) ([]models.Comment, error) {
 	if m == nil {
 		log.Println("Error: DB is nil")
 		return nil, fmt.Errorf("database connection is not initialized")
@@ -240,7 +241,8 @@ func (m *CommentModel) GetCommentByPostID(id int) ([]models.Comment, error) {
 	}
 	return comments, nil
 }
-func (m *CommentModel) GetCommentByCommentID(id int) ([]models.Comment, error) {
+
+func (m *CommentModel) GetCommentByCommentID(id int64) ([]models.Comment, error) {
 	if m == nil {
 		log.Println("Error: DB is nil")
 		return nil, fmt.Errorf("database connection is not initialized")
@@ -337,10 +339,8 @@ func (m *CommentModel) All() ([]models.Comment, error) {
 	return Comments, nil
 }
 
-//TODO ---------- fix this comment ----------
-
-// GetReaction checks if a user has already reacted to a post or comment. It retrieves already existing reactions.
-func (m *CommentModel) GetComment(authorID int, reactedPostID int, reactedCommentID int) (*models.Reaction, error) {
+// GetComment checks if a user has already commented on a post or comment. It retrieves already existing reactions.
+func (m *CommentModel) GetComment(authorID int, reactedPostID int, reactedCommentID int64) (*models.Reaction, error) {
 	var reaction models.Reaction
 	var stmt string
 

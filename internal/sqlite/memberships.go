@@ -2,22 +2,23 @@ package sqlite
 
 import (
 	"database/sql"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 type MembershipModel struct {
 	DB *sql.DB
 }
 
-func (m *MembershipModel) Insert(userID, channelID int) error {
+func (m *MembershipModel) Insert(userID, channelID int64) error {
 	stmt := "INSERT INTO Memberships (UserID, ChannelID, Created) VALUES (?, ?, DateTime('now'))"
 	_, err := m.DB.Exec(stmt, userID, channelID)
 	return err
 }
 
-func (m *MembershipModel) UserMemberships(userID int) ([]models.Membership, error) {
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "Checking memberships for UserID", userID)
+func (m *MembershipModel) UserMemberships(userID int64) ([]models.Membership, error) {
+	// fmt.Printf(ErrorMsgs().KeyValuePair, "Checking memberships for UserID", userID)
 	stmt := "SELECT ID, UserID, ChannelID, Created FROM Memberships WHERE UserID = ?"
 	rows, queryErr := m.DB.Query(stmt, userID)
 	if queryErr != nil {
@@ -40,7 +41,7 @@ func (m *MembershipModel) UserMemberships(userID int) ([]models.Membership, erro
 	if rowsErr := rows.Err(); rowsErr != nil {
 		return nil, rowsErr
 	}
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "Channels joined by current user", len(memberships))
+	// fmt.Printf(ErrorMsgs().KeyValuePair, "Channels joined by current user", len(memberships))
 	return memberships, nil
 }
 

@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 type RuleModel struct {
@@ -13,33 +14,32 @@ type RuleModel struct {
 }
 
 // CreateRule inserts a new rule into the Rules table
-func (m *RuleModel) CreateRule(rule string) (int, error) {
-	var ruleId int
+func (m *RuleModel) CreateRule(rule string) (int64, error) {
+	var ruleId int64
 	stmtRule := "INSERT INTO Rules (Rule, Created, Predefined) VALUES (?, DateTime('now'), 0)"
-	result, ruleErr := m.DB.Exec(stmtRule, rule)
-	if ruleErr != nil {
-		return 0, ruleErr
+	result, err := m.DB.Exec(stmtRule, rule)
+	if err != nil {
+		return 0, err
 	}
 
 	// Get the last inserted ID
-	ruleId64, idErr := result.LastInsertId()
-	if idErr != nil {
-		return 0, idErr
+	ruleId, err = result.LastInsertId()
+	if err != nil {
+		return 0, err
 	}
 
-	ruleId = int(ruleId64)
 	return ruleId, nil
 }
 
 // InsertRule inserts a rule:channel reference into the ChannelsRules table
-func (m *RuleModel) InsertRule(channelId, ruleId int) error {
+func (m *RuleModel) InsertRule(channelId, ruleId int64) error {
 	stmt := "INSERT INTO ChannelsRules (ChannelID, RuleID) VALUES (?, ?)"
 	_, channelRuleErr := m.DB.Exec(stmt, channelId, ruleId)
 	return channelRuleErr
 }
 
 // InsertChannelRule adds an existing rule to the ChannelsRules table, omitting if it already exists
-func (m *RuleModel) InsertChannelRule(channelId, ruleId int) error {
+func (m *RuleModel) InsertChannelRule(channelId, ruleId int64) error {
 	stmt := "INSERT INTO ChannelsRules (ChannelID, RuleID) VALUES (?, ?) ON CONFLICT(ChannelID, RuleID) DO NOTHING"
 	_, channelRuleErr := m.DB.Exec(stmt, channelId, ruleId)
 	return channelRuleErr
@@ -53,7 +53,7 @@ func (m *RuleModel) EditRule(id int, rule string) error {
 }
 
 // DeleteRule removes a rule/channel reference from the ChannelsRules table
-func (m *RuleModel) DeleteRule(channelId, ruleId int) error {
+func (m *RuleModel) DeleteRule(channelId, ruleId int64) error {
 	stmt := "DELETE FROM ChannelsRules WHERE ChannelID = ? AND RuleID = ?"
 	_, deleteErr := m.DB.Exec(stmt, channelId, ruleId)
 	return deleteErr
@@ -89,8 +89,8 @@ func (m *RuleModel) All() ([]models.Rule, error) {
 	return Rules, nil
 }
 
-func (m *RuleModel) AllForChannel(channelId int) ([]models.Rule, error) {
-	//fetch the references from ChannelsRules
+func (m *RuleModel) AllForChannel(channelId int64) ([]models.Rule, error) {
+	// fetch the references from ChannelsRules
 	refStmt := "SELECT RuleID FROM ChannelsRules WHERE ChannelID = ?"
 	crRows, queryErr := m.DB.Query(refStmt, channelId)
 	if queryErr != nil {

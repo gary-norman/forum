@@ -3,8 +3,9 @@ package sqlite
 import (
 	"database/sql"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 type LoyaltyModel struct {
@@ -31,7 +32,7 @@ func (m *LoyaltyModel) InsertLoyalty(follower, following int) error {
 func (m *LoyaltyModel) InsertFollower(user, follower int) error {
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	//fmt.Println("Beginning UPDATE transaction")
+	// fmt.Println("Beginning UPDATE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Insert Follower: %w", err)
 	}
@@ -49,14 +50,14 @@ func (m *LoyaltyModel) InsertFollower(user, follower int) error {
 
 	stmt := "INSERT INTO Followers (UserID, FollowerUserID) VALUES (?, ?)"
 	_, InsertErr := m.DB.Exec(stmt, user, follower)
-	//fmt.Printf("Updating Comments, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
+	// fmt.Printf("Updating Comments, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
 	if InsertErr != nil {
 		return fmt.Errorf("failed to execute Insert query in Insert Follower: %w", err)
 	}
 
 	// Commit the transaction
 	commitErr := tx.Commit()
-	//fmt.Println("Committing UPDATE transaction")
+	// fmt.Println("Committing UPDATE transaction")
 	if commitErr != nil {
 		return fmt.Errorf("failed to commit transaction for Insert query in Insert Follower: %w", err)
 	}
@@ -64,8 +65,7 @@ func (m *LoyaltyModel) InsertFollower(user, follower int) error {
 	return commitErr
 }
 
-func (m *LoyaltyModel) CountUsers(userID int) (followers, following int, err error) {
-
+func (m *LoyaltyModel) CountUsers(userID int64) (followers, following int, err error) {
 	stmt1 := `SELECT COUNT(*) AS FollowingCount
              FROM Following
              WHERE UserID = ?`
@@ -90,17 +90,17 @@ func (m *LoyaltyModel) CountUsers(userID int) (followers, following int, err err
 
 	followers = int(followersCount.Int64)
 	following = int(followingCount.Int64)
-	//fmt.Println("likes:", likes)
-	//fmt.Println("dislikes:", dislikes)
+	// fmt.Println("likes:", likes)
+	// fmt.Println("dislikes:", dislikes)
 
 	return followers, following, err
 }
 
 // Delete removes an entry in the Following table by ID
-func (m *LoyaltyModel) Delete(followingID, followersID int) error {
+func (m *LoyaltyModel) Delete(followingID, followersID int64) error {
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	//fmt.Println("Beginning DELETE transaction")
+	// fmt.Println("Beginning DELETE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Delete in Following: %w", err)
 	}
@@ -119,7 +119,7 @@ func (m *LoyaltyModel) Delete(followingID, followersID int) error {
 	stmt1 := `DELETE FROM Following WHERE ID = ?`
 	// Execute the query, dereferencing the pointers for ID values
 	_, err = m.DB.Exec(stmt1, followingID)
-	//fmt.Printf("Deleting from Reactions where commentID: %v\n", commentID)
+	// fmt.Printf("Deleting from Reactions where commentID: %v\n", commentID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Delete query: %w", err)
 	}
@@ -127,14 +127,14 @@ func (m *LoyaltyModel) Delete(followingID, followersID int) error {
 	stmt2 := `DELETE FROM Followers WHERE ID = ?`
 	// Execute the query, dereferencing the pointers for ID values
 	_, err = m.DB.Exec(stmt2, followersID)
-	//fmt.Printf("Deleting from Reactions where commentID: %v\n", commentID)
+	// fmt.Printf("Deleting from Reactions where commentID: %v\n", commentID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Delete query: %w", err)
 	}
 
 	// Commit the transaction
 	err = tx.Commit()
-	//fmt.Println("Committing DELETE transaction")
+	// fmt.Println("Committing DELETE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to commit transaction for Delete in Following: %w", err)
 	}
@@ -146,7 +146,7 @@ func (m *LoyaltyModel) Delete(followingID, followersID int) error {
 func (m *LoyaltyModel) InsertFollowing(user, following int) error {
 	// Begin the transaction
 	tx, err := m.DB.Begin()
-	//fmt.Println("Beginning UPDATE transaction")
+	// fmt.Println("Beginning UPDATE transaction")
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction for Insert Following: %w", err)
 	}
@@ -164,14 +164,14 @@ func (m *LoyaltyModel) InsertFollowing(user, following int) error {
 
 	stmt := "INSERT INTO Following (UserID, FollowingUserID) VALUES (?, ?)"
 	_, InsertErr := m.DB.Exec(stmt, user, following)
-	//fmt.Printf("Updating Comments, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
+	// fmt.Printf("Updating Comments, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
 	if InsertErr != nil {
 		return fmt.Errorf("failed to execute Insert query in Insert Following: %w", err)
 	}
 
 	// Commit the transaction
 	commitErr := tx.Commit()
-	//fmt.Println("Committing UPDATE transaction")
+	// fmt.Println("Committing UPDATE transaction")
 	if commitErr != nil {
 		return fmt.Errorf("failed to commit transaction for Insert query in Insert Follower: %w", err)
 	}

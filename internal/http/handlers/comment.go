@@ -25,12 +25,6 @@ func (h *CommentHandler) StoreComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check if the method is POST, otherwise return Method Not Allowed
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	// SECTION retrieving comment form data
 	// Variable to hold the decoded data
 	var commentData models.Comment

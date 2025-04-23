@@ -25,6 +25,8 @@ var TemplateData models.TemplateData
 
 func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
+	var userPosts []models.Post
+	userLoggedIn := true
 	// SECTION --- posts and comments ---
 	// postDAO := dao.NewDAO[*models.Post](h.App.Db)
 	// ctx := context.Background()
@@ -36,35 +38,6 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	// 		fmt.Printf(ErrorMsgs().KeyValuePair, "daoAllPosts", post.Title)
 	// 	}
 	// }
-	var userPosts []models.Post
-	userLoggedIn := true
-	allPosts, err := h.App.Posts.All()
-	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all posts", err)
-	}
-	// Retrieve total likes and dislikes for each post
-	allPosts = h.Reaction.GetPostsLikesAndDislikes(allPosts)
-
-	for p := range allPosts {
-		models.UpdateTimeSince(&allPosts[p])
-	}
-
-	allPosts, err = h.Comment.GetPostsComments(allPosts)
-	if err != nil {
-		log.Printf(ErrorMsgs().NotFound, "allPosts comments", "getHome", err)
-	}
-
-	for p := range allPosts {
-		channelIDs, err := h.App.Channels.GetChannelIdFromPost(allPosts[p].ID)
-		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > channelID", err)
-		}
-		if len(allPosts) > 0 && len(channelIDs) > 0 {
-			allPosts[p].ChannelID = channelIDs[0]
-		} else {
-			fmt.Printf(ErrorMsgs().KeyValuePair, "error fetching posts", "no posts or channel IDs found")
-		}
-	}
 
 	// SECTION --- user ---
 	allUsers, allUsersErr := h.App.Users.All()
@@ -96,6 +69,34 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
 	}
 
+	// SECTION --- posts and comments ---
+	allPosts, err := h.App.Posts.All()
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all posts", err)
+	}
+	// Retrieve total likes and dislikes for each post
+	allPosts = h.Reaction.GetPostsLikesAndDislikes(allPosts)
+
+	for p := range allPosts {
+		models.UpdateTimeSince(&allPosts[p])
+	}
+	allPosts, err = h.Comment.GetPostsComments(allPosts)
+	if err != nil {
+		log.Printf(ErrorMsgs().NotFound, "allPosts comments", "getHome", err)
+	}
+
+	for p := range allPosts {
+		channelIDs, err := h.App.Channels.GetChannelIdFromPost(allPosts[p].ID)
+		if err != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "getHome > channelID", err)
+		}
+		if len(allPosts) > 0 && len(channelIDs) > 0 {
+			allPosts[p].ChannelID = channelIDs[0]
+		} else {
+			fmt.Printf(ErrorMsgs().KeyValuePair, "error fetching posts", "no posts or channel IDs found")
+		}
+	}
+
 	// SECTION --- channels --
 	allChannels, err := h.App.Channels.All()
 	if err != nil {
@@ -115,6 +116,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 
 	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
 	if userLoggedIn {
+		userPosts = h.Post.GetUserPosts(currentUser, allPosts)
 		// attach following/follower numbers to currently logged-in user
 		currentUser.Followers, currentUser.Following, err = h.App.Loyalty.CountUsers(currentUser.ID)
 		if err != nil {
@@ -134,10 +136,6 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Query, "user joined channels", err)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
-	}
-
-	if userLoggedIn {
-		userPosts = h.Post.GetUserPosts(currentUser, allPosts)
 	} else {
 		userPosts = allPosts
 	}
@@ -157,8 +155,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		JoinedChannels:         joinedChannels,
 		OwnedAndJoinedChannels: ownedAndJoinedChannels,
 		// ---------- misc ----------
-		Images:     nil,
-		Reactions:  nil,
+		Instance:   "home-page",
 		ImagePaths: h.App.Paths,
 	}
 	// models.JsonError(TemplateData)

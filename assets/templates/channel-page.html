@@ -3,6 +3,7 @@
   {{ with .CurrentUser }}
     {{ $userID = .ID }}
   {{ end }}
+  {{ $thisEntity := .ThisChannel }}
 
     {{ template "channel-page-banner" . }}
     <div class="container-content">
@@ -10,6 +11,6 @@
         {{ template "filters-row" . }}
       {{ template "channel-page-feed" (dict "dot" . "UserID" $userID) }}
     </div>
-    {{ template "right-panel" (dict "dot" . "UserID" $userID) }}
+    {{ template "right-panel" (dict "dot" . "UserID" $userID "ThisEntity" $thisEntity) }}
   </div>
 {{ end }}

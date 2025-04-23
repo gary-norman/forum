@@ -76,3 +76,41 @@ func (dao *DAO[T]) All(ctx context.Context) ([]T, error) {
 
 	return results, nil
 }
+
+func scanRowsToStructs[T any](rows *sql.Rows) ([]T, error) {
+	defer rows.Close()
+
+	var results []T
+	columns, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var t T
+		val := reflect.ValueOf(&t).Elem()
+		dest := make([]any, len(columns))
+
+		for i, col := range columns {
+			field := val.FieldByNameFunc(func(name string) bool {
+				sf, ok := val.Type().FieldByName(name)
+				return ok && sf.Tag.Get("db") == col
+			})
+
+			if field.IsValid() && field.CanSet() {
+				dest[i] = field.Addr().Interface()
+			} else {
+				var discard any
+				dest[i] = &discard
+			}
+		}
+
+		if err := rows.Scan(dest...); err != nil {
+			return nil, err
+		}
+
+		results = append(results, t)
+	}
+
+	return results, rows.Err()
+}

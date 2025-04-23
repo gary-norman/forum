@@ -50,31 +50,8 @@ func (dao *DAO[T]) All(ctx context.Context) ([]T, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
-	columns, _ := rows.Columns()
-	var results []T
-
-	for rows.Next() {
-		var model T
-		dest := make([]any, len(columns))
-		val := reflect.ValueOf(&model).Elem()
-
-		for i, col := range columns {
-			field := val.FieldByNameFunc(func(name string) bool {
-				field, _ := val.Type().FieldByName(name)
-				return field.Tag.Get("db") == col
-			})
-			dest[i] = field.Addr().Interface()
-		}
-
-		if err := rows.Scan(dest...); err != nil {
-			return nil, err
-		}
-		results = append(results, model)
-	}
-
-	return results, nil
+	return scanRowsToStructs[T](rows)
 }
 
 func scanRowsToStructs[T any](rows *sql.Rows) ([]T, error) {

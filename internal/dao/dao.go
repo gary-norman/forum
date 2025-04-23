@@ -15,14 +15,21 @@ type DAO[T models.DBModel] struct {
 	DB *sql.DB
 }
 
+func NewDAO[T models.DBModel](db *sql.DB) *DAO[T] {
+	return &DAO[T]{DB: db}
+}
+
 func (dao *DAO[T]) All(ctx context.Context) ([]T, error) {
-	var model T
-	query := fmt.Sprintf("SELECT * FROM %s", model.TableName())
+	var tableName string
+	model := any(new(T)).(models.DBModel)
+	tableName = model.TableName()
+	query := fmt.Sprintf("SELECT * FROM %s", tableName)
 
 	rows, err := dao.DB.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	return scanRowsToStructs[T](rows)
 }
@@ -139,8 +146,14 @@ func scanRowsToStructs[T any](rows *sql.Rows) ([]T, error) {
 	}
 
 	for rows.Next() {
-		var t T
+		t := new(T)
 		val := reflect.ValueOf(&t).Elem()
+
+		// dereference *Post to get Post struct for field access
+		if val.Kind() == reflect.Ptr {
+			val = val.Elem()
+		}
+
 		dest := make([]any, len(columns))
 
 		for i, col := range columns {
@@ -161,7 +174,7 @@ func scanRowsToStructs[T any](rows *sql.Rows) ([]T, error) {
 			return nil, err
 		}
 
-		results = append(results, t)
+		results = append(results, *t)
 	}
 
 	return results, rows.Err()

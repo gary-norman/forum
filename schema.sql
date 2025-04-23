@@ -67,6 +67,7 @@ CREATE TABLE Rules (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     Rule TEXT
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    Predefined BOOLEAN
 );
 
 CREATE TABLE ChannelsRules (
@@ -227,8 +228,8 @@ CREATE TABLE Notifications (
 
 CREATE TABLE NotificationsUsers (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
-    UserID INT,
-    NotificationID INT,
+    UserID INTEGER,
+    NotificationID INTEGER,
     FOREIGN KEY (UserID) REFERENCES Users(ID),
     FOREIGN KEY (NotificationID) REFERENCES Notifications(ID)
 );

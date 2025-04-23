@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"reflect"
 	"strings"
@@ -72,6 +73,40 @@ func (dao *DAO[T]) Insert(ctx context.Context, model T) error {
 
 	_, err := dao.DB.ExecContext(ctx, query, args...)
 	return err
+}
+
+func (dao *DAO[T]) Update(ctx context.Context, id int64, fields []string, values []any) (*T, error) {
+	if len(fields) == 0 || len(values) == 0 || len(fields) != len(values) {
+		return nil, errors.New("fields and values must be non-empty and of equal length")
+	}
+
+	setClause := make([]string, len(fields))
+	for i, field := range fields {
+		setClause[i] = fmt.Sprintf("%s = ?", field)
+	}
+	values = append(values, id)
+
+	var temp T
+	query := fmt.Sprintf(
+		"UPDATE %s SET %s WHERE id = ? RETURNING *",
+		temp.TableName(),
+		strings.Join(setClause, ", "),
+	)
+
+	rows, err := dao.DB.QueryContext(ctx, query, values...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	result, err := scanRowsToStructs[T](rows)
+	if err != nil {
+		return nil, err
+	}
+	if len(result) == 0 {
+		return nil, fmt.Errorf("no rows returned after update")
+	}
+	return &result[0], nil
 }
 
 func (dao *DAO[T]) Delete(ctx context.Context, id int64) (*T, error) {

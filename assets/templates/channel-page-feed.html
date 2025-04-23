@@ -1,11 +1,9 @@
 {{ define "channel-page-feed" }}
 {{ $userID := .UserID }}
 {{ $dot := .dot }}
-  <div id="wrapper-channel-feed">
-    <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+  <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
     {{ range $dot.Posts }}
       {{ template "post-card" (dict "Post" . "dot" $dot "UserID" $userID "Instance" $.Instance "calledBy" "channel-page-feed") }}
     {{ end }}
-    </div>
   </div>
 {{ end }}

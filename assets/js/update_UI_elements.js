@@ -185,9 +185,9 @@ export function listenToPageSetup() {
     // feeds
     const feeds = document.querySelectorAll(".feeds-wrapper");
 
-    feeds.forEach((feed) => {
-        feed.classList.add("feeds-wrapper-loaded");
-    });
+    // feeds.forEach((feed) => {
+    //     feed.classList.add("feeds-wrapper-loaded");
+    // });
 
     toggleUserInteracted("add");
     if (activePage === "user-page") {

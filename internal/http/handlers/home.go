@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gary-norman/forum/internal/app"
+	// "github.com/gary-norman/forum/internal/dao"
 	mw "github.com/gary-norman/forum/internal/http/middleware"
 	"github.com/gary-norman/forum/internal/models"
 	"github.com/gary-norman/forum/internal/view"
@@ -25,9 +26,16 @@ var TemplateData models.TemplateData
 func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 	// SECTION --- posts and comments ---
-	// var userLoggedIn bool
-	fmt.Println(Colors().Orange + "GetHome" + Colors().Reset)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Context", r.Context())
+	// postDAO := dao.NewDAO[*models.Post](h.App.Db)
+	// ctx := context.Background()
+	// daoAllPosts, err := postDAO.All(ctx)
+	// if err != nil {
+	// 	log.Printf(ErrorMsgs().KeyValuePair, "Error fetching daoAllosts", err)
+	// } else {
+	// 	for _, post := range daoAllPosts {
+	// 		fmt.Printf(ErrorMsgs().KeyValuePair, "daoAllPosts", post.Title)
+	// 	}
+	// }
 	var userPosts []models.Post
 	userLoggedIn := true
 	allPosts, err := h.App.Posts.All()

@@ -6,6 +6,7 @@ type TemplateData struct {
 	RandomUser  User
 	CurrentUser *User
 	// ---------- posts ----------
+	UserID    int64
 	Posts     []Post
 	UserPosts []Post
 	// ---------- channels ----------

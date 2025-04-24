@@ -51,8 +51,8 @@ func CompareAsInts(a, b any) bool {
 	return intA == intB
 }
 
-func PrintType(elem any) string {
-	str := fmt.Sprintf("Type of %v", elem)
+func PrintType(name, calledBy string, elem any) string {
+	str := fmt.Sprintf("Type of %v with value of %v called by %v", name, elem, calledBy)
 	fmt.Printf(ErrorMsgs().KeyValuePair, str, reflect.TypeOf(elem))
 	return ""
 }

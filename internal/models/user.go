@@ -8,8 +8,8 @@ type User struct {
 	ID       int64  `db:"id"`
 	Username string `db:"username"`
 	Login
-	Avatar      string    `db:"avatar,omitempty"` // Store UUID as string
-	Banner      string    `db:"banner,omitempty"` // Store UUID as string
+	Avatar      string    `db:"avatar,omitempty"`
+	Banner      string    `db:"banner,omitempty"`
 	Description string    `db:"description,omitempty"`
 	Usertype    string    `db:"usertype"`
 	Created     time.Time `db:"created"`

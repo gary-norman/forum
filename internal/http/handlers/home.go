@@ -147,6 +147,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		RandomUser:  randomUser,
 		CurrentUser: currentUser,
 		// ---------- posts ----------
+		UserID:    0, // Default value for logged out users
 		Posts:     allPosts,
 		UserPosts: userPosts,
 		// ---------- channels ----------

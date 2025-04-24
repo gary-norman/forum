@@ -38,6 +38,7 @@ func (p *Post) React(likes, dislikes int) {
 }
 
 type PostPage struct {
+	UserID      int64
 	CurrentUser *User
 	Instance    string
 	ThisPost    Post

@@ -31,6 +31,7 @@ func (c *Channel) UpdateTimeSince() {
 }
 
 type ChannelPage struct {
+	UserID                 int64
 	CurrentUser            *User
 	Instance               string
 	ThisChannel            Channel

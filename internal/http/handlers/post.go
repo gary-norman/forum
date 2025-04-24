@@ -108,6 +108,7 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := models.PostPage{
+		UserID:      0, // Default value for logged out users
 		CurrentUser: currentUser,
 		Instance:    "post-page",
 		ThisPost:    thisPost,

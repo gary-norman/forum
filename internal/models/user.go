@@ -35,6 +35,7 @@ type UserCheck struct {
 }
 
 type UserPage struct {
+	UserID      int64
 	CurrentUser *User
 	Instance    string
 	ThisUser    User

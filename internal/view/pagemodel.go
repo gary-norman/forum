@@ -22,7 +22,7 @@ func RenderPageData[T PageModel](w http.ResponseWriter, data T) {
 	err := Template.ExecuteTemplate(&renderedPage, instance, data)
 	if err != nil {
 		errorStr := fmt.Sprintf("Error rendering %v: %v", instance, err)
-		log.Printf(errorStr)
+		log.Println(errorStr)
 		http.Error(w, errorStr, http.StatusInternalServerError)
 		return
 	}

@@ -89,23 +89,25 @@ func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, erro
 	if queryEmailErr != nil {
 		log.Printf(ErrorMsgs().NotFound, email, "GetUserFromLogin", queryEmailErr)
 	}
-	var user *models.User
-	if !usernameExists && !emailExists {
-		return nil, fmt.Errorf("username & email: %v do not exist", login)
-	}
-	var failure string
 	if usernameExists {
-		user, _ = m.GetUserByUsername(username, "GetUserFromLogin")
-		failure = "email"
+		user, err := m.GetUserByUsername(username, "GetUserFromLogin")
+		if err != nil {
+			return nil, err
+		} else {
+			log.Printf(ErrorMsgs().KeyValuePair, "Successfully found user by username", user.Username)
+			return user, nil
+		}
 	}
-
 	if emailExists {
-		user, _ = m.GetUserByEmail(email, "GetUserFromLogin")
-		failure = "username"
+		user, err := m.GetUserByEmail(email, "GetUserFromLogin")
+		if err != nil {
+			return nil, err
+		} else {
+			log.Printf(ErrorMsgs().KeyValuePair, "Successfully found user by email", user.Username)
+			return user, nil
+		}
 	}
-	log.Printf(Colors.Blue+"*Either username or email should fail as only 1 is entered at login. In this case, "+
-		Colors.White+"%v"+Colors.Red+" failed"+Colors.Blue+" as expected.", failure)
-	return user, nil
+	return nil, fmt.Errorf("user: %v not found", login)
 }
 
 func (m *UserModel) QueryUserNameExists(username string) (bool, error) {
@@ -175,9 +177,7 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 		&user.HashedPassword)
 	if queryErr != nil {
 		if errors.Is(queryErr, sql.ErrNoRows) {
-			// No user found
-			log.Printf(ErrorMsgs().NoRows, username, "getUserByUsername, called by: "+calledBy)
-			return nil, nil
+			return nil, fmt.Errorf(ErrorMsgs().NoRows, username, calledBy, queryErr)
 		}
 		return nil, fmt.Errorf(ErrorMsgs().Query, username, queryErr)
 	}
@@ -199,7 +199,7 @@ func (m *UserModel) GetUserByEmail(email, calledBy string) (*models.User, error)
 		closErr := stmt.Close()
 		if closErr != nil {
 			// FIXME this error
-			log.Printf(ErrorMsgs().Close, "stmt", "getUserByUsername")
+			log.Printf(ErrorMsgs().Close, "stmt", "getUserByEmail")
 		}
 	}(stmt)
 	// Create a User instance to store the result
@@ -211,9 +211,7 @@ func (m *UserModel) GetUserByEmail(email, calledBy string) (*models.User, error)
 	fmt.Printf(ErrorMsgs().Query, email, queryErr)
 	if queryErr != nil {
 		if errors.Is(queryErr, sql.ErrNoRows) {
-			// No user found
-			log.Printf(ErrorMsgs().NoRows, email, "getUserByUsername")
-			return nil, nil
+			return nil, fmt.Errorf(ErrorMsgs().NoRows, email, calledBy, queryErr)
 		}
 		return nil, fmt.Errorf(ErrorMsgs().Query, email, queryErr)
 	}

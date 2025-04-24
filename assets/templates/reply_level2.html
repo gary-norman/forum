@@ -2,9 +2,9 @@
   {{ $channelBasePath := "db/userdata/images/channel-images/" }}
   {{ $postBasePath := "db/userdata/images/post-images/" }}
   {{ $userBasePath := "db/userdata/images/user-images/" }}
-  {{ $userID := 0 }} <!-- Default value for logged out users -->
-  {{ if ne .CurrentUser.Username "nouser" }}
-    {{ $userID = .CurrentUser.ID }}
+  {{ $userID := .dot.UserID }}
+  {{ with .CurrentUser }}
+    {{ $userID = .ID }}
   {{ end }}
 
   {{- /*gotype: github.com/gary-norman/forum/internal/models.Comment*/ -}}
@@ -97,7 +97,7 @@
     {{ if .Replies}}
       <div class="container-card-across">
         {{ range .Replies }}
-          {{ template "reply_level3" (dict "CurrentUser" $.CurrentUser "Comment" .) }}
+          {{ template "reply_level3" (dict "CurrentUser" $.CurrentUser "Comment" . "UserID" $userID) }}
         {{ end }} <!-- end range Replies -->
       </div> <!-- end container-comment-across wrapper -->
     {{ end }} <!-- end if Replies -->

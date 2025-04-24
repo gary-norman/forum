@@ -5,7 +5,7 @@
 {{/*  <div id="wrapper-home-feed">*/}}
     <div id="home-feed" class="collapsible-expanded feed-content scrollable no-scrollbar">
       {{ range $userPosts }}
-        {{ template "post-card" (dict "Post" . "dot" $dot "UserID" $userID "Instance" $.Instance "calledBy" "home-page-feed") }}
+        {{ template "post-card" (dict "Post" . "dot" $dot "UserID" $userID "Instance" $dot.Instance "calledBy" "home-page-feed") }}
       {{ end }}
     </div>
 {{/*  </div>*/}}

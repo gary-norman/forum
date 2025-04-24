@@ -2,9 +2,9 @@
   {{ $channelBasePath := "db/userdata/images/channel-images/" }}
   {{ $postBasePath := "db/userdata/images/post-images/" }}
   {{ $userBasePath := "db/userdata/images/user-images/" }}
-  {{ $userID := 0 }} <!-- Default value for logged out users -->
-  {{ if ne .CurrentUser nil }}
-    {{ $userID = .CurrentUser.ID }}
+  {{ $userID := .dot.UserID }}
+  {{ with .CurrentUser }}
+    {{ $userID = .ID }}
   {{ end }}
 
 
@@ -97,7 +97,7 @@
         {{ if .Replies}}
           <div class="container-card-across">
             {{ range .Replies }}
-              {{ template "reply_level2" (dict "CurrentUser" $.CurrentUser "Comment" .) }}
+              {{ template "reply_level2" (dict "CurrentUser" $.CurrentUser "Comment" . "UserID" $userID) }}
             {{ end }} <!-- end range Replies -->
           </div> <!-- end container-comment-across wrapper -->
         {{ end }} <!-- end if Replies -->

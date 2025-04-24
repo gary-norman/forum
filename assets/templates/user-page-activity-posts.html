@@ -1,8 +1,9 @@
 {{ define "user-page-activity-posts" }}
-  {{ $userID := 0 }} {{/* Default value for logged out users */}}
-  {{ if ne .CurrentUser nil }}
-    {{ $userID = .CurrentUser.ID }}
+  {{ $userID := .UserID }}
+  {{ with .CurrentUser }}
+    {{ $userID = .ID }}
   {{ end }}
+{{ $tracer := printf "%s > %s" .ThisUser "user-page-activity-posts" }}
 {{ $dot := . }}
   <div id="activity-posts">
     <div class="filters-row button-row hide-feed">
@@ -19,7 +20,7 @@
     {{/*SECTION---------- user page posts ----------*/}}
     <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
       {{ range .Posts }}
-      {{ template "post-card" (dict "dot" $dot "Post" . "UserID" $userID "calledBy" $dot.Instance) }}
+      {{ template "post-card" (dict "dot" $dot "Post" . "UserID" $userID "calledBy" $dot.Instance "Tracer" $tracer) }}
       {{ end }}
     </div>
   </div>

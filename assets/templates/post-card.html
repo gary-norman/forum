@@ -1,8 +1,13 @@
 {{ define "post-card" }}
+{{/* fprint "UserID post-card" .UserID */}}
 {{ $userID := .UserID }}
 {{ $post := .Post }}
 {{ $dot := .dot}}
-{{ $instance := $dot.Instance }}
+{{ $instance := .Instance }}
+{{ $tracer := printf "%s > %s > %s" $instance .calledBy "post-card" }}
+{{ with .Tracer }}
+  {{ $tracer = printf " > %s > %s" . "post-card" }}
+{{ end }}
 {{ $comments := $post.Comments }}
 <div class="container-card-down">
   <div class="card link" data-post-id="{{ $post.ID }}" data-dest="post" data-channel-ID="{{ $post.ChannelID }}" data-user-id="{{$post.AuthorID}}">
@@ -29,7 +34,7 @@
         <img src="{{ $dot.ImagePaths.Post }}{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
       {{ end }}
       <p class="cardContent">{{$post.Content}}</p>
-      {{ template "control-buttons" (dict "Post" $post "dot" $dot "userID" $userID "calledBy" "post-card" )}}
+      {{ template "control-buttons" (dict "Post" $post "dot" $dot "userID" $userID "calledBy" "post-card" "Tracer" $tracer )}}
     </div> 
   {{ if eq $instance "post-page" }}
 

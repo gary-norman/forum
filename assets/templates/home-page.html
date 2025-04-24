@@ -1,5 +1,5 @@
 {{ define "home-page" }}
-  {{ $userID := 0 }} {{/* Default value for logged out users */}}
+  {{ $userID := .dot.UserID }}
   {{ with .CurrentUser }}
     {{ $userID = .ID }}
   {{ end }}

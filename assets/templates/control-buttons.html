@@ -1,8 +1,13 @@
 {{ define "control-buttons" }}
 {{ $dot := .dot}}
 {{ $user := $dot.CurrentUser }}
+{{ $callChain := printf "UserID: %s > %s" .calledBy "control-buttons" }}
+{{/* fprint $callChain .userID */}}
 {{ $userID := .userID }}
 {{ $calledBy := .calledBy}}
+{{ with .Tracer }}
+  {{/* fprint "Trace" . */}}
+{{ end }}
 {{ $instance := $dot.Instance}}
 {{ $post := .Post }}
 {{ with .Post }}
@@ -22,6 +27,7 @@
                 {{/*            <p>Post: {{ .Post}}</p>*/}}
                 {{ $post := .Post }}
                 {{$status := reactionStatus $userID $post.ID 0}}
+  {{/* fprint "reactionStatus success" $calledBy */}}
                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}} {{ if eq $user nil}}inactive{{ end }}">
                     <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{$post.Likes}}</span>
                 </button>

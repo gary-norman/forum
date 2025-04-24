@@ -1,16 +1,15 @@
 {{ define "channel-page" }}
-  {{ $userID := 0 }} {{/* Default value for logged out users */}}
-  {{ with .CurrentUser }}
-    {{ $userID = .ID }}
-  {{ end }}
-  {{ $thisEntity := .ThisChannel }}
-
-    {{ template "channel-page-banner" . }}
-    <div class="container-content">
-      <div class="content">
-        {{ template "filters-row" . }}
-      {{ template "channel-page-feed" (dict "dot" . "UserID" $userID) }}
-    </div>
-    {{ template "right-panel" (dict "dot" . "UserID" $userID "ThisEntity" $thisEntity) }}
+{{ $userID := .UserID }}
+{{ with .CurrentUser }}
+  {{ $userID = .ID }}
+{{ end }}
+{{ $thisEntity := .ThisChannel }}
+{{ template "channel-page-banner" . }}
+<div class="container-content">
+  <div class="content">
+    {{ template "filters-row" . }}
+    {{ template "channel-page-feed" (dict "dot" . "UserID" $userID) }}
   </div>
+    {{ template "right-panel" (dict "dot" . "UserID" $userID "Instance" $.Instance "ThisEntity" $thisEntity) }}
+</div>
 {{ end }}

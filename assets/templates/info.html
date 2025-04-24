@@ -1,9 +1,9 @@
 {{ define "info"}}
-{{ $userID := 0 }} {{/* Default value for logged out users */}}
-{{ $user := .CurrentUser }}
-{{ if ne .CurrentUser nil }}
-    {{ $userID = .CurrentUser.ID }}
+{{ $userID := .UserID }}
+{{ with .CurrentUser }}
+  {{ $userID = .ID }}
 {{ end }}
+{{ $user := .CurrentUser }}
 {{ $post := .Post }}
 {{ $root := .root}}
 {{ $instance := $root.Instance }}

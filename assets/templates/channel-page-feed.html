@@ -3,7 +3,7 @@
 {{ $dot := .dot }}
   <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
     {{ range $dot.Posts }}
-      {{ template "post-card" (dict "Post" . "dot" $dot "UserID" $userID "Instance" $.Instance "calledBy" "channel-page-feed") }}
+      {{ template "post-card" (dict "Post" . "dot" $dot "UserID" $userID "Instance" $dot.Instance "calledBy" "channel-page-feed") }}
     {{ end }}
   </div>
 {{ end }}

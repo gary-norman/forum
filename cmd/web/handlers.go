@@ -20,6 +20,7 @@ import (
 var TemplateData models.TemplateData
 
 func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
+	start := time.Now()
 	var userPosts []models.Post
 	userLoggedIn := true
 
@@ -53,9 +54,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
 	}
 
-	start := time.Now()
 	// SECTION --- posts and comments ---
-
 	allPosts, err := app.posts.All()
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all posts", err)
@@ -103,6 +102,7 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 
 	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
 	if userLoggedIn {
+		userPosts = app.getUserPosts(currentUser, allPosts)
 		// attach following/follower numbers to currently logged-in user
 		currentUser.Followers, currentUser.Following, err = app.loyalty.CountUsers(currentUser.ID)
 		if err != nil {
@@ -122,10 +122,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Query, "user joined channels", err)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
-	}
-
-	if userLoggedIn {
-		userPosts = app.getUserPosts(currentUser, allPosts)
 	} else {
 		userPosts = allPosts
 	}
@@ -146,8 +142,6 @@ func (app *app) getHome(w http.ResponseWriter, r *http.Request) {
 		OwnedAndJoinedChannels: ownedAndJoinedChannels,
 		// ---------- misc ----------
 		Instance:   "home-page",
-		Images:     nil,
-		Reactions:  nil,
 		ImagePaths: app.paths,
 	}
 	// models.JsonError(TemplateData)

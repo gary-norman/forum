@@ -1,0 +1,38 @@
+{{ define "right-panel--edit-bio"}}
+
+  {{ $dot := .dot }}
+  {{ $instance := $dot.Instance}}
+  {{ $thisUser := $dot.ThisUser }}
+  {{ $currentUser := $dot.CurrentUser }}
+
+  {{if eq $instance "channel-page"}}
+
+
+  {{ else if eq $instance "user-page"}}
+    <div class="right-panel-container-bio">
+      <div class="right-panel-bio flex-space-between">
+        <label for="user-bio-content" class="padded">{{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }}Edit your bio{{ else }}User bio{{ end }}</label>
+        {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
+          <div id="settings-user-bio" class="edit-settings">
+            <button id="edit-user-bio" type="button" class="btn-sm btn-icoonly">
+              <span class="btn-edit" role="contentinfo" aria-label="Edit profile bio"></span>
+            </button>
+            <button id="submit-user-bio" type="submit" name="bio" value="bio" class="btn-sm btn-icoonly">
+              <span class="btn-success" role="contentinfo" aria-label="Submit new bio"></span>
+            </button>
+            <button id="cancel-user-bio" type="button" class="btn-sm btn-icoonly">
+              <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the bio"></span>
+            </button>
+          </div>
+
+        {{ end }} <!-- end of owner user check -->
+      </div>
+      <textarea id="user-bio-content" class="inactive-input" name="content">{{ $thisUser.Description }}</textarea>
+      {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
+        <div class="input-wrapper edit-user">
+          <textarea id="bio" name="bio" placeholder="{{if $thisUser.Description}}{{ $thisUser.Description }}{{else}}update your bio{{end}}"></textarea>
+        </div>
+      {{ end }} <!-- end of owner user check -->
+    </div>
+  {{ end }} <!-- end if channel/user check -->
+{{ end }}

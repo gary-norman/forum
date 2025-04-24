@@ -2,11 +2,11 @@
   {{ $userID := .dot.UserID }}
   {{ $dot := .dot }}
   {{ $userPosts := .UserPosts }}
-  <div id="wrapper-home-feed" style="position: absolute; width: 60%; height: 100%">
-    <div id="home-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+{{/*  <div id="wrapper-home-feed">*/}}
+    <div id="home-feed" class="collapsible-expanded feed-content scrollable no-scrollbar">
       {{ range $userPosts }}
         {{ template "post-card" (dict "Post" . "dot" $dot "UserID" $userID "Instance" $.Instance "calledBy" "home-page-feed") }}
       {{ end }}
     </div>
-  </div>
+{{/*  </div>*/}}
 {{ end }}

@@ -1,0 +1,47 @@
+{{ define "right-panel--edit-image"}}
+
+  {{ $dot := .dot }}
+  {{ $instance := $dot.Instance}}
+  {{ $thisUser := $dot.ThisUser }}
+  {{ $currentUser := $dot.CurrentUser }}
+
+  {{if eq $instance "channel-page"}}
+
+
+  {{ else if eq $instance "user-page"}}
+
+    {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
+      <div class="cont-flex-column">
+        <div class="right-panel-container-pic flex-space-between">
+          <div class="right-panel-container-pic">
+            {{ if (ne $thisUser.Avatar "noimage") }}
+              <div class="right-panel-pic profile-pic" data-image-user="{{ $.ImagePaths.User }}{{ $thisUser.Avatar }}"></div>
+            {{ else }}
+              <div class="right-panel-pic profile-pic--empty" data-name-user="{{ $thisUser.Username }}"></div>
+            {{ end }}
+            <small>Edit your avatar</small>
+          </div>
+          <div id="settings-user-avatar" class="edit-settings">
+            <button id="edit-user-avatar" type="button" class="btn-sm btn-icoonly">
+              <span class="btn-edit" role="contentinfo" aria-label="Edit your avatar picture"></span>
+            </button>
+            <button id="submit-user-avatar" type="submit" name="image" value="image" class="btn-sm btn-icoonly">
+              <span class="btn-success" role="contentinfo" aria-label="Submit new avatar"></span>
+            </button>
+            <button id="cancel-user-avatar" type="button" class="btn-sm btn-icoonly">
+              <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing the avatar"></span>
+            </button>
+          </div>
+        </div>
+        <div id="drop-zone--user-image">
+          <div id="uploaded-file--user-image"></div>
+          <div class="drag-drop-text-wrapper">
+            <span class="dragText">drag and drop your file, or</span>
+            <span class="button">browse</span>
+            <input type="file" id="browse--user-image" name="file-drop" />
+          </div>
+        </div>
+      </div>
+    {{ end }} <!-- end of owner user check -->
+  {{ end }} <!-- end if channel/user check -->
+{{ end }}

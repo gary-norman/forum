@@ -70,5 +70,5 @@ func (s *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf(ErrorMsgs().KeyValuePair, "Search data fetched in:", time.Since(start))
+	//log.Printf(ErrorMsgs().KeyValuePair, "Search data fetched in:", time.Since(start))
 }

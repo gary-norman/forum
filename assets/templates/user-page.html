@@ -1,23 +1,30 @@
 {{ define "user-page" }}
+
+  {{ $userID := 0 }} {{/* Default value for logged out users */}}
+  {{ with .CurrentUser }}
+    {{ $userID = .ID }}
+  {{ end }}
+  {{ $thisEntity := .ThisUser }}
   {{ template "user-page-banner" . }}
   <div class="container-content">
     <div class="content">
     {{ template "user-page-activity-bar" . }}
-      {{/*SECTION ---------- user page activity feed ----------*/}}
-      <div id="user-activity-feeds" style="position: absolute; width: 100%; height: 100%">
-        {{/*SECTION ------- activity activity ---------- */}}
+{{/*      SECTION ---------- user page activity feed ----------*/}}
+      <div id="user-activity-feeds">
+{{/*        SECTION ------- activity activity ---------- */}}
       {{ template "user-page-activity-activity" . }}
-        {{/*SECTION ------- activity posts ---------- */}}
+{{/*        SECTION ------- activity posts ---------- */}}
       {{ template "user-page-activity-posts" . }}
-        {{/*SECTION ------- activity comments ---------- */}}
+{{/*        SECTION ------- activity comments ---------- */}}
       {{ template "user-page-activity-comments" . }}
-        {{/*SECTION ------- saved activities ---------- */}}
+{{/*        SECTION ------- saved activities ---------- */}}
       {{ template "user-page-saved-activities" . }}
-        {{/*SECTION ------- muted activities ---------- */}}
+{{/*        SECTION ------- muted activities ---------- */}}
       {{ template "user-page-muted-activities" . }}
-        {{/*SECTION ------- actvity reactions ---------- */}}
+{{/*        SECTION ------- actvity reactions ---------- */}}
       {{ template "user-page-activity-reactions" . }}
       </div>
     </div>
+    {{ template "right-panel" (dict "dot" . "UserID" $userID "ThisEntity" $thisEntity) }}
   </div>
 {{ end }}

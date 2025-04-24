@@ -3,6 +3,7 @@
 {{ $post := .Post }}
 {{ $dot := .dot}}
 {{ $instance := $dot.Instance }}
+{{ $comments := $post.Comments }}
 <div class="container-card-down">
   <div class="card link" data-post-id="{{ $post.ID }}" data-dest="post" data-channel-ID="{{ $post.ChannelID }}" data-user-id="{{$post.AuthorID}}">
     <div class="container-post-info">
@@ -31,6 +32,9 @@
       {{ template "control-buttons" (dict "Post" $post "dot" $dot "userID" $userID "calledBy" "post-card" )}}
     </div> 
   {{ if eq $instance "post-page" }}
+
+    <p>1. {{$post.Comments}}</p>
+    <p>2. {{$comments}}</p>
     <!--  Reply / Submit Comment form -->
     <form name="replyForm" class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
       <div class="cont-flex-row flex-end">

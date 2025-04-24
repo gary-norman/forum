@@ -1,5 +1,5 @@
 {{ define "this-post" }}
-{{ $userID := 0 }} {{/* Default value for logged out users */}}
+{{ $userID := .UserID }}
 {{ with .CurrentUser }}
   {{ $userID = .ID }}
 {{ end }}

@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/gary-norman/forum/internal/app"
-	h "github.com/gary-norman/forum/internal/http/routes"
+	"github.com/gary-norman/forum/internal/http/routes"
 	"github.com/gary-norman/forum/internal/models"
 	"github.com/gary-norman/forum/internal/view"
 
@@ -42,14 +42,16 @@ func main() {
 	th.Init()
 
 	// Create the RouteHandler with a pointer to the app
-	rh := h.NewRouteHandler(appInstance)
-	mux := rh.Routes()
+	// rh := h.NewRouteHandler(appInstance)
+	// mux := rh.Routes()
+
+	router := routes.NewRouter(appInstance)
 
 	port := 8989
 	addr := fmt.Sprintf(":%d", port)
 	srv := &http.Server{
 		Addr:    addr,
-		Handler: mux,
+		Handler: router,
 	}
 	// Log server listening messages
 	address := "http://localhost" + addr

@@ -1,4 +1,4 @@
-package handlers
+package routes
 
 import (
 	"github.com/gary-norman/forum/internal/app"

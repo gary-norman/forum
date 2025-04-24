@@ -1,5 +1,5 @@
 {{ define "this-post" }}
-{{ $userID := 0 }} {{/* Default value for logged out users */}}
+{{ $userID := .UserID }}
 {{ with .CurrentUser }}
   {{ $userID = .ID }}
 {{ end }}
@@ -58,7 +58,7 @@
 {{/*                    {{ if .Replies}}*/}}
               {{ range .Replies }}
                       <div class="container-card-across">
-                          {{ template "reply_level1" (dict "CurrentUser" $.CurrentUser "Comment" . ) }}
+                          {{ template "reply_level1" (dict "CurrentUser" $.CurrentUser "Comment" . "UserID" $userID ) }}
                       </div> <!-- end container-comment-across wrapper -->
                   {{ end }} <!-- end range Replies -->
 {{/*                        {{ end }} <!-- end if Replies -->*/}}

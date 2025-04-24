@@ -1,8 +1,8 @@
 {{ define "comment-controls" }}
-  {{ $userID := 0 }} <!-- Default value for logged out users -->
+  {{ $userID := .UserID }}
   {{ $user := .CurrentUser }}
-  {{ if ne .CurrentUser nil }}
-    {{ $userID = .CurrentUser.ID }}
+  {{ with .CurrentUser }}
+    {{ $userID = .ID }}
   {{ end }}
   {{ $post := .Post }}
   {{ $comment := .Comment }}

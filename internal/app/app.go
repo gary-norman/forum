@@ -4,14 +4,18 @@ import (
 	"database/sql"
 	"log"
 
+	"github.com/gary-norman/forum/internal/db"
 	"github.com/gary-norman/forum/internal/models"
 	"github.com/gary-norman/forum/internal/sqlite"
 )
 
 var (
-	dbDriver  string = "sqlite3"
-	dbPath    string = "db/forum_database.db"
-	imagePath string = "db/userdata/images/"
+	dbDriver string = "sqlite3"
+	// dbPath    string = "db/forum_database.db"
+	// development db for testing new setup
+	dbPath     string = "db/dev_forum_database.db"
+	schemaPath string = "schema.sql"
+	imagePath  string = "db/userdata/images/"
 )
 
 func Colors() *models.Colors {
@@ -67,9 +71,14 @@ func NewApp(db *sql.DB) *App {
 
 func InitializeApp() (*App, func(), error) {
 	// Open database connection
-	db, err := sql.Open(dbDriver, dbPath)
+	// db, err := sql.Open(dbDriver, dbPath)
+	// if err != nil {
+	// 	return nil, nil, err
+	// }
+
+	db, err := db.InitDB(dbPath, schemaPath)
 	if err != nil {
-		return nil, nil, err
+		log.Fatal("Failed to initialize DB:", err)
 	}
 
 	// Verify connection

@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS Users (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     Username TEXT NOT NULL UNIQUE,
     EmailAddress TEXT NOT NULL,
+    EmailAddress TEXT NOT NULL UNIQUE,
     Avatar TEXT,
     Banner TEXT,
     Description TEXT,

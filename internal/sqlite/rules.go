@@ -46,7 +46,7 @@ func (m *RuleModel) InsertChannelRule(channelId, ruleId int64) error {
 }
 
 // EditRule edits the rule string in the Rules table
-func (m *RuleModel) EditRule(id int, rule string) error {
+func (m *RuleModel) EditRule(id int64, rule string) error {
 	stmt := "UPDATE Rules SET Rule = ? WHERE ID = ?"
 	_, editErr := m.DB.Exec(stmt, rule, id)
 	return editErr

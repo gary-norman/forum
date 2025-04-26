@@ -3,8 +3,9 @@ package sqlite
 import (
 	"database/sql"
 	"fmt"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 type ModModel struct {
@@ -85,9 +86,10 @@ func (m *ModModel) GetModOrModdedChannelIDs(ID int, column string) ([]int, error
 	}
 	var returnedIds []int
 	for _, id := range ids {
-		if column == "UserID" {
+		switch column {
+		case "UserID":
 			returnedIds = append(returnedIds, id.UserID)
-		} else if column == "ChannelID" {
+		case "ChannelID":
 			returnedIds = append(returnedIds, id.ChannelID)
 		}
 	}

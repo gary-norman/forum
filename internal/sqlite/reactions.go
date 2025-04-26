@@ -101,12 +101,12 @@ func (m *ReactionModel) Insert(liked, disliked bool, authorID, reactedPostID, re
 }
 
 // Helper function to safely dereference an integer pointer
-func dereferenceInt(value *int) any {
-	if value == nil {
-		return nil
-	}
-	return *value
-}
+// func dereferenceInt(value *int) any {
+// 	if value == nil {
+// 		return nil
+// 	}
+// 	return *value
+// }
 
 func (m *ReactionModel) Update(liked, disliked bool, authorID, reactedPostID, reactedCommentID int64) error {
 	if !isValidParent(reactedPostID, reactedCommentID) {
@@ -162,7 +162,7 @@ func (m *ReactionModel) Upsert(liked, disliked bool, authorID, reactedPostID, re
 	exists, err := m.Exists(authorID, reactedPostID, reactedCommentID)
 	if err != nil {
 		fmt.Println("Upsert > Exists error")
-		return fmt.Errorf(err.Error())
+		return errors.New(err.Error())
 	}
 
 	if exists {

@@ -23,7 +23,7 @@ func (m *LoyaltyModel) InsertLoyalty(follower, following models.UUIDField) error
 	err = m.InsertFollower(following, follower)
 	if err != nil {
 		fmt.Println("Error adding a follower")
-		return fmt.Errorf(err.Error())
+		return errors.New(err.Error())
 	}
 
 	return err

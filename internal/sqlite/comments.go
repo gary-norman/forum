@@ -19,7 +19,7 @@ func (m *CommentModel) Upsert(comment models.Comment) error {
 	exists, err := m.Exists(comment)
 	if err != nil {
 		fmt.Println("Upsert Comment > Exists error")
-		return fmt.Errorf(err.Error())
+		return errors.New(err.Error())
 	}
 
 	if exists {

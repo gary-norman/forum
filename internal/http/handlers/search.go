@@ -57,7 +57,7 @@ func (s *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().KeyValuePair, "User is not logged in. CurrentUser: ", currentUser)
 	}
 
-	searchResults := map[string]interface{}{
+	searchResults := map[string]any{
 		"users":    allUsers,
 		"channels": allChannels,
 		"posts":    allPosts,

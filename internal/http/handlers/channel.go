@@ -137,7 +137,7 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 	}
 
 	data := models.ChannelPage{
-		UserID:                 0, // Default value for logged out users
+		UserID:                 models.NewUUIDField(), // Default value of 0 for logged out users
 		CurrentUser:            currentUser,
 		Instance:               "channel-page",
 		ThisChannel:            thisChannel,

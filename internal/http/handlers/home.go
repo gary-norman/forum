@@ -143,11 +143,11 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	// SECTION -- template ---
 	TemplateData := models.TemplateData{
 		// ---------- users ----------
+		UserID:      models.NewUUIDField(), // Default value of 0 for logged out users
 		AllUsers:    allUsers,
 		RandomUser:  randomUser,
 		CurrentUser: currentUser,
 		// ---------- posts ----------
-		UserID:    0, // Default value for logged out users
 		Posts:     allPosts,
 		UserPosts: userPosts,
 		// ---------- channels ----------

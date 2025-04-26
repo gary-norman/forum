@@ -81,7 +81,7 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	models.UpdateTimeSince(&thisUser)
 
 	data := models.UserPage{
-		UserID:      0, // Default value for logged out users
+		UserID:      models.NewUUIDField(), // Default value of 0 for logged out users
 		CurrentUser: currentUser,
 		Instance:    "user-page",
 		ThisUser:    thisUser,

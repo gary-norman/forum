@@ -79,17 +79,17 @@ func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, erro
 		return nil, fmt.Errorf(ErrorMsgs().UserModel, "GetUserFromLogin", login)
 	}
 	username, email := login, login
-	fmt.Printf(Colors.Blue+"username called by %v:"+Colors.White+" %v\n"+Colors.Reset, calledBy, username)
-	usernameExists, queryUserErr := m.QueryUserNameExists(username)
-	if queryUserErr != nil {
-		log.Printf(ErrorMsgs().NotFound, username, "GetUserFromLogin", queryUserErr)
+	var loginType string
+	usernameQuery, ok := m.QueryUserNameExists(username)
+	if ok {
+		loginType = usernameQuery
 	}
-	fmt.Printf(Colors.Blue+"usernameExists called by %v:"+Colors.White+" %v\n"+Colors.Reset, calledBy, usernameExists)
-	emailExists, queryEmailErr := m.QueryUserEmailExists(email)
-	if queryEmailErr != nil {
-		log.Printf(ErrorMsgs().NotFound, email, "GetUserFromLogin", queryEmailErr)
+	emailQuery, ok := m.QueryUserEmailExists(email)
+	if ok {
+		loginType = emailQuery
 	}
-	if usernameExists {
+	switch loginType {
+	case "username":
 		user, err := m.GetUserByUsername(username, "GetUserFromLogin")
 		if err != nil {
 			return nil, err
@@ -97,8 +97,7 @@ func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, erro
 			log.Printf(ErrorMsgs().KeyValuePair, "Successfully found user by username", user.Username)
 			return user, nil
 		}
-	}
-	if emailExists {
+	case "email":
 		user, err := m.GetUserByEmail(email, "GetUserFromLogin")
 		if err != nil {
 			return nil, err
@@ -106,40 +105,42 @@ func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, erro
 			log.Printf(ErrorMsgs().KeyValuePair, "Successfully found user by email", user.Username)
 			return user, nil
 		}
+	default:
+		return nil, fmt.Errorf("user: %v not found", login)
 	}
-	return nil, fmt.Errorf("user: %v not found", login)
 }
 
-func (m *UserModel) QueryUserNameExists(username string) (bool, error) {
-	Colors := models.CreateColors()
+func (m *UserModel) QueryUserNameExists(username string) (string, bool) {
 	if m == nil || m.DB == nil {
-		return false, fmt.Errorf(ErrorMsgs().UserModel, "QueryUserNameExists", username)
+		fmt.Errorf(ErrorMsgs().ConnConn, "database", "QueryUserNameExists", username)
+		return "", false
 	}
 	var count int
 	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Username = ?", username).Scan(&count)
 	if queryErr != nil {
 		log.Printf(ErrorMsgs().Query, username, queryErr)
+		return "", false
 	}
 	if count > 0 {
-		return true, nil
+		return "username", true
 	}
-	return false, fmt.Errorf(Colors.Red+"Username does not exist: "+Colors.White+"%v"+Colors.Reset, username)
+	return "", false
 }
 
-func (m *UserModel) QueryUserEmailExists(email string) (bool, error) {
-	Colors := models.CreateColors()
+func (m *UserModel) QueryUserEmailExists(email string) (string, bool) {
 	if m == nil || m.DB == nil {
-		return false, fmt.Errorf(ErrorMsgs().UserModel, "QueryUserEmailExists", email)
+		fmt.Errorf(ErrorMsgs().ConnConn, "database", "QueryUserNameExists", email)
 	}
 	var count int
 	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE EmailAddress = ?", email).Scan(&count)
 	if queryErr != nil {
 		log.Printf(ErrorMsgs().Query, email, queryErr)
+		return "", false
 	}
 	if count > 0 {
-		return true, nil
+		return "username", true
 	}
-	return false, fmt.Errorf(Colors.Red+"Email does not exist: "+Colors.White+"%v"+Colors.Reset, email)
+	return "", false
 }
 
 // TODO unify these functions to accept parameters

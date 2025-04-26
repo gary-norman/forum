@@ -125,7 +125,7 @@ func CreateErrorMessages() *Errors {
 	Colors := CreateColors()
 	customErrors := &Errors{
 		Close:        Colors.Red + "Unable to close " + Colors.White + "%v" + Colors.Blue + "called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
-		ConnConn:     Colors.Red + "Unable to connect to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Reset,
+		ConnConn:     Colors.Red + "Unable to connect to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v(%v)" + Colors.Reset,
 		ConnClose:    Colors.Red + "Unable to close connection to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Reset,
 		ConnInit:     Colors.Red + "Unable to initialise connection " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Reset,
 		ConnSuccess:  Colors.Blue + "Server listening on " + Colors.White + "%v " + Colors.Green + "- success!" + Colors.Reset,

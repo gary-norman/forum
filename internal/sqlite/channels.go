@@ -64,6 +64,32 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int64, column string) ([]mo
 	return channels, nil
 }
 
+func (m *ChannelModel) GetChannelsByID(id int64) ([]models.Channel, error) {
+	stmt := "SELECT * FROM Channels WHERE ID = ?"
+	rows, err := m.DB.Query(stmt, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Parse results
+	channels := make([]models.Channel, 0) // Pre-allocate slice
+	for rows.Next() {
+		c, err := parseChannelRow(rows)
+		if err != nil {
+			return nil, fmt.Errorf("error parsing row: %w", err)
+		}
+		c.Joined = true
+		channels = append(channels, c)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating rows: %w", err)
+	}
+
+	return channels, nil
+}
+
 func (m *ChannelModel) All() ([]models.Channel, error) {
 	stmt := "SELECT ID, OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted FROM Channels ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt)

@@ -276,7 +276,7 @@ func (c *ChannelHandler) JoinedByCurrentUser(memberships []models.Membership) ([
 	fmt.Printf(ErrorMsgs().Divider)
 	var channels []models.Channel
 	for _, membership := range memberships {
-		channel, err := c.App.Channels.OwnedOrJoinedByCurrentUser(membership.ChannelID, "ID")
+		channel, err := c.App.Channels.GetChannelsByID(membership.ChannelID)
 		if err != nil {
 			return nil, fmt.Errorf(ErrorMsgs().KeyValuePair, "Error calling JoinedByCurrentUser > OwnedOrJoinedByCurrentUser", err)
 		}

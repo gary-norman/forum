@@ -2,11 +2,11 @@ package models
 
 type TemplateData struct {
 	// ---------- users ----------
+	UserID      UUIDField
 	AllUsers    []User
 	RandomUser  User
 	CurrentUser *User
 	// ---------- posts ----------
-	UserID    int64
 	Posts     []Post
 	UserPosts []Post
 	// ---------- channels ----------

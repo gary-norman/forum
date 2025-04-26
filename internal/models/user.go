@@ -2,11 +2,13 @@ package models
 
 import (
 	"time"
+
+	dbutil "github.com/gary-norman/forum/internal/dbutils"
 )
 
 type User struct {
-	ID       int64  `db:"id"`
-	Username string `db:"username"`
+	ID       UUIDField `db:"id"`
+	Username string    `db:"username"`
 	Login
 	Avatar      string    `db:"avatar,omitempty"`
 	Banner      string    `db:"banner,omitempty"`
@@ -19,23 +21,23 @@ type User struct {
 	Following   int  `db:"following"`
 }
 
-func (u User) TableName() string { return "users" }
-func (u User) GetID() int64      { return u.ID }
-func (u *User) SetID(id int64)   { u.ID = id }
+func (u User) TableName() string   { return "users" }
+func (u User) GetID() UUIDField    { return u.ID }
+func (u *User) SetID(id UUIDField) { u.ID = id }
 
 func (u *User) UpdateTimeSince() {
 	u.TimeSince = getTimeSince(u.Created)
 }
 
 type UserCheck struct {
-	ID             int64  `db:"id"`
-	Username       string `db:"username"`
+	ID             dbutil.UUID `db:"id"`
+	Username       string      `db:"username"`
 	Email          string
 	HashedPassword string
 }
 
 type UserPage struct {
-	UserID      int64
+	UserID      UUIDField
 	CurrentUser *User
 	Instance    string
 	ThisUser    User

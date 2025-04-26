@@ -6,7 +6,7 @@ import (
 
 type Channel struct {
 	ID               int64     `db:"id"`
-	OwnerID          int64     `db:"ownerId"`
+	OwnerID          UUIDField `db:"ownerId"`
 	Name             string    `db:"name"`
 	Avatar           string    `db:"avatar,omitempty"`
 	Banner           string    `db:"banner,omitempty"`
@@ -31,7 +31,7 @@ func (c *Channel) UpdateTimeSince() {
 }
 
 type ChannelPage struct {
-	UserID                 int64
+	UserID                 UUIDField
 	CurrentUser            *User
 	Instance               string
 	ThisChannel            Channel
@@ -72,7 +72,7 @@ type OwnedAndJoinedChannels struct {
 
 type Membership struct {
 	ID        int64     `db:"id"`
-	UserID    int64     `db:"userId"`
+	UserID    UUIDField `db:"userId"`
 	ChannelID int64     `db:"channelId"`
 	Created   time.Time `db:"created"`
 }
@@ -83,7 +83,7 @@ func (m *Membership) SetID(id int64)   { m.ID = id }
 
 type Mod struct {
 	ID        int64     `db:"id"`
-	UserID    int64     `db:"userId"`
+	UserID    UUIDField `db:"userId"`
 	ChannelID int64     `db:"channelId"`
 	Created   time.Time `db:"created"`
 }

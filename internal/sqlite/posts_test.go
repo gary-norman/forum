@@ -2,9 +2,10 @@ package sqlite
 
 import (
 	"database/sql"
-	"github.com/gary-norman/forum/internal/models"
 	"reflect"
 	"testing"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 func TestPostModel_All(t *testing.T) {
@@ -41,7 +42,7 @@ func TestPostModel_GetPostsByChannel(t *testing.T) {
 		DB *sql.DB
 	}
 	type args struct {
-		channel int
+		channel int64
 	}
 	tests := []struct {
 		name    string
@@ -78,10 +79,8 @@ func TestPostModel_Insert(t *testing.T) {
 		content      string
 		images       string
 		author       string
-		channel      string
 		authorAvatar string
-		channelID    int
-		authorID     int
+		authorID     models.UUIDField
 		commentable  bool
 		isFlagged    bool
 	}
@@ -98,7 +97,17 @@ func TestPostModel_Insert(t *testing.T) {
 			m := &PostModel{
 				DB: tt.fields.DB,
 			}
-			if err := m.Insert(tt.args.title, tt.args.content, tt.args.images, tt.args.author, tt.args.channel, tt.args.authorAvatar, tt.args.channelID, tt.args.authorID, tt.args.commentable, tt.args.isFlagged); (err != nil) != tt.wantErr {
+			_, err := m.Insert(
+				tt.args.title,
+				tt.args.content,
+				tt.args.images,
+				tt.args.author,
+				tt.args.authorAvatar,
+				tt.args.authorID,
+				tt.args.commentable,
+				tt.args.isFlagged,
+			)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("Insert() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

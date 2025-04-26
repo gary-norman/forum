@@ -74,7 +74,6 @@ func (m *UserModel) Delete(user *models.User) error {
 }
 
 func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, error) {
-	Colors := models.CreateColors()
 	if m == nil || m.DB == nil {
 		return nil, fmt.Errorf(ErrorMsgs().UserModel, "GetUserFromLogin", login)
 	}
@@ -112,7 +111,7 @@ func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, erro
 
 func (m *UserModel) QueryUserNameExists(username string) (string, bool) {
 	if m == nil || m.DB == nil {
-		fmt.Errorf(ErrorMsgs().ConnConn, "database", "QueryUserNameExists", username)
+		log.Printf(ErrorMsgs().ConnConn, "database", "QueryUserNameExists", username)
 		return "", false
 	}
 	var count int
@@ -129,7 +128,7 @@ func (m *UserModel) QueryUserNameExists(username string) (string, bool) {
 
 func (m *UserModel) QueryUserEmailExists(email string) (string, bool) {
 	if m == nil || m.DB == nil {
-		fmt.Errorf(ErrorMsgs().ConnConn, "database", "QueryUserNameExists", email)
+		log.Printf(ErrorMsgs().ConnConn, "database", "QueryUserNameExists", email)
 	}
 	var count int
 	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE EmailAddress = ?", email).Scan(&count)

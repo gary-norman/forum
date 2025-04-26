@@ -9,6 +9,7 @@ import (
 
 	"github.com/gary-norman/forum/internal/app"
 	"github.com/gary-norman/forum/internal/models"
+	"github.com/gary-norman/forum/internal/service"
 )
 
 type AuthHandler struct {
@@ -86,18 +87,22 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	hashedPassword, _ := models.HashPassword(password)
-	insertUser := h.App.Users.Insert(
-		username,
-		email,
-		hashedPassword,
-		"",
-		"",
-		"noimage",
-		"default.png",
-		"")
 
-	if insertUser != nil {
+	user, err := service.NewUser(username, email, password)
+	if err != nil {
+		fmt.Printf(ErrorMsgs().KeyValuePair, fmt.Sprintf("Error creating user: %v", username), err)
+	}
+
+	if err := h.App.Users.Insert(
+		user.ID,
+		user.Username,
+		user.Email,
+		user.HashedPassword,
+		user.Avatar,
+		user.Banner,
+		user.Usertype,
+	); err != nil {
+		fmt.Println("Error inserting user:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusInternalServerError,
@@ -107,8 +112,8 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Encode, "register: insertErr", encErr)
 			return
 		}
-		return
 	}
+
 	type FormFields struct {
 		Fields map[string][]string `json:"formValues"`
 	}

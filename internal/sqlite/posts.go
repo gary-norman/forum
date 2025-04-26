@@ -13,7 +13,7 @@ type PostModel struct {
 	DB *sql.DB
 }
 
-func (m *PostModel) Insert(title, content, images, author, authorAvatar string, authorID int64, commentable, isFlagged bool) (int64, error) {
+func (m *PostModel) Insert(title, content, images, author, authorAvatar string, authorID models.UUIDField, commentable, isFlagged bool) (int64, error) {
 	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, AuthorAvatar, AuthorID, IsCommentable, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
 	result, err := m.DB.Exec(stmt, title, content, images, author, authorAvatar, authorID, commentable, isFlagged)
 	if err != nil {
@@ -75,7 +75,7 @@ func (m *PostModel) All() ([]models.Post, error) {
 	return Posts, nil
 }
 
-func (m *PostModel) GetPostsByUserID(user int64) ([]models.Post, error) {
+func (m *PostModel) GetPostsByUserID(user models.UUIDField) ([]models.Post, error) {
 	stmt := "SELECT * FROM posts WHERE AuthorID = ? ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt, user)
 	if err != nil {

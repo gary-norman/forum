@@ -18,9 +18,9 @@ func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
 }
 
-func (m *UserModel) Insert(username, email, password, sessionToken, csrfToken, avatar, banner, description string) error {
+func (m *UserModel) Insert(id models.UUIDField, username, email, password, avatar, banner, userType string) error {
 	// FIXME this prepare statement is unnecessary as it is not used in a loop
-	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (Username, EmailAddress, HashedPassword, SessionToken, CsrfToken, Avatar, Banner, Description, UserType, Created, IsFlagged) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, DateTime('now'), 0)")
+	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (ID, Username, EmailAddress, HashedPassword, Avatar, Banner, UserType, Created, IsFlagged) VALUES (?, ?, ?, ?, ?, ?, ?, DateTime('now'), 0)")
 	if insertErr != nil {
 		log.Printf(ErrorMsgs().Query, username, insertErr)
 	}
@@ -30,7 +30,7 @@ func (m *UserModel) Insert(username, email, password, sessionToken, csrfToken, a
 			log.Printf(ErrorMsgs().Close, "stmt", "insert", closErr)
 		}
 	}(stmt) // Prepared statements take up server resources and should be closed after use.
-	_, err := stmt.Exec(username, email, password, sessionToken, csrfToken, avatar, banner, description)
+	_, err := stmt.Exec(id, username, email, password, avatar, banner, userType)
 	if err != nil {
 		return err
 	}
@@ -247,7 +247,7 @@ func (m *UserModel) GetUserByID(ID int64) (models.User, error) {
 // TODO accept an interface for any given value
 
 // GetSingleUserValue returns the string of the column specified in output, which should be entered in all lower case
-func (m *UserModel) GetSingleUserValue(ID int64, searchColumn, outputColumn string) (string, error) {
+func (m *UserModel) GetSingleUserValue(ID models.UUIDField, searchColumn, outputColumn string) (string, error) {
 	validColumns := map[string]bool{
 		"ID":             true,
 		"Username":       true,

@@ -12,13 +12,13 @@ type ChannelModel struct {
 	DB *sql.DB
 }
 
-func (m *ChannelModel) Insert(ownerID int64, name, description, avatar, banner string, privacy, isFlagged, isMuted bool) error {
+func (m *ChannelModel) Insert(ownerID models.UUIDField, name, description, avatar, banner string, privacy, isFlagged, isMuted bool) error {
 	stmt := "INSERT INTO Channels (OwnerID, Name, Description, Created, Avatar, Banner, Privacy, IsFlagged, IsMuted) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
 	_, err := m.DB.Exec(stmt, ownerID, name, description, avatar, banner, privacy, isFlagged, isMuted)
 	return err
 }
 
-func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID int64, column string) ([]models.Channel, error) {
+func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField, column string) ([]models.Channel, error) {
 	// Validate column name to prevent SQL injection
 	if !isValidColumn(column) {
 		return nil, fmt.Errorf("invalid column name provided: %s", column)

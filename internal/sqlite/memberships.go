@@ -11,13 +11,13 @@ type MembershipModel struct {
 	DB *sql.DB
 }
 
-func (m *MembershipModel) Insert(userID, channelID int64) error {
+func (m *MembershipModel) Insert(userID models.UUIDField, channelID int64) error {
 	stmt := "INSERT INTO Memberships (UserID, ChannelID, Created) VALUES (?, ?, DateTime('now'))"
 	_, err := m.DB.Exec(stmt, userID, channelID)
 	return err
 }
 
-func (m *MembershipModel) UserMemberships(userID int64) ([]models.Membership, error) {
+func (m *MembershipModel) UserMemberships(userID models.UUIDField) ([]models.Membership, error) {
 	// fmt.Printf(ErrorMsgs().KeyValuePair, "Checking memberships for UserID", userID)
 	stmt := "SELECT ID, UserID, ChannelID, Created FROM Memberships WHERE UserID = ?"
 	rows, queryErr := m.DB.Query(stmt, userID)

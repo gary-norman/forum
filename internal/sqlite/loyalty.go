@@ -2,6 +2,7 @@ package sqlite
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 
@@ -12,11 +13,11 @@ type LoyaltyModel struct {
 	DB *sql.DB
 }
 
-func (m *LoyaltyModel) InsertLoyalty(follower, following int) error {
+func (m *LoyaltyModel) InsertLoyalty(follower, following models.UUIDField) error {
 	err := m.InsertFollowing(follower, following)
 	if err != nil {
 		fmt.Println("Error adding a following")
-		return fmt.Errorf(err.Error())
+		return errors.New(err.Error())
 	}
 
 	err = m.InsertFollower(following, follower)
@@ -29,7 +30,7 @@ func (m *LoyaltyModel) InsertLoyalty(follower, following int) error {
 }
 
 // InsertFollower inserts a
-func (m *LoyaltyModel) InsertFollower(user, follower int) error {
+func (m *LoyaltyModel) InsertFollower(user, follower models.UUIDField) error {
 	// Begin the transaction
 	tx, err := m.DB.Begin()
 	// fmt.Println("Beginning UPDATE transaction")
@@ -65,7 +66,7 @@ func (m *LoyaltyModel) InsertFollower(user, follower int) error {
 	return commitErr
 }
 
-func (m *LoyaltyModel) CountUsers(userID int64) (followers, following int, err error) {
+func (m *LoyaltyModel) CountUsers(userID models.UUIDField) (followers, following int, err error) {
 	stmt1 := `SELECT COUNT(*) AS FollowingCount
              FROM Following
              WHERE UserID = ?`
@@ -97,7 +98,7 @@ func (m *LoyaltyModel) CountUsers(userID int64) (followers, following int, err e
 }
 
 // Delete removes an entry in the Following table by ID
-func (m *LoyaltyModel) Delete(followingID, followersID int64) error {
+func (m *LoyaltyModel) Delete(followingID, followersID models.UUIDField) error {
 	// Begin the transaction
 	tx, err := m.DB.Begin()
 	// fmt.Println("Beginning DELETE transaction")
@@ -143,7 +144,7 @@ func (m *LoyaltyModel) Delete(followingID, followersID int64) error {
 }
 
 // InsertFollowing inserts a new user to the Following list of a target use
-func (m *LoyaltyModel) InsertFollowing(user, following int) error {
+func (m *LoyaltyModel) InsertFollowing(user, following models.UUIDField) error {
 	// Begin the transaction
 	tx, err := m.DB.Begin()
 	// fmt.Println("Beginning UPDATE transaction")

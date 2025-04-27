@@ -59,13 +59,13 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	emailExists, err := h.App.Users.QueryUserEmailExists(email)
-	if emailExists {
+	_, ok, emailErr := h.App.Users.QueryUserEmailExists(email)
+	if ok {
 		w.WriteHeader(http.StatusConflict)
 		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusConflict,
 			"message": "an account is already registered to that email address",
-			"body":    err,
+			"body":    emailErr,
 		})
 		if encErr != nil {
 			log.Printf(ErrorMsgs().Encode, "register: emailExists", encErr)
@@ -73,13 +73,13 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	userExists, err := h.App.Users.QueryUserNameExists(username)
-	if userExists {
+	_, ok, usernameErr := h.App.Users.QueryUserNameExists(username)
+	if ok {
 		w.WriteHeader(http.StatusConflict)
 		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusConflict,
 			"message": "an account is already registered to that username",
-			"body":    err,
+			"body":    usernameErr,
 		})
 		if encErr != nil {
 			log.Printf(ErrorMsgs().Encode, "register: userExists", encErr)

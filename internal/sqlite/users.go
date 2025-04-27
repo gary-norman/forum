@@ -79,11 +79,11 @@ func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, erro
 	}
 	username, email := login, login
 	var loginType string
-	usernameQuery, ok := m.QueryUserNameExists(username)
+	usernameQuery, ok, _ := m.QueryUserNameExists(username)
 	if ok {
 		loginType = usernameQuery
 	}
-	emailQuery, ok := m.QueryUserEmailExists(email)
+	emailQuery, ok, _ := m.QueryUserEmailExists(email)
 	if ok {
 		loginType = emailQuery
 	}
@@ -109,37 +109,39 @@ func (m *UserModel) GetUserFromLogin(login, calledBy string) (*models.User, erro
 	}
 }
 
-func (m *UserModel) QueryUserNameExists(username string) (string, bool) {
+func (m *UserModel) QueryUserNameExists(username string) (string, bool, error) {
 	if m == nil || m.DB == nil {
-		log.Printf(ErrorMsgs().ConnConn, "database", "QueryUserNameExists", username)
-		return "", false
+		err := fmt.Errorf("error connecting to database: %s", "QueryUserNameExists")
+		return "", false, err
+
 	}
 	var count int
 	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE Username = ?", username).Scan(&count)
 	if queryErr != nil {
 		log.Printf(ErrorMsgs().Query, username, queryErr)
-		return "", false
+		return "", false, queryErr
 	}
 	if count > 0 {
-		return "username", true
+		return "username", true, queryErr
 	}
-	return "", false
+	return "", false, queryErr
 }
 
-func (m *UserModel) QueryUserEmailExists(email string) (string, bool) {
+func (m *UserModel) QueryUserEmailExists(email string) (string, bool, error) {
 	if m == nil || m.DB == nil {
-		log.Printf(ErrorMsgs().ConnConn, "database", "QueryUserNameExists", email)
+		err := fmt.Errorf("error connecting to database: %s", "QueryUserEmailExists")
+		return "", false, err
 	}
 	var count int
 	queryErr := m.DB.QueryRow("SELECT COUNT(*) FROM Users WHERE EmailAddress = ?", email).Scan(&count)
 	if queryErr != nil {
 		log.Printf(ErrorMsgs().Query, email, queryErr)
-		return "", false
+		return "", false, queryErr
 	}
 	if count > 0 {
-		return "username", true
+		return "username", true, queryErr
 	}
-	return "", false
+	return "", false, queryErr
 }
 
 // TODO unify these functions to accept parameters

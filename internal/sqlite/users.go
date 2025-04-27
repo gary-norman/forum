@@ -41,7 +41,7 @@ func (m *UserModel) Insert(id models.UUIDField, username, email, password, avata
 			log.Printf(ErrorMsgs().Close, "stmt", "insert", closErr)
 		}
 	}(stmt) // Prepared statements take up server resources and should be closed after use.
-	_, err := stmt.Exec(id, username, email, password, avatar, banner, userType)
+	_, err := stmt.Exec(id, nextID, username, email, password, avatar, banner, userType)
 	if err != nil {
 		return err
 	}

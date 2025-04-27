@@ -60,12 +60,18 @@ func GetTimeSince(created time.Time) string {
 }
 
 func GetRandomChannel(channelSlice []models.Channel) models.Channel {
+	if len(channelSlice) == 0 {
+		return models.Channel{}
+	}
 	rndInt := rand.IntN(len(channelSlice))
 	channel := channelSlice[rndInt]
 	return channel
 }
 
 func GetRandomUser(userSlice []models.User) models.User {
+	if len(userSlice) == 0 {
+		return models.User{}
+	}
 	rndInt := rand.IntN(len(userSlice))
 	user := userSlice[rndInt]
 	return user

@@ -182,6 +182,31 @@ func (m *PostModel) GetPostByID(id int64) (models.Post, error) {
 	return p, nil
 }
 
+func (m *PostModel) GetAllChannelPostsForUser(ID models.UUIDField) ([]models.Post, error) {
+	stmt := "SELECT * From posts WHERE ID = (SELECT ChannelID FROM Membership WHERE UserID = ?)"
+	rows, err := m.DB.Query(stmt, ID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Parse results
+	posts := make([]models.Post, 0) // Pre-allocate slice
+	for rows.Next() {
+		c, err := parsePostRows(rows)
+		if err != nil {
+			return nil, fmt.Errorf("error parsing row: %w", err)
+		}
+		posts = append(posts, *c)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating rows: %w", err)
+	}
+
+	return posts, nil
+}
+
 // Search queries the database for any post column that contains the values and returns that post
 func (m *PostModel) FindCurrentPost(column string, value any) ([]models.Post, error) {
 	// Validate column name to prevent SQL injection

@@ -267,9 +267,6 @@ func (c *ChannelHandler) StoreMembership(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-// func (app *App) requestMembership(w http.ResponseWriter, r *http.Request, userID, channelID int64) {
-// }
-
 // JoinedByCurrentUser checks if the currently logged-in user is a member of the current channel
 func (c *ChannelHandler) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
 	fmt.Println(Colors().Orange + "Checking if this user is a member of this channel" + Colors().Reset)

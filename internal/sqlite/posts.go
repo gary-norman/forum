@@ -263,3 +263,31 @@ func (m *PostModel) FindCurrentPost(column string, value any) ([]models.Post, er
 
 	return posts, nil
 }
+
+func parsePostRows(rows *sql.Rows) (*models.Post, error) {
+	var post models.Post
+
+	if err := rows.Scan(
+		&post.ID,
+		&post.Title,
+		&post.Content,
+		&post.Images,
+		&post.Created,
+		&post.IsCommentable,
+		&post.Author,
+		&post.AuthorID,
+		&post.IsFlagged,
+		&post.ChannelID,
+		&post.ChannelName,
+		&post.Likes,
+		&post.Dislikes,
+		&post.CommentsCount,
+		&post.AuthorAvatar,
+		&post.Comments,
+	); err != nil {
+		return nil, err
+	}
+
+	models.UpdateTimeSince(&post)
+	return &post, nil
+}

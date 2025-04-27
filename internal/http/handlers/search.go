@@ -54,7 +54,7 @@ func (s *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
-		log.Printf(ErrorMsgs().KeyValuePair, "User is not logged in. CurrentUser: ", currentUser)
+		log.Printf(ErrorMsgs().KeyValuePair, "User is not logged in. CurrentUser", currentUser)
 	}
 
 	searchResults := map[string]any{
@@ -70,5 +70,5 @@ func (s *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf(ErrorMsgs().KeyValuePair, "Search data fetched in:", time.Since(start))
+	log.Printf(ErrorMsgs().KeyValuePair, "Search data fetched in", time.Since(start))
 }

@@ -183,14 +183,14 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 }
 
 // SearchChannelsByColumn queries the database for any channel column that contains the value and returns a slice of matching channels
-func (m *ChannelModel) SearchChannelsByColumn(column string, value interface{}) ([]models.Channel, error) {
+func (m *ChannelModel) SearchChannelsByColumn(column string, value any) ([]models.Channel, error) {
 	// Validate column name to prevent SQL injection
 	if !isValidColumn(column) {
 		return nil, fmt.Errorf("invalid column name provided: %s", column)
 	}
 
 	// Base query
-	query := "SELECT ID, OwnerId, Name, Avatar, Banner, Description, Created, Privacy, IsMuted, IsFlagged FROM channels WHERE " + column + " = ?"
+	query := "SELECT * FROM channels WHERE " + column + " = ?"
 
 	// Execute the query
 	rows, err := m.DB.Query(query, value)

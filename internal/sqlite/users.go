@@ -344,20 +344,61 @@ func (m *UserModel) All() ([]models.User, error) {
 		}
 	}()
 
-	var Users []models.User
+	users := make([]models.User, 0)
 	for rows.Next() {
-		p := models.User{}
-		scanErr := rows.Scan(&p.ID, &p.Username, &p.Email, &p.Avatar, &p.Banner, &p.Description, &p.Usertype,
-			&p.Created, &p.IsFlagged, &p.SessionToken, &p.CSRFToken, &p.HashedPassword)
-		if scanErr != nil {
-			return nil, scanErr
+		p, err := parseUserRows(rows)
+		if err != nil {
+			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
-		Users = append(Users, p)
+		users = append(users, *p)
 	}
+	return users, nil
+}
 
-	if queryErr = rows.Err(); queryErr != nil {
-		return nil, fmt.Errorf(ErrorMsgs().Query, "Users", queryErr)
+func parseUserRow(row *sql.Row) (*models.User, error) {
+	var user models.User
+
+	if err := row.Scan(
+		&user.ID,
+		&user.Username,
+		&user.Email,
+		&user.Avatar,
+		&user.Banner,
+		&user.Description,
+		&user.Usertype,
+		&user.Created,
+		&user.IsFlagged,
+		&user.SessionToken,
+		&user.CSRFToken,
+		&user.HashedPassword,
+	); err != nil {
+		log.Printf(ErrorMsgs().Query, "GetUserFromId", err)
+		return nil, err
 	}
+	models.UpdateTimeSince(&user)
+	return &user, nil
+}
 
-	return Users, nil
+func parseUserRows(rows *sql.Rows) (*models.User, error) {
+	var user models.User
+
+	if err := rows.Scan(
+		&user.ID,
+		&user.Username,
+		&user.Email,
+		&user.Avatar,
+		&user.Banner,
+		&user.Description,
+		&user.Usertype,
+		&user.Created,
+		&user.IsFlagged,
+		&user.SessionToken,
+		&user.CSRFToken,
+		&user.HashedPassword,
+	); err != nil {
+		log.Printf(ErrorMsgs().Query, "GetUserFromId", err)
+		return nil, err
+	}
+	models.UpdateTimeSince(&user)
+	return &user, nil
 }

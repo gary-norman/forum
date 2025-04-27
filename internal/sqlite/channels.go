@@ -18,6 +18,32 @@ func (m *ChannelModel) Insert(ownerID models.UUIDField, name, description, avata
 	return err
 }
 
+func (m *ChannelModel) NewOwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]models.Channel, error) {
+	stmt := "SELECT * From Channels WHERE ID = (SELECT ChannelID FROM Membership WHERE UserID = ?) OR OwnerID = ?"
+	rows, err := m.DB.Query(stmt, ID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Parse results
+	channels := make([]models.Channel, 0) // Pre-allocate slice
+	for rows.Next() {
+		c, err := parseChannelRows(rows)
+		if err != nil {
+			return nil, fmt.Errorf("error parsing row: %w", err)
+		}
+		c.Joined = true
+		channels = append(channels, *c)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating rows: %w", err)
+	}
+
+	return channels, nil
+}
+
 func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField, column string) ([]models.Channel, error) {
 	// Validate column name to prevent SQL injection
 	if !isValidColumn(column) {

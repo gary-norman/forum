@@ -52,6 +52,7 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField, column st
 
 	// Base query
 	query := "SELECT id, ownerId, name, avatar, banner, description, created, privacy, isMuted, isFlagged FROM channels WHERE " + column + " = ?"
+	query := "SELECT * FROM channels WHERE " + column + " = ?"
 
 	// Execute the query
 	rows, err := m.DB.Query(query, ID)

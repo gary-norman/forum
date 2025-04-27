@@ -166,11 +166,11 @@ func (m *ChannelModel) SearchChannelsByColumn(column string, value interface{}) 
 	// Parse results
 	channels := make([]models.Channel, 0) // Pre-allocate slice
 	for rows.Next() {
-		channel, err := parseChannelRow(rows)
+		channel, err := parseChannelRows(rows)
 		if err != nil {
 			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
-		channels = append(channels, channel)
+		channels = append(channels, *channel)
 	}
 
 	if err := rows.Err(); err != nil {
@@ -194,30 +194,6 @@ func isValidColumn(column string) bool {
 		"IsFlagged":   true,
 	}
 	return validColumns[column]
-}
-
-func parseChannelRow(rows *sql.Rows) (models.Channel, error) {
-	var channel models.Channel
-	var avatar, banner sql.NullString
-
-	if err := rows.Scan(
-		&channel.ID,
-		&channel.OwnerID,
-		&channel.Name,
-		&avatar,
-		&banner,
-		&channel.Description,
-		&channel.Created,
-		&channel.Privacy,
-		&channel.IsMuted,
-		&channel.IsFlagged,
-	); err != nil {
-		return channel, err
-	}
-
-	channel.Avatar = avatar.String
-	channel.Banner = banner.String
-	return channel, nil
 }
 
 func (m *ChannelModel) AddPostToChannel(channelID, postID int64) error {
@@ -278,4 +254,54 @@ func (m *ChannelModel) GetChannelNameFromID(id int64) (string, error) {
 	}
 
 	return name, nil
+}
+
+func parseChannelRow(row *sql.Row) (*models.Channel, error) {
+	var channel models.Channel
+	var avatar, banner sql.NullString
+
+	if err := row.Scan(
+		&channel.ID,
+		&channel.OwnerID,
+		&channel.Name,
+		&avatar,
+		&banner,
+		&channel.Description,
+		&channel.Created,
+		&channel.Privacy,
+		&channel.IsMuted,
+		&channel.IsFlagged,
+	); err != nil {
+		return nil, err
+	}
+
+	channel.Avatar = avatar.String
+	channel.Banner = banner.String
+	models.UpdateTimeSince(&channel)
+	return &channel, nil
+}
+
+func parseChannelRows(rows *sql.Rows) (*models.Channel, error) {
+	var channel models.Channel
+	var avatar, banner sql.NullString
+
+	if err := rows.Scan(
+		&channel.ID,
+		&channel.OwnerID,
+		&channel.Name,
+		&avatar,
+		&banner,
+		&channel.Description,
+		&channel.Created,
+		&channel.Privacy,
+		&channel.IsMuted,
+		&channel.IsFlagged,
+	); err != nil {
+		return nil, err
+	}
+
+	channel.Avatar = avatar.String
+	channel.Banner = banner.String
+	models.UpdateTimeSince(&channel)
+	return &channel, nil
 }

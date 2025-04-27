@@ -18,9 +18,20 @@ func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
 }
 
+func getNextSortID(db *sql.DB) (int, error) {
+	var next int
+	err := db.QueryRow(`SELECT COALESCE(MAX(SortID), 0) + 1 FROM Users`).Scan(&next)
+	return next, err
+}
+
 func (m *UserModel) Insert(id models.UUIDField, username, email, password, avatar, banner, userType string) error {
+	nextID, execErr := getNextSortID(m.DB)
+	if execErr != nil {
+		log.Fatal("Error getting next SortID:", execErr)
+	}
+
 	// FIXME this prepare statement is unnecessary as it is not used in a loop
-	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (ID, Username, EmailAddress, HashedPassword, Avatar, Banner, UserType, Created, IsFlagged) VALUES (?, ?, ?, ?, ?, ?, ?, DateTime('now'), 0)")
+	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (ID, SortID, Username, EmailAddress, HashedPassword, Avatar, Banner, UserType, Created, IsFlagged) VALUES (?, ?, ?, ?, ?, ?, ?, DateTime('now'), 0)")
 	if insertErr != nil {
 		log.Printf(ErrorMsgs().Query, username, insertErr)
 	}

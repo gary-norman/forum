@@ -51,7 +51,6 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField, column st
 	}
 
 	// Base query
-	query := "SELECT id, ownerId, name, avatar, banner, description, created, privacy, isMuted, isFlagged FROM channels WHERE " + column + " = ?"
 	query := "SELECT * FROM channels WHERE " + column + " = ?"
 
 	// Execute the query
@@ -64,7 +63,7 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField, column st
 	// Parse results
 	channels := make([]models.Channel, 0) // Pre-allocate slice
 	for rows.Next() {
-		c, err := parseChannelRow(rows)
+		c, err := parseChannelRows(rows)
 		if err != nil {
 			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
@@ -78,7 +77,7 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField, column st
 			c.Joined = true
 			// fmt.Printf(ErrorMsgs().KeyValuePair, "Joined", c.Joined)
 		}
-		channels = append(channels, c)
+		channels = append(channels, *c)
 	}
 
 	if err := rows.Err(); err != nil {
@@ -102,12 +101,12 @@ func (m *ChannelModel) GetChannelsByID(id int64) ([]models.Channel, error) {
 	// Parse results
 	channels := make([]models.Channel, 0) // Pre-allocate slice
 	for rows.Next() {
-		c, err := parseChannelRow(rows)
+		c, err := parseChannelRows(rows)
 		if err != nil {
 			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
 		c.Joined = true
-		channels = append(channels, c)
+		channels = append(channels, *c)
 	}
 
 	if err := rows.Err(); err != nil {

@@ -258,9 +258,7 @@ func (m *UserModel) GetUserByID(ID int64) (models.User, error) {
 }
 
 // TODO accept an interface for any given value
-
-// GetSingleUserValue returns the string of the column specified in output, which should be entered in all lower case
-func (m *UserModel) GetSingleUserValue(ID models.UUIDField, searchColumn, outputColumn string) (string, error) {
+func isValidUserColumn(column string) bool {
 	validColumns := map[string]bool{
 		"ID":             true,
 		"Username":       true,
@@ -275,7 +273,12 @@ func (m *UserModel) GetSingleUserValue(ID models.UUIDField, searchColumn, output
 		"Created":        true,
 		"IsFlagged":      true,
 	}
-	if !validColumns[searchColumn] {
+	return validColumns[column]
+}
+
+// GetSingleUserValue returns the string of the column specified in output, which should be entered in all lower case
+func (m *UserModel) GetSingleUserValue(ID models.UUIDField, searchColumn, outputColumn string) (string, error) {
+	if !isValidUserColumn(searchColumn) {
 		return "", fmt.Errorf("invalid searchColumn name: %s", searchColumn)
 	}
 	stmt := fmt.Sprintf(

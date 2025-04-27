@@ -19,6 +19,7 @@ type HomeHandler struct {
 	Post     *PostHandler
 	Comment  *CommentHandler
 	Channel  *ChannelHandler
+	Mod      *ModHandler
 }
 
 var TemplateData models.TemplateData

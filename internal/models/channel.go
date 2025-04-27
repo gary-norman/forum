@@ -86,8 +86,13 @@ type Mod struct {
 	UserID    UUIDField `db:"userId"`
 	ChannelID int64     `db:"channelId"`
 	Created   time.Time `db:"created"`
+	TimeSince string
 }
 
 func (m Mod) TableName() string { return "mods" }
 func (m Mod) GetID() int64      { return m.ID }
 func (m *Mod) SetID(id int64)   { m.ID = id }
+
+func (c *Mod) UpdateTimeSince() {
+	c.TimeSince = getTimeSince(c.Created)
+}

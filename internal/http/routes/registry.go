@@ -16,6 +16,7 @@ type RouteHandler struct {
 	Search   *h.SearchHandler
 	Session  *h.SessionHandler
 	User     *h.UserHandler
+	Mod      *h.ModHandler
 }
 
 func NewCommentHandler(app *app.App, reaction *h.ReactionHandler) *h.CommentHandler {
@@ -86,6 +87,14 @@ func NewSearchHandler(app *app.App) *h.SearchHandler {
 	}
 }
 
+func NewModHandler(app *app.App, channel *h.ChannelHandler, user *h.UserHandler) *h.ModHandler {
+	return &h.ModHandler{
+		App:     app,
+		Channel: channel,
+		User:    user,
+	}
+}
+
 func NewRouteHandler(app *app.App) *RouteHandler {
 	// Step 1: Create top-level (flat) handlers without nested deps first
 	sessionHandler := NewSessionHandler(app)
@@ -98,6 +107,7 @@ func NewRouteHandler(app *app.App) *RouteHandler {
 	userHandler := NewUserHandler(app, channelHandler, commentHandler, reactionHandler)
 	postHandler := NewPostHandler(app, channelHandler, commentHandler, reactionHandler)
 	homeHandler := NewHomeHandler(app, channelHandler, commentHandler, postHandler, reactionHandler)
+	modHandler := NewModHandler(app, channelHandler, userHandler)
 	searchHandler := NewSearchHandler(app)
 
 	// Step 3: Return fully wired router
@@ -111,5 +121,6 @@ func NewRouteHandler(app *app.App) *RouteHandler {
 		Search:   searchHandler,
 		Session:  sessionHandler,
 		User:     userHandler,
+		Mod:      modHandler,
 	}
 }

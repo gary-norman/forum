@@ -116,8 +116,44 @@ func (m *ChannelModel) GetChannelsByID(id int64) ([]models.Channel, error) {
 	return channels, nil
 }
 
+func (m *ChannelModel) GetChannelByID(id int64) (*models.Channel, error) {
+	stmt := "SELECT * FROM Channels WHERE ID = ? LIMIT 1"
+	rows, err := m.DB.Query(stmt, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	channels := make([]models.Channel, 0) // Pre-allocate slice
+	for rows.Next() {
+		c, err := parseChannelRows(rows)
+		if err != nil {
+			return nil, err
+		}
+		channels = append(channels, *c)
+	}
+	return &channels[0], nil
+}
+
+func (m *ChannelModel) GetNameOfChannelOwner(channelID int64) (string, error) {
+	stmt := "SELECT username FROM Users WHERE ID = (SELECT OwnerID FROM Channels WHERE ID = ?)"
+	rows, err := m.DB.Query(stmt, channelID)
+	if err != nil {
+		return "", err
+	}
+	defer rows.Close()
+
+	var username string
+	for rows.Next() {
+		if err := rows.Scan(&username); err != nil {
+			return "", err
+		}
+	}
+	return username, nil
+}
+
 func (m *ChannelModel) All() ([]models.Channel, error) {
-	stmt := "SELECT ID, OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted FROM Channels ORDER BY ID DESC"
+	stmt := "SELECT * FROM Channels ORDER BY Created DESC"
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
 		return nil, err

@@ -129,14 +129,19 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
 		}
 		ownedChannels, err = h.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID)
+		if memberErr != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+		}
+
 		if err != nil {
-			log.Printf(ErrorMsgs().Query, "user owned channels", err)
+			log.Printf(ErrorMsgs().Query, "GetHome > user owned channels", err)
 		}
 		joinedChannels, err = h.Channel.JoinedByCurrentUser(memberships)
 		if err != nil {
 			log.Printf(ErrorMsgs().Query, "user joined channels", err)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+
 	} else {
 		userPosts = allPosts
 	}

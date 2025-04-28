@@ -8,6 +8,7 @@ import (
 
 type User struct {
 	ID       UUIDField `db:"id"`
+	SortID   int       `db:"sortId"`
 	Username string    `db:"username"`
 	Login
 	Avatar      string    `db:"avatar,omitempty"`

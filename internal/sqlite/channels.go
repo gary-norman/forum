@@ -18,8 +18,8 @@ func (m *ChannelModel) Insert(ownerID models.UUIDField, name, description, avata
 	return err
 }
 
-func (m *ChannelModel) NewOwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]models.Channel, error) {
-	stmt := "SELECT * From Channels WHERE ID = (SELECT ChannelID FROM Membership WHERE UserID = ?) OR OwnerID = ?"
+func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]models.Channel, error) {
+	stmt := "SELECT * From Channels WHERE ID IN (SELECT ChannelID FROM Memberships WHERE UserID = ?) OR OwnerID = ? ORDER BY Name DESC"
 	rows, err := m.DB.Query(stmt, ID)
 	if err != nil {
 		return nil, err
@@ -33,6 +33,7 @@ func (m *ChannelModel) NewOwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]mod
 		if err != nil {
 			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
+		// FIXME: This is a temporary fix to set the channel as joined:we need to
 		c.Joined = true
 		channels = append(channels, *c)
 	}
@@ -44,52 +45,51 @@ func (m *ChannelModel) NewOwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]mod
 	return channels, nil
 }
 
-func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField, column string) ([]models.Channel, error) {
-	// Validate column name to prevent SQL injection
-	if !isValidColumn(column) {
-		return nil, fmt.Errorf("invalid column name provided: %s", column)
-	}
-
-	// Base query
-	query := "SELECT * FROM channels WHERE " + column + " = ?"
-
-	// Execute the query
-	rows, err := m.DB.Query(query, ID)
-	if err != nil {
-		return nil, fmt.Errorf("error executing query: %w", err)
-	}
-	defer rows.Close()
-
-	// Parse results
-	channels := make([]models.Channel, 0) // Pre-allocate slice
-	for rows.Next() {
-		c, err := parseChannelRows(rows)
-		if err != nil {
-			return nil, fmt.Errorf("error parsing row: %w", err)
-		}
-		if column == "OwnerID" {
-			// fmt.Printf(ErrorMsgs().KeyValuePair, "updating Owned of", c.Name)
-			c.Owned = true
-			// fmt.Printf(ErrorMsgs().KeyValuePair, "Owned", c.Owned)
-		}
-		if column == "ID" {
-			// fmt.Printf(ErrorMsgs().KeyValuePair, "updating Joined of", c.Name)
-			c.Joined = true
-			// fmt.Printf(ErrorMsgs().KeyValuePair, "Joined", c.Joined)
-		}
-		channels = append(channels, *c)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("error iterating rows: %w", err)
-	}
-	if column == "OwnerID" {
-		// fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned by current user", len(channels))
-	}
-
-	return channels, nil
-}
-
+//	func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField, column string) ([]models.Channel, error) {
+//		// Validate column name to prevent SQL injection
+//		if !isValidColumn(column) {
+//			return nil, fmt.Errorf("invalid column name provided: %s", column)
+//		}
+//
+//		// Base query
+//		query := "SELECT * FROM channels WHERE " + column + " = ?"
+//
+//		// Execute the query
+//		rows, err := m.DB.Query(query, ID)
+//		if err != nil {
+//			return nil, fmt.Errorf("error executing query: %w", err)
+//		}
+//		defer rows.Close()
+//
+//		// Parse results
+//		channels := make([]models.Channel, 0) // Pre-allocate slice
+//		for rows.Next() {
+//			c, err := parseChannelRows(rows)
+//			if err != nil {
+//				return nil, fmt.Errorf("error parsing row: %w", err)
+//			}
+//			if column == "OwnerID" {
+//				// fmt.Printf(ErrorMsgs().KeyValuePair, "updating Owned of", c.Name)
+//				c.Owned = true
+//				// fmt.Printf(ErrorMsgs().KeyValuePair, "Owned", c.Owned)
+//			}
+//			if column == "ID" {
+//				// fmt.Printf(ErrorMsgs().KeyValuePair, "updating Joined of", c.Name)
+//				c.Joined = true
+//				// fmt.Printf(ErrorMsgs().KeyValuePair, "Joined", c.Joined)
+//			}
+//			channels = append(channels, *c)
+//		}
+//
+//		if err := rows.Err(); err != nil {
+//			return nil, fmt.Errorf("error iterating rows: %w", err)
+//		}
+//		if column == "OwnerID" {
+//			// fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned by current user", len(channels))
+//		}
+//
+//		return channels, nil
+//	}
 func (m *ChannelModel) GetChannelsByID(id int64) ([]models.Channel, error) {
 	stmt := "SELECT * FROM Channels WHERE ID = ?"
 	rows, err := m.DB.Query(stmt, id)

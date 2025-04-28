@@ -114,7 +114,7 @@ func (m *PostModel) GetPostsByUserID(user models.UUIDField) ([]models.Post, erro
 }
 
 func (m *PostModel) GetPostsByChannel(channel int64) ([]models.Post, error) {
-	stmt := "SELECT * FROM posts WHERE ChannelID = ? ORDER BY ID DESC"
+	stmt := "SELECT * FROM Posts WHERE ID IN (SELECT PostID FROM PostChannels WHERE ChannelID = ?) ORDER BY Created DESC"
 	rows, err := m.DB.Query(stmt, channel)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "Error", "select")
@@ -183,7 +183,7 @@ func (m *PostModel) GetPostByID(id int64) (models.Post, error) {
 }
 
 func (m *PostModel) GetAllChannelPostsForUser(ID models.UUIDField) ([]models.Post, error) {
-	stmt := "SELECT * From posts WHERE ID = (SELECT ChannelID FROM Membership WHERE UserID = ?)"
+	stmt := "SELECT * From posts WHERE ID IN (SELECT ChannelID FROM Memberships WHERE UserID = ?)"
 	rows, err := m.DB.Query(stmt, ID)
 	if err != nil {
 		return nil, err

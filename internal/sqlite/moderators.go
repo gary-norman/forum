@@ -47,7 +47,7 @@ func (m *ModModel) AddModeration(userID models.UUIDField, channelID int64) error
 }
 
 func (m *ModModel) GetModdedChannelsForUser(models.UUIDField) ([]models.Mod, error) {
-	stmt := "SELECT * From Channels WHERE ID = (SELECT ChannelID FROM Mods WHERE UserID = ?)"
+	stmt := "SELECT * From Channels WHERE ID IN (SELECT ChannelID FROM Mods WHERE UserID = ?)"
 	rows, queryErr := m.DB.Query(stmt)
 	if queryErr != nil {
 		return nil, fmt.Errorf(ErrorMsgs().Query, "Mods", queryErr)

@@ -119,7 +119,7 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 		}
 		ownedChannels, err = c.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID)
 		if err != nil {
-			log.Printf(ErrorMsgs().Query, "user owned channels", err)
+			log.Printf(ErrorMsgs().Query, "GetThisChannel > user owned channels", err)
 			http.Error(w, `{"error": "Error getting user owned channels"}`, http.StatusInternalServerError)
 		}
 		joinedChannels, err = c.JoinedByCurrentUser(memberships)
@@ -266,6 +266,7 @@ func (c *ChannelHandler) JoinedByCurrentUser(memberships []models.Membership) ([
 		}
 		channels = append(channels, channel[0])
 	}
+	//TODO add logic that checks if the user is an owner of this channel
 	if len(channels) > 0 {
 		fmt.Println(Colors().Green + "Current user is a member of this channel" + Colors().Reset)
 	} else {

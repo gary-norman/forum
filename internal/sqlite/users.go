@@ -252,7 +252,7 @@ func (m *UserModel) GetUserByID(ID int64) (models.User, error) {
 		&u.CSRFToken,
 		&u.HashedPassword)
 	if err != nil {
-		log.Printf(ErrorMsgs().Query, "GetUserFromId", err)
+		log.Printf(ErrorMsgs().Query, "GetUserByID", err)
 		return u, err
 	}
 	models.UpdateTimeSince(&u)
@@ -377,7 +377,7 @@ func parseUserRow(row *sql.Row) (*models.User, error) {
 		&user.CSRFToken,
 		&user.HashedPassword,
 	); err != nil {
-		log.Printf(ErrorMsgs().Query, "GetUserFromId", err)
+		log.Printf(ErrorMsgs().Query, "parseUserRow", err)
 		return nil, err
 	}
 	models.UpdateTimeSince(&user)
@@ -402,7 +402,7 @@ func parseUserRows(rows *sql.Rows) (*models.User, error) {
 		&user.CSRFToken,
 		&user.HashedPassword,
 	); err != nil {
-		log.Printf(ErrorMsgs().Query, "GetUserFromId", err)
+		log.Printf(ErrorMsgs().Query, "parseUserRows", err)
 		return nil, err
 	}
 	models.UpdateTimeSince(&user)

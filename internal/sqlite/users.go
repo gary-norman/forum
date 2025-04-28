@@ -31,7 +31,7 @@ func (m *UserModel) Insert(id models.UUIDField, username, email, password, avata
 	}
 
 	// FIXME this prepare statement is unnecessary as it is not used in a loop
-	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (ID, SortID, Username, EmailAddress, HashedPassword, Avatar, Banner, UserType, Created, IsFlagged) VALUES (?, ?, ?, ?, ?, ?, ?, DateTime('now'), 0)")
+	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (ID, SortID, Username, EmailAddress, HashedPassword, Avatar, Banner, UserType, Created, IsFlagged) VALUES (?, ?, ?, ?, ?, ?, ?, ?, DateTime('now'), 0)")
 	if insertErr != nil {
 		log.Printf(ErrorMsgs().Query, username, insertErr)
 	}
@@ -177,6 +177,7 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 	var user models.User
 	queryErr := stmt.QueryRow(username).Scan(
 		&user.ID,
+		&user.SortID,
 		&user.Username,
 		&user.Email,
 		&user.Avatar,
@@ -238,6 +239,7 @@ func (m *UserModel) GetUserByID(ID int64) (models.User, error) {
 	u := models.User{}
 	err := row.Scan(
 		&u.ID,
+		&u.SortID,
 		&u.Username,
 		&u.Email,
 		&u.Avatar,
@@ -261,6 +263,7 @@ func (m *UserModel) GetUserByID(ID int64) (models.User, error) {
 func isValidUserColumn(column string) bool {
 	validColumns := map[string]bool{
 		"ID":             true,
+		"SortID":         true,
 		"Username":       true,
 		"EmailAddress":   true,
 		"HashedPassword": true,
@@ -297,7 +300,7 @@ func (m *UserModel) GetSingleUserValue(ID models.UUIDField, searchColumn, output
 	var user models.User
 	if rows.Next() {
 		if scanErr := rows.Scan(
-			&user.ID, &user.Username, &user.Email, &user.Avatar, &user.Banner, &user.Description, &user.Usertype,
+			&user.ID, &user.SortID, &user.Username, &user.Email, &user.Avatar, &user.Banner, &user.Description, &user.Usertype,
 			&user.Created, &user.IsFlagged, &user.SessionToken, &user.CSRFToken, &user.HashedPassword); scanErr != nil {
 			return "", scanErr
 		}
@@ -308,6 +311,7 @@ func (m *UserModel) GetSingleUserValue(ID models.UUIDField, searchColumn, output
 	// Map searchColumn names to their values
 	fields := map[string]any{
 		"id":             user.ID,
+		"sortId":         user.SortID,
 		"username":       user.Username,
 		"email":          user.Email,
 		"hashedPassword": user.HashedPassword,
@@ -360,6 +364,7 @@ func parseUserRow(row *sql.Row) (*models.User, error) {
 
 	if err := row.Scan(
 		&user.ID,
+		&user.SortID,
 		&user.Username,
 		&user.Email,
 		&user.Avatar,
@@ -384,6 +389,7 @@ func parseUserRows(rows *sql.Rows) (*models.User, error) {
 
 	if err := rows.Scan(
 		&user.ID,
+		&user.SortID,
 		&user.Username,
 		&user.Email,
 		&user.Avatar,

@@ -20,7 +20,7 @@ func (m *ChannelModel) Insert(ownerID models.UUIDField, name, description, avata
 
 func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]models.Channel, error) {
 	stmt := "SELECT * From Channels WHERE ID IN (SELECT ChannelID FROM Memberships WHERE UserID = ?) OR OwnerID = ? ORDER BY Name DESC"
-	rows, err := m.DB.Query(stmt, ID)
+	rows, err := m.DB.Query(stmt, ID, ID)
 	if err != nil {
 		return nil, err
 	}

@@ -19,7 +19,7 @@ type ReactionStatus struct {
 }
 
 // WhichReaction checks if a reaction exists and returns whether it is Liked or Disliked.
-func (m *ReactionModel) WhichReaction(authorID, reactedPostID, reactedCommentID int64) (bool, bool, error) {
+func (m *ReactionModel) WhichReaction(authorID models.UUIDField, reactedPostID, reactedCommentID int64) (bool, bool, error) {
 	// fmt.Printf("WhichReaction:\nChecking reaction (reactions.go :22 -> WhichReaction) for\nauthorID: %v,\nchannelID: %v,\nreactedPostID: %v,\nreactedCommentID: %v\n", authorID, channelID, reactedPostID, reactedCommentID)
 
 	stmt := `SELECT Liked, Disliked FROM Reactions
@@ -41,7 +41,7 @@ func (m *ReactionModel) WhichReaction(authorID, reactedPostID, reactedCommentID 
 
 // TODO Might have issues cuz it's not in the database
 
-func (m *ReactionModel) GetReactionStatus(authorID, reactedPostID, reactedCommentID int64) (ReactionStatus, error) {
+func (m *ReactionModel) GetReactionStatus(authorID models.UUIDField, reactedPostID, reactedCommentID int64) (ReactionStatus, error) {
 	if m == nil || m.DB == nil {
 		return ReactionStatus{}, fmt.Errorf("reaction model or database is nil")
 	}

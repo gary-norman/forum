@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Users (
     SortID INTEGER NOT NULL,
     Username TEXT NOT NULL UNIQUE,
     EmailAddress TEXT NOT NULL UNIQUE,
-    Avatar TEXT,
+    Avatar TEXT UNIQUE,
     Banner TEXT,
     Description TEXT,
     Usertype TEXT NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Followers (
 CREATE TABLE IF NOT EXISTS Channels (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     OwnerID BLOB NOT NULL,
-    Name TEXT NOT NULL,
+    Name TEXT NOT NULL UNIQUE,
     Avatar TEXT,
     Banner TEXT,
     Description TEXT NOT NULL,

@@ -128,7 +128,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		if memberErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
 		}
-		ownedChannels, err = h.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
+		ownedChannels, err = h.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID)
 		if err != nil {
 			log.Printf(ErrorMsgs().Query, "user owned channels", err)
 		}

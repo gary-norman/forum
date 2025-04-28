@@ -32,7 +32,7 @@ func (p *PostHandler) GetUserPosts(user *models.User, allPosts []models.Post) []
 	if memberErr != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
 	}
-	ownedChannels, ownedErr := p.App.Channels.OwnedOrJoinedByCurrentUser(user.ID, "OwnerID")
+	ownedChannels, ownedErr := p.App.Channels.OwnedOrJoinedByCurrentUser(user.ID)
 	if ownedErr != nil {
 		log.Printf(ErrorMsgs().Query, "user owned channels", ownedErr)
 	}

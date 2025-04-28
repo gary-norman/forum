@@ -117,7 +117,7 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
 			http.Error(w, `{"error": "Error getting user memberships"}`, http.StatusInternalServerError)
 		}
-		ownedChannels, err = c.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID, "OwnerID")
+		ownedChannels, err = c.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID)
 		if err != nil {
 			log.Printf(ErrorMsgs().Query, "user owned channels", err)
 			http.Error(w, `{"error": "Error getting user owned channels"}`, http.StatusInternalServerError)

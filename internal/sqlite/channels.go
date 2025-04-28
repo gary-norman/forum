@@ -135,8 +135,25 @@ func (m *ChannelModel) GetChannelByID(id int64) (*models.Channel, error) {
 	return &channels[0], nil
 }
 
+func (m *ChannelModel) GetNameOfChannel(channelID int64) (string, error) {
+	stmt := "SELECT Name FROM Channels WHERE ID = ?)"
+	rows, err := m.DB.Query(stmt, channelID)
+	if err != nil {
+		return "", err
+	}
+	defer rows.Close()
+
+	var username string
+	for rows.Next() {
+		if err := rows.Scan(&username); err != nil {
+			return "", err
+		}
+	}
+	return username, nil
+}
+
 func (m *ChannelModel) GetNameOfChannelOwner(channelID int64) (string, error) {
-	stmt := "SELECT username FROM Users WHERE ID = (SELECT OwnerID FROM Channels WHERE ID = ?)"
+	stmt := "SELECT Username FROM Users WHERE ID = (SELECT OwnerID FROM Channels WHERE ID = ?)"
 	rows, err := m.DB.Query(stmt, channelID)
 	if err != nil {
 		return "", err

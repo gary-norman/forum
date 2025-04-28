@@ -230,36 +230,23 @@ func (c *ChannelHandler) StoreMembership(w http.ResponseWriter, r *http.Request)
 	joinedChannelID, convErr := strconv.ParseInt(r.PostForm.Get("channelId"), 10, 64)
 	if convErr != nil {
 		log.Printf(ErrorMsgs().Convert, r.PostForm.Get("channelId"), "StoreMembership > GetChannelID", convErr)
-		log.Printf("Unable to convert %v to integer\n", r.PostForm.Get("channelId"))
 	}
-	// get slice of channels (in this case it is only 1, but the function still returns a slice)
-	channels, err := c.App.Channels.SearchChannelsByColumn("id", joinedChannelID)
+	if err := c.App.Memberships.Insert(user.ID, joinedChannelID); err != nil {
+		log.Printf(ErrorMsgs().Post, err)
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	channelName, err := c.App.Channels.GetNameOfChannel(joinedChannelID)
 	if err != nil {
 		log.Printf(ErrorMsgs().Query, "channel", err)
-	}
-	// get the channel object
-	channel := channels[0]
-
-	createMembershipData := models.Membership{
-		UserID:    user.ID,
-		ChannelID: joinedChannelID,
-	}
-	// send memberships struct to DB
-	insertErr := c.App.Memberships.Insert(
-		createMembershipData.UserID,
-		createMembershipData.ChannelID,
-	)
-	if insertErr != nil {
-		log.Printf(ErrorMsgs().Post, insertErr)
-		http.Error(w, insertErr.Error(), 500)
-		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	encErr := json.NewEncoder(w).Encode(map[string]any{
 		"code":    http.StatusOK,
-		"message": fmt.Sprintf("Welcome to %v!", channel.Name),
+		"message": fmt.Sprintf("Welcome to %v!", channelName),
 	})
 	if encErr != nil {
 		log.Printf(ErrorMsgs().Encode, "storeMembership: Accepted", encErr)

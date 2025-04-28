@@ -2,11 +2,10 @@ package app
 
 import (
 	"database/sql"
-	"log"
-
 	"github.com/gary-norman/forum/internal/db"
 	"github.com/gary-norman/forum/internal/models"
 	"github.com/gary-norman/forum/internal/sqlite"
+	"log"
 )
 
 var (

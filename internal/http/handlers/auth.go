@@ -97,10 +97,13 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		user.ID,
 		user.Username,
 		user.Email,
-		user.HashedPassword,
 		user.Avatar,
 		user.Banner,
+		user.Description,
 		user.Usertype,
+		user.SessionToken,
+		user.CSRFToken,
+		user.HashedPassword,
 	); err != nil {
 		fmt.Println("Error inserting user:", err)
 		w.WriteHeader(http.StatusInternalServerError)

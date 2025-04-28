@@ -24,14 +24,14 @@ func getNextSortID(db *sql.DB) (int, error) {
 	return next, err
 }
 
-func (m *UserModel) Insert(id models.UUIDField, username, email, password, avatar, banner, userType string) error {
+func (m *UserModel) Insert(id models.UUIDField, username, email, avatar, banner, description, userType, sessionToken, crsfToken, password string) error {
 	nextID, execErr := getNextSortID(m.DB)
 	if execErr != nil {
 		log.Fatal("Error getting next SortID:", execErr)
 	}
 
 	// FIXME this prepare statement is unnecessary as it is not used in a loop
-	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (ID, SortID, Username, EmailAddress, HashedPassword, Avatar, Banner, UserType, Created, IsFlagged) VALUES (?, ?, ?, ?, ?, ?, ?, ?, DateTime('now'), 0)")
+	stmt, insertErr := m.DB.Prepare("INSERT INTO Users (ID, SortID, Username, EmailAddress, Avatar, Banner, Description, UserType, Created, IsFlagged, SessionToken, CsrfToken, HashedPassword) VALUES (?, ?, ?, ?, ?, ?, ?, ?, DateTime('now'), 0, ?, ?, ?)")
 	if insertErr != nil {
 		log.Printf(ErrorMsgs().Query, username, insertErr)
 	}
@@ -41,7 +41,7 @@ func (m *UserModel) Insert(id models.UUIDField, username, email, password, avata
 			log.Printf(ErrorMsgs().Close, "stmt", "insert", closErr)
 		}
 	}(stmt) // Prepared statements take up server resources and should be closed after use.
-	_, err := stmt.Exec(id, nextID, username, email, password, avatar, banner, userType)
+	_, err := stmt.Exec(id, nextID, username, email, avatar, banner, description, userType, sessionToken, crsfToken, password)
 	if err != nil {
 		return err
 	}
@@ -359,31 +359,6 @@ func (m *UserModel) All() ([]models.User, error) {
 	return users, nil
 }
 
-func parseUserRow(row *sql.Row) (*models.User, error) {
-	var user models.User
-
-	if err := row.Scan(
-		&user.ID,
-		&user.SortID,
-		&user.Username,
-		&user.Email,
-		&user.Avatar,
-		&user.Banner,
-		&user.Description,
-		&user.Usertype,
-		&user.Created,
-		&user.IsFlagged,
-		&user.SessionToken,
-		&user.CSRFToken,
-		&user.HashedPassword,
-	); err != nil {
-		log.Printf(ErrorMsgs().Query, "parseUserRow", err)
-		return nil, err
-	}
-	models.UpdateTimeSince(&user)
-	return &user, nil
-}
-
 func parseUserRows(rows *sql.Rows) (*models.User, error) {
 	var user models.User
 
@@ -403,6 +378,31 @@ func parseUserRows(rows *sql.Rows) (*models.User, error) {
 		&user.HashedPassword,
 	); err != nil {
 		log.Printf(ErrorMsgs().Query, "parseUserRows", err)
+		return nil, err
+	}
+	models.UpdateTimeSince(&user)
+	return &user, nil
+}
+
+func parseUserRow(row *sql.Row) (*models.User, error) {
+	var user models.User
+
+	if err := row.Scan(
+		&user.ID,
+		&user.SortID,
+		&user.Username,
+		&user.Email,
+		&user.Avatar,
+		&user.Banner,
+		&user.Description,
+		&user.Usertype,
+		&user.Created,
+		&user.IsFlagged,
+		&user.SessionToken,
+		&user.CSRFToken,
+		&user.HashedPassword,
+	); err != nil {
+		log.Printf(ErrorMsgs().Query, "parseUserRow", err)
 		return nil, err
 	}
 	models.UpdateTimeSince(&user)

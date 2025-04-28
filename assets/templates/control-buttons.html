@@ -24,7 +24,6 @@
     {{ end }}>
         {{ if ne $calledBy "right-panel"}} {{/* buttons NOT present in right-panel */}}
             {{ if eq $calledBy "post-card"}}
-                {{/*            <p>Post: {{ .Post}}</p>*/}}
                 {{ $post := .Post }}
                 {{$status := reactionStatus $userID $post.ID 0}}
   {{/* fprint "reactionStatus success" $calledBy */}}

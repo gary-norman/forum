@@ -75,6 +75,8 @@ func InitializeApp() (*App, func(), error) {
 	// 	return nil, nil, err
 	// }
 
+	//os.Remove(dbPath)
+
 	db, err := db.InitDB(dbPath, schemaPath)
 	if err != nil {
 		log.Fatal("Failed to initialize DB:", err)

@@ -23,13 +23,16 @@ func NewUser(username, email, password string) (*models.User, error) {
 	}
 
 	return &models.User{
-		ID:       models.NewUUIDField(),
-		Username: username,
-		Avatar:   "noimage",
-		Banner:   "default.png",
-		Usertype: defaultUserType,
+		ID:          models.NewUUIDField(),
+		Username:    username,
+		Avatar:      "noimage",
+		Banner:      "default.png",
+		Description: "",
+		Usertype:    defaultUserType,
 		Login: models.Login{
 			Email:          email,
+			SessionToken:   "",
+			CSRFToken:      "",
 			HashedPassword: hashedPassword,
 		},
 	}, nil

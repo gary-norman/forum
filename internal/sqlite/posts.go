@@ -14,8 +14,14 @@ type PostModel struct {
 }
 
 func (m *PostModel) Insert(title, content, images, author, authorAvatar string, authorID models.UUIDField, commentable, isFlagged bool) (int64, error) {
+
+	authorIDBytes, err := authorID.UUID.MarshalBinary()
+	if err != nil {
+		return 0, fmt.Errorf("failed to marshal AuthorID to binary: %w", err)
+	}
+
 	stmt := "INSERT INTO Posts (Title, Content, Images, Created, Author, AuthorAvatar, AuthorID, IsCommentable, IsFlagged) VALUES (?, ?, ?, DateTime('now'), ?, ?, ?, ?, ?)"
-	result, err := m.DB.Exec(stmt, title, content, images, author, authorAvatar, authorID, commentable, isFlagged)
+	result, err := m.DB.Exec(stmt, title, content, images, author, authorAvatar, authorIDBytes, commentable, isFlagged)
 	if err != nil {
 		return 0, err
 	}

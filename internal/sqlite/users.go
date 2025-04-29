@@ -18,6 +18,15 @@ func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
 }
 
+func CountUsers(db *sql.DB) (int, error) {
+	var count int
+	err := db.QueryRow(`SELECT COUNT(*) FROM ID`).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 func getNextSortID(db *sql.DB) (int, error) {
 	var next int
 	err := db.QueryRow(`SELECT COALESCE(MAX(SortID), 0) + 1 FROM Users`).Scan(&next)

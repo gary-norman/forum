@@ -58,3 +58,11 @@ func (u *UUIDField) Scan(src any) error {
 		return fmt.Errorf("UUIDField: cannot scan type %T", v)
 	}
 }
+
+func UUIDFieldFromString(s string) (UUIDField, error) {
+	parsed, err := uuid.Parse(s)
+	if err != nil {
+		return UUIDField{}, err
+	}
+	return UUIDField{UUID: parsed}, nil
+}

@@ -21,6 +21,16 @@ type UserHandler struct {
 
 func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+
+	// Fetch User ID from the URL as string
+	idStr := r.PathValue("userId")
+
+	// Convert User ID string to FieldUUID
+	userID, err := models.UUIDFieldFromString(idStr)
+	if err != nil {
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+		return
+	}
 	var thisUser models.User
 
 	userLoggedIn := true
@@ -30,15 +40,13 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 		userLoggedIn = false
 	}
 
-	// Parse User ID from URL
-	userId, err := models.GetIntFromPathValue(r.PathValue("userId"))
-	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "error parsing user ID", err)
-		// http.Error(w, `{"error": "invalid user ID"}`, http.StatusBadRequest)
-	}
+	// if err != nil {
+	// 	log.Printf(ErrorMsgs().KeyValuePair, "error parsing user ID", err)
+	// 	// http.Error(w, `{"error": "invalid user ID"}`, http.StatusBadRequest)
+	// }
 
 	// Fetch the user
-	user, err := u.App.Users.GetUserByID(userId)
+	user, err := u.App.Users.GetUserByID(userID)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "error fetching user", err)
 		// http.Error(w, `{"error": "user not found"}`, http.StatusNotFound)

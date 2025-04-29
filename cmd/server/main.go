@@ -47,6 +47,10 @@ func main() {
 
 	router := routes.NewRouter(appInstance)
 
+	// TODO figure this out
+	// Count users and create new admin account if none exist
+	// userCount, err := app.App.Users.CountUsers(db)
+
 	port := 8989
 	addr := fmt.Sprintf(":%d", port)
 	srv := &http.Server{
@@ -55,8 +59,8 @@ func main() {
 	}
 	// Log server listening messages
 	address := "http://localhost" + addr
-	log.Printf(ErrorMsgs().KeyValuePair, "Starting server on port", port)
-	log.Printf(ErrorMsgs().ConnSuccess, address)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "Starting server on port", port)
+	fmt.Printf(ErrorMsgs().ConnSuccess, address)
 
 	go func() {
 		if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
@@ -79,5 +83,5 @@ func main() {
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Fatalf(ErrorMsgs().Shutdown, err)
 	}
-	log.Printf(Colors().Green + "Graceful shutdown complete." + Colors().Reset)
+	log.Println(Colors().Green + "Graceful shutdown complete." + Colors().Reset)
 }

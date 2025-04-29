@@ -2,13 +2,16 @@ package app
 
 import (
 	"database/sql"
+	"fmt"
+	"log"
+
 	"github.com/gary-norman/forum/internal/db"
 	"github.com/gary-norman/forum/internal/models"
 	"github.com/gary-norman/forum/internal/sqlite"
-	"log"
 )
 
 var (
+	dbType   string = "SQLite"
 	dbDriver string = "sqlite3"
 	// dbPath    string = "db/forum_database.db"
 	// development db for testing new setup
@@ -16,6 +19,10 @@ var (
 	schemaPath string = "schema.sql"
 	imagePath  string = "db/userdata/images/"
 )
+
+func ErrorMsgs() *models.Errors {
+	return models.CreateErrorMessages()
+}
 
 func Colors() *models.Colors {
 	return models.CreateColors()
@@ -75,11 +82,11 @@ func InitializeApp() (*App, func(), error) {
 	// 	return nil, nil, err
 	// }
 
-	//os.Remove(dbPath)
+	// os.Remove(dbPath)
 
 	db, err := db.InitDB(dbPath, schemaPath)
 	if err != nil {
-		log.Fatal("Failed to initialize DB:", err)
+		log.Fatalf("Failed to initialize DB: %v", err)
 	}
 
 	// Verify connection
@@ -87,6 +94,13 @@ func InitializeApp() (*App, func(), error) {
 		db.Close() // Close DB if ping fails
 		return nil, nil, err
 	}
+
+	// Get version
+	var dbVersion string
+	if err = db.QueryRow("select sqlite_version()").Scan(&dbVersion); err != nil {
+		log.Printf(Colors().Red+"Error fetching SQLite version: %v\n"+Colors().Reset, err)
+	}
+	fmt.Printf(ErrorMsgs().DbSuccess, dbType, dbVersion)
 
 	// App instance with DB reference
 	appInstance := NewApp(db)
@@ -97,7 +111,7 @@ func InitializeApp() (*App, func(), error) {
 		if err := db.Close(); err != nil {
 			log.Println(Colors().Red+"Error closing DB: %v"+Colors().Reset, err)
 		} else {
-			log.Println(Colors().Green + "Database closed successfully." + Colors().Reset)
+			fmt.Println(Colors().Green + "Database closed successfully." + Colors().Reset)
 		}
 	}
 

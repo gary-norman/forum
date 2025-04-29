@@ -43,7 +43,7 @@ func (s *SessionHandler) IsAuthenticated(r *http.Request, username string) error
 		// fmt.Printf(ErrorMsgs().KeyValuePair, "Header csrfToken", csrfToken)
 		// fmt.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)
 		// fmt.Printf(ErrorMsgs().Divider)
-		fmt.Printf(Colors.Blue + "Authorise user: " + Colors.Red + "Failed!\n" + Colors.Reset)
+		fmt.Println(Colors.Blue + "Authorise user: " + Colors.Red + "Failed!\n" + Colors.Reset)
 		return ErrAuth
 	}
 	// fmt.Printf(ErrorMsgs().KeyValuePair, "Cookie SessionToken", st.Value)
@@ -54,6 +54,6 @@ func (s *SessionHandler) IsAuthenticated(r *http.Request, username string) error
 	// fmt.Printf(ErrorMsgs().KeyValuePair, "Header csrfToken", csrfToken)
 	// fmt.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)
 	// fmt.Printf(ErrorMsgs().Divider)
-	fmt.Printf(Colors.Blue + "Authorise user: " + Colors.Green + "Success!\n" + Colors.Reset)
+	fmt.Println(Colors.Blue + "Authorise user: " + Colors.Green + "Success!" + Colors.Reset)
 	return nil
 }

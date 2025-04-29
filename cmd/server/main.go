@@ -67,7 +67,7 @@ func main() {
 			fmt.Printf(ErrorMsgs().ConnInit, srv.Addr, "srv.ListenAndServe")
 			log.Fatalf("HTTP server error: %v", err)
 		}
-		log.Printf(Colors().Green + "Stopped serving new connections." + Colors().Reset)
+		log.Println(Colors().Green + "Stopped serving new connections." + Colors().Reset)
 	}()
 
 	// Handle shutdown signals (Ctrl+C, system shutdown)

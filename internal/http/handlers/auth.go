@@ -157,7 +157,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	login := credentials.Username
 	password := credentials.Password
 	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n"+Colors.Reset, login)
-	fmt.Printf(ErrorMsgs().Divider)
+	fmt.Println(ErrorMsgs().Divider)
 
 	user, getUserErr := h.App.Users.GetUserFromLogin(login, "login")
 	if getUserErr != nil {
@@ -233,7 +233,7 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Printf(Colors.Orange+"Attempting logout for "+Colors.White+"%v\n"+Colors.Reset, username)
-	fmt.Printf(ErrorMsgs().Divider)
+	fmt.Println(ErrorMsgs().Divider)
 	var user *models.User
 	user, getUserErr := h.App.Users.GetUserByUsername(username, "logout")
 	if getUserErr != nil {

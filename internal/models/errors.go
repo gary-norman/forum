@@ -135,7 +135,7 @@ func CreateErrorMessages() *Errors {
 		Cookies:      Colors.Red + "Unable to " + Colors.White + "%v cookies " + Colors.Blue + "with error: " + Colors.Red + "%v" + Colors.Reset,
 		CreateFile:   Colors.Red + "Unable to create file " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
 		Delete:       Colors.Red + "Unable to delete " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
-		Divider:      Colors.Grey + "-------------------------------------------------------\n" + Colors.Reset,
+		Divider:      Colors.Grey + "-------------------------------------------------------" + Colors.Reset,
 		Edit:         Colors.Red + "Unable to edit " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
 		Encode:       Colors.Red + "Unable to encode JSON called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
 		Execute:      Colors.Red + "Unable to execute template with error: " + Colors.Red + "%v" + Colors.Reset,

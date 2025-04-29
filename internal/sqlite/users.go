@@ -242,7 +242,7 @@ func (m *UserModel) GetUserByEmail(email, calledBy string) (*models.User, error)
 	return &user, nil
 }
 
-func (m *UserModel) GetUserByID(ID int64) (models.User, error) {
+func (m *UserModel) GetUserByID(ID models.UUIDField) (models.User, error) {
 	stmt := "SELECT * FROM Users WHERE ID = ?"
 	row := m.DB.QueryRow(stmt, ID)
 	u := models.User{}

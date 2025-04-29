@@ -83,7 +83,7 @@ func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user 
 	log.Printf(ErrorMsgs().KeyValuePair, "Cookie SessionToken", st.Value)
 	log.Printf(ErrorMsgs().KeyValuePair, "User SessionToken", user.SessionToken)
 	log.Printf(Colors.Blue+"Session token verficiation: "+stColor+"%v\n"+Colors.Reset, stMatchString)
-	fmt.Printf(ErrorMsgs().Divider)
+	fmt.Println(ErrorMsgs().Divider)
 	log.Printf(ErrorMsgs().KeyValuePair, "Cookie csrfToken", csrf.Value)
 	log.Printf(ErrorMsgs().KeyValuePair, "Header csrfToken", csrfToken)
 	log.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)

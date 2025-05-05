@@ -25,8 +25,8 @@ SELECT
 
      Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur id nunc id nulla dapibus fermentum.',
     'noimage',
-  -- This calculates a pseudo-random date within the year 2024, capped at the current date.
-    MIN(datetime('2024-01-01', '+' || (x % 365) || ' days'), CURRENT_DATE),
+  -- This calculates a pseudo-random date within the year 2025, capped at the current date.
+    MIN(datetime('2025-01-01', '+' || (x % 365) || ' days'), CURRENT_DATE),
     (x % 2),
     0,
     iu.Username,

@@ -21,11 +21,12 @@ func NewUser(username, email, password string) (*models.User, error) {
 	if err != nil {
 		return nil, err
 	}
+	id := models.NewUUIDField()
 
 	return &models.User{
-		ID:          models.NewUUIDField(),
+		ID:          id,
 		Username:    username,
-		Avatar:      "noimage",
+		Avatar:      "noimage_" + username,
 		Banner:      "default.png",
 		Description: "",
 		Usertype:    defaultUserType,

@@ -569,13 +569,13 @@
         <main>
           {{/*SECTION ---------- homepage ---------- */}}
           <div id="home-page" class="active-feed">
-            {{ template "home-page" (dict "dot" $ "UserPosts" .UserPosts "CurrentUser" $.CurrentUser "Instance" "home-page" ) }}
+            {{ template "home-page" (dict "dot" . "UserPosts" .UserPosts "CurrentUser" $.CurrentUser "Instance" "home-page" ) }}
           </div>
 
 
           {{/*SECTION ---------- post page ---------- */}}
           <div id="post-page" class="feeds-wrapper">
-{{/*            {{ template "post-page" (dict "ThisPost" .ThisPost "CurrentUser" $.CurrentUser "IsPostPage" "true" ) }}*/}}
+{{/*            {{ template "post-page" (dict "dot" . "ThisPost" .ThisPost "CurrentUser" $.CurrentUser "Instance" "post-page" "IsPostPage" "true" ) }}*/}}
           </div> <!-- end post-page wrapper -->
 
 

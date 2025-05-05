@@ -25,3 +25,4 @@ go.work
 test_database.db
 bin
 tags
+app.log

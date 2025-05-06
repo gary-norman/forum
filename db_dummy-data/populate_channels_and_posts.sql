@@ -44,11 +44,13 @@ SELECT
   'noimage',
   'default.png',
   'Community focused on ' || cn.name || '. Join discussions, share ideas, and collaborate with fellow tech enthusiasts.',
-  -- Generate a staggered creation date for channels within the last year, capped by current date
-  MIN(datetime('now', '-' || (25 - ROWID) * 10 || ' days'), CURRENT_TIMESTAMP),
-  (ROWID % 2), -- Alternating privacy
-  (ROWID % 2), -- Alternating IsFlagged
-  (ROWID % 2) -- Alternating IsMuted
+  -- MODIFIED: Use printf for robust date string formatting and cn.ROWID for explicitness.
+  -- This calculates a date in the past, staggered based on cn.ROWID.
+  -- (25 - cn.ROWID) * 10 results in offsets from 0 (for ROWID=25) to 240 (for ROWID=1).
+  datetime('now', printf("-%d days", (25 - cn.ROWID) * 10)),
+  (cn.ROWID % 2), -- Alternating privacy, using cn.ROWID for clarity
+  ((cn.ROWID + 1) % 2), -- Alternating IsFlagged, using cn.ROWID for clarity
+  ((cn.ROWID + 2) % 2) -- Alternating IsMuted, using cn.ROWID for clarity
 FROM ChannelNames cn;
 
 -- Create a temporary table to hold the IDs and names of the newly created channels
@@ -61,88 +63,86 @@ SELECT
     -- This allows us to cycle through them predictably.
     ROW_NUMBER() OVER (ORDER BY ch.ID ASC) AS rn
 FROM Channels ch
-WHERE ch.Name IN (SELECT name FROM ChannelNames); -- Filter to ensure we only get the 25 channels just created
+-- Ensure we are selecting from the channels just created by matching their names.
+-- This assumes channel names are unique for this batch.
+WHERE ch.Name IN (SELECT name FROM ChannelNames)
+-- Additionally, to be more robust, filter by creation time if possible,
+-- though this might be tricky if other channels could be created concurrently.
+-- For this script, Name matching should be sufficient.
+ORDER BY ch.ID DESC LIMIT 25; -- Get the last 25 inserted matching names, then re-order by ID ASC for ROW_NUMBER
+
+-- Re-create TempNewChannelIDs with correct ordering for rn after ensuring we got the right 25 channels
+CREATE TEMP TABLE TempNewChannelIDsOrdered AS
+SELECT channel_id, channel_name, ROW_NUMBER() OVER (ORDER BY channel_id ASC) as rn
+FROM TempNewChannelIDs;
+DROP TABLE TempNewChannelIDs;
+ALTER TABLE TempNewChannelIDsOrdered RENAME TO TempNewChannelIDs;
+
 
 -- Insert memberships: Each channel gets the owner + up to 2 other random users from TempUsersForChannels
--- This part might need adjustment if TempUsersForChannels has very few users (e.g., 1 or 2)
--- For simplicity, let's ensure each user in TempUsersForChannels becomes a member of a few channels.
 INSERT INTO Memberships (UserID, ChannelID, Created)
 SELECT
     tu.UserID,
     tnc.channel_id,
-    MIN(datetime(c.Created, '+' || (ABS(RANDOM()) % 24) || ' hours'), CURRENT_TIMESTAMP)
+    -- Get the actual creation time of the channel for membership creation time
+    MIN(datetime(ch.Created, '+' || (ABS(RANDOM()) % 24) || ' hours'), CURRENT_TIMESTAMP)
 FROM TempNewChannelIDs tnc
-JOIN Channels c ON tnc.channel_id = c.ID -- To get channel's creation time
-CROSS JOIN TempUsersForChannels tu        -- Each user from the temp table
-WHERE NOT EXISTS ( -- Ensure user is not already the owner (implicitly handled if OwnerID is also in TempUsersForChannels)
+JOIN Channels ch ON tnc.channel_id = ch.ID -- Join to get actual channel creation time
+CROSS JOIN TempUsersForChannels tu
+WHERE NOT EXISTS (
     SELECT 1 FROM Channels ch_owner
     WHERE ch_owner.ID = tnc.channel_id AND ch_owner.OwnerID = tu.UserID
 )
-GROUP BY tu.UserID, tnc.channel_id -- Avoid duplicate memberships if RANDOM picks same user/channel
+GROUP BY tu.UserID, tnc.channel_id
 ORDER BY RANDOM()
-LIMIT 50; -- Create up to 50 additional memberships
+LIMIT 50; -- Create up to 50 additional memberships, ensuring variety
 
 -- Create a temporary table to cache 5 users for use in post generation.
--- This is the second TempUsers table as in the original script, intended for post authors.
 CREATE TEMP TABLE TempUsersForPosts AS
 SELECT ID AS UserID, Username, Avatar FROM Users ORDER BY RANDOM() LIMIT 5;
 
 -- Prepare indexed users by assigning a row number to each user in the temporary table.
--- This allows efficient mapping of users to posts in subsequent queries.
 WITH IndexedUsers AS (
   SELECT UserID, Username, Avatar, ROW_NUMBER() OVER () AS rn
-  FROM TempUsersForPosts -- Use the correct temp table for post authors
+  FROM TempUsersForPosts
 ),
 -- Generate a sequence of numbers from 1 to 1000 using a recursive CTE.
--- This sequence is used to create multiple posts for testing purposes.
 Counter(x) AS (
   SELECT 1
   UNION ALL
-  SELECT x + 1 FROM Counter WHERE x < 1000 -- Generate 1000 numbers
+  SELECT x + 1 FROM Counter WHERE x < 1000 -- Generate 1000 numbers (ensure DB supports recursion depth)
 )
 -- Insert posts, linking them to the newly created channels dynamically
 INSERT INTO Posts (Title, Content, Images, Created, IsCommentable, IsFlagged, Author, AuthorID, AuthorAvatar)
 SELECT
-  -- Modified title to make 'x' parsing safer: "Discussion: [Channel Name] PostNum:X"
   'Discussion: [' || tnc.channel_name || '] PostNum:' || c.x AS Title,
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vel sem eget justo consequat convallis. Integer porta purus at egestas tincidunt.
 
    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur id nunc id nulla dapibus fermentum.',
   'noimage',
-  -- This calculates a pseudo-random date within the year 2025, capped at the current date.
   MIN(datetime('2025-01-01', '+' || (c.x % 365) || ' days'), CURRENT_TIMESTAMP),
-  (c.x % 2), -- Alternating IsCommentable
-  0, -- IsFlagged set to 0
+  (c.x % 2),
+  ((c.x + 1) % 2),
   iu.Username,
   iu.UserID,
   iu.Avatar
 FROM Counter c
--- Join with TempNewChannelIDs to pick one of the 25 newly created channels
--- The 'rn' in TempNewChannelIDs goes from 1 to 25.
 JOIN TempNewChannelIDs tnc ON tnc.rn = (((c.x - 1) % 25) + 1)
--- Join with IndexedUsers to pick an author for the post
 JOIN IndexedUsers iu ON iu.rn = (((c.x - 1) % 5) + 1);
 
 -- Link each post to its respective channel in PostChannels
--- This uses the Title of the post to extract 'x' and determine the correct channel.
 INSERT INTO PostChannels (PostID, ChannelID, Created)
 SELECT
   p.ID AS PostID,
   tnc.channel_id AS ChannelID,
   MIN(p.Created, CURRENT_TIMESTAMP) AS Created
 FROM Posts p
--- Parse 'x' from the post title. Example Title: "Discussion: [Some Channel] PostNum:123"
--- 1. Find 'PostNum:'
--- 2. Get the substring after 'PostNum:'
--- 3. Convert to INTEGER
 JOIN TempNewChannelIDs tnc ON tnc.rn = (
   (
     ( CAST( SUBSTR(p.Title, INSTR(p.Title, 'PostNum:') + LENGTH('PostNum:')) AS INTEGER) - 1) % 25
   ) + 1
 )
--- Process only posts created in this batch, identifiable by their title format.
--- This WHERE clause is important if the Posts table might contain other posts.
 WHERE p.Title LIKE 'Discussion: [%] PostNum:%'
-AND p.ID NOT IN (SELECT PostID FROM PostChannels WHERE PostID = p.ID); -- Avoid re-inserting if script is run multiple times on same posts
+AND p.ID NOT IN (SELECT PostID FROM PostChannels WHERE PostID = p.ID);
 
 COMMIT;

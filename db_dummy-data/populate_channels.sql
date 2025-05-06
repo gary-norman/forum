@@ -34,7 +34,7 @@ INSERT INTO ChannelNames (name) VALUES
 ('SvelteKit for Web Apps');
 
 -- Create 25 channels with static names
-INSERT INTO Channels (OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsMuted)
+INSERT INTO Channels (OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted)
 SELECT
   (SELECT UserID FROM TempUsers ORDER BY RANDOM() LIMIT 1),
   name,
@@ -42,6 +42,7 @@ SELECT
   'default.png',
   'Community focused on ' || name || '. Join discussions, share ideas, and collaborate with fellow tech enthusiasts.',
   MIN(datetime('2024-01-01', '+' || ROWID || ' days'), CURRENT_DATE),
+  (ROWID % 2),
   (ROWID % 2),
   ((ROWID + 1) % 2)
 FROM ChannelNames;

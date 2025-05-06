@@ -34,12 +34,12 @@ SELECT
     iu.Avatar
 FROM Counter
 -- This maps posts to channels in a round-robin fashion.
-JOIN Channels c ON c.ID = ((x - 1) % 25) + 1
+JOIN Channels c ON c.ID = ((x - 1) % 25) + 177
 JOIN IndexedUsers iu ON ((x - 1) % 5) + 1 = iu.rn;
 
 -- Link each post to a channel
 INSERT INTO PostChannels (PostID, ChannelID, Created)
-SELECT p.ID, ((p.ID - 1) % 25) + 1, MIN(p.Created, CURRENT_DATE)
+SELECT p.ID, ((p.ID - 1) % 25) + 177, MIN(p.Created, CURRENT_DATE)
 FROM Posts p;
 
 COMMIT;

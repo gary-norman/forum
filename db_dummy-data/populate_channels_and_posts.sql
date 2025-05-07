@@ -231,20 +231,37 @@ VALUES
   ('Posts',         (SELECT COUNT(*) FROM Posts)),
   ('PostChannels',  (SELECT COUNT(*) FROM PostChannels));
 
-.mode box
-.headers on
-.width 20 20
+.width 20 10
 
 -- View number of channels per user
 SELECT
   u.Username,
-  COUNT(m.ChannelID) AS ChannelMemberships
+  COUNT(m.ChannelID) AS Channels
 FROM Memberships m
 JOIN Users u ON u.ID = m.UserID
 GROUP BY m.UserID
-ORDER BY ChannelMemberships DESC;
+ORDER BY Channels DESC;
+
+.width 35 10
+-- view number of posts per channel
+SELECT
+  ch.Name AS ChannelName,
+  COUNT(pc.PostID) AS Posts
+FROM PostChannels pc
+JOIN Channels ch ON ch.ID = pc.ChannelID
+GROUP BY ch.ID
+ORDER BY Posts DESC;
 
 .width 14 8
+
+-- view number of posts per user
+SELECT
+  u.Username,
+  COUNT(p.ID) AS Posts
+FROM Posts p
+JOIN Users u ON u.ID = p.AuthorID
+GROUP BY p.AuthorID
+ORDER BY Posts DESC;
 
 -- view stats
 SELECT * FROM Stats;

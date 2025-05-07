@@ -37,21 +37,28 @@ INSERT INTO ChannelNames (name) VALUES
 
 -- Create 25 channels with static names
 -- Ensure OwnerID comes from the limited set in TempUsersForChannels
+
+WITH IndexedChannelNames AS (
+  SELECT name, ROW_NUMBER() OVER () AS rn
+  FROM ChannelNames
+),
+IndexedTempUsers AS (
+  SELECT UserID, Username, Avatar, ROW_NUMBER() OVER () AS rn
+  FROM TempUsersForChannels
+)
 INSERT INTO Channels (OwnerID, Name, Avatar, Banner, Description, Created, Privacy, IsFlagged, IsMuted)
 SELECT
-  (SELECT UserID FROM TempUsersForChannels ORDER BY RANDOM() LIMIT 1), -- Select a random owner from the cached users
+  tu.UserID,
   cn.name,
   'noimage',
   'default.png',
   'Community focused on ' || cn.name || '. Join discussions, share ideas, and collaborate with fellow tech enthusiasts.',
-  -- MODIFIED: Use printf for robust date string formatting and cn.ROWID for explicitness.
-  -- This calculates a date in the past, staggered based on cn.ROWID.
-  -- (25 - cn.ROWID) * 10 results in offsets from 0 (for ROWID=25) to 240 (for ROWID=1).
-  datetime('now', printf("-%d days", (25 - cn.ROWID) * 10)),
-  (cn.ROWID % 2), -- Alternating privacy, using cn.ROWID for clarity
-  ((cn.ROWID + 1) % 2), -- Alternating IsFlagged, using cn.ROWID for clarity
-  ((cn.ROWID + 2) % 2) -- Alternating IsMuted, using cn.ROWID for clarity
-FROM ChannelNames cn;
+  datetime('now', printf("-%d days", (25 - cn.rn) * 10)),
+  (cn.rn % 2),
+  ((cn.rn + 1) % 2),
+  ((cn.rn + 2) % 2)
+FROM IndexedChannelNames cn
+JOIN IndexedTempUsers tu ON tu.rn = ((cn.rn - 1) % 5) + 1;
 
 -- Create a temporary table to hold the IDs and names of the newly created channels
 -- This is crucial for dynamically linking posts to these specific channels.
@@ -59,6 +66,7 @@ CREATE TEMP TABLE TempNewChannelIDs AS
 SELECT
     ch.ID AS channel_id,
     ch.Name AS channel_name,
+  ch.OwnerID AS channel_owner,
     -- Assign a row number from 1 to 25, ordered by the actual ID of the new channels.
     -- This allows us to cycle through them predictably.
     ROW_NUMBER() OVER (ORDER BY ch.ID ASC) AS rn
@@ -73,34 +81,44 @@ ORDER BY ch.ID DESC LIMIT 25; -- Get the last 25 inserted matching names, then r
 
 -- Re-create TempNewChannelIDs with correct ordering for rn after ensuring we got the right 25 channels
 CREATE TEMP TABLE TempNewChannelIDsOrdered AS
-SELECT channel_id, channel_name, ROW_NUMBER() OVER (ORDER BY channel_id ASC) as rn
+SELECT channel_id, channel_name, channel_owner, ROW_NUMBER() OVER (ORDER BY channel_id ASC) as rn
 FROM TempNewChannelIDs;
 DROP TABLE TempNewChannelIDs;
 ALTER TABLE TempNewChannelIDsOrdered RENAME TO TempNewChannelIDs;
 
+-- ******* Memberships ********
 
--- Ensure owners are also members
-INSERT OR IGNORE INTO Memberships (UserID, ChannelID, Created)
-SELECT OwnerID, ID, Created
-FROM Channels
-WHERE Name IN (SELECT name FROM ChannelNames);
+-- Step 4: Insert owner memberships
+INSERT INTO Memberships (UserID, ChannelID, Created)
+SELECT
+  channel_owner,
+  channel_id,
+  datetime('now')
+FROM TempNewChannelIDs;
 
--- Insert 1 non-owner member per channel
-WITH EligiblePairs AS (
+-- Step 5: Add ONE non-owner member per channel (randomly chosen)
+WITH PossibleMembers AS (
   SELECT
-    ch.ID AS ChannelID,
+    tnc.channel_id,
     tu.UserID,
-    datetime(ch.Created, '+' || (ABS(RANDOM()) % 24) || ' hours') AS Created,
-    ROW_NUMBER() OVER (PARTITION BY ch.ID ORDER BY RANDOM()) AS rn
+    tnc.channel_owner,
+    ROW_NUMBER() OVER (PARTITION BY tnc.channel_id ORDER BY RANDOM()) AS rn,
+    tnc.channel_id AS ChannelID,
+    tnc.channel_name,
+    ch.Created
   FROM TempNewChannelIDs tnc
+  JOIN TempUsersForChannels tu ON tu.UserID != tnc.channel_owner
   JOIN Channels ch ON ch.ID = tnc.channel_id
-  CROSS JOIN TempUsersForChannels tu
-  WHERE tu.UserID != ch.OwnerID
 )
-INSERT OR IGNORE INTO Memberships (UserID, ChannelID, Created)
-SELECT UserID, ChannelID, Created
-FROM EligiblePairs
+INSERT INTO Memberships (UserID, ChannelID, Created)
+SELECT
+  UserID,
+  ChannelID,
+  datetime(Created, '+' || (ABS(RANDOM()) % 24) || ' hours')
+FROM PossibleMembers
 WHERE rn = 1;
+
+-- ******** Posts *********
 
 -- Create a temporary table to cache 5 users for use in post generation.
 CREATE TEMP TABLE TempUsersForPosts AS
@@ -183,7 +201,7 @@ WITH MatchedPosts AS (
 INSERT OR IGNORE INTO PostChannels (PostID, ChannelID, Created)
 SELECT * FROM MatchedPosts;
 
-.mode column
+.mode box
 .headers on
 .width 35 20 10
 
@@ -200,31 +218,43 @@ JOIN Users u ON u.ID = m.UserID
 WHERE ch.Name IN (SELECT name FROM ChannelNames)
 ORDER BY ch.ID, Role DESC;
 
--- Debug: How many post-to-channel links were created
-SELECT COUNT(*) AS NewPostLinks FROM PostChannels
-WHERE PostID IN (SELECT PostID FROM IndexedPosts);
 
--- View number of channels per user
+CREATE TABLE IF NOT EXISTS Stats (
+  Name TEXT PRIMARY KEY,
+  Value INTEGER NOT NULL
+);
+
+INSERT INTO Stats (Name, Value)
+VALUES
+  ('Channels',      (SELECT COUNT(*) FROM Channels)),
+  ('Memberships',   (SELECT COUNT(*) FROM Memberships)),
+  ('Posts',         (SELECT COUNT(*) FROM Posts)),
+  ('PostChannels',  (SELECT COUNT(*) FROM PostChannels));
+
 .mode box
 .headers on
-.width 20 10
+.width 20 20
 
+-- View number of channels per user
 SELECT
   u.Username,
-  COUNT(m.ChannelID) AS Channels
+  COUNT(m.ChannelID) AS ChannelMemberships
 FROM Memberships m
 JOIN Users u ON u.ID = m.UserID
 GROUP BY m.UserID
 ORDER BY ChannelMemberships DESC;
 
--- Count how many posts got linked to channels
-SELECT COUNT(*) AS LinkedPosts FROM PostChannels;
+.width 14 8
+
+-- view stats
+SELECT * FROM Stats;
 
 -- Drop temporary tables and views used for seeding
 DROP TABLE IF EXISTS TempUsersForChannels;
 DROP TABLE IF EXISTS TempUsersForPosts;
 DROP TABLE IF EXISTS TempNewChannelIDs;
 DROP TABLE IF EXISTS ChannelNames;
+DROP TABLE IF EXISTS Stats;
 DROP VIEW IF EXISTS IndexedPosts;
 
 COMMIT;

@@ -1,0 +1,4 @@
+DELETE FROM Channels WHERE ID > 1;
+DELETE FROM Memberships WHERE ID > 1;
+DELETE FROM Posts WHERE ID > 1;
+DELETE FROM PostChannels WHERE ID > 1;

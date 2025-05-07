@@ -79,23 +79,28 @@ DROP TABLE TempNewChannelIDs;
 ALTER TABLE TempNewChannelIDsOrdered RENAME TO TempNewChannelIDs;
 
 
--- Insert memberships: Each channel gets the owner + up to 2 other random users from TempUsersForChannels
-INSERT INTO Memberships (UserID, ChannelID, Created)
-SELECT
+-- Ensure owners are also members
+INSERT OR IGNORE INTO Memberships (UserID, ChannelID, Created)
+SELECT OwnerID, ID, Created
+FROM Channels
+WHERE Name IN (SELECT name FROM ChannelNames);
+
+-- Insert 1 non-owner member per channel
+WITH EligiblePairs AS (
+  SELECT
+    ch.ID AS ChannelID,
     tu.UserID,
-    tnc.channel_id,
-    -- Get the actual creation time of the channel for membership creation time
-    MIN(datetime(ch.Created, '+' || (ABS(RANDOM()) % 24) || ' hours'), CURRENT_TIMESTAMP)
-FROM TempNewChannelIDs tnc
-JOIN Channels ch ON tnc.channel_id = ch.ID -- Join to get actual channel creation time
-CROSS JOIN TempUsersForChannels tu
-WHERE NOT EXISTS (
-    SELECT 1 FROM Channels ch_owner
-    WHERE ch_owner.ID = tnc.channel_id AND ch_owner.OwnerID = tu.UserID
+    datetime(ch.Created, '+' || (ABS(RANDOM()) % 24) || ' hours') AS Created,
+    ROW_NUMBER() OVER (PARTITION BY ch.ID ORDER BY RANDOM()) AS rn
+  FROM TempNewChannelIDs tnc
+  JOIN Channels ch ON ch.ID = tnc.channel_id
+  CROSS JOIN TempUsersForChannels tu
+  WHERE tu.UserID != ch.OwnerID
 )
-GROUP BY tu.UserID, tnc.channel_id
-ORDER BY RANDOM()
-LIMIT 50; -- Create up to 50 additional memberships, ensuring variety
+INSERT OR IGNORE INTO Memberships (UserID, ChannelID, Created)
+SELECT UserID, ChannelID, Created
+FROM EligiblePairs
+WHERE rn = 1;
 
 -- Create a temporary table to cache 5 users for use in post generation.
 CREATE TEMP TABLE TempUsersForPosts AS
@@ -115,7 +120,35 @@ Counter(x) AS (
 -- Insert posts, linking them to the newly created channels dynamically
 INSERT INTO Posts (Title, Content, Images, Created, IsCommentable, IsFlagged, Author, AuthorID, AuthorAvatar)
 SELECT
-  'Discussion: [' || tnc.channel_name || '] PostNum:' || c.x AS Title,
+  CASE
+  WHEN tnc.channel_name LIKE '%Go%' THEN 'Best Practices in ' || tnc.channel_name
+  WHEN tnc.channel_name LIKE '%CSS%' THEN 'Modern Layouts in ' || tnc.channel_name
+  WHEN tnc.channel_name LIKE '%C#%' THEN 'Getting Started with ' || tnc.channel_name
+  WHEN tnc.channel_name LIKE '%Java Memory%' THEN 'Tuning Garbage Collection in Java'
+  WHEN tnc.channel_name LIKE '%JavaScript%' THEN 'Why ' || tnc.channel_name || ' Still Matters'
+  WHEN tnc.channel_name LIKE '%Rust%' THEN 'Understanding Ownership in Rust'
+  WHEN tnc.channel_name LIKE '%Python%' THEN 'Data Analysis Tips with Python'
+  WHEN tnc.channel_name LIKE '%Node.js%' THEN 'Speeding Up ' || tnc.channel_name
+  WHEN tnc.channel_name LIKE '%React%' THEN 'Managing State in Large React Apps'
+  WHEN tnc.channel_name LIKE '%Vue%' THEN 'Composition API: A Game Changer'
+  WHEN tnc.channel_name LIKE '%Machine Learning%' THEN 'Real-World ML Workflows'
+  WHEN tnc.channel_name LIKE '%Docker%' THEN 'Lightweight Container Patterns'
+  WHEN tnc.channel_name LIKE '%Kubernetes%' THEN 'K8s for Daily DevOps Tasks'
+  WHEN tnc.channel_name LIKE '%PostgreSQL%' THEN 'Optimizing Indexes in PostgreSQL'
+  WHEN tnc.channel_name LIKE '%SQLite%' THEN 'Mobile-Friendly SQL with SQLite'
+  WHEN tnc.channel_name LIKE '%Microservices%' THEN 'Service Boundaries & Data Ownership'
+  WHEN tnc.channel_name LIKE '%API Security%' THEN 'Avoiding Common API Security Pitfalls'
+  WHEN tnc.channel_name LIKE '%OAuth2%' THEN 'Token Lifecycles & Refresh Logic'
+  WHEN tnc.channel_name LIKE '%Accessibility%' THEN 'Building Inclusive Interfaces'
+  WHEN tnc.channel_name LIKE '%TypeScript%' THEN 'Advanced TypeScript Tricks'
+  WHEN tnc.channel_name LIKE '%CI/CD%' THEN 'Faster Pipelines with CI/CD'
+  WHEN tnc.channel_name LIKE '%Clean Code%' THEN 'Refactoring for Readability'
+  WHEN tnc.channel_name LIKE '%Design Patterns%' THEN 'Applying Patterns in Go'
+  WHEN tnc.channel_name LIKE '%Functional%' THEN 'Pure Functions in JavaScript'
+  WHEN tnc.channel_name LIKE '%SvelteKit%' THEN 'Why SvelteKit Feels Instant'
+  ELSE 'Topic Discussion: ' || tnc.channel_name
+END AS Title,
+
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vel sem eget justo consequat convallis. Integer porta purus at egestas tincidunt.
 
    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur id nunc id nulla dapibus fermentum.',
@@ -130,19 +163,68 @@ FROM Counter c
 JOIN TempNewChannelIDs tnc ON tnc.rn = (((c.x - 1) % 25) + 1)
 JOIN IndexedUsers iu ON iu.rn = (((c.x - 1) % 5) + 1);
 
--- Link each post to its respective channel in PostChannels
-INSERT INTO PostChannels (PostID, ChannelID, Created)
-SELECT
-  p.ID AS PostID,
-  tnc.channel_id AS ChannelID,
-  MIN(p.Created, CURRENT_TIMESTAMP) AS Created
-FROM Posts p
-JOIN TempNewChannelIDs tnc ON tnc.rn = (
-  (
-    ( CAST( SUBSTR(p.Title, INSTR(p.Title, 'PostNum:') + LENGTH('PostNum:')) AS INTEGER) - 1) % 25
-  ) + 1
+-- Create a temp view that assigns row numbers to posts for deterministic mapping
+CREATE TEMP VIEW IF NOT EXISTS IndexedPosts AS
+SELECT ID AS PostID, ROW_NUMBER() OVER (ORDER BY ID ASC) AS rn FROM Posts;
+
+-- Now map each post to one of the 25 channels using modulo logic
+WITH MatchedPosts AS (
+  SELECT
+    ip.PostID,
+    tnc.channel_id,
+    MIN(p.Created, CURRENT_TIMESTAMP) AS Created
+  FROM IndexedPosts ip
+  JOIN Posts p ON p.ID = ip.PostID
+  JOIN TempNewChannelIDs tnc ON tnc.rn = ((ip.rn - 1) % 25) + 1
+  LEFT JOIN PostChannels pc ON pc.PostID = ip.PostID
+  WHERE pc.PostID IS NULL
 )
-WHERE p.Title LIKE 'Discussion: [%] PostNum:%'
-AND p.ID NOT IN (SELECT PostID FROM PostChannels WHERE PostID = p.ID);
+
+INSERT OR IGNORE INTO PostChannels (PostID, ChannelID, Created)
+SELECT * FROM MatchedPosts;
+
+.mode column
+.headers on
+.width 35 20 10
+
+SELECT
+  ch.Name AS ChannelName,
+  u.Username AS MemberUsername,
+  CASE
+    WHEN u.ID = ch.OwnerID THEN 'Owner'
+    ELSE 'Member'
+  END AS Role
+FROM Channels ch
+JOIN Memberships m ON m.ChannelID = ch.ID
+JOIN Users u ON u.ID = m.UserID
+WHERE ch.Name IN (SELECT name FROM ChannelNames)
+ORDER BY ch.ID, Role DESC;
+
+-- Debug: How many post-to-channel links were created
+SELECT COUNT(*) AS NewPostLinks FROM PostChannels
+WHERE PostID IN (SELECT PostID FROM IndexedPosts);
+
+-- View number of channels per user
+.mode box
+.headers on
+.width 20 10
+
+SELECT
+  u.Username,
+  COUNT(m.ChannelID) AS Channels
+FROM Memberships m
+JOIN Users u ON u.ID = m.UserID
+GROUP BY m.UserID
+ORDER BY ChannelMemberships DESC;
+
+-- Count how many posts got linked to channels
+SELECT COUNT(*) AS LinkedPosts FROM PostChannels;
+
+-- Drop temporary tables and views used for seeding
+DROP TABLE IF EXISTS TempUsersForChannels;
+DROP TABLE IF EXISTS TempUsersForPosts;
+DROP TABLE IF EXISTS TempNewChannelIDs;
+DROP TABLE IF EXISTS ChannelNames;
+DROP VIEW IF EXISTS IndexedPosts;
 
 COMMIT;

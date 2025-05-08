@@ -23,7 +23,6 @@ type ChannelHandler struct {
 func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Println(Colors().Orange + "GetThisChannel" + Colors().Reset)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Context", r.Context())
 	userLoggedIn := true
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {

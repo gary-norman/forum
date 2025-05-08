@@ -47,12 +47,15 @@ func (m *ReactionModel) GetReactionStatus(authorID models.UUIDField, reactedPost
 	if m == nil || m.DB == nil {
 		return reactions, fmt.Errorf("reaction model or database is nil")
 	}
+
 	postID, commentID := preparePostChannelIDs(reactedPostID, reactedCommentID)
-	stmt := `SELECT Liked, Disliked FROM Reactions WHERE AuthorID = ? AND ReactedPostID = ? AND ReactedCommentID = ?`
+
+	stmt := `SELECT COUNT(Liked), COUNT(Disliked) FROM Reactions WHERE AuthorID = ? AND ReactedPostID = ? AND ReactedCommentID = ?`
 	if err := m.DB.QueryRow(stmt, authorID, postID, commentID).Scan(&reactions.Liked, &reactions.Disliked); err != nil {
 		return reactions, err
 	}
 
+	models.JsonPost(reactions)
 	return reactions, nil
 }
 

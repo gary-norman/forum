@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/gary-norman/forum/internal/models"
 )
@@ -33,12 +34,16 @@ func or(a, b bool) bool { return a || b }
 func not(a bool) bool { return !a }
 
 // CheckSameName Function to check if  2 strings are identical, for go templates
-func CheckSameName(firstString, secondString string) bool {
+func checkSameName(firstString, secondString string) bool {
 	return firstString == secondString
 }
 
+func startsWith(s, prefix string) bool {
+	return strings.HasPrefix(s, prefix)
+}
+
 // CompareAsInts converts both arguments to integers using ConvertToInt and compares them
-func CompareAsInts(a, b any) bool {
+func compareAsInts(a, b any) bool {
 	intA, errA := ConvertToInt(a)
 	intB, errB := ConvertToInt(b)
 
@@ -51,7 +56,7 @@ func CompareAsInts(a, b any) bool {
 	return intA == intB
 }
 
-func PrintType(name, calledBy string, elem any) string {
+func printType(name, calledBy string, elem any) string {
 	str := fmt.Sprintf("Type of %v with value of %v called by %v", name, elem, calledBy)
 	fmt.Printf(ErrorMsgs().KeyValuePair, str, reflect.TypeOf(elem))
 	return ""
@@ -94,7 +99,7 @@ func ConvertToInt(value any) (int, error) {
 }
 
 // RandomInt Function to get a random integer between 0 and the max number, for go templates
-func RandomInt(max int) int {
+func randomInt(max int) int {
 	return rand.Intn(max)
 }
 
@@ -113,12 +118,12 @@ func isValZero(val string) bool {
 }
 
 // Increment Function to increment an integer for go templates
-func Increment(n int) int {
+func increment(n int) int {
 	return n + 1
 }
 
 // Decrement Function to decrement an integer for go templates
-func Decrement(n int) int {
+func decrement(n int) int {
 	return n - 1
 }
 

@@ -1,4 +1,3 @@
-
 // INFO was a DOMContentLoaded function
 export function listenToLikeDislike() {
   const postControls = document.querySelectorAll(".post-controls");
@@ -138,32 +137,67 @@ function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {
   return postData;
 }
 
-        }
-    }
-
-    return postData;
-}
+// function fetchData(postData, likeString) {
+//   fetch("/store-reaction", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(postData),
+//   })
+//     .then((response) => {
+//       if (!response.ok) {
+//         return response.text().then((text) => {
+//           throw new Error(
+//             `HTTP Error: ${response.status} ${response.statusText}. Response: ${text}`,
+//           );
+//         });
+//       }
+//       return response.json();
+//     })
+//     .then((data) => {
+//       console.log(`${likeString} updated (in js):`, data);
+//     })
+//     .catch((error) => {
+//       console.error("Error updating like:", error.message);
+//     });
+// }
 
 function fetchData(postData, likeString) {
-    fetch('http://localhost:8989/store-reaction', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(postData)
+  fetch("/store-reaction", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(postData),
+  })
+    .then(async (response) => {
+      const text = await response.text();
+
+      if (!response.ok) {
+        throw new Error(
+          `HTTP Error: ${response.status} ${response.statusText}. Response: ${text}`,
+        );
+      }
+
+      // Try to parse JSON if there's any content
+      let data = null;
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch (err) {
+          console.warn("Response is not valid JSON:", text);
+          data = text;
+        }
+      }
+
+      return data;
     })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(`HTTP Error: ${response.status} ${response.statusText}. Response: ${text}`);
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log(`${likeString} updated (in js):`, data);
-        })
-        .catch(error => {
-            console.error('Error updating like:', error);
-        });
+    .then((data) => {
+      console.log(`${likeString} updated (in js):`, data ?? "(no response)");
+    })
+    .catch((error) => {
+      console.error("Error updating like:", error.message);
+    });
 }
+

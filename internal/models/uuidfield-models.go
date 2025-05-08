@@ -45,11 +45,7 @@ func (u *UUIDField) UnmarshalJSON(data []byte) error {
 }
 
 // SQL driver interfaces
-func (u UUIDField) Value() (driver.Value, error) {
-	return u.UUID[:], nil // store as []byte
-}
-
-func (u *UUIDField) Scan(src any) error {
+func (u *UUIDField) copyFromBytes(src any) error {
 	switch v := src.(type) {
 	case []byte:
 		copy(u.UUID[:], v)
@@ -57,6 +53,26 @@ func (u *UUIDField) Scan(src any) error {
 	default:
 		return fmt.Errorf("UUIDField: cannot scan type %T", v)
 	}
+}
+
+func (u *UUIDField) Exec(value any) error {
+	return u.copyFromBytes(value)
+}
+
+func (u *UUIDField) Scan(value any) error {
+	return u.copyFromBytes(value)
+}
+
+func (u *UUIDField) Begin(value any) error {
+	return u.copyFromBytes(value)
+}
+
+func (u *UUIDField) Commit(value any) error {
+	return u.copyFromBytes(value)
+}
+
+func (u UUIDField) Value() (driver.Value, error) {
+	return u.UUID[:], nil // store as []byte
 }
 
 func UUIDFieldFromString(s string) (UUIDField, error) {

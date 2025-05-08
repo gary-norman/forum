@@ -109,50 +109,34 @@ export function listenToLikeDislike() {
 }
 
 function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {
-    let postData;
+  const isLike = likeStatus === "like";
+  const isDislike = likeStatus === "dislike";
 
-    if (likeStatus === "like") {
-        if (postID === null || postID === 0) {
-            // Send the updated like to the backend via POST request
-            postData = {
-                liked: true,
-                disliked: false,
-                reactedCommentId: parseInt(commentID, 10),
-                authorId: parseInt(reactionAuthorID, 10),
-            };
-            console.log("liked comment: ", postData)
+  if (!isLike && !isDislike) {
+    console.error("Invalid likeStatus:", likeStatus);
+    return null;
+  }
 
-        } else if (commentID === null || commentID === 0) {
-            // Send the updated like to the backend via POST request
-            postData = {
-                liked: true,
-                disliked: false,
-                reactedPostId: parseInt(postID, 10),
-                authorId: parseInt(reactionAuthorID, 10),
-            };
-            console.log("liked post: ", postData)
+  if (!reactionAuthorID) {
+    console.error("Missing or invalid reactionAuthorID:", reactionAuthorID);
+    return null;
+  }
 
-        }
-    } else if (likeStatus === "dislike") {
-        if (postID === null || postID === 0) {
-            // Send the updated like to the backend via POST request
-            postData = {
-                liked: false,
-                disliked: true,
-                reactedCommentId: parseInt(commentID, 10),
-                authorId: parseInt(reactionAuthorID, 10),
-            };
-            console.log("disliked comment: ", postData)
+  const postData = {
+    liked: isLike,
+    disliked: isDislike,
+    authorId: reactionAuthorID,
+    ...(postID ? { reactedPostId: Number(postID) } : {}),
+    ...(commentID ? { reactedCommentId: Number(commentID) } : {}),
+  };
 
-        } else if (commentID === null || commentID === 0) {
-            // Send the updated like to the backend via POST request
-            postData = {
-                liked: false,
-                disliked: true,
-                reactedPostId: parseInt(postID, 10),
-                authorId: parseInt(reactionAuthorID, 10),
-            };
-            console.log("disliked post: ", postData)
+  if (postID) {
+    console.info(`${isLike ? "liked" : "disliked"} post:`);
+  } else if (commentID) {
+    console.info(`${isLike ? "liked" : "disliked"} comment:`);
+  }
+  return postData;
+}
 
         }
     }

@@ -18,10 +18,7 @@ type ReactionStatus struct {
 	Disliked bool
 }
 
-// WhichReaction checks if a reaction exists and returns whether it is Liked or Disliked.
 func (m *ReactionModel) WhichReaction(authorID models.UUIDField, reactedPostID, reactedCommentID int64) (bool, bool, error) {
-	// fmt.Printf("WhichReaction:\nChecking reaction (reactions.go :22 -> WhichReaction) for\nauthorID: %v,\nchannelID: %v,\nreactedPostID: %v,\nreactedCommentID: %v\n", authorID, channelID, reactedPostID, reactedCommentID)
-
 	postID, commentID := preparePostChannelIDs(reactedPostID, reactedCommentID)
 
 	fmt.Printf("postID: %v (%T)\ncommentID: %v (%T)\n", postID, postID, commentID, commentID)
@@ -40,7 +37,6 @@ func (m *ReactionModel) WhichReaction(authorID models.UUIDField, reactedPostID, 
 		return false, false, err
 	}
 
-	fmt.Printf("liked: %v (%T)\ndisliked: %v (%T)\n", liked, liked, disliked, disliked)
 	return liked, disliked, nil
 }
 

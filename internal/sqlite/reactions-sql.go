@@ -199,23 +199,14 @@ func (m *ReactionModel) Exists(authorID models.UUIDField, reactedPostID, reacted
 
 // CheckExistingReaction checks if the user has already reacted to a post or comment. For purposes of reactions, the user can only react once to a post or comment.
 func (m *ReactionModel) CheckExistingReaction(liked, disliked bool, reactionAuthorID models.UUIDField, reactedPostID, reactedCommentID int64) (*models.Reaction, error) {
-	postID, commentID := preparePostChannelIDs(reactedPostID, reactedCommentID)
-
 	var reaction models.Reaction
+
+	whereArgs, arg := preparePostChannelIDs(reactedPostID, reactedCommentID)
+
 	// Query to find if there's a reaction by the same user for the same post or comment
-	stmt := `SELECT ID, Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID
-			FROM Reactions 
-			WHERE AuthorID = ? 
-			AND ReactedPostID = ?
-			AND ReactedCommentID = ?
-			AND (Liked = ? OR Disliked = ?)`
-	err := m.DB.QueryRow(stmt, reactionAuthorID, postID, commentID, liked, disliked).Scan(
-		&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID)
-	if errors.Is(err, sql.ErrNoRows) {
-		// No existing reaction found
-		// fmt.Println("No existing reaction found")
-		return nil, nil
-	} else if err != nil {
+	stmt := fmt.Sprintf("SELECT * FROM Reactions WHERE AuthorID = ? AND (Liked = ? OR Disliked = ?) AND %s", whereArgs)
+	if err := m.DB.QueryRow(stmt, reactionAuthorID, liked, disliked, arg).Scan(
+		&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID); err != nil {
 		return nil, err
 	}
 	return &reaction, nil

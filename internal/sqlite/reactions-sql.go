@@ -223,70 +223,41 @@ func (m *ReactionModel) CountReactions(reactedPostID, reactedCommentID int64) (l
 		return 0, 0, fmt.Errorf("only one of  ReactedPostID, or ReactedCommentID must be non-zero")
 	}
 
-	postID, commentID := preparePostChannelIDs(reactedPostID, reactedCommentID)
-	fmt.Printf("post: %v (%T)\ncomment: %v (%T)\n", postID, postID, commentID, commentID)
+	whereArgs, arg := preparePostChannelIDs(reactedPostID, reactedCommentID)
 
-	fmt.Printf("postID: %v (%T)\ncommentID: %v (%T)\n", postID, postID, commentID, commentID)
-
-	stmt := `SELECT 
-                 SUM(CASE WHEN Liked = 1 THEN 1 ELSE 0 END) AS Likes,
-                 SUM(CASE WHEN Disliked = 1 THEN 1 ELSE 0 END) AS Dislikes
-             FROM Reactions
-             WHERE ReactedPostID = ? AND 
-                   ReactedCommentID = ?`
+	stmt := fmt.Sprintf("SELECT COUNT(Liked) AS Likes, COUNT(Disliked) AS Dislikes FROM Reactions WHERE %s", whereArgs)
 	var likesSum, dislikesSum sql.NullInt64
 
+	fmt.Printf("stmt: %s (%T)\n", stmt, stmt)
+
 	// Run the query
-	err = m.DB.QueryRow(stmt, postID, commentID).Scan(&likesSum, &dislikesSum)
+	err = m.DB.QueryRow(stmt, arg).Scan(&likesSum, &dislikesSum)
 	if err != nil {
 		return 0, 0, err
 	}
-	fmt.Printf("likesSum: %v (%T)\ndislikesSum: %v (%T)\n", likesSum, likesSum, dislikesSum, dislikesSum)
+	// fmt.Printf("likesSum: %v (%T)\ndislikesSum: %v (%T)\n", likesSum, likesSum, dislikesSum, dislikesSum)
 	likes = int(likesSum.Int64)
 	dislikes = int(dislikesSum.Int64)
 	// fmt.Println("likes:", likes)
 	// fmt.Println("dislikes:", dislikes)
 
-	fmt.Printf("likes: %v (%T)\ndislikes: %v (%T)\n", likes, likes, dislikes, dislikes)
+	// fmt.Printf("likes: %v (%T)\ndislikes: %v (%T)\n", likes, likes, dislikes, dislikes)
 	return likes, dislikes, err
 }
 
-// TODO refactor this to match the others
 // GetReaction checks if a user has already reacted to a post or comment. It retrieves already existing reactions.
 func (m *ReactionModel) GetReaction(authorID, reactedPostID, reactedCommentID int64) (*models.Reaction, error) {
 	var reaction models.Reaction
-	var stmt string
 
+	whereArgs, arg := preparePostChannelIDs(reactedPostID, reactedCommentID)
+	//
 	// Build the SQL query depending on whether the reaction is to a post or comment
-	if reactedPostID != 0 {
-		stmt = `SELECT ID, Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID 
-				FROM Reactions 
-				WHERE AuthorID = ? AND 
-				      ReactedPostID = ?`
-	} else if reactedCommentID != 0 {
-		stmt = `SELECT ID, Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID 
-				FROM Reactions 
-				WHERE AuthorID = ? AND 
-				      ReactedCommentID = ?`
-	} else {
-		log.Printf("Couldn't find the reaction with AuthorID: %v, reactedPostID: %v, reactedCommentID: %v\n", authorID, &reactedPostID, &reactedCommentID)
-		return nil, nil
-	}
+	stmt := fmt.Sprintf("SELECT * FROM Reactions WHERE AuthorID = ? AND %s", whereArgs)
 
 	// Query the database
-	row := m.DB.QueryRow(stmt, authorID, reactedPostID)
-	if reactedCommentID != 0 {
-		row = m.DB.QueryRow(stmt, authorID, reactedCommentID)
-	}
+	row := m.DB.QueryRow(stmt, arg)
 
-	err := row.Scan(&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			// No reaction found
-			return nil, nil
-		}
-		// Other errors
-		log.Printf("Error fetching reaction: %v", err)
+	if err := row.Scan(&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID); err != nil {
 		return nil, err
 	}
 

@@ -15,18 +15,19 @@ var Template *template.Template
 // init Function to initialise the custom template functions
 func (t *TempHelper) Init() {
 	Template = template.Must(template.New("").Funcs(template.FuncMap{
-		"random":         RandomInt,
-		"increment":      Increment,
-		"decrement":      Decrement,
-		"same":           CheckSameName,
-		"compareAsInts":  CompareAsInts,
-		"reactionStatus": t.App.Reactions.GetReactionStatus,
-		"dict":           dict,
-		"isValZero":      isValZero,
-		"fprint":         fprint,
+		"compareAsInts":  compareAsInts,
 		"debugPanic":     debugPanic,
-		"or":             or,
+		"decrement":      decrement,
+		"dict":           dict,
+		"fprint":         fprint,
+		"increment":      increment,
+		"isValZero":      isValZero,
 		"not":            not,
-		"PrintType":      PrintType,
+		"or":             or,
+		"printType":      printType,
+		"random":         randomInt,
+		"reactionStatus": t.App.Reactions.GetReactionStatus,
+		"same":           checkSameName,
+		"startsWith":     startsWith,
 	}).ParseGlob("assets/templates/*.html"))
 }

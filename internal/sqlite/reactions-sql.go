@@ -93,7 +93,6 @@ func (m *ReactionModel) Insert(liked, disliked bool, authorID models.UUIDField, 
 	// Execute the query, dereferencing the pointers for reactionID values
 	_, err = tx.Exec(stmt1, liked, disliked, authorID,
 		postID, commentID)
-	// fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, reactedPostID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Insert query: %w", err)
 	}
@@ -144,7 +143,6 @@ func (m *ReactionModel) Update(liked, disliked bool, authorID models.UUIDField, 
 	stmt1 := `UPDATE Reactions 
              SET Liked = ?, Disliked = ?, Created = DateTime('now') 
              WHERE AuthorID = ? AND ReactedPostID = ? AND ReactedCommentID = ?`
-	// fmt.Printf("Updating Reactions, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
 
 	// Execute the query
 	_, err = tx.Exec(stmt1, liked, disliked, authorID, postID, commentID)
@@ -222,20 +220,14 @@ func (m *ReactionModel) CountReactions(reactedPostID, reactedCommentID int64) (l
 	stmt := fmt.Sprintf("SELECT COUNT(Liked) AS Likes, COUNT(Disliked) AS Dislikes FROM Reactions WHERE %s", whereArgs)
 	var likesSum, dislikesSum sql.NullInt64
 
-	fmt.Printf("stmt: %s (%T)\n", stmt, stmt)
-
 	// Run the query
 	err = m.DB.QueryRow(stmt, arg).Scan(&likesSum, &dislikesSum)
 	if err != nil {
 		return 0, 0, err
 	}
-	// fmt.Printf("likesSum: %v (%T)\ndislikesSum: %v (%T)\n", likesSum, likesSum, dislikesSum, dislikesSum)
 	likes = int(likesSum.Int64)
 	dislikes = int(dislikesSum.Int64)
-	// fmt.Println("likes:", likes)
-	// fmt.Println("dislikes:", dislikes)
 
-	// fmt.Printf("likes: %v (%T)\ndislikes: %v (%T)\n", likes, likes, dislikes, dislikes)
 	return likes, dislikes, err
 }
 

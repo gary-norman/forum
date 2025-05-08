@@ -43,14 +43,14 @@ func (h *ReactionHandler) GetCommentsLikesAndDislikes(comments []models.Comment)
 }
 
 func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) {
-	// log.Printf("using storeReaction()")
+	log.Printf("using storeReaction()")
 
 	// Variable to hold the decoded data
 	var reactionData models.Reaction
 
 	// Decode the JSON request body into the reactionData variable
 	err := json.NewDecoder(r.Body).Decode(&reactionData)
-	fmt.Printf("reactionData received: %v\n", &reactionData)
+	models.JsonPost(input)
 	if err != nil {
 		// Use the error message from the Errors struct for decoding errors
 		log.Println("Error decoding JSON")
@@ -81,6 +81,7 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 
 	fmt.Printf("commentID after conversion: %v\n", commentID)
 	fmt.Printf("postID after conversion: %v\n", postID)
+	log.Printf(ErrorMsgs().KeyValuePair, "Updating like for", updatedPair)
 
 	// Check if the user already reacted (like/dislike) and update or delete the reaction if needed
 	existingReaction, err := h.App.Reactions.CheckExistingReaction(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
@@ -100,7 +101,7 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 			err = h.App.Reactions.Delete(existingReaction.ID)
 			if err != nil {
 				// Use your custom error message for deletion errors
-				log.Printf(ErrorMsgs().Delete, "storeReaction > h.App.reactions.Delete", err)
+				log.Printf(ErrorMsgs().Delete, updatedPair, "storeReaction > h.App.reactions.Delete", err)
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
@@ -116,7 +117,7 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 		err = h.App.Reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 		if err != nil {
 			// Use your custom error message for update errors
-			log.Printf(ErrorMsgs().Delete, "storeReaction > h.App.reactions.Update", err)
+			log.Printf(ErrorMsgs().Update, updatedPair, "storeReaction > h.App.reactions.Update", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -132,7 +133,7 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 	err = h.App.Reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 	fmt.Printf("Upserting liked: %v, disliked: %v, authorID: %v, postID: %v, commentID: %v\n", reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 	if err != nil {
-		log.Printf(ErrorMsgs().Delete, "storeReaction > h.App.reactions.Upsert", err)
+		log.Printf(ErrorMsgs().Update, updatedPair, "storeReaction > h.App.reactions.Upsert", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

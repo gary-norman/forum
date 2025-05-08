@@ -18,30 +18,6 @@ type ReactionStatus struct {
 	Disliked bool
 }
 
-func (m *ReactionModel) WhichReaction(authorID models.UUIDField, reactedPostID, reactedCommentID int64) (bool, bool, error) {
-	postID, commentID := preparePostChannelIDs(reactedPostID, reactedCommentID)
-
-	fmt.Printf("postID: %v (%T)\ncommentID: %v (%T)\n", postID, postID, commentID, commentID)
-
-	stmt := `SELECT Liked, Disliked FROM Reactions
-             WHERE AuthorID = ?  AND ReactedPostID = ? AND ReactedCommentID = ?`
-
-	var liked, disliked bool
-	err := m.DB.QueryRow(stmt, authorID, postID, commentID).Scan(&liked, &disliked)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			// No matching reaction found, return default values
-			return false, false, err
-		}
-		// Return other errors as is
-		return false, false, err
-	}
-
-	return liked, disliked, nil
-}
-
-// TODO Might have issues cuz it's not in the database
-
 func (m *ReactionModel) GetReactionStatus(authorID models.UUIDField, reactedPostID, reactedCommentID int64) (ReactionStatus, error) {
 	var reactions ReactionStatus
 	if m == nil || m.DB == nil {

@@ -46,18 +46,28 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 	log.Printf("using storeReaction()")
 
 	// Variable to hold the decoded data
-	var reactionData models.Reaction
+	var input models.ReactionInput
 
-	// Decode the JSON request body into the reactionData variable
-	err := json.NewDecoder(r.Body).Decode(&reactionData)
-	models.JsonPost(input)
-	if err != nil {
-		// Use the error message from the Errors struct for decoding errors
-		log.Println("Error decoding JSON")
-		log.Printf(ErrorMsgs().Parse, "storeReaction", err)
-		// TODO expect: 100-continue on the request header (for all of these)
-		w.WriteHeader(http.StatusBadRequest)
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
+	}
+
+	models.JsonPost(input)
+
+	// Convert AuthorID string to UUIDField
+	authorID, err := models.UUIDFieldFromString(input.AuthorID)
+	if err != nil {
+		http.Error(w, "Invalid authorId", http.StatusBadRequest)
+		return
+	}
+
+	reactionData := models.Reaction{
+		Liked:            input.Liked,
+		Disliked:         input.Disliked,
+		AuthorID:         authorID,
+		ReactedPostID:    input.ReactedPostID,
+		ReactedCommentID: input.ReactedCommentID,
 	}
 
 	//// Validate that at least one of reactedPostID or reactedCommentID is non-zero
@@ -67,20 +77,24 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	var postID, commentID int64
+	var postID, commentID, updatedID int64
+	var updatedStr string
 
 	if reactionData.ReactedPostID != nil {
 		// log.Println("ReactedPostID:", *reactionData.ReactedPostID)
 		postID = *reactionData.ReactedPostID
+		updatedID = *reactionData.ReactedPostID
+		updatedStr = "post"
 	}
 
 	if reactionData.ReactedCommentID != nil {
 		// log.Printf("ReactedCommentID: %d", *reactionData.ReactedPostID)
 		commentID = *reactionData.ReactedCommentID
+		updatedID = *reactionData.ReactedCommentID
+		updatedStr = "comment"
 	}
 
-	fmt.Printf("commentID after conversion: %v\n", commentID)
-	fmt.Printf("postID after conversion: %v\n", postID)
+	updatedPair := fmt.Sprintf("%s: %v", updatedStr, updatedID)
 	log.Printf(ErrorMsgs().KeyValuePair, "Updating like for", updatedPair)
 
 	// Check if the user already reacted (like/dislike) and update or delete the reaction if needed
@@ -91,6 +105,7 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 	// If there is an existing reaction, toggle it (i.e., remove it if the user reacts again to the same thing)
 	if existingReaction != nil {
 		log.Printf("Existing Reaction: %+v", existingReaction)
@@ -113,6 +128,7 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 			}
 			return
 		}
+
 		// Otherwise, update the existing reaction
 		err = h.App.Reactions.Update(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 		if err != nil {
@@ -129,6 +145,7 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 		}
 		return
 	}
+
 	// If no existing reaction, insert a new reaction
 	err = h.App.Reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)
 	fmt.Printf("Upserting liked: %v, disliked: %v, authorID: %v, postID: %v, commentID: %v\n", reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, postID, commentID)

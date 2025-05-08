@@ -378,3 +378,11 @@ func isValidParent(reactedPostID, reactedCommentID int64) bool {
 	}
 	return nonZeroCount == 1
 }
+
+// Convert 0 values of reactedPostID and reactedCommentID to nil if they are zero
+func preparePostChannelIDs(post, comment int64) (any, any) {
+	if post == 0 {
+		return nil, comment
+	}
+	return post, nil
+}

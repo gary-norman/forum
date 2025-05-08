@@ -29,43 +29,41 @@ func Colors() *models.Colors {
 }
 
 type App struct {
-	Db             *sql.DB // Store DB reference for cleanup
-	Users          *sqlite.UserModel
-	Posts          *sqlite.PostModel
-	Reactions      *sqlite.ReactionModel
-	ReactionStatus *sqlite.ReactionModel
-	Saved          *sqlite.SavedModel
-	Mods           *sqlite.ModModel
-	Comments       *sqlite.CommentModel
-	Images         *sqlite.ImageModel
-	Channels       *sqlite.ChannelModel
-	Flags          *sqlite.FlagModel
-	Loyalty        *sqlite.LoyaltyModel
-	Memberships    *sqlite.MembershipModel
-	Muted          *sqlite.MutedChannelModel
-	Cookies        *sqlite.CookieModel
-	Rules          *sqlite.RuleModel
-	Paths          models.ImagePaths
+	Db          *sql.DB // Store DB reference for cleanup
+	Users       *sqlite.UserModel
+	Posts       *sqlite.PostModel
+	Reactions   *sqlite.ReactionModel
+	Saved       *sqlite.SavedModel
+	Mods        *sqlite.ModModel
+	Comments    *sqlite.CommentModel
+	Images      *sqlite.ImageModel
+	Channels    *sqlite.ChannelModel
+	Flags       *sqlite.FlagModel
+	Loyalty     *sqlite.LoyaltyModel
+	Memberships *sqlite.MembershipModel
+	Muted       *sqlite.MutedChannelModel
+	Cookies     *sqlite.CookieModel
+	Rules       *sqlite.RuleModel
+	Paths       models.ImagePaths
 }
 
 func NewApp(db *sql.DB) *App {
 	return &App{
-		Db:             db,
-		Users:          &sqlite.UserModel{DB: db},
-		Posts:          &sqlite.PostModel{DB: db},
-		Reactions:      &sqlite.ReactionModel{DB: db},
-		ReactionStatus: &sqlite.ReactionModel{DB: db},
-		Saved:          &sqlite.SavedModel{DB: db},
-		Mods:           &sqlite.ModModel{DB: db},
-		Comments:       &sqlite.CommentModel{DB: db},
-		Images:         &sqlite.ImageModel{DB: db},
-		Channels:       &sqlite.ChannelModel{DB: db},
-		Flags:          &sqlite.FlagModel{DB: db},
-		Loyalty:        &sqlite.LoyaltyModel{DB: db},
-		Memberships:    &sqlite.MembershipModel{DB: db},
-		Muted:          &sqlite.MutedChannelModel{DB: db},
-		Cookies:        &sqlite.CookieModel{DB: db}, // Not in sqlite, handled separately
-		Rules:          &sqlite.RuleModel{DB: db},
+		Db:          db,
+		Users:       &sqlite.UserModel{DB: db},
+		Posts:       &sqlite.PostModel{DB: db},
+		Reactions:   &sqlite.ReactionModel{DB: db},
+		Saved:       &sqlite.SavedModel{DB: db},
+		Mods:        &sqlite.ModModel{DB: db},
+		Comments:    &sqlite.CommentModel{DB: db},
+		Images:      &sqlite.ImageModel{DB: db},
+		Channels:    &sqlite.ChannelModel{DB: db},
+		Flags:       &sqlite.FlagModel{DB: db},
+		Loyalty:     &sqlite.LoyaltyModel{DB: db},
+		Memberships: &sqlite.MembershipModel{DB: db},
+		Muted:       &sqlite.MutedChannelModel{DB: db},
+		Cookies:     &sqlite.CookieModel{DB: db}, // Not in sqlite, handled separately
+		Rules:       &sqlite.RuleModel{DB: db},
 
 		Paths: models.ImagePaths{
 			Channel: imagePath + "channel-images/",

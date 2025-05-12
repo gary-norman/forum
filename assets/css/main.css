@@ -374,6 +374,7 @@ a:active,
 .flex-align-l {
   display: flex;
   column-gap: 1.2rem;
+  justify-content: flex-start;
 }
 
 .post-channel-dropdown {
@@ -383,6 +384,80 @@ a:active,
 
 .wrapper-dropdown {
   display: none;
+  &[class*="filter"] {
+    /*display: unset;*/
+    max-width: 18rem;
+    max-height: 28rem;
+    height: 100%;
+    overflow: auto;
+    background: var(--color-bg-1);
+    border: 1px solid var(--color-bg-3);
+    border-radius: 0.4rem;
+    flex-direction: column;
+    position: absolute;
+    padding: 1.2rem 2.4rem;
+    top: 2.8rem;
+    left: 0;
+    gap: 0.8rem;
+
+    position: fixed;
+    inset-block-start: calc(anchor(end) + 0.4rem);
+    inset-inline-start: anchor(center);
+    transform: translateX(-50%);
+
+    &.active {
+      display: flex;
+
+    }
+    &.btn-sort{
+      position-anchor: --filterSortAnchor;
+    }
+    &.filter-channel{
+      position-anchor: --filterChannelAnchor;
+    }
+    &.filter-date{
+      position-anchor: --filterDateAnchor;
+    }
+    &.filter-reaction{
+      position-anchor: --filterReactionAnchor;
+    }
+    &.filter-replies{
+      position-anchor: --filterRepliesAnchor;
+    }
+    &.filter-saved{
+      position-anchor: --filterSavedAnchor;
+    }
+
+    & * > label {
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      font-size: 1.6rem;
+    }
+  }
+}
+
+.filters-row {
+  & button:has(span.btn-sort) {
+    anchor-name: --filterSortAnchor;
+  }
+  & button:has(span.filter-channel) {
+    anchor-name: --filterChannelAnchor;
+  }
+  & button:has(span.filter-date) {
+    anchor-name: --filterDateAnchor;
+  }
+  & button:has(span.filter-reaction) {
+    anchor-name: --filterReactionAnchor;
+  }
+  & button:has(span.filter-replies) {
+    anchor-name: --filterRepliesAnchor;
+  }
+  & button:has(span.filter-saved) {
+    anchor-name: --filterSavedAnchor;
+  }
 }
 
 .dropdown-toggle {
@@ -857,6 +932,8 @@ input[type="file"] {
 
 .checkbox-visible {
   appearance: auto;
+  align-self: start;
+  margin-top: 0.4rem;
 }
 
 /* TODO use @starting-style to achieve this */

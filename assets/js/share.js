@@ -40,7 +40,7 @@ export function selectActiveFeed() {
   switch (activePage) {
     case "home-page":
       console.log("ON HOME PAGE BITCH")
-      // scrollWindow = homePage.querySelector(`#home-feed`);
+      scrollWindow = document.querySelector(`#home-feed`);
       // console.log("scrollWindow:", scrollWindow)
       break;
     case "user-page":

@@ -6,7 +6,7 @@
 {{ $userID := .userID }}
 {{ $calledBy := .calledBy}}
 {{ with .Tracer }}
-  {{/* fprint "Trace" . */}}
+  {{ fprint "Trace" . }}
 {{ end }}
 {{ $instance := $dot.Instance}}
 {{ $post := .Post }}

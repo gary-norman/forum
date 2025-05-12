@@ -43,6 +43,7 @@
 {{ $postBasePath := "db/userdata/images/post-images/" }}
 {{ $userBasePath := "db/userdata/images/user-images/" }}
 {{ $user := .CurrentUser }}
+{{ $tracer := "index" }}
 {{ if eq .CurrentUser nil }}
   {{ $user = .RandomUser }}
 {{ end }}
@@ -569,7 +570,7 @@
         <main>
           {{/*SECTION ---------- homepage ---------- */}}
           <div id="home-page" class="active-feed">
-            {{ template "home-page" (dict "dot" . "UserPosts" .UserPosts "CurrentUser" $.CurrentUser "Instance" "home-page" ) }}
+            {{ template "home-page" (dict "dot" . "tracer" $tracer "UserPosts" .UserPosts "CurrentUser" $.CurrentUser "Instance" "home-page" ) }}
           </div>
 
 

@@ -1,15 +1,19 @@
 {{ define "home-page" }}
-  {{ $userID := .dot.UserID }}
+  {{ $userID := .UserID }} }}
   {{ with .CurrentUser }}
     {{ $userID = .ID }}
   {{ end }}
   {{ $dot := .dot }}
-  {{ $userPosts := $dot.UserPosts }}
+  {{ $userPosts := .UserPosts }}
+  {{ $tracer := printf "%s > %s" .tracer "home-page" }}
+  {{ with $tracer }}
+    {{ fprint "Trace" . }}
+  {{ end }}
 
   <div class="container-content">
     <div class="content">
-  {{ template "filters-row" . }}
-  {{ template "home-page-feed" (dict "dot" $dot "UserPosts" $userPosts "UserID" $userID) }}
+  {{ template "filters-row" (dict "dot" $dot "tracer" $tracer "UserID" $userID "calledBy" "home-page" "Instance" "home-page") }}
+  {{ template "home-page-feed" (dict "dot" $dot "tracer" $tracer "UserPosts" $userPosts "UserID" $userID) }}
     </div>
 {{/*    {{ template "right-panel" (dict "dot" . "UserID" $userID) }}*/}}
   </div>

@@ -1,10 +1,59 @@
 {{ define "filters-row"}}
-<div class="filters-row button-row">
-  <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-    <span class="btn-sort">sort</span>
-  </button>
-  <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-    <span class="btn-filters">filters</span>
-  </button>
-</div>
+  {{ $userID := .dot.UserID }}
+  {{ with .CurrentUser }}
+    {{ $userID = .ID }}
+  {{ end }}
+  {{ $dot := .dot }}
+  {{ $calledBy := .calledBy }}
+  {{ $tracer := printf "%s > %s" .tracer "filter-rows" }}
+  {{ with $tracer }}
+    {{ fprint "Trace" . }}
+  {{ end }}
+
+  <div class="filters-row button-row">
+    <button class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+      <span class="btn-sort filter-sort">sort</span>
+    </button>
+    <button class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+      <span class="btn-filters filter-channel">channel</span>
+    </button>
+    <button class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+      <span class="btn-filters filter-date">date</span>
+    </button>
+    <button popovertarget="{{$calledBy}}-dropdown-reaction" class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+      <span class="btn-filters filter-reaction">reactions</span>
+    </button>
+{{/*    TODO filters for additional features audit */}}
+{{/*    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
+{{/*      <span class="btn-filters filter-replies">replies</span>*/}}
+{{/*    </button>*/}}
+{{/*    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">*/}}
+{{/*      <span class="btn-filters filter-saved">saved</span>*/}}
+{{/*    </button>*/}}
+
+
+    <div id="{{$calledBy}}-dropdown-reaction" popover class="wrapper-dropdown filter scroll-down scrollable">
+        <div class="flex-align-l">
+          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-liked" name="channel[]" value="{{ .ID }}">
+          <label for="{{$calledBy}}-checkbox-reaction-liked">liked</label>
+        </div>
+      <div class="flex-align-l">
+        <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-disliked" name="channel[]" value="{{ .ID }}">
+        <label for="{{$calledBy}}-checkbox-reaction-disliked">disliked</label>
+      </div>
+      <div class="flex-align-l">
+        <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-none" name="channel[]" value="{{ .ID }}">
+        <label for="{{$calledBy}}-checkbox-reaction-none">no reaction</label>
+      </div>
+    </div>
+
+    <div class="wrapper-dropdown filter-channel active scroll-down scrollable">
+    {{ range $dot.OwnedAndJoinedChannels}}
+      <div class="flex-align-l">
+        <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-channel-{{ .ID }}" name="channel[]" value="{{ .ID }}">
+        <label for="{{$calledBy}}-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
+      </div>
+    {{ end }}
+  </div>
+  </div>
 {{ end }}

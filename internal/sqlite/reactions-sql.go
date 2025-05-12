@@ -31,7 +31,7 @@ func (m *ReactionModel) GetReactionStatus(authorID models.UUIDField, reactedPost
 		return reactions, err
 	}
 
-	models.JsonPost(reactions)
+	//models.JsonPost(reactions)
 	return reactions, nil
 }
 

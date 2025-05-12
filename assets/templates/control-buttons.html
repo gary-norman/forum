@@ -1,12 +1,12 @@
 {{ define "control-buttons" }}
 {{ $dot := .dot}}
 {{ $user := $dot.CurrentUser }}
-{{ $callChain := printf "UserID: %s > %s" .calledBy "control-buttons" }}
+{{ $tracer := printf "%s > %s" .tracer "control-buttons" }}
 {{/* fprint $callChain .userID */}}
 {{ $userID := .userID }}
 {{ $calledBy := .calledBy}}
 {{ with .Tracer }}
-  {{ fprint "Trace" . }}
+{{/*  {{ fprint "Trace" . }}*/}}
 {{ end }}
 {{ $instance := $dot.Instance}}
 {{ $post := .Post }}

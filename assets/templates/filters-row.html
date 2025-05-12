@@ -7,7 +7,7 @@
   {{ $calledBy := .calledBy }}
   {{ $tracer := printf "%s > %s" .tracer "filter-rows" }}
   {{ with $tracer }}
-    {{ fprint "Trace" . }}
+{{/*    {{ fprint "Trace" . }}*/}}
   {{ end }}
 
   <div class="filters-row button-row">

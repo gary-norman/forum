@@ -361,11 +361,3 @@ func preparePostChannelDynamicWhere(post, comment int64) (string, int64) {
 	}
 	return "ReactedPostID = ? AND ReactedCommentID IS NULL", post
 }
-
-// preparePostChannelStaticWhere prepares the tail of the ON CONFLICT statement
-func preparePostChannelStaticWhere(post, comment int64) string {
-	if post == 0 {
-		return fmt.Sprintf("ReactedPostID IS NULL AND ReactedCommentID = %v", comment)
-	}
-	return fmt.Sprintf("ReactedPostID = %v AND ReactedCommentID IS NULL", post)
-}

@@ -8,8 +8,10 @@ type Reaction struct {
 	Disliked         bool      `db:"disliked"`
 	Created          time.Time `db:"created"`
 	AuthorID         UUIDField `db:"authorId"`
-	ReactedPostID    *int64    `db:"reactedPostId,omitempty"`
-	ReactedCommentID *int64    `db:"reactedCommentId,omitempty"`
+	PostID           int64
+	CommentID        int64
+	ReactedPostID    *int64 `db:"reactedPostId,omitempty"`
+	ReactedCommentID *int64 `db:"reactedCommentId,omitempty"`
 }
 
 type ReactionInput struct {

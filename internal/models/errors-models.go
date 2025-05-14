@@ -49,6 +49,7 @@ type Errors struct {
 	Edit        string
 	Encode      string
 	Execute     string
+	Generic     string
 	Insert      string
 	// KeyValuePair: "v" (blue), "v" (white)
 	KeyValuePair string
@@ -139,6 +140,7 @@ func CreateErrorMessages() *Errors {
 		Edit:         Colors.Red + "Unable to edit " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
 		Encode:       Colors.Red + "Unable to encode JSON called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
 		Execute:      Colors.Red + "Unable to execute template with error: " + Colors.Red + "%v" + Colors.Reset,
+		Generic:      Colors.Red + "%s: " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
 		Insert:       Colors.Red + "Unable to insert " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
 		KeyValuePair: Colors.Blue + "%v: " + Colors.White + "%v\n",
 		Login:        Colors.Red + "Unable to login " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,

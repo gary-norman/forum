@@ -2,7 +2,6 @@ package sqlite
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"log"
 
@@ -31,7 +30,6 @@ func (m *ReactionModel) GetReactionStatus(authorID models.UUIDField, reactedPost
 		return reactions, err
 	}
 
-	//models.JsonPost(reactions)
 	return reactions, nil
 }
 
@@ -96,7 +94,7 @@ func (m *ReactionModel) Update(liked, disliked bool, authorID models.UUIDField, 
 		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
 	}
 
-	postID, commentID := preparePostChannelIDs(reactedPostID, reactedCommentID)
+	whereArgs, arg := preparePostChannelDynamicWhere(reactedPostID, reactedCommentID)
 
 	// Begin the transaction
 	tx, err := m.DB.Begin()
@@ -116,12 +114,72 @@ func (m *ReactionModel) Update(liked, disliked bool, authorID models.UUIDField, 
 		}
 	}()
 
-	stmt1 := `UPDATE Reactions 
-             SET Liked = ?, Disliked = ?, Created = DateTime('now') 
-             WHERE AuthorID = ? AND ReactedPostID = ? AND ReactedCommentID = ?`
+	stmt := fmt.Sprintf("UPDATE Reactions SET Liked = ?, Disliked = ?, Created = DateTime('now') WHERE AuthorID = ? AND %s", whereArgs)
 
 	// Execute the query
-	_, err = tx.Exec(stmt1, liked, disliked, authorID, postID, commentID)
+	_, err = tx.Exec(stmt, liked, disliked, authorID, arg)
+	if err != nil {
+		return fmt.Errorf("failed to execute Update query: %w", err)
+	}
+
+	// Commit the transaction
+	err = tx.Commit()
+	// fmt.Println("Committing UPDATE transaction")
+	if err != nil {
+		return fmt.Errorf("failed to commit transaction for Update in Reactions: %w", err)
+	}
+
+	return err
+}
+
+func (m *ReactionModel) Upsert(liked, disliked bool, authorID models.UUIDField, reactedPostID, reactedCommentID int64) error {
+	if !isValidParent(reactedPostID, reactedCommentID) {
+		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
+	}
+
+	postID, commentID := preparePostChannelIDs(reactedPostID, reactedCommentID)
+	// whereArg := preparePostChannelStaticWhere(reactedPostID, reactedCommentID)
+	updateStr := `
+		UPDATE SET
+		Liked = excluded.Liked,
+		Disliked = excluded.Disliked,
+		Created = DateTime('now')
+		`
+
+	// Begin the transaction
+	tx, err := m.DB.Begin()
+	// fmt.Println("Beginning UPDATE transaction")
+	if err != nil {
+		return fmt.Errorf("failed to begin transaction for Insert in Reactions: %w", err)
+	}
+
+	// Ensure rollback on failure
+	defer func() {
+		if p := recover(); p != nil {
+			fmt.Println("Rolling back transaction")
+			_ = tx.Rollback()
+			panic(p)
+		} else if err != nil {
+			_ = tx.Rollback()
+		}
+	}()
+
+	stmt := fmt.Sprintf(`
+		INSERT INTO Reactions (Liked, Disliked, Created, AuthorID, ReactedPostID, ReactedCommentID)
+		VALUES (?, ?, DateTime('now'), ?, ?, ?)
+		ON CONFLICT(AuthorID, ReactedPostID, ReactedCommentID)
+		DO %s
+		`, updateStr)
+	fmt.Println(ErrorMsgs().Divider)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "stmt", stmt)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "liked", liked)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "disliked", disliked)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "postID", postID)
+	fmt.Printf(ErrorMsgs().KeyValuePair, "commentID", commentID)
+	fmt.Println(ErrorMsgs().Divider)
+
+	// Execute the query
+	_, err = tx.Exec(stmt, liked, disliked, authorID, postID, commentID)
 	if err != nil {
 		return fmt.Errorf("failed to execute Update query: %w", err)
 	}
@@ -137,27 +195,27 @@ func (m *ReactionModel) Update(liked, disliked bool, authorID models.UUIDField, 
 }
 
 // Upsert inserts or updates a reaction for a specific combination of AuthorID and the parent fields (ChannelID, ReactedPostID, ReactedCommentID). It uses Exists to determine if the reaction already exists.
-func (m *ReactionModel) Upsert(liked, disliked bool, authorID models.UUIDField, reactedPostID, reactedCommentID int64) error {
-	if !isValidParent(reactedPostID, reactedCommentID) {
-		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
-	}
-
-	// Check if the reaction exists
-	exists, err := m.Exists(authorID, reactedPostID, reactedCommentID)
-	if err != nil {
-		fmt.Println("Upsert > Exists error")
-		return errors.New(err.Error())
-	}
-
-	if exists {
-		// If the reaction exists, update it
-		// fmt.Println("Updating a reaction which already exists (reactions.go :53)")
-		return m.Update(liked, disliked, authorID, reactedPostID, reactedCommentID)
-	}
-	// fmt.Println("Inserting a reaction (reactions.go :56)")
-
-	return m.Insert(liked, disliked, authorID, reactedPostID, reactedCommentID)
-}
+// func (m *ReactionModel) Upsert(liked, disliked bool, authorID models.UUIDField, reactedPostID, reactedCommentID int64) error {
+// 	if !isValidParent(reactedPostID, reactedCommentID) {
+// 		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
+// 	}
+//
+// 	// Check if the reaction exists
+// 	exists, err := m.Exists(authorID, reactedPostID, reactedCommentID)
+// 	if err != nil {
+// 		fmt.Println("Upsert > Exists error")
+// 		return errors.New(err.Error())
+// 	}
+//
+// 	if exists {
+// 		// If the reaction exists, update it
+// 		// fmt.Println("Updating a reaction which already exists (reactions.go :53)")
+// 		return m.Update(liked, disliked, authorID, reactedPostID, reactedCommentID)
+// 	}
+// 	// fmt.Println("Inserting a reaction (reactions.go :56)")
+//
+// 	return m.Insert(liked, disliked, authorID, reactedPostID, reactedCommentID)
+// }
 
 // Exists helps avoid creating duplicate reactions by determining whether a reaction for the specific combination of AuthorID, PostID and CommentID
 func (m *ReactionModel) Exists(authorID models.UUIDField, reactedPostID, reactedCommentID int64) (bool, error) {
@@ -175,12 +233,12 @@ func (m *ReactionModel) Exists(authorID models.UUIDField, reactedPostID, reacted
 func (m *ReactionModel) CheckExistingReaction(liked, disliked bool, reactionAuthorID models.UUIDField, reactedPostID, reactedCommentID int64) (*models.Reaction, error) {
 	var reaction models.Reaction
 
-	whereArgs, arg := preparePostChannelIDs(reactedPostID, reactedCommentID)
+	whereArgs, arg := preparePostChannelDynamicWhere(reactedPostID, reactedCommentID)
 
 	// Query to find if there's a reaction by the same user for the same post or comment
 	stmt := fmt.Sprintf("SELECT * FROM Reactions WHERE AuthorID = ? AND (Liked = ? OR Disliked = ?) AND %s", whereArgs)
 	if err := m.DB.QueryRow(stmt, reactionAuthorID, liked, disliked, arg).Scan(
-		&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.AuthorID, &reaction.Created, &reaction.ReactedPostID, &reaction.ReactedCommentID); err != nil {
+		&reaction.ID, &reaction.Liked, &reaction.Disliked, &reaction.Created, &reaction.AuthorID, &reaction.ReactedPostID, &reaction.ReactedCommentID); err != nil {
 		return nil, err
 	}
 	return &reaction, nil
@@ -191,7 +249,7 @@ func (m *ReactionModel) CountReactions(reactedPostID, reactedCommentID int64) (l
 		return 0, 0, fmt.Errorf("only one of  ReactedPostID, or ReactedCommentID must be non-zero")
 	}
 
-	whereArgs, arg := preparePostChannelIDs(reactedPostID, reactedCommentID)
+	whereArgs, arg := preparePostChannelDynamicWhere(reactedPostID, reactedCommentID)
 
 	stmt := fmt.Sprintf("SELECT COUNT(Liked) AS Likes, COUNT(Disliked) AS Dislikes FROM Reactions WHERE %s", whereArgs)
 	var likesSum, dislikesSum sql.NullInt64
@@ -211,7 +269,7 @@ func (m *ReactionModel) CountReactions(reactedPostID, reactedCommentID int64) (l
 func (m *ReactionModel) GetReaction(authorID, reactedPostID, reactedCommentID int64) (*models.Reaction, error) {
 	var reaction models.Reaction
 
-	whereArgs, arg := preparePostChannelIDs(reactedPostID, reactedCommentID)
+	whereArgs, arg := preparePostChannelDynamicWhere(reactedPostID, reactedCommentID)
 	//
 	// Build the SQL query depending on whether the reaction is to a post or comment
 	stmt := fmt.Sprintf("SELECT * FROM Reactions WHERE AuthorID = ? AND %s", whereArgs)
@@ -308,10 +366,26 @@ func isValidParent(reactedPostID, reactedCommentID int64) bool {
 	return nonZeroCount == 1
 }
 
-// Convert 0 values of reactedPostID and reactedCommentID to nil if they are zero
-func preparePostChannelIDs(post, comment int64) (string, int64) {
+// preparePostChannelIDs prepares the IDs for the post and comment
+func preparePostChannelIDs(post, comment int64) (any, any) {
+	if post == 0 {
+		return nil, comment
+	}
+	return post, nil
+}
+
+// preparePostChannelDynamicWhere prepares the tail of the UPDATE statement
+func preparePostChannelDynamicWhere(post, comment int64) (string, int64) {
 	if post == 0 {
 		return "ReactedPostID IS NULL AND ReactedCommentID = ?", comment
 	}
 	return "ReactedPostID = ? AND ReactedCommentID IS NULL", post
+}
+
+// preparePostChannelStaticWhere prepares the tail of the ON CONFLICT statement
+func preparePostChannelStaticWhere(post, comment int64) string {
+	if post == 0 {
+		return fmt.Sprintf("ReactedPostID IS NULL AND ReactedCommentID = %v", comment)
+	}
+	return fmt.Sprintf("ReactedPostID = %v AND ReactedCommentID IS NULL", post)
 }

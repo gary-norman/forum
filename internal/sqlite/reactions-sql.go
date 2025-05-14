@@ -144,26 +144,28 @@ func (m *ReactionModel) Upsert(liked, disliked bool, authorID models.UUIDField, 
 
 	if reactedPostID != 0 {
 		query = `
-			INSERT INTO Reactions (Liked, Disliked, Created, AuthorID, ReactedPostID)
-			VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?)
-			ON CONFLICT(AuthorID, ReactedPostID)
-			DO UPDATE SET
-				Liked = excluded.Liked,
-				Disliked = excluded.Disliked,
-				Created = CURRENT_TIMESTAMP;
+			INSERT OR REPLACE INTO Reactions (ID, Liked, Disliked, Created, AuthorID, ReactedPostID)
+			VALUES (
+				COALESCE(
+					(SELECT ID FROM Reactions WHERE AuthorID = ? AND ReactedPostID = ?),
+					NULL
+				),
+				?, ?, CURRENT_TIMESTAMP, ?, ?
+			);
 		`
-		args = []any{liked, disliked, authorID, reactedPostID}
+		args = []any{authorID, reactedPostID, liked, disliked, authorID, reactedPostID}
 	} else {
 		query = `
-			INSERT INTO Reactions (Liked, Disliked, Created, AuthorID, ReactedCommentID)
-			VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?)
-			ON CONFLICT(AuthorID, ReactedCommentID)
-			DO UPDATE SET
-				Liked = excluded.Liked,
-				Disliked = excluded.Disliked,
-				Created = CURRENT_TIMESTAMP;
+			INSERT OR REPLACE INTO Reactions (ID, Liked, Disliked, Created, AuthorID, ReactedCommentID)
+			VALUES (
+				COALESCE(
+					(SELECT ID FROM Reactions WHERE AuthorID = ? AND ReactedCommentID = ?),
+					NULL
+				),
+				?, ?, CURRENT_TIMESTAMP, ?, ?
+			);
 		`
-		args = []any{liked, disliked, authorID, reactedCommentID}
+		args = []any{authorID, reactedCommentID, liked, disliked, authorID, reactedCommentID}
 	}
 
 	_, err := m.DB.Exec(query, args...)

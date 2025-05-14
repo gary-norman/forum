@@ -81,15 +81,11 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 	var updatedStr string
 
 	if reactionData.ReactedPostID != nil {
-		reactionData.CommentID = 0
 		reactionData.PostID = *reactionData.ReactedPostID
 		// log.Println("ReactedPostID:", *reactionData.ReactedPostID)
 		updatedID = *reactionData.ReactedPostID
 		updatedStr = "post"
-	}
-
-	if reactionData.ReactedCommentID != nil {
-		reactionData.PostID = 0
+	} else {
 		reactionData.CommentID = *reactionData.ReactedCommentID
 		// log.Printf("ReactedCommentID: %d", *reactionData.ReactedPostID)
 		updatedID = *reactionData.ReactedCommentID

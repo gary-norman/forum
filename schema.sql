@@ -198,10 +198,22 @@ CREATE TABLE IF NOT EXISTS Reactions (
     AuthorID BLOB NOT NULL,
     ReactedPostID INTEGER,
     ReactedCommentID INTEGER,
+    CHECK (
+          (Liked = 1 AND Disliked = 0) OR 
+          (Liked = 0 AND Disliked = 1)
+      ),
     FOREIGN KEY (AuthorID) REFERENCES Users(ID) ON DELETE CASCADE,
     FOREIGN KEY (ReactedPostID) REFERENCES Posts(ID) ON DELETE CASCADE,
     FOREIGN KEY (ReactedCommentID) REFERENCES Comments(ID)
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS unique_reaction_post
+ON Reactions(AuthorID, ReactedPostID)
+WHERE ReactedPostID IS NOT NULL;
+
+CREATE UNIQUE INDEX IF NOT EXISTS unique_reaction_comment
+ON Reactions(AuthorID, ReactedCommentID)
+WHERE ReactedCommentID IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS Flags (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,

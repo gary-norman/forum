@@ -134,64 +134,44 @@ func (m *ReactionModel) Update(liked, disliked bool, authorID models.UUIDField, 
 
 func (m *ReactionModel) Upsert(liked, disliked bool, authorID models.UUIDField, reactedPostID, reactedCommentID int64) error {
 	if !isValidParent(reactedPostID, reactedCommentID) {
-		return fmt.Errorf("only one of ReactedPostID, or ReactedCommentID must be non-zero")
+		return fmt.Errorf("only one of ReactedPostID or ReactedCommentID must be non-zero")
 	}
 
-	postID, commentID := preparePostChannelIDs(reactedPostID, reactedCommentID)
-	// whereArg := preparePostChannelStaticWhere(reactedPostID, reactedCommentID)
-	updateStr := `
-		UPDATE SET
-		Liked = excluded.Liked,
-		Disliked = excluded.Disliked,
-		Created = DateTime('now')
+	var (
+		query string
+		args  []any
+	)
+
+	if reactedPostID != 0 {
+		query = `
+			INSERT INTO Reactions (Liked, Disliked, Created, AuthorID, ReactedPostID)
+			VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?)
+			ON CONFLICT(AuthorID, ReactedPostID)
+			DO UPDATE SET
+				Liked = excluded.Liked,
+				Disliked = excluded.Disliked,
+				Created = CURRENT_TIMESTAMP;
 		`
-
-	// Begin the transaction
-	tx, err := m.DB.Begin()
-	// fmt.Println("Beginning UPDATE transaction")
-	if err != nil {
-		return fmt.Errorf("failed to begin transaction for Insert in Reactions: %w", err)
+		args = []any{liked, disliked, authorID, reactedPostID}
+	} else {
+		query = `
+			INSERT INTO Reactions (Liked, Disliked, Created, AuthorID, ReactedCommentID)
+			VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?)
+			ON CONFLICT(AuthorID, ReactedCommentID)
+			DO UPDATE SET
+				Liked = excluded.Liked,
+				Disliked = excluded.Disliked,
+				Created = CURRENT_TIMESTAMP;
+		`
+		args = []any{liked, disliked, authorID, reactedCommentID}
 	}
 
-	// Ensure rollback on failure
-	defer func() {
-		if p := recover(); p != nil {
-			fmt.Println("Rolling back transaction")
-			_ = tx.Rollback()
-			panic(p)
-		} else if err != nil {
-			_ = tx.Rollback()
-		}
-	}()
-
-	stmt := fmt.Sprintf(`
-		INSERT INTO Reactions (Liked, Disliked, Created, AuthorID, ReactedPostID, ReactedCommentID)
-		VALUES (?, ?, DateTime('now'), ?, ?, ?)
-		ON CONFLICT(AuthorID, ReactedPostID, ReactedCommentID)
-		DO %s
-		`, updateStr)
-	fmt.Println(ErrorMsgs().Divider)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "stmt", stmt)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "liked", liked)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "disliked", disliked)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "postID", postID)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "commentID", commentID)
-	fmt.Println(ErrorMsgs().Divider)
-
-	// Execute the query
-	_, err = tx.Exec(stmt, liked, disliked, authorID, postID, commentID)
+	_, err := m.DB.Exec(query, args...)
 	if err != nil {
-		return fmt.Errorf("failed to execute Update query: %w", err)
+		return fmt.Errorf("failed to upsert reaction: %w", err)
 	}
 
-	// Commit the transaction
-	err = tx.Commit()
-	// fmt.Println("Committing UPDATE transaction")
-	if err != nil {
-		return fmt.Errorf("failed to commit transaction for Update in Reactions: %w", err)
-	}
-
-	return err
+	return nil
 }
 
 // Upsert inserts or updates a reaction for a specific combination of AuthorID and the parent fields (ChannelID, ReactedPostID, ReactedCommentID). It uses Exists to determine if the reaction already exists.

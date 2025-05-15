@@ -199,9 +199,10 @@ CREATE TABLE IF NOT EXISTS Reactions (
     ReactedPostID INTEGER,
     ReactedCommentID INTEGER,
     CHECK (
-          (Liked = 1 AND Disliked = 0) OR 
-          (Liked = 0 AND Disliked = 1)
-      ),
+        (Liked IN (0, 1)) AND 
+        (Disliked IN (0, 1)) AND
+        NOT (Liked = 1 AND Disliked = 1)
+    ),
     FOREIGN KEY (AuthorID) REFERENCES Users(ID) ON DELETE CASCADE,
     FOREIGN KEY (ReactedPostID) REFERENCES Posts(ID) ON DELETE CASCADE,
     FOREIGN KEY (ReactedCommentID) REFERENCES Comments(ID)

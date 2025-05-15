@@ -142,28 +142,45 @@ func (m *ReactionModel) Upsert(liked, disliked bool, authorID models.UUIDField, 
 		args  []any
 	)
 
+	// TODO refactor so that query inserts ID/NULL to PostID AND CommentID
 	if reactedPostID != 0 {
 		query = `
-			INSERT OR REPLACE INTO Reactions (ID, Liked, Disliked, Created, AuthorID, ReactedPostID)
-			VALUES (
-				COALESCE(
-					(SELECT ID FROM Reactions WHERE AuthorID = ? AND ReactedPostID = ?),
-					NULL
-				),
-				?, ?, CURRENT_TIMESTAMP, ?, ?
-			);
+		WITH existing AS (
+    SELECT ID,
+    COALESCE(Liked, 0) AS existing_liked,
+    COALESCE(Disliked, 0) AS existing_disliked
+    FROM Reactions
+    WHERE AuthorID = ? AND ReactedPostID = ?
+		)
+		INSERT OR REPLACE INTO Reactions (ID, Liked, Disliked, Created, AuthorID, ReactedPostID)
+		VALUES (
+			(SELECT ID FROM existing),
+			CASE WHEN (SELECT existing_liked FROM existing) + 1 = 2 THEN 0 ELSE ? END,
+			CASE WHEN (SELECT existing_disliked FROM existing) + 1 = 2 THEN 0 ELSE ? END,
+			CURRENT_TIMESTAMP,
+			?,
+			?
+		);
 		`
 		args = []any{authorID, reactedPostID, liked, disliked, authorID, reactedPostID}
 	} else {
 		query = `
-			INSERT OR REPLACE INTO Reactions (ID, Liked, Disliked, Created, AuthorID, ReactedCommentID)
-			VALUES (
-				COALESCE(
-					(SELECT ID FROM Reactions WHERE AuthorID = ? AND ReactedCommentID = ?),
-					NULL
-				),
-				?, ?, CURRENT_TIMESTAMP, ?, ?
-			);
+		WITH existing AS (
+    SELECT ID,
+    COALESCE(Liked, 0) AS existing_liked,
+    COALESCE(Disliked, 0) AS existing_disliked
+    FROM Reactions
+    WHERE AuthorID = ? AND ReactedCommentID = ?
+		)
+		INSERT OR REPLACE INTO Reactions (ID, Liked, Disliked, Created, AuthorID, ReactedCommentID)
+		VALUES (
+			(SELECT ID FROM existing),
+			CASE WHEN (SELECT existing_liked FROM existing) + 1 = 2 THEN 0 ELSE ? END,
+			CASE WHEN (SELECT existing_disliked FROM existing) + 1 = 2 THEN 0 ELSE ? END,
+			CURRENT_TIMESTAMP,
+			?,
+			?
+		);
 		`
 		args = []any{authorID, reactedCommentID, liked, disliked, authorID, reactedCommentID}
 	}

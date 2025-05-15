@@ -250,7 +250,12 @@ func (m *ReactionModel) CountReactions(reactedPostID, reactedCommentID int64) (l
 
 	whereArgs, arg := preparePostChannelDynamicWhere(reactedPostID, reactedCommentID)
 
-	stmt := fmt.Sprintf("SELECT COUNT(Liked) AS Likes, COUNT(Disliked) AS Dislikes FROM Reactions WHERE %s", whereArgs)
+	stmt := fmt.Sprintf(`
+		SELECT
+		SUM(Liked) AS Likes,
+		SUM(Disliked) AS Dislikes
+		FROM Reactions
+		WHERE %s`, whereArgs)
 	var likesSum, dislikesSum sql.NullInt64
 
 	// Run the query

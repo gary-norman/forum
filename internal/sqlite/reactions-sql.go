@@ -189,14 +189,6 @@ func isValidParent(reactedPostID, reactedCommentID int64) bool {
 	return nonZeroCount == 1
 }
 
-// preparePostChannelIDs prepares the IDs for the post and comment
-func preparePostChannelIDs(post, comment int64) (any, any) {
-	if post == 0 {
-		return nil, comment
-	}
-	return post, nil
-}
-
 // preparePostChannelDynamicWhere prepares the tail of the UPDATE statement
 func preparePostChannelDynamicWhere(post, comment int64) (string, int64) {
 	if post == 0 {

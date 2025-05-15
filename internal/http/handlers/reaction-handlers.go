@@ -72,7 +72,7 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 
 	//// Validate that at least one of reactedPostID or reactedCommentID is non-zero
 	if (reactionData.ReactedPostID == nil || *reactionData.ReactedPostID == 0) && (reactionData.ReactedCommentID == nil || *reactionData.ReactedCommentID == 0) {
-		log.Println("You must react to either a post or a comment")
+		log.Println("invalid reactionData: both reactedPostID and reactedCommentID are nil or zero")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

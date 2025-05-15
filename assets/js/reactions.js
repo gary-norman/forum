@@ -61,7 +61,6 @@ export function listenToLikeDislike() {
         "like",
       );
 
-      console.info("like");
       console.table(postData);
 
       fetchData(postData, "like");
@@ -99,7 +98,6 @@ export function listenToLikeDislike() {
         "dislike",
       );
 
-      console.info("dislike");
       console.table(postData);
 
       fetchData(postData, "dislike");
@@ -130,9 +128,9 @@ function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {
   };
 
   if (postID) {
-    console.info(`${isLike ? "liked" : "disliked"} post:`);
+    console.info(`${isLike ? "liked" : "disliked"} post: ${postID}`);
   } else if (commentID) {
-    console.info(`${isLike ? "liked" : "disliked"} comment:`);
+    console.info(`${isLike ? "liked" : "disliked"} comment: ${commentID}`);
   }
   return postData;
 }
@@ -200,4 +198,3 @@ function fetchData(postData, likeString) {
       console.error("Error updating like:", error.message);
     });
 }
-

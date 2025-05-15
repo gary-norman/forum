@@ -100,6 +100,18 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	
+	// Respond with a JSON response
+	w.Header().Set("Content-Type", "application/json")
+	// Send a response indicating success
+	// w.WriteHeader(http.StatusCreated)
+	err = json.NewEncoder(w).Encode(map[string]string{"message": "Reaction added to database"})
+	if err != nil {
+		log.Printf(ErrorMsgs().Post, err)
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	// http.Redirect(w, r, "/", http.StatusFound)
 
 	updatedReactions, err := h.App.Reactions.All()
 	if err != nil {

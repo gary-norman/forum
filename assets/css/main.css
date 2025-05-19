@@ -387,47 +387,6 @@ a:active,
   display: none;
 }
 
-.wrapper-filter-dropdown {
-  max-width: 18rem;
-  max-height: 28rem;
-  padding: 0.4rem;
-  height: 100%;
-  overflow: auto;
-  background: var(--color-bg-1);
-  border: 1px solid var(--color-bg-3);
-  border-radius: 0.4rem;
-  flex-direction: column;
-  position: absolute;
-  box-shadow: var(--shadow-filter);
-  top: 2.8rem;
-  left: 0;
-  gap: 0.8rem;
-
-  position: fixed;
-  inset-block-start: calc(anchor(end) + 0.4rem);
-  inset-inline-start: calc(anchor(start) - 0.8rem);
-  /*transform: translateX(-25%);*/
-
-
-  & > div {
-    padding: 0.8rem;
-    border-radius: 0.4rem;
-
-    &:hover {
-      background: var(--color-bg-2);
-    }
-
-    & label {
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: normal;
-      font-size: 1.6rem;
-    }
-  }
-}
-
 .dropdown-toggle {
   border: 1px solid var(--color-bg-3);
   padding: 0.4rem 0.8rem;
@@ -2434,24 +2393,6 @@ main {
 
 .button-row-wrap {
   flex-wrap: wrap;
-}
-
-.filters-row {
-  padding-bottom: 2.4rem !important;
-  position: relative;
-  & button {
-    /* position: absolute; */
-    /* top : 1.2rem; */
-  }
-  & button:nth-of-type(1) {
-    /*left: 0;*/
-    z-index: 0;
-  }
-
-  & button:nth-of-type(2) {
-    /*left: 11;*/
-    z-index: 0;
-  }
 }
 
 .above-posts {

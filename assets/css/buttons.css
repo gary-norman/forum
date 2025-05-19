@@ -716,7 +716,7 @@ gap: 0.8rem;
     height: 2.6rem;
     border-radius: var(--btn-radius);
     border: 0.2rem solid
-      lab(from var(--color-hl-green-lab) calc(l - 20) calc(a - 0) calc(b - 0));
+      var(--color-hl-green-secondary);
     background: var(--color-hl-primary);
     transition: left ease-in-out var(--transition-dur-hover-darklight);
   }

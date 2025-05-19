@@ -1,0 +1,79 @@
+{{ define "calendar"}}
+
+
+<div class="card calendar">
+  <div class="calendar-container">
+    <div class="calendar-container-header">
+      <p data-date-starting class="bold calendar-container-title ">
+        Choose the date <span>range</span> or the <span>starting</span> date
+      </p>
+      <p data-date-ending class="bold calendar-container-title hide">
+        Choose the <span class="secondary">ending</span> date
+      </p>
+      <button class="btn-md btn-teritary btn-secondary">
+        <span data-date="year"></span>
+      </button>
+    </div>
+
+    <div class="layout-container">
+      <div class="button-row-wrap shortcut-dates">
+        <button data-date="today" class="btn-md btn-secondary btn-filled btn-action">
+          <span>today</span>
+        </button>
+        <button data-date="this-week" class="btn-md btn-secondary btn-filled btn-action">
+          <span>this week</span>
+        </button>
+        <button data-date="last-week" class="btn-md btn-secondary btn-filled btn-action">
+          <span>last week</span>
+        </button>
+        <button data-date="this-month" class="btn-md btn-secondary btn-filled btn-action">
+          <span>this month</span>
+        </button>
+        <button data-date="last-month" class="btn-md btn-secondary btn-filled btn-action">
+          <span>last month</span>
+        </button>
+        <button data-date="last-6-months" class="btn-md btn-secondary btn-filled btn-action">
+          <span>last 6 months</span>
+        </button>
+        <button data-date="last-year" class="btn-md btn-secondary btn-filled btn-action">
+          <span>last year</span>
+        </button>
+      </div>
+      <hr class="solid">
+      <div class="body-container">
+        <div class="two-body-container">
+          <div class="single-body-calendar">
+            <p class="bold calendar-header">
+              <button class="btn-lg btn-teritary btn-icoonly">
+                <span class="btn-previous" role="contentinfo" aria-description="previous range"></span>
+              </button>
+              <span class="month-header"></span>
+            </p>
+            <div class="days-container"></div>
+            <div class="dates-container"></div>
+
+          </div>
+          <div class="single-body-calendar">
+            <p class="bold calendar-header">
+              <button class="btn-lg btn-teritary btn-icoonly">
+                <span class="btn-next" role="contentinfo" aria-description="previous range"></span>
+              </button>
+              <span class="month-header"></span>
+            </p>
+            <div class="days-container"></div>
+            <div class="dates-container"></div>
+
+          </div>
+        </div>
+        <div class="buttons-container">
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+{{ end }}

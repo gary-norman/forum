@@ -57,13 +57,6 @@ button,
         text-align: center;
         justify-content: center;
     }
-}
-
-.btn-sm.btn-icotext {
-  & span {
-    padding: 0 0 0 2rem;
-  }
-}
     &.btn-icotext > span{
       padding: 0 0 0 2rem;
     }
@@ -81,17 +74,6 @@ font-size  : 1.2rem;
 height: 3.6rem;
 gap: 0.8rem;
 
-& span {
-    &::before {
-        background-size: 1.6rem !important;
-    }
-    width: max-content;
-    padding: 0;
-}
-
-}
-.btn-md.btn-icotext {
-  & span {
   &.btn-icoonly > span {
     height: 2.4rem;
     width: 2.4rem;
@@ -170,10 +152,21 @@ gap: 0.8rem;
 .btn-secondary {
   /* background : transparent; */
   /* border     : 0.15rem solid var(--color-secondary-border); */
-  color: var(--color-fg-1);
   color: var(--color-fg-2);
 
 }
+
+.btn-teritary {
+  & span {
+    text-align: center;
+    align-self: center;
+  }
+  &:hover {
+    background-color: var(--color-bg-1);
+  }
+  &:active {
+    background-color: var(--color-bg-3);
+  }
 
 }
 

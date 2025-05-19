@@ -368,9 +368,14 @@ gap: 0.8rem;
   }
 }
 
-.btn-md span{
-    /*background-size: 2.4rem;*/
-    /*height: 2.4rem;*/
+.btn-previous {
+  transition: all var(--transition-dur-hover) ease-in-out;
+  background : url('/assets/icons/previous_24.svg') no-repeat center;
+}
+
+.btn-next {
+  transition: all var(--transition-dur-hover) ease-in-out;
+  background : url('/assets/icons/next_24.svg') no-repeat center;
 }
 
 .btn-add {

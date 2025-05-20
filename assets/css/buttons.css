@@ -1,11 +1,12 @@
 :root {
   --btn-radius: 2.4rem;
-  cursor: url('/assets/cursors/default.svg'), auto;
-  --cursor-text: url('/assets/cursors/text.svg'), text;
-  --cursor-minus: url('/assets/cursors/minus.svg'), auto;
-  --cursor-plus: url('/assets/cursors/plus.svg'), cell;
-  --cursor-pointer: url('/assets/cursors/pointer.svg'), pointer;
-  --cursor-info: url('/assets/cursors/info.svg'), help;
+  cursor: url("/assets/cursors/default.svg"), auto;
+  --cursor-text: url("/assets/cursors/text.svg"), text;
+  --cursor-minus: url("/assets/cursors/minus.svg"), auto;
+  --cursor-plus: url("/assets/cursors/plus.svg"), cell;
+  --cursor-pointer: url("/assets/cursors/pointer.svg"), pointer;
+  --cursor-info: url("/assets/cursors/info.svg"), help;
+  --cursor-notallowed: url("/assets/cursors/not-allowed.svg"), not-allowed;
 }
 /* SECTION -------- cursors --------*/
 body {
@@ -29,7 +30,7 @@ body {
 /* SECTION -------- buttons --------*/
 button,
 .button {
-  cursor: url('/assets/cursors/pointer.svg'), pointer;
+  cursor: var(--cursor-pointer);
   & span,
   & img {
     /*z-index: calc(var(--z-index-button) + 10);*/

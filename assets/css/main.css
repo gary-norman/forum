@@ -1364,14 +1364,14 @@ input[type="checkbox"]:checked {
 #rules-wrapper-existing span {
   &:hover {
     color: var(--color-error);
-    cursor: url("/assets/cursors/minus.svg"), pointer;
+    cursor: var(--cursor-minus);
   }
 }
 #rules-wrapper-added span,
 #rules-wrapper-removed span {
   &:hover {
     color: var(--color-hl-primary);
-    cursor: url("/assets/cursors/plus.svg"), pointer;
+    cursor: var(--cursor-plus);
   }
 }
 #rules-wrapper-removed {

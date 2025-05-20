@@ -10,23 +10,31 @@
     {{ fprint "Trace" . }}
   {{ end }}
 
-  <div class="filters-row button-row">
-    <button popovertarget="{{$calledBy}}-dropdown-sort" class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+  <div class="filters-row button-row-wrap">
+    <button popovertarget="{{$calledBy}}-dropdown-sort"
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
       <span class="btn-sort filter-sort">sort</span>
     </button>
-    <button popovertarget="{{$calledBy}}-dropdown-channel" class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+    <button popovertarget="{{$calledBy}}-dropdown-channel"
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
       <span class="btn-filters filter-channel">channel</span>
     </button>
-    <button class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+    <button popovertarget="{{$calledBy}}-dropdown-calendar"
+            anchor="{{$calledBy}}-calendar-button"
+            id="{{$calledBy}}-calendar-button"
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
       <span class="btn-filters filter-date">date</span>
     </button>
-    <button popovertarget="{{$calledBy}}-dropdown-comments" class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+    <button popovertarget="{{$calledBy}}-dropdown-comments"
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
       <span class="btn-filters filter-comments">comments</span>
     </button>
-    <button popovertarget="{{$calledBy}}-dropdown-reaction" class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+    <button popovertarget="{{$calledBy}}-dropdown-reaction"
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
       <span class="btn-filters filter-reaction">reactions</span>
     </button>
-    <button popovertarget="{{$calledBy}}-dropdown-type" class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+    <button popovertarget="{{$calledBy}}-dropdown-type"
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
       <span class="btn-filters filter-reaction">type</span>
     </button>
 
@@ -119,13 +127,19 @@
     </div>
 
     {{/*    SECTION channel filter dropdown */}}
-    <div id="{{$calledBy}}-dropdown-channel" popover class="wrapper-filter-dropdown active scroll-down scrollable">
+    <div id="{{$calledBy}}-dropdown-channel" popover class="wrapper-filter-dropdown scroll-down scrollable">
     {{ range $dot.OwnedAndJoinedChannels}}
       <div class="flex-align-l">
         <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-channel-{{ .ID }}" name="channel-{{ .ID }}" value="{{ .ID }}">
         <label for="{{$calledBy}}-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
       </div>
     {{ end }}
-  </div>
+    </div>
+
+    {{/*    SECTION calendar dropdown */}}
+    <div id="{{$calledBy}}-dropdown-calendar" popover class="card calendar">
+      {{ template "calendar"}}
+    </div>
+
   </div>
 {{ end }}

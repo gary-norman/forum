@@ -2126,7 +2126,9 @@ main {
 }
 
 .card {
-  display: flex;
+  &:not(.calendar) {
+    display: flex;
+  }
   flex-direction: column;
   gap: 1.2rem;
   width: 100%;

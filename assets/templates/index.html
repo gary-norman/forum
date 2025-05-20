@@ -572,7 +572,6 @@
         <main>
           {{/*SECTION ---------- homepage ---------- */}}
           <div id="home-page" class="active-feed">
-            {{ template "calendar"}}
             <br>
             {{ template "home-page" (dict "dot" . "tracer" $tracer "UserID" .UserID "UserPosts" .UserPosts "CurrentUser" $.CurrentUser "Instance" "home-page" ) }}
           </div>

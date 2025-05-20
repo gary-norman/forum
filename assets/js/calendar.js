@@ -1,14 +1,27 @@
 import {addGlobalEventListener} from "./navigation.js";
+import {activePageElement} from "./main.js";
 
-const twoBodyContainer = document.querySelector('.two-body-container');
-let isSelecting = false;
-const dateStarting = document.querySelector('[data-date-starting]');
-const dateEnding = document.querySelector('[data-date-ending]');
-let yearButton = document.querySelector('[data-date="year"]');
-let displayContainers = twoBodyContainer.querySelectorAll('.month-header');
-let dayContainers = twoBodyContainer.querySelectorAll('.days-container');
-let dateContainers = twoBodyContainer.querySelectorAll('.dates-container');
+let twoBodyContainer;
+let isSelecting;
+let dateStarting;
+let dateEnding;
+let yearButton;
+let displayContainers;
+let dayContainers ;
+let dateContainers ;
 
+export function getCalendarVars() {
+    twoBodyContainer = activePageElement.querySelector('.two-body-container');
+    isSelecting = false;
+    dateStarting = activePageElement.querySelector('[data-date-starting]');
+    dateEnding = activePageElement.querySelector('[data-date-ending]');
+    yearButton = activePageElement.querySelector('[data-date="year"]');
+    displayContainers = twoBodyContainer.querySelectorAll('.month-header');
+    dayContainers = twoBodyContainer.querySelectorAll('.days-container');
+    dateContainers = twoBodyContainer.querySelectorAll('.dates-container');
+    console.group(twoBodyContainer,dateStarting, dateEnding, yearButton, displayContainers, dayContainers, dateContainers)
+    console.groupEnd()
+}
 
 const date = new Date();
 const month = date.getMonth();
@@ -23,27 +36,31 @@ let monthLeft = dateLeft.getMonth();
 let yearRight = dateRight.getFullYear();
 let monthRight = dateRight.getMonth();
 
+export function fireCalendarListeners(activePageElement) {
 
-displayCalendars();
+    addGlobalEventListener(
+        "click",
+        '.date-cell',
+        e => {processDateRange()},
+        activePageElement.querySelector('.dates-container'))
 
-addGlobalEventListener(
-    "click",
-    'button',
-    e => {previousCalendar()},
-    document.querySelector('.btn-previous').parentElement)
+    addGlobalEventListener(
+        "click",
+        'button',
+        e => {previousCalendar()},
+        activePageElement.querySelector('.btn-previous').parentElement)
 
-addGlobalEventListener(
-    "click",
-    'button',
-    e => {nextCalendar()},
-    document.querySelector('.btn-next').parentElement)
+    addGlobalEventListener(
+        "click",
+        'button',
+        e => {nextCalendar()},
+        activePageElement.querySelector('.btn-next').parentElement)
+}
 
 
-function displayCalendars() {
-    // console.log("yearLeft", yearLeft)
-    // console.log("monthLeft", monthLeft)
-    // console.log("yearRight", yearRight)
-    // console.log("monthRight", monthRight)
+
+
+export function displayCalendars() {
     //get the first day and index of the month
     const firstDayLeft = new Date(yearLeft, monthLeft, 1);
     let firstDayIndexLeft = firstDayLeft.getDay();
@@ -66,8 +83,8 @@ function displayCalendars() {
     const lastDayRight = new Date(yearRight, monthRight + 1, 0);
     const numberOfDaysRight = lastDayRight.getDate();
 
-    console.log("dateLeft", dateLeft)
-    console.log("dateRight", dateRight)
+    // console.log("dateLeft", dateLeft)
+    // console.log("dateRight", dateRight)
     let formattedDateLeft = dateLeft.toLocaleString("en-GB", {
         month: "long",
         year: "numeric",
@@ -142,21 +159,21 @@ function previousCalendar(){
     })
     // manage if the starting month was in left/ or right side
     if (monthRight <= 0) {
-        console.warn("monthRight <= 0");
+        // console.warn("monthRight <= 0");
         monthRight = 10;
         monthLeft = 9;
         yearLeft = yearLeft - 1;
         yearRight = yearLeft;
         yearButton.textContent = yearLeft;
     } else if (monthLeft <= 0) {
-        console.warn("monthLeft <= 0");
+        // console.warn("monthLeft <= 0");
         monthRight = 11;
         monthLeft = 10;
         yearRight = yearLeft - 1;
         yearLeft = yearRight;
         yearButton.textContent = yearLeft;
     } else {
-        console.warn("else");
+        // console.warn("else");
         monthLeft = monthLeft - 2;
         monthRight = monthRight - 2;
     }
@@ -177,14 +194,14 @@ function nextCalendar() {
 
     // manage if the starting month was in left/ or right side
     if (monthRight >= 11) {
-        console.warn("monthRight >= 11");
+        // console.warn("monthRight >= 11");
         monthRight = 1;
         monthLeft = 0;
         yearLeft = yearLeft + 1;
         yearRight = yearLeft;
         yearButton.textContent = yearLeft;
     } else if (monthLeft >= 11) {
-        console.warn("monthLeft >= 11");
+        // console.warn("monthLeft >= 11");
         monthRight = 0;
         monthLeft = 11;
         yearRight = yearLeft + 1;
@@ -200,14 +217,11 @@ function nextCalendar() {
     displayCalendars();
 }
 
-function processDateRange() {
+export function processDateRange() {
 
     dateContainers.forEach(container => {
 
         const dateCells = container.querySelectorAll('.date-cell');
-
-        console.log("running date script")
-
 
         dateCells.forEach((dateCell) => {
             dateCell.addEventListener('click', () => {

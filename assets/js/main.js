@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
   console.log("fired DOMContentLoaded");
   setActivePage("home")
   UpdateUI();
+  fireCalendarListeners(activePageElement)
+  fireCalendarListeners();
 });
 
 document.addEventListener("newContentLoaded", (event) => {

@@ -49,21 +49,22 @@ button,
     font-size  : 1.2rem;
     height: 3.2rem;
     gap: 0.4rem;
-    & span {
-        &::before {
-            background-size: .8rem !important;
-        }
+    &.btn-icoonly > span {
         height: 1.6rem;
         width: 1.6rem;
         background-size: 1.6rem;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+    &.btn-icotext > span{
+      padding: 0 0 0 2rem;
+    }
+    &.btn-icotext.ico-right > span{
+      padding: 0 2rem 0 0;
     }
 }
 
-.btn-sm.btn-icotext {
-  & span {
-    padding: 0 0 0 2rem;
-  }
-}
 
 .btn-md {
 display: flex;
@@ -73,25 +74,22 @@ font-size  : 1.2rem;
 height: 3.6rem;
 gap: 0.8rem;
 
-& span {
-    &::before {
-        background-size: 1.6rem !important;
-    }
-    width: max-content;
-    padding: 0;
-}
-
-}
-.btn-md.btn-icotext {
-  & span {
+  &.btn-icoonly > span {
+    height: 2.4rem;
+    width: 2.4rem;
+    background-size: 2.4rem;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+  &.btn-icotext > span{
     padding: 0 0 0 2rem;
   }
-}
-.btn-md.btn-icotext.ico-right {
-  & span {
+  &.btn-icotext.ico-right > span{
     padding: 0 2rem 0 0;
   }
 }
+
 .btn-lg {
   display: flex;
   border-radius: var(--btn-radius);
@@ -99,18 +97,22 @@ gap: 0.8rem;
   font-size: 1.6rem;
   gap: 1.2rem;
   height: 4rem;
-  & span {
-    &::before {
-      background-size: 2.4rem !important;
-    }
+  &.btn-icoonly > span {
     height: 3.2rem;
+    width: 3.2rem;
+    background-size: 3.2rem;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
   }
-}
-.btn-lg.btn-icotext {
-  & span {
+  &.btn-icotext > span{
     padding: 0 0 0 2.4rem;
   }
+  &.btn-icotext.ico-right > span{
+    padding: 0 2.4rem 0 0;
+  }
 }
+
 .btn-primary {
   width: fit-content;
   background: var(--color-hl-primary);
@@ -149,7 +151,21 @@ gap: 0.8rem;
 .btn-secondary {
   /* background : transparent; */
   /* border     : 0.15rem solid var(--color-secondary-border); */
-  color: var(--color-fg-1);
+  color: var(--color-fg-2);
+
+}
+
+.btn-teritary {
+  & span {
+    text-align: center;
+    align-self: center;
+  }
+  &:hover {
+    background-color: var(--color-bg-1);
+  }
+  &:active {
+    background-color: var(--color-bg-3);
+  }
 
 }
 
@@ -334,7 +350,7 @@ gap: 0.8rem;
   align-items: center;
   justify-content: center;
   width: fit-content;
-  padding: 1.2rem 1rem;
+  padding: 1.2rem 0.4rem;
   & img {
     filter: var(--filter-invert-on_off);
   }
@@ -343,7 +359,7 @@ gap: 0.8rem;
   &:has(.btn-save-empty),
   &:has(.btn-edit),
   &:has(.btn-cancel),
-  &:has(.btn-success){
+  &:has(.btn-success)  {
     padding: 0;
   }
   &:has(.btn-warning), &:has(.btn-success){
@@ -351,32 +367,28 @@ gap: 0.8rem;
   }
 }
 
-.btn-md span{
-    /*background-size: 2.4rem;*/
-    /*height: 2.4rem;*/
+.btn-previous {
+  transition: all var(--transition-dur-hover) ease-in-out;
+  background : url('/assets/icons/previous_24.svg') no-repeat center;
+}
+
+.btn-next {
+  transition: all var(--transition-dur-hover) ease-in-out;
+  background : url('/assets/icons/next_24.svg') no-repeat center;
 }
 
 .btn-add {
   transition: all var(--transition-dur-hover) ease-in-out;
   background : url('/assets/icons/add_circle_16.svg') no-repeat center;
-    width: 2.4rem;
 }
 .btn-minus {
   transition: all var(--transition-dur-hover) ease-in-out;
   background : url('/assets/icons/minus_circle_16.svg') no-repeat center;
-    width: 2.4rem;
-}
-
-
-.btn-cancel {
-  background: url("/assets/icons/close_16.svg") no-repeat center;
-  width: 1.6rem;
 }
 
 .btn-cancel {
   transition: all var(--transition-dur-hover) ease-in-out;
   background: url("/assets/icons/close_16.svg") no-repeat center;
-  width: 1.6rem;
 }
 
 .btn-success {
@@ -708,7 +720,7 @@ gap: 0.8rem;
     height: 2.6rem;
     border-radius: var(--btn-radius);
     border: 0.2rem solid
-      lab(from var(--color-hl-green-lab) calc(l - 20) calc(a - 0) calc(b - 0));
+      var(--color-hl-green-secondary);
     background: var(--color-hl-primary);
     transition: left ease-in-out var(--transition-dur-hover-darklight);
   }

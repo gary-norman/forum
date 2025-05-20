@@ -7,7 +7,7 @@ export function togglePopovers() {
     document.addEventListener("click", () => {
         popovers.forEach((popover) => {
             if (popover.matches(":popover-open")) {
-                console.log("Open popover: ", popover);
+                // console.log("Open popover: ", popover);
                 popover.addEventListener("toggle", () => {
                     toggleUserInteracted("remove");
                 });

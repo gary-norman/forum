@@ -116,6 +116,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
+	channelMap := make(map[int64]bool)
 	if userLoggedIn {
 		userPosts = h.Post.GetUserPosts(currentUser, allPosts)
 		// attach following/follower numbers to currently logged-in user
@@ -140,7 +141,24 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf(ErrorMsgs().Query, "user joined channels", err)
 		}
-		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+
+		// FIXME Fixed duplicate channels used on createPost, sidebar, filters etc
+		//ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+		// Add owned channels
+		for _, channel := range ownedChannels {
+			if !channelMap[channel.ID] {
+				channelMap[channel.ID] = true
+				ownedAndJoinedChannels = append(ownedAndJoinedChannels, channel)
+			}
+		}
+
+		// Add joined channels
+		for _, channel := range joinedChannels {
+			if !channelMap[channel.ID] {
+				channelMap[channel.ID] = true
+				ownedAndJoinedChannels = append(ownedAndJoinedChannels, channel)
+			}
+		}
 
 	} else {
 		userPosts = allPosts

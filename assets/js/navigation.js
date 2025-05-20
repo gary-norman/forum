@@ -1,13 +1,13 @@
 import {changePage, navigateToPage} from "./fetch_and_navigate.js";
 import {data} from "./share.js";
-import {modifyActivePage} from "./main.js";
+import {setActivePage} from "./main.js";
 
 // sidebar butons
 const goHome = document.querySelector("#btn-go-home");
 
 // --- go home ---
 goHome.addEventListener("click", () => {
-    modifyActivePage("home");
+    setActivePage("home");
     changePage(data["homePage"]);
 });
 
@@ -52,3 +52,13 @@ function navigateToEntity(e) {
 
 document.addEventListener("click", navigateToEntity, {capture: false});
 
+// addGlobalEventListener is an event listener on a parent element that only runs your callback
+// when the event happens on a specific type of child element (that matches the selector you give)
+// good for event delegation and for new elements populated dynamically
+export function addGlobalEventListener(type, selector, callback, parent) {
+    parent.addEventListener(type, e => {
+        if (e.target.matches(selector)) {
+            callback(e)
+        }
+    })
+}

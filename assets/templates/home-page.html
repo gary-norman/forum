@@ -1,5 +1,5 @@
 {{ define "home-page" }}
-  {{ $userID := .UserID }} }}
+  {{ $userID := .UserID }}
   {{ with .CurrentUser }}
     {{ $userID = .ID }}
   {{ end }}
@@ -7,7 +7,7 @@
   {{ $userPosts := .UserPosts }}
   {{ $tracer := printf "%s > %s" .tracer "home-page" }}
   {{ with $tracer }}
-{{/*    {{ fprint "Trace" . }}*/}}
+{{/*    {{ fprint "Trace" . }} */}}
   {{ end }}
 
   <div class="container-content">

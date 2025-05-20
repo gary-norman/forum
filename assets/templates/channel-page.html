@@ -1,15 +1,20 @@
 {{ define "channel-page" }}
 {{ $userID := .UserID }}
+{{ $dot := $ }}
 {{ with .CurrentUser }}
   {{ $userID = .ID }}
 {{ end }}
 {{ $thisEntity := .ThisChannel }}
+{{ $tracer := "channel-page" }}
+{{ with $tracer }}
+{{/*  {{ fprint "Trace" . }}*/}}
+{{ end }}
 {{ template "channel-page-banner" . }}
 <div class="container-content">
   <div class="content">
-    {{ template "filters-row" . }}
-    {{ template "channel-page-feed" (dict "dot" . "UserID" $userID) }}
+    {{ template "filters-row" (dict "dot" $dot "tracer" $tracer "UserID" $userID "calledBy" "channel-page" "Instance" "channel-page") }}
+    {{ template "channel-page-feed" (dict "dot" . "tracer" $tracer "UserID" $userID) }}
   </div>
-    {{ template "right-panel" (dict "dot" . "UserID" $userID "Instance" $.Instance "ThisEntity" $thisEntity) }}
+    {{ template "right-panel" (dict "dot" . "tracer" $tracer "UserID" $userID "Instance" $.Instance "ThisEntity" $thisEntity) }}
 </div>
 {{ end }}

@@ -4,11 +4,12 @@ import {listenToShare, selectActiveFeed} from "./share.js";
 import {listenToLikeDislike} from "./reactions.js";
 import {listenToDropdowns} from "./post.js";
 import {saveColourScheme} from "./colour_scheme.js";
-import {activePage} from "./main.js";
+import {activePage, setActivePage} from "./main.js";
 import {getRandomInt} from "./helper_functions.js";
 import {listenToRules} from "./channel_rules.js";
 import {toggleModals, togglePopovers} from "./popups.js";
 import {listenToChannelLinks} from "./navigation.js";
+import {displayCalendars, getCalendarVars, processDateRange} from "./calendar.js";
 
 // activity buttons
 let actButtonContainer, actButtonsAll;
@@ -18,6 +19,7 @@ let activityFeeds, activityFeedsContentAll;
 
 export function UpdateUI() {
     // console.log("updating UI");
+    selectActiveFeed();
     listenToRules();
     listenToReplies();
     listenToEditDetails();
@@ -31,6 +33,9 @@ export function UpdateUI() {
     resetInputStyle();
     togglePopovers();
     listenToChannelLinks();
+    getCalendarVars();
+    displayCalendars();
+    processDateRange();
 }
 
 export function updateProfileImages() {

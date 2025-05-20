@@ -1,4 +1,4 @@
-import { modifyActivePage, newContentLoaded } from "./main.js";
+import { setActivePage, newContentLoaded } from "./main.js";
 import { pages } from "./share.js";
 
 export function navigateToPage(dest, entity) {
@@ -16,7 +16,7 @@ export function navigateToPage(dest, entity) {
     return;
   }
 
-  modifyActivePage(dest);
+  setActivePage(dest);
   changePage(page);
   fetchData(dest, link);
 }
@@ -38,6 +38,15 @@ export function changePage(page) {
       element.classList.add("active-feed");
       console.log("set", element.id, "to active-feed");
     } else {
+      // TODO need to modify home-page template to populate by injection
+      // TODO when injected, the content can be cleared
+      // clear the content of the page previously active
+      // element.textContent = "";
+
+      // TODO with injected home-page, this can be removed
+      // need to clear content of the calendar dropdown, or the calendar won't work on otehr pages after navigation
+
+
       element.classList.remove("active-feed");
     }
   });

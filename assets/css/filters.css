@@ -10,20 +10,19 @@
 .wrapper-filter-dropdown {
     max-width: 18rem;
     max-height: 28rem;
-    padding: 0.4rem;
-    height: 100%;
-    overflow: auto;
-    background: var(--color-bg-1);
-    border: 1px solid var(--color-bg-3);
-    border-radius: 0.4rem;
-    flex-direction: column;
-    box-shadow: var(--shadow-filter);
-    top: 2.8rem;
-    left: 0;
-    gap: 0.8rem;
+    min-height: fit-content;
     position: fixed;
+    gap: 0.8rem;
+    flex-direction: column;
+    padding: 0.4rem;
+    overflow: auto;
+    background: var(--color-bg-2);
+    border: 1px solid var(--color-bg-4);
+    border-radius: 0.4rem;
+    box-shadow: var(--shadow-filter);
     inset-block-start: calc(anchor(end) + 0.4rem);
     inset-inline-start: calc(anchor(start) - 0.8rem);
+
 
     & > div {
         padding: 0.8rem;
@@ -49,9 +48,16 @@
     max-width: 70rem;
     width: 100%;
     padding: 3.2rem 2.4rem;
-    margin: 3.2rem;
     align-self: center;
     box-shadow: var(--shadow-filter);
+    background: var(--color-bg-2);
+    border: 1px solid var(--color-bg-4);
+    border-radius: 0.4rem;
+
+    position: fixed;
+
+    inset-block-start: calc(anchor(end) - 20.9rem);
+    inset-inline-start: calc(anchor(start) - 21.1rem);
 
     & .calendar-container {
         display: flex;

@@ -1,4 +1,4 @@
-import {activePage} from "./main.js";
+import {activePage, setActivePage} from "./main.js";
 
 
 const link = encodeURI(window.location.href);
@@ -36,7 +36,6 @@ let scrollWindow;
 // console.log(data["homePage"]);
 
 export function selectActiveFeed() {
-
   switch (activePage) {
     case "home-page":
       console.log("ON HOME PAGE BITCH")
@@ -67,7 +66,9 @@ export function selectActiveFeed() {
       // console.log(scrollWindow)
       break;
     default:
-      console.log(`No active feed BITCH.`);
+      console.log(`No active feed BITCH... switching to home-page`);
+      setActivePage("home")
+      scrollWindow = document.querySelector(`#home-feed`);
       break;
   }
 }

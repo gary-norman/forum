@@ -479,10 +479,10 @@
         <aside class="sidebar">
           {{ if ne .CurrentUser nil }}
           <div class="sidebarProfile">
-            {{ if (ne $user.Avatar "noimage") }}
-              <div class="sidebar-pic profile-pic" data-image-user="{{ $.ImagePaths.User }}{{ $user.Avatar }}"></div>
-            {{ else }}
+            {{ if (startsWith $user.Avatar "noimage") }}
               <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username }}"></div>
+            {{ else }}
+              <div class="sidebar-pic profile-pic" data-image-user="{{ $.ImagePaths.User }}{{ $user.Avatar }}"></div>
             {{ end }}
             <div>
               <h3 data-current-user-ID="{{$user.ID}}">{{ $user.Username }}</h3>

@@ -90,6 +90,21 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]models
 //
 //		return channels, nil
 //	}
+func (m *ChannelModel) IsUserMemberOfChannel(userID models.UUIDField, channelID int64) (bool, error) {
+	var exists int
+	stmt := `
+		SELECT EXISTS (
+			SELECT 1 FROM Memberships
+			WHERE UserID = ? AND ChannelID = ?
+		)
+	`
+	err := m.DB.QueryRow(stmt, userID, channelID).Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+	return exists == 1, nil
+}
+
 func (m *ChannelModel) GetChannelsByID(id int64) ([]models.Channel, error) {
 	stmt := "SELECT * FROM Channels WHERE ID = ?"
 	rows, err := m.DB.Query(stmt, id)

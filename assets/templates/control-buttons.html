@@ -34,12 +34,12 @@
 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $user nil}}nouser{{ else }}{{if $status.Disliked}}active{{ else }}inactive {{end}} {{ end }}" >
                     <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
                 </button>
-                {{ if and (eq $instance "post-page") (eq $calledBy "this-post") (eq ne $user nil)}}
-                    <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+                {{ if and (eq $instance "post-page") (eq $calledBy "this-post") }}
+                    <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $user nil}}nouser{{end}}">
                         <span class="btn-reply">reply</span>
                     </button>
                 {{ else }}
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action nouser" data-dest="post" data-post-id="{{$post.ID}}">
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $user nil}}nouser{{end}}" data-dest="post" data-post-id="{{$post.ID}}">
                         <span class="btn-reply">{{$post.CommentsCount}}</span>
                     </button>
                 {{ end }}

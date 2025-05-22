@@ -461,18 +461,66 @@ gap: 0.8rem;
   color: lab(from var(--color-hl-orange) calc(l - 20) calc(a - 0) calc(b - 0));
 }
 .btn-action {
-&:hover {
-    border: .15rem solid var(--color-secondary-hover);
-}
-&.inactive{
-  pointer-events: none;
+  position: relative;
+
   &:hover {
-    border: 0.15rem solid var(--color-bg-4);
+    border: 0.15rem solid var(--color-secondary-hover);
+  }
+  &.inactive {
+    pointer-events: none;
+    &:hover {
+      border: 0.15rem solid var(--color-bg-4);
+    }
+  }
+  &.active {
+    border: 0.15rem solid var(--color-secondary-active);
+  }
+  &.nouser {
+    cursor: var(--cursor-notallowed);
+    &:hover {
+      border: 0.15rem solid var(--color-bg-4);
+    }
+
+    &::before,
+    &::after {
+      display: none;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: all 1000ms;
+      /* transition: all var(--transition-dur-feeds); */
+      transition-behavior: allow-discrete;
+      /* animation: scaleInTop 3s ease 1 normal forwards; */
+    }
+
+    &::before {
+      content: "you must be logged in to use this feature";
+      top: calc(100% + 0.55rem);
+      background: var(--color-bg-2);
+      color: var(--color-text);
+      font-size: 0.875rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.8rem;
+      border: 0.15rem solid var(--color-hl-pink);
+      white-space: nowrap;
+      box-shadow: 0 0 0.25rem rgb(0 0 0 / 0.2);
+    }
+
+    &.show-tooltip::before,
+    &.show-tooltip::after {
+      display: block;
+    }
+
+    &::after {
+      content: " ";
+      top: calc(100% - 0.45rem);
+      margin-left: -0.5rem;
+      border: 0.5rem solid;
+      border-color: transparent transparent var(--color-hl-pink) transparent;
+    }
   }
 }
-&.active{
-    border: .15rem solid var(--color-secondary-active);
-}
+@keyframes scaleInTop {
 }
 .btn-action-primary,
 .btn-action-secondary {

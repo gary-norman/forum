@@ -1,110 +1,106 @@
-// INFO was a DOMContentLoaded function
 export function listenToLikeDislike() {
   const postControls = document.querySelectorAll(".post-controls");
-  const sidebar = document.querySelector(`.sidebar`);
   const sidebarProfile = document.querySelector(".sidebarProfile");
-  let currentUserID;
-  if (sidebarProfile) {
-    currentUserID = sidebar
-      .querySelector("h3")
-      .getAttribute("data-current-user-ID");
-  }
+
+  if (!sidebarProfile) return;
+
+  const currentUserID = document
+    .querySelector(".sidebar h3")
+    ?.getAttribute("data-current-user-ID");
+
+  if (!currentUserID) return;
 
   postControls.forEach((singlePostControl) => {
     const likeCountElement = singlePostControl.querySelector(".btn-likes");
     const dislikeCountElement =
       singlePostControl.querySelector(".btn-dislikes");
 
+    if (!likeCountElement || !dislikeCountElement) return;
+
     const likeButton = likeCountElement.closest("button");
     const dislikeButton = dislikeCountElement.closest("button");
 
-    const likeID = likeCountElement.getAttribute("data-like-id");
-    const dislikeID = dislikeCountElement.getAttribute("data-dislike-id");
-    const postID = singlePostControl
-      .closest(".card")
-      .getAttribute("data-post-id");
-    const commentID = singlePostControl
-      .closest(".card")
-      .getAttribute("data-comment-id");
-    const channelID = singlePostControl
-      .closest(".card")
-      .getAttribute("data-channel-id");
+    const postCard = singlePostControl.closest(".card");
+    if (!likeButton || !dislikeButton || !postCard) return;
 
-    if (postControls.classList.contains("user")) {
-      likeButton.addEventListener("click", function (event) {
-        console.clear();
-        let likeCount = parseInt(likeCountElement.textContent, 10);
-        let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
+    const postID = postCard.getAttribute("data-post-id");
+    const commentID = postCard.getAttribute("data-comment-id");
+    const channelID = postCard.getAttribute("data-channel-id");
 
-        if (likeButton.classList.contains("active")) {
-          // Decrement the like count
-          likeCountElement.textContent = `${likeCount - 1}`;
-          // Remove the 'active' class to the like button
-          likeButton.classList.remove("active");
-        } else if (likeButton.classList.contains("inactive")) {
-          // Increment the like count
-          likeCountElement.textContent = `${likeCount + 1}`;
-          // Add the 'active' class from the like button
-          likeButton.classList.add("active");
-
-          if (dislikeButton.classList.contains("active")) {
-            // Decrement the like count
-            dislikeCountElement.textContent = `${dislikeCount - 1}`;
-            // Remove the 'active' class to the like button
-            dislikeButton.classList.remove("active");
-          }
-        }
-        let postData = checkData(
-          commentID,
-          postID,
-          currentUserID,
-          channelID,
-          "like",
-        );
-
-        console.table(postData);
-
-        fetchData(postData, "like");
-      });
-    }
-
-    dislikeButton.addEventListener("click", function (event) {
-      console.clear();
-      let likeCount = parseInt(likeCountElement.textContent, 10);
-      let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
-
-      if (dislikeButton.classList.contains("active")) {
-        // Decrement the like count
-        dislikeCountElement.textContent = `${dislikeCount - 1}`;
-        // Remove the 'active' class to the like button
-        dislikeButton.classList.remove("active");
-      } else {
-        // Increment the like count
-        dislikeCountElement.textContent = `${dislikeCount + 1}`;
-        // Add the 'active' class from the like button
-        dislikeButton.classList.add("active");
-
-        if (likeButton.classList.contains("active")) {
-          // Decrement the like count
-          likeCountElement.textContent = `${likeCount - 1}`;
-          // Remove the 'active' class to the like button
-          likeButton.classList.remove("active");
-        }
-      }
-
-      let postData = checkData(
-        commentID,
+    likeButton.addEventListener("click", () => {
+      handleReaction({
+        type: "like",
+        likeButton,
+        dislikeButton,
+        likeCountElement,
+        dislikeCountElement,
         postID,
-        currentUserID,
+        commentID,
         channelID,
-        "dislike",
-      );
+        currentUserID,
+      });
+    });
 
-      console.table(postData);
-
-      fetchData(postData, "dislike");
+    dislikeButton.addEventListener("click", () => {
+      handleReaction({
+        type: "dislike",
+        likeButton,
+        dislikeButton,
+        likeCountElement,
+        dislikeCountElement,
+        postID,
+        commentID,
+        channelID,
+        currentUserID,
+      });
     });
   });
+}
+
+function handleReaction({
+  type,
+  likeButton,
+  dislikeButton,
+  likeCountElement,
+  dislikeCountElement,
+  postID,
+  commentID,
+  channelID,
+  currentUserID,
+}) {
+  console.clear();
+
+  let likeCount = parseInt(likeCountElement.textContent, 10);
+  let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
+
+  const isLike = type === "like";
+  const mainButton = isLike ? likeButton : dislikeButton;
+  const altButton = isLike ? dislikeButton : likeButton;
+  const mainCountElement = isLike ? likeCountElement : dislikeCountElement;
+  const altCountElement = isLike ? dislikeCountElement : likeCountElement;
+
+  let mainCount = isLike ? likeCount : dislikeCount;
+  let altCount = isLike ? dislikeCount : likeCount;
+
+  const isActive = mainButton.classList.contains("active");
+
+  if (isActive) {
+    mainCountElement.textContent = `${mainCount - 1}`;
+    mainButton.classList.remove("active");
+  } else {
+    mainCountElement.textContent = `${mainCount + 1}`;
+    mainButton.classList.add("active");
+
+    if (altButton.classList.contains("active")) {
+      altCountElement.textContent = `${altCount - 1}`;
+      altButton.classList.remove("active");
+    }
+  }
+
+  const postData = checkData(commentID, postID, currentUserID, channelID, type);
+
+  console.table(postData);
+  fetchData(postData, type);
 }
 
 export function listenToNoUser() {

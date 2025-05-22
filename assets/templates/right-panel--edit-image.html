@@ -14,10 +14,10 @@
       <div class="cont-flex-column">
         <div class="right-panel-container-pic flex-space-between">
           <div class="right-panel-container-pic">
-            {{ if (ne $thisUser.Avatar "noimage") }}
-              <div class="right-panel-pic profile-pic" data-image-user="{{ $.ImagePaths.User }}{{ $thisUser.Avatar }}"></div>
-            {{ else }}
+            {{ if (startsWith $thisUser.Avatar "noimage") }}
               <div class="right-panel-pic profile-pic--empty" data-name-user="{{ $thisUser.Username }}"></div>
+            {{ else }}
+              <div class="right-panel-pic profile-pic" data-image-user="{{ $.ImagePaths.User }}{{ $thisUser.Avatar }}"></div>
             {{ end }}
             <small>Edit your avatar</small>
           </div>

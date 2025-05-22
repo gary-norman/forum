@@ -24,16 +24,16 @@
         </div>
     {{ else if eq $calledBy "user-page-banner"}}
         {{ if ne .CurrentUser nil}}
-            {{ if (ne $user.Avatar "noimage") }}
-                <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ $root.ImagePaths.User }}/{{ $user.Avatar }}"></div>
-            {{ else }}
+            {{ if (startsWith $user.Avatar "noimage") }}
                 <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username}}"></div>
+            {{ else }}
+                <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ $root.ImagePaths.User }}/{{ $user.Avatar }}"></div>
             {{ end }}
         {{else}}
-            {{ if (ne .RandomUser.Avatar "noimage") }}
-                <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ .ImagePaths.User }}/{{ .RandomUser.Avatar }}"></div>
-            {{ else }}
+            {{ if (startsWith .RandomUser.Avatar "noimage") }}
                 <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .RandomUser.Username}}"></div>
+            {{ else }}
+                <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ .ImagePaths.User }}/{{ .RandomUser.Avatar }}"></div>
             {{ end }}
         {{end}}
         <div class="flex-start">

@@ -12,10 +12,10 @@
 <div class="container-card-down">
   <div class="card link" data-post-id="{{ $post.ID }}" data-dest="post" data-channel-ID="{{ $post.ChannelID }}" data-user-id="{{$post.AuthorID}}">
     <div class="container-post-info">
-      {{ if (ne $post.AuthorAvatar "noimage") }}
-        <span class="card-pic profile-pic link" data-dest="user" data-image-user="{{ $dot.ImagePaths.User }}{{ $post.AuthorAvatar }}" data-user-id="{{ $post.AuthorID }}" role="presentation"></span>
-      {{ else }}
+      {{ if (startsWith $post.AuthorAvatar "noimage") }}
         <span class="card-pic profile-pic--empty link" data-dest="user" data-name-user="{{ $post.Author }}" data-user-id="{{ $post.AuthorID }}"></span>
+      {{ else }}
+        <span class="card-pic profile-pic link" data-dest="user" data-image-user="{{ $dot.ImagePaths.User }}{{ $post.AuthorAvatar }}" data-user-id="{{ $post.AuthorID }}" role="presentation"></span>
       {{ end }}
       <div>
         <small id="link-post-user-{{ $post.AuthorID }}-{{$instance}}" data-dest="user" data-user-id="{{ $post.AuthorID }}" class="small-bold link">{{ $post.Author }}</small>

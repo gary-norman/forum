@@ -4,16 +4,16 @@
   <div class="page-control">
     <div class="page-profile">
       {{ if ne .CurrentUser nil }}
-        {{ if (ne .ThisUser.Avatar "noimage") }}
-          <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ .ImagePaths.User }}{{ .ThisUser.Avatar }}"></div>
-        {{ else }}
+        {{ if (starsWith .ThisUser.Avatar "noimage") }}
           <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisUser.Username}}"></div>
+        {{ else }}
+          <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ .ImagePaths.User }}{{ .ThisUser.Avatar }}"></div>
         {{ end }}
       {{else}}
-        {{ if (ne .RandomUser.Avatar "noimage") }}
-          <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ .ImagePaths.User }}{{ .RandomUser.Avatar }}"></div>
-        {{ else }}
+        {{ if (starsWith .RandomUser.Avatar "noimage") }}
           <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .RandomUser.Username}}"></div>
+        {{ else }}
+          <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ .ImagePaths.User }}{{ .RandomUser.Avatar }}"></div>
       {{ end }}
       {{end}}
       <div class="flex-start">

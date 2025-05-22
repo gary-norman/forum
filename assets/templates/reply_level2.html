@@ -15,10 +15,10 @@
   <div class="container-card-down">
     <div class="card" data-comment-id="{{$comment.ID}}" data-channel-ID="{{$comment.ChannelID}}" data-author-ID="{{$comment.AuthorID}}">
       <div class="container-post-info">
-        {{ if (ne $comment.AuthorAvatar "noimage") }}
-          <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $comment.AuthorAvatar }}"></span>
-        {{ else }}
+        {{ if (startsWith $comment.AuthorAvatar "noimage") }}
           <span class="card-pic profile-pic--empty" data-name-user="{{ $comment.Author }}"></span>
+        {{ else }}
+          <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $comment.AuthorAvatar }}"></span>
         {{ end }}
         <div>
           <small class="small-bold">{{$comment.Author}}</small>

@@ -1,3 +1,4 @@
+{{- /*gotype: github.com/gary-norman/forum/internal/models.TemplateData*/ -}}
 {{ define "control-buttons" }}
 {{ $dot := .dot}}
 {{ $user := $dot.CurrentUser }}
@@ -27,10 +28,10 @@
                 {{ $post := .Post }}
                 {{$status := reactionStatus $userID $post.ID 0}}
   {{/* fprint "reactionStatus success" $calledBy */}}
-                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}} {{ if eq $user nil}}inactive{{ end }}">
+<button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $user nil}}nouser{{ else }}{{if $status.Liked}}active{{ else }}inactive {{end}} {{ end }}">
                     <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{$post.Likes}}</span>
                 </button>
-                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}} {{ if eq $user nil}}inactive{{ end }}" >
+<button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $user nil}}nouser{{ else }}{{if $status.Disliked}}active{{ else }}inactive {{end}} {{ end }}" >
                     <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
                 </button>
                 {{ if and (eq $instance "post-page") (eq $calledBy "this-post") (eq ne $user nil)}}
@@ -38,7 +39,7 @@
                         <span class="btn-reply">reply</span>
                     </button>
                 {{ else }}
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" data-dest="post" data-post-id="{{$post.ID}}">
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action nouser" data-dest="post" data-post-id="{{$post.ID}}">
                         <span class="btn-reply">{{$post.CommentsCount}}</span>
                     </button>
                 {{ end }}

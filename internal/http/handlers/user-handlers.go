@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gary-norman/forum/internal/app"
 	mw "github.com/gary-norman/forum/internal/http/middleware"
@@ -137,9 +138,11 @@ func (u *UserHandler) EditUserDetails(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	currentAvatar := user.Avatar
+	prefix := "noimage"
 	fmt.Printf("currentAvatar: %v", currentAvatar)
 	user.Avatar = GetFileName(r, "file-drop", "editUserDetails", "user")
-	if currentAvatar != "noimage" {
+	// TODO does this check need to be here?
+	if strings.HasPrefix(currentAvatar, prefix) {
 		user.Avatar = currentAvatar
 	}
 	currentDescription := r.FormValue("bio")

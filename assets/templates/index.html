@@ -93,8 +93,8 @@
             <small data-result-post-content ></small>
           </div>
         </template>
-
         <div class="flex-align-c">
+        {{ if ne .CurrentUser nil }}
           <button popovertarget="form-post" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
             <span class="btn-posts">post</span>
           </button>
@@ -106,6 +106,7 @@
               >notifications</span
             >
           </button>
+        {{ end }}
         </div>
       </header>
 {{/*SECTION    ---------- login modal ----------*/}}

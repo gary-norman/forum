@@ -33,7 +33,7 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]models
 		if err != nil {
 			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
-		// FIXME: This is a temporary fix to set the channel as joined:we need to
+		// FIXME: This is a temporary fix to set the channel as joined:we need to come up with a more robust solution
 		c.Joined = true
 		channels = append(channels, *c)
 	}
@@ -45,51 +45,6 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]models
 	return channels, nil
 }
 
-//	func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField, column string) ([]models.Channel, error) {
-//		// Validate column name to prevent SQL injection
-//		if !isValidColumn(column) {
-//			return nil, fmt.Errorf("invalid column name provided: %s", column)
-//		}
-//
-//		// Base query
-//		query := "SELECT * FROM channels WHERE " + column + " = ?"
-//
-//		// Execute the query
-//		rows, err := m.DB.Query(query, ID)
-//		if err != nil {
-//			return nil, fmt.Errorf("error executing query: %w", err)
-//		}
-//		defer rows.Close()
-//
-//		// Parse results
-//		channels := make([]models.Channel, 0) // Pre-allocate slice
-//		for rows.Next() {
-//			c, err := parseChannelRows(rows)
-//			if err != nil {
-//				return nil, fmt.Errorf("error parsing row: %w", err)
-//			}
-//			if column == "OwnerID" {
-//				// fmt.Printf(ErrorMsgs().KeyValuePair, "updating Owned of", c.Name)
-//				c.Owned = true
-//				// fmt.Printf(ErrorMsgs().KeyValuePair, "Owned", c.Owned)
-//			}
-//			if column == "ID" {
-//				// fmt.Printf(ErrorMsgs().KeyValuePair, "updating Joined of", c.Name)
-//				c.Joined = true
-//				// fmt.Printf(ErrorMsgs().KeyValuePair, "Joined", c.Joined)
-//			}
-//			channels = append(channels, *c)
-//		}
-//
-//		if err := rows.Err(); err != nil {
-//			return nil, fmt.Errorf("error iterating rows: %w", err)
-//		}
-//		if column == "OwnerID" {
-//			// fmt.Printf(ErrorMsgs().KeyValuePair, "Channels owned by current user", len(channels))
-//		}
-//
-//		return channels, nil
-//	}
 func (m *ChannelModel) IsUserMemberOfChannel(userID models.UUIDField, channelID int64) (bool, error) {
 	var exists int
 	stmt := `

@@ -12,6 +12,7 @@ const channelResultsContainer = document.getElementById("results-channels");
 const postResultsContainer = document.getElementById("results-posts");
 const resultsContainer = document.getElementById("search-results-page");
 const dividers = document.querySelectorAll(`hr`);
+const prefix = "noimage"
 
 
 let isFocus = false;
@@ -143,7 +144,7 @@ fetch("/search")
 
             name.textContent = user.username;
             card.setAttribute("data-user-id", id)
-            if (user.avatar === "noimage") {
+            if (user.avatar.startsWith(prefix) {
                 avatar.classList.add("profile-pic--empty")
                 avatar.classList.remove("profile-pic")
                 avatar.setAttribute("data-name-user", user.name);
@@ -165,7 +166,7 @@ fetch("/search")
 
             name.textContent = "/" + channel.name;
             card.setAttribute("data-channel-id", id);
-            if (channel.avatar === "noimage") {
+            if (channel.avatar.startsWith(prefix) {
                 avatar.classList.add("profile-pic--empty")
                 avatar.classList.remove("profile-pic")
                 avatar.setAttribute("data-name-channel", channel.name);

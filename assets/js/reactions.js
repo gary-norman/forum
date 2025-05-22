@@ -30,41 +30,43 @@ export function listenToLikeDislike() {
       .closest(".card")
       .getAttribute("data-channel-id");
 
-    likeButton.addEventListener("click", function (event) {
-      console.clear();
-      let likeCount = parseInt(likeCountElement.textContent, 10);
-      let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
+    if (postControls.classList.contains("user")) {
+      likeButton.addEventListener("click", function (event) {
+        console.clear();
+        let likeCount = parseInt(likeCountElement.textContent, 10);
+        let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
 
-      if (likeButton.classList.contains("active")) {
-        // Decrement the like count
-        likeCountElement.textContent = `${likeCount - 1}`;
-        // Remove the 'active' class to the like button
-        likeButton.classList.remove("active");
-      } else {
-        // Increment the like count
-        likeCountElement.textContent = `${likeCount + 1}`;
-        // Add the 'active' class from the like button
-        likeButton.classList.add("active");
-
-        if (dislikeButton.classList.contains("active")) {
+        if (likeButton.classList.contains("active")) {
           // Decrement the like count
-          dislikeCountElement.textContent = `${dislikeCount - 1}`;
+          likeCountElement.textContent = `${likeCount - 1}`;
           // Remove the 'active' class to the like button
-          dislikeButton.classList.remove("active");
+          likeButton.classList.remove("active");
+        } else if (likeButton.classList.contains("inactive")) {
+          // Increment the like count
+          likeCountElement.textContent = `${likeCount + 1}`;
+          // Add the 'active' class from the like button
+          likeButton.classList.add("active");
+
+          if (dislikeButton.classList.contains("active")) {
+            // Decrement the like count
+            dislikeCountElement.textContent = `${dislikeCount - 1}`;
+            // Remove the 'active' class to the like button
+            dislikeButton.classList.remove("active");
+          }
         }
-      }
-      let postData = checkData(
-        commentID,
-        postID,
-        currentUserID,
-        channelID,
-        "like",
-      );
+        let postData = checkData(
+          commentID,
+          postID,
+          currentUserID,
+          channelID,
+          "like",
+        );
 
-      console.table(postData);
+        console.table(postData);
 
-      fetchData(postData, "like");
-    });
+        fetchData(postData, "like");
+      });
+    }
 
     dislikeButton.addEventListener("click", function (event) {
       console.clear();
@@ -105,6 +107,38 @@ export function listenToLikeDislike() {
   });
 }
 
+export function listenToNoUser() {
+  const btns = document.querySelectorAll(".btn-action.nouser");
+  const timeOut = 3000; // 3 seconds
+
+  btns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      // Remove tooltip from all others
+      document
+        .querySelectorAll(".btn-action.nouser.show-tooltip")
+        .forEach((el) => el.classList.remove("show-tooltip"));
+
+      // Add tooltip to this one
+      btn.classList.add("show-tooltip");
+
+      setTimeout(() => {
+        btn.classList.remove("show-tooltip");
+      }, timeOut);
+    });
+  });
+
+  // Optional: click anywhere else to hide tooltips
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".btn-action.nouser")) {
+      document
+        .querySelectorAll(".btn-action.nouser.show-tooltip")
+        .forEach((el) => el.classList.remove("show-tooltip"));
+    }
+  });
+}
+
 function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {
   const isLike = likeStatus === "like";
   const isDislike = likeStatus === "dislike";
@@ -134,32 +168,6 @@ function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {
   }
   return postData;
 }
-
-// function fetchData(postData, likeString) {
-//   fetch("/store-reaction", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(postData),
-//   })
-//     .then((response) => {
-//       if (!response.ok) {
-//         return response.text().then((text) => {
-//           throw new Error(
-//             `HTTP Error: ${response.status} ${response.statusText}. Response: ${text}`,
-//           );
-//         });
-//       }
-//       return response.json();
-//     })
-//     .then((data) => {
-//       console.log(`${likeString} updated (in js):`, data);
-//     })
-//     .catch((error) => {
-//       console.error("Error updating like:", error.message);
-//     });
-// }
 
 function fetchData(postData, likeString) {
   fetch("/store-reaction", {

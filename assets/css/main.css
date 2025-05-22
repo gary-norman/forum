@@ -190,6 +190,7 @@ p,
 
 p {
   font-weight: normal;
+  cursor: var(--cursor-text);
 }
 
 .p-bold {

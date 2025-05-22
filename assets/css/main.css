@@ -2373,6 +2373,16 @@ main {
   overflow-wrap: break-word;
 }
 
+.cardContent--full {
+  font-family: SpaceGrotesk-Variable, system-ui;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  max-height: calc(1.5em * 3);
+  hyphens: auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
 .title {
   font-size: 3ch;
   margin: 0.5ch;

@@ -101,6 +101,21 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 
 	models.UpdateTimeSince(&thisPost)
 
+	// Fetch the channel
+	channel, err := p.App.Channels.GetChannelByID(thisPost.ChannelID)
+	if err != nil {
+		log.Printf(ErrorMsgs().Query, "GetThisPost > GetChannelByID", err)
+	}
+
+	// Fetch if the user is a member of the channel
+	isMember, err := p.App.Channels.IsUserMemberOfChannel(currentUser.ID, channel.ID)
+	if err != nil {
+		log.Printf(ErrorMsgs().Query, "GetThisPost > IsUserMemberOfChannel", err)
+	}
+
+	// Fetch if the user is the owner of the channel
+	isOwner := currentUser.ID == channel.OwnerID
+
 	// Fetch the author
 	author, err := p.App.Users.GetUserByUsername(thisPost.Author, "GetThisPost")
 	if err != nil {
@@ -120,7 +135,10 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 		Instance:    "post-page",
 		ThisPost:    thisPost,
 		Author:      author,
+		ThisChannel: channel,
 		OwnerName:   author.Username,
+		IsOwned:     isOwner,
+		IsJoined:    isMember,
 		ImagePaths:  p.App.Paths,
 	}
 

@@ -43,6 +43,9 @@ type PostPage struct {
 	Instance    string
 	ThisPost    Post
 	Author      *User
+	ThisChannel *Channel
+	IsOwned     bool
+	IsJoined    bool
 	OwnerName   string
 	ImagePaths
 }

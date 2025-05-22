@@ -42,6 +42,7 @@ type PostPage struct {
 	CurrentUser *User
 	Instance    string
 	ThisPost    Post
+	Author      *User
 	OwnerName   string
 	ImagePaths
 }

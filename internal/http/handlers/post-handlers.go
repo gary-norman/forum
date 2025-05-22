@@ -101,6 +101,12 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 
 	models.UpdateTimeSince(&thisPost)
 
+	// Fetch the author
+	author, err := p.App.Users.GetUserByUsername(thisPost.Author, "GetThisPost")
+	if err != nil {
+		log.Printf(ErrorMsgs().Query, "GetThisPost > GetUserByUsername", err)
+	}
+
 	if userLoggedIn {
 		currentUser.Followers, currentUser.Following, err = p.App.Loyalty.CountUsers(currentUser.ID)
 		if err != nil {
@@ -113,7 +119,8 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 		CurrentUser: currentUser,
 		Instance:    "post-page",
 		ThisPost:    thisPost,
-		OwnerName:   thisPost.Author,
+		Author:      author,
+		OwnerName:   author.Username,
 		ImagePaths:  p.App.Paths,
 	}
 

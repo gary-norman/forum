@@ -1,7 +1,8 @@
 {{ define "post-page" }}
+  {{ template "post-page-banner" . }}
   <div class="container-content" role="main">
     <div class="content scrollable" aria-labelledby="post-title">
-        {{ template "this-post" . }}
+      {{ template "this-post" . }}
     </div>
   </div>
 {{end}}

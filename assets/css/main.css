@@ -1,6 +1,8 @@
 /* -- custom properties -- */
 /* ----------------------- */
 :root {
+  /* paragraphs */
+  --p-max-width: 78ch;
   /* fonts */
   --font-sz-title: clamp(1.8rem, 2rem + 0.65vw, 2.2rem);
   --font-sz-popover-title: clamp(1rem, 1rem + 0.5vw, 1.5rem);

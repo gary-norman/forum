@@ -12,7 +12,9 @@
   {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "user-page" "Instance" "user-page") }}
     {{/*SECTION---------- user page saved activities ----------*/}}
     <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+    {{ range 10 }}
       <div class="activity-items saved">You saved this post</div>
+    {{ end }}
     </div>
   </div>
 {{ end }}

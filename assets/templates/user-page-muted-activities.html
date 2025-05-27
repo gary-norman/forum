@@ -10,8 +10,11 @@
 {{ $dot := . }}
   <div id="activity-muted">
   {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "user-page" "Instance" "user-page") }}
+    {{/*SECTION---------- user page muted activities ----------*/}}
     <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+    {{ range 10 }}
       <div class="activity-items muted">You muted this post</div>
+    {{ end }}
     </div>
   </div>
 {{ end }}

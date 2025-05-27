@@ -41,10 +41,11 @@
   </head>
   <body>
 {{/*SECTION --------- variables ---------*/}}
-{{ $user := .CurrentUser }}
 {{ $tracer := "index" }}
 {{ if eq .CurrentUser nil }}
-  {{ $user = .RandomUser }}
+  {{ $user := .RandomUser }}
+{{ else }}
+  {{ $user := .CurrentUser }}
 {{ end }}
 {{/*SECTION --------- posts template ---------*/}}
     <div id="notification-main">

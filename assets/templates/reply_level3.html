@@ -6,6 +6,12 @@
   {{ with .CurrentUser }}
     {{ $userID = .ID }}
   {{ end }}
+  {{ $dot := .dot }}
+  {{ $tracer := printf "%s > %s" .Tracer "reply_level3" }}
+  {{ with $tracer }}
+  {{/*    {{ fprint "Trace" . }} */}}
+  {{ end }}
+  {{- /*gotype: github.com/gary-norman/forum/internal/models.Comment*/ -}}
   {{ $comment := .Comment }}
   <div class="reply-arrow"></div>
   <div class="container-card-down">
@@ -14,7 +20,7 @@
         {{ if (startsWith $comment.AuthorAvatar "noimage") }}
           <span class="card-pic profile-pic--empty" data-name-user="{{ $comment.Author }}"></span>
         {{ else }}
-          <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $comment.AuthorAvatar }}"></span>
+          <span class="card-pic profile-pic" data-image-auth="{{ $dot.ImagePaths.User }}{{ $comment.AuthorAvatar }}"></span>
         {{ end }}
         <div>
           <small class="small-bold">{{$comment.Author}}</small>

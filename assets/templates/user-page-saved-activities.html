@@ -1,4 +1,13 @@
 {{ define "user-page-saved-activities" }}
+  {{ $userID := .UserID }}
+  {{ with .CurrentUser }}
+    {{ $userID = .ID }}
+  {{ end }}
+{{ $tracer := printf "%s > %s" .Tracer "user-page-saved-activities" }}
+{{ with $tracer }}
+{{/*    {{ fprint "Trace" . }} */}}
+{{ end }}
+{{ $dot := . }}
   <div id="activity-saved">
     <div class="filters-row button-row hide-feed">
       <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">

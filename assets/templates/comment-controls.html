@@ -7,6 +7,10 @@
   {{ $post := .Post }}
   {{ $comment := .Comment }}
   {{$status := reactionStatus $userID 0 $comment.ID}}
+  {{ $tracer := printf "%s > %s" .Tracer "comment-controls" }}
+  {{ with $tracer }}
+  {{/*    {{ fprint "Trace" . }} */}}
+  {{ end }}
   <button class="btn-md btn-secondary btn-icotext btn-filled btn-action
                                     {{if $status.Liked}}active{{end}}
                                     {{ if eq $user nil}}inactive{{ end }}" >

@@ -1,13 +1,13 @@
 {{ define "right-panel--edit-bio"}}
-
   {{ $dot := .dot }}
   {{ $instance := $dot.Instance}}
   {{ $thisUser := $dot.ThisUser }}
   {{ $currentUser := $dot.CurrentUser }}
-
+  {{ $tracer := printf "%s > %s" .Tracer "--edit-bio" }}
+  {{ with $tracer }}
+{{/*    {{ fprint "Trace" . }} */}}
+  {{ end }}
   {{if eq $instance "channel-page"}}
-
-
   {{ else if eq $instance "user-page"}}
     <div class="right-panel-container-bio">
       <div class="right-panel-bio flex-space-between">

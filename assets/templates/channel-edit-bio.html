@@ -1,6 +1,14 @@
 {{ define "channel-edit-bio" }}
   {{ $userID := .UserID }}
 {{ $dot := .dot }}
+{{ with .CurrentUser }}
+  {{ $userID = .ID }}
+{{ end }}
+{{ $thisEntity := .ThisChannel }}
+{{ $tracer := printf "%s > %s" .Tracer "channel-edit-bio" }}
+{{ with $tracer }}
+{{/*  {{ fprint "Trace" . }}*/}}
+{{ end }}
   <div class="right-panel-container-bio ">
     {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}
     <div class="right-panel-bio flex-space-between">

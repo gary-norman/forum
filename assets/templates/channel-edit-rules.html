@@ -1,6 +1,14 @@
 {{ define "channel-edit-rules" }}
 {{ $dot := .dot }}
 {{ $userID := .userID }}
+{{ with .CurrentUser }}
+  {{ $userID = .ID }}
+{{ end }}
+{{ $thisEntity := .ThisChannel }}
+{{ $tracer := printf "%s > %s" .Tracer "channel-edit-rules" }}
+{{ with $tracer }}
+{{/*  {{ fprint "Trace" . }}*/}}
+{{ end }}
   <div id="right-panel-container-rules">
         {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}
     <div class="right-panel-bio flex-space-between ">

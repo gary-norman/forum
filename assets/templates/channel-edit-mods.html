@@ -1,6 +1,14 @@
 {{ define "channel-edit-mods" }}
   {{ $userID := .UserID }}
 {{ $dot := .dot }}
+{{ with .CurrentUser }}
+  {{ $userID = .ID }}
+{{ end }}
+{{ $thisEntity := .ThisChannel }}
+{{ $tracer := printf "%s > %s" .Tracer "channel-edit-mods" }}
+{{ with $tracer }}
+{{/*  {{ fprint "Trace" . }}*/}}
+{{ end }}
   <div class="right-panel-container-moderators">
     <div class="sidebar-block sidebar-channels">
         {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}

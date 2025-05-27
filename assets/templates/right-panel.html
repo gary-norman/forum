@@ -1,11 +1,18 @@
 {{ define "right-panel" }}
-  {{ $dot := .dot }}
   {{ $userID := .UserID }}
+  {{ with .dot.CurrentUser }}
+    {{ $userID = .ID }}
+  {{ end }}
+  {{ $dot := .dot }}
   {{ $calledBy := .calledBy }}
   {{ $currentUser := $dot.CurrentUser }}
   {{ $instance := $dot.Instance }}
   {{ $thisUser := .ThisEntity }}
   {{ $thisChannel := .ThisEntity }}
+  {{ $tracer := printf "%s > %s" .Tracer "right-panel" }}
+  {{ with $tracer }}
+{{/*    {{ fprint "Trace" . }} */}}
+  {{ end }}
   {{ if eq $instance "channel-page"}}
     <div class="right-panel">
       <div class="right-panel-content scroll-down">
@@ -35,12 +42,9 @@
         {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
           <form action="/edituser" enctype="multipart/form-data" method="POST">
         {{ end }} <!-- end of owner user check -->
-            {{ template "right-panel--edit-name" (dict "dot" $dot)}}
-
-            {{ template "right-panel--edit-image" (dict "dot" $dot)}}
-
-            {{ template "right-panel--edit-bio" (dict "dot" $dot)}}
-
+            {{ template "right-panel--edit-name" (dict "dot" $dot "Tracer" $tracer )}}
+            {{ template "right-panel--edit-image" (dict "dot" $dot "Tracer" $tracer )}}
+            {{ template "right-panel--edit-bio" (dict "dot" $dot "Tracer" $tracer )}}
         {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
           </form>
         {{ end }} <!-- end of owner user check -->
@@ -53,7 +57,7 @@
                   {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }}
                      flex-start
                   {{end}}">
-                    <span class="card-pic profile-pic"></span>
+                    <span class="card-pic profile-pic" data-image-channel="{{ $.ImagePaths.Channel }}{{ "noimage" }}"></span>
                     <div>
                       <div>/Interesting_Things</div>
                       <div>

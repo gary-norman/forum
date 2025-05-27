@@ -1,13 +1,13 @@
 {{ define "right-panel--edit-name" }}
-
   {{ $dot := .dot }}
   {{ $instance := $dot.Instance}}
   {{ $thisUser := $dot.ThisUser }}
   {{ $currentUser := $dot.CurrentUser }}
-
+  {{ $tracer := printf "%s > %s" .Tracer "--edit-name" }}
+  {{ with $tracer }}
+{{/*    {{ fprint "Trace" . }} */}}
+  {{ end }}
   {{if eq $instance "channel-page"}}
-
-
   {{ else if eq $instance "user-page"}}
     <div class="right-panel-container-name flex-space-between">
       <h4 class="right-panel-name">{{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }}{{ $currentUser.Username }}{{ else }}{{ $thisUser.Username }}{{ end }}</h4>

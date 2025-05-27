@@ -7,10 +7,13 @@
     {{ $userID = .ID }}
   {{ end }}
 
+  {{ $dot := .dot }}
+  {{ $tracer := printf "%s > %s" .Tracer "reply_level2" }}
+  {{ with $tracer }}
+  {{/*    {{ fprint "Trace" . }} */}}
+  {{ end }}
   {{- /*gotype: github.com/gary-norman/forum/internal/models.Comment*/ -}}
-
   {{ $comment := .Comment }}
-    {{printf "comment: %v" $comment}}
   <div class="reply-arrow"></div>
   <div class="container-card-down">
     <div class="card" data-comment-id="{{$comment.ID}}" data-channel-ID="{{$comment.ChannelID}}" data-author-ID="{{$comment.AuthorID}}">
@@ -18,7 +21,7 @@
         {{ if (startsWith $comment.AuthorAvatar "noimage") }}
           <span class="card-pic profile-pic--empty" data-name-user="{{ $comment.Author }}"></span>
         {{ else }}
-          <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $comment.AuthorAvatar }}"></span>
+          <span class="card-pic profile-pic" data-image-auth="{{ $dot.ImagePaths.User }}{{ $comment.AuthorAvatar }}"></span>
         {{ end }}
         <div>
           <small class="small-bold">{{$comment.Author}}</small>

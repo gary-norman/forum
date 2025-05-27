@@ -1,15 +1,14 @@
 {{ define "right-panel--edit-image"}}
-
   {{ $dot := .dot }}
   {{ $instance := $dot.Instance}}
   {{ $thisUser := $dot.ThisUser }}
   {{ $currentUser := $dot.CurrentUser }}
-
+  {{ $tracer := printf "%s > %s" .Tracer "--edit-image" }}
+  {{ with $tracer }}
+{{/*    {{ fprint "Trace" . }} */}}
+  {{ end }}
   {{if eq $instance "channel-page"}}
-
-
   {{ else if eq $instance "user-page"}}
-
     {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
       <div class="cont-flex-column">
         <div class="right-panel-container-pic flex-space-between">

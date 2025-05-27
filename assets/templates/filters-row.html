@@ -1,15 +1,15 @@
 {{ define "filters-row"}}
-  {{ $userID := .dot.UserID }}
+  {{ $userID := .UserID }}
   {{ with .CurrentUser }}
     {{ $userID = .ID }}
   {{ end }}
   {{ $dot := .dot }}
   {{ $calledBy := .calledBy }}
-  {{ $tracer := printf "%s > %s" .tracer "filter-rows" }}
+  {{ $tracer := printf "%s > %s" .Tracer "filters-row" }}
   {{ with $tracer }}
     {{ fprint "Trace" . }}
   {{ end }}
-
+{{/*  TODO add hide-feed for all but home-page activity */}}
   <div class="filters-row button-row-wrap">
     <button popovertarget="{{$calledBy}}-dropdown-sort"
             class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">

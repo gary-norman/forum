@@ -1,12 +1,12 @@
 {{ define "post-card" }}
 {{/* fprint "UserID post-card" .UserID */}}
 {{ $userID := .UserID }}
-{{ $post := .Post }}
 {{ $dot := .dot}}
+{{ $post := .Post }}
 {{ $instance := .Instance }}
-{{ $tracer := printf "%s > %s > %s" $instance .calledBy "post-card" }}
-{{ with .Tracer }}
-  {{ $tracer = printf " > %s > %s" . "post-card" }}
+{{ $tracer := printf "%s > %s" .Tracer "post-card" }}
+{{ with $tracer }}
+    {{/* fprint "Trace" . */}} 
 {{ end }}
 {{ $comments := $post.Comments }}
 <div class="container-card-down">
@@ -33,8 +33,12 @@
       {{ if ne $post.Images "noimage" }}
         <img src="{{ $dot.ImagePaths.Post }}{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
       {{ end }}
+    {{ if eq .calledBy "this-post"}}
+      <p class="cardContent--full">{{$post.Content}}</p>
+    {{ else }}
       <p class="cardContent">{{$post.Content}}</p>
-      {{ template "control-buttons" (dict "Post" $post "dot" $dot "userID" $userID "calledBy" "post-card" "Tracer" $tracer )}}
+    {{ end }}
+      {{ template "control-buttons" (dict "Post" $post "dot" $dot "userID" $userID "Instance" $instance "calledBy" "post-card" "Tracer" $tracer )}}
     </div> 
   {{ if eq $instance "post-page" }}
 

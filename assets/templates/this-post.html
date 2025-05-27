@@ -7,7 +7,10 @@
 {{ $dot := . }}
 {{ with .ThisPost }}
   {{ template "post-card" (dict "dot" $dot "Post" $post "UserID" $userID "calledBy" "this-post") }}
-
+{{ end }}
+{{ $tracer := printf "%s > %s" .Tracer "this-post" }}
+{{ with $tracer }}
+{{/*    {{ fprint "Trace" . }} */}}
 {{ end }}
   {{ range $post.Comments }}
   <div class="container-card-across">
@@ -37,7 +40,7 @@
                   <pre class="cardContent">{{$comment.Content}}</pre>
                   <!--  Post control buttons -->
                   <div class="button-row-wrap post-controls" >
-                      {{ template "comment-controls" (dict "Post" $post "Comment" $comment "UserID" $userID "CurrentUser" $.CurrentUser) }}
+                      {{ template "comment-controls" (dict "Post" $post "Comment" $comment "UserID" $userID "Tracer" $tracer "CurrentUser" $.CurrentUser) }}
                   </div>
                   <!--  Reply / Submit Comment form -->
                   <form name="replyForm" class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
@@ -59,7 +62,7 @@
 {{/*                    {{ if .Replies}}*/}}
               {{ range .Replies }}
                       <div class="container-card-across">
-                          {{ template "reply_level1" (dict "CurrentUser" $.CurrentUser "Comment" . "UserID" $userID ) }}
+                          {{ template "reply_level1" (dict "dot" $dot "CurrentUser" $.CurrentUser "Comment" . "Tracer" $tracer "UserID" $userID ) }}
                       </div> <!-- end container-comment-across wrapper -->
                   {{ end }} <!-- end range Replies -->
 {{/*                        {{ end }} <!-- end if Replies -->*/}}

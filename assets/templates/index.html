@@ -574,16 +574,12 @@
           {{/*SECTION ---------- homepage ---------- */}}
           <div id="home-page" class="active-feed">
             <br>
-            {{ template "home-page" (dict "dot" . "tracer" $tracer "UserID" .UserID "UserPosts" .UserPosts "CurrentUser" $.CurrentUser "Instance" "home-page" ) }}
+            {{ template "home-page" (dict "dot" . "Tracer" $tracer "UserID" .UserID "UserPosts" .UserPosts "CurrentUser" $.CurrentUser "Instance" "home-page" ) }}
           </div>
-
-
           {{/*SECTION ---------- post page ---------- */}}
           <div id="post-page" class="feeds-wrapper">
-{{/*            {{ template "post-page" (dict "dot" . "tracer" $tracer "ThisPost" .ThisPost "CurrentUser" $.CurrentUser "Instance" "post-page" "IsPostPage" "true" ) }}*/}}
+{{/*            {{ template "post-page" (dict "dot" . "Tracer" $tracer "ThisPost" .ThisPost "CurrentUser" $.CurrentUser "Instance" "post-page" "IsPostPage" "true" ) }}*/}}
           </div> <!-- end post-page wrapper -->
-
-
           {{/*SECTION ---------- user page ---------- */}}
           <div id="user-page" class="feeds-wrapper">
           </div>
@@ -595,4 +591,3 @@
     </main>
   </body>
 </html>
-

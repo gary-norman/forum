@@ -1,4 +1,12 @@
 {{ define "list-item" }}
+  {{ $userID := .UserID }}
+  {{ with .dot.CurrentUser }}
+    {{ $userID = .ID }}
+  {{ end }}
+  {{ $tracer := printf "%s > %s" .Tracer "list-item" }}
+  {{ with $tracer }}
+{{/*    {{ fprint "Trace" . }} */}}
+  {{ end }}
 
 
 {{/*  TODO add links to sidebar elements*/}}

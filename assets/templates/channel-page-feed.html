@@ -1,9 +1,17 @@
 {{ define "channel-page-feed" }}
 {{ $userID := .UserID }}
 {{ $dot := .dot }}
+{{ with .CurrentUser }}
+  {{ $userID = .ID }}
+{{ end }}
+{{ $thisEntity := .ThisChannel }}
+{{ $tracer := printf "%s > %s" .Tracer "channel-page-feed" }}
+{{ with $tracer }}
+{{/*  {{ fprint "Trace" . }}*/}}
+{{ end }}
   <div id="channel-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
     {{ range $dot.Posts }}
-      {{ template "post-card" (dict "Post" . "dot" $dot "UserID" $userID "Instance" $dot.Instance "calledBy" "channel-page-feed") }}
+      {{ template "post-card" (dict "Post" . "dot" $dot "UserID" $userID "Tracer" $tracer "Instance" $dot.Instance "calledBy" "channel-page-feed") }}
     {{ end }}
   </div>
 {{ end }}

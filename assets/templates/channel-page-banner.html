@@ -1,23 +1,32 @@
 {{ define "channel-page-banner" }}
+  {{ $userID := .UserID }}
+  {{ with .CurrentUser }}
+    {{ $userID = .ID }}
+  {{ end }}
+  {{ $dot := .dot }}
+  {{ $tracer := printf "%s > %s" .Tracer "channel-page-banner" }}
+  {{ with $tracer }}
+{{/*    {{ fprint "Trace" . }} */}}
+  {{ end }}
   <div id="channel-page-banner" class="banner">
     <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image"/>
     <div class="page-control">
       <div class="page-profile">
-        {{ if (ne .ThisChannel.Avatar "noimage") }}
-        <div class="sidebar-pic profile-pic" data-image-user="{{ .ImagePaths.Channel }}{{ .ThisChannel.Avatar }}">
+        {{ if (ne $dot.ThisChannel.Avatar "noimage") }}
+        <div class="sidebar-pic profile-pic" data-image-user="{{ $dot.ImagePaths.Channel }}{{ $dot.ThisChannel.Avatar }}">
         </div>
         {{ else }}
-        <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ .ThisChannel.Name }}">
+        <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $dot.ThisChannel.Name }}">
         </div>
         {{ end }}
         <div class="flex-start">
           <h2 {{ if (eq .ThisChannel.Privacy true) }} class="private-channel align-self-start" {{ end }}>
-            /{{ .ThisChannel.Name }}
+            /{{ $dot.ThisChannel.Name }}
           </h2>
         </div>
       </div>
       <div class="page-buttons">
-        {{ if or (not .IsOwned) (not .IsJoined) }}
+        {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}
         <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
           <span class="btn-posts">join</span>
         </button>
@@ -26,7 +35,7 @@
         <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
           <img src="/assets/icons/share_16.svg" alt="share button" />
         </button>
-        {{ if or (not .IsOwned) (not .IsJoined) }}
+        {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}
         <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
           <img src="/assets/icons/heart-empty_24.svg" alt="like button" />
         </button>

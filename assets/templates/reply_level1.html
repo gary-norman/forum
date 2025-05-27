@@ -8,8 +8,12 @@
   {{ end }}
 
 
+  {{ $dot := .dot }}
+  {{ $tracer := printf "%s > %s" .Tracer "reply_level1" }}
+  {{ with $tracer }}
+  {{/*    {{ fprint "Trace" . }} */}}
+  {{ end }}
   {{- /*gotype: github.com/gary-norman/forum/internal/models.Comment*/ -}}
-
   {{ $comment := .Comment }}
       <div class="reply-arrow"></div>
       <div class="container-card-down">
@@ -18,7 +22,7 @@
           {{ if (startsWith $comment.AuthorAvatar "noimage") }}
             <span class="card-pic profile-pic--empty" data-name-user="{{ $comment.Author }}"></span>
           {{ else }}
-            <span class="card-pic profile-pic" data-image-auth="{{ $userBasePath }}{{ $comment.AuthorAvatar }}"></span>
+            <span class="card-pic profile-pic" data-image-auth="{{ $dot.ImagePaths.User }}{{ $comment.AuthorAvatar }}"></span>
           {{ end }}
           <div>
             <small class="small-bold">{{$comment.Author}}</small>
@@ -97,7 +101,7 @@
         {{ if .Replies}}
           <div class="container-card-across">
             {{ range .Replies }}
-              {{ template "reply_level2" (dict "CurrentUser" $.CurrentUser "Comment" . "UserID" $userID) }}
+              {{ template "reply_level2" (dict "CurrentUser" $.CurrentUser "dot" $dot "Comment" . "UserID" $userID) }}
             {{ end }} <!-- end range Replies -->
           </div> <!-- end container-comment-across wrapper -->
         {{ end }} <!-- end if Replies -->

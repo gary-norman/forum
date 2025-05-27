@@ -1,6 +1,14 @@
 {{ define "channel-edit-image" }}
   {{ $userID := .userID }}
 {{ $dot := .dot }}
+{{ with .CurrentUser }}
+  {{ $userID = .ID }}
+{{ end }}
+{{ $thisEntity := .ThisChannel }}
+{{ $tracer := printf "%s > %s" .Tracer "channel-edit-image" }}
+{{ with $tracer }}
+{{/*  {{ fprint "Trace" . }}*/}}
+{{ end }}
   <div class="right-panel-container-pic flex-space-between">
     <div class="right-panel-container-pic">
       {{ if (ne $dot.ThisChannel.Avatar "noimage") }}

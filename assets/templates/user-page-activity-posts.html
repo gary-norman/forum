@@ -3,8 +3,11 @@
   {{ with .CurrentUser }}
     {{ $userID = .ID }}
   {{ end }}
-{{ $tracer := printf "%s > %s" .ThisUser "user-page-activity-posts" }}
-{{ $dot := . }}
+{{ $tracer := printf "%s > %s" .Tracer "-activity-posts" }}
+{{ with $tracer }}
+{{/*    {{ fprint "Trace" . }} */}}
+{{ end }}
+{{ $dot := .dot }}
   <div id="activity-posts">
     <div class="filters-row button-row hide-feed">
       <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
@@ -19,8 +22,8 @@
     </div>
     {{/*SECTION---------- user page posts ----------*/}}
     <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
-      {{ range .Posts }}
-      {{ template "post-card" (dict "dot" $dot "Post" . "UserID" $userID "calledBy" $dot.Instance "Tracer" $tracer) }}
+      {{ range $dot.Posts }}
+      {{ template "post-card" (dict "dot" $dot "Post" . "UserID" $userID "CurrentUser" $dot.CurrentUser "calledBy" $dot.Instance "Tracer" $tracer) }}
       {{ end }}
     </div>
   </div>

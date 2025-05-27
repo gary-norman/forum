@@ -1,15 +1,19 @@
-import {listenToReplies} from "./comments.js";
-import {listenToEditDetails} from "./edit_user.js";
-import {listenToShare, selectActiveFeed} from "./share.js";
+import { listenToReplies } from "./comments.js";
+import { listenToEditDetails } from "./edit_user.js";
+import { listenToShare, selectActiveFeed } from "./share.js";
 import { listenToLikeDislike, listenToNoUser } from "./reactions.js";
-import {listenToDropdowns} from "./post.js";
-import {saveColourScheme} from "./colour_scheme.js";
-import {activePage, setActivePage} from "./main.js";
-import {getRandomInt} from "./helper_functions.js";
-import {listenToRules} from "./channel_rules.js";
-import {toggleModals, togglePopovers} from "./popups.js";
-import {listenToChannelLinks} from "./navigation.js";
-import {displayCalendars, getCalendarVars, processDateRange} from "./calendar.js";
+import { listenToDropdowns } from "./post.js";
+import { saveColourScheme } from "./colour_scheme.js";
+import { activePage, setActivePage } from "./main.js";
+import { getRandomInt } from "./helper_functions.js";
+import { listenToRules } from "./channel_rules.js";
+import { toggleModals, togglePopovers } from "./popups.js";
+import { listenToChannelLinks } from "./navigation.js";
+import {
+  displayCalendars,
+  getCalendarVars,
+  processDateRange,
+} from "./calendar.js";
 
 // activity buttons
 let actButtonContainer, actButtonsAll;
@@ -18,25 +22,25 @@ let actButtonContainer, actButtonsAll;
 let activityFeeds, activityFeedsContentAll;
 
 export function UpdateUI() {
-    // console.log("updating UI");
-    selectActiveFeed();
-    listenToRules();
-    listenToReplies();
-    listenToEditDetails();
-    listenToShare();
-    listenToLikeDislike();
-    listenToNoUser();
-    listenToDropdowns();
-    listenToPageSetup();
-    saveColourScheme();
-    updateProfileImages();
-    toggleModals();
-    resetInputStyle();
-    togglePopovers();
-    listenToChannelLinks();
-    getCalendarVars();
-    displayCalendars();
-    processDateRange();
+  // console.log("updating UI");
+  selectActiveFeed();
+  listenToRules();
+  listenToReplies();
+  listenToEditDetails();
+  listenToShare();
+  listenToLikeDislike();
+  listenToNoUser();
+  listenToDropdowns();
+  listenToPageSetup();
+  saveColourScheme();
+  updateProfileImages();
+  toggleModals();
+  resetInputStyle();
+  togglePopovers();
+  listenToChannelLinks();
+  getCalendarVars();
+  displayCalendars();
+  processDateRange();
 }
 
 export function updateProfileImages() {
@@ -246,4 +250,3 @@ function toggleFeed(targetFeed, targetFeedContent, targetButton) {
     targetFeed.querySelector(".button-row").classList.remove("hide-feed");
   }, timeOut);
 }
-

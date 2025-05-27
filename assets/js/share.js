@@ -1,5 +1,4 @@
-import {activePage, setActivePage} from "./main.js";
-
+import { activePage, setActivePage } from "./main.js";
 
 const link = encodeURI(window.location.href);
 export const data = {
@@ -36,14 +35,16 @@ let scrollWindow;
 // console.log(data["homePage"]);
 
 export function selectActiveFeed() {
+  const angry =
+    "background-color: #000000; color: #ff0000; font-weight: bold; border: 2px solid #ff0000; padding: 5px; border-radius: 5px;";
   switch (activePage) {
     case "home-page":
-      console.log("ON HOME PAGE BITCH")
+      console.log("%cON HOME PAGE BITCH", angry);
       scrollWindow = document.querySelector(`#home-feed`);
       // console.log("scrollWindow:", scrollWindow)
       break;
     case "user-page":
-      console.log("ON USER PAGE BITCH")
+      console.log("%cON USER PAGE BITCH", angry);
       const userFeeds = Array.from(
         document.querySelectorAll('[id^="activity-feed-"]'),
       );
@@ -55,19 +56,19 @@ export function selectActiveFeed() {
       // console.log(scrollWindow)
       break;
     case "channel-page":
-      console.log("ON CHANNEL PAGE BITCH")
+      console.log("%cON CHANNEL PAGE BITCH", angry);
 
       scrollWindow = data.channelPage.querySelector(`#channel-feed`);
       // console.log(scrollWindow)
       break;
     case "post-page":
-      console.log("ON POST PAGE BITCH")
+      console.log("%cON POST PAGE BITCH", angry);
 
       // console.log(scrollWindow)
       break;
     default:
-      console.log(`No active feed BITCH... switching to home-page`);
-      setActivePage("home")
+      console.log("%cNO ACTIVE FEED BITCH... switching to home-page, angry");
+      setActivePage("home");
       scrollWindow = document.querySelector(`#home-feed`);
       break;
   }

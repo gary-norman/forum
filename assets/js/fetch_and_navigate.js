@@ -1,11 +1,13 @@
 import { setActivePage, newContentLoaded } from "./main.js";
 import { pages } from "./share.js";
+const expect =
+  "background-color: #00ff00; color: #000000; font-weight: bold; border: 2px solid #00ff00; padding: 5px; border-radius: 5px;";
 
 export function navigateToPage(dest, entity) {
   // dest is a string - "channel"
-  // entity is the template element
-  console.log("dest:", dest);
-  console.log("entity:", entity);
+  // entity is the template element:work
+  console.info("%cdest:%o", expect, dest);
+  console.info("%centity:%o", expect, entity);
 
   const link = entity.getAttribute(`data-${dest}-id`);
   // console.log("link: ", link);
@@ -36,7 +38,7 @@ export function changePage(page) {
     // console.log("element.id: ", element.id);
     if (element.id === pageId) {
       element.classList.add("active-feed");
-      console.log("set", element.id, "to active-feed");
+      console.info("%cset%o%cto active-feed", expect, element.id, expect);
     } else {
       // TODO need to modify home-page template to populate by injection
       // TODO when injected, the content can be cleared
@@ -46,14 +48,13 @@ export function changePage(page) {
       // TODO with injected home-page, this can be removed
       // need to clear content of the calendar dropdown, or the calendar won't work on otehr pages after navigation
 
-
       element.classList.remove("active-feed");
     }
   });
 }
 
 function fetchData(entity, Id) {
-  console.log(`Fetching ${entity} data for ID:`, Id);
+  console.log(`%cFetching ${entity} data for ID:`, expect, Id);
 
   fetch(`/${entity}s/${Id}`)
     .then((response) => {
@@ -81,3 +82,4 @@ function fetchData(entity, Id) {
     })
     .catch((error) => console.error(`Error fetching ${entity} data:`, error));
 }
+

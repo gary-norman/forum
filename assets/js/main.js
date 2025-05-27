@@ -2,6 +2,11 @@ import { navigateToPage } from "./fetch_and_navigate.js";
 import { UpdateUI } from "./update_UI_elements.js";
 import { fireCalendarListeners } from "./calendar.js";
 
+const angry =
+  "background-color: #000000; color: #ff0000; font-weight: bold; border: 2px solid #ff0000; padding: 5px; border-radius: 5px;";
+const expect =
+  "background-color: #00ff00; color: #000000; font-weight: bold; border: 2px solid #00ff00; padding: 5px; border-radius: 5px;";
+
 export let activePage, activePageElement;
 
 // Create a new custom event
@@ -16,14 +21,14 @@ export const newContentLoaded = new CustomEvent("newContentLoaded");
 // });
 
 document.addEventListener("newContentLoaded", (event) => {
-  console.log("fired newContentLoaded");
+  console.log("%cfired", expect, "newContentLoaded");
   UpdateUI();
 });
 
 export function setActivePage(dest) {
   activePage = dest + "-page";
   activePageElement = document.querySelector(`#${dest}-page`);
-  console.warn("activePageElement:", activePageElement);
+  console.info("%cactivePageElement:", expect, activePageElement);
 }
 
 // variables
@@ -31,7 +36,7 @@ export function setActivePage(dest) {
 const homePageUserContainer = document.querySelector("#home-page-users");
 if (homePageUserContainer !== null) {
   homePageUserContainer.addEventListener("click", (e) => {
-    console.log("clicked ", e.target);
+    console.log("%cclicked ", expect, e.target);
     if (e.target.matches(".card")) {
       navigateToPage("user", e.target);
     }

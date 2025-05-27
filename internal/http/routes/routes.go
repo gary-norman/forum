@@ -25,7 +25,7 @@ func NewRouter(app *app.App) http.Handler {
 	mux.HandleFunc("POST /protected", r.Auth.Protected)
 	mux.Handle("/", mw.WithUser(http.HandlerFunc(r.Home.GetHome), r.App))
 	mux.HandleFunc("GET /posts/create", r.Post.CreatePost)
-	mux.HandleFunc("GET /search", r.Search.Search)
+	mux.Handle("GET /search", mw.WithUser(http.HandlerFunc(r.Search.Search), r.App))
 	mux.Handle("GET /posts/{postId}", mw.WithUser(http.HandlerFunc(r.Post.GetThisPost), r.App))
 	mux.Handle("GET /users/{userId}", mw.WithUser(http.HandlerFunc(r.User.GetThisUser), r.App))
 	mux.Handle("GET /channels/{channelId}", mw.WithUser(http.HandlerFunc(r.Channel.GetThisChannel), r.App))

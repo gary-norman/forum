@@ -37,7 +37,6 @@
             class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
       <span class="btn-filters filter-reaction">type</span>
     </button>
-
     {{/*    SECTION sort dropdown */}}
     <div id="{{$calledBy}}-dropdown-sort" popover class="wrapper-filter-dropdown scroll-down scrollable">
       {{/*    SECTION sort - newest/oldest */}}
@@ -77,7 +76,6 @@
         <label for="{{$calledBy}}-checkbox-most-comments">least comments</label>
       </div>
     </div>
-
     {{/*    SECTION type filter dropdown */}}
     <div id="{{$calledBy}}-dropdown-type" popover class="wrapper-filter-dropdown scroll-down scrollable">
       <div class="flex-align-l">
@@ -97,7 +95,6 @@
         <label for="{{$calledBy}}-checkbox-type-post">liked</label>
       </div>
     </div>
-
     {{/*    SECTION reactions filter dropdown */}}
     <div id="{{$calledBy}}-dropdown-reaction" popover class="wrapper-filter-dropdown scroll-down scrollable">
       <div class="flex-align-l">
@@ -113,7 +110,6 @@
         <label for="{{$calledBy}}-checkbox-reaction-none">no reaction</label>
       </div>
     </div>
-
     {{/*    SECTION comments filter dropdown */}}
     <div id="{{$calledBy}}-dropdown-comments" popover class="wrapper-filter-dropdown scroll-down scrollable">
       <div class="flex-align-l">
@@ -125,7 +121,6 @@
         <label for="{{$calledBy}}-checkbox-no-comments">has no comments</label>
       </div>
     </div>
-
     {{/*    SECTION channel filter dropdown */}}
     <div id="{{$calledBy}}-dropdown-channel" popover class="wrapper-filter-dropdown scroll-down scrollable">
     {{ if eq $calledBy "channel-page" }}
@@ -137,11 +132,9 @@
       {{ end }}
     {{ end }}
     </div>
-
     {{/*    SECTION calendar dropdown */}}
     <div id="{{$calledBy}}-dropdown-calendar" popover class="card calendar">
       {{ template "calendar"}}
     </div>
-
   </div>
 {{ end }}

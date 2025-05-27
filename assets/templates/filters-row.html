@@ -128,11 +128,13 @@
 
     {{/*    SECTION channel filter dropdown */}}
     <div id="{{$calledBy}}-dropdown-channel" popover class="wrapper-filter-dropdown scroll-down scrollable">
-    {{ range $dot.OwnedAndJoinedChannels}}
-      <div class="flex-align-l">
-        <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-channel-{{ .ID }}" name="channel-{{ .ID }}" value="{{ .ID }}">
-        <label for="{{$calledBy}}-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
-      </div>
+    {{ if eq $calledBy "channel-page" }}
+      {{ range $dot.OwnedAndJoinedChannels}}
+        <div class="flex-align-l">
+          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-channel-{{ .ID }}" name="channel-{{ .ID }}" value="{{ .ID }}">
+          <label for="{{$calledBy}}-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
+        </div>
+      {{ end }}
     {{ end }}
     </div>
 

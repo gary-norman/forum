@@ -21,29 +21,29 @@
                 {{ $post := .Post }}
                 {{$status := reactionStatus $userID $post.ID 0}}
   {{/* fprint "reactionStatus success" $calledBy */}}
-<button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $user nil}}nouser{{ else }}{{if $status.Liked}}active{{ else }}inactive {{end}} {{ end }}">
+<button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{ else }}{{if $status.Liked}}active{{ else }}inactive {{end}} {{ end }}">
                     <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{$post.Likes}}</span>
                 </button>
-<button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $user nil}}nouser{{ else }}{{if $status.Disliked}}active{{ else }}inactive {{end}} {{ end }}" >
+<button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{ else }}{{if $status.Disliked}}active{{ else }}inactive {{end}} {{ end }}" >
                     <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
                 </button>
                 {{ if and (eq $instance "post-page") (eq $calledBy "this-post") }}
-                    <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $user nil}}nouser{{end}}">
+                    <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}">
                         <span class="btn-reply">reply</span>
                     </button>
                 {{ else }}
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $user nil}}nouser{{end}}" data-dest="post" data-post-id="{{$post.ID}}">
+                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}" data-dest="post" data-post-id="{{$post.ID}}">
                         <span class="btn-reply">{{$post.CommentsCount}}</span>
                     </button>
                 {{ end }}
                 <button id="share-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" popovertarget="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                     <span class="btn-share">share</span>
                 </button>
-                {{ if ne $user nil}}
+                {{ if ne $userID nil}}
                     <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
                         <span class="btn-report">report</span>
                     </button>
-                    {{ if eq $user.ID $post.AuthorID}}
+                    {{ if eq $userID $post.AuthorID}}
                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
                             <span class="btn-edit">edit</span>
                         </button>
@@ -71,9 +71,9 @@
                     </div> <!-- end of div share-container -->
                 </div> <!-- end of div popover -->
             {{ end }} <!-- end of eq $calledBy "post-card" -->
-            {{ if eq $calledBy "comment-card"}}
+            {{ if eq $calledBy "comment-card"}}{{ $comment := $dot.Comment }}{{ $post := .Post }}
                 {{$status := reactionStatus $userID 0 $comment.ID}}
-                <div style="display: none;" class="data-div" data-post-id="{{$comment.ID}}" data-channel-ID="{{$post.ChannelID}}" data-author-ID="{{$comment.AuthorID}}"></div>
+<div style="display: none;" class="data-div" data-post-id="{{$post.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{$comment.AuthorID}}"></div>
 
                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
                     <span class="btn-likes" data-like-ID="user-{{$comment.ID}}">{{$comment.Likes}}</span>
@@ -81,7 +81,7 @@
                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
                     <span class="btn-dislikes" data-dislike-ID="user-{{$comment.ID}}">{{$comment.Dislikes}}</span>
                 </button>
-                {{ if ne $user nil}}
+                {{ if ne $userID nil}}
                     {{ if ne $calledBy "reply_level1"}}
                         <button id="reply-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
                             <span class="btn-reply">reply</span>
@@ -91,7 +91,7 @@
                 <button id="share-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" popovertarget="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
                     <span class="btn-share">share</span>
                 </button>
-                {{ if ne $user nil}}
+                {{ if ne $userID nil}}
 {{/*                    INFO If logged in user is the owner of the post/comment, show Edit*/}}
                     {{ if eq $userID $comment.AuthorID}}
                         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
@@ -129,7 +129,7 @@
         {{ end }}<!-- end to buttons NOT present in right-panel -->
 
             {{ if eq $calledBy "right-panel"}}
-                {{ if ne $user nil }}
+                {{ if ne $userID nil }}
                     {{/*          TODO when user is an administrator, button prepared; needs admin check*/}}
                     {{if eq $instance "user-page"}}
                         {{/*        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >*/}}
@@ -143,7 +143,7 @@
                             <span class="btn-report">report</span>
                         </button>
                     {{ end }} <!-- end of if "user-page" or "channel-page" -->
-                {{ end }} <!-- end of if ne $user nil -->
+                {{ end }} <!-- end of if ne $userID nil -->
             {{ end }} <!-- end of eq $calledBy "right-panel" -->
     </div> <!-- end of div button-row-wrap -->
 {{ end}}

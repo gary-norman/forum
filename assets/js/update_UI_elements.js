@@ -136,8 +136,6 @@ function getInitialFromAttribute() {
   const userProfileImageEmpty = document.querySelectorAll(
     ".profile-pic--empty",
   );
-  const userProfileImage = document.querySelectorAll(".profile-pic");
-
   const colorsArr = [
     ["var(--color-hl-blue)", "var(--color-light-1)"],
     ["var(--color-hl-green)", "var(--color-dark-1)"],
@@ -146,45 +144,31 @@ function getInitialFromAttribute() {
     ["var(--color-hl-yellow)", "var(--color-dark-1)"],
     ["var(--color-hl-red)", "var(--color-light-1)"],
   ];
-  let userTheme = getRandomInt(6);
-  for (let i = 0; i < userProfileImageEmpty.length; i++) {
-    let attArr = ["user", "sidebar-user", "channel"];
-    attArr[0] = userProfileImageEmpty[i].getAttribute("data-name-user");
-    attArr[1] = userProfileImageEmpty[i].getAttribute("data-name-user-sidebar");
-    attArr[2] = userProfileImageEmpty[i].getAttribute("data-name-channel");
-    if (attArr[0]) {
-      userProfileImageEmpty[i].style.background = colorsArr[userTheme][0];
-      userProfileImageEmpty[i].style.color = colorsArr[userTheme][1];
-      userProfileImageEmpty[i].style.fontSize = "2rem";
-      userProfileImageEmpty[i].setAttribute(
-        "data-initial",
-        Array.from(`${attArr[0]}`)[0],
-      );
-      // console.log('attArr[0]');
-    } else if (attArr[1]) {
-      userProfileImageEmpty[i].style.background = colorsArr[userTheme][0];
-      userProfileImageEmpty[i].style.color = colorsArr[userTheme][1];
-      userProfileImageEmpty[i].style.fontSize = "5rem";
-      userProfileImageEmpty[i].setAttribute(
-        "data-initial",
-        Array.from(`${attArr[1]}`)[0],
-      );
-      // console.log('attArr[0]');
-    } else if (attArr[2]) {
-      let theme = getRandomInt(6);
-      userProfileImageEmpty[i].style.background = colorsArr[theme][0];
-      userProfileImageEmpty[i].style.color = colorsArr[theme][1];
-      userProfileImageEmpty[i].setAttribute(
-        "data-initial",
-        Array.from(`${attArr[2]}`)[0],
-      );
+  const attrConfigs = [
+    { attr: "data-name-user", fontSize: "2rem" },
+    { attr: "data-name-user-sidebar", fontSize: "5rem" },
+    { attr: "data-name-channel", fontSize: "" },
+  ];
 
-      // console.log('attArr[1]');
-    } else {
-      console.warn(
-        "No data-name- attribute value found for element:",
-        userProfileImage[i],
-      );
+  for (let i = 0, len = userProfileImageEmpty.length; i < len; i++) {
+    const el = userProfileImageEmpty[i];
+    let found = false;
+    for (const config of attrConfigs) {
+      const value = el.getAttribute(config.attr);
+      if (value) {
+        const theme = getRandomInt(colorsArr.length);
+        el.style.background = colorsArr[theme][0];
+        el.style.color = colorsArr[theme][1];
+        if (config.fontSize) {
+          el.style.fontSize = config.fontSize;
+        }
+        el.setAttribute("data-initial", value.charAt(0));
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      console.warn("No data-name- attribute value found for element:", el);
     }
   }
 }

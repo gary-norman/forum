@@ -144,30 +144,36 @@ function getInitialFromAttribute() {
     ["var(--color-hl-yellow)", "var(--color-dark-1)"],
     ["var(--color-hl-red)", "var(--color-light-1)"],
   ];
-  const attrConfigs = [
-    { attr: "data-name-user", fontSize: "2rem" },
-    { attr: "data-name-user-sidebar", fontSize: "5rem" },
-    { attr: "data-name-channel", fontSize: "" },
-  ];
 
-  for (let i = 0, len = userProfileImageEmpty.length; i < len; i++) {
-    const el = userProfileImageEmpty[i];
-    let found = false;
-    for (const config of attrConfigs) {
-      const value = el.getAttribute(config.attr);
-      if (value) {
-        const theme = getRandomInt(colorsArr.length);
-        el.style.background = colorsArr[theme][0];
-        el.style.color = colorsArr[theme][1];
-        if (config.fontSize) {
-          el.style.fontSize = config.fontSize;
-        }
-        el.setAttribute("data-initial", value.charAt(0));
-        found = true;
-        break;
-      }
+  function getConsistentThemeIndex(name) {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
     }
-    if (!found) {
+    return Math.abs(hash) % colorsArr.length;
+  }
+
+  for (const el of userProfileImageEmpty) {
+    const nameUser = el.getAttribute("data-name-user");
+    const nameSidebar = el.getAttribute("data-name-user-sidebar");
+    const nameChannel = el.getAttribute("data-name-channel");
+
+    const name = nameUser || nameSidebar || nameChannel;
+
+    if (name) {
+      const theme = getConsistentThemeIndex(name);
+      const [bg, fg] = colorsArr[theme];
+      el.style.background = bg;
+      el.style.color = fg;
+
+      if (nameUser) {
+        el.style.fontSize = "2rem";
+      } else if (nameSidebar) {
+        el.style.fontSize = "5rem";
+      }
+
+      el.setAttribute("data-initial", Array.from(name)[0]);
+    } else {
       console.warn("No data-name- attribute value found for element:", el);
     }
   }

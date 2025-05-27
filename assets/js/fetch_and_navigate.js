@@ -1,7 +1,9 @@
 import { setActivePage, newContentLoaded } from "./main.js";
 import { pages } from "./share.js";
 const expect =
-  "background-color: #00ff00; color: #000000; font-weight: bold; border: 2px solid #00ff00; padding: 5px; border-radius: 5px;";
+  "background-color: #000000; color: #00ff00; font-weight: bold; border: 1px solid #00ff00; margin-inline-end: 5px; padding: 5px; border-radius: 5px;";
+const standard =
+  "background-color: transparent; color: #ffffff; font-weight: normal;";
 
 export function navigateToPage(dest, entity) {
   // dest is a string - "channel"
@@ -38,7 +40,13 @@ export function changePage(page) {
     // console.log("element.id: ", element.id);
     if (element.id === pageId) {
       element.classList.add("active-feed");
-      console.info("%cset%o%cto active-feed", expect, element.id, expect);
+      console.info(
+        "%cset%o%c to %cactive-feed",
+        expect,
+        element.id,
+        standard,
+        expect,
+      );
     } else {
       // TODO need to modify home-page template to populate by injection
       // TODO when injected, the content can be cleared

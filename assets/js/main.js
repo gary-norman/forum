@@ -5,7 +5,7 @@ import { fireCalendarListeners } from "./calendar.js";
 const angry =
   "background-color: #000000; color: #ff0000; font-weight: bold; border: 2px solid #ff0000; padding: 5px; border-radius: 5px;";
 const expect =
-  "background-color: #00ff00; color: #000000; font-weight: bold; border: 2px solid #00ff00; padding: 5px; border-radius: 5px;";
+  "background-color: #000000; color: #00ff00; font-weight: bold; border: 1px solid #00ff00; padding: 5px; border-radius: 5px;";
 
 export let activePage, activePageElement;
 

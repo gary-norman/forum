@@ -1,9 +1,8 @@
 {{ define "reply_level2" }}
-  {{ $userID := .dot.UserID }}
+  {{ $userID := .UserID }}
   {{ with .CurrentUser }}
     {{ $userID = .ID }}
   {{ end }}
-
   {{ $dot := .dot }}
   {{ $tracer := printf "%s > %s" .Tracer "reply_level2" }}
   {{ with $tracer }}
@@ -97,7 +96,7 @@
     {{ if .Replies}}
       <div class="container-card-across">
         {{ range .Replies }}
-          {{ template "reply_level3" (dict "CurrentUser" $.CurrentUser "Comment" . "UserID" $userID) }}
+          {{ template "reply_level3" (dict "CurrentUser" $.CurrentUser "dot" $dot "Comment" . "UserID" $userID) }}
         {{ end }} <!-- end range Replies -->
       </div> <!-- end container-comment-across wrapper -->
     {{ end }} <!-- end if Replies -->

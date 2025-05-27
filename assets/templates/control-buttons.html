@@ -1,21 +1,13 @@
 {{ define "control-buttons" }}
 {{- /*gotype: github.com/gary-norman/forum/internal/models.TemplateData*/ -}}
-{{ $dot := .dot}}
-{{ $user := $dot.CurrentUser }}
-{{ $tracer := printf "%s > %s" .tracer "control-buttons" }}
-{{/* fprint $callChain .userID */}}
+{{ $dot := .dot }}
 {{ $userID := .userID }}
-{{ $calledBy := .calledBy}}
-{{ with .Tracer }}
-{{/*  {{ fprint "Trace" . }}*/}}
+{{ $calledBy := .calledBy }}
+{{ $tracer := printf "%s > %s" .Tracer "control-buttons" }}
+{{ with $tracer }}
+  {{/* fprint "Trace" . */}}
 {{ end }}
-{{ $instance := $dot.Instance}}
-{{ $post := .Post }}
-{{ with .Post }}
-  {{ $post := . }}
-{{ end }}
-{{ $comment := .Comment }}
-{{ with .Comment }}
+{{ $instance := .Instance }}
   {{ $comment := . }}
 {{ end }}
     <div class="button-row-wrap

@@ -8,8 +8,9 @@
   {{/* fprint "Trace" . */}}
 {{ end }}
 {{ $instance := .Instance }}
+{{/* with .Comment }}
   {{ $comment := . }}
-{{ end }}
+{{ end */}}
     <div class="button-row-wrap
     {{ if ne $calledBy "right-panel"}} post-controls{{end}}"
     {{ if eq $calledBy "post-card" }} data-post-id="{{$post.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{$post.AuthorID}}"

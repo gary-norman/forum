@@ -67,11 +67,14 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var thisPost models.Post
 	var posts []models.Post
+	isMember := false
+	var isMemberErr error
+	isOwner := false
 
 	userLoggedIn := true
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
-		fmt.Println(ErrorMsgs().NotFound, "currentUser", "getThisPost", "_")
+		fmt.Printf(ErrorMsgs().NotFound, "currentUser", "getThisPost", "_")
 		userLoggedIn = false
 	}
 
@@ -107,15 +110,6 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Query, "GetThisPost > GetChannelByID", err)
 	}
 
-	// Fetch if the user is a member of the channel
-	isMember, err := p.App.Channels.IsUserMemberOfChannel(currentUser.ID, channel.ID)
-	if err != nil {
-		log.Printf(ErrorMsgs().Query, "GetThisPost > IsUserMemberOfChannel", err)
-	}
-
-	// Fetch if the user is the owner of the channel
-	isOwner := currentUser.ID == channel.OwnerID
-
 	// Fetch the author
 	author, err := p.App.Users.GetUserByUsername(thisPost.Author, "GetThisPost")
 	if err != nil {
@@ -127,6 +121,13 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, `{"error": "error fetching user loyalty"}`, http.StatusInternalServerError)
 		}
+		// Fetch if the user is a member of the channel
+		isMember, isMemberErr = p.App.Channels.IsUserMemberOfChannel(currentUser.ID, channel.ID)
+		if isMemberErr != nil {
+			log.Printf(ErrorMsgs().Query, "GetThisPost > IsUserMemberOfChannel", err)
+		}
+		// Fetch if the user is the owner of the channel
+		isOwner = currentUser.ID == channel.OwnerID
 	}
 
 	data := models.PostPage{
@@ -141,7 +142,6 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 		IsJoined:    isMember,
 		ImagePaths:  p.App.Paths,
 	}
-
 	view.RenderPageData(w, data)
 }
 

@@ -145,8 +145,7 @@ func CreateErrorMessages() *Errors {
 		KeyValuePair: Colors.Blue + "%v: " + Colors.White + "%v\n",
 		Login:        Colors.Red + "Unable to login " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
 		NoRows:       Colors.Red + "No rows returned for " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + " with error: " + Colors.Red + "v" + Colors.Reset,
-		NotFound: Colors.Red + "Unable to find: " + Colors.White + "%v " + Colors.Blue + "called by " + Colors.
-			White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
+		NotFound:     Colors.Red + "Unable to find: " + Colors.White + "%v " + Colors.Blue + "called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v\n" + Colors.Reset,
 		Open:         Colors.Red + "Unable to open " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error " + Colors.Red + "%v" + Colors.Reset,
 		Parse:        Colors.Red + "Unable to parse " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
 		Post:         Colors.Red + "Unable to post with error: " + Colors.Red + "%v" + Colors.Reset,

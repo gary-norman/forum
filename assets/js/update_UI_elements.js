@@ -38,9 +38,9 @@ export function UpdateUI() {
   resetInputStyle();
   togglePopovers();
   listenToChannelLinks();
-  getCalendarVars();
-  displayCalendars();
-  processDateRange();
+  // getCalendarVars();
+  // displayCalendars();
+  // processDateRange();
 }
 
 export function updateProfileImages() {

@@ -514,12 +514,17 @@ button,
     }
   }
 }
+
 @keyframes scaleInTop {
 }
 .btn-action-primary,
 .btn-action-secondary {
   position: relative;
   z-index: var(--z-index-btn-action);
+
+  & span {
+    z-index: calc(var(--z-index-btn-action) + 20);
+  }
   &:hover::before {
     content: "";
     position: absolute;
@@ -544,7 +549,7 @@ button,
     /* border: 1px solid rgba(1 1 1 / 0.2); */
     border-radius: var(--btn-radius);
     animation: linear-fill-button 0.2s ease-in 0.1s 1 forwards;
-    z-index: calc(var(--z-index-btn-action) + 1);
+    z-index: calc(var(--z-index-btn-action) + 10);
   }
 }
 .btn-action-primary {

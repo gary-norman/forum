@@ -18,9 +18,9 @@
     {{ if eq $calledBy "post-card" }}
       {{ $post := .Post }} data-post-id="{{$post.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{$post.AuthorID}}"
     {{ end }}
-    {{ if eq $calledBy "comment-card"}}
+    {{/* if eq $calledBy "comment-card"}}
       {{ $post := .Post }} data-comment-id="{{$comment.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{comment.AuthorID}}"
-    {{ end }}
+    {{ end */}}
     >
     {{ if ne $calledBy "right-panel"}} {{/* buttons NOT present in right-panel */}}
       {{ if eq $calledBy "post-card"}}

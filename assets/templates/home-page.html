@@ -4,6 +4,7 @@
     {{ $userID = .ID }}
   {{ end }}
   {{ $dot := .dot }}
+  {{ $instance := "home-page" }}
   {{ $userPosts := .UserPosts }}
   {{ $tracer := printf "%s > %s" .Tracer "home-page" }}
   {{ with $tracer }}
@@ -12,7 +13,7 @@
   <div class="container-content">
     <div class="content">
   {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "home-page") }}
-  {{ template "home-page-feed" (dict "dot" $dot "Tracer" $tracer "UserPosts" $userPosts "UserID" $userID) }}
+  {{ template "home-page-feed" (dict "dot" $dot "Tracer" $tracer "UserPosts" $userPosts "UserID" $userID "Instance" $instance) }}
     </div>
 {{/*    {{ template "right-panel" (dict "dot" . "UserID" $userID "Tracer" $tracer) }}*/}}
   </div>

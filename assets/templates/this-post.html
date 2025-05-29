@@ -39,7 +39,7 @@
         <p class="cardContent">{{ $comment.Content }}</p>
 {{/*  Post control buttons */}}
         <div class="button-row-wrap post-controls" >
-          {{ template "comment-controls" (dict "Post" $post "Comment" $comment "UserID" $userID "Tracer" $tracer "CurrentUser" $.CurrentUser) }}
+          {{ template "comment-controls" (dict "Post" $post "Comment" $comment "UserID" $userID "Tracer" $tracer "CurrentUser" $.CurrentUser "Instance" $instance) }}
         </div>
 {{/*  Reply / Submit Comment form */}}
         <form name="replyForm" class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
@@ -61,7 +61,7 @@
       {{ with .Replies }}
         {{ range .}}
           <div class="container-card-across">
-            {{ template "reply_level1" (dict "dot" $dot "CurrentUser" $.CurrentUser "Comment" . "Tracer" $tracer "UserID" $userID) }}
+            {{ template "reply_level1" (dict "dot" $dot "CurrentUser" $.CurrentUser "Comment" . "Instance" $instance "Tracer" $tracer "UserID" $userID) }}
           </div> {{/* end container-comment-across wrapper */}}
         {{ end }} {{/* end range Replies */}}
       {{ end }} {{/* end with .Replies */}}

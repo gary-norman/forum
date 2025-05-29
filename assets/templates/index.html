@@ -475,7 +475,7 @@
       <div class="main-content">
   {{/*SECTION     ---------- sidebar ---------- */}}
         <aside class="sidebar">
-          {{ if ne .CurrentUser nil }}{{ $user := .RandomUser }}
+          {{ if ne .CurrentUser nil }}{{ $user := .CurrentUser }}
           <div class="sidebarProfile">
             {{ if (startsWith $user.Avatar "noimage") }}
               <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username }}"></div>

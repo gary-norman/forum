@@ -64,6 +64,7 @@ export function changePage(page) {
 function fetchData(entity, Id) {
   console.log(`%cFetching ${entity} data for ID:`, expect, Id);
 
+  history.pushState(null, "", `/${entity}s/${Id}`);
   fetch(`/${entity}s/${Id}`)
     .then((response) => {
       if (!response.ok) {

@@ -3,9 +3,9 @@ import { UpdateUI } from "./update_UI_elements.js";
 import { fireCalendarListeners } from "./calendar.js";
 
 const angry =
-  "background-color: #000000; color: #ff0000; font-weight: bold; border: 2px solid #ff0000; padding: 5px; border-radius: 5px;";
+  "background-color: #000000; color: #ea4f92; font-weight: bold; border: 2px solid #ea4f92; padding: .2rem; border-radius: .8rem;";
 const expect =
-  "background-color: #000000; color: #00ff00; font-weight: bold; border: 1px solid #00ff00; padding: 5px; border-radius: 5px;";
+  "background-color: rgb(108 207 93); color: #000000; font-weight: bold; padding: .1rem; border-radius: 1rem;";
 
 export let activePage, activePageElement;
 

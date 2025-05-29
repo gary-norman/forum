@@ -36,7 +36,7 @@ let scrollWindow;
 
 export function selectActiveFeed() {
   const angry =
-    "background-color: #000000; color: #ff0000; font-weight: bold; border: 2px solid #ff0000; padding: 5px; border-radius: 5px;";
+    "background-color: #000000; color: #ea4f92; font-weight: bold; border: 2px solid #ea4f92; padding: .2rem; border-radius: .8rem;";
   switch (activePage) {
     case "home-page":
       console.log("%cON HOME PAGE BITCH", angry);

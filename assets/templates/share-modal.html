@@ -1,0 +1,48 @@
+{{ define "share-modal" }}
+{{ $entity := .Entity }}
+{{ $type := .Type }}
+{{ $instance := .Instance }}
+{{ $pop1 := .Pop1}}
+{{ $pop2 := .Pop2}}
+{{ $popoverID := printf "share-container-%s-%v-%s-%v-%s" $entity $pop1 $type $pop2 $instance }}
+{{ $inputValue := printf "https://localhost:8989/%ss/%v" .Type $pop2 }}
+{{ $inputID := printf "copy-url-%s-%v-%s-%v" $entity $pop1 $type $pop2 }}
+
+{{ $tracer := printf "%s > %s" .Tracer "share-modal" }}
+{{ with $tracer }}
+  {{/* fprint "Trace" . */}}
+{{ end }}
+<div
+  popover
+  id="{{ $popoverID }}"
+  class="scrollable-user"
+>
+  <div class="share-container">
+    <div class="button-row">
+      <a href="/" target="_blank" class="share-logo facebook"></a>
+      <a href="/" target="_blank" class="share-logo twitter"></a>
+      <a href="/" target="_blank" class="share-logo linkedin"></a>
+      <a href="/" target="_blank" class="share-logo reddit"></a>
+      <a href="/" target="_blank" class="share-logo whatsapp"></a>
+      <a href="/" target="_blank" class="share-logo telegram"></a>
+    </div>
+    <div class="flex-space-between">
+      <label
+        class="padded"
+        for="{{ $inputID }}"
+        >Copy URL link</label
+      >
+      <button class="btn-sm btn-icoonly">
+        <span class="btn-copy" aria-label="Copy URL link"></span>
+      </button>
+    </div>
+    <input
+      value="{{ $inputValue }}"
+      readonly
+      type="text"
+      id="{{ $inputID }}"
+      name="{{ $inputID }}"
+    />
+  </div>
+</div>
+{{ end }}

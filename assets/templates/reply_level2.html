@@ -4,6 +4,7 @@
     {{ $userID = .ID }}
   {{ end }}
   {{ $dot := .dot }}
+  {{ $instance := .Instance }}
   {{ $tracer := printf "%s > %s" .Tracer "reply_level2" }}
   {{ with $tracer }}
   {{/*    {{ fprint "Trace" . }} */}}
@@ -33,7 +34,7 @@
         </div>
       </div>
       <pre class="cardContent">{{$comment.Content}}</pre>
-      <!--  Post control buttons -->
+      {{/*  Post control buttons */}}
       <div class="button-row-wrap post-controls" >
         {{$status := reactionStatus $userID 0 $comment.ID}}
         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
@@ -51,36 +52,16 @@
         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
           <span class="btn-report">report</span>
         </button>
-        <!--  Share modal -->
-        <div popover id="share-container-{{$comment.ID}}-activity" class="scrollable-user">
-          <div class="share-container">
-            <div class="button-row">
-              <a href="/" target="_blank" class="share-logo facebook"></a>
-              <a href="/" target="_blank" class="share-logo twitter"></a>
-              <a href="/" target="_blank" class="share-logo linkedin"></a>
-              <a href="/" target="_blank" class="share-logo reddit"></a>
-              <a href="/" target="_blank" class="share-logo whatsapp"></a>
-              <a href="/" target="_blank" class="share-logo telegram"></a>
-            </div>
-            <div class="flex-space-between">
-              <label class="padded" for="copy-url-{{$comment.ID}}-activity">Copy URL link</label>
-              <button class="btn-sm btn-icoonly">
-                <span class="btn-copy" aria-label="Copy URL link"></span>
-              </button>
-            </div>
-          <input value="https://localhost:8989/comments/{{ $comment.ID }}" readonly type="text"
-                   id="copy-url-{{$comment.ID}}-activity" name="copy-url-{{$comment.ID}}-activity"/>
-          </div>
-        </div>
-      </div>
-      <!--  Reply / Submit Comment form -->
+        {{/*  Share modal */}}
+        {{ template "share-modal" (dict "Entity" "channel" "Type" "comment" "Pop1" $comment.ChannelID "Pop2" "Instance" $instance $comment.ID "Tracer" $tracer) }}
+      {{/*  Reply / Submit Comment form */}}
       <form class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
         <div class="cont-flex-row flex-end">
           <div class="input-wrapper container-reply">
             <textarea id="comment-form-textarea-reply2-{{$comment.ID}}" name="content" placeholder="Type a reply..."></textarea>
             <label for="comment-form-textarea-reply2-{{$comment.ID}}" class="user-label">Reply</label>
           </div>
-          <!-- Hidden input to store the commentID (if replying to a comment) -->
+          {{/* Hidden input to store the commentID (if replying to a comment) */}}
           <input type="hidden" name="commentID" value="{{$comment.ID}}">
           <input type="hidden" name="channel" value='{"channelName": "{{$comment.ChannelName}}", "channelID": "{{$comment.ChannelID}}"}'>
           <button type="submit" class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
@@ -88,17 +69,17 @@
           </button>
         </div>
       </form>
-    </div> <!-- end comment card-->
+    </div> {{/* end comment card*/}}
 
     {{println "level of recursion: 2"}}
 
-    <!-- Recursively Render Replies -->
+    {{/* Recursively Render Replies */}}
     {{ if .Replies}}
       <div class="container-card-across">
         {{ range .Replies }}
           {{ template "reply_level3" (dict "CurrentUser" $.CurrentUser "dot" $dot "Comment" . "UserID" $userID) }}
-        {{ end }} <!-- end range Replies -->
-      </div> <!-- end container-comment-across wrapper -->
-    {{ end }} <!-- end if Replies -->
-  </div> <!-- end container-comment-down wrapper -->
-{{end}} <!-- end define "reply -->
+        {{ end }} {{/* end range Replies */}}
+      </div> {{/* end container-comment-across wrapper */}}
+    {{ end }} {{/* end if Replies */}}
+  </div> {{/* end container-comment-down wrapper */}}
+{{end}} {{/* end define "reply */}}

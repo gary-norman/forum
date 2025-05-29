@@ -55,28 +55,8 @@
           {{ end}}
         {{ end }}{{/* end of ne $user nil */}}
 {{/* ---- share popover ---- */}}
-        <div popover id="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="scrollable-user">
-          <div class="share-container">
-            <div class="button-row">
-              <a href="/" target="_blank" class="share-logo facebook"></a>
-              <a href="/" target="_blank" class="share-logo twitter"></a>
-              <a href="/" target="_blank" class="share-logo linkedin"></a>
-              <a href="/" target="_blank" class="share-logo reddit"></a>
-              <a href="/" target="_blank" class="share-logo whatsapp"></a>
-              <a href="/" target="_blank" class="share-logo telegram"></a>
-            </div>
-            <div class="flex-space-between">
-              <label class="padded" for="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}-{{$instance}}">Copy URL link</label>
-              <button class="btn-sm btn-icoonly">
-                <span class="btn-copy" aria-label="Copy URL link"></span>
-              </button>
-            </div>
-            <input value="https://localhost:8989/posts/{{ $post.ID }}" readonly type="text"
-            id="copy-url-channel-{{ $post.ChannelID }}-post-{{ $post.ID }}-{{$instance}}"
-            name="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}-{{$instance}}"/>
-          </div> {{/* end of div share-container */}}
-        </div>{
-{/* ---- end of share popover ---- */}}
+        {{ template "share-modal" (dict "Entity" "channel" "Type" "post" "Pop1" $post.ChannelID "Pop2" $post.ID "Instance" $instance "Tracer" $tracer)}}
+{{/* ---- end of share popover ---- */}}
       {{ end }} {{/* end of eq $calledBy "post-card" */}}
       {{ if eq $calledBy "comment-card"}}{{ $comment := $dot.Comment }}{{ $post := .Post }}
         {{$status := reactionStatus $userID 0 $comment.ID}}
@@ -110,25 +90,7 @@
             {{ end}}
           {{ end }}{{/* end of ne $user nil */}}
 {{/*  ---- share modal ---- */}}
-          <div popover id="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="scrollable-user">
-            <div class="share-container">
-              <div class="button-row">
-                <a href="/" target="_blank" class="share-logo facebook"></a>
-                <a href="/" target="_blank" class="share-logo twitter"></a>
-                <a href="/" target="_blank" class="share-logo linkedin"></a>
-                <a href="/" target="_blank" class="share-logo reddit"></a>
-                <a href="/" target="_blank" class="share-logo whatsapp"></a>
-                <a href="/" target="_blank" class="share-logo telegram"></a>
-              </div>
-              <div class="flex-space-between">
-                <label class="padded" for="copy-url-channel-{{$post.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}">Copy URL link</label>
-                <button class="btn-sm btn-icoonly">
-                  <span class="btn-copy" aria-label="Copy URL link"></span>
-                </button>
-              </div>
-              <input value="https://localhost:8989/comments/{{$comment.ID}}" readonly type="text" id="copy-url-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" name="copy-url-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}"/>
-            </div>
-          </div>
+        {{ template "share-modal" (dict "Entity" "channel" "Type" "comment" "Pop1" $comment.ChannelID "Pop2" $comment.ID "Instance" $instance "Tracer" $tracer)}}
       {{ end }} {{/* end of eq $calledBy "comment-card" */}}
     {{ end }}{{/* end to buttons NOT present in right-panel */}}
     {{ if eq $calledBy "right-panel"}}

@@ -5,6 +5,7 @@
     {{ $userID = .ID }}
   {{ end }}
   {{ $post := .Post }}
+  {{ $instance := .Instance }}
   {{ $comment := .Comment }}
   {{$status := reactionStatus $userID 0 $comment.ID}}
   {{ $tracer := printf "%s > %s" .Tracer "comment-controls" }}
@@ -28,25 +29,5 @@
       <span class="btn-report">report</span>
     </button>
   {{ end }}
-  <!--  Share modal -->
-  <div popover id="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}" class="scrollable-user">
-    <div class="share-container">
-      <div class="button-row">
-        <a href="/" target="_blank" class="share-logo facebook"></a>
-        <a href="/" target="_blank" class="share-logo twitter"></a>
-        <a href="/" target="_blank" class="share-logo linkedin"></a>
-        <a href="/" target="_blank" class="share-logo reddit"></a>
-        <a href="/" target="_blank" class="share-logo whatsapp"></a>
-        <a href="/" target="_blank" class="share-logo telegram"></a>
-      </div>
-      <div class="flex-space-between">
-        <label class="padded" for="copy-url-channel-{{$post.ChannelID}}-comment-{{$comment.ID}}">Copy URL link</label>
-        <button class="btn-sm btn-icoonly">
-          <span class="btn-copy" aria-label="Copy URL link"></span>
-        </button>
-      </div>
-    <input value="https://localhost:8989/comments/{{ $comment.ID }}" readonly type="text"
-             id="copy-url-channel-{{$post.ChannelName}}-comment-{{$comment.ID}}" name="copy-url-channel-{{$post.ChannelName}}-comment-{{$comment.ID}}"/>
-    </div>
-  </div>
+{{ template "share-modal" (dict "Entity" "channel" "Type" "comment" "Pop1" $comment.ChannelID "Pop2" $comment.ID "Instance" $instance "Tracer" $tracer)}}
 {{ end }}

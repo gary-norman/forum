@@ -19,10 +19,10 @@
       {{ end }}
       <div>
         <small id="link-post-user-{{ $post.AuthorID }}-{{$instance}}" data-dest="user" data-user-id="{{ $post.AuthorID }}" class="small-bold link">{{ $post.Author }}</small>
-          <div>
-            <small id="link-post-channelID-{{ $post.ChannelID }}-{{ $instance }}" data-dest="channel" class="link" data-channel-id="{{ $post.ChannelID }}">{{ $post.ChannelName }}</small>
-            <small>-</small>
-            <small>{{$post.TimeSince}}</small>
+        <div>
+          <small id="link-post-channelID-{{ $post.ChannelID }}-{{ $instance }}" data-dest="channel" class="link" data-channel-id="{{ $post.ChannelID }}">{{ $post.ChannelName }}</small>
+          <small>-</small>
+          <small>{{$post.TimeSince}}</small>
         </div>
       </div>
       <div class="like-button">
@@ -31,7 +31,7 @@
     </div>
       <h4 id="link-post-post-{{ $post.ID }}-{{ .Instance }}">{{$post.Title}}</h4>
       {{ if ne $post.Images "noimage" }}
-        <img src="{{ $dot.ImagePaths.Post }}{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
+      <img src="{{ $dot.ImagePaths.Post }}{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
       {{ end }}
     {{ if eq .calledBy "this-post"}}
       <p class="cardContent--full">{{$post.Content}}</p>
@@ -41,7 +41,8 @@
       {{ template "control-buttons" (dict "Post" $post "dot" $dot "userID" $userID "Instance" $instance "calledBy" "post-card" "Tracer" $tracer )}}
     </div> 
   {{ if eq $instance "post-page" }}
-
+  {{ range $comments }}
+  {{ end }}
     <p>1. {{$post.Comments}}</p>
     <p>2. {{$comments}}</p>
     <!--  Reply / Submit Comment form -->

@@ -2085,7 +2085,7 @@ main {
 .scrollable {
   width: 100%;
   height: 100%;
-  /* overflow-y: scroll; */
+  overflow-y: scroll;
   mask-size: cover;
   -webkit-mask-size: cover;
   mask-repeat: no-repeat;

@@ -13,10 +13,14 @@ let filterButtons;
 
 
 document.addEventListener("newContentLoaded", () => {
-    toggleFilters();
+    if (activePageElement.id !== "post-page") {
+        toggleFilters();
+    }
 });
 document.addEventListener("DOMContentLoaded", () => {
-    toggleFilters();
+    if (activePageElement.id !== "post-page") {
+        toggleFilters();
+    }
 });
 
 function toggleFilters() {

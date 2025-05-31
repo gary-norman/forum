@@ -12,13 +12,13 @@ export let activePage, activePageElement;
 // Create a new custom event
 export const newContentLoaded = new CustomEvent("newContentLoaded");
 
-// document.addEventListener("DOMContentLoaded", (event) => {
-//   console.log("fired DOMContentLoaded");
-//   setActivePage("home")
-//   UpdateUI();
-//   fireCalendarListeners(activePageElement)
-//   fireCalendarListeners();
-// });
+document.addEventListener("DOMContentLoaded", (event) => {
+  console.log("fired DOMContentLoaded");
+  setActivePage("home")
+  UpdateUI();
+  // fireCalendarListeners(activePageElement)
+  // fireCalendarListeners();
+});
 
 document.addEventListener("newContentLoaded", (event) => {
   console.log("%cfired", expect, "newContentLoaded");

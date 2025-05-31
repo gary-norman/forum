@@ -8,6 +8,7 @@ const goHome = document.querySelector("#btn-go-home");
 // --- go home ---
 goHome.addEventListener("click", () => {
     setActivePage("home");
+    history.pushState({}, "", `/`);
     changePage(data["homePage"]);
 });
 

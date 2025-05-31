@@ -7,21 +7,65 @@
     }
 }
 
-.wrapper-filter-dropdown {
-    max-width: 18rem;
-    max-height: 28rem;
-    min-height: fit-content;
+.wrapper-filter-dropdown, .card.date {
+    display: none;
+    height: fit-content;
     position: fixed;
-    gap: 0.8rem;
-    flex-direction: column;
-    padding: 0.4rem;
-    overflow: auto;
+    inset-block-start: calc(anchor(end) + 0.4rem);
+    inset-inline-start: calc(anchor(start) - 0.8rem);
+    box-shadow: var(--shadow-filter);
     background: var(--color-bg-2);
     border: 1px solid var(--color-bg-4);
     border-radius: 0.4rem;
-    box-shadow: var(--shadow-filter);
-    inset-block-start: calc(anchor(end) + 0.4rem);
-    inset-inline-start: calc(anchor(start) - 0.8rem);
+
+    /* for closed state of popover animation */
+    opacity: 0;
+    transition: all;
+    transition-duration: 0.4s;
+    transition-behavior: allow-discrete;
+
+    &:popover-open {
+        &:has(input[type="checkbox"]) {
+            display: grid;
+        }
+        &:not(:has(input[type="checkbox"])) {
+            display: flex;
+         }
+
+        opacity: 1;
+        translate: 0 0;
+
+        @starting-style {
+            opacity: 0;
+            translate: 0 -10px;
+
+            display: none;
+        }
+    }
+}
+
+
+.wrapper-filter-dropdown {
+    max-width: 18rem;
+    max-height: 28rem;
+    flex-direction: column;
+    padding: 0.4rem;
+    overflow: auto;
+    gap: 0.8rem;
+
+    & .dropdown-option {
+        justify-content: start;
+
+        &:has(input[type="checkbox"]) {
+            display: grid;
+            grid-template-columns: 1.6rem calc(100% - 1.6rem - 1.2rem);
+            gap: 1.2rem;
+        }
+    }
+
+    &:has(.dropdown-option):has([id*="checkbox-channel"]) {
+        max-width: 28rem;
+    }
 
 
     & > div {
@@ -29,7 +73,7 @@
         border-radius: 0.4rem;
 
         &:hover {
-            background: var(--color-bg-2);
+            background: var(--color-bg-1);
         }
 
         & label {
@@ -39,10 +83,39 @@
             line-height: normal;
             letter-spacing: normal;
             font-size: 1.6rem;
+
+            /*word-break: break-all;*/
+            /*hyphens: auto;*/
+
+            overflow-wrap: break-word;
+            hyphens: auto;
+            word-break: normal;
         }
     }
 }
 
+.card.date {
+    width: 18rem;
+    gap: 1.6rem;
+    padding: 1.6rem;
+
+    & .input-wrapper {
+        display: flex;
+        gap: 0.4rem;
+        flex-direction: column;
+
+        & label {
+            font-size: 1.2rem;
+            color: var(--color-hl-pink);
+        }
+    }
+
+    & input {
+        margin: 0;
+    }
+}
+
+/* */
 .card.calendar {
     gap: 2.4rem;
     max-width: 70rem;

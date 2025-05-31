@@ -4,6 +4,7 @@
     {{ $userID = .ID }}
   {{ end }}
   {{ $dot := .dot }}
+{{ $instance := .Instance }}
   {{ $tracer := printf "%s > %s" .Tracer "reply_level3" }}
   {{ with $tracer }}
   {{/*    {{ fprint "Trace" . }} */}}
@@ -49,27 +50,7 @@
           <span class="btn-report">report</span>
         </button>
         <!--  Share modal -->
-        <div popover id="share-container-{{$comment.ID}}-activity" class="scrollable-user">
-          <div class="share-container">
-            <div class="button-row">
-              <a href="/" target="_blank" class="share-logo facebook"></a>
-              <a href="/" target="_blank" class="share-logo twitter"></a>
-              <a href="/" target="_blank" class="share-logo linkedin"></a>
-              <a href="/" target="_blank" class="share-logo reddit"></a>
-              <a href="/" target="_blank" class="share-logo whatsapp"></a>
-              <a href="/" target="_blank" class="share-logo telegram"></a>
-            </div>
-            <div class="flex-space-between">
-              <label class="padded" for="copy-url-{{$comment.ID}}-activity">Copy URL link</label>
-              <button class="btn-sm btn-icoonly">
-                <span class="btn-copy" aria-label="Copy URL link"></span>
-              </button>
-            </div>
-          <input value="https://localhost:8989/comments/{{ $comment.ID }}" readonly type="text"
-                   id="copy-url-{{$comment.ID}}-activity" name="copy-url-{{$comment.ID}}-activity"/>
-          </div>
-        </div>
-      </div>
+        {{ template "share-modal" (dict "Entity" "channel" "Type" "comment" "Pop1" $comment.ChannelID "Pop2" "Instance" $instance $comment.ID "Tracer" $tracer) }}
       <!--  Reply / Submit Comment form -->
       <form class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
         <div class="cont-flex-row flex-end">

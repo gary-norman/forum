@@ -1,7 +1,7 @@
 import { setActivePage, newContentLoaded } from "./main.js";
 import { pages } from "./share.js";
 const expect =
-  "background-color: #000000; color: #00ff00; font-weight: bold; border: 1px solid #00ff00; margin-inline-end: 5px; padding: 5px; border-radius: 5px;";
+  "background-color: rgb(108 207 93); color: #000000; font-weight: bold; padding: .1rem; border-radius: 1rem;";
 const standard =
   "background-color: transparent; color: #ffffff; font-weight: normal;";
 
@@ -64,6 +64,7 @@ export function changePage(page) {
 function fetchData(entity, Id) {
   console.log(`%cFetching ${entity} data for ID:`, expect, Id);
 
+  history.pushState(null, "", `/${entity}s/${Id}`);
   fetch(`/${entity}s/${Id}`)
     .then((response) => {
       if (!response.ok) {
@@ -90,4 +91,3 @@ function fetchData(entity, Id) {
     })
     .catch((error) => console.error(`Error fetching ${entity} data:`, error));
 }
-

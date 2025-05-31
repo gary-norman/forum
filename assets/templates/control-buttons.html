@@ -8,142 +8,107 @@
   {{/* fprint "Trace" . */}}
 {{ end }}
 {{ $instance := .Instance }}
-{{/* with .Comment }}
+{{ with .Comment }}
   {{ $comment := . }}
-{{ end */}}
-    <div class="button-row-wrap
-    {{ if ne $calledBy "right-panel"}} post-controls{{end}}"
-    {{ if eq $calledBy "post-card" }}{{ $post := .Post }} data-post-id="{{$post.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{$post.AuthorID}}"
-{{/*    {{ if eq $calledBy "comment-card"}} data-comment-id="{{$comment.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{comment.AuthorID}}"*/}}
-    {{ end }}>
-        {{ if ne $calledBy "right-panel"}} {{/* buttons NOT present in right-panel */}}
-            {{ if eq $calledBy "post-card"}}
-                {{ $post := .Post }}
-                {{$status := reactionStatus $userID $post.ID 0}}
-  {{/* fprint "reactionStatus success" $calledBy */}}
-<button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{ else }}{{if $status.Liked}}active{{ else }}inactive {{end}} {{ end }}">
-                    <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{$post.Likes}}</span>
-                </button>
-<button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{ else }}{{if $status.Disliked}}active{{ else }}inactive {{end}} {{ end }}" >
-                    <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
-                </button>
-                {{ if and (eq $instance "post-page") (eq $calledBy "this-post") }}
-                    <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}">
-                        <span class="btn-reply">reply</span>
-                    </button>
-                {{ else }}
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}" data-dest="post" data-post-id="{{$post.ID}}">
-                        <span class="btn-reply">{{$post.CommentsCount}}</span>
-                    </button>
-                {{ end }}
-                <button id="share-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" popovertarget="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                    <span class="btn-share">share</span>
-                </button>
-                {{ if ne $userID nil}}
-                    <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
-                        <span class="btn-report">report</span>
-                    </button>
-                    {{ if eq $userID $post.AuthorID}}
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
-                            <span class="btn-edit">edit</span>
-                        </button>
-                    {{ end}}
-                {{ end }}<!-- end of ne $user nil -->
-
-                <div popover id="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="scrollable-user">
-                    <div class="share-container">
-                        <div class="button-row">
-                            <a href="/" target="_blank" class="share-logo facebook"></a>
-                            <a href="/" target="_blank" class="share-logo twitter"></a>
-                            <a href="/" target="_blank" class="share-logo linkedin"></a>
-                            <a href="/" target="_blank" class="share-logo reddit"></a>
-                            <a href="/" target="_blank" class="share-logo whatsapp"></a>
-                            <a href="/" target="_blank" class="share-logo telegram"></a>
-                        </div>
-                        <div class="flex-space-between">
-                            <label class="padded" for="copy-url-channel-{{$post.ChannelName}}-post-{{$post.ID}}-{{$instance}}">Copy URL link</label>
-                            <button class="btn-sm btn-icoonly">
-                                <span class="btn-copy" aria-label="Copy URL link"></span>
-                            </button>
-                        </div>
-                        <input value="https://localhost:8989/posts/{{ $post.ID }}" readonly type="text"
-                     id="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}-{{$instance}}" name="copy-url-channel-{{ $post.ChannelName }}-post-{{ $post.ID }}-{{$instance}}"/>
-                    </div> <!-- end of div share-container -->
-                </div> <!-- end of div popover -->
-            {{ end }} <!-- end of eq $calledBy "post-card" -->
-            {{ if eq $calledBy "comment-card"}}{{ $comment := $dot.Comment }}{{ $post := .Post }}
-                {{$status := reactionStatus $userID 0 $comment.ID}}
-<div style="display: none;" class="data-div" data-post-id="{{$post.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{$comment.AuthorID}}"></div>
-
-                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
-                    <span class="btn-likes" data-like-ID="user-{{$comment.ID}}">{{$comment.Likes}}</span>
-                </button>
-                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
-                    <span class="btn-dislikes" data-dislike-ID="user-{{$comment.ID}}">{{$comment.Dislikes}}</span>
-                </button>
-                {{ if ne $userID nil}}
-                    {{ if ne $calledBy "reply_level1"}}
-                        <button id="reply-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
-                            <span class="btn-reply">reply</span>
-                        </button>
-                    {{ end }}
-                {{ end }}<!-- end of ne $user nil -->
-                <button id="share-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" popovertarget="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                    <span class="btn-share">share</span>
-                </button>
-                {{ if ne $userID nil}}
-{{/*                    INFO If logged in user is the owner of the post/comment, show Edit*/}}
-                    {{ if eq $userID $comment.AuthorID}}
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
-                            <span class="btn-edit">edit</span>
-                        </button>
-{{/*                        INFO otherwise, show Report*/}}
-                    {{ else }}
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
-                            <span class="btn-report">report</span>
-                        </button>
-                    {{ end}}
-                {{ end }}<!-- end of ne $user nil -->
-                <!--  Share modal -->
-                <div popover id="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="scrollable-user">
-                    <div class="share-container">
-                        <div class="button-row">
-                            <a href="/" target="_blank" class="share-logo facebook"></a>
-                            <a href="/" target="_blank" class="share-logo twitter"></a>
-                            <a href="/" target="_blank" class="share-logo linkedin"></a>
-                            <a href="/" target="_blank" class="share-logo reddit"></a>
-                            <a href="/" target="_blank" class="share-logo whatsapp"></a>
-                            <a href="/" target="_blank" class="share-logo telegram"></a>
-                        </div>
-                        <div class="flex-space-between">
-                            <label class="padded" for="copy-url-channel-{{$post.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}">Copy URL link</label>
-                            <button class="btn-sm btn-icoonly">
-                                <span class="btn-copy" aria-label="Copy URL link"></span>
-                            </button>
-                        </div>
-                        <input value="https://localhost:8989/comments/{{$comment.ID}}" readonly type="text" id="copy-url-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" name="copy-url-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}"/>
-                    </div>
-                </div>
-
-            {{ end }} <!-- end of eq $calledBy "comment-card" -->
-        {{ end }}<!-- end to buttons NOT present in right-panel -->
-
-            {{ if eq $calledBy "right-panel"}}
-                {{ if ne $userID nil }}
-                    {{/*          TODO when user is an administrator, button prepared; needs admin check*/}}
-                    {{if eq $instance "user-page"}}
-                        {{/*        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >*/}}
-                        {{/*          <span class="btn-ban">ban</span>*/}}
-                        {{/*        </button>*/}}
-                        {{ else if eq $instance "channel-page"}}
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-                            <span class="btn-mute">mute</span>
-                        </button>
-                        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
-                            <span class="btn-report">report</span>
-                        </button>
-                    {{ end }} <!-- end of if "user-page" or "channel-page" -->
-                {{ end }} <!-- end of if ne $userID nil -->
-            {{ end }} <!-- end of eq $calledBy "right-panel" -->
-    </div> <!-- end of div button-row-wrap -->
+{{ end }}
+    <div class="
+      button-row-wrap
+      {{ if ne $calledBy "right-panel"}} post-controls{{end}}
+    "
+    {{ if eq $calledBy "post-card" }}
+      {{ $post := .Post }} data-post-id="{{$post.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{$post.AuthorID}}"
+    {{ end }}
+    {{/* if eq $calledBy "comment-card"}}
+      {{ $post := .Post }} data-comment-id="{{$comment.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{comment.AuthorID}}"
+    {{ end */}}
+    >
+    {{ if ne $calledBy "right-panel"}} {{/* buttons NOT present in right-panel */}}
+      {{ if eq $calledBy "post-card"}}
+        {{ $post := .Post }}
+        {{$status := reactionStatus $userID $post.ID 0}}
+        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{ else }}{{if $status.Liked}}active{{ else }}inactive {{end}} {{ end }}">
+          <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{$post.Likes}}</span>
+        </button>
+        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{ else }}{{if $status.Disliked}}active{{ else }}inactive {{end}} {{ end }}" >
+          <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
+        </button>
+        {{ if and (eq $instance "post-page") (eq $calledBy "this-post") }}
+          <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}">
+            <span class="btn-reply">reply</span>
+          </button>
+        {{ else }}
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}" data-dest="post" data-post-id="{{$post.ID}}">
+            <span class="btn-reply">{{$post.CommentsCount}}</span>
+          </button>
+        {{ end }}
+        <button id="share-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" popovertarget="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+          <span class="btn-share">share</span>
+        </button>
+        {{ if ne $userID nil}}
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+            <span class="btn-report">report</span>
+          </button>
+          {{ if eq $userID $post.AuthorID}}
+            <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+              <span class="btn-edit">edit</span>
+            </button>
+          {{ end}}
+        {{ end }}{{/* end of ne $user nil */}}
+{{/* ---- share popover ---- */}}
+        {{ template "share-modal" (dict "Entity" "channel" "Type" "post" "Pop1" $post.ChannelID "Pop2" $post.ID "Instance" $instance "Tracer" $tracer)}}
+{{/* ---- end of share popover ---- */}}
+      {{ end }} {{/* end of eq $calledBy "post-card" */}}
+      {{ if eq $calledBy "comment-card"}}{{ $comment := $dot.Comment }}{{ $post := .Post }}
+        {{$status := reactionStatus $userID 0 $comment.ID}}
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+            <span class="btn-likes" data-like-ID="user-{{$comment.ID}}">{{$comment.Likes}}</span>
+          </button>
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+            <span class="btn-dislikes" data-dislike-ID="user-{{$comment.ID}}">{{$comment.Dislikes}}</span>
+          </button>
+          {{ if ne $userID nil}}
+            {{ if ne $calledBy "reply_level1"}}
+              <button id="reply-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+                <span class="btn-reply">reply</span>
+              </button>
+            {{ end }}
+          {{ end }}{{/* end of ne $user nil */}}
+          <button id="share-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" popovertarget="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+            <span class="btn-share">share</span>
+          </button>
+          {{ if ne $userID nil}}
+{{/* INFO If logged in user is the owner of the post/comment, show Edit*/}}
+            {{ if eq $userID $comment.AuthorID}}
+              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+                <span class="btn-edit">edit</span>
+              </button>
+{{/* INFO otherwise, show Report*/}}
+            {{ else }}
+              <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+                <span class="btn-report">report</span>
+              </button>
+            {{ end}}
+          {{ end }}{{/* end of ne $user nil */}}
+{{/*  ---- share modal ---- */}}
+        {{ template "share-modal" (dict "Entity" "channel" "Type" "comment" "Pop1" $comment.ChannelID "Pop2" $comment.ID "Instance" $instance "Tracer" $tracer)}}
+      {{ end }} {{/* end of eq $calledBy "comment-card" */}}
+    {{ end }}{{/* end to buttons NOT present in right-panel */}}
+    {{ if eq $calledBy "right-panel"}}
+      {{ if ne $userID nil }}
+{{/* TODO when user is an administrator, button prepared; needs admin check*/}}
+        {{if eq $instance "user-page"}}
+          {{/*        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >*/}}
+          {{/*          <span class="btn-ban">ban</span>*/}}
+          {{/*        </button>*/}}
+          {{ else if eq $instance "channel-page"}}
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+            <span class="btn-mute">mute</span>
+          </button>
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+            <span class="btn-report">report</span>
+          </button>
+        {{ end }} {{/* end of if "user-page" or "channel-page" */}}
+      {{ end }} {{/* end of if ne $userID nil */}}
+    {{ end }} {{/* end of eq $calledBy "right-panel" */}}
+  </div> {{/* end of div button-row-wrap */}}
 {{ end}}

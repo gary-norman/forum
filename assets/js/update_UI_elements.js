@@ -38,9 +38,20 @@ export function UpdateUI() {
   resetInputStyle();
   togglePopovers();
   listenToChannelLinks();
+  popstate();
   // getCalendarVars();
   // displayCalendars();
   // processDateRange();
+}
+
+export function popstate() {
+  window.addEventListener("popstate", () => {
+    const pathParts = window.location.pathname.split("/").filter(Boolean);
+    const [entity, id] = pathParts;
+    if (entity && id) {
+      fetchData(entity.slice(0, -1), id); // Convert 'posts' to 'post'
+    }
+  });
 }
 
 export function updateProfileImages() {

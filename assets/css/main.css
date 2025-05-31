@@ -2055,6 +2055,31 @@ main {
   background: var(--color-hl-blue);
 }
 
+.comment-header--count {
+  counter-reset: comment;
+  background: var(--color-bg-2);
+  border-radius: var(--border-radius-input);
+  width: fit-content;
+  padding: 1.2rem;
+  & h3 {
+    font-size: 1.4rem;
+    margin-block-end: 0.2rem;
+  }
+}
+
+.comment-list {
+  background: var(--color-bg-3);
+  border-radius: var(--border-radius-input);
+  border: 1px solid var(--color-bg-4);
+  padding: 0.3rem 0.5rem;
+  font-size: 1.2rem;
+}
+
+.comment--count::before {
+  counter-increment: comment;
+  content: counter(comment);
+}
+
 .saved {
   background: var(--color-hl-orange);
 }
@@ -2115,7 +2140,7 @@ main {
 .scrollable {
   width: 100%;
   height: 100%;
-  /* overflow-y: scroll; */
+  overflow-y: scroll;
   mask-size: cover;
   -webkit-mask-size: cover;
   mask-repeat: no-repeat;

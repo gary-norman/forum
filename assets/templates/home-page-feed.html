@@ -4,6 +4,7 @@
     {{ $userID = .ID }}
   {{ end }}
   {{ $dot := .dot }}
+  {{ $instance := .Instance }}
   {{ $userPosts := .UserPosts }}
   {{ $tracer := printf "%s > %s" .Tracer "home-page-feed" }}
   {{ with $tracer }}
@@ -12,7 +13,7 @@
 {{/*  <div id="wrapper-home-feed">*/}}
     <div id="home-feed" class="collapsible-expanded feed-content scrollable no-scrollbar">
       {{ range $userPosts }}
-        {{ template "post-card" (dict "Post" . "dot" $dot "Tracer" $tracer "UserID" $userID "Instance" $dot.Instance "calledBy" "home-page-feed") }}
+        {{ template "post-card" (dict "Post" . "dot" $dot "Tracer" $tracer "UserID" $userID "Instance" $instance "calledBy" "home-page-feed") }}
       {{ end }}
     </div>
 {{/*  </div>*/}}

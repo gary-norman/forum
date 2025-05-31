@@ -30,16 +30,16 @@ function toggleFilters() {
         const popover = activePageElement.querySelector(`#${id}`);
 
         // console.log("%cid:", expect, id);
-        console.log("%cbutton:", expect, button);
-        console.log("%cpopover:", warn, popover);
+        // console.log("%cbutton:", expect, button);
+        // console.log("%cpopover:", warn, popover);
 
         popover.addEventListener("toggle", () => {
             if (popover.matches(':popover-open')) {
                 button.classList.add("active");
-                console.log("%cpopover open", warn, popover);
+                // console.log("%cpopover open", warn, popover);
             } else {
                 button.classList.remove("active");
-                console.log("%cpopover closed", warn, popover);
+                // console.log("%cpopover closed", warn, popover);
 
             }
 

@@ -23,7 +23,6 @@ let activityFeeds, activityFeedsContentAll;
 
 export function UpdateUI() {
   // console.log("updating UI");
-  selectActiveFeed();
   listenToRules();
   listenToReplies();
   listenToEditDetails();

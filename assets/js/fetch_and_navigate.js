@@ -8,8 +8,8 @@ const standard =
 export function navigateToPage(dest, entity) {
   // dest is a string - "channel"
   // entity is the template element:work
-  console.info("%cdest:%o", expect, dest);
-  console.info("%centity:%o", expect, entity);
+  // console.info("%cdest:%o", expect, dest);
+  // console.info("%centity:%o", expect, entity);
 
   const link = entity.getAttribute(`data-${dest}-id`);
   // console.log("link: ", link);
@@ -40,13 +40,13 @@ export function changePage(page) {
     // console.log("element.id: ", element.id);
     if (element.id === pageId) {
       element.classList.add("active-feed");
-      console.info(
-        "%cset%o%c to %cactive-feed",
-        expect,
-        element.id,
-        standard,
-        expect,
-      );
+      // console.info(
+      //   "%cset%o%c to %cactive-feed",
+      //   expect,
+      //   element.id,
+      //   standard,
+      //   expect,
+      // );
     } else {
       // TODO need to modify home-page template to populate by injection
       // TODO when injected, the content can be cleared
@@ -62,9 +62,9 @@ export function changePage(page) {
 }
 
 function fetchData(entity, Id) {
-  console.log(`%cFetching ${entity} data for ID:`, expect, Id);
+  // console.log(`%cFetching ${entity} data for ID:`, expect, Id);
 
-  history.pushState(null, "", `/${entity}s/${Id}`);
+  history.pushState({}, "", `/${entity}s/${Id}`);
   fetch(`/${entity}s/${Id}`)
     .then((response) => {
       if (!response.ok) {

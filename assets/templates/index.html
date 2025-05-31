@@ -19,6 +19,7 @@
     <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
     <script type="module" src="/assets/js/main.js" defer></script>
     <script type="module" src="/assets/js/calendar.js" defer></script>
+    <script type="module" src="/assets/js/filters.js" defer></script>
     <script type="module" src="/assets/js/reactions.js" defer></script>
     <script type="module" src="/assets/js/share.js" defer></script>
     <script type="module" src="/assets/js/comments.js" defer></script>
@@ -475,7 +476,7 @@
       <div class="main-content">
   {{/*SECTION     ---------- sidebar ---------- */}}
         <aside class="sidebar">
-          {{ if ne .CurrentUser nil }}{{ $user := .RandomUser }}
+          {{ if ne .CurrentUser nil }}{{ $user := .CurrentUser }}
           <div class="sidebarProfile">
             {{ if (startsWith $user.Avatar "noimage") }}
               <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username }}"></div>

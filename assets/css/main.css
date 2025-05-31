@@ -814,10 +814,8 @@ textarea,
 input,
 button {
   background: transparent;
-  /* padding: 0; */
-  /* margin: 0; */
-  /* -webkit-appearance: none; */
   -moz-appearance: none;
+  -webkit-appearance: none;
   appearance: none;
   border: none;
 }
@@ -825,7 +823,8 @@ button {
 textarea,
 input[type="text"],
 input[type="password"],
-input[type="email"] {
+input[type="email"],
+input[type="date"]{
   position: relative;
   margin-block: 0.4rem;
   border: 1px solid var(--color-bg-4);
@@ -864,11 +863,43 @@ input[type="file"] {
 }
 
 .checkbox-not-visible {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   display: none;
 }
+
+input[type="checkbox"] {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  width: 1.6rem !important;
+  aspect-ratio: 1/1;
+  border: 2px solid var(--color-hl-green);
+  border-radius: 4px;
+  background: var(--color-bg-2);
+  cursor: pointer;
+  position: relative;
+  top: calc(50% - 1.2rem);
+  &[id*="channel"] {
+    top: calc(50% - 1.4rem);
+  }
+
+  &:checked {
+    position: relative;
+    background: var(--color-hl-green);
+    border-color: var(--color-hl-green);
+
+    &:after {
+      position: absolute;
+      width: 1rem;
+      aspect-ratio: 1/1;
+      top: 50%;
+      left: 50%;
+      content: "";
+      background: url("/assets/images/check.svg") center/contain no-repeat;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
 
 /* TODO use @starting-style to achieve this */
 .user-interacted > * {
@@ -958,7 +989,10 @@ input[type="file"] {
   text-align: center;
 }
 .input-wrapper {
-  width: min(80%, 25rem);
+  width: 100%;
+  &:not(:has(input[type="date"])) {
+    width: min(80%, 25rem);
+  }
   position: relative;
 
   &.container-reply,
@@ -1214,10 +1248,6 @@ input[type="text"].inactive-input {
 /*select {*/
 /*    background: url("/assets/images/down-arrow.svg") no-repeat center right 0.75rem;*/
 /*}*/
-
-input[type="checkbox"]:checked {
-  background: url("/assets/images/check.svg") no-repeat center / 75% auto;
-}
 
 .wrapper-main {
   display: flex;
@@ -2122,9 +2152,10 @@ main {
 }
 
 .card {
-  &:not(.calendar) {
+  &:not(.calendar, .date){
     display: flex;
   }
+
   flex-direction: column;
   gap: 1.2rem;
   width: fit-content;
@@ -2526,7 +2557,7 @@ main {
 
   &.sidebar-scroll {
     height: auto;
-    min-height: calc(100dvh - 6rem);
+    min-height: calc(100dvh - 10.2rem - 6rem);
   }
 
   &::-webkit-scrollbar {

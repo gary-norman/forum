@@ -1607,7 +1607,7 @@ input[type="text"].inactive-input {
   flex-direction: column;
   max-width: 32rem;
   min-width: 32rem;
-  height: 100dvh;
+  height: calc(100dvh - 6rem);
   padding: 2.4rem 0;
   gap: 1.2rem;
   background: var(--color-bg-2);

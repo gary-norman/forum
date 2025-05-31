@@ -19,11 +19,15 @@
             class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
       <span class="btn-filters filter-channel">channel</span>
     </button>
-    <button popovertarget="{{$calledBy}}-dropdown-calendar"
-            anchor="{{$calledBy}}-calendar-button"
-            id="{{$calledBy}}-calendar-button"
+{{/*    <button popovertarget="{{$calledBy}}-dropdown-calendar"*/}}
+{{/*            anchor="{{$calledBy}}-calendar-button"*/}}
+{{/*            id="{{$calledBy}}-calendar-button"*/}}
+{{/*            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">*/}}
+{{/*      <span class="btn-filters filter-date">created</span>*/}}
+{{/*    </button>*/}}
+    <button popovertarget="{{$calledBy}}-dropdown-date"
             class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
-      <span class="btn-filters filter-date">date</span>
+      <span class="btn-filters filter-date">created</span>
     </button>
     <button popovertarget="{{$calledBy}}-dropdown-comments"
             class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
@@ -35,106 +39,120 @@
     </button>
     <button popovertarget="{{$calledBy}}-dropdown-type"
             class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
-      <span class="btn-filters filter-reaction">type</span>
+      <span class="btn-filters filter-type">type</span>
     </button>
     {{/*    SECTION sort dropdown */}}
     <div id="{{$calledBy}}-dropdown-sort" popover class="wrapper-filter-dropdown scroll-down scrollable">
       {{/*    SECTION sort - newest/oldest */}}
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-new" name="sort-most-new" value="most-new">
         <label for="{{$calledBy}}-checkbox-most-new">newest first</label>
       </div>
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-old" name="sort-most-old" value="most-old">
         <label for="{{$calledBy}}-checkbox-most-old">oldest first</label>
       </div>
       {{/*    SECTION sort - recent/earliest activity */}}
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-new-activity" name="sort-most-new" value="most-new-activity">
         <label for="{{$calledBy}}-checkbox-most-new-activity">newest activity</label>
       </div>
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-old-activity" name="sort-most-old" value="most-old-activity">
         <label for="{{$calledBy}}-checkbox-most-old">oldest activity</label>
       </div>
       {{/*    SECTION sort - most likes/dilikes */}}
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-likes" name="sort-most-likes" value="most-likes">
         <label for="{{$calledBy}}-checkbox-most-likes">most likes</label>
       </div>
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-dislikes" name="sort-most-dislikes" value="most-dislikes">
         <label for="{{$calledBy}}-checkbox-most-dislikes">most dislikes</label>
       </div>
       {{/*    SECTION sort - most/least comments */}}
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-comments" name="sort-most-comments" value="most-comments">
         <label for="{{$calledBy}}-checkbox-most-comments">most comments</label>
       </div>
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-least-comments" name="sort-least-comments" value="least-comments">
         <label for="{{$calledBy}}-checkbox-most-comments">least comments</label>
       </div>
     </div>
     {{/*    SECTION type filter dropdown */}}
     <div id="{{$calledBy}}-dropdown-type" popover class="wrapper-filter-dropdown scroll-down scrollable">
-      <div class="flex-align-l">
-        <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-post" value="type-post">
-        <label for="{{$calledBy}}-checkbox-type-post">liked</label>
+      <div class="dropdown-option">
+        <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-channel" value="type-post">
+        <label for="{{$calledBy}}-checkbox-type-channel">channel</label>
       </div>
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-post" value="type-post">
-        <label for="{{$calledBy}}-checkbox-type-post">liked</label>
+        <label for="{{$calledBy}}-checkbox-type-post">post</label>
       </div>
-      <div class="flex-align-l">
-        <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-post" value="type-post">
-        <label for="{{$calledBy}}-checkbox-type-post">liked</label>
+      <div class="dropdown-option">
+        <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-comment" value="type-post">
+        <label for="{{$calledBy}}-checkbox-type-comment">comment</label>
       </div>
-      <div class="flex-align-l">
-        <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-post" value="type-post">
-        <label for="{{$calledBy}}-checkbox-type-post">liked</label>
+      <div class="dropdown-option">
+        <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-reaction" value="type-post">
+        <label for="{{$calledBy}}-checkbox-type-reaction">reaction</label>
       </div>
+
     </div>
     {{/*    SECTION reactions filter dropdown */}}
     <div id="{{$calledBy}}-dropdown-reaction" popover class="wrapper-filter-dropdown scroll-down scrollable">
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-liked" value="reaction-like">
         <label for="{{$calledBy}}-checkbox-reaction-liked">liked</label>
       </div>
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-disliked" value="reaction-dislike">
         <label for="{{$calledBy}}-checkbox-reaction-disliked">disliked</label>
       </div>
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-none" value="reaction-none">
         <label for="{{$calledBy}}-checkbox-reaction-none">no reaction</label>
       </div>
     </div>
     {{/*    SECTION comments filter dropdown */}}
     <div id="{{$calledBy}}-dropdown-comments" popover class="wrapper-filter-dropdown scroll-down scrollable">
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-has-comments" value="has-comments">
         <label for="{{$calledBy}}-checkbox-has-comments">has comments</label>
       </div>
-      <div class="flex-align-l">
+      <div class="dropdown-option">
         <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-no-comments" value="no-comments">
         <label for="{{$calledBy}}-checkbox-no-comments">has no comments</label>
       </div>
     </div>
     {{/*    SECTION channel filter dropdown */}}
     <div id="{{$calledBy}}-dropdown-channel" popover class="wrapper-filter-dropdown scroll-down scrollable">
-    {{ if eq $calledBy "channel-page" }}
+{{/*    {{ if eq $calledBy "channel-page" }}*/}}
       {{ range $dot.OwnedAndJoinedChannels}}
-        <div class="flex-align-l">
+        <div class="dropdown-option">
           <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-channel-{{ .ID }}" name="channel-{{ .ID }}" value="{{ .ID }}">
-          <label for="{{$calledBy}}-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
+          <label lang="en" for="{{$calledBy}}-checkbox-channel-{{ .ID }}">/{{ .Name }}</label>
         </div>
       {{ end }}
-    {{ end }}
+{{/*    {{ end }}*/}}
     </div>
-    {{/*    SECTION calendar dropdown */}}
-    <div id="{{$calledBy}}-dropdown-calendar" popover class="card calendar">
-      {{ template "calendar"}}
+    {{/*    SECTION date dropdown */}}
+    <div id="{{$calledBy}}-dropdown-date" popover class="card date">
+      <div class="input-wrapper">
+        <label for="creation-year-start-{{$calledBy}}" class="calendar-label">start date</label>
+        <input class="" type="date" id="creation-year-start-{{$calledBy}}" name="creation-year-start" placeholder="pick a starting date" />
+      </div>
+      <div class="input-wrapper">
+        <label for="creation-year-end-{{$calledBy}}" class="calendar-label">end date</label>
+        <input class="" type="date" id="creation-year-end-{{$calledBy}}" name="creation-year-end" placeholder="pick an ending year" />
+      </div>
     </div>
+
+{{/*    TODO calendar setup for the additional features */}}
+{{/*    */}}{{/*    SECTION calendar dropdown */}}
+{{/*    <div id="{{$calledBy}}-dropdown-calendar" popover class="card calendar">*/}}
+{{/*      {{ template "calendar"}}*/}}
+{{/*    </div>*/}}
   </div>
 {{ end }}

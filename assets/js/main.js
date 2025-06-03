@@ -12,6 +12,14 @@ export let activePage, activePageElement;
 // Create a new custom event
 export const newContentLoaded = new CustomEvent("newContentLoaded");
 
+window.addEventListener("popstate", () => {
+  const pathParts = window.location.pathname.split("/").filter(Boolean);
+  const [entity, id] = pathParts;
+  if (entity && id) {
+    fetchData(entity.slice(0, -1), id); // Convert 'posts' to 'post'
+  }
+});
+
 document.addEventListener("DOMContentLoaded", (event) => {
   console.log("fired DOMContentLoaded");
   setActivePage("home");

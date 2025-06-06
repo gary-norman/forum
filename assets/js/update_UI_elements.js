@@ -9,6 +9,7 @@ import { getRandomInt } from "./helper_functions.js";
 import { listenToRules } from "./channel_rules.js";
 import { toggleModals, togglePopovers } from "./popups.js";
 import { listenToChannelLinks } from "./navigation.js";
+import { agreeToJoin } from "./join_channel.js";
 import {
   displayCalendars,
   getCalendarVars,
@@ -37,6 +38,7 @@ export function UpdateUI() {
   resetInputStyle();
   togglePopovers();
   listenToChannelLinks();
+  agreeToJoin();
   // getCalendarVars();
   // displayCalendars();
   // processDateRange();

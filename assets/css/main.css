@@ -239,6 +239,10 @@ a:active,
   /*color: inherit;*/
 }
 
+.link:hover {
+  color: var(--color-hl-green);
+}
+
 /* SECTION ---- images ---- */
 .post-image {
   /* TODO add a container query to size this correctly */
@@ -824,7 +828,7 @@ textarea,
 input[type="text"],
 input[type="password"],
 input[type="email"],
-input[type="date"]{
+input[type="date"] {
   position: relative;
   margin-block: 0.4rem;
   border: 1px solid var(--color-bg-4);
@@ -899,7 +903,6 @@ input[type="checkbox"] {
     }
   }
 }
-
 
 /* TODO use @starting-style to achieve this */
 .user-interacted > * {
@@ -2178,7 +2181,7 @@ main {
 }
 
 .card {
-  &:not(.calendar, .date){
+  &:not(.calendar, .date) {
     display: flex;
   }
 

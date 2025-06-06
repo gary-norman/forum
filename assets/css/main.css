@@ -875,7 +875,7 @@ input[type="checkbox"] {
   border: 2px solid var(--color-hl-green);
   border-radius: 4px;
   background: var(--color-bg-2);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   position: relative;
   top: calc(50% - 1.2rem);
   &[id*="channel"] {
@@ -1375,6 +1375,7 @@ input[type="text"].inactive-input {
   }
 }
 
+// TODO does this need a var(--cursor-default)?
 [id^="edit-channel-rules-title-rules-"] {
   font-size: 1.6rem;
   cursor: default;

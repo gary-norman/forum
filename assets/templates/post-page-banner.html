@@ -8,6 +8,7 @@
   {{ with $tracer }}
 {{/*    {{ fprint "Trace" . }} */}}
   {{ end }}
+{{ template "channel-join-popover" (dict "ThisChannel" $dot.ThisChannel) }}
 <div id="post-page-banner" class="banner">
   <div class="page-control">
     <div class="page-profile">

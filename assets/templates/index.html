@@ -413,32 +413,6 @@
           </div>
         </form>
       </div>
-{{/*SECTION ---------- join channel popover ---------- */}}
-      <div popover id="form-join-channel">
-        <form action="/channels/join" class="wrapper-form" method="POST">
-          <h5 id="join-channel-title" class="form-title">join {{ .ThisChannel.Name }}</h5>
-          <span id="join-agree" class="text-join-channel">check the agree checkbox to agree to the rules of this channel</span>
-          <div class="cont-flex-row flex-center">
-            <label class="allow-comments">
-              <input id="join-channel-id" type="hidden" value="{{ .ThisChannel.ID }}" name="channelId" />
-              <input type="checkbox" id="rules-agree-checkbox" name="agree" required/>
-              <span class="allow-comments-fx"></span>
-  {{/*              <span class="darklight-border"></span> */}}
-            </label>
-            <label for="rules-agree-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">agree</label>
-          </div>
-          {{ if (eq .ThisChannel.Privacy true) }}
-          <span class="text-join-channel">this channel is private. Your request will be sent to the moderators for approval.</span>
-          {{ end }}
-  {{/*FIXME ---------- fix these buttons ----------*/}}
-          <div class="cont-flex-row flex-center">
-            <button id="join-channel-btn" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
-              <span>join</span>
-            </button>
-            <a href="/" class="button btn-md btn-secondary btn-action btn-filled">cancel</a>
-          </div>
-        </form>
-      </div>
 {{/*SECTION ---------- edit channel rules popover ---------- */}}
       <div popover id="form-edit-channel-rules">
         <form id="popover-form-edit-channel-rules" action="/channels/add-rules/{{.ThisChannel.ID}}" class="wrapper-form" method="POST">

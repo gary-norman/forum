@@ -48,6 +48,11 @@ export function agreeToJoin() {
   const checkbox = document.getElementById("rules-agree-checkbox");
   const button = document.getElementById("join-channel-btn");
 
+  if (checkbox === null || button === null) {
+    console.warn("Checkbox or button not found. Skipping agreeToJoin setup.");
+    return;
+  }
+
   const updateButtonClasses = () => {
     if (checkbox.checked) {
       button.classList.add("btn-primary", "btn-action-primary");

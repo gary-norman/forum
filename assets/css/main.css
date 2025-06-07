@@ -111,6 +111,10 @@
   height: 0;
 }
 
+.hidden {
+  display: none;
+}
+
 .display-on {
   display: revert;
 }

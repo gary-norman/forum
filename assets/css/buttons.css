@@ -420,12 +420,15 @@ button,
   background: url("/assets/icons/settings_24.svg") no-repeat center;
   justify-self: flex-end;
 }
+
 .btn-filled,
-.btn-filled-fancy {
+.btn-filled-fancy,
+.btn-filled-nohover {
   background: var(--color-bg-3);
   /* transition: border 300ms cubic-bezier(1, 0.02, 1, -0.27); */
   border: 0.15rem solid var(--color-bg-4);
-
+}
+.btn-filled {
   &:hover {
     /* background: var(--color-secondary-hover); */
     border: 0.15rem solid var(--color-secondary-hover);

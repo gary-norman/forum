@@ -70,3 +70,20 @@ export function agreeToJoin() {
   checkbox.addEventListener("change", updateButtonClasses);
 }
 
+export function showJoinPopoverRules() {
+  const showRules = document.querySelector('[id^="showRules"]');
+  const rulesContainer = document.querySelector('[id^="rulesContainer"]');
+
+  if (showRules === null || rulesContainer === null) {
+    console.warn(
+      "Show rules button or rules container not found. Skipping showJoinPopoverRules setup.",
+    );
+    return;
+  }
+
+  showRules.addEventListener("click", function (event) {
+    event.preventDefault();
+    rulesContainer.classList.toggle("hidden");
+  });
+}
+

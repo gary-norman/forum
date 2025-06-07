@@ -56,8 +56,10 @@ export function agreeToJoin() {
   const updateButtonClasses = () => {
     if (checkbox.checked) {
       button.classList.add("btn-primary", "btn-action-primary");
+      button.classList.remove("btn-filled-nohover");
     } else {
       button.classList.remove("btn-primary", "btn-action-primary");
+      button.classList.add("btn-filled-nohover");
     }
   };
 

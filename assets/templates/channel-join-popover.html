@@ -3,7 +3,7 @@
   <form action="/channels/join" class="wrapper-form" method="POST">
     <h5 id="join-channel-title" class="form-title">join {{ .ThisChannel.Name }}</h5>
     <span id="join-agree" class="text-join-channel">check the agree checkbox to agree to the <span id="showRules-channel-{{ .ThisChannel.ID }}" class="link">rules</span> of this channel</span>
-    <div class="side-panel-block" style="display: none">
+    <div id="rulesContainer-channel-{{ .ThisChannel.ID }}" class="side-panel-block hidden">
       <ul class="sidebar-channel-ul">
         {{ range .ThisChannel.Rules }}
         <li>{{ .Rule }}</li>
@@ -24,10 +24,10 @@
     {{ end }}
 {{/*FIXME ---------- fix these buttons ----------*/}}
     <div class="cont-flex-row flex-center">
-      <button id="join-channel-btn" class="btn-md btn-invert-onoff_onoff">
+      <button id="join-channel-btn" class="btn-md btn-filled-nohover btn-invert-onoff_onoff">
         <span>join</span>
       </button>
-      <button class="button btn-md btn-secondary btn-action btn-filled">
+      <button popovertarget="form-join-channel" popovertargetaction="hide" class="button btn-md btn-secondary btn-action btn-filled">
         <span>cancel</span>
       </button>
     </div>

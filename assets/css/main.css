@@ -2454,37 +2454,37 @@ main {
   font-size: 0.8ch;
 }
 
-.cardContent {
+.cardContent,
+.cardContent--full {
+  --line-clamp: 3;
+  --line-height: 1.5em;
   font-family: SpaceGrotesk-Variable, system-ui;
   font-size: 1.2rem;
-  display: -webkit-box;
-  /* Required for the ellipsis */
-  -webkit-box-orient: vertical;
-  /* Specify vertical orientation */
-  overflow: hidden;
-  /* Hide the overflowing text */
-  text-overflow: ellipsis;
-  /* Add the ellipsis */
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  /* Limit to 3 visible lines */
-  line-height: 1.5;
-  /* Adjust the line height */
-  max-height: calc(1.5em * 3);
-  /* Set max height to match 3 lines */
+  width: min(70ch, 90%);
+  line-height: var(--line-height);
   hyphens: auto;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
 
+.cardContent {
+  display: -webkit-box;
+  /* Required for the ellipsis */
+  -webkit-box-orient: vertical;
+  /* Specify vertical orientation */
+  overflow: clip;
+  /* Hide the overflowing text */
+  text-overflow: ellipsis;
+  /* Add the ellipsis */
+  -webkit-line-clamp: var(--line-clamp);
+  line-clamp: var(--line-clamp);
+  /* Limit to 3 visible lines */
+  /* Adjust the line height */
+  max-height: calc(var(--line-height) * var(--line-clamp));
+  /* Set max height to match 3 lines */
+}
+
 .cardContent--full {
-  font-family: SpaceGrotesk-Variable, system-ui;
-  font-size: 1.2rem;
-  line-height: 1.5;
-  max-height: calc(1.5em * 3);
-  hyphens: auto;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
 }
 
 .title {

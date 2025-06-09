@@ -1,9 +1,9 @@
 {{ define "channel-join-popover" }}
 <div popover id="form-join-channel">
   <form action="/channels/join" class="wrapper-form" method="POST">
-    <h5 id="join-channel-title" class="form-title">join {{ .ThisChannel.Name }}</h5>
+    <h5 id="join-channel-title" class="form-title">join /{{ .ThisChannel.Name }}</h5>
     <span id="join-agree" class="text-join-channel">check the agree checkbox to agree to the <span id="showRules-channel-{{ .ThisChannel.ID }}" class="link">rules</span> of this channel</span>
-    <div id="rulesContainer-channel-{{ .ThisChannel.ID }}" class="side-panel-block hidden">
+    <div id="rulesContainer-channel-{{ .ThisChannel.ID }}" class="side-panel-block hidden" style="width: 100%">
       <ul class="sidebar-channel-ul">
         {{ range .ThisChannel.Rules }}
         <li>{{ .Rule }}</li>

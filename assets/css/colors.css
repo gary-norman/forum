@@ -56,7 +56,7 @@
     from var(--color-hl-pink-lab) calc(l * 1.95) calc(c * 1.5) h / 70%
   );
   --color-hl-pink-lab-vivid: oklch(
-    from var(--color-hl-pink-lab) calc(l * 1.2) calc(c * 1.6) h
+    from var(--color-hl-pink-lab) calc(l * 1.2) calc(c * 1.4) h
   );
   --color-hl-pink-bg: color-mix(
     in rgb,

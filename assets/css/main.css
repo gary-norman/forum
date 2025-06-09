@@ -42,6 +42,7 @@
   interpolate-size: allow-keywords;
   /* allow animations between intrinsic sizes */
   --transition-dur-hover: 200ms;
+  --transition-dur-appear: 400ms;
   --transition-dur-feeds: 500ms;
   --transition-dur-hover-darklight: 500ms;
   --transition-type-hover: ease-in-out;
@@ -1427,6 +1428,15 @@ input[type="text"].inactive-input {
 #wrapper-edit-channel-rules-added:has(#rules-wrapper-added:empty),
 #wrapper-edit-channel-rules-removed:has(#rules-wrapper-removed:empty) {
   display: none;
+}
+
+.container-join-rules {
+  width: 100%;
+  /* display: none; */
+  overflow: auto;
+  height: fit-content;
+  max-height: 22rem;
+  transition: display var(--transition-dur-appear) ease-in-out;
 }
 
 .text-join-channel,

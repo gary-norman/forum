@@ -86,4 +86,3 @@ export function showJoinPopoverRules() {
     rulesContainer.classList.toggle("hidden");
   });
 }
-

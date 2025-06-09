@@ -5,8 +5,14 @@
     <span id="join-agree" class="text-join-channel">check the agree checkbox to agree to the <span id="showRules-channel-{{ .ThisChannel.ID }}" class="link">rules</span> of this channel</span>
     <div id="rulesContainer-channel-{{ .ThisChannel.ID }}" class="side-panel-block container-join-rules hidden">
       <ul class="sidebar-channel-ul">
-        {{ range .ThisChannel.Rules }}
-        <li>{{ .Rule }}</li>
+        {{ if gt (len .ThisChannel.Rules) 0 }}
+          {{ range .ThisChannel.Rules }}
+            <li>{{ .Rule }}</li>
+          {{ end }}
+        {{ else }}
+          {{ range 25 }}
+            <li>this is a long list of test rules</li>
+          {{ end }}
         {{ end }}
       </ul>
     </div>

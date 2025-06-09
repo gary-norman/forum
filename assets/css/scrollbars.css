@@ -20,6 +20,9 @@
   background: var(--color-hl-pink);
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-hl-pink-lab-vivid);
+}
 ::-webkit-scrollbar-thumb:window-inactive {
   background: var(--color-hl-pink-lab-faded-1);
 }

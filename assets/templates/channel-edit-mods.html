@@ -11,27 +11,28 @@
 {{ end }}
   <div class="right-panel-container-moderators">
     <div class="sidebar-block sidebar-channels">
-        {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}
       <div class="right-panel-bio flex-space-between">
-        <label for="channel-bio-content" class="padded">Edit moderators</label>
+        {{ if (eq $dot.ThisChannel.OwnerID $userID) }}
+        <label for="channel-mods-content" class="padded">Edit moderators</label>
         <button id="right-panel-channel--edit-channel-mods" class="btn-sm btn-icoonly">
           <span class="btn-edit" role="contentinfo" aria-label="Edit channel moderators"></span>
         </button>
+        {{ else }}
+        <label for="channel-mods-content" class="padded">Moderators</label>
+        {{ end }}
       </div>
-      {{ else }}
-      <small class="padded">Moderators</small>
-      {{ end }}
-    <div class="side-panel-block">
-      {{/* TODO range through moderators */}}
-      <div class="sidebar-channel">
-        <div class="container-channel-info">
-          <span class="card-pic mod-pic"></span>
-          <div>
-            <div>Other_one55</div>
+      <div id="channel-mods-content" class="side-panel-block">
+        {{/* TODO range through moderators */}}
+        <div class="sidebar-channel">
+          <div class="container-channel-info">
+            <span class="card-pic mod-pic"></span>
+            <div>
+              <div>Other_one55</div>
+            </div>
+            <button class="btn-sm btn-icoonly margin-auto-0">
+              <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
+            </button>
           </div>
-          <button class="btn-sm btn-icoonly margin-auto-0">
-            <span class="btn-save-empty" role="contentinfo" aria-label="Edit profile name"></span>
-          </button>
         </div>
       </div>
     </div>

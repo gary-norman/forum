@@ -10,17 +10,19 @@
 {{/*  {{ fprint "Trace" . }}*/}}
 {{ end }}
   <div class="right-panel-container-bio ">
-    {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}
     <div class="right-panel-bio flex-space-between">
+    {{ if (eq $dot.ThisChannel.OwnerID $userID) }}
       <label for="channel-bio-content" class="padded">Edit channel bio</label>
       <button id="right-panel-channel--edit-channel-bio" class="btn-sm btn-icoonly">
           <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
       </button>
-    </div>
+    {{ else }}
+      <label for="channel-bio-content" class="padded">Bio</label>
     {{ end }}
-    <div class="side-panel-block">
+    </div>
+    <div id="channel-bio-content" class="side-panel-block">
       <article>{{ $dot.ThisChannel.Description }}</article>
     </div>
-    <textarea id="channel-bio-content" class="inactive-input" name="content" style="display: none">{{ $dot.ThisChannel.Description }}</textarea>
+    <textarea class="inactive-input" name="content" style="display: none">{{ $dot.ThisChannel.Description }}</textarea>
   </div>
 {{ end }}

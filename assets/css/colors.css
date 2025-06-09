@@ -52,6 +52,9 @@
   --color-hl-pink-lab-faded: oklch(
     from var(--color-hl-pink-lab) calc(l * 1.95) calc(c * 1.9) h / 10%
   );
+  --color-hl-pink-lab-faded-1: oklch(
+    from var(--color-hl-pink-lab) calc(l * 1.95) calc(c * 1.5) h / 70%
+  );
   --color-hl-pink-lab-vivid: oklch(
     from var(--color-hl-pink-lab) calc(l * 1.2) calc(c * 1.6) h
   );
@@ -166,4 +169,3 @@
   color: var(--color-hl-pink-lab);
   text-shadow: var(--text-3d-pink);
 }
-

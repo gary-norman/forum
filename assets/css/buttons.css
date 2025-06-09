@@ -232,6 +232,12 @@ button,
     background: url("/assets/icons/arrow-down_16.svg") no-repeat center;
   }
 }
+.btn-active-filter {
+  &::before {
+    left: 2rem;
+    background: url("/assets/icons/success_16.svg") no-repeat center;
+  }
+}
 .btn-sort {
   &::before {
     background: url("/assets/icons/sort_16.svg") no-repeat center;
@@ -460,6 +466,7 @@ button,
   &:hover {
     border: 0.15rem solid var(--color-secondary-hover);
   }
+
   &.inactive {
     /* pointer-events: none; */
     &:hover {
@@ -468,7 +475,18 @@ button,
   }
   &.active {
     border: 0.15rem solid var(--color-secondary-active);
+    &.selected {
+      border: 0.15rem solid var(--color-hl-green);
+    }
   }
+
+  &.selected {
+    border: 0.15rem solid var(--color-hl-green);
+    &:hover {
+      border: 0.15rem solid var(--color-secondary-hover);
+    }
+  }
+
   &.nouser {
     cursor: var(--cursor-notallowed);
     &:hover {

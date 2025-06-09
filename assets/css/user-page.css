@@ -92,7 +92,6 @@
   }
 }
 
-
 .page-control {
   display: flex;
   justify-content: space-between;
@@ -116,7 +115,8 @@
       height: 8rem;
       flex-shrink: 0;
       border-radius: 8rem;
-      background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;
+      background: url(/assets/images/profile.png) lightgray 50% / cover
+        no-repeat;
     }
 
     & h2 {
@@ -144,7 +144,8 @@
     }
   }
 }
-.hide-feed, .hide {
+.hide-feed,
+.hide {
   display: none !important;
 }
 

@@ -44,6 +44,12 @@
   --color-hl-pink-bg: color-mix(in rgb, var(--color-hl-pink) 30%, var(--color-bg-1));
   --color-hl-pink-bg-lab: color-mix(in lab, var(--color-hl-pink-lab) 30%, var(--color-bg-1-lab));
   --color-hl-yellow: #E2C044;
+  --color-hl-pink-lab-faded: oklch(
+    from var(--color-hl-pink-lab) calc(l * 1.95) calc(c * 1.9) h / 10%
+  );
+  --color-hl-pink-lab-vivid: oklch(
+    from var(--color-hl-pink-lab) calc(l * 1.2) calc(c * 1.6) h
+  );
   --color-hl-yellow-lab: lab(84.51 5.57 76.51);
   --color-hl-red: #f94243;
   --color-hl-red-lab: lab(51.65 83.45 51.15);

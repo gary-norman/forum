@@ -10,6 +10,7 @@
 {{ with $tracer }}
 {{/*  {{ fprint "Trace" . }}*/}}
 {{ end }}
+{{ template "channel-join-popover" (dict "ThisChannel" $dot.ThisChannel) }}
 {{ template "channel-page-banner" (dict "dot" $dot "Tracer" $tracer "CurrentUser" .CurrentUser "UserID" $userID) }}
 <div class="container-content">
   <div class="content">

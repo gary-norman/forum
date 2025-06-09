@@ -8,7 +8,6 @@
   {{ with $tracer }}
 {{/*    {{ fprint "Trace" . }} */}}
   {{ end }}
-{{ template "channel-join-popover" (dict "ThisChannel" $dot.ThisChannel) }}
   <div id="channel-page-banner" class="banner">
     <img class="page-banner" src="/assets/images/user-banner.jpeg" alt="User Banner Image"/>
     <div class="page-control">

@@ -123,6 +123,8 @@
       overflow: hidden;
       width: calc-size(fit-content, size + 4.8rem);
       color: var(--color-fg-1);
+      text-transform: capitalize;
+      word-spacing: -2rem;
       text-overflow: ellipsis;
       font-style: normal;
       font-weight: 700;

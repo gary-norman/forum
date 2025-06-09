@@ -545,8 +545,12 @@ a:active,
 .form-title {
   font-size: clamp(1.2rem, 2rem + -0.4dvw, 2.4rem);
   color: var(--color-fg-1);
-  /* margin-inline: auto; */
   text-align: center;
+
+  & span {
+    text-transform: capitalize;
+    word-spacing: -0.4rem;
+  }
 }
 
 .form-container {
@@ -2522,9 +2526,11 @@ main {
 
     & .right-panel-container-name {
       & .right-panel-name {
-        height: 3.2rem;
+        /* height: 3.2rem; */
         align-items: center;
-        overflow: hidden;
+        overflow: clip;
+        text-transform: capitalize;
+        word-spacing: -1rem;
         color: var(--color-fg-1);
         text-overflow: ellipsis;
       }

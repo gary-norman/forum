@@ -20,7 +20,7 @@
       <label for="rules-agree-checkbox" class="cursor-pointer">agree</label>
     </div>
     {{ if (eq .ThisChannel.Privacy true) }}
-    <span class="text-join-channel">this channel is private. Your request will be sent to the moderators for approval.</span>
+    <span class="text-join-private">this channel is private. Your request will be sent to the moderators for approval.</span>
     {{ end }}
 {{/*FIXME ---------- fix these buttons ----------*/}}
     <div class="cont-flex-row flex-center">

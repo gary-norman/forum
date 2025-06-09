@@ -1429,8 +1429,44 @@ input[type="text"].inactive-input {
   display: none;
 }
 
-.text-join-channel {
+.text-join-channel,
+.text-join-private {
   font-size: 1.2rem;
+  width: min(40ch, 85%);
+  margin-block: 0.8rem 0.4rem;
+  margin-inline: auto;
+  padding: 0.4rem 1.2rem;
+}
+
+.text-join-channel {
+  border-block-start: 1px dashed var(--color-dark-6);
+}
+
+.text-join-private {
+  --b: 1px; /* border thickness */
+  --s: 10px; /* size of the dashes */
+  --c1: var(--color-hl-pink-lab-vivid);
+  --c2: var(--color-fg-2);
+  position: relative;
+  background: var(--color-hl-pink-lab-faded);
+  /* border: 1px dashed var(--color-hl-pink-lab); */
+  border-radius: 0.8rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 0.8rem;
+    padding: var(--b);
+    background: repeating-conic-gradient(var(--c1) 0 25%, var(--c2) 0 50%) 0 0 /
+      var(--s) var(--s) round;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+  }
 }
 
 .wrapper-form,

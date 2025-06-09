@@ -1453,10 +1453,11 @@ input[type="text"].inactive-input {
 }
 
 .text-join-private {
-  --b: 1px; /* border thickness */
+  --b: 2px; /* border thickness */
   --s: 10px; /* size of the dashes */
+  --t: 25px; /* size of the dashes */
   --c1: var(--color-hl-pink-lab-vivid);
-  --c2: var(--color-fg-2);
+  --c2: var(--color-bg-3);
   position: relative;
   background: var(--color-hl-pink-lab-faded);
   /* border: 1px dashed var(--color-hl-pink-lab); */
@@ -1475,7 +1476,6 @@ input[type="text"].inactive-input {
       linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-    z-index: -1;
   }
 }
 

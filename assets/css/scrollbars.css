@@ -1,0 +1,25 @@
+:root {
+  --scroll-size: 0.4rem;
+}
+
+::-webkit-scrollbar {
+  width: var(--scroll-size);
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: var(--scroll-size);
+  border-radius: var(--scroll-size);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: var(--scroll-size);
+  border-radius: var(--scroll-size);
+  background: var(--color-hl-pink);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: var(--color-hl-pink-lab-faded-1);
+}

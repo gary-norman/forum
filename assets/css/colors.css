@@ -29,9 +29,28 @@
   --color-dark-5-lab: 46.31% -0.73 -5.33;
   --color-dark-6: rgb(147 161 164);
   /*--color-dark-6-lab: 46.31% -0.73 -5.33;*/
+
   /* --- highlight colours --- */
+  /* ------------------------------------------------------------------  */
+  /* --- blue --- */
   --color-hl-blue: rgb(96 156 208);
   --color-hl-blue-lab: lab(62.35 -4.66 -32.56);
+  /* ---------------------------------------------------  */
+  /* --- blue palette --- */
+  --blue-base: var(--color-hl-blue-lab);
+
+  --color-blue-0: oklch(from var(--blue-base) calc(l + 0.3) c h);
+  --color-blue-1: oklch(from var(--blue-base) calc(l + 0.2) c h);
+  --color-blue-2: oklch(from var(--blue-base) calc(l + 0.1) c h);
+  --color-blue-3: var(--blue-base);
+  --color-blue-4: oklch(from var(--blue-base) calc(l - 0.1) c h);
+  --color-blue-5: oklch(from var(--blue-base) calc(l - 0.2) c h);
+  --color-blue-6: oklch(from var(--blue-base) calc(l - 0.3) c h);
+
+  --color-blue-contrast: oklch(from var(--blue-base) calc(l + 0.6) c h);
+  --color-blue-complement: hsl(from var(--blue-base) calc(h + 180) s l);
+
+  /* --- green --- */
   --color-hl-green: rgb(108 207 93);
   --color-hl-green-secondary: rgb(108 207 93 / 0.5);
   --color-hl-green-lab: lab(78.47 -39.34 34.94);
@@ -45,8 +64,40 @@
     var(--color-hl-green-lab) 30%,
     var(--color-bg-1-lab)
   );
+  /* ---------------------------------------------------  */
+  /* --- green palette --- */
+  --green-base: var(--color-hl-green-lab);
+
+  --color-green-0: oklch(from var(--green-base) calc(l + 0.3) c h);
+  --color-green-1: oklch(from var(--green-base) calc(l + 0.2) c h);
+  --color-green-2: oklch(from var(--green-base) calc(l + 0.1) c h);
+  --color-green-3: var(--green-base);
+  --color-green-4: oklch(from var(--green-base) calc(l - 0.1) c h);
+  --color-green-5: oklch(from var(--green-base) calc(l - 0.2) c h);
+  --color-green-6: oklch(from var(--green-base) calc(l - 0.3) c h);
+
+  --color-green-contrast: oklch(from var(--green-base) calc(l - 0.6) c h);
+  --color-green-complement: hsl(from var(--green-base) calc(h + 180) s l);
+
+  /* --- orange --- */
   --color-hl-orange: #d56f3e;
   --color-hl-orange-lab: lab(62.29 34.31 54.48);
+  /* ---------------------------------------------------  */
+  /* --- orange palette --- */
+  --orange-base: var(--color-hl-orange-lab);
+
+  --color-orange-0: oklch(from var(--orange-base) calc(l + 0.3) c h);
+  --color-orange-1: oklch(from var(--orange-base) calc(l + 0.2) c h);
+  --color-orange-2: oklch(from var(--orange-base) calc(l + 0.1) c h);
+  --color-orange-3: var(--orange-base);
+  --color-orange-4: oklch(from var(--orange-base) calc(l - 0.1) c h);
+  --color-orange-5: oklch(from var(--orange-base) calc(l - 0.2) c h);
+  --color-orange-6: oklch(from var(--orange-base) calc(l - 0.3) c h);
+
+  --color-orange-contrast: oklch(from var(--orange) calc(l + 0.6) c h);
+  --color-orange-complement: hsl(from var(--orange) calc(h + 180) s l);
+
+  /* --- pink --- */
   --color-hl-pink: #ea4f92;
   --color-hl-pink-lab: lab(57.24 64.92 -3.64);
   --color-hl-pink-lab-faded: oklch(
@@ -68,12 +119,57 @@
     var(--color-hl-pink-lab) 30%,
     var(--color-bg-1-lab)
   );
+  /* ---------------------------------------------------  */
+  /* --- pink palette --- */
+  --pink-base: var(--color-hl-pink-lab);
+
+  --color-pink-0: oklch(from var(--pink-base) calc(l + 0.3) c h);
+  --color-pink-1: oklch(from var(--pink-base) calc(l + 0.2) c h);
+  --color-pink-2: oklch(from var(--pink-base) calc(l + 0.1) c h);
+  --color-pink-3: var(--pink-base);
+  --color-pink-4: oklch(from var(--pink-base) calc(l - 0.1) c h);
+  --color-pink-5: oklch(from var(--pink-base) calc(l - 0.2) c h);
+  --color-pink-6: oklch(from var(--pink-base) calc(l - 0.3) c h);
+
+  --color-pink-contrast: oklch(from var(--pink) calc(l + 0.6) c h);
+  --color-pink-complement: hsl(from var(--pink-base) calc(h + 180) s l);
+
+  /* --- yellow --- */
   --color-hl-yellow: #e2c044;
   --color-hl-yellow-lab: lab(84.51 5.57 76.51);
+  /* ---------------------------------------------------  */
+  /* --- yellow palette --- */
+  --yellow-base: var(--color-hl-yellow-lab);
+
+  --color-yellow-0: oklch(from var(--yellow-base) calc(l + 0.3) c h);
+  --color-yellow-1: oklch(from var(--yellow-base) calc(l + 0.2) c h);
+  --color-yellow-2: oklch(from var(--yellow-base) calc(l + 0.1) c h);
+  --color-yellow-3: var(--yellow-base);
+  --color-yellow-4: oklch(from var(--yellow-base) calc(l - 0.1) c h);
+  --color-yellow-5: oklch(from var(--yellow-base) calc(l - 0.2) c h);
+  --color-yellow-6: oklch(from var(--yellow-base) calc(l - 0.3) c h);
+
+  --color-yellow: oklch(from var(--yellow) calc(l + 0.6) c h);
+  --color-yellow: hsl(from var(--yellow) calc(h + 180) s l);
+
+  /* --- red --- */
   --color-hl-red: #f94243;
   --color-hl-red-lab: lab(51.65 83.45 51.15);
   --color-error: rgb(294 63 71);
-  /* --- btn etc --- */
+  /* ---------------------------------------------------  */
+  /* --- red palette --- */
+  --red-base: var(--color-hl-red-lab);
+
+  --color-red-0: oklch(from var(--red-base) calc(l + 0.3) c h);
+  --color-red-1: oklch(from var(--red-base) calc(l + 0.2) c h);
+  --color-red-2: oklch(from var(--red-base) calc(l + 0.1) c h);
+  --color-red-3: var(--red-base);
+  --color-red-4: oklch(from var(--red-base) calc(l - 0.1) c h);
+  --color-red-5: oklch(from var(--red-base) calc(l - 0.2) c h);
+  --color-red-6: oklch(from var(--red-base) calc(l - 0.3) c h);
+
+  --color-red: oklch(from var(--red) calc(l + 0.6) c h);
+  --color-red: hsl(from var(--red) calc(h + 180) s l);
 
   /* ------------------------ */
   /* dark / light mode colours */

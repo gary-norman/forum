@@ -24,7 +24,7 @@
   --clr-light--5: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 2)) c h);
   --clr-light--6: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 1)) c h);
 
-  --clr-accent--base-1: light-dark(var(--clr-accent--green), var(--clr-accent--blue);
+  --clr-accent--base-1: light-dark(var(--clr-accent--blue), var(--clr-accent--green));
 
   --clr-accent--1-0: oklch(from var(--clr-accent--base-1) calc(l + calc(var(--clr-accent--multi) * 3)) c h);
   --clr-accent--1-1: oklch(from var(--clr-accent--base-1) calc(l + calc(var(--clr-accent--multi) * 2)) c h);
@@ -44,19 +44,19 @@
   --clr-accent--2-5: oklch(from var(--clr-accent--base-2) calc(l - calc(var(--clr-accent--multi) * 2)) c h);
   --clr-accent--2-6: oklch(from var(--clr-accent--base-2) calc(l - calc(var(--clr-accent--multi) * 3)) c h);
 
-  --clr-bg-1: light-dark(var(--clr-dark--1), var(--clr-light--1));
-  --clr-bg-2: light-dark(var(--clr-dark--2), var(--clr-light--2));
-  --clr-bg-3: light-dark(var(--clr-dark--3), var(--clr-light--3));
-  --clr-bg-4: light-dark(var(--clr-dark--4), var(--clr-light--4));
-  --clr-bg-5: light-dark(var(--clr-dark--5), var(--clr-light--5));
-  --clr-bg-6: light-dark(var(--clr-dark--6), var(--clr-light--6));
+  --clr-bg-1: light-dark(var(--clr-light--1), var(--clr-dark--1));
+  --clr-bg-2: light-dark(var(--clr-light--2), var(--clr-dark--2));
+  --clr-bg-3: light-dark(var(--clr-light--3), var(--clr-dark--3));
+  --clr-bg-4: light-dark(var(--clr-light--4), var(--clr-dark--4));
+  --clr-bg-5: light-dark(var(--clr-light--5), var(--clr-dark--5));
+  --clr-bg-6: light-dark(var(--clr-light--6), var(--clr-dark--6));
 
-  --clr-fg-1: light-dark(var(--clr-light--1), var(--clr-dark--1));
-  --clr-fg-2: light-dark(var(--clr-light--2), var(--clr-dark--2));
-  --clr-fg-3: light-dark(var(--clr-light--3), var(--clr-dark--3));
-  --clr-fg-4: light-dark(var(--clr-light--4), var(--clr-dark--4));
-  --clr-fg-5: light-dark(var(--clr-light--5), var(--clr-dark--5));
-  --clr-fg-6: light-dark(var(--clr-light--6), var(--clr-dark--6));
+  --clr-fg-1: light-dark(var(--clr-dark--1), var(--clr-light--1));
+  --clr-fg-2: light-dark(var(--clr-dark--2), var(--clr-light--2));
+  --clr-fg-3: light-dark(var(--clr-dark--3), var(--clr-light--3));
+  --clr-fg-4: light-dark(var(--clr-dark--4), var(--clr-light--4));
+  --clr-fg-5: light-dark(var(--clr-dark--5), var(--clr-light--5));
+  --clr-fg-6: light-dark(var(--clr-dark--6), var(--clr-light--6));
 
 /* --- buttons etc --- */
   --clr-hl-primary: var(--clr-accent--1);

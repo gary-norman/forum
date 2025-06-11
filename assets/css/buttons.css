@@ -498,7 +498,7 @@ button,
       font-size: 0.875rem;
       padding: 0.5rem 0.75rem;
       border-radius: 0.8rem;
-      border: 0.15rem solid var(--color-hl-pink);
+      border: 0.15rem solid var(--clr-accent--2);
       white-space: nowrap;
       box-shadow: 0 0 0.25rem rgb(0 0 0 / 0.2);
     }
@@ -513,13 +513,11 @@ button,
       top: calc(100% - 0.45rem);
       margin-left: -0.5rem;
       border: 0.5rem solid;
-      border-color: transparent transparent var(--color-hl-pink) transparent;
+      border-color: transparent transparent var(--clr-accent--2) transparent;
     }
   }
 }
 
-@keyframes scaleInTop {
-}
 .btn-action-primary,
 .btn-action-secondary {
   position: relative;
@@ -560,17 +558,17 @@ button,
     background: conic-gradient(
       from var(--grad-from),
       transparent var(--beam-1-end),
-      var(--color-hl-pink) var(--beam-1-end),
-      var(--color-hl-pink) var(--beam-1-start),
+      var(--clr-accent--2) var(--beam-1-end),
+      var(--clr-accent--2) var(--beam-1-start),
       transparent var(--beam-1-start),
       transparent var(--beam-2-end),
-      var(--color-hl-pink) var(--beam-2-end),
-      var(--color-hl-pink) var(--beam-2-start),
+      var(--clr-accent--2) var(--beam-2-end),
+      var(--clr-accent--2) var(--beam-2-start),
       transparent var(--beam-2-start)
     );
   }
   &:hover::after {
-    background: var(--color-hl-pink);
+    background: var(--clr-accent--2);
   }
 }
 .btn-action-secondary {
@@ -769,7 +767,7 @@ button,
     width: 2.6rem;
     height: 2.6rem;
     border-radius: var(--btn-radius);
-    border: 0.2rem solid var(--color-hl-green-secondary);
+    border: 0.2rem solid var(--clr-accent--1-5);
     background: var(--color-hl-primary);
     transition: left ease-in-out var(--transition-dur-hover-darklight);
   }
@@ -808,7 +806,7 @@ input:not(:checked) + .darklight-fx:after {
   height: 1.8rem;
 }
 .allow-comments:has(input:checked) + label {
-  color: var(--color-hl-green);
+  color: var(--clr-accent--1);
 }
 .allow-comments-fx {
   &::before {
@@ -817,8 +815,7 @@ input:not(:checked) + .darklight-fx:after {
     width: 1.2rem;
     height: 1.2rem;
     filter: grayscale(1);
-    border: 0.1rem solid
-      lab(from var(--color-hl-green-lab) calc(l - 20) calc(a - 0) calc(b - 0));
+    border: 0.1rem solid var(--clr-accent--1-4);
     transition: all var(--transition-dur-hover) var(--transition-type-hover);
   }
 }

@@ -33,6 +33,8 @@
   --clr-accent--1-4: oklch(from var(--clr-accent--base-1) calc(l - calc(var(--clr-accent--multi) * 1)) c h);
   --clr-accent--1-5: oklch(from var(--clr-accent--base-1) calc(l - calc(var(--clr-accent--multi) * 2)) c h);
   --clr-accent--1-6: oklch(from var(--clr-accent--base-1) calc(l - calc(var(--clr-accent--multi) * 3)) c h);
+  --clr-accent--1-contrast: oklch(from var(--clr-accent--base-1) calc(l + 0.6) c h);
+  --clr-accent--1-complement: hsl(from var(--clr-accent--base-1) calc(h + 180) s l);
   
   --clr-accent--base-2: var(--clr-accent--pink);
 
@@ -43,6 +45,8 @@
   --clr-accent--2-4: oklch(from var(--clr-accent--base-2) calc(l - calc(var(--clr-accent--multi) * 1)) c h);
   --clr-accent--2-5: oklch(from var(--clr-accent--base-2) calc(l - calc(var(--clr-accent--multi) * 2)) c h);
   --clr-accent--2-6: oklch(from var(--clr-accent--base-2) calc(l - calc(var(--clr-accent--multi) * 3)) c h);
+  --clr-accent--2-contrast: oklch(from var(--clr-accent--base-2) calc(l + 0.6) c h);
+  --clr-accent--2-complement: hsl(from var(--clr-accent--base-2) calc(h + 180) s l);
 
   --clr-bg-1: light-dark(var(--clr-light--1), var(--clr-dark--1));
   --clr-bg-2: light-dark(var(--clr-light--2), var(--clr-dark--2));

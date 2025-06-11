@@ -94,8 +94,8 @@
   --color-orange-5: oklch(from var(--orange-base) calc(l - 0.2) c h);
   --color-orange-6: oklch(from var(--orange-base) calc(l - 0.3) c h);
 
-  --color-orange-contrast: oklch(from var(--orange) calc(l + 0.6) c h);
-  --color-orange-complement: hsl(from var(--orange) calc(h + 180) s l);
+  --color-orange-contrast: oklch(from var(--orange-base) calc(l + 0.6) c h);
+  --color-orange-complement: hsl(from var(--orange-base) calc(h + 180) s l);
 
   /* --- pink --- */
   --color-hl-pink: #ea4f92;
@@ -131,7 +131,7 @@
   --color-pink-5: oklch(from var(--pink-base) calc(l - 0.2) c h);
   --color-pink-6: oklch(from var(--pink-base) calc(l - 0.3) c h);
 
-  --color-pink-contrast: oklch(from var(--pink) calc(l + 0.6) c h);
+  --color-pink-contrast: oklch(from var(--pink-base) calc(l + 0.6) c h);
   --color-pink-complement: hsl(from var(--pink-base) calc(h + 180) s l);
 
   /* --- yellow --- */
@@ -149,8 +149,8 @@
   --color-yellow-5: oklch(from var(--yellow-base) calc(l - 0.2) c h);
   --color-yellow-6: oklch(from var(--yellow-base) calc(l - 0.3) c h);
 
-  --color-yellow: oklch(from var(--yellow) calc(l + 0.6) c h);
-  --color-yellow: hsl(from var(--yellow) calc(h + 180) s l);
+  --color-yellow: oklch(from var(--yellow-base) calc(l + 0.6) c h);
+  --color-yellow: hsl(from var(--yellow-base) calc(h + 180) s l);
 
   /* --- red --- */
   --color-hl-red: #f94243;
@@ -168,8 +168,8 @@
   --color-red-5: oklch(from var(--red-base) calc(l - 0.2) c h);
   --color-red-6: oklch(from var(--red-base) calc(l - 0.3) c h);
 
-  --color-red: oklch(from var(--red) calc(l + 0.6) c h);
-  --color-red: hsl(from var(--red) calc(h + 180) s l);
+  --color-red: oklch(from var(--red-base) calc(l + 0.6) c h);
+  --color-red: hsl(from var(--red-base) calc(h + 180) s l);
 
   /* ------------------------ */
   /* dark / light mode colours */

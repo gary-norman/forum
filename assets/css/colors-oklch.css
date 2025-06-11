@@ -1,5 +1,4 @@
 :root {
-  --clr-dark--base: lab(15.02% -0.95 -7.36);
   --clr-accent--pink: lab(57.24 64.92 -3.64);
   --clr-accent--green: lab(78.47 -39.34 34.94);
   --clr-accent--blue: lab(62.35 -4.66 -32.56);
@@ -11,12 +10,12 @@
   --clr-light--multi: 0.1;
   --clr-accent--multi: 0.1;
 
-  --clr-dark--1: var(--clr-dark--base);
-  --clr-dark--2: oklch(from var(--clr-dark--base) calc(l + calc(var(--clr-dark--multi) * 1)) c h);
-  --clr-dark--3: oklch(from var(--clr-dark--base) calc(l + calc(var(--clr-dark--multi) * 2)) c h);
-  --clr-dark--4: oklch(from var(--clr-dark--base) calc(l + calc(var(--clr-dark--multi) * 3)) c h);
-  --clr-dark--5: oklch(from var(--clr-dark--base) calc(l + calc(var(--clr-dark--multi) * 4)) c h);
-  --clr-dark--6: oklch(from var(--clr-dark--base) calc(l + calc(var(--clr-dark--multi) * 5)) c h);
+  --clr-dark--1: lab(16.86% -0.44 -3.85);
+  --clr-dark--2: lab(20.62% -1.85 -4.38);
+  --clr-dark--3: lab(31.92% -0.99 -6.40);
+  --clr-dark--4: lab(38.26% -0.87 -7.48);
+  --clr-dark--5: lab(49.40% -0.59 -3.94);
+  --clr-dark--6: lab(65.26% -4.31 -3.26);
 
   --clr-light--1: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 6)) c h);
   --clr-light--2: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 4)) c h);

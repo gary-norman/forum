@@ -17,12 +17,12 @@
   --clr-dark--5: lab(49.40% -0.59 -3.94);
   --clr-dark--6: lab(65.26% -4.31 -3.26);
 
-  --clr-light--1: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 6)) c h);
-  --clr-light--2: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 4)) c h);
-  --clr-light--3: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 2)) c h);
-  --clr-light--4: oklch(from var(--clr-dark--1) calc(l - calc(var(--clr-light--multi) * 2)) c h);
-  --clr-light--5: oklch(from var(--clr-dark--1) calc(l - calc(var(--clr-light--multi) * 4)) c h);
-  --clr-light--6: oklch(from var(--clr-dark--1) calc(l - calc(var(--clr-light--multi) * 6)) c h);
+  --clr-light--1: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 7)) c h);
+  --clr-light--2: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 6)) c h);
+  --clr-light--3: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 4)) c h);
+  --clr-light--4: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 3)) c h);
+  --clr-light--5: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 2)) c h);
+  --clr-light--6: oklch(from var(--clr-dark--1) calc(l + calc(var(--clr-light--multi) * 1)) c h);
 
   --clr-accent--base-1: light-dark(var(--clr-accent--green), var(--clr-accent--blue);
 

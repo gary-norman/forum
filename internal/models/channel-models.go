@@ -20,6 +20,7 @@ type Channel struct {
 	Privacy          bool `db:"privacy"`
 	IsMuted          bool `db:"isMuted"`
 	IsFlagged        bool `db:"isFlagged,omitempty"`
+	Members          int
 }
 
 func (c Channel) TableName() string { return "channels" }

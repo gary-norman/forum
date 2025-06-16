@@ -772,7 +772,7 @@ button,
     width: 2.6rem;
     height: 2.6rem;
     border-radius: var(--btn-radius);
-    border: 0.2rem solid var(--clr-accent--1-5);
+    border: 0.2rem solid var(--clr-accent--1-2);
     background: var(--color-hl-primary);
     transition: left ease-in-out var(--transition-dur-hover-darklight);
   }
@@ -820,7 +820,7 @@ input:not(:checked) + .darklight-fx:after {
     width: 1.2rem;
     height: 1.2rem;
     filter: grayscale(1);
-    border: 0.1rem solid var(--clr-accent--1-4);
+    border: 0.1rem solid var(--clr-accent--1-1);
     transition: all var(--transition-dur-hover) var(--transition-type-hover);
   }
 }

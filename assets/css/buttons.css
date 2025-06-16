@@ -115,7 +115,7 @@ button,
 .btn-primary {
   width: fit-content;
   background: var(--color-hl-primary);
-  /* border     : 0.15rem solid transparent; */
+  border: 0.15rem solid transparent;
   color: var(--color-light-1);
   transition: all var(--transition-dur-hover);
   & span {

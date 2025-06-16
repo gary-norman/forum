@@ -105,7 +105,14 @@ func (m *ChannelModel) GetChannelsByID(id int64) ([]models.Channel, error) {
 }
 
 func (m *ChannelModel) GetChannelByID(id int64) (*models.Channel, error) {
-	stmt := "SELECT * FROM Channels WHERE ID = ? LIMIT 1"
+	stmt := `
+	SELECT c.*, 
+  COUNT(m.UserID) AS MemberCount
+	FROM Channels c
+	LEFT JOIN Memberships m ON c.ID = m.ChannelID
+	WHERE c.ID = ?
+	GROUP BY c.ID;
+	`
 	rows, err := m.DB.Query(stmt, id)
 	if err != nil {
 		return nil, err

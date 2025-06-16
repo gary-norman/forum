@@ -245,7 +245,8 @@ a:active,
 }
 
 .link:hover {
-  color: var(--clr-accent--1-1);
+  color: var(--clr-accent--1--1);
+}
 
 .link-under {
   color: var(--clr-accent--1--1);
@@ -1465,8 +1466,8 @@ input[type="text"].inactive-input {
   --b: 2px; /* border thickness */
   --s: 10px; /* size of the dashes */
   --t: 25px; /* size of the dashes */
-  --c1: var(--color-hl-pink-lab-vivid);
-  --c2: var(--clr-bg-3);
+  --c1: var(--clr-accent--2--2);
+  --c2: var(--clr-accent--2-1);
   position: relative;
   background: var(--color-hl-pink-lab-faded);
   /* border: 1px dashed var(--color-hl-pink-lab); */
@@ -2017,7 +2018,7 @@ hr.solid {
     row-gap: 0.4rem;
     text-transform: capitalize;
     word-spacing: -0.3rem;
-    
+
     & div:nth-of-type(2) {
       display: flex;
     }

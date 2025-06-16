@@ -335,11 +335,11 @@ button,
   border: 0.15rem solid transparent;
   transition: border var(--transition-dur-hover);
   &:hover {
-    border: 0.15rem solid var(--clr-secondary-hover);
+    border: 0.15rem solid var(--clr-secondary--border-hover);
   }
 }
 .btn-active {
-  border: 0.15rem solid var(--clr-secondary-active);
+  border: 0.15rem solid var(--clr-secondary--active);
   pointer-events: none;
 }
 .btn-icoonly {
@@ -431,8 +431,8 @@ button,
 }
 .btn-filled {
   &:hover {
-    /* background: var(--clr-secondary-hover); */
-    border: 0.15rem solid var(--clr-secondary-hover);
+    /* background: var(--clr-secondary--hover); */
+    border: 0.15rem solid var(--clr-secondary--border-hover);
   }
 
   &.selected {
@@ -464,7 +464,7 @@ button,
   position: relative;
 
   &:hover {
-    border: 0.15rem solid var(--clr-secondary-hover);
+    border: 0.15rem solid var(--clr-secondary--border-hover);
   }
   &.inactive {
     /* pointer-events: none; */
@@ -473,7 +473,7 @@ button,
     }
   }
   &.active {
-    border: 0.15rem solid var(--clr-secondary-active);
+    border: 0.15rem solid var(--clr-secondary--active);
   }
   &.nouser {
     cursor: var(--cursor-notallowed);
@@ -593,17 +593,17 @@ button,
     background: conic-gradient(
       from var(--grad-from),
       transparent var(--beam-1-end),
-      var(--clr-secondary-hover) var(--beam-1-end),
-      var(--clr-secondary-hover) var(--beam-1-start),
+      var(--clr-secondary--hover) var(--beam-1-end),
+      var(--clr-secondary--hover) var(--beam-1-start),
       transparent var(--beam-1-start),
       transparent var(--beam-2-end),
-      var(--clr-secondary-hover) var(--beam-2-end),
-      var(--clr-secondary-hover) var(--beam-2-start),
+      var(--clr-secondary--hover) var(--beam-2-end),
+      var(--clr-secondary--hover) var(--beam-2-start),
       transparent var(--beam-2-start)
     );
   }
   &:hover::after {
-    /* background: var(--clr-secondary-hover); */
+    /* background: var(--clr-secondary--hover); */
   }
 }
 /* INFO the invert buttons determine whether the color of the background image is inverted in normal/hover and dark/light.
@@ -751,7 +751,7 @@ button,
   width: 7rem;
   height: 3.4rem;
   border-radius: var(--btn-radius);
-  border: 0.2rem solid var(--clr-secondary-border);
+  border: 0.2rem solid var(--clr-secondary--border);
   position: relative;
   cursor: url("/assets/cursors/pointer.svg"), pointer;
   z-index: 0;
@@ -979,6 +979,6 @@ input:checked + .allow-comments-fx {
     background: var(--clr-bg-3);
   }
   100% {
-    background: var(--clr-secondary-hover);
+    background: var(--clr-secondary--hover);
   }
 }

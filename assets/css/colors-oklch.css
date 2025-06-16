@@ -5,6 +5,7 @@
   --clr-accent--orange: lab(62.29 34.31 54.48);
   --clr-accent--yellow: lab(84.51 5.57 76.51); 
   --clr-accent--red: lab(51.65 83.45 51.15);
+  --clr--error: lab(64.5 81.87 50.88);
 
   --clr-dark--multi: 0.1;
   --clr-light--multi: 0.085;

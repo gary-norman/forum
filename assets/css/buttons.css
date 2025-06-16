@@ -536,6 +536,7 @@ button,
     height: calc(100% + 0.4rem);
     --grad-from: 0deg;
     border-radius: var(--btn-radius);
+    border: 0;
     animation: orbit-btn var(--transition-dur-hover) ease-in 1 forwards;
     z-index: calc(var(--z-index-btn-action) - 10);
   }

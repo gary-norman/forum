@@ -67,7 +67,7 @@
   --clr-secondary--active: var(--clr-bg-2);
   --clr-secondary--hover: var(--clr-bg-4);
   --clr-secondary--border: var(--clr-bg-5);
-  --clr-secondary--border-hover: var(--clr-bg-3);
+  --clr-secondary--border-hover: var(--clr-fg-3);
 
 }
 

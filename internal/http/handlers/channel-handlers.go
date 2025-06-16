@@ -38,7 +38,7 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Fetch the channel
-	foundChannels, err := c.App.Channels.SearchChannelsByColumn("ID", channelId)
+	foundChannels, err := c.App.Channels.GetChannelsByID(channelId)
 	if err != nil || len(foundChannels) == 0 {
 		http.Error(w, `{"error": "Channel not found"}`, http.StatusNotFound)
 		return

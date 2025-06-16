@@ -551,7 +551,8 @@ button,
     height: var(--beam-linear-h);
     /* border: 1px solid rgba(1 1 1 / 0.2); */
     border-radius: var(--btn-radius);
-    animation: linear-fill-button 0.2s ease-in 0.1s 1 forwards;
+    animation: linear-fill-button var(--transition-dur-hover) ease-in 0.1s 1
+      forwards;
     z-index: calc(var(--z-index-btn-action) + 10);
   }
 }

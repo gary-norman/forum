@@ -547,7 +547,7 @@ button,
     left: 50%;
     color: var(--color-fg-1);
     transform: translate(-50%, -50%);
-    width: var(--beam-linear-w);
+    width: calc(var(--beam-linear-w) + 0.2rem);
     height: var(--beam-linear-h);
     /* border: 1px solid rgba(1 1 1 / 0.2); */
     border-radius: var(--btn-radius);

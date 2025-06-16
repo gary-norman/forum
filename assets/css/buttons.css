@@ -545,6 +545,7 @@ button,
     position: absolute;
     top: 50%;
     left: 50%;
+    background: var(--background-fill);
     color: var(--color-fg-1);
     transform: translate(-50%, -50%);
     width: calc(var(--beam-linear-w) + 0.2rem);

@@ -538,6 +538,11 @@ button,
     border-radius: var(--btn-radius);
     border: 0;
     animation: orbit-btn var(--transition-dur-hover) ease-in 1 forwards;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
     z-index: calc(var(--z-index-btn-action) - 10);
   }
   &:hover::after {

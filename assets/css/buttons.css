@@ -543,7 +543,7 @@ button,
       linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-    z-index: calc(var(--z-index-btn-action) - 10);
+    z-index: calc(var(--z-index-btn-action) + 10);
   }
   &:hover::after {
     content: "";
@@ -559,7 +559,7 @@ button,
     border-radius: var(--btn-radius);
     animation: linear-fill-button var(--transition-dur-hover) ease-in 0.1s 1
       forwards;
-    z-index: calc(var(--z-index-btn-action) + 10);
+    z-index: calc(var(--z-index-btn-action) - 10);
   }
 }
 .btn-action-primary {

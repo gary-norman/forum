@@ -556,7 +556,10 @@ button,
   }
 }
 .btn-action-primary {
+  --background-fill: var(--clr-accent--1);
+
   &:hover::before {
+    padding: 0.2rem;
     background: conic-gradient(
       from var(--grad-from),
       transparent var(--beam-1-end),

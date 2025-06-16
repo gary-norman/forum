@@ -246,6 +246,14 @@ a:active,
 
 .link:hover {
   color: var(--clr-accent--1-1);
+
+.link-under {
+  color: var(--clr-accent--1--1);
+  text-decoration: underline;
+
+  &:hover {
+    color: var(--clr-accent--2--2);
+  }
 }
 
 /* SECTION ---- images ---- */

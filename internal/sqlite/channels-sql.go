@@ -195,40 +195,6 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 	return channels, nil
 }
 
-// SearchChannelsByColumn queries the database for any channel column that contains the value and returns a slice of matching channels
-func (m *ChannelModel) SearchChannelsByColumn(column string, value any) ([]models.Channel, error) {
-	// Validate column name to prevent SQL injection
-	if !isValidColumn(column) {
-		return nil, fmt.Errorf("invalid column name provided: %s", column)
-	}
-
-	// Base query
-	query := "SELECT * FROM channels WHERE " + column + " = ?"
-
-	// Execute the query
-	rows, err := m.DB.Query(query, value)
-	if err != nil {
-		return nil, fmt.Errorf("error executing query: %w", err)
-	}
-	defer rows.Close()
-
-	// Parse results
-	channels := make([]models.Channel, 0) // Pre-allocate slice
-	for rows.Next() {
-		channel, err := parseChannelRows(rows)
-		if err != nil {
-			return nil, fmt.Errorf("error parsing row: %w", err)
-		}
-		channels = append(channels, *channel)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("error iterating rows: %w", err)
-	}
-
-	return channels, nil
-}
-
 func isValidColumn(column string) bool {
 	validColumns := map[string]bool{
 		"ID":          true,

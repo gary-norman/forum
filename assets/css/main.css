@@ -95,7 +95,7 @@
     --switch-darkLight: url("/assets/icons/switch-off.svg");
 
     /* body { */
-    /*   background: var(--color-bg-4); */
+    /*   background: var(--clr-bg-4); */
     /* } */
   }
 }
@@ -439,7 +439,7 @@ a:active,
     margin: 6.4rem 0;
     height: fit-content;
     color: var(--clr-accent--1);
-    background: var(--color-dark-1);
+    background: var(--clr-dark-1);
     border: 2px solid var(--clr-accent--1);
     border-radius: var(--border-radius-button);
   }
@@ -547,7 +547,7 @@ a:active,
 
 .close:hover,
 .close:focus {
-  color: var(--color-error);
+  color: var(--clr--error);
   transform: rotate(-90deg);
   text-decoration: none;
   cursor: var(--cursor-pointer);
@@ -629,7 +629,7 @@ a:active,
   place-content: center;
   justify-content: center;
   /* line-height: 1rem; */
-  color: var(--color-light-3);
+  color: var(--clr-light--3);
   padding: 0 0.4rem 0 0;
 }
 
@@ -724,90 +724,6 @@ a:active,
   & small {
   }
 }
-
-/* ---- lab test colors ---- */
-.hexGRN {
-  background: var(--color-hl-green);
-  justify-content: space-between;
-}
-
-.labGRN {
-  background: var(--color-hl-green-lab);
-}
-
-.hexPINK {
-  background: var(--color-hl-pink);
-  justify-content: space-between;
-}
-
-.labPINK {
-  background: var(--color-hl-pink-lab);
-}
-
-.hexInRGB {
-  background: radial-gradient(
-    in srgb circle at 50% 100%,
-    var(--color-hl-green),
-    var(--color-hl-pink)
-  );
-}
-
-.hexInHSL {
-  background: radial-gradient(
-    in hsl circle at 50% 100%,
-    var(--color-hl-green),
-    var(--color-hl-pink)
-  );
-}
-
-.hexInLCH {
-  background: radial-gradient(
-    in lch circle at 50% 100%,
-    var(--color-hl-green),
-    var(--color-hl-pink)
-  );
-}
-
-.hexInLAB {
-  background: radial-gradient(
-    in oklab circle at 50% 100%,
-    var(--color-hl-green),
-    var(--color-hl-pink)
-  );
-}
-
-.labInRGB {
-  background: radial-gradient(
-    in srgb circle at 50% 100%,
-    var(--color-hl-green-lab),
-    var(--color-hl-pink-lab)
-  );
-}
-
-.labInHSL {
-  background: radial-gradient(
-    in hsl circle at 50% 100%,
-    var(--color-hl-green-lab),
-    var(--color-hl-pink-lab)
-  );
-}
-
-.labInLCH {
-  background: radial-gradient(
-    in lch circle at 50% 100%,
-    var(--color-hl-green-lab),
-    var(--color-hl-pink-lab)
-  );
-}
-
-.labInLAB {
-  background: radial-gradient(
-    in lab circle at 50% 100%,
-    var(--color-hl-green-lab),
-    var(--color-hl-pink-lab)
-  );
-}
-/* ---------------------------------------- */
 
 /* prevent special form element styling  */
 
@@ -1140,15 +1056,15 @@ input[type="checkbox"] {
   /* TODO get code under working */
   /*& input:not(:placeholder-shown):invalid,*/
   .pass-nomatch {
-    color: var(--color-error);
-    border-color: var(--color-error);
+    color: var(--clr--error);
+    border-color: var(--clr--error);
 
     & ~ .validation-icon::before {
       background: url("/assets/icons/form-error.svg") no-repeat;
     }
 
     & ~ label {
-      background: var(--color-error);
+      background: var(--clr--error);
     }
   }
 }
@@ -1406,10 +1322,10 @@ input[type="text"].inactive-input {
   color: var(--clr-accent--2);
 }
 #edit-channel-rules-title-rules-added {
-  color: var(--color-hl-primary);
+  color: var(--clr-accent--1);
 }
 #edit-channel-rules-title-rules-removed {
-  color: var(--color-error);
+  color: var(--clr--error);
 }
 [id^="rules-wrapper"] {
   & span,
@@ -1419,14 +1335,14 @@ input[type="text"].inactive-input {
 }
 #rules-wrapper-existing span {
   &:hover {
-    color: var(--color-error);
+    color: var(--clr--error);
     cursor: var(--cursor-minus);
   }
 }
 #rules-wrapper-added span,
 #rules-wrapper-removed span {
   &:hover {
-    color: var(--color-hl-primary);
+    color: var(--clr-accent--1);
     cursor: var(--cursor-plus);
   }
 }
@@ -1459,7 +1375,7 @@ input[type="text"].inactive-input {
 }
 
 .text-join-channel {
-  border-block-start: 1px dashed var(--color-dark-6);
+  border-block-start: 1px dashed var(--clr-dark--6);
 }
 
 .text-join-private {
@@ -1469,8 +1385,8 @@ input[type="text"].inactive-input {
   --c1: var(--clr-accent--2--2);
   --c2: var(--clr-accent--2-1);
   position: relative;
-  background: var(--color-hl-pink-lab-faded);
-  /* border: 1px dashed var(--color-hl-pink-lab); */
+  background: var(--clr-accent--2-faded);
+  /* border: 1px dashed var(--clr-accent--pink); */
   border-radius: 0.8rem;
 
   &::before {
@@ -1593,7 +1509,7 @@ input[type="text"].inactive-input {
   }
 
   & p a:hover {
-    color: var(--color-secondary-hover);
+    color: var(--clr-secondary--hover);
   }
 
   & input {
@@ -1618,7 +1534,7 @@ input[type="text"].inactive-input {
 /*  cursor: pointer;*/
 /*}*/
 /*#drop-zone p a:hover {*/
-/*  color: var(--color-secondary-hover);*/
+/*  color: var(--clr-secondary--hover);*/
 /*}*/
 /*#drop-zone input {*/
 /*  cursor: pointer;*/
@@ -1763,7 +1679,7 @@ hr.solid {
     background: var(--clr-bg-3);
 
     & > label {
-      border: 0.2rem solid var(--color-secondary-border-hover);
+      border: 0.2rem solid var(--clr-secondary--border-hover);
     }
   }
 
@@ -1823,7 +1739,7 @@ hr.solid {
     transition-delay: var(--delay-4);
 
     &:hover {
-      background: var(--color-error);
+      background: var(--clr--error);
     }
   }
 }
@@ -2079,7 +1995,7 @@ hr.solid {
 
   &::before {
     content: "•";
-    color: var(--color-hl-primary);
+    color: var(--clr-accent--1);
     font-size: 2.8rem;
     position: absolute;
     left: 1.6rem;
@@ -2111,7 +2027,7 @@ main {
 /*}*/
 
 .activity-items {
-  color: var(--color-light-1-lab);
+  color: var(--clr-light--1);
   border-radius: 1.1rem;
   margin: 1.2rem 0 0 0.8rem;
   padding: 0.2rem 0.8rem;
@@ -2119,11 +2035,11 @@ main {
 }
 
 .activity {
-  background: var(--color-error);
+  background: var(--clr--error);
 }
 
 .comments {
-  background: var(--color-hl-blue);
+  background: var(--clr-accent--blue);
 }
 
 .comment-header--count {
@@ -2152,12 +2068,12 @@ main {
 }
 
 .saved {
-  background: var(--color-hl-orange);
+  background: var(--clr-accent--orange);
 }
 
 .muted {
-  background: var(--color-hl-yellow);
-  color: var(--color-dark-1);
+  background: var(--clr-accent--yellow);
+  color: var(--clr-dark-1);
 }
 
 .reactions {
@@ -2697,7 +2613,7 @@ main {
 
   60% {
     filter: invert(1) brightness(1.2);
-    color: var(--color-light-1);
+    color: var(--clr-light-1);
   }
 }
 
@@ -2723,10 +2639,10 @@ main {
 
 @keyframes text-invert {
   45% {
-    color: var(--color-dark-1);
+    color: var(--clr-dark-1);
   }
 
   50% {
-    color: var(--color-light-1);
+    color: var(--clr-light-1);
   }
 }

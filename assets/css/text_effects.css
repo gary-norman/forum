@@ -1,37 +1,34 @@
 .engraved {
-    /*font-size               : 100px;*/
-    font-family             : Futura, serif;
-    background-color        : #666666;
-    -webkit-background-clip : text;
-    -moz-background-clip    : text;
-    background-clip         : text;
-    color                   : transparent;
-    text-shadow             : rgba(245,245,245,0.3) 2px 2px 1px;
+  /*font-size               : 100px;*/
+  font-family: Futura, serif;
+  background-color: #666666;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: rgba(245, 245, 245, 0.3) 2px 2px 1px;
 }
 /* --- 3D text --- */
 :root {
-    --text-3d-pink: 0 1px 0 color-mix(in lab, var(--color-hl-pink-lab) 40%, #505050),
-    0 2px 0 color-mix(in lab, var(--color-hl-pink-lab) 38%, #505050),
-    0 3px 0 color-mix(in lab, var(--color-hl-pink-lab) 27%, #505050),
-    0 4px 0 color-mix(in lab, var(--color-hl-pink-lab) 16%, #505050),
-    0 5px 0 color-mix(in lab, var(--color-hl-pink-lab) 5%, #505050),
-    0 6px 1px rgba(0,0,0,.1),
-    0 0 5px rgba(0,0,0,.1),
-    0 1px 3px rgba(0,0,0,.3),
-    0 3px 5px rgba(0,0,0,.2),
-    0 5px 10px rgba(0,0,0,.25),
-    0 10px 10px rgba(0,0,0,.2),
-    0 20px 20px rgba(0,0,0,.15);
-    --text-3d-green: 0 1px 0 color-mix(in lab, var(--color-hl-green-lab) 40%, #505050),
-    0 2px 0 color-mix(in lab, var(--color-hl-green-lab) 38%, #505050),
-    0 3px 0 color-mix(in lab, var(--color-hl-green-lab) 27%, #505050),
-    0 4px 0 color-mix(in lab, var(--color-hl-green-lab) 16%, #505050),
-    0 5px 0 color-mix(in lab, var(--color-hl-green-lab) 5%, #505050),
-    0 6px 1px rgba(0,0,0,.1),
-    0 0 5px rgba(0,0,0,.1),
-    0 1px 3px rgba(0,0,0,.3),
-    0 3px 5px rgba(0,0,0,.2),
-    0 5px 10px rgba(0,0,0,.25),
-    0 10px 10px rgba(0,0,0,.2),
-    0 20px 20px rgba(0,0,0,.15);
+  --text-3d-pink:
+    0 1px 0 color-mix(in lab, var(--clr-accent--2) 40%, #505050),
+    0 2px 0 color-mix(in lab, var(--clr-accent--2) 38%, #505050),
+    0 3px 0 color-mix(in lab, var(--clr-accent--2) 27%, #505050),
+    0 4px 0 color-mix(in lab, var(--clr-accent--2) 16%, #505050),
+    0 5px 0 color-mix(in lab, var(--clr-accent--2) 5%, #505050),
+    0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2),
+    0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2),
+    0 20px 20px rgba(0, 0, 0, 0.15);
+  --text-3d-green:
+    0 1px 0 color-mix(in lab, var(--clr-accent--1) 40%, #505050),
+    0 2px 0 color-mix(in lab, var(--clr-accent--1) 38%, #505050),
+    0 3px 0 color-mix(in lab, var(--clr-accent--1) 27%, #505050),
+    0 4px 0 color-mix(in lab, var(--clr-accent--1) 16%, #505050),
+    0 5px 0 color-mix(in lab, var(--clr-accent--1) 5%, #505050),
+    0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2),
+    0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2),
+    0 20px 20px rgba(0, 0, 0, 0.15);
 }
+

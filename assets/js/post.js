@@ -24,14 +24,12 @@ export function listenToDropdowns() {
   const dropdownToggle = document.querySelector(".dropdown-toggle");
   const wrapperDropdown = document.querySelector(".wrapper-dropdown");
 
-
-
   dropdownToggle.addEventListener("click", () => {
     const isActive = !dropdownToggle.classList.contains("active");
     dropdownToggle.classList.toggle("active");
 
     if (isActive) {
-      dropdownToggle.style.background = "var(--color-hl-pink)";
+      dropdownToggle.style.background = "var(--clr-accent--2)";
       wrapperDropdown.style.display = "block";
     } else {
       dropdownToggle.style.background = "";
@@ -39,3 +37,4 @@ export function listenToDropdowns() {
     }
   });
 }
+

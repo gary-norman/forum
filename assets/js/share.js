@@ -335,26 +335,26 @@ async function updateCopyStatus(input, label, icon) {
 
     // Update label text and styles
     label.textContent = "Copied!";
-    label.style.color = "var(--color-hl-primary)";
+    label.style.color = "var(--clr-accent--1)";
     iconSpan.classList.remove("btn-copy");
     iconSpan.classList.add("btn-success");
 
     setTimeout(() => {
       label.textContent = "Copy URL link";
-      label.style.color = "var(--color-fg-2)";
+      label.style.color = "var(--clr-fg-2)";
       iconSpan.classList.add("btn-copy");
       iconSpan.classList.remove("btn-success");
     }, 2000);
   } catch (err) {
     console.error("Failed to copy text:", err);
     label.textContent = "Failed to Copy";
-    label.style.color = "var(--color-hl-red)";
+    label.style.color = "var(--clr-accent--red)";
     iconSpan.classList.remove("btn-copy");
     iconSpan.classList.add("btn-warning");
 
     setTimeout(() => {
       label.textContent = "Copy URL";
-      label.style.color = "var(--color-fg-2)";
+      label.style.color = "var(--clr-fg-2)";
       iconSpan.classList.add("btn-copy");
       iconSpan.classList.remove("btn-warning");
     }, 2000);

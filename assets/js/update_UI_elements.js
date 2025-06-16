@@ -139,12 +139,12 @@ function getInitialFromAttribute() {
     ".profile-pic--empty",
   );
   const colorsArr = [
-    ["var(--color-hl-blue)", "var(--color-light-1)"],
-    ["var(--color-hl-green)", "var(--color-dark-1)"],
-    ["var(--color-hl-orange)", "var(--color-light-1)"],
-    ["var(--color-hl-pink)", "var(--color-light-1)"],
-    ["var(--color-hl-yellow)", "var(--color-dark-1)"],
-    ["var(--color-hl-red)", "var(--color-light-1)"],
+    ["var(--clr-accent--blue)", "var(--clr-light--1)"],
+    ["var(--clr-accent--green)", "var(--clr-dark--1)"],
+    ["var(--clr-accent--orange)", "var(--clr-light--1)"],
+    ["var(--clr-accent--pink)", "var(--clr-light--1)"],
+    ["var(--clr-accent--yellow)", "var(--clr-dark--1)"],
+    ["var(--clr-accent--red)", "var(--clr-light--1)"],
   ];
 
   function getConsistentThemeIndex(name) {

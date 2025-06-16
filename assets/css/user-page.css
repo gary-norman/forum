@@ -3,28 +3,28 @@
 /*}*/
 :root {
   --gradient-1: light-dark(
-    lab(var(--color-fg-2-lab) / 1),
-    lab(var(--color-bg-1-lab) / 1)
+    var(--clr-fg-2),
+    var(--clr-bg-1)
   );
   --gradient-2: light-dark(
-    lab(var(--color-fg-2-lab) / 0.98),
-    lab(var(--color-bg-1-lab) / 0.98)
+    rgb(from var(--clr-fg-2) r g b / 0.98),
+    rgb(from var(--clr-bg-1) r g b / 0.98)
   );
   --gradient-3: light-dark(
-    lab(var(--color-fg-2-lab) / 0.9),
-    lab(var(--color-bg-1-lab) / 0.9)
+    rgb(from var(--clr-fg-2) r g b / 0.9),
+    rgb(from var(--clr-bg-1) r g b / 0.9)
   );
   --gradient-4: light-dark(
-    lab(var(--color-fg-2-lab) / 0.7),
-    lab(var(--color-bg-1-lab) / 0.7)
+    rgb(from var(--clr-fg-2) r g b / 0.7),
+    rgb(from var(--clr-bg-1) r g b / 0.7)
   );
   --gradient-5: light-dark(
-    lab(var(--color-fg-2-lab) / 0.5),
-    lab(var(--color-bg-1-lab) / 0.5)
+    rgb(from var(--clr-fg-2) r g b / 0.5),
+    rgb(from var(--clr-bg-1) r g b / 0.5)
   );
   --gradient-6: light-dark(
-    lab(var(--color-fg-2-lab) / 0),
-    lab(var(--color-bg-1-lab) / 0)
+    rgb(from var(--clr-fg-2) r g b / 0),
+    rgb(from var(--clr-bg-1) r g b / 0)
   );
   --banner-gradient:
     linear-gradient(
@@ -122,7 +122,7 @@
     & h2 {
       overflow: hidden;
       width: calc-size(fit-content, size + 4.8rem);
-      color: var(--color-fg-1);
+      color: var(--clr-fg-1);
       text-transform: capitalize;
       word-spacing: -2rem;
       text-overflow: ellipsis;

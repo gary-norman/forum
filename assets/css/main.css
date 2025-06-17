@@ -409,6 +409,7 @@ a:active,
   border: 1px solid var(--clr-bg-3);
   padding: 0.4rem 0.8rem;
   border-radius: var(--border-radius-input);
+  color: var(--clr-fg-1);
   &:hover {
     border: 1px solid var(--clr-accent--2);
   }

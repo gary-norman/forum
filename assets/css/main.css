@@ -1636,6 +1636,10 @@ hr.solid {
   }
 }
 
+.page-profile {
+  --before-trans: translatey(-35%);
+}
+
 .sidebar-pic {
   width: 6rem;
   height: 6rem;
@@ -1929,6 +1933,7 @@ hr.solid {
   column-gap: 1.2rem;
   justify-content: flex-start;
   cursor: var(--cursor-pointer);
+  --before-trans: translatey(-47%);
 
   & div:nth-of-type(1) {
     display: flex;
@@ -1987,7 +1992,7 @@ hr.solid {
     position: absolute;
     left: 0;
     top: 0.4rem;
-    transform: translate(0, -47%);
+    transform: var(--before-trans);
   }
 }
 
@@ -2002,7 +2007,7 @@ hr.solid {
     position: absolute;
     left: 1.6rem;
     top: 0.4rem;
-    transform: translate(0, -47%);
+    transform: var(--before-trans);
   }
 }
 

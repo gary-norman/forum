@@ -29,12 +29,11 @@ export function listenToDropdowns() {
     dropdownToggle.classList.toggle("active");
 
     if (isActive) {
-      dropdownToggle.style.background = "var(--clr-accent--2)";
+      // dropdownToggle.style.background = "var(--clr-accent--2)";
       wrapperDropdown.style.display = "block";
     } else {
-      dropdownToggle.style.background = "";
+      // dropdownToggle.style.background = "";
       wrapperDropdown.style.display = "none";
     }
   });
 }
-

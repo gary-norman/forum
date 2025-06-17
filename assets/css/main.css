@@ -413,8 +413,9 @@ a:active,
   &:hover {
     border: 1px solid var(--clr-accent--2);
   }
-  &:active {
+  &.active {
     background: var(--clr-accent--2);
+    border: 1px solid var(--clr-accent--2);
   }
 }
 

@@ -21,6 +21,7 @@ type Channel struct {
 	IsMuted          bool `db:"isMuted"`
 	IsFlagged        bool `db:"isFlagged,omitempty"`
 	Members          int
+	MembersOnline    int
 }
 
 func (c Channel) TableName() string { return "channels" }

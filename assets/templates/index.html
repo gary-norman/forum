@@ -521,11 +521,8 @@
                     {{ end }}
                     <div>
                       <div>/{{ .Name }}</div>
-                      <div>
-                        <div class="channel-users">{{ .Members }}</div>
-                      <div class="channel-green-dot">0</div>
+                      {{ template "user-counters" (dict "Members" .Members "Online" .MembersOnline )}}
                     </div>
-                  </div>
                     <div>
                       {{ if (eq .Owned true) }}
                       <span class="info-box">owner</span>

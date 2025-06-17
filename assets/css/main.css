@@ -1233,8 +1233,8 @@ input[type="text"].inactive-input {
   box-shadow:
     rgb(0 0 0 / 16%) 0 3px 6px,
     rgb(0 0 0 / 23%) 0 3px 6px;
-  max-width: 75dvw;
-  max-height: 75dvh;
+  max-width: 22dvw;
+  max-height: 90dvh;
   opacity: 0;
   overflow: hidden;
   transition:

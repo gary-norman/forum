@@ -62,7 +62,7 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Fetch channel posts
-	thisChannelPosts := []models.Post{}
+	var thisChannelPosts []models.Post
 	thisChannelPostIDs, err := c.App.Channels.GetPostIDsFromChannel(thisChannel.ID)
 	if err == nil {
 		for _, postID := range thisChannelPostIDs {

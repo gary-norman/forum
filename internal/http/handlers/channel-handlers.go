@@ -130,6 +130,8 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 			http.Error(w, `{"error": "Error getting user joined channels"}`, http.StatusInternalServerError)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+
+		// Determine whether the current user has joined thisChannel
 		for _, channel := range joinedChannels {
 			if thisChannel.ID == channel.ID {
 				isJoined = true
@@ -148,6 +150,8 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 		IsJoined:               isJoined,
 		Rules:                  thisChannelRules,
 		Posts:                  thisChannelPosts,
+		OwnedChannels:          ownedChannels,
+		JoinedChannels:         joinedChannels,
 		OwnedAndJoinedChannels: ownedAndJoinedChannels,
 		ImagePaths:             c.App.Paths,
 	}

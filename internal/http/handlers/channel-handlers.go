@@ -64,13 +64,15 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 	// Fetch channel posts
 	var thisChannelPosts []models.Post
 	thisChannelPostIDs, err := c.App.Channels.GetPostIDsFromChannel(thisChannel.ID)
-	if err == nil {
-		for _, postID := range thisChannelPostIDs {
-			post, err := c.App.Posts.GetPostByID(postID)
-			if err == nil {
-				thisChannelPosts = append(thisChannelPosts, post)
-			}
+	if err != nil {
+		http.Error(w, `{"error": "Error getting Post IDs"}`, http.StatusInternalServerError)
+	}
+	for p := range thisChannelPostIDs {
+		post, err := c.App.Posts.GetPostByID(thisChannelPostIDs[p])
+		if err != nil {
+			http.Error(w, `{"error": "Error getting post ID:" + thisChannelPostIDs[p]}`, http.StatusInternalServerError)
 		}
+		thisChannelPosts = append(thisChannelPosts, post)
 	}
 
 	allChannels, err := c.App.Channels.All()

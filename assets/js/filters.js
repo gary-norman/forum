@@ -8,6 +8,9 @@ const warn =
     "background-color: #000000; color: #e3c144; font-weight: bold; border: 1px solid #e3c144; padding: 5px; border-radius: 5px;";
 
 let filterButtons;
+const currentDate = new Date();
+const formattedDate = currentDate.toISOString().split("T")[0];
+console.log("%cformattedDate:", expect, formattedDate);
 
 document.addEventListener("newContentLoaded", () => {
     if (activePageElement.id !== "post-page") {
@@ -26,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function toggleFilters() {
     let filterContainer = activePageElement.querySelector(".filters-row");
     filterButtons = filterContainer.querySelectorAll("button.btn-action");
+    let startDateInteracted = false;
 
     filterButtons.forEach(button => {
         const id = button.getAttribute('popovertarget');
@@ -35,10 +39,10 @@ function toggleFilters() {
         button.addEventListener("click", (e) => {
             const noneSelected= checkSelectedInputs(popover);
 
-            if (!popover.matches(':popover-open')) {
-
-                toggleFilterButtonState(button, noneSelected, "inside");
-                console.log("%cpopover opened", expect, popover);
+            if (!popover.matches(':popover-open') && button.contains(e.target)) {
+                // console.log("%ctoggleFilters -- 1", expect);
+                toggleFilterButtonState(button, noneSelected, "button");
+                // console.log("%cpopover opened", expect, popover);
             }
         })
 
@@ -87,8 +91,47 @@ function toggleFilters() {
             });
         }
 
-        if (cancelButton){
-            cancelButton.addEventListener("click", () => {
+        if (popover && popover.matches('[popover].card.date')) {
+            const startInput = popover.querySelector('input[id^="creation-year-start"]');
+            const endInput =  popover.querySelector('input[id^="creation-year-end"]');
+
+            popover.querySelectorAll("input").forEach(function (input) {
+                input.addEventListener("input", (e) => {
+
+                    if (startInput.value !== "" && startDateInteracted === false) {
+                        console.log("%ctest 1:", warn);
+
+                        endInput.value = formattedDate;
+                        console.log("%cend input:", expect, endInput.value);
+
+                    }
+                    const noneSelected= checkSelectedInputs(popover);
+                    console.log("%cnoneSelected:", expect, noneSelected);
+                    console.log("%cpopover -- 1:", expect, popover);
+                    toggleFilterButtonState(button, noneSelected, "inside");
+
+                    if (noneSelected) {
+                        console.log("%chiding the clearButton -- 3", angry);
+                        toggleClearButton(popover, "hide");
+
+                    } else {
+                        console.log("%cshowing the clearButton -- 3", angry);
+                        toggleClearButton(popover, "show");
+                    }
+                });
+
+                input.addEventListener("blur", () => {
+                    console.log("%cstartDateInteracted -- 3: ", angry, startDateInteracted);
+
+                    startDateInteracted = true;
+                });
+            })
+
+        }
+
+
+        if (clearButton){
+            clearButton.addEventListener("click", () => {
                 popover.querySelectorAll('.dropdown-option').forEach(function (option) {
                     const checkbox = option.querySelector("input[type='checkbox']");
                     const radio = option.querySelector("input[type='radio']");
@@ -109,6 +152,19 @@ function toggleFilters() {
                     toggleFilterButtonState(button, noneSelected, "inside");
                     clearRadios(popover, button);
                 });
+
+                if (popover && popover.matches('[popover].card.date')) {
+                    popover.querySelectorAll("input").forEach(function (input) {
+                        input.value = "";
+
+                        const noneSelected = checkSelectedInputs(popover);
+
+                        startDateInteracted = false;
+                        toggleClearButton(popover, "hide");
+                        toggleFilterButtonState(button, noneSelected, "inside");
+
+                    });
+                }
             });
         }
     })
@@ -233,7 +289,6 @@ function checkSelectedInputs(popover) {
     const dates = popover.querySelectorAll("input[type='date']");
     // console.log("%ccheckboxes:", warn, checkboxes);
 
-    return Array.from(checkboxes).every(checkbox => !checkbox.checked);
     // console.log("%cradios:", warn, radios);
 
     if (checkboxes.length > 0) {
@@ -242,6 +297,9 @@ function checkSelectedInputs(popover) {
     } else if (radios.length > 0) {
         // console.log("%cradios:", expect, radios);
         return Array.from(radios).every(radio => !radio.checked);
+    } else if (dates.length > 0) {
+        // console.log("%cdates:", expect, dates);
+        return [...dates].every(date => !date.value);
     }
     return console.log("%cno checkboxes or radios", angry);
 }

@@ -23,6 +23,18 @@
     transition-duration: 0.4s;
     transition-behavior: allow-discrete;
 
+    & .container-filter {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        height: 100%;
+        max-height: calc(28rem - 0.8rem);
+
+        &.scrollable {
+            padding-right: 0.4rem;
+        }
+    }
+
     &:popover-open {
         &:has(input[type="checkbox"]) {
             display: grid;
@@ -63,14 +75,8 @@
     overflow: hidden;
     gap: 0.8rem;
 
-    & .content {
-        display: flex;
-        flex-direction: column;
+    & .container-filter {
         overflow: auto;
-        gap: 0.8rem;
-        height: 100%;
-        max-height: calc(28rem - 0.8rem);
-        padding-right: 0.4rem;
 
         & .dropdown-option {
             display: flex;
@@ -152,9 +158,6 @@
         }
     }
 
-    & input {
-        margin: 0;
-    }
 }
 
 /* */

@@ -12,11 +12,14 @@
 {{/*  TODO add hide-feed for all but home-page activity */}}
   <div class="filters-row button-row-wrap">
     <button popovertarget="{{$calledBy}}-dropdown-sort"
-            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action"
+            aria-label="sort filter">
       <span class="btn-sort filter-sort">sort</span>
     </button>
     <button popovertarget="{{$calledBy}}-dropdown-channel"
-            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action"
+            aria-label="channel filter">
+
       <span class="btn-filters filter-channel">channel</span>
     </button>
 {{/*    <button popovertarget="{{$calledBy}}-dropdown-calendar"*/}}
@@ -26,24 +29,28 @@
 {{/*      <span class="btn-filters filter-date">created</span>*/}}
 {{/*    </button>*/}}
     <button popovertarget="{{$calledBy}}-dropdown-date"
-            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action"
+            aria-label="date filter">
       <span class="btn-filters filter-date">created</span>
     </button>
     <button popovertarget="{{$calledBy}}-dropdown-comments"
-            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action"
+            aria-label="comments filter">
       <span class="btn-filters filter-comments">comments</span>
     </button>
     <button popovertarget="{{$calledBy}}-dropdown-reaction"
-            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action"
+            aria-label="reactions filter">
       <span class="btn-filters filter-reaction">reactions</span>
     </button>
     <button popovertarget="{{$calledBy}}-dropdown-type"
-            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action">
+            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action"
+            aria-label="type filter">
       <span class="btn-filters filter-type">type</span>
     </button>
     {{/*    SECTION sort dropdown */}}
-    <div id="{{$calledBy}}-dropdown-sort" popover class="wrapper-filter-dropdown filter-popover">
-      <div class="content scroll-down scrollable">
+    <div id="{{$calledBy}}-dropdown-sort" popover="manual" class="wrapper-filter-dropdown filter-popover">
+      <div class="container-filter scroll-down scrollable">
         {{/*    SECTION sort - newest/oldest */}}
         <div class="dropdown-option">
           <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-new" name="sort-most-new" value="most-new">
@@ -72,19 +79,25 @@
           <label for="{{$calledBy}}-checkbox-most-dislikes">most dislikes</label>
         </div>
         {{/*    SECTION sort - most/least comments */}}
-        <div class="dropdown-option">
-          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-comments" name="sort-most-comments" value="most-comments">
-          <label for="{{$calledBy}}-checkbox-most-comments">most comments</label>
-        </div>
-        <div class="dropdown-option">
-          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-least-comments" name="sort-least-comments" value="least-comments">
-          <label for="{{$calledBy}}-checkbox-most-comments">least comments</label>
-        </div>
+          <div class="dropdown-option">
+            <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-comments" name="sort-most-comments" value="most-comments">
+            <label for="{{$calledBy}}-checkbox-most-comments">most comments</label>
+          </div>
+          <div class="dropdown-option">
+            <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-least-comments" name="sort-least-comments" value="least-comments">
+            <label for="{{$calledBy}}-checkbox-most-comments">least comments</label>
+          </div>
       </div>
+      <small class="clear-choices hide padded flex-space-between">
+        <span class="clear-all">clear choice</span>
+        <button type="button" class="btn-sm btn-icoonly">
+          <span class="btn-cancel" role="contentinfo" aria-label="cancel all options selected for the channel filter"></span>
+        </button>
+      </small>
     </div>
     {{/*    SECTION type filter dropdown */}}
-    <div id="{{$calledBy}}-dropdown-type" popover class="wrapper-filter-dropdown filter-popover">
-      <div class="content scroll-down scrollable">
+    <div id="{{$calledBy}}-dropdown-type" popover="manual" class="wrapper-filter-dropdown filter-popover">
+      <div class="container-filter">
         <div class="dropdown-option">
           <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-channel" value="type-post">
           <label for="{{$calledBy}}-checkbox-type-channel">channel</label>
@@ -102,7 +115,7 @@
           <label for="{{$calledBy}}-checkbox-type-reaction">reaction</label>
         </div>
       </div>
-      <small class="clear-checkboxes hide padded flex-space-between">
+      <small class="clear-choices hide padded flex-space-between">
         <span class="clear-all">clear choice</span>
         <button type="button" class="btn-sm btn-icoonly">
           <span class="btn-cancel" role="contentinfo" aria-label="cancel all options selected for the channel filter"></span>
@@ -110,8 +123,8 @@
       </small>
     </div>
     {{/*    SECTION reactions filter dropdown */}}
-    <div id="{{$calledBy}}-dropdown-reaction" popover class="wrapper-filter-dropdown filter-popover">
-      <div class="content scroll-down scrollable">
+    <div id="{{$calledBy}}-dropdown-reaction" popover="manual" class="wrapper-filter-dropdown filter-popover">
+      <div class="container-filter scroll-down scrollable">
         <div class="dropdown-option">
           <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-liked" value="reaction-like">
           <label for="{{$calledBy}}-checkbox-reaction-liked">liked</label>
@@ -125,7 +138,7 @@
           <label for="{{$calledBy}}-checkbox-reaction-none">no reaction</label>
         </div>
       </div>
-      <small class="clear-checkboxes hide padded flex-space-between">
+      <small class="clear-choices hide padded flex-space-between">
         <span class="clear-all">clear choice</span>
         <button type="button" class="btn-sm btn-icoonly">
           <span class="btn-cancel" role="contentinfo" aria-label="cancel all options selected for the channel filter"></span>
@@ -133,8 +146,8 @@
       </small>
     </div>
     {{/*    SECTION comments filter dropdown */}}
-    <div id="{{$calledBy}}-dropdown-comments" popover class="wrapper-filter-dropdown filter-popover">
-      <div class="content scroll-down scrollable">
+    <div id="{{$calledBy}}-dropdown-comments" popover="manual" class="wrapper-filter-dropdown filter-popover">
+      <div class="container-filter">
         <div class="dropdown-option">
           <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-has-comments" value="has-comments">
           <label for="{{$calledBy}}-checkbox-has-comments">has comments</label>
@@ -143,11 +156,17 @@
           <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-no-comments" value="no-comments">
           <label for="{{$calledBy}}-checkbox-no-comments">has no comments</label>
         </div>
+        <small class="clear-choices hide padded flex-space-between">
+          <span class="clear-all">clear choice</span>
+          <button type="button" class="btn-sm btn-icoonly">
+            <span class="btn-cancel" role="contentinfo" aria-label="cancel all options selected for the channel filter"></span>
+          </button>
+        </small>
       </div>
     </div>
     {{/*    SECTION channel filter dropdown */}}
-    <div id="{{$calledBy}}-dropdown-channel" popover class="wrapper-filter-dropdown filter-popover">
-      <div class="content scroll-down scrollable">
+    <div id="{{$calledBy}}-dropdown-channel" popover="manual" class="wrapper-filter-dropdown filter-popover">
+      <div class="container-filter scroll-down scrollable">
         {{ range $dot.OwnedAndJoinedChannels}}
           <div class="dropdown-option">
             <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-channel-{{ .ID }}" name="channel-{{ .ID }}" value="{{ .ID }}">
@@ -155,7 +174,7 @@
           </div>
         {{ end }}
       </div>
-      <small class="clear-checkboxes hide padded flex-space-between">
+      <small class="clear-choices hide padded flex-space-between">
         <span class="clear-all">clear choice</span>
         <button type="button" class="btn-sm btn-icoonly">
           <span class="btn-cancel" role="contentinfo" aria-label="cancel all options selected for the channel filter"></span>
@@ -163,26 +182,28 @@
       </small>
     </div>
     {{/*    SECTION date dropdown */}}
-    <div id="{{$calledBy}}-dropdown-date" popover class="card date filter-popover">
-      <div class="input-wrapper">
-        <label for="creation-year-start-{{$calledBy}}" class="calendar-label">start date</label>
-        <input class="" type="date" id="creation-year-start-{{$calledBy}}" name="creation-year-start" placeholder="pick a starting date" />
+    <div id="{{$calledBy}}-dropdown-date" popover="manual" class="card date filter-popover">
+      <div class="container-filter">
+        <div class="input-wrapper">
+          <label for="creation-year-start-{{$calledBy}}" class="calendar-label">start date</label>
+          <input class="" type="date" id="creation-year-start-{{$calledBy}}" name="creation-year-start" placeholder="pick a starting date" />
+        </div>
+        <div class="input-wrapper">
+          <label for="creation-year-end-{{$calledBy}}" class="calendar-label">end date</label>
+          <input class="" type="date" id="creation-year-end-{{$calledBy}}" name="creation-year-end" placeholder="pick an ending year" />
+        </div>
+        <small class="clear-choices hide padded flex-space-between">
+          <span class="clear-all">clear choice</span>
+          <button type="button" class="btn-sm btn-icoonly">
+            <span class="btn-cancel" role="contentinfo" aria-label="cancel all options selected for the channel filter"></span>
+          </button>
+        </small>
       </div>
-      <div class="input-wrapper">
-        <label for="creation-year-end-{{$calledBy}}" class="calendar-label">end date</label>
-        <input class="" type="date" id="creation-year-end-{{$calledBy}}" name="creation-year-end" placeholder="pick an ending year" />
-      </div>
-      <small class="clear-checkboxes hide padded flex-space-between">
-        <span class="clear-all">clear choice</span>
-        <button type="button" class="btn-sm btn-icoonly">
-          <span class="btn-cancel" role="contentinfo" aria-label="cancel all options selected for the channel filter"></span>
-        </button>
-      </small>
     </div>
 
 {{/*    TODO calendar setup for the additional features */}}
 {{/*    */}}{{/*    SECTION calendar dropdown */}}
-{{/*    <div id="{{$calledBy}}-dropdown-calendar" popover class="card calendar">*/}}
+{{/*    <div id="{{$calledBy}}-dropdown-calendar" popover="manual" class="card calendar">*/}}
 {{/*      {{ template "calendar"}}*/}}
 {{/*    </div>*/}}
   </div>

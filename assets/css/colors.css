@@ -33,7 +33,8 @@
   --color-hl-blue: rgb(96 156 208);
   --color-hl-blue-lab: lab(62.35 -4.66 -32.56);
   --color-hl-green: rgb(108 207 93);
-  --color-hl-green-secondary: rgb(108 207 93 / 0.5);
+  --color-hl-green-secondary: rgb(108 207 93 / 0.4);
+  --color-hl-green-tertiary: rgb(108 207 93 / 0.2);
   --color-hl-green-lab: lab(78.47 -39.34 34.94);
   --color-hl-green-bg: color-mix(in rgb, var(--color-hl-green) 30%, var(--color-bg-1));
   --color-hl-green-bg-lab: color-mix(in lab, var(--color-hl-green-lab) 30%, var(--color-bg-1-lab));

@@ -74,6 +74,29 @@ function filterContent() {
         if (activeFilters.channels.length > 0 && !activeFilters.channels.includes(postChannel)) {
             visible = false;
         }
+
+        // Check the comments
+        if (activeFilters.comments !== null) {
+            const postComments = Number(post.querySelector(".btn-reply").textContent);
+
+            console.log("%ccommentRadios:", expect, commentRadios);
+            console.log("%cactiveFilters.comments ", expect, activeFilters.comments);
+
+            let commentMatch = false;
+
+            if (activeFilters.comments.includes("has-comments") && postComments > 0) {
+                commentMatch = true;
+            }
+
+            if (activeFilters.comments.includes("no-comments") && postComments <= 0) {
+                commentMatch = true;
+            }
+
+            if (commentMatch === false) {
+                visible = false;
+            }
+        }
+
         // Check the reaction
         if (activeFilters.reactions.length > 0) {
 

@@ -53,39 +53,39 @@
       <div class="container-filter scroll-down scrollable">
         {{/*    SECTION sort - newest/oldest */}}
         <div class="dropdown-option">
-          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-new" name="sort-most-new" value="most-new">
+          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-new" name="sort" value="most-new">
           <label for="{{$calledBy}}-checkbox-most-new">newest first</label>
         </div>
         <div class="dropdown-option">
-          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-old" name="sort-most-old" value="most-old">
+          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-old" name="sort" value="most-old">
           <label for="{{$calledBy}}-checkbox-most-old">oldest first</label>
         </div>
         {{/*    SECTION sort - recent/earliest activity */}}
         <div class="dropdown-option">
-          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-new-activity" name="sort-most-new" value="most-new-activity">
+          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-new-activity" name="sort" value="most-new-activity">
           <label for="{{$calledBy}}-checkbox-most-new-activity">newest activity</label>
         </div>
         <div class="dropdown-option">
-          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-old-activity" name="sort-most-old" value="most-old-activity">
+          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-old-activity" name="sort" value="most-old-activity">
           <label for="{{$calledBy}}-checkbox-most-old">oldest activity</label>
         </div>
         {{/*    SECTION sort - most likes/dilikes */}}
         <div class="dropdown-option">
-          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-likes" name="sort-most-likes" value="most-likes">
+          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-likes" name="sort" value="most-likes">
           <label for="{{$calledBy}}-checkbox-most-likes">most likes</label>
         </div>
         <div class="dropdown-option">
-          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-dislikes" name="sort-most-dislikes" value="most-dislikes">
+          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-dislikes" name="sort" value="most-dislikes">
           <label for="{{$calledBy}}-checkbox-most-dislikes">most dislikes</label>
         </div>
         {{/*    SECTION sort - most/least comments */}}
           <div class="dropdown-option">
-            <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-comments" name="sort-most-comments" value="most-comments">
+            <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-comments" name="sort" value="most-comments">
             <label for="{{$calledBy}}-checkbox-most-comments">most comments</label>
           </div>
           <div class="dropdown-option">
-            <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-least-comments" name="sort-least-comments" value="least-comments">
-            <label for="{{$calledBy}}-checkbox-most-comments">least comments</label>
+            <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-least-comments" name="sort" value="least-comments">
+            <label for="{{$calledBy}}-checkbox-least-comments">least comments</label>
           </div>
       </div>
       <small class="clear-choices hide padded flex-space-between">
@@ -126,15 +126,15 @@
     <div id="{{$calledBy}}-dropdown-reaction" popover="manual" class="wrapper-filter-dropdown filter-popover">
       <div class="container-filter scroll-down scrollable">
         <div class="dropdown-option">
-          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-liked" value="reaction-like">
+          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-liked" value="liked">
           <label for="{{$calledBy}}-checkbox-reaction-liked">liked</label>
         </div>
         <div class="dropdown-option">
-          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-disliked" value="reaction-dislike">
+          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-disliked" value="disliked">
           <label for="{{$calledBy}}-checkbox-reaction-disliked">disliked</label>
         </div>
         <div class="dropdown-option">
-          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-none" value="reaction-none">
+          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-reaction-none" value="no-reaction">
           <label for="{{$calledBy}}-checkbox-reaction-none">no reaction</label>
         </div>
       </div>
@@ -149,11 +149,11 @@
     <div id="{{$calledBy}}-dropdown-comments" popover="manual" class="wrapper-filter-dropdown filter-popover">
       <div class="container-filter">
         <div class="dropdown-option">
-          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-has-comments" value="has-comments">
+          <input class="checkbox-not-visible" name="comments" type="radio" id="{{$calledBy}}-checkbox-has-comments" value="has-comments">
           <label for="{{$calledBy}}-checkbox-has-comments">has comments</label>
         </div>
         <div class="dropdown-option">
-          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-no-comments" value="no-comments">
+          <input class="checkbox-not-visible" name="comments" type="radio" id="{{$calledBy}}-checkbox-no-comments" value="no-comments">
           <label for="{{$calledBy}}-checkbox-no-comments">has no comments</label>
         </div>
         <small class="clear-choices hide padded flex-space-between">

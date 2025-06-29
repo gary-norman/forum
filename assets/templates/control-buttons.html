@@ -45,10 +45,13 @@
           <span class="btn-share">share</span>
         </button>
         {{ if ne $userID nil}}
-          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
-            <span class="btn-report">report</span>
-          </button>
-          {{ if eq $userID $post.AuthorID}}
+            {{ if ne $userID $post.AuthorID}}
+                <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+                    <span class="btn-report">report</span>
+                </button>
+            {{ end}}
+
+            {{ if eq $userID $post.AuthorID}}
             <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
               <span class="btn-edit">edit</span>
             </button>

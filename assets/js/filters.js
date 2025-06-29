@@ -60,6 +60,15 @@ function filterContent() {
 
 
     allPagePosts.forEach(post => {
+        const postChannel = post.dataset.channelId;
+
+        // console.log("%cpost: ", warn, post);
+        let visible = true;
+
+        // Check the channel
+        if (activeFilters.channels.length > 0 && !activeFilters.channels.includes(postChannel)) {
+            visible = false;
+        }
         // Show or hide
         post.parentElement.classList.toggle('hide', !visible);
     });

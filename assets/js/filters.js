@@ -62,12 +62,47 @@ function filterContent() {
     allPagePosts.forEach(post => {
         const postChannel = post.dataset.channelId;
 
+        // console.log("%cpostLikes: ", warn, typeof postLikes, postLikes);
+        // console.log("%cpostDislikes: ", warn, typeof postDislikes, postDislikes);
         // console.log("%cpost: ", warn, post);
+        // console.log("%cpostLikes: ", expect, postLikes);
+        // console.log("%cpostDislikes: ", expect, postDislikes);
+
         let visible = true;
 
         // Check the channel
         if (activeFilters.channels.length > 0 && !activeFilters.channels.includes(postChannel)) {
             visible = false;
+        }
+        // Check the reaction
+        if (activeFilters.reactions.length > 0) {
+
+            const postLikes = Number(post.querySelector(".btn-likes").textContent);
+            const postDislikes = Number(post.querySelector(".btn-dislikes").textContent);
+            let reactionMatch = false;
+
+            if (activeFilters.reactions.includes("liked") && postLikes > 0) {
+                console.log("test1")
+                reactionMatch = true;
+            }
+
+            if (activeFilters.reactions.includes("disliked") && postDislikes > 0) {
+                console.log("test2")
+                reactionMatch = true;
+            }
+
+            if (
+                activeFilters.reactions.includes("no-reaction") &&
+                postLikes === 0 &&
+                postDislikes === 0
+            ) {
+                console.log("test3")
+                reactionMatch = true;
+            }
+
+            if (reactionMatch === false) {
+                visible = false;
+            }
         }
         // Show or hide
         post.parentElement.classList.toggle('hide', !visible);

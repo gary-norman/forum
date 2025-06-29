@@ -127,6 +127,24 @@ function filterContent() {
                 visible = false;
             }
         }
+
+        // Check the date range
+        if (activeFilters.startDate !== null && activeFilters.endDate !== null) {
+            const postDate = new Date(post.dataset.createdAt);
+
+            //set the time as the end of the day, because it was counting the date at 1:00:00
+            // and wouldn't include dates within the day
+            activeFilters.endDate.setHours(23, 59, 59, 999);
+
+            if (postDate <= activeFilters.startDate) {
+                visible = false;
+            }
+            if (postDate >= activeFilters.endDate) {
+                visible = false;
+            }
+        }
+
+
         // Show or hide
         post.parentElement.classList.toggle('hide', !visible);
     });

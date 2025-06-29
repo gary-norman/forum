@@ -10,12 +10,14 @@ const warn =
 let filterButtons;
 const currentDate = new Date();
 const formattedDate = currentDate.toISOString().split("T")[0];
-console.log("%cformattedDate:", expect, formattedDate);
+let allPagePosts = [];
 
 document.addEventListener("newContentLoaded", () => {
     if (activePageElement.id !== "post-page") {
         listenToClicksForPopovers();
         toggleFilters();
+        setAllPosts();
+        filterContent();
     }
 });
 
@@ -23,8 +25,46 @@ document.addEventListener("DOMContentLoaded", () => {
     if (activePageElement.id !== "post-page") {
         listenToClicksForPopovers();
         toggleFilters();
+        setAllPosts();
+        filterContent();
     }
 });
+
+function setAllPosts() {
+
+    allPagePosts = Array.from(activePageElement.querySelectorAll(".card.link"));
+    console.log("%cactivePageElement: ", expect, activePageElement);
+    console.log("%callPagePosts: ", expect, allPagePosts);
+}
+
+function filterContent() {
+    const filtersRow = activePageElement.querySelector(".filters-row");
+    const channelCheckboxes = filtersRow.querySelector(`[id$="dropdown-channel"]`).querySelectorAll('input[type="checkbox"]:checked');
+    const reactionCheckboxes = filtersRow.querySelector(`[id$="dropdown-reaction"]`).querySelectorAll('input[type="checkbox"]:checked');
+    const typeCheckboxes = filtersRow.querySelector(`[id$="dropdown-type"]`).querySelectorAll('input[type="checkbox"]:checked');
+    const commentRadios = filtersRow.querySelector(`[id$="dropdown-comments"]`).querySelectorAll('input[type="radio"]:checked');
+    const sortRadios = filtersRow.querySelector(`[id$="dropdown-sort"]`).querySelectorAll('input[type="radio"]:checked');
+    const startDateInput = filtersRow.querySelector(`[id$="dropdown-date"] input[name="creation-year-start"]`);
+    const endDateInput = filtersRow.querySelector(`[id$="dropdown-date"] input[name="creation-year-end"]`);
+
+    // Build active filters
+    const activeFilters = {
+        channels: Array.from(channelCheckboxes).map(cb => cb.value),
+        reactions: Array.from(reactionCheckboxes).map(rb => rb.value),
+        types: Array.from(typeCheckboxes).map(cb => cb.value),
+        comments: commentRadios.length > 0 ? commentRadios[0].value : null,
+        sort: sortRadios.length > 0 ? sortRadios[0].value : null,
+        startDate: startDateInput?.value ? new Date(startDateInput.value) : null,
+        endDate: endDateInput?.value ? new Date(endDateInput.value) : null,
+    };
+
+
+    allPagePosts.forEach(post => {
+        // Show or hide
+        post.parentElement.classList.toggle('hide', !visible);
+    });
+}
+
 
 function toggleFilters() {
     let filterContainer = activePageElement.querySelector(".filters-row");
@@ -69,6 +109,8 @@ function toggleFilters() {
 
                     const noneSelected= checkSelectedInputs(popover);
 
+                    filterContent();
+
                     if (noneSelected) {
                         toggleClearButton(popover, "hide");
 
@@ -92,6 +134,9 @@ function toggleFilters() {
                         endInput.value = formattedDate;
                     }
                     const noneSelected= checkSelectedInputs(popover);
+
+                    filterContent();
+
                     toggleFilterButtonState(button, noneSelected, "inside");
 
                     if (noneSelected) {
@@ -127,6 +172,8 @@ function toggleFilters() {
 
                     toggleClearButton(popover, "hide");
                     toggleFilterButtonState(button, noneSelected, "inside");
+                    console.log("test5");
+                    filterContent();
                     clearRadios(popover, button);
                 });
 
@@ -138,6 +185,7 @@ function toggleFilters() {
 
                         startDateInteracted = false;
                         toggleClearButton(popover, "hide");
+                        filterContent();
                         toggleFilterButtonState(button, noneSelected, "inside");
 
                     });

@@ -115,6 +115,16 @@ function filterContent() {
 
         //sort by recent activity
         //sort newest first
+        if (activeFilters.sort.includes("most-new-activity")) {
+            allPagePosts = sortNewestDateFirst(compareActivity);
+            console.log("%cSORTING NEWEST ACTIVITY FIRST... allPagePosts:", warn, allPagePosts);
+        }
+
+        //sort oldest first
+        if (activeFilters.sort.includes("most-old-activity")) {
+            allPagePosts = sortOldestDateFirst(compareActivity);
+            console.log("%cSORTING OLDEST ACTIVITY FIRST... allPagePosts:", warn, allPagePosts);
+        }
 
         //sort oldest first
 

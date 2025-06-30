@@ -15,7 +15,8 @@
        data-dest="post"
        data-channel-ID="{{ $post.ChannelID }}"
        data-user-id="{{$post.AuthorID}}"
-       data-created-at="{{$post.Created}}">
+       data-created-at="{{$post.Created}}"
+       data-last-reaction="{{$post.LastReaction}}">
     <div class="container-post-info">
       {{ if (startsWith $post.AuthorAvatar "noimage") }}
         <span class="card-pic profile-pic--empty link" data-dest="user" data-name-user="{{ $post.Author }}" data-user-id="{{ $post.AuthorID }}"></span>

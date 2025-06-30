@@ -3,11 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
-
 	"github.com/gary-norman/forum/internal/app"
 	"github.com/gary-norman/forum/internal/models"
+	"log"
+	"net/http"
 )
 
 type ReactionHandler struct {
@@ -27,6 +26,30 @@ func (h *ReactionHandler) GetPostsLikesAndDislikes(posts []models.Post) []models
 		models.React(&posts[p], likes, dislikes)
 	}
 	return posts
+}
+
+func (h *ReactionHandler) getLastReactionTimeForPosts(posts []models.Post) ([]models.Post, error) {
+	for i := range posts {
+		p := &posts[i]
+
+		if p.Likes < 0 || p.Dislikes < 0 {
+			continue
+		}
+
+		lastReactionTime, err := h.App.Reactions.GetLastReaction(p.ID, 0)
+		if err != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "Error getting last reaction time", err)
+		}
+		if lastReactionTime.Created.IsZero() {
+			//fmt.Printf("No reaction time found for PostID: %v\n", p.ID)
+
+			p.LastReaction = nil
+		} else {
+			p.LastReaction = &lastReactionTime.Created
+			//fmt.Printf("\nPostID: %v\nLastReaction: %v\n", p.ID, p.LastReaction)
+		}
+	}
+	return posts, nil
 }
 
 // getCommentsLikesAndDislikes updates the reactions of each comment in the given slice
@@ -100,7 +123,7 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	
+
 	// Respond with a JSON response
 	w.Header().Set("Content-Type", "application/json")
 	// Send a response indicating success
@@ -132,4 +155,3 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 	// 	fmt.Println(ErrorMsgs().Divider)
 	// }
 }
-

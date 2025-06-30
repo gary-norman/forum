@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setAllPosts() {
-
     allPagePosts = Array.from(activePageElement.querySelectorAll(".card.link"));
 }
 
@@ -59,9 +58,16 @@ function filterContent() {
 
     allPagePosts.forEach(post => {
         const postChannel = post.dataset.channelId;
+        const postComments = Number(post.querySelector(".btn-reply").textContent);
+        const postLikes = Number(post.querySelector(".btn-likes").textContent);
+        const postDislikes = Number(post.querySelector(".btn-dislikes").textContent);
+        const postDate = new Date(post.dataset.createdAt);
+
         let visible = true;
 
-        // Check the channel
+
+
+        // Filter by channel
         if (activeFilters.channels.length > 0 && !activeFilters.channels.includes(postChannel)) {
             visible = false;
         }
@@ -84,11 +90,8 @@ function filterContent() {
             }
         }
 
-        // Check the reaction
+        // Filter by reaction
         if (activeFilters.reactions.length > 0) {
-
-            const postLikes = Number(post.querySelector(".btn-likes").textContent);
-            const postDislikes = Number(post.querySelector(".btn-dislikes").textContent);
             let reactionMatch = false;
 
             if (activeFilters.reactions.includes("liked") && postLikes > 0) {
@@ -112,10 +115,8 @@ function filterContent() {
             }
         }
 
-        // Check the date range
+        // Filter by date range
         if (activeFilters.startDate !== null && activeFilters.endDate !== null) {
-            const postDate = new Date(post.dataset.createdAt);
-
             //set the time as the end of the day, because it was counting the date at 1:00:00
             // and wouldn't include dates within the day
             activeFilters.endDate.setHours(23, 59, 59, 999);

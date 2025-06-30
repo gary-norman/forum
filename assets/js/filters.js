@@ -34,6 +34,27 @@ function setAllPosts() {
     allPagePosts = Array.from(activePageElement.querySelectorAll(".card.link"));
 }
 
+// sortNewestDateFirst used for sorting numbers - ascending
+function compareDates(a, b) {
+    const dateA = new Date(a.dataset.createdAt);
+    const dateB = new Date(b.dataset.createdAt);
+    return dateA - dateB;
+}
+
+function compareNumbers(a, b) {
+    return a - b;
+}
+
+function sortOldestDateFirst() {
+    //sort oldest first
+    return allPagePosts.sort(compareDates);
+}
+
+function sortNewestDateFirst() {
+    //sort newest first
+    return allPagePosts.sort(compareDates).reverse();
+}
+
 function filterContent() {
     const filtersRow = activePageElement.querySelector(".filters-row");
     const channelCheckboxes = filtersRow.querySelector(`[id$="dropdown-channel"]`).querySelectorAll('input[type="checkbox"]:checked');
@@ -72,9 +93,8 @@ function filterContent() {
             visible = false;
         }
 
-        // Check the comments
+        // Filter by comments
         if (activeFilters.comments !== null) {
-            const postComments = Number(post.querySelector(".btn-reply").textContent);
             let commentMatch = false;
 
             if (activeFilters.comments.includes("has-comments") && postComments > 0) {
@@ -134,6 +154,28 @@ function filterContent() {
         post.parentElement.classList.toggle('hide', !visible);
     });
 }
+
+
+
+function reorderVisiblePosts() {
+    const feedContainer = activePageElement.querySelector(`[id$="feed"]`);
+
+    // Remove existing posts from DOM
+    allPagePosts.forEach(post => {
+        console.log("removing")
+        // console.log("%cREMOVING", angry, post.parentElement);
+        feedContainer.removeChild(post.parentElement);
+    });
+
+    // Append posts back in sorted order
+    allPagePosts.forEach(post => {
+        console.log("appending")
+
+        // console.log("%cAPPENDING", angry, post.parentElement);
+        feedContainer.appendChild(post.parentElement)
+    });
+}
+
 
 
 function toggleFilters() {

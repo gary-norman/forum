@@ -45,7 +45,23 @@ function compareNumbers(a, b) {
     return a - b;
 }
 
-function sortOldestDateFirst() {
+function compareActivity(a, b) {
+    const createdDateA = new Date(a.dataset.createdAt);
+    const createdDateB = new Date(b.dataset.createdAt);
+    const lastReactedDateA = new Date(a.dataset.lastReaction);
+    const lastReactedDateB = new Date(b.dataset.lastReaction);
+
+    // Pick the later date for a
+    const latestDateA = (lastReactedDateA > createdDateA) ? lastReactedDateA : createdDateA;
+
+    // Pick the later date for b
+    const latestDateB = (lastReactedDateB > createdDateB) ? lastReactedDateB : createdDateB;
+
+    // Return difference for sort
+    return latestDateA - latestDateB;
+}
+
+function sortOldestDateFirst(func) {
     //sort oldest first
     return allPagePosts.sort(compareDates);
 }

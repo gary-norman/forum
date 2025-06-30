@@ -93,6 +93,11 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 
 	// Retrieve total likes and dislikes for each Channel post
 	thisChannelPosts = c.Reaction.GetPostsLikesAndDislikes(thisChannelPosts)
+
+	// Retrieve last reaction time for posts
+	thisChannelPosts, err = c.Reaction.getLastReactionTimeForPosts(thisChannelPosts)
+
+	// Retrieve comments for posts
 	thisChannelPosts, err = c.Comment.GetPostsComments(thisChannelPosts)
 	if err != nil {
 		http.Error(w, `{"error": "Error getting comments" }`, http.StatusInternalServerError)

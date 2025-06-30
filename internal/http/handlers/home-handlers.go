@@ -78,6 +78,9 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	// Retrieve total likes and dislikes for each post
 	allPosts = h.Reaction.GetPostsLikesAndDislikes(allPosts)
 
+	// Retrieve last reaction time for posts
+	allPosts, err = h.Reaction.getLastReactionTimeForPosts(allPosts)
+
 	for p := range allPosts {
 		models.UpdateTimeSince(&allPosts[p])
 	}

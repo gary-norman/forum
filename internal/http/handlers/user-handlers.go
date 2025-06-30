@@ -70,6 +70,9 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 		// http.Error(w, `{"error": "error fetching user posts"}`, http.StatusInternalServerError)
 	}
 
+	// Retrieve last reaction time for posts
+	posts, err = u.Reaction.getLastReactionTimeForPosts(posts)
+
 	// Fetch channel name for posts
 	for p := range posts {
 		posts[p].ChannelID, posts[p].ChannelName, err = u.Channel.GetChannelInfoFromPostID(posts[p].ID)

@@ -75,6 +75,52 @@ function filterContent() {
         startDate: startDateInput?.value ? new Date(startDateInput.value) : null,
         endDate: endDateInput?.value ? new Date(endDateInput.value) : null,
     };
+    // Sort
+    // Default sort
+    if (activeFilters.sort === null) {
+        allPagePosts = sortNewestDateFirst();
+        console.log("%cDEFAULT SORTING... allPagePosts:", warn, allPagePosts);
+        reorderVisiblePosts();
+    } else {
+
+        // sort by date
+        //sort newest first
+        if (activeFilters.sort.includes("most-new")) {
+            allPagePosts = sortNewestDateFirst();
+            console.log("%cSORTING NEWEST FIRST... allPagePosts:", warn, allPagePosts);
+        }
+
+
+        //sort oldest first
+        if (activeFilters.sort.includes("most-old")) {
+            allPagePosts = sortOldestDateFirst();
+            console.log("%cSORTING OLDEST FIRST... allPagePosts:", warn, allPagePosts);
+        }
+
+        //sort by recent activity
+        //sort newest first
+
+        //sort oldest first
+
+        //sort by likes
+        //sort most first
+
+        //sort least first
+
+        //sort by dislikes
+        //sort most first
+
+        //sort least first
+
+        //sort by comments
+        //sort most first
+
+        //sort least first
+
+        reorderVisiblePosts();
+    }
+
+
 
 
     allPagePosts.forEach(post => {

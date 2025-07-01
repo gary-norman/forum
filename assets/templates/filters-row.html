@@ -75,8 +75,16 @@
           <label for="{{$calledBy}}-checkbox-most-likes">most likes</label>
         </div>
         <div class="dropdown-option">
+          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-least-likes" name="sort" value="least-likes">
+          <label for="{{$calledBy}}-checkbox-least-likes">least likes</label>
+        </div>
+        <div class="dropdown-option">
           <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-most-dislikes" name="sort" value="most-dislikes">
           <label for="{{$calledBy}}-checkbox-most-dislikes">most dislikes</label>
+        </div>
+        <div class="dropdown-option">
+          <input class="checkbox-not-visible" type="radio" id="{{$calledBy}}-checkbox-least-dislikes" name="sort" value="least-dislikes">
+          <label for="{{$calledBy}}-checkbox-least-dislikes">least dislikes</label>
         </div>
         {{/*    SECTION sort - most/least comments */}}
           <div class="dropdown-option">

@@ -119,7 +119,7 @@ function filterContent() {
     // Sort
     // Default sort
     if (activeFilters.sort === null) {
-        allPagePosts = sortNewestDateFirst(compareDates);
+        allPagePosts = sortAscending(compareDates);
         console.log("%cDEFAULT SORTING... allPagePosts:", warn, allPagePosts);
         reorderVisiblePosts();
     } else {
@@ -127,31 +127,28 @@ function filterContent() {
         // sort by date
         //sort newest first
         if (activeFilters.sort.includes("most-new")) {
-            allPagePosts = sortNewestDateFirst(compareDates);
+            allPagePosts = sortAscending(compareDates);
             // console.log("%cSORTING NEWEST FIRST... allPagePosts:", warn, allPagePosts);
         }
 
-
         //sort oldest first
         if (activeFilters.sort.includes("most-old")) {
-            allPagePosts = sortOldestDateFirst(compareDates);
+            allPagePosts = sortDescending(compareDates);
             // console.log("%cSORTING OLDEST FIRST... allPagePosts:", warn, allPagePosts);
         }
 
         //sort by recent activity
         //sort newest first
         if (activeFilters.sort.includes("most-new-activity")) {
-            allPagePosts = sortNewestDateFirst(compareActivity);
-            console.log("%cSORTING NEWEST ACTIVITY FIRST... allPagePosts:", warn, allPagePosts);
+            allPagePosts = sortAscending(compareActivity);
+            console.log("%cSorting by newest activity... allPagePosts:", warn, allPagePosts);
         }
 
         //sort oldest first
         if (activeFilters.sort.includes("most-old-activity")) {
-            allPagePosts = sortOldestDateFirst(compareActivity);
-            console.log("%cSORTING OLDEST ACTIVITY FIRST... allPagePosts:", warn, allPagePosts);
+            allPagePosts = sortDescending(compareActivity);
+            console.log("%cSorting by oldest activity... allPagePosts:", warn, allPagePosts);
         }
-
-        //sort oldest first
 
         //sort by likes
         //sort most first

@@ -155,24 +155,45 @@ function filterContent() {
 
         //sort by likes
         //sort most first
+        if (activeFilters.sort.includes("most-likes")) {
+            allPagePosts = sortDescending(compareNumberValues("likes"));
+            console.log("%cSorting by most likes... allPagePosts:", warn, allPagePosts);
+        }
 
         //sort least first
+        if (activeFilters.sort.includes("least-likes")) {
+            allPagePosts = sortAscending(compareNumberValues("likes"));
+            console.log("%cSorting by least likes... allPagePosts:", warn, allPagePosts);
+        }
 
         //sort by dislikes
         //sort most first
+        if (activeFilters.sort.includes("most-dislikes")) {
+            allPagePosts = sortDescending(compareNumberValues("dislikes"));
+            console.log("%cSorting by most dislikes... allPagePosts:", warn, allPagePosts);
+        }
 
         //sort least first
+        if (activeFilters.sort.includes("least-dislikes")) {
+            allPagePosts = sortAscending(compareNumberValues("dislikes"));
+            console.log("%cSorting by least dislikes... allPagePosts:", warn, allPagePosts);
+        }
 
         //sort by comments
         //sort most first
+        if (activeFilters.sort.includes("most-comments")) {
+            allPagePosts = sortDescending(compareNumberValues("comments"));
+            console.log("%cSorting by most comments... allPagePosts:", warn, allPagePosts);
+        }
 
         //sort least first
+        if (activeFilters.sort.includes("least-comments")) {
+            allPagePosts = sortAscending(compareNumberValues("comments"));
+            console.log("%cSorting by least comments... allPagePosts:", warn, allPagePosts);
+        }
 
         reorderVisiblePosts();
     }
-
-
-
 
     allPagePosts.forEach(post => {
         const postChannel = post.dataset.channelId;

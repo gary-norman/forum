@@ -34,13 +34,14 @@ function setAllPosts() {
     allPagePosts = Array.from(activePageElement.querySelectorAll(".card.link"));
 }
 
-// sortNewestDateFirst used for sorting numbers - ascending
+// compareDates used to compare 2 dates, which then is used in the default js sort function
 function compareDates(a, b) {
     const dateA = new Date(a.dataset.createdAt);
     const dateB = new Date(b.dataset.createdAt);
     return dateA - dateB;
 }
 
+// compareNumberValues used to compare 2 numbers, which then is used in the default js sort function
 function compareNumberValues(sortBy) {
     return function(a,b){
         let valueA, valueB;
@@ -67,6 +68,8 @@ function compareNumberValues(sortBy) {
     }
 }
 
+// compareActivity used to compare 2 dates per element, and chooses the most recent date for each
+// This is then used in the default js sort function
 function compareActivity(a, b) {
     const createdDateA = new Date(a.dataset.createdAt);
     const createdDateB = new Date(b.dataset.createdAt);
@@ -83,13 +86,13 @@ function compareActivity(a, b) {
     return latestDateA - latestDateB;
 }
 
-function sortOldestDateFirst(func) {
-    //sort oldest first
+// sortDescending sort by oldest date / most amount first
+function sortDescending(func) {
     return allPagePosts.sort(func);
 }
 
-function sortNewestDateFirst(func) {
-    //sort newest first
+// sortAscending sort by newest date / least amount first
+function sortAscending(func) {
     return allPagePosts.sort(func).reverse();
 }
 

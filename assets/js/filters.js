@@ -41,8 +41,30 @@ function compareDates(a, b) {
     return dateA - dateB;
 }
 
-function compareNumbers(a, b) {
-    return a - b;
+function compareNumberValues(sortBy) {
+    return function(a,b){
+        let valueA, valueB;
+
+        switch (sortBy) {
+            case "likes":
+                valueA = Number(a.querySelector(".btn-likes").textContent);
+                valueB = Number(b.querySelector(".btn-likes").textContent);
+                break;
+            case "dislikes":
+                valueA = Number(a.querySelector(".btn-dislikes").textContent);
+                valueB = Number(b.querySelector(".btn-dislikes").textContent);
+                break;
+            case "comments":
+                valueA = Number(a.querySelector(".btn-reply").textContent);
+                valueB = Number(b.querySelector(".btn-reply").textContent);
+                break;
+            default:
+                valueA = 0;
+                valueB = 0;
+        }
+
+        return valueB - valueA;
+    }
 }
 
 function compareActivity(a, b) {

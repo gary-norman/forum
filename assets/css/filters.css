@@ -69,6 +69,7 @@
 
 .wrapper-filter-dropdown {
     max-width: 18rem;
+    min-width: 14.8rem;
     max-height: 28rem;
     flex-direction: column;
     padding: 0.4rem;

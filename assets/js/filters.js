@@ -10,7 +10,7 @@ const warn =
 let filterButtons;
 const currentDate = new Date();
 const formattedDate = currentDate.toISOString().split("T")[0];
-let allPagePosts = [];
+let allPageCards = [];
 
 document.addEventListener("newContentLoaded", () => {
     if (activePageElement.id !== "post-page") {
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setAllPosts() {
-    allPagePosts = Array.from(activePageElement.querySelectorAll(".card.link"));
+    allPageCards = Array.from(activePageElement.querySelectorAll(".card.link"));
 }
 
 // compareDates used to compare 2 dates, which then is used in the default js sort function
@@ -88,12 +88,12 @@ function compareActivity(a, b) {
 
 // sortDescending sort by oldest date / most amount first
 function sortDescending(func) {
-    return allPagePosts.sort(func);
+    return allPageCards.sort(func);
 }
 
 // sortAscending sort by newest date / least amount first
 function sortAscending(func) {
-    return allPagePosts.sort(func).reverse();
+    return allPageCards.sort(func).reverse();
 }
 
 function filterContent() {
@@ -110,101 +110,95 @@ function filterContent() {
     const activeFilters = {
         channels: Array.from(channelCheckboxes).map(cb => cb.value),
         reactions: Array.from(reactionCheckboxes).map(rb => rb.value),
-        types: Array.from(typeCheckboxes).map(cb => cb.value),
+        types: Array.from(typeCheckboxes).map(cb => cb.value.slice(5)), //slice to remove "type-" before type of card from the template
         comments: commentRadios.length > 0 ? commentRadios[0].value : null,
         sort: sortRadios.length > 0 ? sortRadios[0].value : null,
         startDate: startDateInput?.value ? new Date(startDateInput.value) : null,
         endDate: endDateInput?.value ? new Date(endDateInput.value) : null,
     };
+
     // Sort
     // Default sort
     if (activeFilters.sort === null) {
-        allPagePosts = sortAscending(compareDates);
-        console.log("%cDEFAULT SORTING... allPagePosts:", warn, allPagePosts);
+        allPageCards = sortAscending(compareDates);
         reorderVisiblePosts();
     } else {
 
         // sort by date
         //sort newest first
         if (activeFilters.sort.includes("most-new")) {
-            allPagePosts = sortAscending(compareDates);
-            // console.log("%cSORTING NEWEST FIRST... allPagePosts:", warn, allPagePosts);
+            allPageCards = sortAscending(compareDates);
         }
 
         //sort oldest first
         if (activeFilters.sort.includes("most-old")) {
-            allPagePosts = sortDescending(compareDates);
-            // console.log("%cSORTING OLDEST FIRST... allPagePosts:", warn, allPagePosts);
+            allPageCards = sortDescending(compareDates);
         }
 
         //sort by recent activity
         //sort newest first
         if (activeFilters.sort.includes("most-new-activity")) {
-            allPagePosts = sortAscending(compareActivity);
-            console.log("%cSorting by newest activity... allPagePosts:", warn, allPagePosts);
+            allPageCards = sortAscending(compareActivity);
         }
 
         //sort oldest first
         if (activeFilters.sort.includes("most-old-activity")) {
-            allPagePosts = sortDescending(compareActivity);
-            console.log("%cSorting by oldest activity... allPagePosts:", warn, allPagePosts);
+            allPageCards = sortDescending(compareActivity);
         }
 
         //sort by likes
         //sort most first
         if (activeFilters.sort.includes("most-likes")) {
-            allPagePosts = sortDescending(compareNumberValues("likes"));
-            console.log("%cSorting by most likes... allPagePosts:", warn, allPagePosts);
+            allPageCards = sortDescending(compareNumberValues("likes"));
         }
 
         //sort least first
         if (activeFilters.sort.includes("least-likes")) {
-            allPagePosts = sortAscending(compareNumberValues("likes"));
-            console.log("%cSorting by least likes... allPagePosts:", warn, allPagePosts);
+            allPageCards = sortAscending(compareNumberValues("likes"));
         }
 
         //sort by dislikes
         //sort most first
         if (activeFilters.sort.includes("most-dislikes")) {
-            allPagePosts = sortDescending(compareNumberValues("dislikes"));
-            console.log("%cSorting by most dislikes... allPagePosts:", warn, allPagePosts);
+            allPageCards = sortDescending(compareNumberValues("dislikes"));
         }
 
         //sort least first
         if (activeFilters.sort.includes("least-dislikes")) {
-            allPagePosts = sortAscending(compareNumberValues("dislikes"));
-            console.log("%cSorting by least dislikes... allPagePosts:", warn, allPagePosts);
+            allPageCards = sortAscending(compareNumberValues("dislikes"));
         }
 
         //sort by comments
         //sort most first
         if (activeFilters.sort.includes("most-comments")) {
-            allPagePosts = sortDescending(compareNumberValues("comments"));
-            console.log("%cSorting by most comments... allPagePosts:", warn, allPagePosts);
+            allPageCards = sortDescending(compareNumberValues("comments"));
         }
 
         //sort least first
         if (activeFilters.sort.includes("least-comments")) {
-            allPagePosts = sortAscending(compareNumberValues("comments"));
-            console.log("%cSorting by least comments... allPagePosts:", warn, allPagePosts);
+            allPageCards = sortAscending(compareNumberValues("comments"));
         }
 
         reorderVisiblePosts();
     }
 
-    allPagePosts.forEach(post => {
-        const postChannel = post.dataset.channelId;
-        const postComments = Number(post.querySelector(".btn-reply").textContent);
-        const postLikes = Number(post.querySelector(".btn-likes").textContent);
-        const postDislikes = Number(post.querySelector(".btn-dislikes").textContent);
-        const postDate = new Date(post.dataset.createdAt);
+    allPageCards.forEach(card => {
+        const cardChannel = card.dataset.channelId;
+        const cardType = card.dataset.dest;
+        const cardCommentsCount = Number(card.querySelector(".btn-reply").textContent);
+        const cardLikesCount = Number(card.querySelector(".btn-likes").textContent);
+        const cardDislikesCount = Number(card.querySelector(".btn-dislikes").textContent);
+        const cardCreatedDate = new Date(card.dataset.createdAt);
 
         let visible = true;
 
-
-
         // Filter by channel
-        if (activeFilters.channels.length > 0 && !activeFilters.channels.includes(postChannel)) {
+        if (activeFilters.channels.length > 0 && !activeFilters.channels.includes(cardChannel)) {
+            visible = false;
+        }
+
+        // Filter by type
+        if (activeFilters.types.length > 0 && !activeFilters.types.includes(cardType)) {
             visible = false;
         }
 
@@ -212,11 +206,11 @@ function filterContent() {
         if (activeFilters.comments !== null) {
             let commentMatch = false;
 
-            if (activeFilters.comments.includes("has-comments") && postComments > 0) {
+            if (activeFilters.comments.includes("has-comments") && cardCommentsCount > 0) {
                 commentMatch = true;
             }
 
-            if (activeFilters.comments.includes("no-comments") && postComments <= 0) {
+            if (activeFilters.comments.includes("no-comments") && cardCommentsCount <= 0) {
                 commentMatch = true;
             }
 
@@ -229,18 +223,18 @@ function filterContent() {
         if (activeFilters.reactions.length > 0) {
             let reactionMatch = false;
 
-            if (activeFilters.reactions.includes("liked") && postLikes > 0) {
+            if (activeFilters.reactions.includes("liked") && cardLikesCount > 0) {
                 reactionMatch = true;
             }
 
-            if (activeFilters.reactions.includes("disliked") && postDislikes > 0) {
+            if (activeFilters.reactions.includes("disliked") && cardDislikesCount > 0) {
                 reactionMatch = true;
             }
 
             if (
                 activeFilters.reactions.includes("no-reaction") &&
-                postLikes === 0 &&
-                postDislikes === 0
+                cardLikesCount === 0 &&
+                cardDislikesCount === 0
             ) {
                 reactionMatch = true;
             }
@@ -256,17 +250,16 @@ function filterContent() {
             // and wouldn't include dates within the day
             activeFilters.endDate.setHours(23, 59, 59, 999);
 
-            if (postDate <= activeFilters.startDate) {
+            if (cardCreatedDate <= activeFilters.startDate) {
                 visible = false;
             }
-            if (postDate >= activeFilters.endDate) {
+            if (cardCreatedDate >= activeFilters.endDate) {
                 visible = false;
             }
         }
 
-
-        // Show or hide
-        post.parentElement.classList.toggle('hide', !visible);
+        // Show or hide card, by hiding the container holding it
+        card.parentElement.classList.toggle('hide', !visible);
     });
 }
 
@@ -276,17 +269,14 @@ function reorderVisiblePosts() {
     const feedContainer = activePageElement.querySelector(`[id$="feed"]`);
 
     // Remove existing posts from DOM
-    allPagePosts.forEach(post => {
-        console.log("removing")
-        // console.log("%cREMOVING", angry, post.parentElement);
+    allPageCards.forEach(post => {
+        // console.log("removing")
         feedContainer.removeChild(post.parentElement);
     });
 
     // Append posts back in sorted order
-    allPagePosts.forEach(post => {
-        console.log("appending")
-
-        // console.log("%cAPPENDING", angry, post.parentElement);
+    allPageCards.forEach(post => {
+        // console.log("appending")
         feedContainer.appendChild(post.parentElement)
     });
 }
@@ -304,7 +294,7 @@ function toggleFilters() {
         const clearButton = popover.querySelector(".clear-choices ");
 
         button.addEventListener("click", (e) => {
-            const noneSelected= checkSelectedInputs(popover);
+            const noneSelected = checkSelectedInputs(popover);
 
             if (!popover.matches(':popover-open') && button.contains(e.target)) {
                 toggleFilterButtonState(button, noneSelected, "button");
@@ -334,7 +324,7 @@ function toggleFilters() {
 
                     input.click();
 
-                    const noneSelected= checkSelectedInputs(popover);
+                    const noneSelected = checkSelectedInputs(popover);
 
                     filterContent();
 
@@ -378,9 +368,7 @@ function toggleFilters() {
                     startDateInteracted = true;
                 });
             })
-
         }
-
 
         if (clearButton){
             clearButton.addEventListener("click", () => {
@@ -399,7 +387,6 @@ function toggleFilters() {
 
                     toggleClearButton(popover, "hide");
                     toggleFilterButtonState(button, noneSelected, "inside");
-                    console.log("test5");
                     filterContent();
                     clearRadios(popover, button);
                 });
@@ -414,7 +401,6 @@ function toggleFilters() {
                         toggleClearButton(popover, "hide");
                         filterContent();
                         toggleFilterButtonState(button, noneSelected, "inside");
-
                     });
                 }
             });
@@ -465,7 +451,6 @@ function toggleFilterButtonState(button, noneSelected, clickLocation) {
     }
 
     if (clickLocation === "outside" && noneSelected) {
-        // console.log("%cfirst if statement:", angry);
         button.querySelector("span").classList.add("btn-filters");
         button.querySelector("span").classList.remove("btn-active-filter");
         button.classList.remove("selected");
@@ -506,7 +491,6 @@ function toggleClearButton(popover, state) {
             button.classList.add("hide");
         }
     }
-
 }
 
 function checkSelectedInputs(popover) {
@@ -522,7 +506,7 @@ function checkSelectedInputs(popover) {
     } else if (dates.length > 0) {
         return [...dates].every(date => !date.value);
     }
-    return console.log("%cno checkboxes or radios", angry);
+    return console.log("%cno checkboxes, radios or dates", angry);
 }
 
 

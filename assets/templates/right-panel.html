@@ -31,7 +31,8 @@
           {{ template "channel-edit-image" (dict "dot" $dot "UserID" $userID) }}
         {{ end }}
         {{ template "channel-edit-bio" (dict "dot" $dot "UserID" $userID) }}
-        {{ template "channel-edit-mods" (dict "dot" $dot "UserID" $userID) }}
+        {{/*        TODO moderators commented out for base version          */}}
+{{/*        {{ template "channel-edit-mods" (dict "dot" $dot "UserID" $userID) }}*/}}
         {{ template "channel-edit-rules" (dict "dot" $dot "UserID" $userID) }}
         {{ template "control-buttons" (dict "dot" $dot "userID" $userID "calledBy" "right-panel") }}
       </div>

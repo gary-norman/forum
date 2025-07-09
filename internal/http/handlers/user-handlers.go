@@ -63,33 +63,33 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Fetch thisUser allPosts
-	allPosts, err := u.App.Posts.GetPostsByUserID(thisUser.ID)
+	// Fetch thisUser userPosts
+	userPosts, err := u.App.Posts.GetPostsByUserID(thisUser.ID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "error fetching thisUser allPosts", err)
-		// http.Error(w, `{"error": "error fetching thisUser allPosts"}`, http.StatusInternalServerError)
+		log.Printf(ErrorMsgs().KeyValuePair, "error fetching thisUser userPosts", err)
+		// http.Error(w, `{"error": "error fetching thisUser userPosts"}`, http.StatusInternalServerError)
 	}
 
 	// Fetch Reactions for posts
-	allPosts = u.Reaction.GetPostsLikesAndDislikes(allPosts)
+	userPosts = u.Reaction.GetPostsLikesAndDislikes(userPosts)
 
-	// Retrieve last reaction time for allPosts
-	allPosts, err = u.Reaction.getLastReactionTimeForPosts(allPosts)
+	// Retrieve last reaction time for userPosts
+	userPosts, err = u.Reaction.getLastReactionTimeForPosts(userPosts)
 
-	// Fetch channel name for allPosts
-	for p := range allPosts {
-		allPosts[p].ChannelID, allPosts[p].ChannelName, err = u.Channel.GetChannelInfoFromPostID(allPosts[p].ID)
+	// Fetch channel name for userPosts
+	for p := range userPosts {
+		userPosts[p].ChannelID, userPosts[p].ChannelName, err = u.Channel.GetChannelInfoFromPostID(userPosts[p].ID)
 		if err != nil {
 			http.Error(w, `{"error": "error fetching channel info"}`, http.StatusInternalServerError)
 		}
 
-		models.UpdateTimeSince(&allPosts[p])
+		models.UpdateTimeSince(&userPosts[p])
 	}
 
 	// Fetch thisUser post comments
-	allPosts, err = u.Comment.GetPostsComments(allPosts)
+	userPosts, err = u.Comment.GetPostsComments(userPosts)
 	if err != nil {
-		log.Printf(ErrorMsgs().NotFound, "allPosts comments", "getHome", err)
+		log.Printf(ErrorMsgs().NotFound, "userPosts comments", "getHome", err)
 	}
 
 	models.UpdateTimeSince(&thisUser)
@@ -103,10 +103,10 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 		models.UpdateTimeSince(&allChannels[c])
 	}
 
-	for p := range allPosts {
+	for p := range userPosts {
 		for _, channel := range allChannels {
-			if channel.ID == allPosts[p].ChannelID {
-				allPosts[p].ChannelName = channel.Name
+			if channel.ID == userPosts[p].ChannelID {
+				userPosts[p].ChannelName = channel.Name
 			}
 		}
 	}
@@ -156,11 +156,8 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	} else {
-		//userPosts = allPosts
 		ownedAndJoinedChannels = allChannels
 	}
-
-	//userPosts = u.Post.GetUserPosts(&thisUser, allPosts)
 
 	data := models.UserPage{
 		UserID:      models.NewUUIDField(), // Default value of 0 for logged out users
@@ -168,9 +165,8 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 		Instance:    "user-page",
 		ThisUser:    thisUser,
 		ImagePaths:  u.App.Paths,
-		// ---------- allPosts ----------
-		Posts:     allPosts,
-		UserPosts: nil,
+		// ---------- userPosts ----------
+		Posts: userPosts,
 		// ---------- channels ----------
 		AllChannels:            allChannels,
 		OwnedChannels:          ownedChannels,

@@ -44,9 +44,10 @@ type UserPage struct {
 	ThisUser    User
 	OwnerName   string
 	ImagePaths
-	// ---------- posts ----------
+	// ---------- posts, comments & reactions----------
 	Posts     []Post
-	UserPosts []Post
+	Comments  []Comment
+	Reactions []Reaction
 	// ---------- channels ----------
 	AllChannels            []Channel
 	OwnedChannels          []Channel

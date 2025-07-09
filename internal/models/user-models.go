@@ -43,8 +43,15 @@ type UserPage struct {
 	Instance    string
 	ThisUser    User
 	OwnerName   string
-	Posts       []Post
 	ImagePaths
+	// ---------- posts ----------
+	Posts     []Post
+	UserPosts []Post
+	// ---------- channels ----------
+	AllChannels            []Channel
+	OwnedChannels          []Channel
+	JoinedChannels         []Channel
+	OwnedAndJoinedChannels []Channel
 }
 
 func (p UserPage) GetInstance() string { return p.Instance }

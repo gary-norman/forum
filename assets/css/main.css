@@ -2471,7 +2471,7 @@ main {
 
 .above-activity {
   position: sticky;
-  width: calc(100vw - 3rem - 1.2rem - 32rem);
+  width: 100%;
   /*z-index: var(--z-index-above);*/
 }
 

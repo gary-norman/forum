@@ -52,7 +52,8 @@
 
   /* --- green --- */
   --color-hl-green: rgb(108 207 93);
-  --color-hl-green-secondary: rgb(108 207 93 / 0.5);
+  --color-hl-green-secondary: rgb(108 207 93 / 0.4);
+  --color-hl-green-tertiary: rgb(108 207 93 / 0.2);
   --color-hl-green-lab: lab(78.47 -39.34 34.94);
   --color-hl-green-bg: color-mix(
     in rgb,

@@ -126,13 +126,13 @@ export function listenToNoUser() {
   });
 
   // Optional: click anywhere else to hide tooltips
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".btn-action.nouser")) {
-      document
-        .querySelectorAll(".btn-action.nouser.show-tooltip")
-        .forEach((el) => el.classList.remove("show-tooltip"));
-    }
-  });
+  // document.addEventListener("click", (e) => {
+  //   if (!e.target.closest(".btn-action.nouser")) {
+  //     document
+  //       .querySelectorAll(".btn-action.nouser.show-tooltip")
+  //       .forEach((el) => el.classList.remove("show-tooltip"));
+  //   }
+  // });
 }
 
 function checkData(commentID, postID, reactionAuthorID, channelID, likeStatus) {

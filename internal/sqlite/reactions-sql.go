@@ -2,6 +2,7 @@ package sqlite
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 
@@ -15,6 +16,50 @@ type ReactionModel struct {
 type ReactionStatus struct {
 	Liked    bool
 	Disliked bool
+}
+
+func (m *ReactionModel) GetLastReaction(reactedPostID, reactedCommentID int64) (models.Reaction, error) {
+	whereArgs, arg := preparePostChannelDynamicWhere(reactedPostID, reactedCommentID)
+
+	stmt := fmt.Sprintf(`
+	SELECT
+		ID,
+		Liked,
+		Disliked,
+		Created,
+		AuthorID,
+		ReactedPostID,
+		ReactedCommentID
+	FROM Reactions
+	WHERE %s
+	ORDER BY id DESC
+	LIMIT 1`, whereArgs)
+
+	row := m.DB.QueryRow(stmt, arg)
+
+	var reaction models.Reaction
+
+	err := row.Scan(
+		&reaction.ID,
+		&reaction.Liked,
+		&reaction.Disliked,
+		&reaction.Created,
+		&reaction.AuthorID,
+		&reaction.ReactedPostID,
+		&reaction.ReactedCommentID,
+	)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			// no matching reaction
+			return models.Reaction{}, nil
+		}
+		return models.Reaction{}, err
+	}
+
+	//fmt.Println("Reaction: ", reaction)
+
+	return reaction, nil
 }
 
 func (m *ReactionModel) GetReactionStatus(authorID models.UUIDField, reactedPostID, reactedCommentID int64) (ReactionStatus, error) {

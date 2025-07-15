@@ -11,16 +11,17 @@ type Post struct {
 	Images        string    `db:"images,omitempty"`
 	Created       time.Time `db:"created"`
 	TimeSince     string
-	IsCommentable bool      `db:"commentable"`
-	Author        string    `db:"author"`
-	AuthorID      UUIDField `db:"authorId"`
-	AuthorAvatar  string    `db:"authorAvatar"`
-	ChannelID     int64     `db:"channelId"`
-	ChannelName   string    `db:"channelName"`
-	IsFlagged     bool      `db:"isFlagged,omitempty"`
-	Likes         int       `db:"likes"`
-	Dislikes      int       `db:"dislikes"`
-	CommentsCount int       `db:"commentsCount"`
+	IsCommentable bool       `db:"commentable"`
+	Author        string     `db:"author"`
+	AuthorID      UUIDField  `db:"authorId"`
+	AuthorAvatar  string     `db:"authorAvatar"`
+	ChannelID     int64      `db:"channelId"`
+	ChannelName   string     `db:"channelName"`
+	IsFlagged     bool       `db:"isFlagged,omitempty"`
+	Likes         int        `db:"likes"`
+	Dislikes      int        `db:"dislikes"`
+	CommentsCount int        `db:"commentsCount"`
+	LastReaction  *time.Time `db:"lastReaction"`
 	Comments      []Comment
 }
 

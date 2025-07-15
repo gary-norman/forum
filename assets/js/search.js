@@ -34,11 +34,16 @@ let channels = [];
 let posts = [];
 
 document.addEventListener("click", (e) => {
-  if (e.target !== searchInput) {
-    resultsContainer.classList.add("hide");
-  } else if (e.target === searchInput && isValue) {
-    resultsContainer.classList.remove("hide");
+  if (!resultsContainer.classList.contains("hide")) {
+    if (e.target !== searchInput) {
+      resultsContainer.classList.add("hide");
+    }
+  } else {
+    if (e.target === searchInput && isValue) {
+      resultsContainer.classList.remove("hide");
+    }
   }
+
 });
 
 searchInput.addEventListener("input", (e) => {
@@ -105,7 +110,7 @@ searchInput.addEventListener("input", (e) => {
   }
 
   let calcHeight = `${Math.max(7, calculateVisibleChildrenHeight(resultsContainer))}rem`;
-  if (calcHeight === "7.8rem") {
+  if (calcHeight >= "8rem") {
     calcHeight = "7rem";
   }
 

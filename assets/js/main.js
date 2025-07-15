@@ -21,20 +21,20 @@ window.addEventListener("popstate", () => {
 });
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  console.log("fired DOMContentLoaded");
+  // console.log("fired DOMContentLoaded");
   setActivePage("home");
   UpdateUI();
 });
 
 document.addEventListener("newContentLoaded", (event) => {
-  console.log("%cfired", expect, "newContentLoaded");
+  // console.log("%cfired", expect, "newContentLoaded");
   UpdateUI();
 });
 
 export function setActivePage(dest) {
   activePage = dest + "-page";
   activePageElement = document.querySelector(`#${dest}-page`);
-  console.info("%cactivePageElement:", expect, activePageElement);
+  // console.info("%cactivePageElement:", expect, activePageElement);
 }
 
 // variables

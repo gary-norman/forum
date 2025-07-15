@@ -51,7 +51,7 @@ export function changePage(page) {
       // TODO need to modify home-page template to populate by injection
       // TODO when injected, the content can be cleared
       // clear the content of the page previously active
-      // element.textContent = "";
+      // element.innerHTML = "";
 
       // TODO with injected home-page, this can be removed
       // need to clear content of the calendar dropdown, or the calendar won't work on otehr pages after navigation

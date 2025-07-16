@@ -23,8 +23,10 @@
           <h2 {{ if (eq .ThisChannel.Privacy true) }} class="private-channel align-self-start" {{ end }}>
             /{{ $dot.ThisChannel.Name }}
           </h2>
+        {{ template "user-counters" (dict "Members" $dot.ThisChannel.Members "Online" $dot.ThisChannel.MembersOnline )}}
         </div>
       </div>
+    {{ if ne .CurrentUser nil }}
       <div class="page-buttons">
         {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}
         <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
@@ -41,6 +43,7 @@
         </button>
         {{ end }}
       </div>
+    {{ end }}
     </div>
   </div>
 {{ end }}

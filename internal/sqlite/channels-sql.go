@@ -19,7 +19,18 @@ func (m *ChannelModel) Insert(ownerID models.UUIDField, name, description, avata
 }
 
 func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]models.Channel, error) {
-	stmt := "SELECT * From Channels WHERE ID IN (SELECT ChannelID FROM Memberships WHERE UserID = ?) OR OwnerID = ? ORDER BY Name DESC"
+	stmt := `
+	SELECT c.*,
+	COUNT(m.UserID) AS MemberCount
+	From Channels c
+	LEFT JOIN Memberships m ON c.ID = m.ChannelID
+	WHERE c.ID IN (
+		SELECT ChannelID FROM Memberships WHERE UserID = ?
+	)
+	OR c.OwnerID = ?
+	GROUP BY c.ID
+	ORDER BY Name DESC
+	`
 	rows, err := m.DB.Query(stmt, ID, ID)
 	if err != nil {
 		return nil, err
@@ -35,6 +46,8 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]models
 		}
 		// FIXME: This is a temporary fix to set the channel as joined:we need to come up with a more robust solution
 		c.Joined = true
+		// TODO (realtime) get this data freom websockets
+		c.MembersOnline = 0
 		channels = append(channels, *c)
 	}
 
@@ -61,7 +74,14 @@ func (m *ChannelModel) IsUserMemberOfChannel(userID models.UUIDField, channelID 
 }
 
 func (m *ChannelModel) GetChannelsByID(id int64) ([]models.Channel, error) {
-	stmt := "SELECT * FROM Channels WHERE ID = ?"
+	stmt := `
+	SELECT c.*, 
+  COUNT(m.UserID) AS MemberCount
+	FROM Channels c
+	LEFT JOIN Memberships m ON c.ID = m.ChannelID
+	WHERE c.ID = ?
+	GROUP BY c.ID;
+	`
 	rows, err := m.DB.Query(stmt, id)
 	if err != nil {
 		return nil, err
@@ -75,7 +95,8 @@ func (m *ChannelModel) GetChannelsByID(id int64) ([]models.Channel, error) {
 		if err != nil {
 			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
-		c.Joined = true
+		// TODO (realtime) get this data freom websockets
+		c.MembersOnline = 0
 		channels = append(channels, *c)
 	}
 
@@ -87,7 +108,14 @@ func (m *ChannelModel) GetChannelsByID(id int64) ([]models.Channel, error) {
 }
 
 func (m *ChannelModel) GetChannelByID(id int64) (*models.Channel, error) {
-	stmt := "SELECT * FROM Channels WHERE ID = ? LIMIT 1"
+	stmt := `
+	SELECT c.*, 
+  COUNT(m.UserID) AS MemberCount
+	FROM Channels c
+	LEFT JOIN Memberships m ON c.ID = m.ChannelID
+	WHERE c.ID = ?
+	GROUP BY c.ID;
+	`
 	rows, err := m.DB.Query(stmt, id)
 	if err != nil {
 		return nil, err
@@ -100,6 +128,8 @@ func (m *ChannelModel) GetChannelByID(id int64) (*models.Channel, error) {
 		if err != nil {
 			return nil, err
 		}
+		// TODO (realtime) get this data freom websockets
+		c.MembersOnline = 0
 		channels = append(channels, *c)
 	}
 	return &channels[0], nil
@@ -140,7 +170,13 @@ func (m *ChannelModel) GetNameOfChannelOwner(channelID int64) (string, error) {
 }
 
 func (m *ChannelModel) All() ([]models.Channel, error) {
-	stmt := "SELECT * FROM Channels ORDER BY Created DESC"
+	stmt := `
+	SELECT c.*, 
+  COUNT(m.UserID) AS MemberCount
+	FROM Channels c
+	LEFT JOIN Memberships m ON c.ID = m.ChannelID
+	GROUP BY c.ID;
+	`
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
 		return nil, err
@@ -152,54 +188,17 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 		}
 	}()
 
-	var Channels []models.Channel
+	channels := make([]models.Channel, 0) // Pre-allocate slice
 	for rows.Next() {
-		p := models.Channel{}
-		err = rows.Scan(&p.ID, &p.OwnerID, &p.Name, &p.Avatar, &p.Banner, &p.Description, &p.Created, &p.Privacy, &p.IsFlagged, &p.IsMuted)
+		c, err := parseChannelRows(rows)
 		if err != nil {
 			return nil, err
 		}
-		Channels = append(Channels, p)
-	}
-
-	if err = rows.Err(); err != nil {
-		return nil, err
+		// TODO (realtime) get this data freom websockets
+		c.MembersOnline = 0
+		channels = append(channels, *c)
 	}
 	// fmt.Printf(ErrorMsgs().KeyValuePair, "Total channels", len(Channels))
-	return Channels, nil
-}
-
-// SearchChannelsByColumn queries the database for any channel column that contains the value and returns a slice of matching channels
-func (m *ChannelModel) SearchChannelsByColumn(column string, value any) ([]models.Channel, error) {
-	// Validate column name to prevent SQL injection
-	if !isValidColumn(column) {
-		return nil, fmt.Errorf("invalid column name provided: %s", column)
-	}
-
-	// Base query
-	query := "SELECT * FROM channels WHERE " + column + " = ?"
-
-	// Execute the query
-	rows, err := m.DB.Query(query, value)
-	if err != nil {
-		return nil, fmt.Errorf("error executing query: %w", err)
-	}
-	defer rows.Close()
-
-	// Parse results
-	channels := make([]models.Channel, 0) // Pre-allocate slice
-	for rows.Next() {
-		channel, err := parseChannelRows(rows)
-		if err != nil {
-			return nil, fmt.Errorf("error parsing row: %w", err)
-		}
-		channels = append(channels, *channel)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("error iterating rows: %w", err)
-	}
-
 	return channels, nil
 }
 
@@ -319,6 +318,7 @@ func parseChannelRows(rows *sql.Rows) (*models.Channel, error) {
 		&channel.Privacy,
 		&channel.IsMuted,
 		&channel.IsFlagged,
+		&channel.Members,
 	); err != nil {
 		return nil, err
 	}

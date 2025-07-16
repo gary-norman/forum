@@ -14,8 +14,8 @@
     inset-block-start: calc(anchor(end) + 0.4rem);
     inset-inline-start: calc(anchor(start) - 0.8rem);
     box-shadow: var(--shadow-filter);
-    background: var(--color-bg-2);
-    border: 1px solid var(--color-bg-4);
+    background: var(--clr-bg-2);
+    border: 1px solid var(--clr-bg-4);
     border-radius: 0.4rem;
     /* for closed state of popover animation */
     opacity: 0;
@@ -178,8 +178,8 @@
     padding: 3.2rem 2.4rem;
     align-self: center;
     box-shadow: var(--shadow-filter);
-    background: var(--color-bg-2);
-    border: 1px solid var(--color-bg-4);
+    background: var(--clr-bg-2);
+    border: 1px solid var(--clr-bg-4);
     border-radius: 0.4rem;
 
     position: fixed;
@@ -203,9 +203,9 @@
                 align-self: center;
                 align-items: center;
                 & span {
-                    color: var(--color-hl-green);
+                    color: var(--clr-accent--1);
                     &.secondary {
-                        color: var(--color-hl-pink);
+                        color: var(--clr-accent--2);
                     }
                 }
             }
@@ -286,7 +286,7 @@
                             gap: 0.4rem;
 
                             & .day-name {
-                                color: var(--color-bg-5);
+                                color: var(--clr-bg-5);
                                 pointer-events: none;
                             }
                         }
@@ -313,16 +313,16 @@
                                 aspect-ratio: 1/1;
 
                                 &.current-date {
-                                    color: var(--color-hl-pink);
+                                    color: var(--clr-accent--2);
                                 }
 
                                 &:hover {
-                                    background-color: var(--color-bg-1);
+                                    background-color: var(--clr-bg-1);
                                     cursor: var(--cursor-pointer);
                                 }
 
                                 &.active {
-                                    background-color: var(--color-hl-green);
+                                    background-color: var(--clr-accent--1);
                                 }
 
                                 &.disabled {
@@ -331,7 +331,7 @@
                                 }
 
                                 &.selected {
-                                    background-color: var(--color-hl-green-secondary);
+                                    background-color: var(--clr-accent--1-faded);
                                     margin: 0.2rem;
                                     background-clip: padding-box;
                                 }

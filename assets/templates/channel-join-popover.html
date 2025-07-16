@@ -2,7 +2,7 @@
 <div popover id="form-join-channel">
   <form action="/channels/join" class="wrapper-form" method="POST">
     <h5 id="join-channel-title" class="form-title">join <span>/{{ .ThisChannel.Name }}</span></h5>
-    <span id="join-agree" class="text-join-channel">check the agree checkbox to agree to the <span id="showRules-channel-{{ .ThisChannel.ID }}" class="link">rules</span> of this channel</span>
+    <span id="join-agree" class="text-join-channel">check the agree checkbox to agree to the <span id="showRules-channel-{{ .ThisChannel.ID }}" class="link-under">rules</span> of this channel</span>
     <div id="rulesContainer-channel-{{ .ThisChannel.ID }}" class="side-panel-block container-join-rules hidden">
       <ul class="sidebar-channel-ul">
         {{ if gt (len .ThisChannel.Rules) 0 }}

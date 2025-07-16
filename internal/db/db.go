@@ -40,8 +40,8 @@ func InitDB(filepath string, schemaFile string) (*sql.DB, error) {
 	}
 
 	// Split and execute each statement individually
-	statements := strings.Split(string(schema), ";")
-	for _, stmt := range statements {
+	statements := strings.SplitSeq(string(schema), ";")
+	for stmt := range statements {
 		trimmed := strings.TrimSpace(stmt)
 		if trimmed != "" {
 			if _, err := db.Exec(trimmed + ";"); err != nil {

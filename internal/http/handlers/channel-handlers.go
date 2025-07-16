@@ -38,7 +38,7 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Fetch the channel
-	foundChannels, err := c.App.Channels.SearchChannelsByColumn("ID", channelId)
+	foundChannels, err := c.App.Channels.GetChannelsByID(channelId)
 	if err != nil || len(foundChannels) == 0 {
 		http.Error(w, `{"error": "Channel not found"}`, http.StatusNotFound)
 		return
@@ -62,15 +62,17 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Fetch channel posts
-	thisChannelPosts := []models.Post{}
+	var thisChannelPosts []models.Post
 	thisChannelPostIDs, err := c.App.Channels.GetPostIDsFromChannel(thisChannel.ID)
-	if err == nil {
-		for _, postID := range thisChannelPostIDs {
-			post, err := c.App.Posts.GetPostByID(postID)
-			if err == nil {
-				thisChannelPosts = append(thisChannelPosts, post)
-			}
+	if err != nil {
+		http.Error(w, `{"error": "Error getting Post IDs"}`, http.StatusInternalServerError)
+	}
+	for p := range thisChannelPostIDs {
+		post, err := c.App.Posts.GetPostByID(thisChannelPostIDs[p])
+		if err != nil {
+			http.Error(w, `{"error": "Error getting post ID:" + thisChannelPostIDs[p]}`, http.StatusInternalServerError)
 		}
+		thisChannelPosts = append(thisChannelPosts, post)
 	}
 
 	allChannels, err := c.App.Channels.All()
@@ -80,14 +82,15 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 	for c := range allChannels {
 		models.UpdateTimeSince(&allChannels[c])
 	}
+	channelName, err := c.App.Channels.GetChannelNameFromID(thisChannel.ID)
+	if err != nil {
+		http.Error(w, `{"error": "error fetching channel name"}`, http.StatusInternalServerError)
+	}
 
-	// Fetch channel name and timesince for posts
+	// Add channel ID & name and fetch timesince for posts
 	for p := range thisChannelPosts {
-		thisChannelPosts[p].ChannelID, thisChannelPosts[p].ChannelName, err = c.GetChannelInfoFromPostID(thisChannelPosts[p].ID)
-		if err != nil {
-			http.Error(w, `{"error": "error fetching channel info"}`, http.StatusInternalServerError)
-		}
-
+		thisChannelPosts[p].ChannelID, thisChannelPosts[p].ChannelName = thisChannel.ID, channelName
+		// TODO no need for this
 		models.UpdateTimeSince(&thisChannelPosts[p])
 	}
 
@@ -132,6 +135,8 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 			http.Error(w, `{"error": "Error getting user joined channels"}`, http.StatusInternalServerError)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+
+		// Determine whether the current user has joined thisChannel
 		for _, channel := range joinedChannels {
 			if thisChannel.ID == channel.ID {
 				isJoined = true
@@ -150,6 +155,8 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 		IsJoined:               isJoined,
 		Rules:                  thisChannelRules,
 		Posts:                  thisChannelPosts,
+		OwnedChannels:          ownedChannels,
+		JoinedChannels:         joinedChannels,
 		OwnedAndJoinedChannels: ownedAndJoinedChannels,
 		ImagePaths:             c.App.Paths,
 	}

@@ -133,10 +133,6 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
 		}
 		ownedChannels, err = h.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID)
-		if memberErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
-		}
-
 		if err != nil {
 			log.Printf(ErrorMsgs().Query, "GetHome > user owned channels", err)
 		}
@@ -146,7 +142,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// FIXME Fixed duplicate channels used on createPost, sidebar, filters etc
-		//ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+		// ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
 		// Add owned channels
 		for _, channel := range ownedChannels {
 			if !channelMap[channel.ID] {

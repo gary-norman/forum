@@ -20,6 +20,8 @@ type Channel struct {
 	Privacy          bool `db:"privacy"`
 	IsMuted          bool `db:"isMuted"`
 	IsFlagged        bool `db:"isFlagged,omitempty"`
+	Members          int
+	MembersOnline    int
 }
 
 func (c Channel) TableName() string { return "channels" }
@@ -40,6 +42,8 @@ type ChannelPage struct {
 	IsJoined               bool
 	Rules                  []Rule
 	Posts                  []Post
+	OwnedChannels          []Channel
+	JoinedChannels         []Channel
 	OwnedAndJoinedChannels []Channel
 	ImagePaths
 }

@@ -114,12 +114,12 @@ button,
 
 .btn-primary {
   width: fit-content;
-  background: var(--color-hl-primary);
-  /* border     : 0.15rem solid transparent; */
-  color: var(--color-light-1);
+  background: var(--clr-accent--1);
+  border: 0.15rem solid transparent;
+  color: var(--clr-light--1);
   transition: all var(--transition-dur-hover);
   & span {
-    color: var(--color-dark-1);
+    color: var(--clr-dark--1);
     /*&::before {*/
     /* filter: var(--filter-invert-always_on) !important; */
     /*    !*background: rgb(255 255 255 / .3);*!*/
@@ -149,8 +149,8 @@ button,
 
 .btn-secondary {
   /* background : transparent; */
-  /* border     : 0.15rem solid var(--color-secondary-border); */
-  color: var(--color-fg-2);
+  /* border     : 0.15rem solid var(--clr-secondary-border); */
+  color: var(--clr-fg-2);
 }
 
 .btn-teritary {
@@ -159,10 +159,10 @@ button,
     align-self: center;
   }
   &:hover {
-    background-color: var(--color-bg-1);
+    background-color: var(--clr-bg-1);
   }
   &:active {
-    background-color: var(--color-bg-3);
+    background-color: var(--clr-bg-3);
   }
 }
 
@@ -328,7 +328,7 @@ button,
 .btn-channel-green-dot {
   &::before {
     content: "•";
-    color: var(--color-hl-primary);
+    color: var(--clr-accent--1);
     font-size: 2.8rem;
     position: absolute;
     left: 1.6rem;
@@ -341,11 +341,11 @@ button,
   border: 0.15rem solid transparent;
   transition: border var(--transition-dur-hover);
   &:hover {
-    border: 0.15rem solid var(--color-secondary-hover);
+    border: 0.15rem solid var(--clr-secondary--border-hover);
   }
 }
 .btn-active {
-  border: 0.15rem solid var(--color-secondary-active);
+  border: 0.15rem solid var(--clr-secondary--active);
   pointer-events: none;
 }
 .btn-icoonly {
@@ -353,6 +353,7 @@ button,
   align-items: center;
   justify-content: center;
   width: fit-content;
+  min-width: 3.6rem;
   padding: 1.2rem 0.4rem;
   & img {
     filter: var(--filter-invert-on_off);
@@ -430,18 +431,18 @@ button,
 .btn-filled,
 .btn-filled-fancy,
 .btn-filled-nohover {
-  background: var(--color-bg-3);
+  background: var(--clr-bg-3);
   /* transition: border 300ms cubic-bezier(1, 0.02, 1, -0.27); */
-  border: 0.15rem solid var(--color-bg-4);
+  border: 0.15rem solid var(--clr-bg-4);
 }
 .btn-filled {
   &:hover {
-    /* background: var(--color-secondary-hover); */
-    border: 0.15rem solid var(--color-secondary-hover);
+    /* background: var(--clr-secondary--hover); */
+    border: 0.15rem solid var(--clr-secondary--border-hover);
   }
 
   &.selected {
-    color: var(--color-fg-1);
+    color: var(--clr-fg-1);
   }
 }
 .btn-filled-fancy {
@@ -454,26 +455,28 @@ button,
   border: 0.15rem solid lab(from firebrick calc(l - 20) calc(a - 0) calc(b - 0));
 }
 .btn-filled-orange {
-  background: var(--color-hl-orange);
+  background: var(--clr-accent-orange);
   border: 0.15rem solid
-    lab(from var(--color-hl-orange) calc(l - 20) calc(a - 0) calc(b - 0));
+    lab(from var(--clr-accent-orange) calc(l - 20) calc(a - 0) calc(b - 0));
 }
 .btn-filled-white_orange {
-  background: var(--color-fg-1);
-  border: 0.15rem solid var(--color-hl-orange);
-  color: lab(from var(--color-hl-orange) calc(l - 20) calc(a - 0) calc(b - 0));
+  background: var(--clr-fg-1);
+  border: 0.15rem solid var(--clr-accent-orange);
+  color: lab(
+    from var(--clr-accent-orange) calc(l - 20) calc(a - 0) calc(b - 0)
+  );
 }
 .btn-action {
   position: relative;
 
   &:hover {
-    border: 0.15rem solid var(--color-secondary-hover);
+    border: 0.15rem solid var(--clr-secondary--border-hover);
   }
 
   &.inactive {
     /* pointer-events: none; */
     &:hover {
-      border: 0.15rem solid var(--color-bg-4);
+      border: 0.15rem solid var(--clr-bg-4);
     }
   }
   &.active {
@@ -493,7 +496,7 @@ button,
   &.nouser {
     cursor: var(--cursor-notallowed);
     &:hover {
-      border: 0.15rem solid var(--color-bg-4);
+      border: 0.15rem solid var(--clr-bg-4);
     }
 
     &::before,
@@ -511,12 +514,12 @@ button,
     &::before {
       content: "you must be logged in to use this feature";
       top: calc(100% + 0.55rem);
-      background: var(--color-bg-2);
-      color: var(--color-text);
+      background: var(--clr-bg-2);
+      color: var(--clr-fg-1);
       font-size: 0.875rem;
       padding: 0.5rem 0.75rem;
       border-radius: 0.8rem;
-      border: 0.15rem solid var(--color-hl-pink);
+      border: 0.15rem solid var(--clr-accent--2);
       white-space: nowrap;
       box-shadow: 0 0 0.25rem rgb(0 0 0 / 0.2);
     }
@@ -531,13 +534,11 @@ button,
       top: calc(100% - 0.45rem);
       margin-left: -0.5rem;
       border: 0.5rem solid;
-      border-color: transparent transparent var(--color-hl-pink) transparent;
+      border-color: transparent transparent var(--clr-accent--2) transparent;
     }
   }
 }
 
-@keyframes scaleInTop {
-}
 .btn-action-primary,
 .btn-action-secondary {
   position: relative;
@@ -555,58 +556,72 @@ button,
     height: calc(100% + 0.4rem);
     --grad-from: 0deg;
     border-radius: var(--btn-radius);
+    border: 0;
     animation: orbit-btn var(--transition-dur-hover) ease-in 1 forwards;
-    z-index: calc(var(--z-index-btn-action) - 10);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: calc(var(--z-index-btn-action) + 10);
   }
   &:hover::after {
     content: "";
     position: absolute;
     top: 50%;
     left: 50%;
-    color: var(--color-fg-1);
+    background: var(--background-fill);
+    color: var(--clr-fg-1);
     transform: translate(-50%, -50%);
-    width: var(--beam-linear-w);
+    width: calc(var(--beam-linear-w) + 0.2rem);
     height: var(--beam-linear-h);
     /* border: 1px solid rgba(1 1 1 / 0.2); */
     border-radius: var(--btn-radius);
-    animation: linear-fill-button 0.2s ease-in 0.1s 1 forwards;
-    z-index: calc(var(--z-index-btn-action) + 10);
+    animation: linear-fill-button var(--transition-dur-hover) ease-in 0.1s 1
+      forwards;
+    z-index: calc(var(--z-index-btn-action) - 10);
   }
 }
 .btn-action-primary {
+  --background-fill: var(--clr-accent--1);
+
   &:hover::before {
+    padding: 0.2rem;
     background: conic-gradient(
       from var(--grad-from),
       transparent var(--beam-1-end),
-      var(--color-hl-pink) var(--beam-1-end),
-      var(--color-hl-pink) var(--beam-1-start),
+      var(--clr-accent--2) var(--beam-1-end),
+      var(--clr-accent--2) var(--beam-1-start),
       transparent var(--beam-1-start),
       transparent var(--beam-2-end),
-      var(--color-hl-pink) var(--beam-2-end),
-      var(--color-hl-pink) var(--beam-2-start),
+      var(--clr-accent--2) var(--beam-2-end),
+      var(--clr-accent--2) var(--beam-2-start),
       transparent var(--beam-2-start)
     );
   }
   &:hover::after {
-    background: var(--color-hl-pink);
+    background: var(--clr-accent--2);
   }
 }
 .btn-action-secondary {
+  --background-fill: var(--clr-fg-2);
+
   &:hover::before {
+    padding: 0.2rem;
     background: conic-gradient(
       from var(--grad-from),
       transparent var(--beam-1-end),
-      var(--color-secondary-hover) var(--beam-1-end),
-      var(--color-secondary-hover) var(--beam-1-start),
+      var(--clr-secondary--hover) var(--beam-1-end),
+      var(--clr-secondary--hover) var(--beam-1-start),
       transparent var(--beam-1-start),
       transparent var(--beam-2-end),
-      var(--color-secondary-hover) var(--beam-2-end),
-      var(--color-secondary-hover) var(--beam-2-start),
+      var(--clr-secondary--hover) var(--beam-2-end),
+      var(--clr-secondary--hover) var(--beam-2-start),
       transparent var(--beam-2-start)
     );
   }
   &:hover::after {
-    background: var(--color-secondary-hover);
+    /* background: var(--clr-secondary--hover); */
   }
 }
 /* INFO the invert buttons determine whether the color of the background image is inverted in normal/hover and dark/light.
@@ -678,7 +693,7 @@ button,
   }
   &:hover span,
   &:hover img {
-    color: var(--color-light-1);
+    color: var(--clr-light-1);
     &::before {
       filter: var(--filter-invert-always_off);
     }
@@ -695,7 +710,7 @@ button,
   }
   &:hover span,
   &:hover img {
-    color: var(--color-light-1);
+    color: var(--clr-light-1);
     &::before {
       filter: var(--filter-invert-always_off);
     }
@@ -712,7 +727,7 @@ button,
   }
   &:hover span,
   &:hover img {
-    color: var(--color-light-1);
+    color: var(--clr-light-1);
     &::before {
       filter: var(--filter-invert-on_off);
     }
@@ -729,7 +744,7 @@ button,
   }
   &:hover span,
   &:hover img {
-    color: var(--color-light-1);
+    color: var(--clr-light-1);
     &::before {
       filter: var(--filter-invert-on_off);
     }
@@ -754,7 +769,7 @@ button,
   width: 7rem;
   height: 3.4rem;
   border-radius: var(--btn-radius);
-  border: 0.2rem solid var(--color-secondary-border);
+  border: 0.2rem solid var(--clr-secondary--border);
   position: relative;
   cursor: url("/assets/cursors/pointer.svg"), pointer;
   z-index: 0;
@@ -771,7 +786,7 @@ button,
   width: 7rem;
   height: 3.4rem;
   border-radius: var(--btn-radius);
-  border: 0.2rem solid var(--color-secondary-border);
+  border: 0.2rem solid var(--clr-secondary-border);
   position: absolute;
   top: 0;
   left: 0;
@@ -787,8 +802,8 @@ button,
     width: 2.6rem;
     height: 2.6rem;
     border-radius: var(--btn-radius);
-    border: 0.2rem solid var(--color-hl-green-secondary);
-    background: var(--color-hl-primary);
+    border: 0.2rem solid var(--clr-accent--1-2);
+    background: var(--clr-accent--1);
     transition: left ease-in-out var(--transition-dur-hover-darklight);
   }
 }
@@ -826,7 +841,7 @@ input:not(:checked) + .darklight-fx:after {
   height: 1.8rem;
 }
 .allow-comments:has(input:checked) + label {
-  color: var(--color-hl-green);
+  color: var(--clr-accent--1);
 }
 .allow-comments-fx {
   &::before {
@@ -835,8 +850,7 @@ input:not(:checked) + .darklight-fx:after {
     width: 1.2rem;
     height: 1.2rem;
     filter: grayscale(1);
-    border: 0.1rem solid
-      lab(from var(--color-hl-green-lab) calc(l - 20) calc(a - 0) calc(b - 0));
+    border: 0.1rem solid var(--clr-accent--1-1);
     transition: all var(--transition-dur-hover) var(--transition-type-hover);
   }
 }
@@ -980,9 +994,9 @@ input:checked + .allow-comments-fx {
 }
 @keyframes btn-fill {
   90% {
-    background: var(--color-bg-3);
+    background: var(--clr-bg-3);
   }
   100% {
-    background: var(--color-secondary-hover);
+    background: var(--clr-secondary--hover);
   }
 }

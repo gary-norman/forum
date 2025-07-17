@@ -1,3 +1,5 @@
+// Package db provides functions to initialize and manage the SQLite database.
+// It sets up the database with foreign key support, applies recommended PRAGMAs
 package db
 
 import (

@@ -1,3 +1,4 @@
+// Package handlers contains the HTTP handlers for the forum application.
 package handlers
 
 import (

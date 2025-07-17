@@ -1,3 +1,4 @@
+// Package app sets up the application.
 package app
 
 import (
@@ -29,7 +30,7 @@ func Colors() *models.Colors {
 }
 
 type App struct {
-	Db          *sql.DB // Store DB reference for cleanup
+	DB          *sql.DB // Store DB reference for cleanup
 	Users       *sqlite.UserModel
 	Posts       *sqlite.PostModel
 	Reactions   *sqlite.ReactionModel
@@ -49,7 +50,7 @@ type App struct {
 
 func NewApp(db *sql.DB) *App {
 	return &App{
-		Db:          db,
+		DB:          db,
 		Users:       &sqlite.UserModel{DB: db},
 		Posts:       &sqlite.PostModel{DB: db},
 		Reactions:   &sqlite.ReactionModel{DB: db},

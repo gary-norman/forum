@@ -29,7 +29,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	var userPosts []models.Post
 	userLoggedIn := true
 	// SECTION --- posts and comments ---
-	// postDAO := dao.NewDAO[*models.Post](h.App.Db)
+	// postDAO := dao.NewDAO[*models.Post](h.App.DB)
 	// ctx := context.Background()
 	// daoAllPosts, err := postDAO.All(ctx)
 	// if err != nil {

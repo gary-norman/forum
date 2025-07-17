@@ -22,6 +22,7 @@
       {{ $post := .Post }} data-comment-id="{{$comment.ID}}" data-channel-id="{{$post.ChannelID}}" data-author-id="{{comment.AuthorID}}"
     {{ end */}}
     >
+{{/* TODO - simply don't add this template to right-panel, omit this if clause */}}
     {{ if ne $calledBy "right-panel"}} {{/* buttons NOT present in right-panel */}}
       {{ if eq $calledBy "post-card"}}
         {{ $post := .Post }}

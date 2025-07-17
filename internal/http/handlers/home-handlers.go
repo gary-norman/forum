@@ -81,6 +81,9 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 
 	// Retrieve last reaction time for posts
 	allPosts, err = h.Reaction.getLastReactionTimeForPosts(allPosts)
+	if err != nil {
+		log.Printf(ErrorMsgs().KeyValuePair, "Error getting last reaction time for allPosts", err)
+	}
 
 	for p := range allPosts {
 		models.UpdateTimeSince(&allPosts[p])

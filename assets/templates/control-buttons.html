@@ -35,12 +35,12 @@
         </button>
         {{ if and (eq $instance "post-page") (eq $calledBy "this-post") }}
 {{/* the detailed post */}}
-          <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}">
+          <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}" data-action="comment-post" data-post-id="{{$post.ID}}">
             <span class="btn-reply">reply</span>
           </button>
         {{ else }}
 {{/* posts on any list */}}
-          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}" data-dest="post" data-post-id="{{$post.ID}}">
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}" data-dest="post" data-action="navigate--comment-post" data-post-id="{{$post.ID}}">
             <span class="btn-reply">{{$post.CommentsCount}}</span>
           </button>
         {{ end }}

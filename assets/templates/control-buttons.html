@@ -3,6 +3,7 @@
 {{ $dot := .dot }}
 {{ $userID := .userID }}
 {{ $calledBy := .calledBy }}
+{{ $thisPost := .ThisPost }}
 {{ $tracer := printf "%s > %s" .Tracer "control-buttons" }}
 {{ with $tracer }}
   {{/* fprint "Trace" . */}}
@@ -33,7 +34,7 @@
         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{ else }}{{if $status.Disliked}}active{{ else }} {{end}} {{ end }}" >
           <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
         </button>
-        {{ if and (eq $instance "post-page") (eq $calledBy "this-post") }}
+        {{ if eq $thisPost "true" }}
 {{/* the detailed post */}}
           <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}" data-action="comment-post" data-post-id="{{$post.ID}}">
             <span class="btn-reply">reply</span>

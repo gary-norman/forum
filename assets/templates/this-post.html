@@ -39,7 +39,7 @@
         <p class="cardContent">{{ $comment.Content }}</p>
 {{/*  Post control buttons */}}
         <div class="button-row-wrap post-controls" >
-          {{ template "comment-controls" (dict "Post" $post "Comment" $comment "UserID" $userID "Tracer" $tracer "CurrentUser" $.CurrentUser "Instance" $instance) }}
+          {{ template "comment-controls" (dict "Post" $post "Comment" $comment "UserID" $userID "Tracer" $tracer "CurrentUser" $.CurrentUser "Instance" $instance "calledBy" "this-post") }}
         </div>
 {{/*  Reply / Submit Comment form */}}
         <form name="replyForm" class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">

@@ -67,7 +67,7 @@ export function selectActiveFeed() {
       // console.log(scrollWindow)
       break;
     default:
-      console.log("%cNO ACTIVE FEED BITCH... switching to home-page, angry");
+      console.log("%cNO ACTIVE FEED BITCH... switching to home-page", angry);
       setActivePage("home");
       scrollWindow = document.querySelector(`#home-feed`);
       break;

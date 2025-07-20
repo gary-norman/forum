@@ -1,4 +1,4 @@
-import { listenToReplies } from "./comments.js";
+import { listenToReplies, toggleReplyForm } from "./comments.js";
 import { listenToEditDetails } from "./edit_user.js";
 import { listenToShare, selectActiveFeed } from "./share.js";
 import { listenToLikeDislike, listenToNoUser } from "./reactions.js";

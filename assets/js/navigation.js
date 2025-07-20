@@ -1,6 +1,8 @@
-import {changePage, navigateToPage} from "./fetch_and_navigate.js";
-import {data} from "./share.js";
-import {setActivePage} from "./main.js";
+import { setActivePage, newContentLoaded } from "./main.js";
+import { changePage, navigateToPage } from "./fetch_and_navigate.js";
+import { toggleReplyForm } from "./comments.js";
+import { data } from "./share.js";
+import { UpdateUI } from "./update_UI_elements.js";
 
 // sidebar butons
 const goHome = document.querySelector("#btn-go-home");

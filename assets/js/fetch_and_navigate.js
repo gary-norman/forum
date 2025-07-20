@@ -17,12 +17,12 @@ export function navigateToPage(dest, entity) {
 
   if (!link) {
     console.error(`${dest} ID is missing`);
-    return;
+    return Promise.reject(`${dest} ID is missing`);
   }
 
   setActivePage(dest);
   changePage(page);
-  fetchData(dest, link);
+  return fetchData(dest, link);
 }
 
 export function changePage(page) {
@@ -65,7 +65,7 @@ function fetchData(entity, Id) {
   // console.log(`%cFetching ${entity} data for ID:`, expect, Id);
 
   history.pushState({}, "", `/${entity}s/${Id}`);
-  fetch(`/${entity}s/${Id}`)
+  return fetch(`/${entity}s/${Id}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

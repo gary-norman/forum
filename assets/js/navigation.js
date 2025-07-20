@@ -45,8 +45,9 @@ function navigateToEntity(e) {
   if (hasDestination || !isButton || (isButton && hasDestination)) {
     if (commentAction === "navigate--comment-post") {
       const dest = e.target.getAttribute("data-dest");
-      navigateToPage(dest, e.target);
-      toggleReplyForm();
+      navigateToPage(dest, e.target).then(() => {
+        toggleReplyForm();
+      });
     } else if (commentAction === "comment-post") {
       toggleReplyForm();
     } else if (hasDestination || !isButton || (isButton && hasDestination)) {

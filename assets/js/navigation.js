@@ -67,9 +67,9 @@ document.addEventListener("click", navigateToEntity, {capture: false});
 // when the event happens on a specific type of child element (that matches the selector you give)
 // good for event delegation and for new elements populated dynamically
 export function addGlobalEventListener(type, selector, callback, parent) {
-    parent.addEventListener(type, e => {
-        if (e.target.matches(selector)) {
-            callback(e)
-        }
-    })
+  parent.addEventListener(type, (e) => {
+    if (e.target.matches(selector)) {
+      callback(e);
+    }
+  });
 }

@@ -38,6 +38,8 @@ export function listenToChannelLinks() {
 function navigateToEntity(e) {
     const hasDestination = e.target.getAttribute("data-dest");
     const isButton = e.target.nodeName.toLowerCase() === "button";
+  const commentAction = e.target.getAttribute("data-action");
+  const postID = e.target.getAttribute("data-post-id");
 
     if ((hasDestination || !isButton) || (isButton && hasDestination) ) {
         const parent = e.target.closest(".link");

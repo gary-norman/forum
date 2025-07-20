@@ -41,18 +41,24 @@ function navigateToEntity(e) {
   const commentAction = e.target.getAttribute("data-action");
   const postID = e.target.getAttribute("data-post-id");
 
-    if ((hasDestination || !isButton) || (isButton && hasDestination) ) {
-        const parent = e.target.closest(".link");
-        if (parent) {
-            const dest = parent.getAttribute("data-dest");
-            navigateToPage(dest, parent);
-        }
-        return;
+  if (hasDestination || !isButton || (isButton && hasDestination)) {
+    if (commentAction === "navigate--comment-post") {
+      const dest = e.target.getAttribute("data-dest");
+      navigateToPage(dest, e.target);
+      toggleReplyForm();
+    } else if (commentAction === "comment-post") {
+      toggleReplyForm();
+    } else if (hasDestination || !isButton || (isButton && hasDestination)) {
+      const parent = e.target.closest(".link");
+      if (parent) {
+        const dest = parent.getAttribute("data-dest");
+        navigateToPage(dest, parent);
+      }
+    } else if (e.target.matches(".link")) {
+      const dest = e.target.getAttribute("data-dest");
+      navigateToPage(dest, e.target);
     }
-    if (e.target.matches(".link")) {
-        const dest = e.target.getAttribute("data-dest");
-        navigateToPage(dest, e.target);
-    }
+  }
 }
 
 document.addEventListener("click", navigateToEntity, {capture: false});

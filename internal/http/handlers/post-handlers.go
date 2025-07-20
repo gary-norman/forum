@@ -79,13 +79,13 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Parse post ID from URL
-	postId, err := models.GetIntFromPathValue(r.PathValue("postId"))
+	postID, err := models.GetIntFromPathValue(r.PathValue("postId"))
 	if err != nil {
 		http.Error(w, `{"error": "invalid post ID"}`, http.StatusBadRequest)
 	}
 
 	// Fetch the post
-	post, err := p.App.Posts.GetPostByID(postId)
+	post, err := p.App.Posts.GetPostByID(postID)
 	if err != nil {
 		http.Error(w, `{"error": "post not found"}`, http.StatusNotFound)
 	}

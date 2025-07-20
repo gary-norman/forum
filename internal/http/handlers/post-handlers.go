@@ -21,7 +21,7 @@ type PostHandler struct {
 	Reaction *ReactionHandler
 }
 
-// getUserPosts returns a slice of Posts that belong to channels the user follows. If no user is logged in, it returns all posts
+// GetUserPosts returns a slice of Posts that belong to channels the user follows. If no user is logged in, it returns all posts
 func (p *PostHandler) GetUserPosts(user *models.User, allPosts []models.Post) []models.Post {
 	if user == nil {
 		return allPosts

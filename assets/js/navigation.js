@@ -9,35 +9,36 @@ const goHome = document.querySelector("#btn-go-home");
 
 // --- go home ---
 goHome.addEventListener("click", () => {
-    setActivePage("home");
-    history.pushState({}, "", `/`);
-    changePage(data["homePage"]);
+  setActivePage("home");
+  history.pushState({}, "", `/`);
+  changePage(data["homePage"]);
 });
 
 // INFO was inside a DOMContentLoaded function
 export function listenToChannelLinks() {
-    const joinedAndOwnedChannelContainer = document.querySelector(
-        "#sidebar-channel-block",
+  const joinedAndOwnedChannelContainer = document.querySelector(
+    "#sidebar-channel-block",
+  );
+
+  // console.log(joinedAndOwnedChannelContainer);
+  let joinedAndOwnedChannels;
+
+  if (joinedAndOwnedChannelContainer) {
+    joinedAndOwnedChannels =
+      joinedAndOwnedChannelContainer.querySelectorAll(".sidebar-channel");
+    joinedAndOwnedChannels.forEach((channel) =>
+      channel.addEventListener("click", (e) => {
+        e.preventDefault();
+        navigateToPage("channel", channel);
+      }),
     );
-
-    // console.log(joinedAndOwnedChannelContainer);
-    let joinedAndOwnedChannels;
-
-    if (joinedAndOwnedChannelContainer) {
-        joinedAndOwnedChannels =
-            joinedAndOwnedChannelContainer.querySelectorAll(".sidebar-channel");
-        joinedAndOwnedChannels.forEach((channel) =>
-            channel.addEventListener("click", (e) => {
-                e.preventDefault();
-                navigateToPage("channel", channel);
-            }),
-        );
-    }
+  }
 }
 
 function navigateToEntity(e) {
-    const hasDestination = e.target.getAttribute("data-dest");
-    const isButton = e.target.nodeName.toLowerCase() === "button";
+  debugger;
+  const hasDestination = e.target.getAttribute("data-dest");
+  const isButton = e.target.nodeName.toLowerCase() === "button";
   const commentAction = e.target.getAttribute("data-action");
   const postID = e.target.getAttribute("data-post-id");
 
@@ -60,8 +61,7 @@ function navigateToEntity(e) {
     }
   }
 }
-
-document.addEventListener("click", navigateToEntity, {capture: false});
+document.addEventListener("click", navigateToEntity, { capture: false });
 
 // addGlobalEventListener is an event listener on a parent element that only runs your callback
 // when the event happens on a specific type of child element (that matches the selector you give)

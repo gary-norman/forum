@@ -10,11 +10,12 @@ const warn =
 
 
 export function listenToEditDetails() {
-  const userSettingBlocks = activePageElement.querySelectorAll('[id^="settings-user-"]');
+  const settingBlocks = activePageElement.querySelectorAll('[id*="settings-"]');
   const nameInput = activePageElement.querySelector('[id$="name-input"]');
   const nameContent = activePageElement.querySelector('[id$="name-content"]');
-  const bioInput = activePageElement.querySelector("#bio");
-  const bioContent = activePageElement.querySelector("#user-bio-content");
+  const nameLabel = activePageElement.querySelector('[id$="name-label"]');
+  const bioInput = activePageElement.querySelector('[id$="bio-input"]');
+  const bioContent = activePageElement.querySelector('[id$="bio-content"]');
   const dragDropImage = activePageElement.querySelector("#drop-zone--user-image");
   const inputs = [bioInput, nameInput];
   const adjustHeight = (element) => {
@@ -26,7 +27,7 @@ export function listenToEditDetails() {
 
   // console.log("bioContent", bioContent);
   // console.log("nameContent", nameContent);
-  console.log("inputs", inputs);
+  // console.log("inputs", inputs);
 
   // inputs.forEach((input) => {
   //   if (input) {
@@ -68,40 +69,47 @@ export function listenToEditDetails() {
   //   });
   // });
 
-  userSettingBlocks.forEach((block) => {
-    const editButton = block.querySelector('[id^="edit-user"]');
-    const submitButton = block.querySelector('[id^="submit-user"]');
-    const cancelButton = block.querySelector('[id^="cancel-user"]');
+  console.log("settingBlocks", settingBlocks);
+
+  settingBlocks.forEach((block) => {
+    const editButton = block.querySelector('[id*="edit-"]');
+    const submitButton = block.querySelector('[id*="submit-"]');
+    const cancelButton = block.querySelector('[id*="cancel-"]');
+
+    function removeEditingState() {
+      nameContent.classList.remove("editing");
+      nameInput.classList.remove("editing");
+      nameLabel.classList.remove("editing");
+      bioContent.classList.remove("editing");
+      bioInput.classList.remove("editing");
+      dragDropImage.classList.remove("editing");
+    }
+
     editButton.addEventListener("click", function (e) {
       block.classList.add("editing");
-      userSettingBlocks.forEach((otherBlock) => {
+      settingBlocks.forEach((otherBlock) => {
         if (block !== otherBlock) {
           otherBlock.classList.remove("editing");
         }
       });
 
-      switch (editButton.id) {
-        case "edit-user-name":
+      switch (true) {
+        case editButton.id.endsWith("edit-name"):
+          removeEditingState();
           nameContent.classList.add("editing");
           nameInput.classList.add("editing");
-          bioContent.classList.remove("editing");
-          bioInput.classList.remove("editing");
-          dragDropImage.classList.remove("editing");
+          nameLabel.classList.add("editing");
           nameInput.focus();
           break;
-        case "edit-user-avatar":
+        case editButton.id.endsWith("edit-avatar"):
+          removeEditingState();
           dragDropImage.classList.add("editing");
-          nameContent.classList.remove("editing");
-          nameInput.classList.remove("editing");
-          bioContent.classList.remove("editing");
-          bioInput.classList.remove("editing");
+
           break;
-        case "edit-user-bio":
+        case editButton.id.endsWith("edit-bio"):
+          removeEditingState();
           bioContent.classList.add("editing");
           bioInput.classList.add("editing");
-          nameInput.classList.remove("editing");
-          nameContent.classList.remove("editing");
-          dragDropImage.classList.remove("editing");
           bioInput.focus();
           break;
         default:
@@ -112,14 +120,15 @@ export function listenToEditDetails() {
       block.classList.remove("editing");
 
       switch (true) {
-        case cancelButton.id.startsWith("cancel-user-name"):
+        case cancelButton.id.endsWith("cancel-name"):
           nameContent.classList.remove("editing");
           nameInput.classList.remove("editing");
+          nameLabel.classList.remove("editing");
           break;
-        case cancelButton.id.startsWith("cancel-user-avatar"):
+        case cancelButton.id.endsWith("cancel-avatar"):
           dragDropImage.classList.remove("editing");
           break;
-        case cancelButton.id.startsWith("cancel-user-bio"):
+        case cancelButton.id.endsWith("cancel-bio"):
           bioContent.classList.remove("editing");
           bioInput.classList.remove("editing");
           break;
@@ -130,17 +139,20 @@ export function listenToEditDetails() {
     submitButton.addEventListener("click", function (e) {
       block.classList.remove("editing");
 
-      switch (cancelButton.id) {
-        case "submit-user-name":
-          nameContent.classList.remove("editing");
-          nameInput.classList.remove("editing");
+      switch (true) {
+        case  submitButton.id.endsWith("submit-name"):
+          // nameContent.classList.remove("editing");
+          // nameInput.classList.remove("editing");
+          removeEditingState();
           break;
-        case "submit-user-avatar":
-          dragDropImage.classList.remove("editing");
+        case submitButton.id.endsWith("submit-avatar"):
+          // dragDropImage.classList.remove("editing");
+          removeEditingState();
           break;
-        case "submit-user-bio":
-          bioContent.classList.remove("editing");
-          bioInput.classList.remove("editing");
+        case submitButton.id.endsWith("submit-bio"):
+          // bioContent.classList.remove("editing");
+          // bioInput.classList.remove("editing");
+          removeEditingState();
           break;
         default:
           console.log("submit button clicked but section not recognised");
@@ -148,3 +160,5 @@ export function listenToEditDetails() {
     });
   });
 }
+
+

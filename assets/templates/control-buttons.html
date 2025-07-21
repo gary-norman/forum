@@ -27,10 +27,10 @@
         {{ $post := .Post }}
         {{$status := reactionStatus $userID $post.ID 0}}
         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{ else }}{{if $status.Liked}}active{{ else }} {{end}} {{ end }}">
-          <span class="btn-likes" data-like-ID="user-{{$post.ID}}">{{$post.Likes}}</span>
+          <span class="btn-likes">{{$post.Likes}}</span>
         </button>
         <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{ else }}{{if $status.Disliked}}active{{ else }} {{end}} {{ end }}" >
-          <span class="btn-dislikes" data-dislike-ID="user-{{$post.ID}}">{{$post.Dislikes}}</span>
+          <span class="btn-dislikes">{{$post.Dislikes}}</span>
         </button>
         {{ if and (eq $instance "post-page") (eq $calledBy "this-post") }}
           <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}">

@@ -174,8 +174,16 @@
   display: none;
   min-height: 2.4rem;
   margin-bottom: 2.4rem;
+  width: 100%;
   &.editing {
     display: flex;
+  }
+}
+
+#user-name-label, #channel-name-label {
+  display: none;
+  &.editing {
+    display: block;
   }
 }
 

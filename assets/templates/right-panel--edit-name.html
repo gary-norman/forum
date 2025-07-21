@@ -10,7 +10,13 @@
   {{if eq $instance "channel-page"}}
   {{ else if eq $instance "user-page"}}
     <div class="right-panel-container-name flex-space-between">
-      <h4 class="right-panel-name">{{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }}{{ $currentUser.Username }}{{ else }}{{ $thisUser.Username }}{{ end }}</h4>
+      {{  if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username)}}
+        <div id="user-name-input" class="input-wrapper ">
+          <label class="hide" for="name-user-{{$instance}}">Edit your name</label>
+          <textarea class="scroll-down" id="name-user-{{$instance}}" name="name" placeholder="{{$thisUser.Username}}">{{$thisUser.Username}}</textarea>
+        </div>
+      {{ end }} <!-- "nouser" check -->
+      <h4 id="user-name-content" class="right-panel-name">{{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }}{{ $currentUser.Username }}{{ else }}{{ $thisUser.Username }}{{ end }}</h4>
       {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
         <div id="settings-user-name" class="edit-settings">
           <button id="edit-user-name" type="button" class="btn-sm btn-icoonly">
@@ -24,6 +30,7 @@
           </button>
         </div>
       {{ end }} <!-- end of owner user check -->
+
     </div>
   {{ end }}
 {{ end }}

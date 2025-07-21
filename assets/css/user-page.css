@@ -43,7 +43,7 @@
   /*position: relative;*/
   width: 100%;
   display: none;
-  padding: 0 0 12.4rem 0;
+  padding: 0;
   flex-direction: column;
   align-items: flex-start;
   gap: 2.4rem;
@@ -135,10 +135,13 @@
 .green {
   background: limegreen;
 }
+
 #user-activity-feeds {
+  height: 100%;
   width: 100%;
   & > * {
     width: 100%;
+    height: 100%;
     & > * {
       width: 100%;
     }
@@ -167,7 +170,7 @@
 }
 
 /*text input, when editing name */
-#name {
+#user-name-input, #channel-name-input {
   display: none;
   min-height: 2.4rem;
   margin-bottom: 2.4rem;

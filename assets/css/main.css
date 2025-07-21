@@ -212,9 +212,7 @@ small,
   line-height: normal;
   letter-spacing: normal;
 
-  &.padded {
-    padding: 0 1.2rem;
-  }
+
   &.sticky {
     position: sticky;
     top: 0;
@@ -936,7 +934,7 @@ input[type="checkbox"] {
   position: relative;
 
   &.container-reply,
-  &.edit-user {
+  &.edit-wrapper {
     width: 100%;
     & textarea {
       resize: none;
@@ -1797,6 +1795,10 @@ hr.solid {
   }
 }
 
+.padded {
+  padding: 0 1.2rem;
+}
+
 .flex-space-around {
   justify-content: space-around !important;
 }
@@ -2529,10 +2531,6 @@ main {
         font-style: normal;
         line-height: normal;
         letter-spacing: normal;
-
-        &.padded {
-          padding: 0 1.2rem;
-        }
       }
     }
 
@@ -2554,7 +2552,7 @@ main {
 
 .edit-settings {
   display: flex;
-  gap: 0.8rem;
+  gap: 0;
   & button:has(.btn-success),
   & button:has(.btn-cancel) {
     display: none;

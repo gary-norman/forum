@@ -928,9 +928,9 @@ input[type="checkbox"] {
 }
 .input-wrapper {
   width: 100%;
-  &:not(:has(input[type="date"])) {
-    width: min(80%, 25rem);
-  }
+  /*&:not(:has(input[type="date"])) {*/
+  /*  width: min(80%, 25rem);*/
+  /*}*/
   position: relative;
 
   &.container-reply,
@@ -1790,7 +1790,6 @@ hr.solid {
     &.padded {
       align-content: center;
       height: 3.2rem;
-      padding: 0 1.2rem;
     }
   }
 }

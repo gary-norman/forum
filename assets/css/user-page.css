@@ -167,7 +167,7 @@
 }
 
 /*text input, when editing name */
-#name {
+#user-name-input, #channel-name-input {
   display: none;
   min-height: 2.4rem;
   margin-bottom: 2.4rem;

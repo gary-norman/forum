@@ -49,73 +49,18 @@
         {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
           </form>
         {{ end }} <!-- end of owner user check -->
-        <div class="right-panel-container-modded-channels">
-            <div class="sidebar-block sidebar-channels">
-              <small class="padded">Modded Channels</small>
-              <div class="sidebar-channel-block">
-                <div class="sidebar-channel">
-                  <div class="container-channel-info
-                  {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }}
-                     flex-start
-                  {{end}}">
-                    <span class="card-pic profile-pic" data-image-channel="{{ $.ImagePaths.Channel }}{{ "noimage" }}"></span>
-                    <div>
-                      <div>/Interesting_Things</div>
-                      <div>
-                        <div class="channel-users">5.6k</div>
-                        <div class="channel-green-dot">36</div>
-                      </div>
-                    </div>
-                    {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
-                      <button class="btn-sm btn-icoonly margin-auto-0">
-                        <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                      </button>
-                    {{ end }} <!-- end of owner user check -->
-                  </div>
-                </div>
-                <div class="sidebar-channel">
-                  <div class="container-channel-info
-                    {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }}
-                      flex-start
-                    {{end}}">
-                    <span class="card-pic channel-pic"></span>
-                    <div>
-                      <div>/CSS_Help</div>
-                      <div>
-                        <div class="channel-users">5.6k</div>
-                        <div class="channel-green-dot">36</div>
-                      </div>
-                    </div>
-                    {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
-                      <button class="btn-sm btn-icoonly margin-auto-0">
-                        <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                      </button>
-                    {{ end }} <!-- end of owner user check -->
-                  </div>
-                </div>
-                <div class="sidebar-channel">
-                  <div class="container-channel-info
-                    {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }}
-                      flex-start
-                    {{end}}">
-                    <span class="card-pic channel-pic"></span>
-                    <div>
-                      <div>/Golang#Discussion</div>
-                      <div>
-                        <div class="channel-users">5.6k</div>
-                        <div class="channel-green-dot">36</div>
-                      </div>
-                    </div>
-                    {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
-                      <button class="btn-sm btn-icoonly margin-auto-0">
-                        <span class="btn-settings" role="contentinfo" aria-label="Edit profile name"></span>
-                      </button>
-                    {{ end }} <!-- end of owner user check -->
-                  </div>
+        {{if ne .OwnedChannels nil}}
+          <div class="right-panel-container-modded-channels">
+              <div class="sidebar-block sidebar-channels">
+                <small class="padded">Modded Channels</small>
+                <div id="sidebar-channel-block">
+                  {{ range .OwnedChannels }}
+                    {{template "channel-card-mini" (dict "dot" $ "Tracer" $tracer "Instance" $instance "Channel" . )}}
+                  {{ end }} <!-- end range of channels here-->
                 </div>
               </div>
             </div>
-          </div>
+          {{end}}
       </div>
     </div>
   {{ end }} <!-- end if channel/user check -->

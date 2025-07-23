@@ -937,6 +937,8 @@ input[type="checkbox"] {
   &.edit-wrapper {
     display: none;
     width: 100%;
+    font-size: 1.2rem;
+    padding: 0.8rem 1.2rem;
 
     &:has(.editing) {
       display: block;
@@ -944,8 +946,8 @@ input[type="checkbox"] {
     & textarea {
       resize: none;
       overflow: hidden;
-      min-width: 24rem;
-      min-height: 5rem; /* Set a minimum height */
+      /*min-width: 24rem;*/
+      /*min-height: 5rem; !* Set a minimum height *!*/
       max-height: 30rem; /* Optional: Set a max height */
     }
   }
@@ -2503,6 +2505,9 @@ main {
 
     & form {
       width: 100%;
+      display: flex;
+      flex-flow: column;
+      gap: 1.2rem;
     }
 
     & > div {

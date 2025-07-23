@@ -1,15 +1,16 @@
-{{ define "user-page-muted-activities" }}
+{{ define "user-page--muted-channels" }}
   {{ $userID := .UserID }}
   {{ with .CurrentUser }}
     {{ $userID = .ID }}
   {{ end }}
-{{ $tracer := printf "%s > %s" .Tracer "user-page-muted-activities" }}
+{{ $tracer := printf "%s > %s" .Tracer "user-page--muted-channels" }}
 {{ with $tracer }}
 {{/*    {{ fprint "Trace" . }} */}}
 {{ end }}
 {{ $dot := . }}
   <div id="activity-muted">
-  {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "user-page" "Instance" "user-page") }}
+    {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "user-page--muted-channels") }}
+
     {{/*SECTION---------- user page muted activities ----------*/}}
     <div id="activity-feed-muted" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
     {{ range 10 }}

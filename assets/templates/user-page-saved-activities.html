@@ -1,15 +1,15 @@
-{{ define "user-page-saved-activities" }}
+{{ define "user-page--saved-activities" }}
   {{ $userID := .UserID }}
   {{ with .CurrentUser }}
     {{ $userID = .ID }}
   {{ end }}
-{{ $tracer := printf "%s > %s" .Tracer "user-page-saved-activities" }}
+{{ $tracer := printf "%s > %s" .Tracer "user-page--saved-activities" }}
 {{ with $tracer }}
 {{/*    {{ fprint "Trace" . }} */}}
 {{ end }}
 {{ $dot := . }}
   <div id="activity-saved">
-  {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "user-page" "Instance" "user-page") }}
+    {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "user-page--saved-activities") }}
     {{/*SECTION---------- user page saved activities ----------*/}}
     <div id="activity-feed-saved" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
     {{ range 10 }}

@@ -1,22 +1,16 @@
-{{ define "user-page-activity-comments" }}
+{{ define "user-page--activity-comments" }}
 {{ $userID := .UserID }}
 {{ with .CurrentUser }}
   {{ $userID = .ID }}
 {{ end }}
-{{ $tracer := printf "%s > %s" .Tracer "user-page-activity-comments" }}
+{{ $tracer := printf "%s > %s" .Tracer "user-page--activity-comments" }}
 {{ with $tracer }}
 {{/*    {{ fprint "Trace" . }} */}}
 {{ end }}
 {{ $dot := . }}
   <div id="activity-comments">
-    <div class="filters-row button-row hide-feed">
-      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-        <span class="btn-sort">sort</span>
-      </button>
-      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-        <span class="btn-filters">filters</span>
-      </button>
-    </div>
+    {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "user-page--activity-comments") }}
+
     <div id="activity-feed-comments" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
     {{ range 10}}
       <div class="activity-items comments cont-flex-column">Yo mama so fat</div>

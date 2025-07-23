@@ -1,25 +1,16 @@
-{{ define "user-page-activity-activity" }}
+{{ define "user-page--activity-activity" }}
 {{ $userID := .UserID }}
 {{ with .CurrentUser }}
   {{ $userID = .ID }}
 {{ end }}
-{{ $tracer := printf "%s > %s" .Tracer "-activity-activity" }}
+{{ $tracer := printf "%s > %s" .Tracer "user-page--activity-activity" }}
 {{ with $tracer }}
 {{/*    {{ fprint "Trace" . }} */}}
 {{ end }}
 {{ $dot := .dot }}
   <div id="activity-activity">
-    <div class="filters-row button-row">
-      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-        <span class="btn-sort">sort</span>
-      </button>
-      <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-        <span class="btn-filters">filters</span>
-      </button>
-      <button id="scroll-test" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
-        <span class="btn-sort">scroll</span>
-      </button>
-    </div>
+    {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "user-page--activity-activity") }}
+
     <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
       {{ range $dot.Posts }}
       {{ template "post-card" (dict "dot" $dot "Post" . "UserID" $userID "calledBy" $dot.Instance "Tracer" $tracer) }}

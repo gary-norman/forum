@@ -160,17 +160,16 @@
 }
 
 /* username displayed by default, before editing */
-#user-name-content {
+[id$="-name-content"] {
   display: flex;
   min-height: 2.4rem;
-  margin-bottom: 1.2rem;
   &.editing {
     display: none;
   }
 }
 
 /*text input, when editing name */
-#user-name-input, #channel-name-input {
+[id$="-name-input"] {
   display: none;
   min-height: 2.4rem;
   margin-bottom: 2.4rem;
@@ -180,14 +179,14 @@
   }
 }
 
-#user-name-label, #channel-name-label {
+[id$="-name-label"]{
   display: none;
   &.editing {
     display: block;
   }
 }
 
-#user-bio-content {
+[id$="-bio-content"] {
   padding: 0.8rem 1.2rem;
   display: flex;
   overflow-y: scroll;
@@ -198,7 +197,7 @@
   }
 }
 
-#bio {
+[id$="-bio-inout"] {
   resize: none;
   min-width: 100%;
   min-height: 5rem;

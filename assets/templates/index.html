@@ -513,24 +513,7 @@
               </div>
               <div id="sidebar-channel-block">
                 {{ range .OwnedAndJoinedChannels }}
-                <div class="sidebar-channel" data-channel-desc="{{ .Description }}" data-channel-id="{{ .ID }}">
-                  <div class="container-channel-info">
-                    {{ if (ne .Avatar "noimage") }}
-                    <span class="card-pic profile-pic" data-image-channel="{{ $.ImagePaths.Channel }}{{ .Avatar }}"></span>
-                    {{ else }}
-                    <span class="card-pic profile-pic--empty" data-name-channel="{{ .Name }}"></span>
-                    {{ end }}
-                    <div>
-                      <div>/{{ .Name }}</div>
-                      {{ template "user-counters" (dict "Members" .Members "Online" .MembersOnline )}}
-                    </div>
-                    <div>
-                      {{ if (eq .Owned true) }}
-                      <span class="info-box">owner</span>
-                      {{ end }}
-                    </div>
-                  </div>
-                </div>
+                  {{template "channel-card-mini" (dict "dot" $ "Tracer" $tracer "Instance" "sidebar" "Channel" . )}}
                 {{ end }} <!-- end range of channels here-->
               </div>
             </div>

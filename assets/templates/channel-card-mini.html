@@ -1,0 +1,36 @@
+{{define "channel-card-mini"}}
+
+{{ $dot := .dot }}
+{{ $instance := .Instance}}
+{{ $thisUser := $dot.ThisUser }}
+{{ $currentUser := $dot.CurrentUser }}
+{{ $channel := .Channel }}
+{{ $tracer := printf "%s > %s" .Tracer "--edit-name" }}
+{{ with $tracer }}
+  {{/*    {{ fprint "Trace" . }} */}}
+{{ end }}
+
+  {{if eq $instance "sidebar"}}
+  <div class="sidebar-channel" data-channel-desc="{{ $channel.Description }}" data-channel-id="{{ $channel.ID }}">
+    <div class="container-channel-info">
+      {{ if (ne $channel.Avatar "noimage") }}
+        <span class="card-pic profile-pic" data-image-channel="{{ $dot.ImagePaths.Channel }}{{ $channel.Avatar }}"></span>
+      {{ else }}
+        <span class="card-pic profile-pic--empty" data-name-channel="{{ $channel.Name }}"></span>
+      {{ end }}
+      <div>
+        <div>/{{ $channel.Name }}</div>
+        {{ template "user-counters" (dict "Members" $channel.Members "Online" $channel.MembersOnline )}}
+      </div>
+      <div>
+        {{ if (eq $channel.Owned true) }}
+          <span class="info-box">owner</span>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+  {{else if eq $instance "user-page"}}
+
+  {{end}}
+
+{{end}}

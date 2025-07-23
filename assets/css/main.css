@@ -928,14 +928,19 @@ input[type="checkbox"] {
 }
 .input-wrapper {
   width: 100%;
-  /*&:not(:has(input[type="date"])) {*/
-  /*  width: min(80%, 25rem);*/
-  /*}*/
+  &:has(.input-3d) {
+    width: min(80%, 25rem);
+  }
   position: relative;
 
   &.container-reply,
   &.edit-wrapper {
+    display: none;
     width: 100%;
+
+    &:has(.editing) {
+      display: block;
+    }
     & textarea {
       resize: none;
       overflow: hidden;

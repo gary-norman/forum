@@ -11,7 +11,7 @@
   <div id="activity-activity">
     {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "user-page--activity-activity") }}
 
-    <div id="activity-feed-activity" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
+    <div id="activity-activity-feed" class="collapsible-expanded feed-content scrollable-user scrollable no-scrollbar">
       {{ range $dot.Posts }}
       {{ template "post-card" (dict "dot" $dot "Post" . "UserID" $userID "calledBy" $dot.Instance "Tracer" $tracer) }}
       {{ end }}

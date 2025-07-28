@@ -10,7 +10,7 @@
 {{ $dot := . }}
   <div id="activity-reactions">
     {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "user-page--activity-reactions") }}
-    <div id="activity-feed-reactions" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+    <div id="activity-reactions-feed" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
     {{ range 10}}
       <div class="activity-items reactions">You liked this post</div>
     {{ end }}

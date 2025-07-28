@@ -12,7 +12,7 @@
     {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "user-page--activity-posts") }}
 
     {{/*SECTION---------- user page posts ----------*/}}
-    <div id="activity-feed-posts" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
+    <div id="activity-posts-feed" class="collapsible-collapsed feed-content scrollable-user scrollable no-scrollbar">
       {{ range $dot.Posts }}
       {{ template "post-card" (dict "dot" $dot "Post" . "UserID" $userID "CurrentUser" $dot.CurrentUser "calledBy" $dot.Instance "Tracer" $tracer) }}
       {{ end }}

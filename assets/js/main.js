@@ -1,4 +1,4 @@
-import { navigateToPage } from "./fetch_and_navigate.js";
+import {fetchData} from "./fetch_and_navigate.js";
 import { UpdateUI } from "./update_UI_elements.js";
 import { fireCalendarListeners } from "./calendar.js";
 
@@ -39,12 +39,12 @@ export function setActivePage(dest) {
 
 // variables
 //user information
-const homePageUserContainer = document.querySelector("#home-page-users");
-if (homePageUserContainer !== null) {
-  homePageUserContainer.addEventListener("click", (e) => {
-    console.log("%cclicked ", expect, e.target);
-    if (e.target.matches(".card")) {
-      navigateToPage("user", e.target);
-    }
-  });
-}
+// const homePageUserContainer = document.querySelector("#home-page-users");
+// if (homePageUserContainer !== null) {
+//   homePageUserContainer.addEventListener("click", (e) => {
+//     console.log("%cclicked ", expect, e.target);
+//     if (e.target.matches(".card")) {
+//       navigateToPage("user", e.target);
+//     }
+//   });
+// }

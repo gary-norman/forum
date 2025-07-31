@@ -1,9 +1,9 @@
 {{ define "home-page" }}
   {{ $userID := .UserID }}
-  {{ with .dot.CurrentUser }}
+  {{ $dot := .dot }}
+  {{ with $dot.CurrentUser }}
     {{ $userID = .ID }}
   {{ end }}
-  {{ $dot := .dot }}
   {{ $instance := "home-page" }}
   {{ $userPosts := .UserPosts }}
   {{ $tracer := printf "%s > %s" .Tracer "home-page" }}

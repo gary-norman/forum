@@ -1,4 +1,4 @@
-import { activePage, setActivePage } from "./main.js";
+import {activePage, activePageElement, setActivePage} from "./main.js";
 
 const link = encodeURI(window.location.href);
 export const data = {
@@ -46,7 +46,8 @@ export function selectActiveFeed() {
     case "user-page":
       console.log("%cON USER PAGE BITCH", angry);
       const userFeeds = Array.from(
-        document.querySelectorAll('[id^="activity-feed-"]'),
+        activePageElement.querySelectorAll('[id$="-feed"]'),
+        // activePageElement.querySelector('[id="user-activity-feeds"]').querySelectorAll('[id$="-feed"]'),
       );
       const activeFeed = userFeeds.find((feed) =>
         feed.classList.contains("collapsible-expanded"),
@@ -58,7 +59,7 @@ export function selectActiveFeed() {
     case "channel-page":
       console.log("%cON CHANNEL PAGE BITCH", angry);
 
-      scrollWindow = data.channelPage.querySelector(`#channel-feed`);
+      scrollWindow = document.querySelector(`#channel-feed`);
       // console.log(scrollWindow)
       break;
     case "post-page":

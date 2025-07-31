@@ -273,8 +273,8 @@ function filterContent() {
 
 function reorderVisiblePosts() {
     const feedContainer = activePageElement.querySelector(`[id$="feed"]`);
-    console.log("%cfeedContainer:", expect, feedContainer);
-    console.log("%cactivePageElement:", expect, activePageElement);
+    // console.log("%cfeedContainer:", expect, feedContainer);
+    // console.log("%cactivePageElement:", expect, activePageElement);
     // console.log("%callPageCards:", expect, allPageCards);
 
     // Remove existing posts from DOM

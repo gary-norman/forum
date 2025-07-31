@@ -145,8 +145,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Query, "user joined channels", err)
 		}
 
-		// FIXME Fixed duplicate channels used on createPost, sidebar, filters etc
-		// ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+		//ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
 		// Add owned channels
 		for _, channel := range ownedChannels {
 			if !channelMap[channel.ID] {
@@ -168,8 +167,9 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// SECTION -- template ---
-	TemplateData := models.TemplateData{
+	data := models.TemplateData{
 		// ---------- users ----------
+		// FIXME Logged out user ID doesn't equal to 0 - it gets generated anyway
 		UserID:      models.NewUUIDField(), // Default value of 0 for logged out users
 		AllUsers:    allUsers,
 		RandomUser:  randomUser,
@@ -200,10 +200,12 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	execErr := t.Execute(w, TemplateData)
+	execErr := t.Execute(w, data)
 	if execErr != nil {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return
 	}
 	log.Printf(ErrorMsgs().KeyValuePair, "GetHome Render time:", time.Since(start))
+
+	//view.RenderPageData(w, data)
 }

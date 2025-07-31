@@ -20,9 +20,9 @@
       <label for="channel-bio-content" class="padded">Bio</label>
     {{ end }}
     </div>
-    <div id="channel-bio-content" class="side-panel-block">
+    <div  class="side-panel-block">
       <article>{{ $dot.ThisChannel.Description }}</article>
     </div>
-    <textarea class="inactive-input" name="content" style="display: none">{{ $dot.ThisChannel.Description }}</textarea>
+    <textarea id="channel-bio-content" class="inactive-input" name="content" style="display: none">{{ $dot.ThisChannel.Description }}</textarea>
   </div>
 {{ end }}

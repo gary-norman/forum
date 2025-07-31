@@ -16,6 +16,7 @@ import (
 type UserHandler struct {
 	App      *app.App
 	Reaction *ReactionHandler
+	Post     *PostHandler
 	Comment  *CommentHandler
 	Channel  *ChannelHandler
 }
@@ -29,10 +30,9 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	// Convert User ID string to FieldUUID
 	userID, err := models.UUIDFieldFromString(idStr)
 	if err != nil {
-		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+		http.Error(w, "Invalid thisUser ID", http.StatusBadRequest)
 		return
 	}
-	var thisUser models.User
 
 	userLoggedIn := true
 	currentUser, ok := mw.GetUserFromContext(r.Context())
@@ -42,63 +42,136 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// if err != nil {
-	// 	log.Printf(ErrorMsgs().KeyValuePair, "error parsing user ID", err)
-	// 	// http.Error(w, `{"error": "invalid user ID"}`, http.StatusBadRequest)
+	// 	log.Printf(ErrorMsgs().KeyValuePair, "error parsing thisUser ID", err)
+	// 	// http.Error(w, `{"error": "invalid thisUser ID"}`, http.StatusBadRequest)
 	// }
 
-	// Fetch the user
-	user, err := u.App.Users.GetUserByID(userID)
+	// Fetch the thisUser
+	thisUser, err := u.App.Users.GetUserByID(userID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "error fetching user", err)
-		// http.Error(w, `{"error": "user not found"}`, http.StatusNotFound)
+		log.Printf(ErrorMsgs().KeyValuePair, "error fetching thisUser", err)
+		// http.Error(w, `{"error": "thisUser not found"}`, http.StatusNotFound)
 	}
 
-	// Fetch user loyalty
+	// Fetch thisUser loyalty
 	if err == nil {
-		thisUser = user
+
 		thisUser.Followers, thisUser.Following, err = u.App.Loyalty.CountUsers(thisUser.ID)
 		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "error fetching user loyalty", err)
-			// http.Error(w, `{"error": "error fetching user loyalty"}`, http.StatusInternalServerError)
+			log.Printf(ErrorMsgs().KeyValuePair, "error fetching thisUser loyalty", err)
+			// http.Error(w, `{"error": "error fetching thisUser loyalty"}`, http.StatusInternalServerError)
 		}
 	}
 
-	// Fetch user posts
-	posts, err := u.App.Posts.GetPostsByUserID(thisUser.ID)
+	// Fetch thisUser userPosts
+	userPosts, err := u.App.Posts.GetPostsByUserID(thisUser.ID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "error fetching user posts", err)
-		// http.Error(w, `{"error": "error fetching user posts"}`, http.StatusInternalServerError)
+		log.Printf(ErrorMsgs().KeyValuePair, "error fetching thisUser userPosts", err)
+		// http.Error(w, `{"error": "error fetching thisUser userPosts"}`, http.StatusInternalServerError)
 	}
 
-	// Retrieve last reaction time for posts
-	posts, err = u.Reaction.getLastReactionTimeForPosts(posts)
+	// Fetch Reactions for posts
+	userPosts = u.Reaction.GetPostsLikesAndDislikes(userPosts)
 
-	// Fetch channel name for posts
-	for p := range posts {
-		posts[p].ChannelID, posts[p].ChannelName, err = u.Channel.GetChannelInfoFromPostID(posts[p].ID)
+	// Retrieve last reaction time for userPosts
+	userPosts, err = u.Reaction.getLastReactionTimeForPosts(userPosts)
+
+	// Fetch channel name for userPosts
+	for p := range userPosts {
+		userPosts[p].ChannelID, userPosts[p].ChannelName, err = u.Channel.GetChannelInfoFromPostID(userPosts[p].ID)
 		if err != nil {
 			http.Error(w, `{"error": "error fetching channel info"}`, http.StatusInternalServerError)
 		}
 
-		models.UpdateTimeSince(&posts[p])
+		models.UpdateTimeSince(&userPosts[p])
 	}
+
+	// Fetch thisUser post comments
+	userPosts, err = u.Comment.GetPostsComments(userPosts)
+	if err != nil {
+		log.Printf(ErrorMsgs().NotFound, "userPosts comments", "getHome", err)
+	}
+
+	models.UpdateTimeSince(&thisUser)
+
+	// SECTION --- channels --
+	allChannels, err := u.App.Channels.All()
+	if err != nil {
+		log.Printf(ErrorMsgs().Query, "channels.All", err)
+	}
+	for c := range allChannels {
+		models.UpdateTimeSince(&allChannels[c])
+	}
+
+	for p := range userPosts {
+		for _, channel := range allChannels {
+			if channel.ID == userPosts[p].ChannelID {
+				userPosts[p].ChannelName = channel.Name
+			}
+		}
+	}
+
+	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
+	channelMap := make(map[int64]bool)
+	//var userPosts []models.Post
 
 	if userLoggedIn {
 		currentUser.Followers, currentUser.Following, err = u.App.Loyalty.CountUsers(currentUser.ID)
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
 		}
-	}
 
-	models.UpdateTimeSince(&thisUser)
+		// get owned and joined channels of current thisUser
+		memberships, memberErr := u.App.Memberships.UserMemberships(currentUser.ID)
+		if memberErr != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+		}
+		ownedChannels, err = u.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID)
+		if memberErr != nil {
+			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+		}
+
+		if err != nil {
+			log.Printf(ErrorMsgs().Query, "GetHome > thisUser owned channels", err)
+		}
+		joinedChannels, err = u.Channel.JoinedByCurrentUser(memberships)
+		if err != nil {
+			log.Printf(ErrorMsgs().Query, "thisUser joined channels", err)
+		}
+
+		//ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+		// Add owned channels
+		for _, channel := range ownedChannels {
+			if !channelMap[channel.ID] {
+				channelMap[channel.ID] = true
+				ownedAndJoinedChannels = append(ownedAndJoinedChannels, channel)
+			}
+		}
+
+		// Add joined channels
+		for _, channel := range joinedChannels {
+			if !channelMap[channel.ID] {
+				channelMap[channel.ID] = true
+				ownedAndJoinedChannels = append(ownedAndJoinedChannels, channel)
+			}
+		}
+	} else {
+		ownedAndJoinedChannels = allChannels
+	}
 
 	data := models.UserPage{
 		UserID:      models.NewUUIDField(), // Default value of 0 for logged out users
 		CurrentUser: currentUser,
 		Instance:    "user-page",
 		ThisUser:    thisUser,
-		Posts:       posts,
 		ImagePaths:  u.App.Paths,
+		// ---------- userPosts ----------
+		Posts: userPosts,
+		// ---------- channels ----------
+		AllChannels:            allChannels,
+		OwnedChannels:          ownedChannels,
+		JoinedChannels:         joinedChannels,
+		OwnedAndJoinedChannels: ownedAndJoinedChannels,
 	}
 
 	view.RenderPageData(w, data)

@@ -31,7 +31,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setAllPosts() {
-    allPageCards = Array.from(activePageElement.querySelectorAll(".card.link"));
+    if (activePageElement.id !== "user-page") {
+        allPageCards = Array.from(activePageElement.querySelectorAll(".card.link"));
+    } else {
+        allPageCards = Array.from(activePageElement.querySelector(".collapsible-expanded").querySelectorAll(".card.link"));
+    }
+    // console.log("%csetAllPosts:", expect, allPageCards);
+    // console.log("%cactivePageElement:", expect, activePageElement);
 }
 
 // compareDates used to compare 2 dates, which then is used in the default js sort function
@@ -267,11 +273,16 @@ function filterContent() {
 
 function reorderVisiblePosts() {
     const feedContainer = activePageElement.querySelector(`[id$="feed"]`);
+    // console.log("%cfeedContainer:", expect, feedContainer);
+    // console.log("%cactivePageElement:", expect, activePageElement);
+    // console.log("%callPageCards:", expect, allPageCards);
 
     // Remove existing posts from DOM
     allPageCards.forEach(post => {
-        // console.log("removing")
-        feedContainer.removeChild(post.parentElement);
+        // console.log("%cpost.parentElement: ", warn, post.parentElement)
+        if (post.parentElement) {
+            feedContainer.removeChild(post.parentElement);
+        }
     });
 
     // Append posts back in sorted order

@@ -212,9 +212,7 @@ small,
   line-height: normal;
   letter-spacing: normal;
 
-  &.padded {
-    padding: 0 1.2rem;
-  }
+
   &.sticky {
     position: sticky;
     top: 0;
@@ -767,7 +765,7 @@ input[type="password"],
 input[type="email"],
 input[type="date"] {
   position: relative;
-  margin-block: 0.4rem;
+  margin-block: 0.4rem 0;
   border: 1px solid var(--clr-bg-4);
   font-size: 1.6rem;
   border-radius: var(--border-radius-input);
@@ -930,19 +928,26 @@ input[type="checkbox"] {
 }
 .input-wrapper {
   width: 100%;
-  &:not(:has(input[type="date"])) {
+  &:has(.input-3d) {
     width: min(80%, 25rem);
   }
   position: relative;
 
   &.container-reply,
-  &.edit-user {
+  &.edit-wrapper {
+    display: none;
     width: 100%;
+    font-size: 1.2rem;
+    /*padding: 0.8rem 1.2rem;*/
+
+    &:has(.editing) {
+      display: block;
+    }
     & textarea {
       resize: none;
       overflow: hidden;
-      min-width: 24rem;
-      min-height: 5rem; /* Set a minimum height */
+      /*min-width: 24rem;*/
+      /*min-height: 5rem; !* Set a minimum height *!*/
       max-height: 30rem; /* Optional: Set a max height */
     }
   }
@@ -1470,7 +1475,7 @@ input[type="text"].inactive-input {
   flex-direction: column;
   align-items: center;
   height: 10.5rem;
-  margin-block: 1.2rem;
+  margin-block: 0.4rem 0;
   padding: 0 1.2rem;
   font-size: var(--font-sz-cards);
   background: var(--clr-bg-3);
@@ -1792,9 +1797,12 @@ hr.solid {
     &.padded {
       align-content: center;
       height: 3.2rem;
-      padding: 0 1.2rem;
     }
   }
+}
+
+.padded {
+  padding: 0 1.2rem;
 }
 
 .flex-space-around {
@@ -2465,7 +2473,7 @@ main {
 
 .above-activity {
   position: sticky;
-  width: calc(100vw - 3rem - 1.2rem - 32rem);
+  width: 100%;
   /*z-index: var(--z-index-above);*/
 }
 
@@ -2497,6 +2505,9 @@ main {
 
     & form {
       width: 100%;
+      display: flex;
+      flex-flow: column;
+      gap: 1.2rem;
     }
 
     & > div {
@@ -2529,10 +2540,6 @@ main {
         font-style: normal;
         line-height: normal;
         letter-spacing: normal;
-
-        &.padded {
-          padding: 0 1.2rem;
-        }
       }
     }
 
@@ -2554,7 +2561,7 @@ main {
 
 .edit-settings {
   display: flex;
-  gap: 0.8rem;
+  gap: 0;
   & button:has(.btn-success),
   & button:has(.btn-cancel) {
     display: none;

@@ -1,29 +1,66 @@
 {{ define "right-panel--edit-name" }}
   {{ $dot := .dot }}
   {{ $instance := $dot.Instance}}
-  {{ $thisUser := $dot.ThisUser }}
   {{ $currentUser := $dot.CurrentUser }}
   {{ $tracer := printf "%s > %s" .Tracer "--edit-name" }}
   {{ with $tracer }}
 {{/*    {{ fprint "Trace" . }} */}}
   {{ end }}
   {{if eq $instance "channel-page"}}
-  {{ else if eq $instance "user-page"}}
-    <div class="right-panel-container-name flex-space-between">
-      <h4 class="right-panel-name">{{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }}{{ $currentUser.Username }}{{ else }}{{ $thisUser.Username }}{{ end }}</h4>
-      {{ if and (ne $currentUser nil) (eq $currentUser.Username $thisUser.Username) }} <!-- owner user check -->
-        <div id="settings-user-name" class="edit-settings">
-          <button id="edit-user-name" type="button" class="btn-sm btn-icoonly">
-            <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
-          </button>
-          <button id="submit-user-name" type="submit" name="bio" value="bio" class="btn-sm btn-icoonly">
-            <span class="btn-success" role="contentinfo" aria-label="Submit new name"></span>
-          </button>
-          <button id="cancel-user-name" type="button" class="btn-sm btn-icoonly">
-            <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing your name"></span>
-          </button>
+  <div class="cont-flex-column">
+      <div class="right-panel-container-name flex-space-between">
+        <div class="cont-flex-column">
+          <h4 id="channel-name-content">/{{ $dot.ThisChannel.Name }}</h4>
+          <small>created by
+                              {{ if and (ne $currentUser nil) (eq $dot.ThisChannel.OwnerID $currentUser.ID) }}
+                                you
+                              {{else }}
+                                {{ $dot.OwnerName }}
+                              {{ end }}
+                            {{ $dot.ThisChannel.TimeSince}}
+          </small>
         </div>
-      {{ end }} <!-- end of owner user check -->
+        {{ if and (ne $currentUser nil) (eq $dot.ThisChannel.OwnerID $currentUser.ID) }}
+          <label id="channel-name-label" class="padded" for="channel-name-input">edit channel name</label>
+          <div id="channel-settings-name" class="edit-settings">
+            <button id="channel-edit-name" type="button" class="btn-sm btn-icoonly">
+              <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
+            </button>
+            <button id="channel-submit-name" type="submit" name="bio" value="bio" class="btn-sm btn-icoonly">
+              <span class="btn-success" role="contentinfo" aria-label="Submit new name"></span>
+            </button>
+            <button id="channel-cancel-name" type="button" class="btn-sm btn-icoonly">
+              <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing your name"></span>
+            </button>
+          </div>
+        {{ end }}
+      </div>
+    </div>
+    <div class="input-wrapper edit-wrapper">
+      <textarea class="scroll-down" id="channel-name-input" name="name" placeholder="{{ $dot.ThisChannel.Name }}">{{ $dot.ThisChannel.Name }}</textarea>
+    </div>
+  {{ else if eq $instance "user-page"}}
+    <div class="cont-flex-column">
+      <div class="right-panel-container-name flex-space-between">
+        <h4 id="user-name-content" class="side-panel-block">{{ if and (ne $currentUser nil) (eq $currentUser.Username $dot.ThisUser.Username) }}{{ $currentUser.Username }}{{ else }}{{ $dot.ThisUser.Username }}{{ end }}</h4>
+        {{ if and (ne $currentUser nil) (eq $currentUser.Username $dot.ThisUser.Username) }} <!-- owner user check -->
+            <label id="user-name-label" class="padded" for="user-name-input">edit your name</label>
+            <div id="user-settings-name" class="edit-settings">
+              <button id="user-edit-name" type="button" class="btn-sm btn-icoonly">
+                <span class="btn-edit" role="contentinfo" aria-label="Edit profile name"></span>
+              </button>
+              <button id="user-submit-name" type="submit" name="bio" value="bio" class="btn-sm btn-icoonly">
+                <span class="btn-success" role="contentinfo" aria-label="Submit new name"></span>
+              </button>
+              <button id="user-cancel-name" type="button" class="btn-sm btn-icoonly">
+                <span class="btn-cancel" role="contentinfo" aria-label="Cancel editing your name"></span>
+              </button>
+            </div>
+        {{ end }} <!-- end of owner user check -->
+      </div>
+      <div class="input-wrapper edit-wrapper">
+        <textarea class="scroll-down" id="user-name-input" name="name" placeholder="{{$dot.ThisUser.Username}}">{{$dot.ThisUser.Username}}</textarea>
+      </div>
     </div>
   {{ end }}
 {{ end }}

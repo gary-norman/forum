@@ -172,7 +172,7 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Parse, "storePost", parseErr)
 		return
 	}
-	channels := r.Form["channel[]"] // Retrieve the slice of checked channel IDs
+	channels := r.Form["channel_list"] // Retrieve the slice of checked channel IDs
 	// get channel name
 
 	// SECTION getting channel data (for reverting to single channel post

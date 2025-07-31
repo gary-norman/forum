@@ -15,12 +15,12 @@
     <div class="content">
     {{ template "user-page-activity-bar" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer) }}
       <div id="user-activity-feeds">
-      {{ template "user-page-activity-activity" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
-      {{ template "user-page-activity-posts" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
-      {{ template "user-page-activity-comments" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
-      {{ template "user-page-saved-activities" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
-      {{ template "user-page-muted-activities" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
-      {{ template "user-page-activity-reactions" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
+      {{ template "user-page--activity-activity" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
+      {{ template "user-page--activity-posts" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
+      {{ template "user-page--activity-comments" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
+      {{ template "user-page--saved-activities" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
+      {{ template "user-page--muted-channels" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
+      {{ template "user-page--activity-reactions" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
       </div>
     </div>
     {{ template "right-panel" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "ThisEntity" $thisEntity "calledBy" $instance ) }}

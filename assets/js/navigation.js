@@ -8,10 +8,11 @@ import { UpdateUI } from "./update_UI_elements.js";
 const goHome = document.querySelector("#btn-go-home");
 
 // --- go home ---
-goHome.addEventListener("click", () => {
-  setActivePage("home");
-  history.pushState({}, "", `/`);
-  changePage(data["homePage"]);
+goHome.addEventListener("click", (e) => {
+    setActivePage("home");
+    history.pushState({}, "", `/`);
+    changePage(data["homePage"]);
+    // navigateToPage("home", e.target)
 });
 
 // INFO was inside a DOMContentLoaded function

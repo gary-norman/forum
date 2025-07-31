@@ -28,11 +28,15 @@ pass!
 
 ###### Does it show a warning message?
 
-pass!
+need to add a message
 
 ###### Are sessions present in the project?
 
+pass!
+
 ##### Try opening two different browsers and login into one of them. Refresh the other browser
+
+pass!
 
 ###### Can you confirm that the browser non logged remains unregistered?
 
@@ -122,7 +126,7 @@ pass!
 
 ###### Are you forbidden from creating a post?
 
-!!pass, but takes user to blank page (error 401)
+pass!
 
 ##### Enter the forum as a non-registered user and try to create a comment
 
@@ -131,6 +135,8 @@ pass!
 ###### Are you forbidden from creating a comment?
 
 ##### Enter the forum as a non-registered user and try to like a comment
+
+pass! #check when comments work
 
 ###### Are you forbidden from liking a post?
 

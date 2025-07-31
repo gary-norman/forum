@@ -10,10 +10,17 @@
   <div class="cont-flex-column">
       <div class="right-panel-container-name flex-space-between">
         <div class="cont-flex-column">
-          <h4 class="channel-name-content">/{{ $dot.ThisChannel.Name }}</h4>
-          <small>created by {{ if (eq $dot.ThisChannel.OwnerID $currentUser.ID) }}you {{ else }} {{ $dot.OwnerName }} {{ end }}{{ $dot.ThisChannel.TimeSince}}</small>
+          <h4 id="channel-name-content">/{{ $dot.ThisChannel.Name }}</h4>
+          <small>created by
+                              {{ if and (ne $currentUser nil) (eq $dot.ThisChannel.OwnerID $currentUser.ID) }}
+                                you
+                              {{else }}
+                                {{ $dot.OwnerName }}
+                              {{ end }}
+                            {{ $dot.ThisChannel.TimeSince}}
+          </small>
         </div>
-        {{ if (eq $dot.ThisChannel.OwnerID $currentUser.ID) }}
+        {{ if and (ne $currentUser nil) (eq $dot.ThisChannel.OwnerID $currentUser.ID) }}
           <label id="channel-name-label" class="padded" for="channel-name-input">edit channel name</label>
           <div id="channel-settings-name" class="edit-settings">
             <button id="channel-edit-name" type="button" class="btn-sm btn-icoonly">

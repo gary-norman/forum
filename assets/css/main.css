@@ -765,7 +765,7 @@ input[type="password"],
 input[type="email"],
 input[type="date"] {
   position: relative;
-  margin-block: 0.4rem;
+  margin-block: 0.4rem 0;
   border: 1px solid var(--clr-bg-4);
   font-size: 1.6rem;
   border-radius: var(--border-radius-input);
@@ -938,7 +938,7 @@ input[type="checkbox"] {
     display: none;
     width: 100%;
     font-size: 1.2rem;
-    padding: 0.8rem 1.2rem;
+    /*padding: 0.8rem 1.2rem;*/
 
     &:has(.editing) {
       display: block;
@@ -1475,7 +1475,7 @@ input[type="text"].inactive-input {
   flex-direction: column;
   align-items: center;
   height: 10.5rem;
-  margin-block: 1.2rem;
+  margin-block: 0.4rem 0;
   padding: 0 1.2rem;
   font-size: var(--font-sz-cards);
   background: var(--clr-bg-3);

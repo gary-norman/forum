@@ -6,10 +6,11 @@ import {setActivePage} from "./main.js";
 const goHome = document.querySelector("#btn-go-home");
 
 // --- go home ---
-goHome.addEventListener("click", () => {
+goHome.addEventListener("click", (e) => {
     setActivePage("home");
     history.pushState({}, "", `/`);
     changePage(data["homePage"]);
+    navigateToPage("home", e.target)
 });
 
 // INFO was inside a DOMContentLoaded function

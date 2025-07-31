@@ -16,25 +16,27 @@
   {{ if eq $instance "channel-page"}}
     <div class="right-panel">
       <div class="right-panel-content scroll-down">
-        <div class="right-panel-container-name flex-space-between">
-          <div class="cont-flex-column">
-            <h4 class="right-panel-name">/{{ $dot.ThisChannel.Name }}</h4>
-            <small>created by {{ if (eq $dot.ThisChannel.OwnerID $userID) }}you {{ else }} {{ $dot.OwnerName }} {{ end }}{{ $dot.ThisChannel.TimeSince}}</small>
+        {{ if and (ne $currentUser nil) (eq $dot.ThisChannel.OwnerID $currentUser.ID) }} <!-- owner user check -->
+        <form action="/edituser" enctype="multipart/form-data" method="POST">
+          {{ end }} <!-- end of owner user check -->
+          {{ template "right-panel--edit-name" (dict "dot" $dot "Tracer" $tracer )}}
+{{/*          {{ template "right-panel--edit-image" (dict "dot" $dot "Tracer" $tracer )}}*/}}
+{{/*          {{ template "right-panel--edit-bio" (dict "dot" $dot "Tracer" $tracer )}}*/}}
+          {{ if and (ne $currentUser nil) (eq $dot.ThisChannel.OwnerID $currentUser.ID) }} <!-- owner user check -->
+        </form>
+        {{ end }} <!-- end of owner user check -->
+        {{if ne .OwnedChannels nil}}
+          <div class="right-panel-container-modded-channels">
+            <div class="sidebar-block sidebar-channels">
+              <small class="padded">Modded Channels</small>
+              <div id="sidebar-channel-block">
+                {{ range .OwnedChannels }}
+                  {{template "channel-card-mini" (dict "dot" $ "Tracer" $tracer "Instance" $instance "Channel" . )}}
+                {{ end }} <!-- end range of channels here-->
+              </div>
+            </div>
           </div>
-            {{ if (eq $dot.ThisChannel.OwnerID $userID) }}
-                <button id="right-panel-channel--edit-channel-name" class="btn-sm btn-icoonly">
-                  <span class="btn-edit" role="contentinfo" aria-label="Edit channel name"></span>
-                </button>
-            {{ end }}
-        </div>
-          {{ if (eq $dot.ThisChannel.OwnerID $userID) }}
-            {{ template "channel-edit-image" (dict "dot" $dot "UserID" $userID) }}
-          {{ end }}
-          {{ template "channel-edit-bio" (dict "dot" $dot "UserID" $userID) }}
-          {{/*        TODO moderators commented out for base version          */}}
-{{/*          {{ template "channel-edit-mods" (dict "dot" $dot "UserID" $userID) }}*/}}
-          {{ template "channel-edit-rules" (dict "dot" $dot "UserID" $userID) }}
-          {{ template "control-buttons" (dict "dot" $dot "userID" $userID "calledBy" "right-panel") }}
+        {{end}}
       </div>
     </div>
   {{ else if eq $instance "user-page"}}

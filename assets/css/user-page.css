@@ -163,6 +163,7 @@
 [id$="-name-content"] {
   display: flex;
   min-height: 2.4rem;
+  margin-block: 0.4rem 0;
   &.editing {
     display: none;
   }
@@ -172,7 +173,7 @@
 [id$="-name-input"] {
   display: none;
   min-height: 2.4rem;
-  margin-bottom: 2.4rem;
+  margin-block: 0.4rem 0;
   width: 100%;
   &.editing {
     display: flex;
@@ -192,18 +193,20 @@
   overflow-y: scroll;
   white-space: pre-wrap;
   max-height: 30.4rem;
+  margin-block: 0.4rem 0;
   &.editing {
     display: none;
   }
 }
 
-[id$="-bio-inout"] {
+[id$="-bio-input"] {
   resize: none;
   min-width: 100%;
   min-height: 5rem;
   max-height: 30.4rem;
   display: none;
   padding: 0.8rem 1.2rem;
+  margin-block: 0.4rem 0;
   overflow-y: scroll;
 
   &.editing {

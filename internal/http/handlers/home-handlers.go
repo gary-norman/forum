@@ -163,7 +163,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// SECTION -- template ---
-	TemplateData := models.TemplateData{
+	data := models.TemplateData{
 		// ---------- users ----------
 		// FIXME Logged out user ID doesn't equal to 0 - it gets generated anyway
 		UserID:      models.NewUUIDField(), // Default value of 0 for logged out users
@@ -196,10 +196,12 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	execErr := t.Execute(w, TemplateData)
+	execErr := t.Execute(w, data)
 	if execErr != nil {
 		log.Printf(ErrorMsgs().Execute, execErr)
 		return
 	}
 	log.Printf(ErrorMsgs().KeyValuePair, "GetHome Render time:", time.Since(start))
+
+	//view.RenderPageData(w, data)
 }

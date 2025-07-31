@@ -68,6 +68,18 @@ export function listenToEditDetails() {
   //     this.style.height = this.scrollHeight + "px"; // Set height to fit content
   //   });
   // });
+  function removeEditingState() {
+    console.log("%cnameContent:", expect, nameContent)
+    console.log("%cnameInput:", expect, nameInput)
+    console.log("%cnameLabel:", expect, nameLabel)
+
+    nameContent.classList.remove("editing");
+    nameInput.classList.remove("editing");
+    nameLabel.classList.remove("editing");
+    bioContent.classList.remove("editing");
+    bioInput.classList.remove("editing");
+    dragDropImage.classList.remove("editing");
+  }
 
   console.log("settingBlocks", settingBlocks);
 
@@ -76,14 +88,7 @@ export function listenToEditDetails() {
     const submitButton = block.querySelector('[id*="submit-"]');
     const cancelButton = block.querySelector('[id*="cancel-"]');
 
-    function removeEditingState() {
-      nameContent.classList.remove("editing");
-      nameInput.classList.remove("editing");
-      nameLabel.classList.remove("editing");
-      bioContent.classList.remove("editing");
-      bioInput.classList.remove("editing");
-      dragDropImage.classList.remove("editing");
-    }
+
 
     editButton.addEventListener("click", function (e) {
       block.classList.add("editing");

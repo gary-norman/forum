@@ -337,7 +337,7 @@
             <div class="wrapper-dropdown">
               {{ range .OwnedAndJoinedChannels}}
               <div class="flex-align-l post-channel-dropdown">
-                <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="channel[]" value="{{ .ID }}">
+                <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="channel_list" value="{{ .ID }}">
                 <label for="post-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
               </div>
               {{ end }}

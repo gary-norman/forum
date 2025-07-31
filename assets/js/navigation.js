@@ -10,7 +10,7 @@ goHome.addEventListener("click", (e) => {
     setActivePage("home");
     history.pushState({}, "", `/`);
     changePage(data["homePage"]);
-    navigateToPage("home", e.target)
+    // navigateToPage("home", e.target)
 });
 
 // INFO was inside a DOMContentLoaded function

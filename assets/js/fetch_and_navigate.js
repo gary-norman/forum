@@ -11,8 +11,8 @@ const warn =
 export function navigateToPage(dest, entity) {
   // dest is a string - "channel"
   // entity is the template element:work
-  console.info("%cdest:%o", expect, dest);
-  console.info("%centity:%o", expect, entity);
+  // console.info("%cdest:%o", expect, dest);
+  // console.info("%centity:%o", expect, entity);
 
   let link;
   if (dest === "home") {
@@ -47,6 +47,8 @@ export function changePage(page) {
 
     if (element.id === pageId) {
       element.classList.add("active-feed");
+    } else if (pageId !== "home-page" && element.id === "home-page") {
+      element.classList.remove("active-feed");
     } else {
       // console.log("%cpage: ",warn, page);
       // TODO need to modify home-page template to populate by injection
@@ -64,32 +66,32 @@ export function changePage(page) {
 }
 
 export function fetchData(entity, Id) {
-  console.log(`%cFetching ${entity} data for ID:`, expect, Id);
+  // console.log(`%cFetching ${entity} data for ID:`, expect, Id);
 
 
-  if (Id === "home") {
-    console.log("home");
-    history.pushState({}, "", `/`);
-    fetch(`/`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          const content = data[`${entity}sHTML`];
-          const target = document.getElementById(`${entity}-page`);
-          if (target && content) {
-            target.innerHTML = content;
-            document.dispatchEvent(newContentLoaded);
-          } else {
-            console.warn("Target element or content missing");
-          }
-        })
-        .catch((error) => console.error(`Error fetching ${entity} data:`, error));
-  } else {
-    console.log("other");
+  // if (Id === "home") {
+  //   console.log("home");
+  //   history.pushState({}, "", `/`);
+  //   fetch(`/`)
+  //       .then((response) => {
+  //         if (!response.ok) {
+  //           throw new Error(`HTTP error! status: ${response.status}`);
+  //         }
+  //         return response.json();
+  //       })
+  //       .then((data) => {
+  //         const content = data[`${entity}sHTML`];
+  //         const target = document.getElementById(`${entity}-page`);
+  //         if (target && content) {
+  //           target.innerHTML = content;
+  //           document.dispatchEvent(newContentLoaded);
+  //         } else {
+  //           console.warn("Target element or content missing");
+  //         }
+  //       })
+  //       .catch((error) => console.error(`Error fetching ${entity} data:`, error));
+  // } else {
+  //   console.log("other");
     history.pushState({}, "", `/${entity}s/${Id}`);
     fetch(`/${entity}s/${Id}`)
         .then((response) => {
@@ -109,5 +111,5 @@ export function fetchData(entity, Id) {
           }
         })
         .catch((error) => console.error(`Error fetching ${entity} data:`, error));
-  }
+  // }
 }

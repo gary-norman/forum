@@ -26,23 +26,24 @@
         {{ template "user-counters" (dict "Members" $dot.ThisChannel.Members "Online" $dot.ThisChannel.MembersOnline )}}
         </div>
       </div>
+{{/*       FIXME base audit - commented out until all buttons work */}}
     {{ if ne .CurrentUser nil }}
-      <div class="page-buttons">
-        {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}
-        <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
-          <span class="btn-posts">join</span>
-        </button>
-        {{ end }}
-        <div class="user-following"></div>
-        <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">
-          <img src="/assets/icons/share_16.svg" alt="share button" />
-        </button>
-        {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}
-        <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">
-          <img src="/assets/icons/heart-empty_24.svg" alt="like button" />
-        </button>
-        {{ end }}
-      </div>
+{{/*      <div class="page-buttons">*/}}
+{{/*        {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}*/}}
+{{/*        <button popovertarget="form-join-channel" class="btn-join-channel btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">*/}}
+{{/*          <span class="btn-posts">join</span>*/}}
+{{/*        </button>*/}}
+{{/*        {{ end }}*/}}
+{{/*        <div class="user-following"></div>*/}}
+{{/*        <button class="btn-md btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-onoff_offoff">*/}}
+{{/*          <img src="/assets/icons/share_16.svg" alt="share button" />*/}}
+{{/*        </button>*/}}
+{{/*        {{ if or (not $dot.IsOwned) (not $dot.IsJoined) }}*/}}
+{{/*        <button class="btn-md s16 btn-secondary btn-filled btn-filled-fancy btn-icoonly btn-action-secondary btn-invert-never">*/}}
+{{/*          <img src="/assets/icons/heart-empty_24.svg" alt="like button" />*/}}
+{{/*        </button>*/}}
+{{/*        {{ end }}*/}}
+{{/*      </div>*/}}
     {{ end }}
     </div>
   </div>

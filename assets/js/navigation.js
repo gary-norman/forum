@@ -37,7 +37,7 @@ export function listenToChannelLinks() {
 }
 
 function navigateToEntity(e) {
-  debugger;
+  // debugger;
   const hasDestination = e.target.getAttribute("data-dest");
   const isButton = e.target.nodeName.toLowerCase() === "button";
   const commentAction = e.target.getAttribute("data-action");

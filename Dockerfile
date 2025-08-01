@@ -51,4 +51,4 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Run the application
-CMD ["/app/codex"]
+CMD ["/bin/codex"]

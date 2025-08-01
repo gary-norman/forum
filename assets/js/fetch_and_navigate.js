@@ -5,8 +5,7 @@ const expect =
 const standard =
   "background-color: transparent; color: #ffffff; font-weight: normal;";
 const warn =
-    "background-color: #000000; color: #e3c144; font-weight: bold; border: 1px solid #e3c144; padding: 5px; border-radius: 5px;";
-
+  "background-color: #000000; color: #e3c144; font-weight: bold; border: 1px solid #e3c144; padding: 5px; border-radius: 5px;";
 
 export function navigateToPage(dest, entity) {
   // dest is a string - "channel"
@@ -44,7 +43,6 @@ export function changePage(page) {
   }
 
   pages.forEach((element) => {
-
     if (element.id === pageId) {
       element.classList.add("active-feed");
     } else if (pageId !== "home-page" && element.id === "home-page") {
@@ -67,22 +65,6 @@ export function changePage(page) {
 
 export function fetchData(entity, Id) {
   // console.log(`%cFetching ${entity} data for ID:`, expect, Id);
-
-  history.pushState({}, "", `/${entity}s/${Id}`);
-  fetch(`/${entity}s/${Id}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const content = data[`${entity}sHTML`];
-      const target = document.getElementById(`${entity}-page`);
-      // console.log("target: ", target);
-      // console.log("content: ", content);
-      if (target && content) {
-        target.innerHTML = content;
 
   // if (Id === "home") {
   //   console.log("home");
@@ -107,24 +89,25 @@ export function fetchData(entity, Id) {
   //       .catch((error) => console.error(`Error fetching ${entity} data:`, error));
   // } else {
   //   console.log("other");
-    history.pushState({}, "", `/${entity}s/${Id}`);
-    fetch(`/${entity}s/${Id}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          const content = data[`${entity}sHTML`];
-          const target = document.getElementById(`${entity}-page`);
-          if (target && content) {
-            target.innerHTML = content;
-            document.dispatchEvent(newContentLoaded);
-          } else {
-            console.warn("Target element or content missing");
-          }
-        })
-        .catch((error) => console.error(`Error fetching ${entity} data:`, error));
+
+  history.pushState({}, "", `/${entity}s/${Id}`);
+  fetch(`/${entity}s/${Id}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const content = data[`${entity}sHTML`];
+      const target = document.getElementById(`${entity}-page`);
+      if (target && content) {
+        target.innerHTML = content;
+        document.dispatchEvent(newContentLoaded);
+      } else {
+        console.warn("Target element or content missing");
+      }
+    })
+    .catch((error) => console.error(`Error fetching ${entity} data:`, error));
   // }
 }

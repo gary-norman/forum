@@ -1,6 +1,7 @@
 import {fetchData} from "./fetch_and_navigate.js";
 import { UpdateUI } from "./update_UI_elements.js";
 import { fireCalendarListeners } from "./calendar.js";
+import {selectActiveFeed} from "./navigation.js";
 
 const angry =
   "background-color: #000000; color: #ea4f92; font-weight: bold; border: 2px solid #ea4f92; padding: .2rem; border-radius: .8rem;";
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   // console.log("fired DOMContentLoaded");
   setActivePage("home");
   UpdateUI();
+  selectActiveFeed();
 });
 
 document.addEventListener("newContentLoaded", (event) => {

@@ -38,7 +38,7 @@ export function listenToChannelLinks() {
 
 function navigateToEntity(e) {
   console.info("navigateToEntity called");
-  const target = e.target;
+  let target = e.target;
   const isButton = target.nodeName.toLowerCase() === "button";
   const commentAction = target.getAttribute("data-action");
   const dest = target.getAttribute("data-dest");
@@ -48,6 +48,7 @@ function navigateToEntity(e) {
     console.info("Navigating to comment post:", dest);
     navigateToPage(dest, target)
       .then(() => {
+        target = activePageElement.querySelector(`#post-card-${postID}`);
         toggleReplyForm(target);
       })
       .catch((err) => {

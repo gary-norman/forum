@@ -34,7 +34,6 @@ let channels = [];
 let posts = [];
 
 function handleClickOutside(e) {
-  console.log("listening for clicks outside of search results page");
   if (e.target !== searchInput) {
     resultsContainer.classList.add("hide");
   }

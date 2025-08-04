@@ -33,18 +33,26 @@ let users = [];
 let channels = [];
 let posts = [];
 
-document.addEventListener("click", (e) => {
-  if (!resultsContainer.classList.contains("hide")) {
-    if (e.target !== searchInput) {
-      resultsContainer.classList.add("hide");
-    }
-  } else {
-    if (e.target === searchInput && isValue) {
-      resultsContainer.classList.remove("hide");
-    }
+function handleClickOutside(e) {
+  console.log("listening for clicks outside of search results page");
+  if (e.target !== searchInput) {
+    resultsContainer.classList.add("hide");
   }
+}
 
+
+searchInput.addEventListener("click", () => {
+  if (isValue) {
+    resultsContainer.classList.remove("hide");
+    document.addEventListener("click", handleClickOutside);
+  }
+})
+
+searchInput.addEventListener("blur", () => {
+  resultsContainer.classList.add("hide");
+  document.removeEventListener("click", handleClickOutside);
 });
+
 
 searchInput.addEventListener("input", (e) => {
   const value = e.target.value.toLowerCase();

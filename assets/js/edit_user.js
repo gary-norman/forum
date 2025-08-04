@@ -9,7 +9,19 @@ const warn =
     "background-color: #000000; color: #e3c144; font-weight: bold; border: 1px solid #e3c144; padding: 5px; border-radius: 5px;";
 
 
-export function listenToEditDetails() {
+document.addEventListener("newContentLoaded", () => {
+  if (activePageElement.id === "channel-page" || activePageElement.id === "user-page") {
+    listenToEditDetails();
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (activePageElement.id === "channel-page" || activePageElement.id === "user-page") {
+    listenToEditDetails();
+  }
+});
+
+function listenToEditDetails() {
   const settingBlocks = activePageElement.querySelectorAll('[id*="settings-"]');
   const nameInput = activePageElement.querySelector('[id$="name-input"]');
   const nameContent = activePageElement.querySelector('[id$="name-content"]');

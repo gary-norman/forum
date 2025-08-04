@@ -1,4 +1,5 @@
 import {activePage, activePageElement, setActivePage} from "./main.js";
+import {selectActiveFeed, scrollWindow} from "./navigation.js";
 
 const link = encodeURI(window.location.href);
 export const data = {
@@ -9,7 +10,7 @@ export const data = {
 };
 export const pages = [
   data["homePage"],
-  data["userPage"],
+  // data["userPage"],
   data["channelPage"],
   data["postPage"],
 ];
@@ -30,55 +31,12 @@ const postMsg = encodeURIComponent(
 const commentTitle = encodeURIComponent("Comment from User ??? Here");
 const postTitle = encodeURIComponent("Post Title Here");
 let activityButtons;
-let scrollWindow;
 
 // console.log(data["homePage"]);
-
-export function selectActiveFeed() {
-  const angry =
-    "background-color: #000000; color: #ea4f92; font-weight: bold; border: 2px solid #ea4f92; padding: .2rem; border-radius: .8rem;";
-  switch (activePage) {
-    case "home-page":
-      console.log("%cON HOME PAGE BITCH", angry);
-      scrollWindow = document.querySelector(`#home-feed`);
-      // console.log("scrollWindow:", scrollWindow)
-      break;
-    case "user-page":
-      console.log("%cON USER PAGE BITCH", angry);
-      const userFeeds = Array.from(
-        activePageElement.querySelectorAll('[id$="-feed"]'),
-        // activePageElement.querySelector('[id="user-activity-feeds"]').querySelectorAll('[id$="-feed"]'),
-      );
-      const activeFeed = userFeeds.find((feed) =>
-        feed.classList.contains("collapsible-expanded"),
-      );
-
-      scrollWindow = activeFeed;
-      // console.log(scrollWindow)
-      break;
-    case "channel-page":
-      console.log("%cON CHANNEL PAGE BITCH", angry);
-
-      scrollWindow = document.querySelector(`#channel-feed`);
-      // console.log(scrollWindow)
-      break;
-    case "post-page":
-      console.log("%cON POST PAGE BITCH", angry);
-
-      // console.log(scrollWindow)
-      break;
-    default:
-      console.log("%cNO ACTIVE FEED BITCH... switching to home-page", angry);
-      setActivePage("home");
-      scrollWindow = document.querySelector(`#home-feed`);
-      break;
-  }
-}
 
 // INFO was a DOMContentLoaded function
 export function listenToShare() {
   let postID, commentID, channelID, msg, title;
-  selectActiveFeed();
   const buttonControls = document.querySelectorAll('[class$="-controls"]');
 
   // console.log("buttonControls: ", buttonControls);

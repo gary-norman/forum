@@ -4,8 +4,9 @@ import {toggleUserInteracted} from "./update_UI_elements.js";
 export function togglePopovers() {
     const popovers = document.querySelectorAll("[popover]:has(.user-label)");
 
-    document.addEventListener("click", () => {
-        popovers.forEach((popover) => {
+
+    popovers.forEach((popover) => {
+        popover.addEventListener("click", () => {
             if (popover.matches(":popover-open")) {
                 // console.log("Open popover: ", popover);
                 popover.addEventListener("toggle", () => {

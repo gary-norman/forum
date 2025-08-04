@@ -1,6 +1,6 @@
 import { listenToReplies, toggleReplyForm } from "./comments.js";
-import { listenToEditDetails } from "./edit_user.js";
-import { listenToShare, selectActiveFeed } from "./share.js";
+import { listenToShare } from "./share.js";
+import { selectActiveFeed } from "./navigation.js";
 import { listenToLikeDislike, listenToNoUser } from "./reactions.js";
 import { listenToDropdowns } from "./post.js";
 import { saveColourScheme } from "./colour_scheme.js";
@@ -8,7 +8,6 @@ import { activePage, setActivePage } from "./main.js";
 import { getRandomInt } from "./helper_functions.js";
 import { listenToRules } from "./channel_rules.js";
 import { toggleModals, togglePopovers } from "./popups.js";
-import { listenToChannelLinks } from "./navigation.js";
 import { agreeToJoin, showJoinPopoverRules } from "./join_channel.js";
 import {
   displayCalendars,
@@ -26,7 +25,6 @@ export function UpdateUI() {
   // console.log("updating UI");
   listenToRules();
   listenToReplies();
-  listenToEditDetails();
   listenToShare();
   listenToLikeDislike();
   listenToNoUser();
@@ -37,7 +35,6 @@ export function UpdateUI() {
   toggleModals();
   resetInputStyle();
   togglePopovers();
-  listenToChannelLinks();
   agreeToJoin();
   showJoinPopoverRules();
   // getCalendarVars();

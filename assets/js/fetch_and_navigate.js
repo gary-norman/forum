@@ -1,5 +1,7 @@
 import { setActivePage, newContentLoaded } from "./main.js";
-import { pages, selectActiveFeed } from "./share.js";
+import { pages  } from "./share.js";
+import {selectActiveFeed} from "./navigation.js";
+
 const expect =
   "background-color: rgb(108 207 93); color: #000000; font-weight: bold; padding: .1rem; border-radius: 1rem;";
 const standard =
@@ -33,7 +35,7 @@ export function navigateToPage(dest, entity) {
 }
 
 export function changePage(page) {
-  // console.log("page: ", page);
+  // console.log("%cpage: ", expect, page);
   let pageId;
   if (typeof page != "string") {
     pageId = page.id;
@@ -61,6 +63,8 @@ export function changePage(page) {
       element.classList.remove("active-feed");
     }
   });
+
+  selectActiveFeed();
 }
 
 export function fetchData(entity, Id) {

@@ -75,14 +75,7 @@ func NewApp(db *sql.DB) *App {
 }
 
 func InitializeApp() (*App, func(), error) {
-	// Open database connection
-	// db, err := sql.Open(dbDriver, dbPath)
-	// if err != nil {
-	// 	return nil, nil, err
-	// }
-
-	// os.Remove(dbPath)
-
+	// Initialize DB
 	db, err := db.InitDB(dbPath, schemaPath)
 	if err != nil {
 		log.Fatalf("Failed to initialize DB: %v", err)

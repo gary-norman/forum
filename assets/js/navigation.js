@@ -1,11 +1,19 @@
-import { setActivePage, activePageElement, newContentLoaded } from "./main.js";
+import {setActivePage, newContentLoaded, activePage, activePageElement} from "./main.js";
 import { changePage, navigateToPage } from "./fetch_and_navigate.js";
 import { toggleReplyForm } from "./comments.js";
 import { data } from "./share.js";
-import { UpdateUI } from "./update_UI_elements.js";
 
 // sidebar butons
 const goHome = document.querySelector("#btn-go-home");
+export let scrollWindow;
+
+document.addEventListener("newContentLoaded", () => {
+  listenToChannelLinks();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  listenToChannelLinks();
+});
 
 // --- go home ---
 goHome.addEventListener("click", (e) => {
@@ -16,7 +24,7 @@ goHome.addEventListener("click", (e) => {
 });
 
 // INFO was inside a DOMContentLoaded function
-export function listenToChannelLinks() {
+ function listenToChannelLinks() {
   const joinedAndOwnedChannelContainer = document.querySelector(
     "#sidebar-channel-block",
   );

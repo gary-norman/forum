@@ -34,12 +34,9 @@ let activityButtons;
 
 // console.log(data["homePage"]);
 
-
-
 // INFO was a DOMContentLoaded function
 export function listenToShare() {
   let postID, commentID, channelID, msg, title;
-  selectActiveFeed();
   const buttonControls = document.querySelectorAll('[class$="-controls"]');
 
   // console.log("buttonControls: ", buttonControls);

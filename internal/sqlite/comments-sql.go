@@ -53,8 +53,7 @@ func (m *CommentModel) Insert(comment models.Comment) error {
 
 	// Define the SQL statement
 	stmt1 := `INSERT INTO Comments 
-		(Content, Created, Author, AuthorID, AuthorAvatar, ChannelName, ChannelID, CommentedPostID, 
-CommentedCommentID, IsCommentable, IsFlagged, IsReply)
+		(Content, Created, Author, AuthorID, AuthorAvatar, ChannelName, ChannelID, IsCommentable, IsFlagged)
 		VALUES (?, DateTime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
 	// Execute the query, dereferencing the pointers for reactionID values
@@ -65,11 +64,8 @@ CommentedCommentID, IsCommentable, IsFlagged, IsReply)
 		&comment.AuthorAvatar,
 		&comment.ChannelName,
 		&comment.ChannelID,
-		&comment.CommentedPostID,
-		&comment.CommentedCommentID,
 		&comment.IsCommentable,
 		&comment.IsFlagged,
-		&comment.IsReply,
 	)
 	// fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, parentPostID)
 	if err != nil {

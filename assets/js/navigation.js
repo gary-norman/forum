@@ -9,10 +9,10 @@ const goHome = document.querySelector("#btn-go-home");
 
 // --- go home ---
 goHome.addEventListener("click", (e) => {
-    setActivePage("home");
-    history.pushState({}, "", `/`);
-    changePage(data["homePage"]);
-    // navigateToPage("home", e.target)
+  setActivePage("home");
+  history.pushState({}, "", `/`);
+  changePage(data["homePage"]);
+  // navigateToPage("home", e.target)
 });
 
 // INFO was inside a DOMContentLoaded function
@@ -37,32 +37,38 @@ export function listenToChannelLinks() {
 }
 
 function navigateToEntity(e) {
-  debugger;
-  const hasDestination = e.target.getAttribute("data-dest");
-  const isButton = e.target.nodeName.toLowerCase() === "button";
-  const commentAction = e.target.getAttribute("data-action");
-  const postID = e.target.getAttribute("data-post-id");
+  console.info("navigateToEntity called");
+  const target = e.target;
+  const isButton = target.nodeName.toLowerCase() === "button";
+  const commentAction = target.getAttribute("data-action");
+  const dest = target.getAttribute("data-dest");
+  const postID = target.getAttribute("data-post-id");
 
-  if (hasDestination || !isButton || (isButton && hasDestination)) {
-    if (commentAction === "navigate--comment-post") {
-      const dest = e.target.getAttribute("data-dest");
-      navigateToPage(dest, e.target).then(() => {
-        toggleReplyForm();
+  if (commentAction === "navigate--comment-post" && dest) {
+    console.info("Navigating to comment post:", dest);
+    navigateToPage(dest, target)
+      .then(() => {
+        toggleReplyForm(target);
+      })
+      .catch((err) => {
+        console.error("Navigation failed:", err);
       });
-    } else if (commentAction === "comment-post") {
-      toggleReplyForm();
-    } else if (hasDestination || !isButton || (isButton && hasDestination)) {
-      const parent = e.target.closest(".link");
-      if (parent) {
-        const dest = parent.getAttribute("data-dest");
-        navigateToPage(dest, parent);
-      }
-    } else if (e.target.matches(".link")) {
-      const dest = e.target.getAttribute("data-dest");
-      navigateToPage(dest, e.target);
-    }
+    return;
+  }
+
+  if (commentAction === "comment-post") {
+    console.info("Toggling reply form for post ID:", postID);
+    toggleReplyForm(target);
+    return;
+  }
+
+  // Handle navigation for elements with data-dest or .link class
+  let navTarget = target.closest(".link");
+  if (navTarget && navTarget.getAttribute("data-dest")) {
+    navigateToPage(navTarget.getAttribute("data-dest"), navTarget);
   }
 }
+
 document.addEventListener("click", navigateToEntity, { capture: false });
 
 // addGlobalEventListener is an event listener on a parent element that only runs your callback

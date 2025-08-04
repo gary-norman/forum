@@ -1,14 +1,10 @@
 // INFO was a DOMContentLoaded function
 import { activePage } from "./main.js";
 
-export function toggleReplyForm() {
-  console.log("TRF");
-  const postCard = document.querySelector('[id^="post-card"]');
-  console.log("postCard:", postCard);
+export function toggleReplyForm(target) {
+  const postCard = target.closest(".card");
   const postForm = postCard.querySelector(".form-reply");
-  console.log("postForm:", postForm);
   const textArea = postForm.querySelector('[id^="comment-form-textarea-"]');
-  console.log("textArea:", textArea);
 
   postForm.classList.add("replying");
   textArea.value = "";

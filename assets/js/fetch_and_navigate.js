@@ -91,7 +91,7 @@ export function fetchData(entity, Id) {
   //   console.log("other");
 
   history.pushState({}, "", `/${entity}s/${Id}`);
-  fetch(`/${entity}s/${Id}`)
+  return fetch(`/${entity}s/${Id}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

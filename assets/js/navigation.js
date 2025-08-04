@@ -1,4 +1,4 @@
-import { setActivePage, newContentLoaded } from "./main.js";
+import { setActivePage, activePageElement, newContentLoaded } from "./main.js";
 import { changePage, navigateToPage } from "./fetch_and_navigate.js";
 import { toggleReplyForm } from "./comments.js";
 import { data } from "./share.js";

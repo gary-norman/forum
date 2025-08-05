@@ -948,9 +948,10 @@ input[type="checkbox"] {
     & textarea {
       resize: none;
       overflow: hidden;
-      /*min-width: 24rem;*/
-      /*min-height: 5rem; !* Set a minimum height *!*/
-      max-height: 30rem; /* Optional: Set a max height */
+      field-sizing: content;
+      max-width: 100%;
+      min-height: 5rem;
+      max-height: 30rem;
     }
   }
 }

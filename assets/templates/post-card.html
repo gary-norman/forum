@@ -15,7 +15,7 @@
 {{ end }}
 {{ $comments := $post.Comments }}
 <div class="container-card-down">
-  <div id="post-card-{{ $post.ID }}" class="card link"
+  <div id="post-card-{{ $post.ID }}" class="card {{ if ne $thisPost "true" }}link{{ end }}"
        data-post-id="{{ $post.ID }}"
        data-dest="post"
        data-channel-ID="{{ $post.ChannelID }}"

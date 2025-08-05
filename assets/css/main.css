@@ -212,7 +212,6 @@ small,
   line-height: normal;
   letter-spacing: normal;
 
-
   &.sticky {
     position: sticky;
     top: 0;
@@ -909,6 +908,9 @@ input[type="checkbox"] {
 
   &.replying {
     display: flex;
+    & > div > div {
+      display: block;
+    }
   }
   & > * {
     gap: 1.2rem;

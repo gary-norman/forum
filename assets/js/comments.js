@@ -8,7 +8,7 @@ export function toggleReplyForm(target) {
 
   postForm.classList.add("replying");
   textArea.value = "";
-  textArea.style.height = "5rem";
+  textArea.focus();
 }
 
 export function listenToReplies() {

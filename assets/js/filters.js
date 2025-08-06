@@ -353,7 +353,6 @@ function toggleFilters() {
         if (popover && popover.matches('[popover].card.date')) {
             const startInput = popover.querySelector('input[id^="creation-year-start"]');
             const endInput =  popover.querySelector('input[id^="creation-year-end"]');
-            const pickers =
 
             popover.querySelectorAll("input").forEach(function (input) {
                 input.addEventListener("input", (e) => {
@@ -433,19 +432,31 @@ function clearRadios(popover, button) {
 
 function listenToClicksForPopovers(){
     const popovers = activePageElement.querySelectorAll('[popover].filter-popover');
+    let filterContainer = activePageElement.querySelector(".filters-row");
+    filterButtons = filterContainer.querySelectorAll("button.btn-action");
 
     if (popovers) {
-        document.addEventListener("click", (e) => {
-            popovers.forEach((popover) => {
-                if (!popover.contains(e.target) && popover.matches(':popover-open')) {
-                    const button = activePageElement.querySelector(`[popovertarget="${popover.id}"]`);
-                    const noneSelected = checkSelectedInputs(popover);
-
-                    toggleFilterButtonState(button, noneSelected, "outside");
-                }
+        filterButtons.forEach((button) => {
+            button.addEventListener("click", (e) => {
+                console.log("%cadding glonbal listener", warn)
+                document.addEventListener("click", handleClicksOutsidePopovers, true);
             });
-        }, true);
+        });
     }
+
+    function handleClicksOutsidePopovers(e) {
+        popovers.forEach((popover) => {
+            if (!popover.contains(e.target) && popover.matches(':popover-open')) {
+                const button = activePageElement.querySelector(`[popovertarget="${popover.id}"]`);
+                const noneSelected = checkSelectedInputs(popover);
+
+                toggleFilterButtonState(button, noneSelected, "outside");
+                document.removeEventListener("click", handleClicksOutsidePopovers);
+            }
+        });
+    }
+
+
 }
 
 function toggleFilterButtonState(button, noneSelected, clickLocation) {

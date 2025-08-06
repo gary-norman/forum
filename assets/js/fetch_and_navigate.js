@@ -115,3 +115,21 @@ export function fetchData(entity, Id) {
     .catch((error) => console.error(`Error fetching ${entity} data:`, error));
   // }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const path = window.location.pathname;
+  const [, dest, id] = path.match(/\/api\/(\w+)\/(\w+)/) || [];
+  const page = dest + "Page";
+  console.info("%cPath: %o Dest: %o ID: %o", expect, path, dest, id);
+  switch (dest) {
+    case undefined:
+      console.info(`%cUnknown dest: ${dest}, navigating to home`, warn);
+      setActivePage("home");
+      break;
+    default:
+      console.info("%cNavigating to %o %o", expect, dest, id);
+      setActivePage(dest);
+      changePage(page);
+      return fetchData(dest, id);
+  }
+});

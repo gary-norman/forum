@@ -13,19 +13,18 @@ export function showMainNotification(message, timeout = 2500) {
 // showNotification changes the given element to provide feedback to user
 export function showInlineNotification(
   elementID,
-  messageOld,
-  messageNew,
+  messageFail,
+  messageSuccess,
   success,
 ) {
   const notification = document.getElementById(elementID);
-  notification.textContent = messageNew;
+  notification.textContent = messageSuccess;
   notification.style.color = "var(--clr-accent--1)";
   if (!success) {
     notification.style.color = "var(--clr--error)";
     setTimeout(() => {
-      notification.textContent = messageOld;
+      notification.textContent = messageFail;
       notification.style.color = "var(--clr-fg-1)";
     }, 2500); // Hide after 3 seconds
   }
 }
-

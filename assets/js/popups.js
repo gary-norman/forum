@@ -52,7 +52,8 @@ export function toggleModals() {
             // Delay attaching the outside click listener
             setTimeout(() => {
                 document.addEventListener("click", handleClickOutsideModals);
-            }, 0);        })
+            }, 0);
+        })
 
         openLoginModalFallback.addEventListener(
             "click",

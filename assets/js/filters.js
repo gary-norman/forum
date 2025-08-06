@@ -438,7 +438,6 @@ function listenToClicksForPopovers(){
     if (popovers) {
         filterButtons.forEach((button) => {
             button.addEventListener("click", (e) => {
-                console.log("%cadding glonbal listener", warn)
                 document.addEventListener("click", handleClicksOutsidePopovers, true);
             });
         });

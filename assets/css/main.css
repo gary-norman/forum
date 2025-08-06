@@ -1428,7 +1428,7 @@ input[type="text"].inactive-input {
 }
 
 .wrapper-form {
-  width: 30rem;
+  width: 100%;
   align-items: center;
 }
 

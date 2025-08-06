@@ -94,7 +94,7 @@ export function fetchData(entity, Id) {
   // } else {
   //   console.log("other");
 
-  history.pushState({}, "", `/${entity}s/${Id}`);
+  history.pushState({}, "", `/api/${entity}/${Id}`);
   return fetch(`/${entity}s/${Id}`)
     .then((response) => {
       if (!response.ok) {

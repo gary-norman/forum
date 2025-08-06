@@ -32,8 +32,7 @@ export function UpdateUI() {
   listenToPageSetup();
   saveColourScheme();
   updateProfileImages();
-  toggleModals();
-  resetInputStyle();
+  // resetInputStyle();
   togglePopovers();
   agreeToJoin();
   showJoinPopoverRules();
@@ -55,7 +54,7 @@ export function updateProfileImages() {
   }
 }
 
-function resetInputStyle() {
+export function resetInputStyle() {
   const modals = document.querySelectorAll(".modal");
 
   // revert to original state if modals are closed

@@ -1,5 +1,17 @@
 // modals
-import {toggleUserInteracted} from "./update_UI_elements.js";
+import {resetInputStyle, toggleUserInteracted} from "./update_UI_elements.js";
+import {activePageElement} from "./main.js";
+
+const angry =
+    "background-color: #000000; color: #ff0000; font-weight: bold; border: 2px solid #ff0000; padding: 5px; border-radius: 5px;";
+const expect =
+    "background-color: #000000; color: #00ff00; font-weight: bold; border: 1px solid #00ff00; padding: 5px; border-radius: 5px;";
+const warn =
+    "background-color: #000000; color: #e3c144; font-weight: bold; border: 1px solid #e3c144; padding: 5px; border-radius: 5px;";
+
+document.addEventListener("DOMContentLoaded", () => {
+    toggleModals();
+});
 
 export function togglePopovers() {
     const popovers = document.querySelectorAll("[popover]:has(.user-label)");
@@ -29,33 +41,39 @@ export function toggleModals() {
         "#btn-open-login-modal-fallback",
     );
 
+
     // open modals
     // TODO refactor the open and close modals
     if (openLoginModal) {
-        openLoginModal.addEventListener(
+        openLoginModal.addEventListener("click", () => {
+            loginModal.style.display = "block";
+
+
+            // Delay attaching the outside click listener
+            setTimeout(() => {
+                document.addEventListener("click", handleClickOutsideModals);
+            }, 0);        })
+
+        openLoginModalFallback.addEventListener(
             "click",
             () => (loginModal.style.display = "block"),
         );
+    } else {
+        console.warn("openLoginModal not found");
     }
-    openLoginModalFallback.addEventListener(
-        "click",
-        () => (loginModal.style.display = "block"),
-    );
-// openEditUserModal.addEventListener('click', () => editUserModal.style.display = 'block');
-// openAccSettingsModal.addEventListener('click', () => accSettingsModal.style.display = 'block');
-// openViewStatsModal.addEventListener('click', () => viewStatsModal.style.display = 'block');
-// openRemoveAccModal.addEventListener('click', () => removeAccModal.style.display = 'block');
-// close modals
-    closeLoginModal.addEventListener(
-        "click",
-        () => (loginModal.style.display = "none"),
-    );
 
-    window.addEventListener("click", ({ target }) => {
-        switch (target) {
-            case loginModal:
-                loginModal.style.display = "none";
-                break;
+    function handleClickOutsideModals(e) {
+        console.log("%ce.target", warn, e.target);
+
+        // if the target is not the modal itself, which is of class modal-content
+        if (e.target === loginModal || e.target === closeLoginModal) {
+            console.log("%cclicked outside modals", expect);
+
+
+
+            loginModal.style.display = "none";
+            resetInputStyle();
+            document.removeEventListener("click", handleClickOutsideModals);
         }
-    });
+    }
 }

@@ -33,7 +33,7 @@ let users = [];
 let channels = [];
 let posts = [];
 
-function handleClickOutside(e) {
+function handleClickOutsideSearchContainer(e) {
   if (e.target !== searchInput) {
     resultsContainer.classList.add("hide");
   }
@@ -43,13 +43,13 @@ function handleClickOutside(e) {
 searchInput.addEventListener("click", () => {
   if (isValue) {
     resultsContainer.classList.remove("hide");
-    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("click", handleClickOutsideSearchContainer);
   }
 })
 
 searchInput.addEventListener("blur", () => {
   resultsContainer.classList.add("hide");
-  document.removeEventListener("click", handleClickOutside);
+  document.removeEventListener("click", handleClickOutsideSearchContainer);
 });
 
 

@@ -26,3 +26,4 @@ test_database.db
 bin
 tags
 app.log
+/cmd/certs/

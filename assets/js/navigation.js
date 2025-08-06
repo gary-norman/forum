@@ -7,7 +7,7 @@ import {
 import { changePage, navigateToPage } from "./fetch_and_navigate.js";
 import { toggleReplyForm } from "./comments.js";
 import { data } from "./share.js";
-
+import { showInlineNotification } from "./notifications.js";
 // sidebar butons
 const goHome = document.querySelector("#btn-go-home");
 export let scrollWindow;
@@ -58,11 +58,25 @@ function navigateToEntity(e) {
   const postID = target.getAttribute("data-post-id");
 
   if (commentAction === "navigate--comment-post" && dest) {
+    const sidebarProfile = document.querySelector(".sidebarProfile");
     console.info("Navigating to comment post:", dest);
     navigateToPage(dest, target)
       .then(() => {
         target = activePageElement.querySelector(`#post-card-${postID}`);
-        toggleReplyForm(target);
+        if (sidebarProfile) {
+          toggleReplyForm(target);
+        } else {
+          const notifier = activePageElement.querySelector(
+            `#post-card-info-${postID}`,
+          );
+          console.info("notifier:", notifier);
+          showInlineNotification(
+            notifier,
+            "",
+            "You must be logged in to reply to a post.",
+            false,
+          );
+        }
       })
       .catch((err) => {
         console.error("Navigation failed:", err);
@@ -71,8 +85,22 @@ function navigateToEntity(e) {
   }
 
   if (commentAction === "comment-post") {
+    const sidebarProfile = document.querySelector(".sidebarProfile");
     console.info("Toggling reply form for post ID:", postID);
-    toggleReplyForm(target);
+    if (sidebarProfile) {
+      toggleReplyForm(target);
+    } else {
+      const notifier = activePageElement.querySelector(
+        `#post-card-info-${postID}`,
+      );
+      console.info("notifier:", notifier);
+      showInlineNotification(
+        notifier,
+        "",
+        "You must be logged in to reply to a post.",
+        false,
+      );
+    }
     return;
   }
 

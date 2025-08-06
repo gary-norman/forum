@@ -14,6 +14,7 @@ const regPassRpt = document.querySelector("#register_password-rpt");
 const validList = regForm.querySelector("ul");
 
 // login/register forms
+const notifier = document.querySelector("#login-title");
 const formLogin = document.querySelector("#form-login");
 const formRegister = document.querySelector("#form-register");
 const formForgot = document.querySelector("#form-forgot");
@@ -165,9 +166,9 @@ if (registerForm) {
       })
       .then((data) => {
         if (data.message === "registration failed!") {
-          showInlineNotification("login-title", "", data.message, false);
+          showInlineNotification(notifier, "", data.message, false);
         } else {
-          showInlineNotification("login-title", "", data.message, true);
+          showInlineNotification(notifier, "", data.message, true);
           setTimeout(() => {
             window.location.href = "/";
           }, 2000);
@@ -212,13 +213,13 @@ if (loginForm) {
       })
       .then((data) => {
         if (data.message === "incorrect password") {
-          showInlineNotification("login-title", "", data.message, false);
+          showInlineNotification(notifier, "", data.message, false);
         } else if (data.message === "user not found") {
-          showInlineNotification("login-title", "", data.message, false);
+          showInlineNotification(notifier, "", data.message, false);
         } else if (data.message === "failed to create cookies") {
-          showInlineNotification("login-title", "", data.message, false);
+          showInlineNotification(notifier, "", data.message, false);
         } else {
-          showInlineNotification("login-title", "", data.message, true);
+          showInlineNotification(notifier, "", data.message, true);
           setTimeout(() => {
             window.location.href = "/";
           }, 2000);
@@ -265,4 +266,3 @@ if (logoutFormButton) {
       });
   });
 }
-

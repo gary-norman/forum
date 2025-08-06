@@ -1,3 +1,4 @@
+import { activePageElement } from "./main.js";
 // showMainNotification changes the main notification modal to provide feedback to user
 export function showMainNotification(message, timeout = 2500) {
   const notification = document.getElementById("notification-main");
@@ -12,12 +13,12 @@ export function showMainNotification(message, timeout = 2500) {
 }
 // showNotification changes the given element to provide feedback to user
 export function showInlineNotification(
-  elementID,
+  notification,
   messageFail,
   messageSuccess,
   success,
 ) {
-  const notification = document.getElementById(elementID);
+  // const notification = activePageElement.getElementById(elementID);
   notification.textContent = messageSuccess;
   notification.style.color = "var(--clr-accent--1)";
   if (!success) {

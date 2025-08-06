@@ -1,3 +1,4 @@
+// Package routes provides the HTTP routing for the application.
 package routes
 
 import (

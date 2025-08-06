@@ -122,7 +122,7 @@ func (h *CommentHandler) GetPostsComments(posts []models.Post) ([]models.Post, e
 	return posts, nil
 }
 
-// getRepliesForComment Recursively fetches replies for each comment
+// GetRepliesForComment Recursively fetches replies for each comment
 func (h *CommentHandler) GetRepliesForComment(comment models.Comment) models.Comment {
 	// Find replies to the current comment
 	var replies []models.Comment

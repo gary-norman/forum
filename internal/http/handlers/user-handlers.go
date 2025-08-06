@@ -75,6 +75,9 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 
 	// Retrieve last reaction time for userPosts
 	userPosts, err = u.Reaction.getLastReactionTimeForPosts(userPosts)
+	if err != nil {
+		http.Error(w, `{"error": "error fetching last reaction time for posts info"}`, http.StatusInternalServerError)
+	}
 
 	// Fetch channel name for userPosts
 	for p := range userPosts {
@@ -113,7 +116,7 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 
 	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
 	channelMap := make(map[int64]bool)
-	//var userPosts []models.Post
+	// var userPosts []models.Post
 
 	if userLoggedIn {
 		currentUser.Followers, currentUser.Following, err = u.App.Loyalty.CountUsers(currentUser.ID)
@@ -139,7 +142,7 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Query, "thisUser joined channels", err)
 		}
 
-		//ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+		// ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
 		// Add owned channels
 		for _, channel := range ownedChannels {
 			if !channelMap[channel.ID] {

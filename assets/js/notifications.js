@@ -1,4 +1,4 @@
-// showMainNotification changes the element ID to provide feedback to user
+// showMainNotification changes the main notification modal to provide feedback to user
 export function showMainNotification(message, timeout = 2500) {
   const notification = document.getElementById("notification-main");
   const notificationContent = document.getElementById(
@@ -10,7 +10,7 @@ export function showMainNotification(message, timeout = 2500) {
     notification.style.display = "none";
   }, timeout); // Hide after 3 seconds
 }
-// showNotification changes the element ID to provide feedback to user
+// showNotification changes the given element to provide feedback to user
 export function showInlineNotification(
   elementID,
   messageOld,

@@ -939,6 +939,7 @@ input[type="checkbox"] {
   &.edit-wrapper {
     display: none;
     width: 100%;
+    max-width: calc(100% - 1.2rem - 11rem);
     font-size: 1.2rem;
     /*padding: 0.8rem 1.2rem;*/
 
@@ -2190,6 +2191,7 @@ main {
   flex-direction: column;
   gap: 1.2rem;
   width: fit-content;
+  max-width: 60rem;
   color: var(--clr-fg-1);
   background: var(--clr-bg-2);
   border: 1px solid var(--clr-bg-3);

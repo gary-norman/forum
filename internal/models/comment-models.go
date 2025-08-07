@@ -25,9 +25,9 @@ type Comment struct {
 	Replies            []Comment
 }
 
-func (c Comment) TableName() string { return "comments" }
-func (c Comment) GetID() int64      { return c.ID }
-func (c *Comment) SetID(id int64)   { c.ID = id }
+func (c *Comment) TableName() string { return "comments" }
+func (c *Comment) GetID() int64      { return c.ID }
+func (c *Comment) SetID(id int64)    { c.ID = id }
 
 func (c *Comment) React(likes, dislikes int) {
 	c.Likes += likes

@@ -57,19 +57,19 @@ func (m *CommentModel) Insert(comment models.Comment) error {
 CommentedCommentID, IsCommentable, IsFlagged, IsReply)
 		VALUES (?, DateTime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
-	// Execute the query, dereferencing the pointers for reactionID values
+	// Execute the query, dereferencing the pointers is handled by database/sql
 	_, err = tx.Exec(stmt1,
-		&comment.Content,
-		&comment.Author,
-		&comment.AuthorID,
-		&comment.AuthorAvatar,
-		&comment.ChannelName,
-		&comment.ChannelID,
-		&comment.CommentedPostID,
-		&comment.CommentedCommentID,
-		&comment.IsCommentable,
-		&comment.IsFlagged,
-		&comment.IsReply,
+		comment.Content,
+		comment.Author,
+		comment.AuthorID,
+		comment.AuthorAvatar,
+		comment.ChannelName,
+		comment.ChannelID,
+		comment.CommentedPostID,
+		comment.CommentedCommentID,
+		comment.IsCommentable,
+		comment.IsFlagged,
+		comment.IsReply,
 	)
 	// fmt.Printf("Inserting row:\nLiked: %v, Disliked: %v, userID: %v, PostID: %v\n", liked, disliked, authorID, parentPostID)
 	if err != nil {

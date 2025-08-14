@@ -1,3 +1,4 @@
+// Package sqlite contains the implementation of all database operations
 package sqlite
 
 import (

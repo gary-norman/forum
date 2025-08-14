@@ -66,6 +66,12 @@ func (h *CommentHandler) StoreComment(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error converting commentID: %v", commentID)
 	}
 
+	// Convert ChannelID to an integer
+	channelID, channelIDConvErr := strconv.ParseInt(channelData.ChannelID, 10, 64)
+	if channelIDConvErr != nil {
+		log.Printf("Error converting channelID: %v", channelData.ChannelID)
+	}
+
 	// Assign the returned values
 	commentData = models.Comment{
 		Content:            r.PostForm.Get("content"),
@@ -79,6 +85,7 @@ func (h *CommentHandler) StoreComment(w http.ResponseWriter, r *http.Request) {
 		AuthorAvatar:       user.Avatar,
 		ChannelName:        channelData.ChannelName,
 		ChannelID:          0,
+		ChannelID:     channelID,
 	}
 
 	commentData.ChannelID, _ = strconv.ParseInt(channelData.ChannelID, 10, 64)

@@ -222,16 +222,16 @@ func (m *CommentModel) GetCommentByPostID(id int64) ([]models.Comment, error) {
 			&c.ID,
 			&c.Content,
 			&c.Created,
-			&c.AuthorID,
-			&c.ChannelID,
-			&c.IsReply,
 			&c.CommentedPostID,
 			&c.CommentedCommentID,
+			&c.IsCommentable,
 			&c.IsFlagged,
+			&c.IsReply,
 			&c.Author,
+			&c.AuthorID,
 			&c.AuthorAvatar,
 			&c.ChannelName,
-			&c.IsCommentable,
+			&c.ChannelID,
 		)
 		if scanErr != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")

@@ -68,7 +68,7 @@ func NewApp(db *sql.DB) *App {
 		Loyalty:     &sqlite.LoyaltyModel{DB: db},
 		Memberships: &sqlite.MembershipModel{DB: db},
 		Muted:       &sqlite.MutedChannelModel{DB: db},
-		Cookies:     &sqlite.CookieModel{DB: db}, // Not in sqlite, handled separately
+		Cookies:     &sqlite.CookieModel{DB: db},
 		Rules:       &sqlite.RuleModel{DB: db},
 
 		Paths: models.ImagePaths{

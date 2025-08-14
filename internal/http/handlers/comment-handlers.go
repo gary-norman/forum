@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -74,25 +75,31 @@ func (h *CommentHandler) StoreComment(w http.ResponseWriter, r *http.Request) {
 
 	// Assign the returned values
 	commentData = models.Comment{
-		Content:            r.PostForm.Get("content"),
-		CommentedPostID:    &postID,
-		CommentedCommentID: &commentID,
-		IsCommentable:      true,
-		IsFlagged:          false,
-		IsReply:            false,
-		Author:             user.Username,
-		AuthorID:           user.ID,
-		AuthorAvatar:       user.Avatar,
-		ChannelName:        channelData.ChannelName,
-		ChannelID:          0,
+		Content:       r.PostForm.Get("content"),
+		Author:        user.Username,
+		AuthorID:      user.ID,
+		AuthorAvatar:  user.Avatar,
 		ChannelID:     channelID,
+		ChannelName:   channelData.ChannelName,
+		IsCommentable: true,
+		IsReply:       false,
+		IsFlagged:     false,
+	}
+	// Set CommentedPostID if it is provided (ie not 0)
+	if postID != 0 {
+		commentData.CommentedPostID = sql.NullInt64{Int64: int64(postID), Valid: true}
+	}
+
+	// Set CommentedCommentID if it is provided (ie not 0)
+	if commentID != 0 {
+		commentData.CommentedCommentID = sql.NullInt64{Int64: int64(commentID), Valid: true}
 	}
 
 	commentData.ChannelID, _ = strconv.ParseInt(channelData.ChannelID, 10, 64)
 
 	// Log the values
-	fmt.Printf("commentData.CommentedPostID: %v\n", *commentData.CommentedPostID)
-	fmt.Printf("commentData.CommentedCommentID: %v\n", *commentData.CommentedCommentID)
+	fmt.Printf("commentData.CommentedPostID: %v\n", commentData.CommentedPostID)
+	fmt.Printf("commentData.CommentedCommentID: %v\n", commentData.CommentedCommentID)
 
 	// Insert the comment
 	insertErr := h.App.Comments.Upsert(commentData)

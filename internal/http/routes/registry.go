@@ -115,6 +115,7 @@ func NewRouteHandler(app *app.App) *RouteHandler {
 		App:      app,
 		Auth:     authHandler,
 		Channel:  channelHandler,
+		Comment:  commentHandler,
 		Home:     homeHandler,
 		Post:     postHandler,
 		Reaction: reactionHandler,

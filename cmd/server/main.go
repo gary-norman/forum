@@ -51,7 +51,7 @@ func main() {
 	// Count users and create new admin account if none exist
 	// userCount, err := app.App.Users.CountUsers(db)
 
-	port := 8989
+	port := 8888
 	addr := fmt.Sprintf(":%d", port)
 	srv := &http.Server{
 		Addr:    addr,

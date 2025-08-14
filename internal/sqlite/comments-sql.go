@@ -112,7 +112,7 @@ func (m *CommentModel) Update(comment models.Comment) error {
 	// TODO add Updated field, which should be populated on update
 	// Define the SQL statement
 	stmt1 := `UPDATE Comments 
-		SET Content = ?, Created = DateTime('now'), IsCommentable = ?, IsFlagged = ?, Author = ?, AuthorAvatar = ?, ChannelName = ?, ChannelID = ?
+		SET Content = ?, IsCommentable = ?, IsFlagged = ?, Author = ?, AuthorAvatar = ?, ChannelName = ?, ChannelID = ?
 		WHERE AuthorID = ? AND (CommentedPostID = ? OR CommentedCommentID = ?)`
 
 	// Execute the query

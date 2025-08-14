@@ -9,14 +9,15 @@ export function showMainNotification(message, timeout = 2500) {
   notification.style.display = "flex";
   setTimeout(() => {
     notification.style.display = "none";
-  }, timeout); // Hide after 3 seconds
+  }, timeout);
 }
-// showNotification changes the given element to provide feedback to user
+// showNotification changes the given element to provide feedback to user. notification is the element that accepts the message, originalText returns any pre-existing (eg instructional) text, messageSuccess is the text to show when the action is successful, success is a boolean indicating if the action was successful, and timeout is how long to show the notification for.
 export function showInlineNotification(
   notification,
-  messageFail,
+  originalText,
   messageSuccess,
   success,
+  timeout = 2500,
 ) {
   // const notification = activePageElement.getElementById(elementID);
   notification.textContent = messageSuccess;
@@ -24,8 +25,8 @@ export function showInlineNotification(
   if (!success) {
     notification.style.color = "var(--clr--error)";
     setTimeout(() => {
-      notification.textContent = messageFail;
+      notification.textContent = originalText;
       notification.style.color = "var(--clr-fg-1)";
-    }, 2500); // Hide after 3 seconds
+    }, timeout);
   }
 }

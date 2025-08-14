@@ -351,12 +351,12 @@ func (m *CommentModel) GetComment(authorID int, reactedPostID int, reactedCommen
 		stmt = `SELECT ID, Created, AuthorID, CommentedPostID, CommentedCommentID, IsCommentable, IsFlagged 
 				FROM Comments 
 				WHERE AuthorID = ? AND 
-				      ReactedPostID = ?`
+				      CommentedPostID = ?`
 	} else if reactedCommentID != 0 {
 		stmt = `SELECT ID, Liked, Disliked, AuthorID, Created, ReactedPostID, ReactedCommentID 
 				FROM Reactions 
 				WHERE AuthorID = ? AND 
-				      ReactedCommentID = ?`
+				      CommentedCommentID = ?`
 	} else {
 		return nil, nil
 	}

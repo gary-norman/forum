@@ -49,7 +49,6 @@ func (m *ReactionModel) GetLastReaction(reactedPostID, reactedCommentID int64) (
 		&reaction.ReactedPostID,
 		&reaction.ReactedCommentID,
 	)
-
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			// no matching reaction
@@ -58,7 +57,7 @@ func (m *ReactionModel) GetLastReaction(reactedPostID, reactedCommentID int64) (
 		return models.Reaction{}, err
 	}
 
-	//fmt.Println("Reaction: ", reaction)
+	// fmt.Println("Reaction: ", reaction)
 
 	return reaction, nil
 }

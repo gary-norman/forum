@@ -27,3 +27,4 @@ bin
 tags
 app.log
 /cmd/certs/
+pkg

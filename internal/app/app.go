@@ -81,31 +81,31 @@ func NewApp(db *sql.DB) *App {
 
 func InitializeApp() (*App, func(), error) {
 	// Initialize DB
-	db, err := db.InitDB(dbPath, schemaPath)
+	initDB, err := db.InitDB(dbPath, schemaPath)
 	if err != nil {
 		log.Fatalf("Failed to initialize DB: %v", err)
 	}
 
 	// Verify connection
-	if err = db.Ping(); err != nil {
-		db.Close() // Close DB if ping fails
+	if err = initDB.Ping(); err != nil {
+		initDB.Close() // Close DB if ping fails
 		return nil, nil, err
 	}
 
 	// Get version
 	var dbVersion string
-	if err = db.QueryRow("select sqlite_version()").Scan(&dbVersion); err != nil {
+	if err = initDB.QueryRow("select sqlite_version()").Scan(&dbVersion); err != nil {
 		log.Printf(Colors().Red+"Error fetching SQLite version: %v\n"+Colors().Reset, err)
 	}
 	fmt.Printf(ErrorMsgs().DbSuccess, dbType, dbVersion)
 
 	// App instance with DB reference
-	appInstance := NewApp(db)
+	appInstance := NewApp(initDB)
 
 	// Cleanup function to close DB connection
 	cleanup := func() {
 		log.Println("Closing database connection...")
-		if err := db.Close(); err != nil {
+		if err := initDB.Close(); err != nil {
 			log.Println(Colors().Red+"Error closing DB: %v"+Colors().Reset, err)
 		} else {
 			fmt.Println(Colors().Green + "Database closed successfully." + Colors().Reset)

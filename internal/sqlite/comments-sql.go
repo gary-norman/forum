@@ -117,16 +117,17 @@ func (m *CommentModel) Update(comment models.Comment) error {
 
 	// Execute the query
 	_, err = tx.Exec(stmt1,
-		&comment.Content,
-		&comment.IsCommentable,
-		&comment.IsFlagged,
-		&comment.Author,
-		&comment.AuthorAvatar,
-		&comment.ChannelName,
-		&comment.ChannelID,
-		&comment.AuthorID,
-		&comment.CommentedPostID,
-		&comment.CommentedCommentID)
+		comment.Content,
+		comment.Author,
+		comment.AuthorID,
+		comment.AuthorAvatar,
+		comment.ChannelName,
+		comment.ChannelID,
+		comment.CommentedPostID,
+		comment.CommentedCommentID,
+		comment.IsCommentable,
+		comment.IsFlagged,
+		comment.IsReply)
 	// fmt.Printf("Updating Comments, where reactionID: %v, PostID: %v and UserID: %v with Liked: %v, Disliked: %v\n", reactionID, reactedPostID, authorID, liked, disliked)
 	if err != nil {
 		return fmt.Errorf("failed to execute Update query: %w", err)

@@ -14,9 +14,14 @@ import (
 var (
 	dbType   string = "SQLite"
 	dbDriver string = "sqlite3"
-	// dbPath    string = "db/forum_database.db"
-	// development db for testing new setup
-	dbPath     string = "db/dev_forum_database.db"
+	// old development db
+	dbDevOld string = "db/dev_forum_database.db"
+	// new development db
+	dbDev string = "/var/lib/db-codex/dev_forum_database.db"
+	// production db
+	dbProd string = "/var/lib/db-codex/forum_database.db"
+	// dbPath     string = fmt.Sprintf("%s", dbDev) // Change to dbProd for production
+	dbPath     string = dbDev // Change to dbProd for production
 	schemaPath string = "schema.sql"
 	imagePath  string = "db/userdata/images/"
 )

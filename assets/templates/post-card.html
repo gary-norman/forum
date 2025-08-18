@@ -77,18 +77,5 @@
       </div>
     </form>
   </div> 
-  {{ if eq $instance "post-page" }}
-    <div class="comment-header--count">
-      <h3>Replies</h3>
-      {{ $count := len $comments }}
-      {{ if gt $count 0 }}
-        {{ range $comments }}
-          <span class="comment-list comment--count">Reply from {{ .Author }}</span>
-        {{ end }}
-      {{ else }}
-        <span class="comment-list">No replies</span>
-      {{ end }}
-    </div>
-  {{end}}
 </div>
 {{end}}

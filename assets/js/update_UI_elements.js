@@ -28,7 +28,6 @@ export function UpdateUI() {
   listenToShare();
   listenToLikeDislike();
   listenToNoUser();
-  listenToDropdowns();
   listenToPageSetup();
   saveColourScheme();
   updateProfileImages();

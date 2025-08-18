@@ -34,7 +34,7 @@ let channels = [];
 let posts = [];
 
 function handleClickOutsideSearchContainer(e) {
-  if (e.target !== searchInput) {
+  if (!searchInput.contains(e.target) && !resultsContainer.contains(e.target)){
     resultsContainer.classList.add("hide");
   }
 }
@@ -47,9 +47,13 @@ searchInput.addEventListener("click", () => {
   }
 })
 
-searchInput.addEventListener("blur", () => {
-  resultsContainer.classList.add("hide");
-  document.removeEventListener("click", handleClickOutsideSearchContainer);
+searchInput.addEventListener("blur", (e) => {
+
+    setTimeout(() => {
+      resultsContainer.classList.add("hide");
+      document.removeEventListener("click", handleClickOutsideSearchContainer);
+    }, 100);
+
 });
 
 

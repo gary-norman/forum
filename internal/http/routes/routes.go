@@ -37,7 +37,6 @@ func NewRouter(app *app.App) http.Handler {
 	mux.Handle("POST /edituser", mw.WithUser(http.HandlerFunc(r.User.EditUserDetails), r.App))
 	mux.Handle("POST /channels/join", mw.WithUser(http.HandlerFunc(r.Channel.StoreMembership), r.App))
 	mux.Handle("POST /channels/add-rules/{channelId}", mw.WithUser(http.HandlerFunc(r.Channel.CreateAndInsertRule), r.App))
-	mux.Handle("POST /store-comment", mw.WithUser(http.HandlerFunc(r.Comment.StoreComment), r.App))
-
+	mux.Handle("POST /cdx/post/{postId}/store-comment", mw.WithUser(http.HandlerFunc(r.Comment.StoreComment), r.App))
 	return mux
 }

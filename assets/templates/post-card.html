@@ -62,7 +62,7 @@
     </div>
     {{ template "control-buttons" (dict "Post" $post "dot" $dot "userID" $userID "Instance" $instance "calledBy" "post-card" "ThisPost" $thisPost "Tracer" $tracer) }}
   <!--  Reply / Submit Comment form -->
-    <form name="replyForm" class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
+    <form name="replyForm" class="form-reply" action="/cdx/post/{{$post.ID}}/store-comment" enctype="multipart/form-data" method="POST">
       <div class="cont-flex-row flex-end">
         <div class="input-wrapper container-reply">
           <textarea id="comment-form-textarea-thispostcard-{{$post.ID}}" name="content" placeholder="Type a reply..."></textarea>

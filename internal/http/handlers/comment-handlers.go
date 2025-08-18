@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gary-norman/forum/internal/app"
 	mw "github.com/gary-norman/forum/internal/http/middleware"
@@ -110,7 +111,9 @@ func (h *CommentHandler) StoreComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/", http.StatusFound)
+	path := strings.TrimSuffix(r.URL.Path, "/store-comment")
+
+	http.Redirect(w, r, path, http.StatusFound)
 }
 
 func (h *CommentHandler) GetPostsComments(posts []models.Post) ([]models.Post, error) {

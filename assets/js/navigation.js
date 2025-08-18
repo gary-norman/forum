@@ -104,10 +104,19 @@ function navigateToEntity(e) {
     return;
   }
 
-  // Handle navigation for elements with data-dest or .link class
-  let navTarget = target.closest(".link");
-  if (navTarget && navTarget.getAttribute("data-dest")) {
-    navigateToPage(navTarget.getAttribute("data-dest"), navTarget);
+  // // Handle navigation for elements with data-dest or .link class
+
+  if ((dest || !isButton) || (isButton && dest) ) {
+    const parent = e.target.closest(".link");
+    if (parent) {
+      const newDest = parent.getAttribute("data-dest");
+      navigateToPage(newDest, parent);
+    }
+    return;
+  }
+  if (e.target.matches(".link")) {
+    const newDest = e.target.getAttribute("data-dest");
+    navigateToPage(newDest, e.target);
   }
 }
 

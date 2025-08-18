@@ -19,12 +19,17 @@ import { navigateToPage } from "./fetch_and_navigate.js";
 //   });
 
 // post channel selection dropdown
+
+document.addEventListener("DOMContentLoaded" , () => {
+  listenToDropdowns();
+})
 // INFO was a DOMContentLoaded function
 export function listenToDropdowns() {
   const dropdownToggle = document.querySelector(".dropdown-toggle");
   const wrapperDropdown = document.querySelector(".wrapper-dropdown");
 
   dropdownToggle.addEventListener("click", () => {
+    console.log("clicked dropdownToggle");
     const isActive = !dropdownToggle.classList.contains("active");
     dropdownToggle.classList.toggle("active");
 

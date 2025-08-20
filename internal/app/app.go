@@ -23,7 +23,7 @@ var (
 	// dbPath     string = fmt.Sprintf("%s", dbDev) // Change to dbProd for production
 	dbPath     string = dbDev // Change to dbProd for production
 	schemaPath string = "schema.sql"
-	imagePath  string = "db/userdata/images/"
+	imagePath  string = "/db/userdata/images/"
 )
 
 func ErrorMsgs() *models.Errors {

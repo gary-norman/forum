@@ -17,7 +17,7 @@ func NewRouter(app *app.App) http.Handler {
 	// handlers.MuxHandler(mux, "assets")
 	// handlers.MuxHandler(mux, "db")
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
-	mux.Handle("/db/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./db"))))
+	mux.Handle("/db/", http.StripPrefix("/db/", http.FileServer(http.Dir("./db"))))
 
 	// Core routes
 	mux.HandleFunc("POST /register", r.Auth.Register)

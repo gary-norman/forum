@@ -20,7 +20,9 @@ var (
 	dbDev string = "/var/lib/db-codex/dev_forum_database.db"
 	// production db
 	dbProd string = "/var/lib/db-codex/forum_database.db"
-	dbPath     string = dbDev // Change to dbProd for production
+	// Uncomment the required dbPath line based on the environment
+	// dbPath string = dbDev // Development database
+	dbPath     string = dbProd // Production database
 	schemaPath string = "schema.sql"
 	imagePath  string = "/db/userdata/images/"
 )

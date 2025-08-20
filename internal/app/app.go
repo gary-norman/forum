@@ -20,7 +20,6 @@ var (
 	dbDev string = "/var/lib/db-codex/dev_forum_database.db"
 	// production db
 	dbProd string = "/var/lib/db-codex/forum_database.db"
-	// dbPath     string = fmt.Sprintf("%s", dbDev) // Change to dbProd for production
 	dbPath     string = dbDev // Change to dbProd for production
 	schemaPath string = "schema.sql"
 	imagePath  string = "/db/userdata/images/"

@@ -1,4 +1,6 @@
-#### Authentication
+#### Base Audit
+
+##### Authentication
 
 ###### Are an email and a password asked for in the registration?
 
@@ -28,7 +30,7 @@ pass!
 
 ###### Does it show a warning message?
 
-need to add a message
+pass!
 
 ###### Are sessions present in the project?
 
@@ -136,7 +138,7 @@ pass!
 
 ##### Enter the forum as a non-registered user and try to like a comment
 
-pass! #check when comments work
+pass!
 
 ###### Are you forbidden from liking a post?
 
@@ -158,7 +160,7 @@ pass!
 
 ###### Were you forbidden from creating the empty comment?
 
-pass!
+fail!
 
 ##### Enter the forum as a registered user and try to create a post
 
@@ -210,13 +212,13 @@ pass!
 
 ##### Enter the forum as a registered user and try seeing all of your created posts
 
-###### Does it present the expected posts?
+###### Does it present the created posts?
 
 !!pass, but we need to sort out the pages
 
 ##### Enter the forum as a registered user and try seeing all of your liked posts
 
-###### Does it present the expected posts?
+###### Does it present the liked posts?
 
 !! we need to add this functionality
 

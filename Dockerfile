@@ -32,7 +32,7 @@ COPY --from=builder /app/README.md /app/README.md
 COPY --from=builder /app/LICENSE /app/LICENSE
 
 # Create the database directory and initialize the database
-RUN mkdir -p /app/db && sqlite3 /app/db/forum_database.db < /app/schema.sql
+RUN mkdir -p /var/lib/db-codex && sqlite3 /var/lib/db-codex/forum_database.db < /app/schema.sql
 
 # Create the userdata directory structure
 RUN mkdir -p /app/db/userdata/images/channel-images

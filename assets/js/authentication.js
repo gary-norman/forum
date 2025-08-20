@@ -182,53 +182,63 @@ if (registerForm) {
 
 // --- login ---
 if (loginForm) {
-  loginForm.addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent the default form submission
-    // const form = event.target;
-    // const formData = new FormData(form); // Collect form data
-    const csrfToken = getCSRFToken();
-    console.log("csrfToken: ", csrfToken);
+  loginForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-    fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-csrf-token": csrfToken,
-      },
-      // body: formData, // Send the form data
-      body: JSON.stringify({
-        username: document.getElementById("loginFormUser").value,
-        password: document.getElementById("loginFormPassword").value,
-      }),
-      cache: "no-store",
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.table(response.json);
-          return response.json();
-        } else {
-          console.log("(error) response", response.json);
-          throw new Error("Login failed.");
-        }
-      })
-      .then((data) => {
-        if (data.message === "incorrect password") {
-          showInlineNotification(notifier, "", data.message, false);
-        } else if (data.message === "user not found") {
-          showInlineNotification(notifier, "", data.message, false);
-        } else if (data.message === "failed to create cookies") {
-          showInlineNotification(notifier, "", data.message, false);
-        } else {
-          showInlineNotification(notifier, "", data.message, true);
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 2000);
-        }
-      })
-      .catch((error) => {
-        console.error("Login failed:", error);
-        // showMainNotification("An error occurred during login.");
+    const usernameInput = document.getElementById("loginFormUser");
+    const passwordInput = document.getElementById("loginFormPassword");
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!username || !password) {
+      showInlineNotification(
+        notifier,
+        "",
+        "Username and password required.",
+        false,
+      );
+      return;
+    }
+
+    const csrfToken = getCSRFToken();
+
+    try {
+      const response = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
+        },
+        body: JSON.stringify({ username, password }),
+        cache: "no-store",
       });
+
+      const data = await response.json();
+
+      const errorMessages = new Set([
+        "incorrect password",
+        "user not found",
+        "failed to create cookies",
+      ]);
+
+      if (!response.ok || errorMessages.has(data.message)) {
+        showInlineNotification(
+          notifier,
+          "",
+          data.message || "Login failed.",
+          false,
+        );
+        return;
+      }
+
+      showInlineNotification(notifier, "", data.message, true);
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+    } catch (error) {
+      console.error("Login failed:", error);
+      showMainNotification("An error occurred during login.");
+    }
   });
 }
 

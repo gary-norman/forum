@@ -4,13 +4,17 @@ set -e
 # Path to the database
 DB_PATH="/var/lib/db-codex/forum_database.db"
 
+# create UserID as uuid
+UserID=$(python3 -c "import uuid; print(uuid.uuid4().hex)")
+
 # Insert the user into the Users table
 sqlite3 "$DB_PATH" <<EOF
-INSERT INTO Users (Username, EmailAddress, Avatar, Banner, Description, Usertype, Created, IsFlagged, SessionToken, CsrfToken, HashedPassword)
+INSERT INTO Users (ID, Username, EmailAddress, Avatar, Banner, Description, Usertype, Created, IsFlagged, SessionToken, CsrfToken, HashedPassword)
 VALUES (
+    x'$UserID',
     'TheCodexDonkey',
     'donkey@codex.com',
-    'K1xcM1YYVT6xkHoEUICS4g==.png',
+    'donkey.png',
     '',
     "I'm such a friendly donkey, and I'm here to show you around the wonderful world of Codex. I've already added you to my channel, where you'll find updates, information and any cool stuff I feel like sharing. Welcome to Codex!",
     0,
@@ -27,12 +31,12 @@ sqlite3 "$DB_PATH" <<EOF
 INSERT INTO Channels (Name, Avatar, Description, Created, Privacy, Banner, OwnerID, IsMuted, IsFlagged)
 VALUES (
     'WelcomeToCodex',
-    '-ou7VWQ7pK1JHiOvK7lJiw==.png',
+    'codex.png',
     "Welcome to Codex! This channel will guide you through the forum, and give you updates, insights, and generally keep you up to date with everything that's going on.",
     DateTime('now'),
     0,
     '',
-    1,
+    x'$UserID',
     0,
     0
 );
@@ -48,8 +52,8 @@ VALUES (
   DateTime('now'),
   0,
   'TheCodexDonkey',
-  1,
-  'K12cM1YYVT6xkHoEUICS4g==.png',
+  x'$UserID',
+  'donkey.png',
   0
 );
 EOF

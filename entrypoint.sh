@@ -2,7 +2,7 @@
 set -e
 
 # Path to the database
-DB_PATH="/app/db/forum_database.db"
+DB_PATH="/var/lib/db-codex/forum_database.db"
 
 # Insert the user into the Users table
 sqlite3 "$DB_PATH" <<EOF

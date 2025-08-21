@@ -47,6 +47,8 @@ COPY --from=builder /app/db/userdata/images/channel-images/-ou7VWQ7pK1JHiOvK7lJi
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+EXPOSE 8888
+
 # Use the script as the container entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
 

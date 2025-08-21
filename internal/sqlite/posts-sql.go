@@ -207,7 +207,7 @@ func (m *PostModel) GetAllChannelPostsForUser(ID models.UUIDField) ([]models.Pos
 	return posts, nil
 }
 
-// Search queries the database for any post column that contains the values and returns that post
+// FindCurrentPost queries the database for any post column that contains the values and returns that post
 func (m *PostModel) FindCurrentPost(column string, value any) ([]models.Post, error) {
 	// Validate column name to prevent SQL injection
 	validColumns := map[string]bool{

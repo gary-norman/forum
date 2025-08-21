@@ -40,7 +40,7 @@ EOF
 
 # Insert the post into the posts table
 sqlite3 "$DB_PATH" <<EOF
-INSERT INTO Posts (Title, Content, Images, Created, IsCommentable, Author, AuthorID, AuthorAvatar, ChannelName, ChannelID, IsFlagged)
+INSERT INTO Posts (Title, Content, Images, Created, IsCommentable, Author, AuthorID, AuthorAvatar, IsFlagged)
 VALUES (
   'Welcome to Codex!',
   "We are so glad you could join us! Since you're here, you probably already know this, but just in case, this is a place for us all to share everything we know about coding - our hopes, fears, plans, anxieties... Everything that makes up this world in which we find ourselves. Hopefully, Codex will make it less daunting, and a world we enjoy living in. So, welcome! We're so glad you're here.",
@@ -50,8 +50,6 @@ VALUES (
   'TheCodexDonkey',
   1,
   'K12cM1YYVT6xkHoEUICS4g==.png',
-  'WelcomeToCodex',
-  1,
   0
 );
 EOF

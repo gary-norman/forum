@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y sqlite3 libsqlite3-0 && rm -rf /var/lib
 WORKDIR /app
 
 # Copy the built application from the builder stage
-COPY --from=builder /app/bin/codex /app/codex
+COPY --from=builder /app/bin/codex /app/bin/codex
 COPY --from=builder /app/schema.sql /app/schema.sql
 COPY --from=builder /app/assets /app/assets
 COPY --from=builder /app/robots.txt /app/robots.txt
@@ -51,4 +51,4 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Run the application
-CMD ["/bin/codex"]
+CMD ["/app/bin/codex"]

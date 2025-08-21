@@ -1,3 +1,4 @@
+// Package dbutil provides utilities for working with UUIDs in a database context.
 package dbutil
 
 import (

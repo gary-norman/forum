@@ -43,11 +43,12 @@
             aria-label="reactions filter">
       <span class="btn-filters filter-reaction">reactions</span>
     </button>
-    <button popovertarget="{{$calledBy}}-dropdown-type"
-            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action"
-            aria-label="type filter">
-      <span class="btn-filters filter-type">type</span>
-    </button>
+    {{/*    TODO commented out until further release as not needed for base audit */}}
+{{/*    <button popovertarget="{{$calledBy}}-dropdown-type"*/}}
+{{/*            class="btn-md btn-secondary btn-icotext ico-right btn-filled btn-action"*/}}
+{{/*            aria-label="type filter">*/}}
+{{/*      <span class="btn-filters filter-type">type</span>*/}}
+{{/*    </button>*/}}
     {{/*    SECTION sort dropdown */}}
     <div id="{{$calledBy}}-dropdown-sort" popover="manual" class="wrapper-filter-dropdown filter-popover">
       <div class="container-filter scroll-down scrollable">
@@ -103,33 +104,34 @@
         </button>
       </small>
     </div>
-    {{/*    SECTION type filter dropdown */}}
-    <div id="{{$calledBy}}-dropdown-type" popover="manual" class="wrapper-filter-dropdown filter-popover">
-      <div class="container-filter">
-        <div class="dropdown-option">
-          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-channel" value="type-channel">
-          <label for="{{$calledBy}}-checkbox-type-channel">channel</label>
-        </div>
-        <div class="dropdown-option">
-          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-post" value="type-post">
-          <label for="{{$calledBy}}-checkbox-type-post">post</label>
-        </div>
-        <div class="dropdown-option">
-          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-comment" value="type-comment">
-          <label for="{{$calledBy}}-checkbox-type-comment">comment</label>
-        </div>
-        <div class="dropdown-option">
-          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-reaction" value="type-reaction">
-          <label for="{{$calledBy}}-checkbox-type-reaction">reaction</label>
-        </div>
-      </div>
-      <small class="clear-choices hide padded flex-space-between">
-        <span class="clear-all">clear choice</span>
-        <button type="button" class="btn-sm btn-icoonly">
-          <span class="btn-cancel" role="contentinfo" aria-label="cancel all options selected for the channel filter"></span>
-        </button>
-      </small>
-    </div>
+    {{/*    TODO commented out until further release as not needed for base audit */}}
+{{/*    */}}{{/*    SECTION type filter dropdown */}}
+{{/*    <div id="{{$calledBy}}-dropdown-type" popover="manual" class="wrapper-filter-dropdown filter-popover">*/}}
+{{/*      <div class="container-filter">*/}}
+{{/*        <div class="dropdown-option">*/}}
+{{/*          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-channel" value="type-channel">*/}}
+{{/*          <label for="{{$calledBy}}-checkbox-type-channel">channel</label>*/}}
+{{/*        </div>*/}}
+{{/*        <div class="dropdown-option">*/}}
+{{/*          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-post" value="type-post">*/}}
+{{/*          <label for="{{$calledBy}}-checkbox-type-post">post</label>*/}}
+{{/*        </div>*/}}
+{{/*        <div class="dropdown-option">*/}}
+{{/*          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-comment" value="type-comment">*/}}
+{{/*          <label for="{{$calledBy}}-checkbox-type-comment">comment</label>*/}}
+{{/*        </div>*/}}
+{{/*        <div class="dropdown-option">*/}}
+{{/*          <input class="checkbox-visible" type="checkbox" id="{{$calledBy}}-checkbox-type-reaction" value="type-reaction">*/}}
+{{/*          <label for="{{$calledBy}}-checkbox-type-reaction">reaction</label>*/}}
+{{/*        </div>*/}}
+{{/*      </div>*/}}
+{{/*      <small class="clear-choices hide padded flex-space-between">*/}}
+{{/*        <span class="clear-all">clear choice</span>*/}}
+{{/*        <button type="button" class="btn-sm btn-icoonly">*/}}
+{{/*          <span class="btn-cancel" role="contentinfo" aria-label="cancel all options selected for the channel filter"></span>*/}}
+{{/*        </button>*/}}
+{{/*      </small>*/}}
+{{/*    </div>*/}}
     {{/*    SECTION reactions filter dropdown */}}
     <div id="{{$calledBy}}-dropdown-reaction" popover="manual" class="wrapper-filter-dropdown filter-popover">
       <div class="container-filter scroll-down">

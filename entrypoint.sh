@@ -54,5 +54,15 @@ VALUES (
 );
 EOF
 
+# Attach the post to the channel
+sqlite3 "$DB_PATH" <<EOF
+INSERT INTO PostChannels (PostID, ChannelID, Created)
+VALUES (
+    1,
+    1,
+    DateTime('now')
+);
+EOF
+
 # Continue with the original command
 exec "$@"

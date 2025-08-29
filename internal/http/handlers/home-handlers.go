@@ -149,7 +149,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 			log.Printf(ErrorMsgs().Query, "user joined channels", err)
 		}
 
-		//ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
+		// ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
 		// Add owned channels
 		for _, channel := range ownedChannels {
 			if !channelMap[channel.ID] {
@@ -211,5 +211,5 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf(ErrorMsgs().KeyValuePair, "GetHome Render time:", time.Since(start))
 
-	//view.RenderPageData(w, data)
+	// view.RenderPageData(w, data)
 }

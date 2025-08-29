@@ -1,0 +1,64 @@
+{{ define "post-popover" }}
+{{ $channels := .OwnedAndJoinedChannels }}
+  <div popover id="form-post">
+    <div class="modal-header">
+      <div id="modal-header-post">create a post</div>
+    </div>
+      {{ if (len .OwnedAndJoinedChannels) }}
+      <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
+        <div class="wrapper-dropdown">
+            <div class="dropdown-toggle" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
+                select channel(s)
+            </div>
+            {{ range .OwnedAndJoinedChannels}}
+            <div class="flex-align-l post-channel-dropdown">
+              <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="channel_list" value="{{ .ID }}">
+              <label for="post-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
+            </div>
+            {{ end }}
+        </div>
+        <div class="input-wrapper">
+          <input type="text" id="title" name="title" placeholder="title" required>
+          <label for="title" class="user-label">title</label>
+        </div>
+        <div class="input-wrapper">
+          <textarea id="content" name="content" placeholder="post"></textarea>
+          <label for="content" class="user-label">post</label>
+        </div>
+        <p>upload an image (optional)</p>
+        <div id="drop-zone--post">
+          <div id="uploaded-file--post"></div>
+          <div class="drag-drop-text-wrapper">
+            <label for="browse--post" class="dragText">drag and drop your file, or</label>
+            <input type="file" id="browse--post" name="file-drop" />
+          </div>
+        </div>
+        <div class="cont-flex-row flex-center">
+          <div class="allow-comments">
+            <input type="checkbox" id="allow-comments-checkbox" name="commentable"/>
+            <span class="allow-comments-fx"></span>
+          </div>
+          <label for="allow-comments-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Allow comments</label>
+        </div>
+        <div class="cont-flex-row flex-center">
+          <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
+            <span>create post</span>
+          </button>
+          <button type="button" class="button btn-md btn-secondary btn-action btn-filled" onclick="closePopover()">cancel</button>
+        </div>
+      </form>
+          {{ else }}
+        <div class="wrapper-form">
+          <div class="flex-align-c">
+            You must be a member of at least one channel to create a post. Please create or join a channel first.
+          </div>
+          <div class="cont-flex-row flex-center">
+            <button popovertarget="form-channel" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
+              <span>create</span>
+            </button>
+            <a href="/channels/all" class="button btn-md btn-secondary btn-action btn-filled">browse</a>
+          </div>
+        </div>
+      {{ end }}
+      </div>
+{{ end }}

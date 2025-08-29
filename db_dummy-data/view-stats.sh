@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-DB_PATH="../db/dev_forum_database.db"
+DB_PATH="/var/lib/db-codex/dev_forum_database.db"
 SQL_STATS="view_stats.sql"
 
 echo "Querying database..."

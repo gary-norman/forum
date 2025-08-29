@@ -172,7 +172,7 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().Parse, "storePost", parseErr)
 		return
 	}
-	channels := r.Form["channel_list"] // Retrieve the slice of checked channel IDs
+	channels := r.MultipartForm.Value["channel_list"] // Retrieve the slice of checked channel IDs
 	// get channel name
 
 	// SECTION getting channel data (for reverting to single channel post
@@ -259,6 +259,6 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
-	http.Redirect(w, r, "/", http.StatusFound)
+	postUrl := fmt.Sprintf("/cdx/post/%d", postID)
+	http.Redirect(w, r, postUrl, http.StatusFound)
 }

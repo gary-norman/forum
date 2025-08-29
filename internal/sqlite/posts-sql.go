@@ -30,7 +30,7 @@ func (m *PostModel) Insert(title, content, images, author, authorAvatar string, 
 }
 
 func (m *PostModel) All() ([]models.Post, error) {
-	stmt := "SELECT * FROM Posts ORDER BY ID DESC"
+	stmt := "SELECT * FROM Posts ORDER BY Created DESC"
 	rows, selectErr := m.DB.Query(stmt)
 	if selectErr != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "Error:", "select")

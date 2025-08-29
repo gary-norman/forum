@@ -51,7 +51,7 @@
 {{ else }}
   {{ $user := .CurrentUser }}
 {{ end }}
-{{/*SECTION --------- posts template ---------*/}}
+{{/*SECTION --------- main notification ---------*/}}
     <div id="notification-main">
       <div id="notification-main-content"></div>
     </div>
@@ -139,7 +139,7 @@
                   class="input-3d"
                   id="loginFormPassword"
                   name="password"
-                  autoplacecomplete="current-password"
+                  autocomplete="current-password"
                   placeholder="password"
                 />
                 <label for="loginFormPassword" class="user-label">password</label>

@@ -323,32 +323,25 @@
 {{/*SECTION     ---------- post form ---------- */}}
       <div popover id="form-post">
         <div class="modal-header">
-          <div id="modal-header-logreg">create a post</div>
+          <div id="modal-header-post">create a post</div>
         </div>
+          {{ if (len .OwnedAndJoinedChannels) }}
           <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
-  {{/*          <label for="channel" class="invisible">channel</label>*/}}
-  {{/*          <select id="channel" name="channel" multiple>*/}}
-  {{/*          <option selected disabled hidden>select a channel</option>*/}}
-  {{/*          {{ range .OwnedAndJoinedChannels }}*/}}
-  {{/*          <option value='{"channelName":"{{ .Name }}", "channelID":"{{ .ID }}"}'>{{ .Name }}</option>*/}}
-  {{/*          {{ end }}*/}}
-  {{/*          </select>*/}}
-            <div class="dropdown-toggle">
-              select channel(s)
-            </div>
             <div class="wrapper-dropdown">
-              {{ range .OwnedAndJoinedChannels}}
-              <div class="flex-align-l post-channel-dropdown">
-                <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="channel_list" value="{{ .ID }}">
-                <label for="post-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
-              </div>
-              {{ end }}
+                <div class="dropdown-toggle" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
+                    select channel(s)
+                </div>
+                {{ range .OwnedAndJoinedChannels}}
+                <div class="flex-align-l post-channel-dropdown">
+                  <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="channel_list" value="{{ .ID }}">
+                  <label for="post-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
+                </div>
+                {{ end }}
             </div>
             <div class="input-wrapper">
-            <input type="text" id="title" name="title" placeholder="title" required>
+              <input type="text" id="title" name="title" placeholder="title" required>
               <label for="title" class="user-label">title</label>
             </div>
-  {{/*  FIXME ---------- fix resize issue ---------- */}}
             <div class="input-wrapper">
               <textarea id="content" name="content" placeholder="post"></textarea>
               <label for="content" class="user-label">post</label>
@@ -358,27 +351,37 @@
               <div id="uploaded-file--post"></div>
               <div class="drag-drop-text-wrapper">
                 <label for="browse--post" class="dragText">drag and drop your file, or</label>
-  {{/*              <span class="button">browse</span> */}}
                 <input type="file" id="browse--post" name="file-drop" />
               </div>
             </div>
             <div class="cont-flex-row flex-center">
               <div class="allow-comments">
-              <input type="checkbox" id="allow-comments-checkbox" name="commentable"/>
-              <span class="allow-comments-fx"></span>
-  {{/*              <span class="darklight-border"></span>*/}}
+                <input type="checkbox" id="allow-comments-checkbox" name="commentable"/>
+                <span class="allow-comments-fx"></span>
               </div>
               <label for="allow-comments-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Allow comments</label>
             </div>
-  {{/*FIXME ---------- fix these buttons ---------- */}}
             <div class="cont-flex-row flex-center">
               <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
                 <span>create post</span>
               </button>
-              <a href="/" class="button btn-md btn-secondary btn-action btn-filled">cancel</a>
+              <button type="button" class="button btn-md btn-secondary btn-action btn-filled" onclick="closePopover()">cancel</button>
             </div>
           </form>
-        </div>
+              {{ else }}
+            <div class="wrapper-form">
+              <div class="flex-align-c">
+                You must be a member of at least one channel to create a post. Please create or join a channel first.
+              </div>
+              <div class="cont-flex-row flex-center">
+                <button popovertarget="form-channel" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
+                  <span>create</span>
+                </button>
+                <a href="/channels/all" class="button btn-md btn-secondary btn-action btn-filled">browse</a>
+              </div>
+            </div>
+          {{ end }}
+          </div>
 {{/*SECTION    ---------- create channel popover ---------- */}}
       <div popover id="form-channel">
         <form class="wrapper-form" enctype="multipart/form-data" action="/channels/create" method="POST">

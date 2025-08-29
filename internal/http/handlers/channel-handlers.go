@@ -99,6 +99,9 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 
 	// Retrieve last reaction time for posts
 	thisChannelPosts, err = c.Reaction.getLastReactionTimeForPosts(thisChannelPosts)
+	if err != nil {
+		http.Error(w, `{"error": "Error getting channel posts" }`, http.StatusInternalServerError)
+	}
 
 	// Retrieve comments for posts
 	thisChannelPosts, err = c.Comment.GetPostsComments(thisChannelPosts)

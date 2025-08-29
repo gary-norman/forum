@@ -2425,6 +2425,7 @@ main {
   hyphens: auto;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  white-space: pre-line;
 }
 
 .cardContent {

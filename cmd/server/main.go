@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"os/signal"
 	"syscall"
@@ -28,6 +29,11 @@ func Colors() *models.Colors {
 }
 
 func main() {
+	// pprof server for profiling at http://localhost:6060/debug/pprof/
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
+
 	// Initialize the app
 	appInstance, cleanup, err := app.InitializeApp()
 	if err != nil {

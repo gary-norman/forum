@@ -30,15 +30,15 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 		userLoggedIn = false
 	}
 
-	// Parse channelId from the request
-	channelId, err := models.GetIntFromPathValue(r.PathValue("channelId"))
+	// Parse channelID from the request
+	channelID, err := models.GetIntFromPathValue(r.PathValue("channelId"))
 	if err != nil {
 		http.Error(w, `{"error": "channelId must be an integer"}`, http.StatusBadRequest)
 		return
 	}
 
 	// Fetch the channel
-	foundChannels, err := c.App.Channels.GetChannelsByID(channelId)
+	foundChannels, err := c.App.Channels.GetChannelsByID(channelID)
 	if err != nil || len(foundChannels) == 0 {
 		http.Error(w, `{"error": "Channel not found"}`, http.StatusNotFound)
 		return
@@ -292,7 +292,7 @@ func (c *ChannelHandler) JoinedByCurrentUser(memberships []models.Membership) ([
 }
 
 func (c *ChannelHandler) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
-	channelId, err := strconv.ParseInt(r.PathValue("channelId"), 10, 64)
+	channelID, err := strconv.ParseInt(r.PathValue("channelId"), 10, 64)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > convert channelId to int", err)
 	}
@@ -317,16 +317,16 @@ func (c *ChannelHandler) CreateAndInsertRule(w http.ResponseWriter, r *http.Requ
 			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > id => idInt", err)
 		}
 		if found {
-			err := c.App.Rules.DeleteRule(channelId, idInt)
+			err := c.App.Rules.DeleteRule(channelID, idInt)
 			if err != nil {
 				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > DeleteRule", err)
 			}
 		} else {
-			ruleId, err := c.App.Rules.CreateRule(rule.Rule)
+			ruleID, err := c.App.Rules.CreateRule(rule.Rule)
 			if err != nil {
 				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > CreateRule", err)
 			}
-			err = c.App.Rules.InsertRule(channelId, ruleId)
+			err = c.App.Rules.InsertRule(channelID, ruleID)
 			if err != nil {
 				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > InsertRule", err)
 			}

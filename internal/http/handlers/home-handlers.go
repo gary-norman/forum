@@ -101,7 +101,8 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		if len(allPosts) > 0 && len(channelIDs) > 0 {
 			allPosts[p].ChannelID = channelIDs[0]
 		} else {
-			fmt.Printf(ErrorMsgs().KeyValuePair, "error fetching posts", "no posts or channel IDs found")
+			fetchErr := fmt.Sprintf("post ID: %v does not belong to any channel", allPosts[p].ID)
+			fmt.Printf(ErrorMsgs().KeyValuePair, "error fetching posts", fetchErr)
 		}
 	}
 

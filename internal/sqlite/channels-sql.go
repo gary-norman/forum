@@ -122,6 +122,7 @@ func (m *ChannelModel) GetChannelByID(id int64) (*models.Channel, error) {
 	}
 	defer rows.Close()
 
+	var channel models.Channel            // Pre-allocate slice
 	channels := make([]models.Channel, 0) // Pre-allocate slice
 	for rows.Next() {
 		c, err := parseChannelRows(rows)
@@ -131,6 +132,9 @@ func (m *ChannelModel) GetChannelByID(id int64) (*models.Channel, error) {
 		// TODO (realtime) get this data freom websockets
 		c.MembersOnline = 0
 		channels = append(channels, *c)
+	}
+	if len(channels) == 0 {
+		return &channel, fmt.Errorf("no channel found for ID %d", id)
 	}
 	return &channels[0], nil
 }
@@ -265,6 +269,9 @@ func (m *ChannelModel) GetChannelIdFromPost(postID int64) ([]int64, error) {
 		channelIDs = append(channelIDs, channelID)
 	}
 
+	if len(channelIDs) == 0 {
+		return channelIDs, fmt.Errorf("no channel found for post %d", postID)
+	}
 	return channelIDs, nil
 }
 

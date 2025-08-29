@@ -34,6 +34,7 @@ func (s *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 		channelIDs, err := s.App.Channels.GetChannelIdFromPost(allPosts[p].ID)
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > channelID", err)
+			return
 		}
 		allPosts[p].ChannelID = channelIDs[0]
 	}

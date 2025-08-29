@@ -26,7 +26,7 @@ func (p *PostHandler) GetUserPosts(user *models.User, allPosts []models.Post) []
 	if user == nil {
 		return allPosts
 	}
-	var ownedAndJoinedChannels []models.Channel
+	ownedAndJoinedChannels := make([]models.Channel, 0)
 	var postsInUserChannels []models.Post
 
 	memberships, memberErr := p.App.Memberships.UserMemberships(user.ID)

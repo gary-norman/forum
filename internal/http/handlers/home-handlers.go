@@ -122,8 +122,11 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
+	ownedChannels := make([]models.Channel, 0)
+	joinedChannels := make([]models.Channel, 0)
+	ownedAndJoinedChannels := make([]models.Channel, 0)
 	channelMap := make(map[int64]bool)
+
 	if userLoggedIn {
 		userPosts = h.Post.GetUserPosts(currentUser, allPosts)
 		// attach following/follower numbers to currently logged-in user

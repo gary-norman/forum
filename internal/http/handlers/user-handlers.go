@@ -114,7 +114,9 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
+	ownedChannels := make([]models.Channel, 0)
+	joinedChannels := make([]models.Channel, 0)
+	ownedAndJoinedChannels := make([]models.Channel, 0)
 	channelMap := make(map[int64]bool)
 	// var userPosts []models.Post
 

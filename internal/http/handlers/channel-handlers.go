@@ -106,7 +106,9 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, `{"error": "Error getting comments" }`, http.StatusInternalServerError)
 	}
 
-	var ownedChannels, joinedChannels, ownedAndJoinedChannels []models.Channel
+	ownedChannels := make([]models.Channel, 0)
+	joinedChannels := make([]models.Channel, 0)
+	ownedAndJoinedChannels := make([]models.Channel, 0)
 	isJoined := false
 	isOwned := false
 

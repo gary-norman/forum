@@ -10,7 +10,7 @@ export const data = {
 };
 export const pages = [
   data["homePage"],
-  // data["userPage"],
+  data["userPage"],
   data["channelPage"],
   data["postPage"],
 ];

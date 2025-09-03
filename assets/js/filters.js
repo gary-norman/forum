@@ -106,7 +106,8 @@ function filterContent() {
     const filtersRow = activePageElement.querySelector(".filters-row");
     const channelCheckboxes = filtersRow.querySelector(`[id$="dropdown-channel"]`).querySelectorAll('input[type="checkbox"]:checked');
     const reactionCheckboxes = filtersRow.querySelector(`[id$="dropdown-reaction"]`).querySelectorAll('input[type="checkbox"]:checked');
-    const typeCheckboxes = filtersRow.querySelector(`[id$="dropdown-type"]`).querySelectorAll('input[type="checkbox"]:checked');
+    // TODO commenting out type as not needed for base audit
+    // const typeCheckboxes = filtersRow.querySelector(`[id$="dropdown-type"]`).querySelectorAll('input[type="checkbox"]:checked');
     const commentRadios = filtersRow.querySelector(`[id$="dropdown-comments"]`).querySelectorAll('input[type="radio"]:checked');
     const sortRadios = filtersRow.querySelector(`[id$="dropdown-sort"]`).querySelectorAll('input[type="radio"]:checked');
     const startDateInput = filtersRow.querySelector(`[id$="dropdown-date"] input[name="creation-year-start"]`);
@@ -116,7 +117,8 @@ function filterContent() {
     const activeFilters = {
         channels: Array.from(channelCheckboxes).map(cb => cb.value),
         reactions: Array.from(reactionCheckboxes).map(rb => rb.value),
-        types: Array.from(typeCheckboxes).map(cb => cb.value.slice(5)), //slice to remove "type-" before type of card from the template
+        // TODO commenting out type as not needed for base audit
+        // types: Array.from(typeCheckboxes).map(cb => cb.value.slice(5)), //slice to remove "type-" before type of card from the template
         comments: commentRadios.length > 0 ? commentRadios[0].value : null,
         sort: sortRadios.length > 0 ? sortRadios[0].value : null,
         startDate: startDateInput?.value ? new Date(startDateInput.value) : null,
@@ -190,7 +192,8 @@ function filterContent() {
 
     allPageCards.forEach(card => {
         const cardChannel = card.dataset.channelId;
-        const cardType = card.dataset.dest;
+        // TODO commenting out type as not needed for base audit
+        // const cardType = card.dataset.dest;
         const cardCommentsCount = Number(card.querySelector(".btn-reply").textContent);
         const cardLikesCount = Number(card.querySelector(".btn-likes").textContent);
         const cardDislikesCount = Number(card.querySelector(".btn-dislikes").textContent);
@@ -203,10 +206,11 @@ function filterContent() {
             visible = false;
         }
 
-        // Filter by type
-        if (activeFilters.types.length > 0 && !activeFilters.types.includes(cardType)) {
-            visible = false;
-        }
+        // TODO commenting out type as not needed for base audit
+        // // Filter by type
+        // if (activeFilters.types.length > 0 && !activeFilters.types.includes(cardType)) {
+        //     visible = false;
+        // }
 
         // Filter by comments
         if (activeFilters.comments !== null) {

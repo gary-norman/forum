@@ -127,6 +127,7 @@ export function selectActiveFeed() {
     case "home-page":
       console.log("%cON HOME PAGE BITCH", angry);
       scrollWindow = document.querySelector(`#home-feed`);
+      document.dispatchEvent(newContentLoaded);
       // console.log("scrollWindow:", scrollWindow)
       break;
     case "user-page":

@@ -1,3 +1,4 @@
+// Package view contains the HTML rendering logic for the forum application.
 package view
 
 import (

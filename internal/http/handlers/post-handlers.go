@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"reflect"
 	"strconv"
 
 	"github.com/gary-norman/forum/internal/app"
@@ -186,26 +185,10 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 		IsFlagged:     false,
 	}
 
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Title", createPostData.Title)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Content", createPostData.Content)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Images", createPostData.Images)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Author", createPostData.Author)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Username", user.Username)
-
-	fmt.Printf(ErrorMsgs().KeyValuePair, "AuthorID", createPostData.AuthorID)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "AuthorID type", reflect.TypeOf(createPostData.AuthorID))
-	fmt.Printf(ErrorMsgs().KeyValuePair, "ID", user.ID)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "ID type", reflect.TypeOf(user.ID))
-
-	fmt.Printf(ErrorMsgs().KeyValuePair, "AuthorAvatar", createPostData.AuthorAvatar)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Avatar", user.Avatar)
-
-	fmt.Printf(ErrorMsgs().KeyValuePair, "IsComm", createPostData.IsCommentable)
-	fmt.Printf(ErrorMsgs().KeyValuePair, "IsFlag", createPostData.IsFlagged)
-
 	if r.PostForm.Get("commentable") == "on" {
 		createPostData.IsCommentable = true
 	}
+
 	createPostData.Images = GetFileName(r, "file-drop", "storePost", "post")
 	/*createPostData.ChannelName = channelData.ChannelName
 	createPostData.ChannelID, _ = strconv.Atoi(channelData.ChannelID)*/

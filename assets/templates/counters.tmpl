@@ -1,0 +1,50 @@
+{{ define "counters"}}
+{{ $user := .CurrentUser }}
+{{ $userID := .UserID }}
+{{ with .CurrentUser }}
+  {{ $userID = .ID }}
+{{ end }}
+{{ $post := .Post }}
+{{ $dot := .dot}}
+{{ $instance := $dot.Instance }}
+{{ $calledBy := $dot.calledBy }}
+{{ $tracer := printf "%s > %s" .Tracer "counters" }}
+{{ with $tracer }}
+{{/*    {{ fprint "Trace" . }} */}}
+{{ end }}
+{{ if and (eq $calledBy "info--header") (eq $instance "channel-page") }}
+
+{{ else if and (eq $calledBy "info--list-item") (eq $instance "channel-page") }}
+
+{{ else if and (eq $calledBy "info--header") (eq $instance "user-page") }}
+
+{{ else if and (eq $calledBy "info--list-item") (eq $instance "user-page") }}
+
+{{ else if and (eq $calledBy "info--header") (eq $instance "sidebar") }}
+
+{{ else if and (eq $calledBy "info--list-item") (eq $instance "sidebar") }}
+
+{{ end }}
+<div>
+  <div class="cont-flex-column">
+   <small>following:</small>
+   <button class="btn-lg btn-icotext btn-follows btn-invert-never">
+    <span class="btn-following">{{ if ne $dot.CurrentUser nil}}{{$user.Following}}{{ else }}{{$dot.RandomUser.Following}}{{ end }}</span>
+   </button>
+  </div>
+  <div class="cont-flex-column">
+   <small>followers:</small>
+   <button class="btn-lg btn-icotext btn-follows btn-invert-never">
+    <span class="btn-followers">{{ if ne $dot.CurrentUser nil}}{{$user.Followers}}{{ else }}{{$dot.RandomUser.Followers}}{{ end }}</span>
+   </button>
+  </div>
+</div>
+<div>
+  <button class="btn-md btn-icotext btn-follows btn-invert-never">
+    <span class="btn-channel-users">13.8k</span>
+  </button>
+  <button class="btn-md btn-icotext btn-follows btn-invert-never" style="position: relative">
+    <span class="btn-channel-green-dot">37</span>
+  </button>
+</div>
+{{ end }}

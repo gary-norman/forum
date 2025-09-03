@@ -1,0 +1,48 @@
+{{ define "info"}}
+{{ $userID := .UserID }}
+{{ with .CurrentUser }}
+  {{ $userID = .ID }}
+{{ end }}
+{{ $dot := .dot }}
+{{ $user := .CurrentUser }}
+{{ $post := .Post }}
+{{ $instance := $dot.Instance }}
+{{ $calledBy := .calledBy }}
+{{ $tracer := printf "%s > %s" .Tracer "info" }}
+{{ with $tracer }}
+  {{/*    {{ fprint "Trace" . }} */}}
+{{ end }}
+
+{{/*    add data-user-id, class"link" and data-dest="user"... etc to all links, */}}
+    {{ if eq $calledBy "channel-page-banner" }}
+        {{ if (ne $dot.ThisChannel.Avatar "noimage") }}
+            <div class="sidebar-pic profile-pic" data-image-user="{{ $dot.ImagePaths.Channel }}/{{ $dot.ThisChannel.Avatar }}">
+            </div>
+        {{ else }}
+            <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $dot.ThisChannel.Name }}">
+            </div>
+        {{ end }}
+        <div class="flex-start">
+            <h2 {{ if (eq $dot.ThisChannel.Privacy true) }} class="private-channel align-self-start" {{ end }}>/{{ $dot.ThisChannel.Name }}</h2>
+            {{ template "counters" "dot" $dot "Post" $post "calledBy" "info" "UserID" $userID "Tracer" $tracer }}
+        </div>
+    {{ else if eq $calledBy "user-page-banner"}}
+        {{ if ne $dot.CurrentUser nil}}
+            {{ if (startsWith $user.Avatar "noimage") }}
+                <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username}}"></div>
+            {{ else }}
+                <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ $dot.ImagePaths.User }}/{{ $user.Avatar }}"></div>
+            {{ end }}
+        {{else}}
+            {{ if (startsWith $dot.RandomUser.Avatar "noimage") }}
+                <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $dot.RandomUser.Username}}"></div>
+            {{ else }}
+                <div class="sidebar-pic profile-pic user-page-pic" data-image-user="{{ $dot.ImagePaths.User }}/{{ $dot.RandomUser.Avatar }}"></div>
+            {{ end }}
+        {{end}}
+        <div class="flex-start">
+            <h2 class="align-self-start">{{ if ne $dot.CurrentUser nil}}{{ $user.Username }}{{ else }}{{ $dot.RandomUser.Username }}{{ end }}</h2>
+            {{ template "counters"}}
+        </div>
+    {{ end }}
+{{ end }}

@@ -1,0 +1,85 @@
+{{ define "reply_level2" }}
+  {{ $userID := .UserID }}
+  {{ with .CurrentUser }}
+    {{ $userID = .ID }}
+  {{ end }}
+  {{ $dot := .dot }}
+  {{ $instance := .Instance }}
+  {{ $tracer := printf "%s > %s" .Tracer "reply_level2" }}
+  {{ with $tracer }}
+  {{/*    {{ fprint "Trace" . }} */}}
+  {{ end }}
+  {{- /*gotype: github.com/gary-norman/forum/internal/models.Comment*/ -}}
+  {{ $comment := .Comment }}
+  <div class="reply-arrow"></div>
+  <div class="container-card-down">
+    <div class="card" data-comment-id="{{$comment.ID}}" data-channel-ID="{{$comment.ChannelID}}" data-author-ID="{{$comment.AuthorID}}">
+      <div class="container-post-info">
+        {{ if (startsWith $comment.AuthorAvatar "noimage") }}
+          <span class="card-pic profile-pic--empty" data-name-user="{{ $comment.Author }}"></span>
+        {{ else }}
+          <span class="card-pic profile-pic" data-image-auth="{{ $dot.ImagePaths.User }}{{ $comment.AuthorAvatar }}"></span>
+        {{ end }}
+        <div>
+          <small class="small-bold">{{$comment.Author}}</small>
+          <div>
+            <small>{{$comment.ChannelName}}</small>
+            <small>-</small>
+            <small>{{$comment.TimeSince}}</small>
+            <small>commentID: {{$comment.ID}}</small>
+          </div>
+        </div>
+        <div class="like-button">
+          <button data-tooltip-name="like" aria-label="like button" class="btn-icoonly"></button>
+        </div>
+      </div>
+      <pre class="cardContent">{{$comment.Content}}</pre>
+      {{/*  Post control buttons */}}
+      <div class="button-row-wrap post-controls" >
+        {{$status := reactionStatus $userID 0 $comment.ID}}
+        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Liked}}active{{end}}" >
+          <span class="btn-likes" data-like-ID="user-{{$comment.ID}}">{{$comment.Likes}}</span>
+        </button>
+        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
+          <span class="btn-dislikes" data-dislike-ID="user-{{$comment.ID}}">{{$comment.Dislikes}}</span>
+        </button>
+        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+          <span class="btn-reply">reply</span>
+        </button>
+        <button id="share-button-{{$comment.ID}}-activity" popovertarget="share-container-{{$comment.ID}}-activity" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+          <span class="btn-share">share</span>
+        </button>
+        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action">
+          <span class="btn-report">report</span>
+        </button>
+        {{/*  Share modal */}}
+        {{ template "share-modal" (dict "Entity" "channel" "Type" "comment" "Pop1" $comment.ChannelID "Pop2" "Instance" $instance $comment.ID "Tracer" $tracer) }}
+      {{/*  Reply / Submit Comment form */}}
+      <form class="form-reply" action="/store-comment" enctype="multipart/form-data" method="POST">
+        <div class="cont-flex-row flex-end">
+          <div class="input-wrapper container-reply">
+            <textarea id="comment-form-textarea-reply2-{{$comment.ID}}" name="content" placeholder="Type a reply..."></textarea>
+            <label for="comment-form-textarea-reply2-{{$comment.ID}}" class="user-label">Reply</label>
+          </div>
+          {{/* Hidden input to store the commentID (if replying to a comment) */}}
+          <input type="hidden" name="commentID" value="{{$comment.ID}}">
+          <input type="hidden" name="channel" value='{"channelName": "{{$comment.ChannelName}}", "channelID": "{{$comment.ChannelID}}"}'>
+          <button type="submit" class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+            <span class="btn-reply-comment">comment</span>
+          </button>
+        </div>
+      </form>
+    </div> {{/* end comment card*/}}
+
+    {{println "level of recursion: 2"}}
+
+    {{/* Recursively Render Replies */}}
+    {{ if .Replies}}
+      <div class="container-card-across">
+        {{ range .Replies }}
+          {{ template "reply_level3" (dict "CurrentUser" $.CurrentUser "dot" $dot "Comment" . "UserID" $userID) }}
+        {{ end }} {{/* end range Replies */}}
+      </div> {{/* end container-comment-across wrapper */}}
+    {{ end }} {{/* end if Replies */}}
+  </div> {{/* end container-comment-down wrapper */}}
+{{end}} {{/* end define "reply */}}

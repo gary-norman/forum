@@ -1,0 +1,81 @@
+{{ define "post-card" }}
+{{/* fprint "UserID post-card" .UserID */}}
+{{ $userID := .UserID }}
+{{ $dot := .dot}}
+{{ $post := .Post }}
+{{ $instance := .Instance }}
+{{ $thisPost := "false" }}
+{{ if eq .calledBy "this-post" }}
+  {{ $thisPost = "true" }}
+{{ end }}
+{{ $calledBy := .calledBy }}
+{{ $tracer := printf "%s > %s" .Tracer "post-card" }}
+{{ with $tracer }}
+    {{/* fprint "Trace" . */}} 
+{{ end }}
+{{ $comments := $post.Comments }}
+<div class="container-card-down">
+  <div id="post-card-{{ $post.ID }}" class="card {{ if ne $thisPost "true" }}link{{ end }}"
+       data-post-id="{{ $post.ID }}"
+       data-dest="post"
+       data-channel-ID="{{ $post.ChannelID }}"
+       data-user-id="{{$post.AuthorID}}"
+       data-created-at="{{$post.Created}}"
+       data-last-reaction="{{$post.LastReaction}}">
+    <div class="container-post-info">
+      {{ if (startsWith $post.AuthorAvatar "noimage") }}
+        {{/*        FIXME base audit - removed links and data-dests for user-page being commented out*/}}
+        <span class="card-pic profile-pic--empty{{/*        link*/}}"
+{{/*              data-dest="user" */}}
+              data-name-user="{{ $post.Author }}" data-user-id="{{ $post.AuthorID }}"></span>
+      {{ else }}
+        <span class="card-pic profile-pic{{/*        link*/}}"
+{{/*              data-dest="user" */}}
+              data-image-user="{{ $dot.ImagePaths.User }}{{ $post.AuthorAvatar }}" data-user-id="{{ $post.AuthorID }}" role="presentation"></span>
+      {{ end }}
+      <div>
+        <small id="link-post-user-{{ $post.AuthorID }}-{{$instance}}"
+{{/*               data-dest="user"*/}}
+               data-user-id="{{ $post.AuthorID }}" class="small-bold
+{{/*               link*/}}
+">{{ $post.Author }}</small>
+        <div>
+          <small id="link-post-channelID-{{ $post.ChannelID }}-{{ $instance }}" data-dest="channel" class="link" data-channel-id="{{ $post.ChannelID }}">{{ $post.ChannelName }}</small>
+          <small>-</small>
+          <small>{{$post.TimeSince}}</small>
+        </div>
+      </div>
+      <div class="like-button">
+        <button data-tooltip-name="like" aria-label="like button" class="btn-icoonly"></button>
+      </div>
+    </div>
+    <h4 id="link-post-post-{{ $post.ID }}-{{ .Instance }}">{{$post.Title}}</h4>
+    {{ if ne $post.Images "noimage" }}
+    <img src="{{ $dot.ImagePaths.Post }}{{ $post.Images }}" class="post-image" alt="Image for {{ $post.Title }}">
+    {{ end }}
+  {{ if eq .calledBy "this-post"}}
+    <p class="cardContent--full">{{$post.Content}}</p>
+  {{ else }}
+    <p class="cardContent">{{$post.Content}}</p>
+  {{ end }}
+    <div id="post-card-info-{{ $post.ID }}" class="popover-title">
+    </div>
+    {{ template "control-buttons" (dict "Post" $post "dot" $dot "userID" $userID "Instance" $instance "calledBy" "post-card" "ThisPost" $thisPost "Tracer" $tracer) }}
+  <!--  Reply / Submit Comment form -->
+    <form name="replyForm" class="form-reply" action="/cdx/post/{{$post.ID}}/store-comment" enctype="multipart/form-data" method="POST">
+      <div class="cont-flex-row flex-end">
+        <div class="input-wrapper container-reply">
+          <textarea id="comment-form-textarea-thispostcard-{{$post.ID}}" name="content" placeholder="Type a reply..."></textarea>
+          <label for="comment-form-textarea-thispostcard-{{$post.ID}}" class="user-label">Reply</label>
+        </div>
+        <!-- Hidden input to store the postID -->
+        <input type="hidden" name="postID" value="{{$post.ID}}">
+        <input type="hidden" name="channel" value='{"channelName": "{{$post.ChannelName}}", "channelID": "{{$post.ChannelID}}"}'>
+        <button class="btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+          <span class="btn-reply-comment">comment</span>
+        </button>
+      </div>
+    </form>
+  </div> 
+</div>
+{{end}}

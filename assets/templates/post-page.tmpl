@@ -1,0 +1,10 @@
+{{ define "post-page" }}
+{{ $tracer := "post-page" }}
+{{ $instance := "post-page" }}
+  {{ template "post-page-banner" (dict "dot" . "CurrentUser" .CurrentUser "UserID" .UserID "Tracer" $tracer) }}
+  <div class="container-content" role="main">
+    <div class="content scrollable scroll-down" aria-labelledby="post-title">
+       {{ template "this-post" (dict "dot" . "CurrentUser" .CurrentUser "UserID" .UserID "ThisPost" .ThisPost "Tracer" $tracer "Instance" $instance) }}
+    </div>
+  </div>
+{{ end }}

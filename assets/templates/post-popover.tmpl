@@ -1,16 +1,16 @@
 {{ define "post-popover" }}
-{{ $channels := .OwnedAndJoinedChannels }}
+{{ $dot := . }}
   <div popover id="form-post">
     <div class="modal-header">
       <div id="modal-header-post">create a post</div>
     </div>
-      {{ if (len .OwnedAndJoinedChannels) }}
+      {{ if (len $dot.OwnedAndJoinedChannels) }}
       <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
         <div class="wrapper-dropdown">
             <div class="dropdown-toggle" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
                 select channel(s)
             </div>
-            {{ range .OwnedAndJoinedChannels}}
+            {{ range $dot.OwnedAndJoinedChannels}}
             <div class="flex-align-l post-channel-dropdown">
               <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="channel_list" value="{{ .ID }}">
               <label for="post-checkbox-channel-{{ .ID }}">{{ .Name }}</label>

@@ -24,36 +24,42 @@ func (p *PostHandler) GetUserPosts(user *models.User, allPosts []models.Post) []
 	if user == nil {
 		return allPosts
 	}
-	ownedAndJoinedChannels := make([]models.Channel, 0)
-	var postsInUserChannels []models.Post
 
 	memberships, memberErr := p.App.Memberships.UserMemberships(user.ID)
 	if memberErr != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+		return allPosts
 	}
 	ownedChannels, ownedErr := p.App.Channels.OwnedOrJoinedByCurrentUser(user.ID)
 	if ownedErr != nil {
 		log.Printf(ErrorMsgs().Query, "GetUserPosts > user owned channels", ownedErr)
+		return allPosts
 	}
 	joinedChannels, joinedErr := p.Channel.JoinedByCurrentUser(memberships)
 	if joinedErr != nil {
 		log.Printf(ErrorMsgs().Query, "user joined channels", joinedErr)
-	}
-	ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
-
-	if len(ownedAndJoinedChannels) == 0 {
 		return allPosts
 	}
 
-	// Create a set of user's channel IDs for efficient lookup
-	userChannelIDSet := make(map[int64]bool)
-	for _, membership := range ownedAndJoinedChannels {
-		userChannelIDSet[membership.ID] = true
+	// Combine owned and joined channels
+	allChannels := make([]models.Channel, 0, len(ownedChannels)+len(joinedChannels))
+	allChannels = append(allChannels, ownedChannels...)
+	allChannels = append(allChannels, joinedChannels...)
+
+	if len(allChannels) == 0 {
+		return allPosts
 	}
 
-	// Iterate over all the posts and check if their ChannelID is in the user's channel set
+	// Build a set of channel IDs for fast lookup
+	channelIDSet := make(map[int64]struct{}, len(allChannels))
+	for _, ch := range allChannels {
+		channelIDSet[ch.ID] = struct{}{}
+	}
+
+	// Filter posts belonging to user's channels
+	postsInUserChannels := make([]models.Post, 0, len(allPosts))
 	for _, post := range allPosts {
-		if _, exists := userChannelIDSet[post.ChannelID]; exists {
+		if _, exists := channelIDSet[post.ChannelID]; exists {
 			postsInUserChannels = append(postsInUserChannels, post)
 		}
 	}

@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"reflect"
@@ -143,21 +142,6 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 		ImagePaths:  p.App.Paths,
 	}
 	view.RenderPageData(w, data)
-}
-
-func (p *PostHandler) CreatePost(w http.ResponseWriter, r *http.Request) {
-	tpl, parseErr := template.ParseFiles("./assets/templates/posts.create.html")
-	if parseErr != nil {
-		http.Error(w, parseErr.Error(), 500)
-		log.Printf(ErrorMsgs().Parse, "./assets/templates/posts.create.html", "createPost", parseErr)
-		return
-	}
-
-	execErr := tpl.Execute(w, nil)
-	if execErr != nil {
-		log.Printf(ErrorMsgs().Execute, execErr)
-		return
-	}
 }
 
 func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {

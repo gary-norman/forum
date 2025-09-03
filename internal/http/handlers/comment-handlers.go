@@ -126,8 +126,8 @@ func (h *CommentHandler) GetPostsComments(posts []models.Post) ([]models.Post, e
 		/// Filter comments that belong to the current post based on the postID and CommentedPostID
 		var postComments []models.Comment
 		var commentsCount int
-		for c, comment := range comments {
-			models.UpdateTimeSince(&comments[c])
+		for _, comment := range comments {
+			models.UpdateTimeSince(&comment)
 			// For each comment, recursively assign its replies
 			commentWithReplies := h.GetRepliesForComment(comment)
 			postComments = append(postComments, commentWithReplies)

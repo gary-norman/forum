@@ -1,3 +1,4 @@
+// Package models contains data models used across the application.
 package models
 
 type TemplateData struct {

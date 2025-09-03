@@ -131,8 +131,8 @@ func (h *CommentHandler) GetPostsComments(posts []models.Post) ([]models.Post, e
 			// For each comment, recursively assign its replies
 			commentWithReplies := h.GetRepliesForComment(comment)
 			postComments = append(postComments, commentWithReplies)
-			commentsCount = len(postComments)
 		}
+		commentsCount = len(postComments)
 		posts[p].Comments = postComments
 		posts[p].CommentsCount = commentsCount
 	}

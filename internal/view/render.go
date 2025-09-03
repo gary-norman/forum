@@ -3,6 +3,7 @@ package view
 
 import (
 	"html/template"
+	"path/filepath"
 
 	"github.com/gary-norman/forum/internal/app"
 )
@@ -13,8 +14,11 @@ type TempHelper struct {
 
 var Template *template.Template
 
-// init Function to initialise the custom template functions
+// Init Function to initialise the custom template functions
 func (t *TempHelper) Init() {
+	tmplFiles1, _ := filepath.Glob("assets/templates/*.html")
+	tmplFiles2, _ := filepath.Glob("assets/templates/*.tmpl")
+	allFiles := append(tmplFiles1, tmplFiles2...)
 	Template = template.Must(template.New("").Funcs(template.FuncMap{
 		"compareAsInts":  compareAsInts,
 		"debugPanic":     debugPanic,
@@ -30,5 +34,5 @@ func (t *TempHelper) Init() {
 		"reactionStatus": t.App.Reactions.GetReactionStatus,
 		"same":           checkSameName,
 		"startsWith":     startsWith,
-	}).ParseGlob("assets/templates/*.html"))
+	}).ParseFiles(allFiles...))
 }

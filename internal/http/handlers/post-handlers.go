@@ -226,6 +226,6 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	postUrl := fmt.Sprintf("/cdx/post/%d", postID)
-	http.Redirect(w, r, postUrl, http.StatusFound)
+	postURL := fmt.Sprintf("/cdx/post/%d", postID)
+	http.Redirect(w, r, postURL, http.StatusFound)
 }

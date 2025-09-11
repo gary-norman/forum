@@ -7,7 +7,7 @@ import { saveColourScheme } from "./colour_scheme.js";
 import { activePage, setActivePage } from "./main.js";
 import { getRandomInt } from "./helper_functions.js";
 import { listenToRules } from "./channel_rules.js";
-import { toggleModals, togglePopovers } from "./popups.js";
+import { closePostForm, toggleModals, togglePopovers } from "./popups.js";
 import { agreeToJoin, showJoinPopoverRules } from "./join_channel.js";
 import {
   displayCalendars,
@@ -22,13 +22,13 @@ let actButtonContainer, actButtonsAll;
 let activityFeeds, activityFeedsContentAll;
 
 export function UpdateUI() {
-  // console.log("updating UI");
+  closePostForm();
   listenToRules();
   listenToReplies();
   listenToShare();
   listenToLikeDislike();
   listenToNoUser();
-  listenToPageSetup();
+  // listenToPageSetup();
   saveColourScheme();
   updateProfileImages();
   // resetInputStyle();

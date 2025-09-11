@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
       setActivePage("home");
       break;
     default:
-      console.info("%cNavigating to %o %o", expect, dest, id);
+      console.info("%cNavigating to /cdx/%o/%o", expect, dest, id);
       setActivePage(dest);
       changePage(page);
       return fetchData(dest, id);

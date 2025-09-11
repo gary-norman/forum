@@ -18,9 +18,8 @@ type CookieModel struct {
 func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) error {
 	sessionToken := models.GenerateToken(32)
 	csrfToken := models.GenerateToken(32)
-	expires := time.Now().Add(time.Hour * 24)
+	expires := time.Now().Add(24 * time.Hour)
 
-	// Set Session, Username, and CSRF Token cookies
 	http.SetCookie(w, &http.Cookie{
 		Name:     "session_token",
 		Value:    sessionToken,
@@ -39,10 +38,9 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 		Expires:  expires,
 		HttpOnly: false,
 	})
-	// Store tokens in the database
-	err := m.UpdateCookies(user, sessionToken, csrfToken)
-	if err != nil {
-		log.Printf(ErrorMsgs().Cookies, "update", err)
+
+	if err := m.UpdateCookies(user, sessionToken, csrfToken); err != nil {
+		log.Printf(ErrorMsgs().Cookies, fmt.Sprintf("update user: %v", user.ID), err)
 		return err
 	}
 	return nil
@@ -51,6 +49,20 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user *models.User) bool {
 	Colors := models.CreateColors()
 	var success bool
+
+	stmt := "SELECT CookiesExpire FROM Users WHERE Username = ?"
+	rows, err := m.DB.Query(stmt, user.Username)
+	if err != nil {
+		log.Printf(ErrorMsgs().Cookies, "query", err)
+	}
+	defer rows.Close()
+
+	var expire time.Time
+	for rows.Next() {
+		if err := rows.Scan(&expire); err != nil {
+			log.Printf(ErrorMsgs().Cookies, "scan", err)
+		}
+	}
 
 	// Get the Session Token from the request cookie
 	st, err := r.Cookie("session_token")
@@ -65,7 +77,7 @@ func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user 
 
 	stColor, csrfColor := Colors.Red, Colors.Red
 	stMatchString, csrfMatchString := "Failed!", "Failed!"
-	if st.Value == user.SessionToken {
+	if st.Value == user.SessionToken && time.Now().Before(expire) {
 		stColor = Colors.Green
 		stMatchString = "Success!"
 		success = true
@@ -94,14 +106,15 @@ func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user 
 
 func (m *CookieModel) UpdateCookies(user *models.User, sessionToken, csrfToken string) error {
 	Colors := models.CreateColors()
+	expires := time.Now().Add(24 * time.Hour)
 	if m == nil || m.DB == nil {
 		fmt.Printf(ErrorMsgs().UserModel, "UpdateCookies", user.Username)
 		return errors.New("UserModel or DB is nil")
 	}
 	var stmt string
 	fmt.Printf(Colors.Blue+"Updating DB Cookies for: "+Colors.White+"%v\n"+Colors.Reset, user.Username)
-	stmt = "UPDATE Users SET SessionToken = ?, CsrfToken = ? WHERE Username = ?"
-	result, err := m.DB.Exec(stmt, sessionToken, csrfToken, user.Username)
+	stmt = "UPDATE Users SET SessionToken = ?, CsrfToken = ?, CookiesExpire = ? WHERE Username = ?"
+	result, err := m.DB.Exec(stmt, sessionToken, csrfToken, expires, user.Username)
 	if err != nil {
 		return err
 	}

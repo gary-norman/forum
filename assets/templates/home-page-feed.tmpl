@@ -6,13 +6,14 @@
   {{ $dot := .dot }}
   {{ $instance := .Instance }}
   {{ $userPosts := .UserPosts }}
+  {{ $allPosts := .AllPosts }}
   {{ $tracer := printf "%s > %s" .Tracer "home-page-feed" }}
   {{ with $tracer }}
 {{/*    {{ fprint "Trace" . }} */}}
   {{ end }}
 {{/*  <div id="wrapper-home-feed">*/}}
     <div id="home-feed" class="collapsible-expanded feed-content scrollable no-scrollbar">
-      {{ range $userPosts }}
+      {{ range $allPosts }}
         {{ template "post-card" (dict "Post" . "dot" $dot "Tracer" $tracer "UserID" $userID "Instance" $instance "calledBy" "home-page-feed") }}
       {{ end }}
     </div>

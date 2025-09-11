@@ -13,7 +13,7 @@
   {{ template "user-page-banner" (dict "dot" . "UserID" $userID "Tracer" $tracer) }}
   <div class="container-content">
     <div class="content">
-    {{ template "user-page-activity-bar" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer) }}
+  {{/* template "user-page-activity-bar" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer) */}}
       <div id="user-activity-feeds">
 {{/*      {{ template "user-page--activity-activity" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}*/}}
       {{ template "user-page--activity-posts" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}

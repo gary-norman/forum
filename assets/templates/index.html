@@ -58,7 +58,7 @@
     <main class="wrapper-main">
       {{/*SECTION ---------- header -----------*/}}
       <header class="header">
-        <div class="branding"></div>
+        <div class="branding btn-go-home"></div>
           <search class="wrapper-search input-wrapper">
 {{/*            <form>*/}}
               <input data-search
@@ -178,7 +178,7 @@
                   ></path>
                 </svg>
               </button>
-              <button aria-label="Log in with Twitter" class="icon">
+              <button aria-label="Log in with X" class="icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 32 32"
@@ -219,8 +219,10 @@
               <input
                 type="text"
                 id="register_user"
+                class="input-3d"
                 name="register_user"
                 placeholder="username"
+                autocomplete="username"
                 pattern="\w{5,16}"
                 required
               />
@@ -233,6 +235,7 @@
               <input
                 type="email"
                 id="register_email"
+                class="input-3d"
                 name="register_email"
                 placeholder="email address"
                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
@@ -247,6 +250,7 @@
               <input
                 type="password"
                 id="register_password"
+                class="input-3d"
                 name="register_password"
                 autocomplete="new-password"
                 placeholder="password"
@@ -267,6 +271,7 @@
               <input
                 type="password"
                 id="register_password-rpt"
+                class="input-3d"
                 name="register_password-rpt"
                 autocomplete="new-password"
                 placeholder="repeat password"
@@ -357,7 +362,7 @@
             <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>create</span>
             </button>
-            <a href="/" class="button btn-md btn-secondary btn-action btn-filled">cancel</a>
+          <button id="cancel-channel" type="button" class="button btn-md btn-secondary btn-action btn-filled">cancel</button>
           </div>
         </form>
       </div>
@@ -391,7 +396,7 @@
             <button id="edit-channel-rules-btn" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
               <span>submit</span>
             </button>
-            <a href="/" class="button btn-md btn-secondary btn-action btn-filled">cancel</a>
+          <button id="cancel-channel-rules" type="button" class="button btn-md btn-secondary btn-action btn-filled">cancel</button>
           </div>
         </form>
       </div>
@@ -426,7 +431,7 @@
             {{ end }}
             <div class="sidebar-block sidebar-dashboard">
               <small class="padded">Dashboard</small>
-              <div id="btn-go-home" data-dest="home" class="sidebar-option home">Home</div>
+              <div data-dest="home" class="sidebar-option home btn-go-home">Home</div>
               <div
                 class="sidebar-option flex-space-between darkMode"
                 id="sidebar-option-darkmode"
@@ -470,7 +475,7 @@
         <main>
           {{/*SECTION ---------- homepage ---------- */}}
           <div id="home-page" class="active-feed">
-            {{ template "home-page" (dict "dot" . "Tracer" $tracer "UserID" .UserID "UserPosts" .UserPosts "CurrentUser" $.CurrentUser "Instance" "home-page" ) }}
+            {{ template "home-page" (dict "dot" . "Tracer" $tracer "UserID" .UserID "AllPosts" .Posts "UserPosts" .UserPosts "CurrentUser" $.CurrentUser "Instance" "home-page" ) }}
           </div>
           {{/*SECTION ---------- post page ---------- */}}
           <div id="post-page" class="feeds-wrapper">

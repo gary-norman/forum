@@ -6,10 +6,10 @@ import {
 } from "./main.js";
 import { changePage, navigateToPage } from "./fetch_and_navigate.js";
 import { toggleReplyForm } from "./comments.js";
-import { data } from "./share.js";
+import { pageData } from "./share.js";
 import { showInlineNotification } from "./notifications.js";
 // sidebar butons
-const goHomeBtn = document.querySelector("#btn-go-home");
+const goHomeBtns = document.querySelectorAll(".btn-go-home");
 export let scrollWindow;
 
 document.addEventListener("newContentLoaded", () => {
@@ -25,12 +25,15 @@ export function goHome() {
   const stateObj = { entity: "home", id: "home" };
   history.pushState(stateObj, "", `/`);
   setActivePage("home");
-  changePage(data["homePage"]);
+  changePage(pageData["homePage"]);
   // navigateToPage("home", e.target)
 }
-goHomeBtn.addEventListener("click", (e) => {
-  goHome();
-});
+
+goHomeBtns.forEach((button) =>
+  button.addEventListener("click", () => {
+    goHome();
+  }),
+);
 
 // INFO was inside a DOMContentLoaded function
 function listenToChannelLinks() {

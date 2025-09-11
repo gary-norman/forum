@@ -9,7 +9,7 @@ import { toggleReplyForm } from "./comments.js";
 import { pageData } from "./share.js";
 import { showInlineNotification } from "./notifications.js";
 // sidebar butons
-const goHomeBtn = document.querySelector("#btn-go-home");
+const goHomeBtns = document.querySelectorAll(".btn-go-home");
 export let scrollWindow;
 
 document.addEventListener("newContentLoaded", () => {
@@ -28,9 +28,12 @@ export function goHome() {
   changePage(pageData["homePage"]);
   // navigateToPage("home", e.target)
 }
-goHomeBtn.addEventListener("click", (e) => {
-  goHome();
-});
+
+goHomeBtns.forEach((button) =>
+  button.addEventListener("click", () => {
+    goHome();
+  }),
+);
 
 // INFO was inside a DOMContentLoaded function
 function listenToChannelLinks() {

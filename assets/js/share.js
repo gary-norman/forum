@@ -1,18 +1,18 @@
-import {activePage, activePageElement, setActivePage} from "./main.js";
-import {selectActiveFeed, scrollWindow} from "./navigation.js";
+import { activePage, activePageElement, setActivePage } from "./main.js";
+import { selectActiveFeed, scrollWindow } from "./navigation.js";
 
 const link = encodeURI(window.location.href);
-export const data = {
+export const pageData = {
   homePage: document.getElementById("home-page"),
   userPage: document.getElementById("user-page"),
   channelPage: document.getElementById("channel-page"),
   postPage: document.getElementById("post-page"),
 };
 export const pages = [
-  data["homePage"],
-  data["userPage"],
-  data["channelPage"],
-  data["postPage"],
+  pageData["homePage"],
+  pageData["userPage"],
+  pageData["channelPage"],
+  pageData["postPage"],
 ];
 
 pages.forEach((page) => {

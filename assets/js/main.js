@@ -1,7 +1,8 @@
-import {fetchData} from "./fetch_and_navigate.js";
+import { fetchData, changePage } from "./fetch_and_navigate.js";
 import { UpdateUI } from "./update_UI_elements.js";
 import { fireCalendarListeners } from "./calendar.js";
-import {selectActiveFeed} from "./navigation.js";
+import { selectActiveFeed, goHome } from "./navigation.js";
+import { showMainNotification } from "./notifications.js";
 
 const angry =
   "background-color: #000000; color: #ea4f92; font-weight: bold; border: 2px solid #ea4f92; padding: .2rem; border-radius: .8rem;";
@@ -13,11 +14,40 @@ export let activePage, activePageElement;
 // Create a new custom event
 export const newContentLoaded = new CustomEvent("newContentLoaded");
 
-window.addEventListener("popstate", () => {
-  const pathParts = window.location.pathname.split("/").filter(Boolean);
-  const [entity, id] = pathParts;
-  if (entity && id) {
-    fetchData(entity.slice(0, -1), id); // Convert 'posts' to 'post'
+window.addEventListener("popstate", (event) => {
+  if (!event.state || typeof event.state !== "object") {
+    // Handle missing or invalid state gracefully
+    displayError("Navigation state is missing or invalid.");
+    return;
+  }
+  const { entity, id } = event.state;
+  const page = entity + "Page";
+  console.info("%cPopped state:", expect, event.state);
+  console.info("%centity:", expect, entity);
+  console.info("%cid:", expect, id);
+  if (entity === "home") {
+    goHome();
+  } else if (entity && id) {
+    try {
+      setActivePage(entity);
+      changePage(page);
+      fetchData(entity, id);
+    } catch (err) {
+      showMainNotification("Failed to fetch data.");
+      // Optionally log error or handle further
+    }
+  } else {
+    // Use a custom error class for HTTP-like errors
+    class HttpError extends Error {
+      constructor(message, status) {
+        super(message);
+        this.name = "HttpError";
+        this.status = status;
+      }
+    }
+    const error = new HttpError("Invalid URL: entity or id missing", 400);
+    showMainNotification(error.message);
+    // Optionally log error or handle further
   }
 });
 

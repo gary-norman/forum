@@ -94,8 +94,10 @@ export function fetchData(entity, Id) {
   // } else {
   //   console.log("other");
 
-  history.pushState({}, "", `/cdx/${entity}/${Id}`);
-  return fetch(`/${entity}s/${Id}`)
+  const stateObj = { entity: entity, id: Id };
+  const url = `/cdx/${entity}/${Id}`;
+  history.pushState(stateObj, "", url);
+  return fetch(`/${entity}/${Id}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

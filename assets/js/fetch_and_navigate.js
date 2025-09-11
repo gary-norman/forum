@@ -120,7 +120,7 @@ export function fetchData(entity, Id) {
 
 document.addEventListener("DOMContentLoaded", function () {
   const path = window.location.pathname;
-  const [, dest, id] = path.match(/\/cdx\/(\w+)\/(\w+)/) || [];
+  const [, dest, id] = path.match(/\/cdx\/(\w+)\/([^/]+)/) || [];
   const page = dest + "Page";
   console.info("%cPath: %o Dest: %o ID: %o", expect, path, dest, id);
   switch (dest) {

@@ -9,7 +9,7 @@ import { toggleReplyForm } from "./comments.js";
 import { data } from "./share.js";
 import { showInlineNotification } from "./notifications.js";
 // sidebar butons
-const goHome = document.querySelector("#btn-go-home");
+const goHomeBtn = document.querySelector("#btn-go-home");
 export let scrollWindow;
 
 document.addEventListener("newContentLoaded", () => {
@@ -21,11 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // --- go home ---
-goHome.addEventListener("click", (e) => {
+export function goHome() {
+  const stateObj = { entity: "home", id: "home" };
+  history.pushState(stateObj, "", `/`);
   setActivePage("home");
-  history.pushState({}, "", `/`);
   changePage(data["homePage"]);
   // navigateToPage("home", e.target)
+}
+goHomeBtn.addEventListener("click", (e) => {
+  goHome();
 });
 
 // INFO was inside a DOMContentLoaded function

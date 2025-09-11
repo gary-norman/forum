@@ -11,15 +11,16 @@ type User struct {
 	SortID   int       `db:"sortId"`
 	Username string    `db:"username"`
 	Login
-	Avatar      string    `db:"avatar,omitempty"`
-	Banner      string    `db:"banner,omitempty"`
-	Description string    `db:"description,omitempty"`
-	Usertype    string    `db:"usertype"`
-	Created     time.Time `db:"created"`
-	TimeSince   string
-	IsFlagged   bool `db:"isFlagged,omitempty"`
-	Followers   int  `db:"followers"`
-	Following   int  `db:"following"`
+	Avatar        string    `db:"avatar,omitempty"`
+	Banner        string    `db:"banner,omitempty"`
+	Description   string    `db:"description,omitempty"`
+	Usertype      string    `db:"usertype"`
+	Created       time.Time `db:"created"`
+	TimeSince     string
+	IsFlagged     bool      `db:"isFlagged,omitempty"`
+	Followers     int       `db:"followers"`
+	Following     int       `db:"following"`
+	CookiesExpire time.Time `db:"cookiesexpire"`
 }
 
 func (u User) TableName() string   { return "users" }

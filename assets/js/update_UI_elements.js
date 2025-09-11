@@ -28,7 +28,7 @@ export function UpdateUI() {
   listenToShare();
   listenToLikeDislike();
   listenToNoUser();
-  listenToPageSetup();
+  // listenToPageSetup();
   saveColourScheme();
   updateProfileImages();
   // resetInputStyle();

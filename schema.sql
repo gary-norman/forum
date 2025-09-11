@@ -239,7 +239,8 @@ CREATE TABLE IF NOT EXISTS Users (
     IsFlagged BOOLEAN,
     SessionToken TEXT,
     CsrfToken TEXT,
-    HashedPassword TEXT NOT NULL
+    HashedPassword TEXT NOT NULL,
+    CookiesExpire DATETIME
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS unique_reaction_post

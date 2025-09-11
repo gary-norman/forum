@@ -110,7 +110,7 @@ function navigateToEntity(e) {
 
   // // Handle navigation for elements with data-dest or .link class
 
-  if ((dest || !isButton) || (isButton && dest) ) {
+  if (dest || !isButton || (isButton && dest)) {
     const parent = e.target.closest(".link");
     if (parent) {
       const newDest = parent.getAttribute("data-dest");

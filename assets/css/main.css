@@ -266,6 +266,7 @@ a:active,
 .user-page-pic,
 .profile-pic--empty,
 .channel-pic {
+  font-family: SpaceMonoFixed, system-ui;
   font-size: inherit;
   position: relative;
 }

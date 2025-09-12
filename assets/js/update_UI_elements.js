@@ -167,6 +167,8 @@ function getInitialFromAttribute() {
         el.style.fontSize = "2rem";
       } else if (nameSidebar) {
         el.style.fontSize = "5rem";
+      } else if (nameChannel) {
+        el.style.fontSize = "clamp(1.5rem, 1.1rem + 2.17vw, 5rem)";
       }
 
       el.setAttribute("data-initial", Array.from(name)[0]);

@@ -99,7 +99,7 @@ func ConvertToInt(value any) (int, error) {
 }
 
 // RandomInt Function to get a random integer between 0 and the max number, for go templates
-func randomInt(max int) int {
+func RandomInt(max int) int {
 	return rand.Intn(max)
 }
 

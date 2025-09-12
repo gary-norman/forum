@@ -16,6 +16,7 @@ func (r Rule) GetID() int64      { return r.ID }
 func (r *Rule) SetID(id int64)   { r.ID = id }
 
 // TODO figure out the use of strings/int64s for this
+
 type PostRule struct {
 	ID      string    `db:"id"`
 	Rule    string    `db:"rule"`

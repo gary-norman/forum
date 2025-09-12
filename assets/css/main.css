@@ -2619,6 +2619,17 @@ main {
   }
 }
 
+.scroll-down--nobar {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  &::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+  }
+}
+
 /* ---- animations ---- */
 @keyframes border-fade {
   100% {

@@ -4,12 +4,18 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"math/rand"
 
 	"github.com/gary-norman/forum/internal/models"
 )
 
 type ChannelModel struct {
 	DB *sql.DB
+}
+
+// RandomInt Function to get a random integer between 0 and the max number, for go templates
+func RandomInt(max int) int {
+	return rand.Intn(max)
 }
 
 func (m *ChannelModel) Insert(ownerID models.UUIDField, name, description, avatar, banner string, privacy, isFlagged, isMuted bool) error {
@@ -47,7 +53,8 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]models
 		// FIXME: This is a temporary fix to set the channel as joined:we need to come up with a more robust solution
 		c.Joined = true
 		// TODO (realtime) get this data freom websockets
-		c.MembersOnline = 0
+		rnd := RandomInt(1800)
+		c.MembersOnline = rnd
 		channels = append(channels, *c)
 	}
 
@@ -96,7 +103,8 @@ func (m *ChannelModel) GetChannelsByID(id int64) ([]models.Channel, error) {
 			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
 		// TODO (realtime) get this data freom websockets
-		c.MembersOnline = 0
+		rnd := RandomInt(1800)
+		c.MembersOnline = rnd
 		channels = append(channels, *c)
 	}
 
@@ -130,7 +138,8 @@ func (m *ChannelModel) GetChannelByID(id int64) (*models.Channel, error) {
 			return nil, err
 		}
 		// TODO (realtime) get this data freom websockets
-		c.MembersOnline = 0
+		rnd := RandomInt(1800)
+		c.MembersOnline = rnd
 		channels = append(channels, *c)
 	}
 	if len(channels) == 0 {
@@ -199,7 +208,8 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 			return nil, err
 		}
 		// TODO (realtime) get this data freom websockets
-		c.MembersOnline = 0
+		rnd := RandomInt(1800)
+		c.MembersOnline = rnd
 		channels = append(channels, *c)
 	}
 	// fmt.Printf(ErrorMsgs().KeyValuePair, "Total channels", len(Channels))
@@ -252,7 +262,7 @@ func (m *ChannelModel) GetPostIDsFromChannel(channelID int64) ([]int64, error) {
 	return postIDs, nil
 }
 
-func (m *ChannelModel) GetChannelIdFromPost(postID int64) ([]int64, error) {
+func (m *ChannelModel) GetChannelIDFromPost(postID int64) ([]int64, error) {
 	var channelIDs []int64
 	stmt := "SELECT ChannelID FROM PostChannels WHERE PostID = ?"
 	rows, err := m.DB.Query(stmt, postID)
@@ -301,6 +311,7 @@ func parseChannelRow(row *sql.Row) (*models.Channel, error) {
 		&channel.Privacy,
 		&channel.IsMuted,
 		&channel.IsFlagged,
+		&channel.Members,
 	); err != nil {
 		return nil, err
 	}

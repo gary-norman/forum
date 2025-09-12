@@ -1,7 +1,5 @@
 PRAGMA journal_mode = MEMORY; -- volatile for testing
 PRAGMA synchronous = OFF;
--- PRAGMA journal_mode = WAL;
--- PRAGMA synchronous = NORMAL;
 PRAGMA foreign_keys = ON;
 PRAGMA ignore_check_constraints = OFF;
 PRAGMA auto_vacuum = NONE;
@@ -28,9 +26,9 @@ CREATE TABLE IF NOT EXISTS Channels (
     Banner TEXT,
     Description TEXT NOT NULL,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Privacy BOOLEAN NOT NULL,
-    IsMuted BOOLEAN NOT NULL,
-    IsFlagged BOOLEAN,
+    Privacy INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    IsMuted INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    IsFlagged INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
     FOREIGN KEY (OwnerID) REFERENCES Users(ID) ON DELETE CASCADE
 );
 
@@ -58,9 +56,9 @@ CREATE TABLE IF NOT EXISTS Comments (
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CommentedPostID INTEGER,
     CommentedCommentID INTEGER,
-    IsCommentable BOOLEAN,
-    IsFlagged BOOLEAN,
-    IsReply BOOLEAN,
+    IsCommentable INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    IsFlagged INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    IsReply INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
     Author TEXT NOT NULL,
     AuthorID BLOB NOT NULL,
     AuthorAvatar TEXT,
@@ -80,7 +78,7 @@ CREATE TABLE IF NOT EXISTS Flags (
     FlagType TEXT NOT NULL,
     Content TEXT,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Approved BOOLEAN NOT NULL,
+    Approved INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
     AuthorID BLOB NOT NULL,
     ChannelID INTEGER NOT NULL,
     FlaggedUserID BLOB,
@@ -149,8 +147,8 @@ CREATE TABLE IF NOT EXISTS Notifications (
     ID INTEGER PRIMARY KEY,
     Notification TEXT,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Read BOOLEAN,
-    Archived BOOLEAN
+    Read INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    Archived INTEGER NOT NULL CHECK (IsCommentable IN (0, 1))
 );
 
 CREATE TABLE IF NOT EXISTS NotificationsUsers (
@@ -192,11 +190,11 @@ CREATE TABLE IF NOT EXISTS Posts (
     Content TEXT NOT NULL,
     Images TEXT,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    IsCommentable BOOLEAN NOT NULL,
+    IsCommentable INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
     Author TEXT NOT NULL ,
     AuthorID BLOB NOT NULL,
     AuthorAvatar TEXT,
-    IsFlagged BOOLEAN,
+    IsFlagged INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
     FOREIGN KEY (Author) REFERENCES Users(Username) ON DELETE CASCADE,
     FOREIGN KEY (AuthorID) REFERENCES Users(ID) ON DELETE CASCADE,
     FOREIGN KEY (AuthorAvatar) REFERENCES Users(Avatar)
@@ -204,8 +202,8 @@ CREATE TABLE IF NOT EXISTS Posts (
 
 CREATE TABLE IF NOT EXISTS Reactions (
     ID INTEGER PRIMARY KEY,
-    Liked BOOLEAN,
-    Disliked BOOLEAN,
+    Liked INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    Disliked INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     AuthorID BLOB NOT NULL,
     ReactedPostID INTEGER,
@@ -224,7 +222,7 @@ CREATE TABLE IF NOT EXISTS Rules (
     ID INTEGER PRIMARY KEY,
     Rule TEXT,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Predefined BOOLEAN
+    Predefined INTEGER NOT NULL CHECK (IsCommentable IN (0, 1))
 );
 
 CREATE TABLE IF NOT EXISTS Users (
@@ -236,7 +234,7 @@ CREATE TABLE IF NOT EXISTS Users (
     Description TEXT,
     Usertype TEXT NOT NULL,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    IsFlagged BOOLEAN,
+    IsFlagged INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
     SessionToken TEXT,
     CsrfToken TEXT,
     HashedPassword TEXT NOT NULL,

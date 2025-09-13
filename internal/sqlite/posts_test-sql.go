@@ -8,7 +8,7 @@ import (
 	"github.com/gary-norman/forum/internal/models"
 )
 
-func TestPostModel_All(t *testing.T) {
+func TestPostModelAll(t *testing.T) {
 	type fields struct {
 		DB *sql.DB
 	}
@@ -37,7 +37,7 @@ func TestPostModel_All(t *testing.T) {
 	}
 }
 
-func TestPostModel_GetPostsByChannel(t *testing.T) {
+func TestPostModelGetPostsByChannel(t *testing.T) {
 	type fields struct {
 		DB *sql.DB
 	}
@@ -70,7 +70,7 @@ func TestPostModel_GetPostsByChannel(t *testing.T) {
 	}
 }
 
-func TestPostModel_Insert(t *testing.T) {
+func TestPostModelInsert(t *testing.T) {
 	type fields struct {
 		DB *sql.DB
 	}

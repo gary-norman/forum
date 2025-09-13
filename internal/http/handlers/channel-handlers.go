@@ -229,7 +229,7 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 }
 
 func (c *ChannelHandler) GetChannelInfoFromPostID(postID int64) (int64, string, error) {
-	channelIDs, err := c.App.Channels.GetChannelIdFromPost(postID)
+	channelIDs, err := c.App.Channels.GetChannelIDFromPost(postID)
 	if err != nil {
 		log.Printf(ErrorMsgs().KeyValuePair, "GetChannelInfoFromPostId > GetChannelIdFromPost", err)
 		return 0, "", err

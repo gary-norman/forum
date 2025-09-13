@@ -30,7 +30,7 @@ func (t *TempHelper) Init() {
 		"not":            not,
 		"or":             or,
 		"printType":      printType,
-		"random":         randomInt,
+		"random":         RandomInt,
 		"reactionStatus": t.App.Reactions.GetReactionStatus,
 		"same":           checkSameName,
 		"startsWith":     startsWith,

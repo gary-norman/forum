@@ -98,7 +98,7 @@ func InitializeApp() (*App, func(), error) {
 	if err = initDB.QueryRow("select sqlite_version()").Scan(&dbVersion); err != nil {
 		log.Printf(Colors().Red+"Error fetching SQLite version: %v\n"+Colors().Reset, err)
 	}
-	fmt.Printf(ErrorMsgs().DbSuccess, dbType, dbVersion)
+	fmt.Printf(ErrorMsgs().DBSuccess, dbType, dbVersion)
 
 	// App instance with DB reference
 	appInstance := NewApp(initDB)

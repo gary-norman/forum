@@ -94,7 +94,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for p := range allPosts {
-		channelIDs, err := h.App.Channels.GetChannelIdFromPost(allPosts[p].ID)
+		channelIDs, err := h.App.Channels.GetChannelIDFromPost(allPosts[p].ID)
 		if err != nil {
 			log.Printf(ErrorMsgs().KeyValuePair, "getHome > channelID", err)
 		}

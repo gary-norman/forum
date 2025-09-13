@@ -24,7 +24,7 @@ func CreateLogs(logToFile bool, filename string) (*Logs, error) {
 	writers = append(writers, os.Stdout)
 
 	if logToFile {
-		logFile, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		logFile, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o666)
 		if err != nil {
 			return nil, err
 		}
@@ -42,7 +42,7 @@ func CreateLogs(logToFile bool, filename string) (*Logs, error) {
 	return logs, nil
 }
 
-// Helper to add a Request ID to a context
+// WithRequestID is a helper function that adds a Request ID to a context
 func WithRequestID(ctx context.Context, requestID string) context.Context {
 	return context.WithValue(ctx, RequestIDKey, requestID)
 }

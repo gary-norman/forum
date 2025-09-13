@@ -3,17 +3,18 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gary-norman/forum/internal/app"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
 	"net/http"
+
+	"github.com/gary-norman/forum/internal/app"
+	"github.com/gary-norman/forum/internal/models"
 )
 
 type ReactionHandler struct {
 	App *app.App
 }
 
-// getPostsLikesAndDislikes updates the reactions of each post in the given slice
+// GetPostsLikesAndDislikes updates the reactions of each post in the given slice
 func (h *ReactionHandler) GetPostsLikesAndDislikes(posts []models.Post) []models.Post {
 	for p, post := range posts {
 		likes, dislikes, err := h.App.Reactions.CountReactions(post.ID, 0) // Pass 0 for CommentID if it's a post
@@ -41,18 +42,18 @@ func (h *ReactionHandler) getLastReactionTimeForPosts(posts []models.Post) ([]mo
 			log.Printf(ErrorMsgs().KeyValuePair, "Error getting last reaction time", err)
 		}
 		if lastReactionTime.Created.IsZero() {
-			//fmt.Printf("No reaction time found for PostID: %v\n", p.ID)
+			// fmt.Printf("No reaction time found for PostID: %v\n", p.ID)
 
 			p.LastReaction = nil
 		} else {
 			p.LastReaction = &lastReactionTime.Created
-			//fmt.Printf("\nPostID: %v\nLastReaction: %v\n", p.ID, p.LastReaction)
+			// fmt.Printf("\nPostID: %v\nLastReaction: %v\n", p.ID, p.LastReaction)
 		}
 	}
 	return posts, nil
 }
 
-// getCommentsLikesAndDislikes updates the reactions of each comment in the given slice
+// GetCommentsLikesAndDislikes updates the reactions of each comment in the given slice
 func (h *ReactionHandler) GetCommentsLikesAndDislikes(comments []models.Comment) []models.Comment {
 	for c, comment := range comments {
 		likes, dislikes, err := h.App.Reactions.CountReactions(0, comment.ID) // Pass 0 for PostID if it's a comment

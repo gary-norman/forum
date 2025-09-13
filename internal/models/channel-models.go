@@ -97,6 +97,6 @@ func (m Mod) TableName() string { return "mods" }
 func (m Mod) GetID() int64      { return m.ID }
 func (m *Mod) SetID(id int64)   { m.ID = id }
 
-func (c *Mod) UpdateTimeSince() {
-	c.TimeSince = getTimeSince(c.Created)
+func (m *Mod) UpdateTimeSince() {
+	m.TimeSince = getTimeSince(m.Created)
 }

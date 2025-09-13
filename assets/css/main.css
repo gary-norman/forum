@@ -266,6 +266,7 @@ a:active,
 .user-page-pic,
 .profile-pic--empty,
 .channel-pic {
+  font-family: SpaceMonoFixed, system-ui;
   font-size: inherit;
   position: relative;
 }
@@ -2615,6 +2616,17 @@ main {
 
   &::-webkit-scrollbar-thumb:hover {
     background: var(--clr-bg-4);
+  }
+}
+
+.scroll-down--nobar {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  &::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
   }
 }
 

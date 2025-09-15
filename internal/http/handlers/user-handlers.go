@@ -30,7 +30,7 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	// Convert User ID string to FieldUUID
 	userID, err := models.UUIDFieldFromString(idStr)
 	if err != nil {
-		http.Error(w, "Invalid thisUser ID", http.StatusBadRequest)
+		view.RenderErrorPage(w, models.NotFoundLocation("user"))
 		return
 	}
 

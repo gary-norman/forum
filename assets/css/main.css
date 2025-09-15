@@ -1809,6 +1809,9 @@ hr.solid {
 .padded {
   padding: 0 1.2rem;
 }
+.padded-left {
+  padding: 0 0 0 1.2rem;
+}
 
 .flex-space-around {
   justify-content: space-around !important;
@@ -2115,6 +2118,41 @@ main {
     display: flex;
     opacity: 1;
   }
+}
+
+#error-400, #error-500 {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+
+    flex: 1 0 0;
+    align-self: stretch;
+    height: 100%;
+    padding: 3.2rem 6.8rem 0 0;
+
+    &.active-feed {
+      display: flex;
+      opacity: 1;
+    }
+
+  & .content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+
+    & button {
+      margin-top: 2rem;
+    }
+  }
+}
+
+#error-400 .content, #error-500 .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 #home-feed {

@@ -221,6 +221,13 @@ button,
     background: url("/assets/icons/post_16.svg") no-repeat center;
   }
 }
+
+.btn-home {
+  &::before {
+    background: url("/assets/icons/home_16.svg") no-repeat center;
+  }
+}
+
 .btn-notifications {
   &::before {
     background: url("/assets/icons/notification_16.svg") no-repeat center;

@@ -318,39 +318,13 @@ function toggleFilters() {
 
         if (popover && popover.matches('[popover].wrapper-filter-dropdown')) {
             popover.querySelectorAll(".dropdown-option").forEach(function (option) {
-                option.addEventListener("click", (e) => {
-                    let input;
-                    const checkbox = option.querySelector("input[type='checkbox']");
-                    const radio = option.querySelector("input[type='radio']");
-                    let optionText = option.querySelector("label").innerText;
 
-                    if (checkbox) {
-                        input = checkbox;
-                    } else if (radio) {
-                        input = radio;
-                        if (optionText === "has no comments" ) {
-                            optionText = optionText.slice(4);
-                        }
-                        clearRadios(popover, button);
+                // store handler on the element itself to reuse later
+                if (!option._handler) {
+                    option._handler = optionHandlerFactory(popover, button);
+                    option.addEventListener("click", option._handler);
+                }
 
-                        option.classList.add("selected");
-                        button.querySelector("span").innerText = optionText;
-                    }
-
-                    input.click();
-
-                    const noneSelected = checkSelectedInputs(popover);
-
-                    filterContent();
-
-                    if (noneSelected) {
-                        toggleClearButton(popover, "hide");
-
-                    } else {
-                        toggleClearButton(popover, "show");
-                    }
-                    toggleFilterButtonState(button, noneSelected, "inside");
-                });
             });
         }
 
@@ -386,6 +360,7 @@ function toggleFilters() {
 
         if (clearButton){
             clearButton.addEventListener("click", () => {
+                let noneSelected;
                 popover.querySelectorAll('.dropdown-option').forEach(function (option) {
                     const checkbox = option.querySelector("input[type='checkbox']");
                     const radio = option.querySelector("input[type='radio']");
@@ -397,29 +372,72 @@ function toggleFilters() {
                     }
                     input.checked = false;
 
-                    const noneSelected = checkSelectedInputs(popover);
+                    noneSelected = checkSelectedInputs(popover);
 
-                    toggleClearButton(popover, "hide");
-                    toggleFilterButtonState(button, noneSelected, "inside");
-                    filterContent();
-                    clearRadios(popover, button);
+
                 });
 
                 if (popover && popover.matches('[popover].card.date')) {
                     popover.querySelectorAll("input").forEach(function (input) {
                         input.value = "";
 
-                        const noneSelected = checkSelectedInputs(popover);
+                         noneSelected = checkSelectedInputs(popover);
 
                         startDateInteracted = false;
-                        toggleClearButton(popover, "hide");
-                        filterContent();
-                        toggleFilterButtonState(button, noneSelected, "inside");
                     });
                 }
+
+                toggleClearButton(popover, "hide");
+                toggleFilterButtonState(button, noneSelected, "inside");
+                filterContent();
+                clearRadios(popover, button);
             });
         }
     })
+}
+
+function optionHandlerFactory(popover, button) {
+    return function (e) {
+        console.log("%cREATTACHED:", warn, e.currentTarget);
+        handleOptionClick(e, popover, button);
+    };
+}
+
+function handleOptionClick(e, popover, button) {
+    const option = e.currentTarget;
+
+
+    let input;
+    const checkbox = option.querySelector("input[type='checkbox']");
+    const radio = option.querySelector("input[type='radio']");
+    let optionText = option.querySelector("label").innerText;
+
+    if (checkbox) {
+        input = checkbox;
+    } else if (radio) {
+        input = radio;
+        if (optionText === "has no comments" ) {
+            optionText = optionText.slice(4);
+        }
+        clearRadios(popover, button);
+
+        option.classList.add("selected");
+        button.querySelector("span").innerText = optionText;
+    }
+
+    input.click();
+
+    const noneSelected = checkSelectedInputs(popover);
+
+    filterContent();
+
+    if (noneSelected) {
+        toggleClearButton(popover, "hide");
+
+    } else {
+        toggleClearButton(popover, "show");
+    }
+    toggleFilterButtonState(button, noneSelected, "inside");
 }
 
 

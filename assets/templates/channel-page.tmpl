@@ -1,22 +1,26 @@
 {{ define "channel-page" }}
-{{ $userID := .UserID }}
-{{ $dot := $ }}
-{{ with .CurrentUser }}
-  {{ $userID = .ID }}
-{{ end }}
-{{ $thisEntity := .ThisChannel }}
-{{ $instance := "channel-page" }}
-{{ $tracer := "channel-page" }}
-{{ with $tracer }}
-{{/*  {{ fprint "Trace" . }}*/}}
-{{ end }}
-{{ template "channel-join-popover" (dict "ThisChannel" $dot.ThisChannel) }}
-{{ template "channel-page-banner" (dict "dot" $dot "Tracer" $tracer "CurrentUser" .CurrentUser "UserID" $userID) }}
-<div class="container-content">
-  <div class="content">
-    {{ template "filters-row" (dict "dot" . "Tracer" $tracer "UserID" $userID "CurrentUser" .CurrentUser "calledBy" $instance ) }}
-    {{ template "channel-page-feed" (dict "dot" . "Tracer" $tracer "UserID" $userID "CurrentUser" .CurrentUser ) }}
+{{ if eq .Location "not-found"}}
+  {{ template "not-found" (dict "Message" .Message) }}
+{{ else }}
+  {{ $userID := .UserID }}
+  {{ $dot := $ }}
+  {{ with .CurrentUser }}
+    {{ $userID = .ID }}
+  {{ end }}
+  {{ $thisEntity := .ThisChannel }}
+  {{ $instance := "channel-page" }}
+  {{ $tracer := "channel-page" }}
+  {{ with $tracer }}
+  {{/*  {{ fprint "Trace" . }}*/}}
+  {{ end }}
+  {{ template "channel-join-popover" (dict "ThisChannel" $dot.ThisChannel) }}
+  {{ template "channel-page-banner" (dict "dot" $dot "Tracer" $tracer "CurrentUser" .CurrentUser "UserID" $userID) }}
+  <div class="container-content">
+    <div class="content">
+      {{ template "filters-row" (dict "dot" . "Tracer" $tracer "UserID" $userID "CurrentUser" .CurrentUser "calledBy" $instance ) }}
+      {{ template "channel-page-feed" (dict "dot" . "Tracer" $tracer "UserID" $userID "CurrentUser" .CurrentUser ) }}
+    </div>
+      {{ template "right-panel" (dict "dot" . "Tracer" $tracer "UserID" $userID "CurrentUser" .CurrentUser "Instance" $.Instance "ThisEntity" $thisEntity "calledBy" $instance ) }}
   </div>
-    {{ template "right-panel" (dict "dot" . "Tracer" $tracer "UserID" $userID "CurrentUser" .CurrentUser "Instance" $.Instance "ThisEntity" $thisEntity "calledBy" $instance ) }}
-</div>
+  {{ end }}
 {{ end }}

@@ -1,28 +1,32 @@
 {{ define "user-page" }}
-  {{ $userID := .UserID }}
-  {{ with .CurrentUser }}
-    {{ $userID = .ID }}
-  {{ end }}
-  {{ $thisEntity := .ThisUser }}
-{{ $instance := "user-page" }}
-  {{ $tracer := "user-page" }}
-  {{ with $tracer }}
-{{/*    {{ fprint "Trace" . }} */}}
-  {{ end }}
-{{/* ---page start--- */}}
-  {{ template "user-page-banner" (dict "dot" . "UserID" $userID "Tracer" $tracer) }}
-  <div class="container-content">
-    <div class="content">
-  {{/* template "user-page-activity-bar" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer) */}}
-      <div id="user-activity-feeds">
-{{/*      {{ template "user-page--activity-activity" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}*/}}
-      {{ template "user-page--activity-posts" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
-{{/*      {{ template "user-page--activity-comments" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}*/}}
-{{/*      {{ template "user-page--saved-activities" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}*/}}
-{{/*      {{ template "user-page--muted-channels" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}*/}}
-{{/*      {{ template "user-page--activity-reactions" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}*/}}
+{{ if eq .Location "not-found"}}
+  {{ template "not-found" (dict "Message" .Message) }}
+{{ else }}
+    {{ $userID := .UserID }}
+    {{ with .CurrentUser }}
+      {{ $userID = .ID }}
+    {{ end }}
+    {{ $thisEntity := .ThisUser }}
+  {{ $instance := "user-page" }}
+    {{ $tracer := "user-page" }}
+    {{ with $tracer }}
+  {{/*    {{ fprint "Trace" . }} */}}
+    {{ end }}
+  {{/* ---page start--- */}}
+    {{ template "user-page-banner" (dict "dot" . "UserID" $userID "Tracer" $tracer) }}
+    <div class="container-content">
+      <div class="content">
+    {{/* template "user-page-activity-bar" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer) */}}
+        <div id="user-activity-feeds">
+  {{/*      {{ template "user-page--activity-activity" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}*/}}
+        {{ template "user-page--activity-posts" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}
+  {{/*      {{ template "user-page--activity-comments" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}*/}}
+  {{/*      {{ template "user-page--saved-activities" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}*/}}
+  {{/*      {{ template "user-page--muted-channels" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}*/}}
+  {{/*      {{ template "user-page--activity-reactions" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "Instance" $instance ) }}*/}}
+        </div>
       </div>
+      {{ template "right-panel" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "ThisEntity" $thisEntity "calledBy" $instance ) }}
     </div>
-    {{ template "right-panel" (dict "dot" . "UserID" $userID "CurrentUser" .CurrentUser "Tracer" $tracer "ThisEntity" $thisEntity "calledBy" $instance ) }}
-  </div>
+  {{ end }}
 {{ end }}

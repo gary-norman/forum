@@ -438,7 +438,7 @@ a:active,
     margin: 6.4rem 0;
     height: fit-content;
     color: var(--clr-accent--1);
-    background: var(--clr-dark-1);
+    background: var(--clr-dark--1);
     border: 2px solid var(--clr-accent--1);
     border-radius: var(--border-radius-button);
   }
@@ -1564,13 +1564,13 @@ input[type="text"].inactive-input {
 
 [id^="uploadedFile"] {
   display: grid;
-  color: var(--clr-fg-1-lab);
+  color: var(--clr-fg-1);
 }
 
 .uploaded-file {
   font-size: var(--font-sz-main);
   padding: 0.5rem 2rem;
-  color: var(--clr-bg-2-lab);
+  color: var(--clr-bg-2);
   background: var(--clr-accent--1);
   border: 1px dashed var(--clr-accent--2);
 }
@@ -2095,7 +2095,7 @@ main {
 
 .muted {
   background: var(--clr-accent--yellow);
-  color: var(--clr-dark-1);
+  color: var(--clr-dark--1);
 }
 
 .reactions {
@@ -2119,39 +2119,19 @@ main {
   }
 }
 
-#error-400, #error-500 {
-    display: none;
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
 
-    flex: 1 0 0;
-    align-self: stretch;
-    height: 100%;
-    padding: 3.2rem 6.8rem 0 0;
-
-    &.active-feed {
-      display: flex;
-      opacity: 1;
-    }
-
-  & .content{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.2rem;
-
-    & button {
-      margin-top: 2rem;
-    }
-  }
-}
-
-#error-400 .content, #error-500 .content {
+.content-error{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1.2rem;
+  padding: 0 21.6rem 0 0;
+  width: 100%;
+
+  & button {
+    margin-top: 2rem;
+  }
 }
 
 #home-feed {
@@ -2698,10 +2678,10 @@ main {
 
 @keyframes text-invert {
   45% {
-    color: var(--clr-dark-1);
+    color: var(--clr-dark--1);
   }
 
   50% {
-    color: var(--clr-light-1);
+    color: var(--clr-light--1);
   }
 }

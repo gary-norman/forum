@@ -89,37 +89,37 @@
 }
 
 .mode-dark {
-  --clr-bg-1: var(--clr-dark-1);
-  --clr-bg-2: var(--clr-dark-2);
-  --clr-bg-3: var(--clr-dark-3);
-  --clr-bg-4: var(--clr-dark-4);
-  --clr-bg-5: var(--clr-dark-5);
-  --clr-bg-6: var(--clr-dark-6);
+  --clr-bg-1: var(--clr-dark--1);
+  --clr-bg-2: var(--clr-dark--2);
+  --clr-bg-3: var(--clr-dark--3);
+  --clr-bg-4: var(--clr-dark--4);
+  --clr-bg-5: var(--clr-dark--5);
+  --clr-bg-6: var(--clr-dark--6);
 
-  --clr-fg-1: var(--clr-light-1);
-  --clr-fg-2: var(--clr-light-2);
-  --clr-fg-3: var(--clr-light-3);
-  --clr-fg-4: var(--clr-light-4);
-  --clr-fg-5: var(--clr-light-5);
-  --clr-fg-6: var(--clr-light-6);
+  --clr-fg-1: var(--clr-light--1);
+  --clr-fg-2: var(--clr-light--2);
+  --clr-fg-3: var(--clr-light--3);
+  --clr-fg-4: var(--clr-light--4);
+  --clr-fg-5: var(--clr-light--5);
+  --clr-fg-6: var(--clr-light--6);
 
   --clr-accent--base-1: var(--clr-accent--green);
 }
 
 .mode-light {
-  --clr-bg-1: var(--clr-light-1);
-  --clr-bg-2: var(--clr-light-2);
-  --clr-bg-3: var(--clr-light-3);
-  --clr-bg-4: var(--clr-light-4);
-  --clr-bg-5: var(--clr-light-5);
-  --clr-bg-6: var(--clr-light-6);
+  --clr-bg-1: var(--clr-light--1);
+  --clr-bg-2: var(--clr-light--2);
+  --clr-bg-3: var(--clr-light--3);
+  --clr-bg-4: var(--clr-light--4);
+  --clr-bg-5: var(--clr-light--5);
+  --clr-bg-6: var(--clr-light--6);
 
-  --clr-fg-1: var(--clr-dark-1);
-  --clr-fg-2: var(--clr-dark-2);
-  --clr-fg-3: var(--clr-dark-3);
-  --clr-fg-4: var(--clr-dark-4);
-  --clr-fg-5: var(--clr-dark-5);
-  --clr-fg-6: var(--clr-dark-6);
+  --clr-fg-1: var(--clr-dark--1);
+  --clr-fg-2: var(--clr-dark--2);
+  --clr-fg-3: var(--clr-dark--3);
+  --clr-fg-4: var(--clr-dark--4);
+  --clr-fg-5: var(--clr-dark--5);
+  --clr-fg-6: var(--clr-dark--6);
 
   --clr-accent--base-1: var(--clr-accent--blue);
 }

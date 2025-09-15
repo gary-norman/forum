@@ -1,5 +1,6 @@
 import { setActivePage, newContentLoaded } from "./main.js";
 import { pages } from "./share.js";
+import { showMainNotification } from "./notifications.js";
 import { selectActiveFeed } from "./navigation.js";
 
 const expect =
@@ -114,7 +115,7 @@ export function fetchData(entity, Id) {
         console.warn("Target element or content missing");
       }
     })
-    .catch((error) => console.error(`Error fetching ${entity} data:`, error));
+    .catch((error) => showMainNotification(error));
   // }
 }
 

@@ -511,6 +511,7 @@ a:active,
 .modal-header {
   display: flex;
   justify-content: center;
+  padding-block: 0 1.6rem;
   & > div {
     position: relative;
     font-size: 1.6rem;
@@ -976,7 +977,7 @@ input[type="checkbox"] {
 
 .logreg-form {
   /* margin-block: auto; */
-  padding-block: 1.6rem 1.6rem;
+  padding-block: 0 1.6rem;
 }
 #resetForm {
   & .form-title {

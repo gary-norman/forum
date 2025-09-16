@@ -42,6 +42,7 @@ type PostPage struct {
 	UserID      UUIDField
 	CurrentUser *User
 	Instance    string
+	Location    string
 	ThisPost    Post
 	Author      *User
 	ThisChannel *Channel

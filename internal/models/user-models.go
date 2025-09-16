@@ -42,6 +42,7 @@ type UserPage struct {
 	UserID      UUIDField
 	CurrentUser *User
 	Instance    string
+	Location    string
 	ThisUser    User
 	OwnerName   string
 	ImagePaths

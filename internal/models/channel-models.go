@@ -36,6 +36,7 @@ type ChannelPage struct {
 	UserID                 UUIDField
 	CurrentUser            *User
 	Instance               string
+	Location               string
 	ThisChannel            Channel
 	OwnerName              string
 	IsOwned                bool

@@ -74,6 +74,7 @@ function navigateToEntity(e) {
         if (sidebarProfile) {
           toggleReplyForm(target);
         } else {
+          return;
           const notifier = activePageElement.querySelector(
             `#post-card-info-${postID}`,
           );
@@ -98,6 +99,7 @@ function navigateToEntity(e) {
     if (sidebarProfile) {
       toggleReplyForm(target);
     } else {
+      return;
       const notifier = activePageElement.querySelector(
         `#post-card-info-${postID}`,
       );

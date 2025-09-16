@@ -46,6 +46,7 @@ func GetIntFromPathValue(value string) (int64, error) {
 	return intValue, nil
 }
 
+// ToHTMLVar converts a string like "post-page" to "postsHTML"
 func ToHTMLVar(s string) string {
 	parts := strings.Split(s, "-")
 	if len(parts) == 0 {

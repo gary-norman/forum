@@ -2128,23 +2128,24 @@ main {
   }
 }
 
-#error-400, #error-500 {
-    display: none;
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
+#error-400,
+#error-500 {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
 
-    flex: 1 0 0;
-    align-self: stretch;
-    height: 100%;
-    padding: 3.2rem 6.8rem 0 0;
+  flex: 1 0 0;
+  align-self: stretch;
+  height: 100%;
+  padding: 3.2rem 6.8rem 0 0;
 
-    &.active-feed {
-      display: flex;
-      opacity: 1;
-    }
+  &.active-feed {
+    display: flex;
+    opacity: 1;
+  }
 
-  & .content{
+  & .content {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2156,7 +2157,8 @@ main {
   }
 }
 
-#error-400 .content, #error-500 .content {
+#error-400 .content,
+#error-500 .content {
   display: flex;
   flex-direction: column;
   align-items: center;

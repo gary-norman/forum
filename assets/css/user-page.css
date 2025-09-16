@@ -77,7 +77,7 @@
 .banner-user {
   position: relative;
   width: 100%;
-  min-height: 20rem;
+  min-height: 11rem;
   overflow: hidden;
   z-index: var(--z-index-banner);
   &::before {
@@ -106,10 +106,10 @@
 .page-control-user {
   display: flex;
   justify-content: space-between;
-  width: calc(100% - 9.6rem);
+  width: clamp(40rem, 100vw - 50rem, 100rem);
   z-index: var(--z-index-page-control);
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 4.8rem;
 
   & .page-buttons {
@@ -117,6 +117,9 @@
     width: 100%;
     justify-content: right;
     align-items: center;
+    & > * {
+      height: 3rem;
+    }
   }
 
   & .page-profile {
@@ -140,6 +143,7 @@
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+      font-size: clamp(2.5rem, 0.4rem + 2.17vw, 3rem);
     }
   }
 }

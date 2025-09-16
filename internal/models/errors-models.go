@@ -40,7 +40,7 @@ type Errors struct {
 	ConnInit    string
 	ConnConn    string
 	ConnSuccess string
-	DbSuccess   string
+	DBSuccess   string
 	Convert     string
 	Cookies     string
 	CreateFile  string
@@ -80,7 +80,7 @@ type Message struct {
 	Name, Text string
 }
 
-func JsonError(messageStruct TemplateData) {
+func JSONError(messageStruct TemplateData) {
 	ErrorMsgs := CreateErrorMessages()
 	val := reflect.ValueOf(messageStruct)
 	typ := val.Type()
@@ -111,7 +111,7 @@ func JsonError(messageStruct TemplateData) {
 	}
 }
 
-func JsonPost(messageStruct any) {
+func JSONPost(messageStruct any) {
 	ErrorMsgs := CreateErrorMessages()
 	val := reflect.ValueOf(messageStruct)
 	typ := val.Type()
@@ -131,7 +131,7 @@ func CreateErrorMessages() *Errors {
 		ConnClose:    Colors.Red + "Unable to close connection to " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Reset,
 		ConnInit:     Colors.Red + "Unable to initialise connection " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Reset,
 		ConnSuccess:  Colors.Blue + "Server listening on " + Colors.White + "%v " + Colors.Green + "- success!\n" + Colors.Reset,
-		DbSuccess:    Colors.Blue + "Database connected: " + Colors.White + "%v " + "v" + Colors.Orange + "%v " + Colors.Green + "- success!\n" + Colors.Reset,
+		DBSuccess:    Colors.Blue + "Database connected: " + Colors.White + "%v " + "v" + Colors.Orange + "%v " + Colors.Green + "- success!\n" + Colors.Reset,
 		Convert:      Colors.Red + "Unable to convert " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,
 		Cookies:      Colors.Red + "Unable to " + Colors.White + "%v cookies " + Colors.Blue + "with error: " + Colors.Red + "%v" + Colors.Reset,
 		CreateFile:   Colors.Red + "Unable to create file " + Colors.White + "%v" + Colors.Blue + " called by " + Colors.White + "%v" + Colors.Blue + " with error: " + Colors.Red + "%v" + Colors.Reset,

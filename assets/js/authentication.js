@@ -166,9 +166,9 @@ if (registerForm) {
       })
       .then((data) => {
         if (data.message === "registration failed!") {
-          showInlineNotification(notifier, "", data.message, false);
+          showInlineNotification(notifier, "", data.message, false, "dummy");
         } else {
-          showInlineNotification(notifier, "", data.message, true);
+          showInlineNotification(notifier, "", data.message, true, "dummy");
           setTimeout(() => {
             window.location.href = "/";
           }, 2000);
@@ -196,6 +196,7 @@ if (loginForm) {
         "",
         "Username and password required.",
         false,
+        "dummy",
       );
       return;
     }
@@ -227,11 +228,12 @@ if (loginForm) {
           "",
           data.message || "Login failed.",
           false,
+          "dummy",
         );
         return;
       }
 
-      showInlineNotification(notifier, "", data.message, true);
+      showInlineNotification(notifier, "", data.message, true, "dummy");
       setTimeout(() => {
         window.location.href = "/";
       }, 2000);

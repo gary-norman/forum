@@ -258,6 +258,7 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 // SECTION ------- routing handlers ----------
+
 func (h *AuthHandler) Protected(w http.ResponseWriter, r *http.Request) {
 	login := r.FormValue("username")
 	var user *models.User

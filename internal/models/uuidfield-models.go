@@ -16,17 +16,22 @@ type UUIDField struct {
 	UUID uuid.UUID
 }
 
-// Automatically generate a new UUID if it's not already set
+// NewUUIDField automatically generates a new UUID if it's not already set
 func NewUUIDField() UUIDField {
 	return UUIDField{UUID: uuid.New()}
 }
 
-// Implement fmt.Stringer
+// ZeroUUIDField returns a UUIDField with a nil UUID
+func ZeroUUIDField() UUIDField {
+	return UUIDField{UUID: uuid.Nil}
+}
+
+// String implements fmt.Stringer
 func (u UUIDField) String() string {
 	return u.UUID.String()
 }
 
-// JSON marshalling
+// MarshalJSON marshals the UUID string as JSON
 func (u UUIDField) MarshalJSON() ([]byte, error) {
 	return json.Marshal(u.UUID.String())
 }

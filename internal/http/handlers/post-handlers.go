@@ -27,7 +27,7 @@ func (p *PostHandler) GetUserPosts(user *models.User, allPosts []models.Post) []
 
 	memberships, memberErr := p.App.Memberships.UserMemberships(user.ID)
 	if memberErr != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+		log.Printf(ErrorMsgs().KeyValuePair, "GetUserPosts > UserMemberships", memberErr)
 		return allPosts
 	}
 	ownedChannels, ownedErr := p.App.Channels.OwnedOrJoinedByCurrentUser(user.ID)

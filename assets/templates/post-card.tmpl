@@ -58,7 +58,7 @@
   {{ else }}
     <p class="cardContent">{{$post.Content}}</p>
   {{ end }}
-    <div id="post-card-info-{{ $post.ID }}" class="popover-title">
+    <div id="post-card-info-{{ $post.ID }}" class="popover-title invisible-notify">
     </div>
     {{ template "control-buttons" (dict "Post" $post "dot" $dot "userID" $userID "Instance" $instance "calledBy" "post-card" "ThisPost" $thisPost "Tracer" $tracer) }}
   <!--  Reply / Submit Comment form -->

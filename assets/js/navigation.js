@@ -69,10 +69,12 @@ function navigateToEntity(e) {
     console.info("Navigating to comment post:", dest);
     navigateToPage(dest, target)
       .then(() => {
+        pageData["homePage"].innerHTML = "";
         target = activePageElement.querySelector(`#post-card-${postID}`);
         if (sidebarProfile) {
           toggleReplyForm(target);
         } else {
+          return;
           const notifier = activePageElement.querySelector(
             `#post-card-info-${postID}`,
           );
@@ -97,6 +99,7 @@ function navigateToEntity(e) {
     if (sidebarProfile) {
       toggleReplyForm(target);
     } else {
+      return;
       const notifier = activePageElement.querySelector(
         `#post-card-info-${postID}`,
       );

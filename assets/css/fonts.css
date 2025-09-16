@@ -16,46 +16,54 @@
 *
 */
 @font-face {
-  font-family: 'SpaceGrotesk-Light';
-  src: url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Light.woff2') format('woff2'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Light.woff') format('woff'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Light.ttf') format('truetype');
+  font-family: "SpaceGrotesk-Light";
+  src:
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Light.woff2") format("woff2"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Light.woff") format("woff"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Light.ttf") format("truetype");
   font-weight: 300;
   font-display: swap;
   font-style: normal;
 }
 @font-face {
-  font-family: 'SpaceGrotesk-Regular';
-  src: url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.woff2') format('woff2'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.woff') format('woff'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.ttf') format('truetype');
+  font-family: "SpaceGrotesk-Regular";
+  src:
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.woff2") format("woff2"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.woff") format("woff"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.ttf")
+      format("truetype");
   font-weight: 400;
   font-display: swap;
   font-style: normal;
 }
 @font-face {
-  font-family: 'SpaceGrotesk-Medium';
-  src: url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Medium.woff2') format('woff2'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Medium.woff') format('woff'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Medium.ttf') format('truetype');
+  font-family: "SpaceGrotesk-Medium";
+  src:
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Medium.woff2") format("woff2"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Medium.woff") format("woff"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Medium.ttf") format("truetype");
   font-weight: 500;
   font-display: swap;
   font-style: normal;
 }
 @font-face {
-  font-family: 'SpaceGrotesk-SemiBold';
-  src: url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.woff2') format('woff2'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.woff') format('woff'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.ttf') format('truetype');
+  font-family: "SpaceGrotesk-SemiBold";
+  src:
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.woff2")
+      format("woff2"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.woff") format("woff"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.ttf")
+      format("truetype");
   font-weight: 600;
   font-display: swap;
   font-style: normal;
 }
 @font-face {
-  font-family: 'SpaceGrotesk-Bold';
-  src: url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.woff2') format('woff2'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.woff') format('woff'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.ttf') format('truetype');
+  font-family: "SpaceGrotesk-Bold";
+  src:
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.woff2") format("woff2"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.woff") format("woff"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.ttf") format("truetype");
   font-weight: 700;
   font-display: swap;
   font-style: normal;
@@ -69,10 +77,13 @@
 'wght' (range from 300.0 to 700.0
 */
 @font-face {
-  font-family: 'SpaceGrotesk-Variable';
-  src: url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Variable.woff2') format('woff2'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Variable.woff') format('woff'),
-  url('/assets/fonts/SpaceGrotesk/SpaceGrotesk-Variable.ttf') format('truetype');
+  font-family: "SpaceGrotesk-Variable";
+  src:
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Variable.woff2")
+      format("woff2"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Variable.woff") format("woff"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Variable.ttf")
+      format("truetype");
   font-weight: 300 700;
   font-display: swap;
   font-style: normal;
@@ -82,7 +93,8 @@
 
 @font-face {
   font-family: SpaceMono;
-  src: local(SpaceMono-Bold),
+  src:
+    local(SpaceMono-Bold),
     url(/assets/fonts/SpaceMono/SpaceMono-Bold.ttf) format("truetype");
   font-weight: bold;
   font-style: normal;
@@ -90,3 +102,16 @@
   font-stretch: normal;
 }
 
+/* ------ SpaceMonoFixed -------- */
+
+@font-face {
+  font-family: SpaceMonoFixed;
+  src:
+    local(SpaceMono-Bold),
+    url(/assets/fonts/SpaceMono/SpaceMono-Bold.ttf) format("truetype");
+  size-adjust: 90%;
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+  font-stretch: normal;
+}

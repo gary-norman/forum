@@ -107,9 +107,16 @@
   width: 5.5rem;
 }
 
-.invisible {
+.invisible,
+.invisible-notify {
   visibility: hidden;
-  height: 0;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.invisible-notify {
+  margin-block: -0.6rem !important;
 }
 
 .hidden {
@@ -266,6 +273,7 @@ a:active,
 .user-page-pic,
 .profile-pic--empty,
 .channel-pic {
+  font-family: SpaceMonoFixed, system-ui;
   font-size: inherit;
   position: relative;
 }
@@ -503,6 +511,7 @@ a:active,
 .modal-header {
   display: flex;
   justify-content: center;
+  padding-block: 0 1.6rem;
   & > div {
     position: relative;
     font-size: 1.6rem;
@@ -968,7 +977,7 @@ input[type="checkbox"] {
 
 .logreg-form {
   /* margin-block: auto; */
-  padding-block: 1.6rem 1.6rem;
+  padding-block: 0 1.6rem;
 }
 #resetForm {
   & .form-title {
@@ -2119,8 +2128,37 @@ main {
   }
 }
 
+#error-400,
+#error-500 {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
 
-.content-error{
+  flex: 1 0 0;
+  align-self: stretch;
+  height: 100%;
+  padding: 3.2rem 6.8rem 0 0;
+
+  &.active-feed {
+    display: flex;
+    opacity: 1;
+  }
+
+  & .content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+
+    & button {
+      margin-top: 2rem;
+    }
+  }
+}
+
+#error-400 .content,
+#error-500 .content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2633,6 +2671,17 @@ main {
 
   &::-webkit-scrollbar-thumb:hover {
     background: var(--clr-bg-4);
+  }
+}
+
+.scroll-down--nobar {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  &::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
   }
 }
 

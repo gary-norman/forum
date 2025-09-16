@@ -35,47 +35,80 @@ func CreateColors() *Colors {
 }
 
 type Errors struct {
-	Close       string
-	ConnClose   string
-	ConnInit    string
-	ConnConn    string
+	// Close: Unable to close "v" called by "v" with error "v"
+	Close string
+	// ConnClose: Unable to close connection to "v" called by "v"
+	ConnClose string
+	// ConnInit: Unable to initialise connection to "v" called by "v"
+	ConnInit string
+	// ConnConn: Unable to connect to "v" called by "v(v)"
+	ConnConn string
+	// ConnSuccess: Server listening on "v" - success!
 	ConnSuccess string
-	DBSuccess   string
-	Convert     string
-	Cookies     string
-	CreateFile  string
-	Delete      string
-	Divider     string
-	Edit        string
-	Encode      string
-	Execute     string
-	Generic     string
-	Insert      string
+	// DBSuccess: Database connected: "v" "v" - success!
+	DBSuccess string
+	// Convert: Unable to convert "v" called by "v" with error "v"
+	Convert string
+	// Cookies: Unable to "v" cookies with error "v"
+	Cookies string
+	// CreateFile: Unable to create file "v" with error "v"
+	CreateFile string
+	// Delete: Unable to delete "v" with error "v"
+	Delete string
+	// Divider: Error dividing "v" by "v" with error "v"
+	Divider string
+	// Edit: Unable to edit "v" with error "v"
+	Edit string
+	// Encode: Unable to encode "v" with error "v"
+	Encode string
+	// Execute: Unable to execute "v" with error "v"
+	Execute string
+	// Generic: Generic error occurred: "v"
+	Generic string
+	// Insert: Unable to insert "v" with error "v"
+	Insert string
 	// KeyValuePair: "v" (blue), "v" (white)
 	KeyValuePair string
-	Login        string
-	NoRows       string
+	// Login: Unable to login user "v" with error "v"
+	Login string
+	// NoRows: No rows found for query "v"
+	NoRows string
 	// NotFound: Unable to find "v" called by "v" with error "v"
-	NotFound  string
-	Open      string
-	Parse     string
-	Post      string
-	Comment   string
-	Printf    string
+	NotFound string
+	// Open: Unable to open "v" with error "v"
+	Open string
+	// Parse: Unable to parse "v" with error "v"
+	Parse string
+	// Post: Unable to post "v" with error "v"
+	Post string
+	// Comment: Unable to add comment "v" with error "v"
+	Comment string
+	// Printf: Error formatting string "v" with error "v"
+	Printf string
+	// Protected: Attempt to access protected resource "v" denied
 	Protected string
 	// Query: Unable to query "v" with error "v"
-	Query        string
-	Read         string
+	Query string
+	// Read: Unable to read "v" with error "v"
+	Read string
+	// RetrieveFile: Unable to retrieve file "v" with error "v"
 	RetrieveFile string
 	// Register: unable to register "v" with error "v"
-	Register  string
-	SaveFile  string
-	Shutdown  string
+	Register string
+	// SaveFile: Unable to save file "v" with error "v"
+	SaveFile string
+	// Shutdown: Error during shutdown: "v"
+	Shutdown string
+	// Unmarshal: Unable to unmarshal "v" with error "v"
 	Unmarshal string
-	Update    string
+	// Update: Unable to update "v" with error "v"
+	Update string
+	// UserModel: Error in user model "v" with error "v"
 	UserModel string
-	Write     string
+	// Write: Unable to write "v" with error "v"
+	Write string
 }
+
 type Message struct {
 	Name, Text string
 }

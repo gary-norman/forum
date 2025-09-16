@@ -1,3 +1,4 @@
+import { showInlineNotification } from "./notifications.js";
 export function listenToLikeDislike() {
   const postControls = document.querySelectorAll(".post-controls");
   const sidebarProfile = document.querySelector(".sidebarProfile");
@@ -26,6 +27,7 @@ export function listenToLikeDislike() {
     const postID = postCard.getAttribute("data-post-id");
     const commentID = postCard.getAttribute("data-comment-id");
     const channelID = postCard.getAttribute("data-channel-id");
+    const notifier = postCard.querySelector(`#post-card-info-${postID}`);
 
     if (!likeButton._handler) {
       likeButton._handler = reactionHandlerFactory({
@@ -37,6 +39,7 @@ export function listenToLikeDislike() {
         postID,
         commentID,
         channelID,
+        notifier,
         currentUserID,
       });
       likeButton.addEventListener("click", likeButton._handler);
@@ -52,6 +55,7 @@ export function listenToLikeDislike() {
         postID,
         commentID,
         channelID,
+        notifier,
         currentUserID,
       });
       dislikeButton.addEventListener("click", dislikeButton._handler);
@@ -96,9 +100,10 @@ function handleReaction({
   postID,
   commentID,
   channelID,
+  notifier,
   currentUserID,
 }) {
-  console.clear();
+  // console.clear();
 
   let likeCount = parseInt(likeCountElement.textContent, 10);
   let dislikeCount = parseInt(dislikeCountElement.textContent, 10);
@@ -111,6 +116,16 @@ function handleReaction({
 
   let mainCount = isLike ? likeCount : dislikeCount;
   let altCount = isLike ? dislikeCount : likeCount;
+
+  if (!currentUserID) {
+    showInlineNotification(
+      notifier,
+      "",
+      "You must be logged in to like or dislike a post.",
+      false,
+    );
+    return;
+  }
 
   const isActive = mainButton.classList.contains("active");
 

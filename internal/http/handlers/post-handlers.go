@@ -85,15 +85,16 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	// Parse post ID from URL
 	postID, err := models.GetIntFromPathValue(r.PathValue("postId"))
 	if err != nil {
-		view.RenderErrorPage(w, models.NotFoundLocation("post"))
+		error := fmt.Errorf(ErrorMsgs().NotFound, r.PathValue("postId"), "GetThisPost", err)
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), error)
 		return
 	}
 
 	// Fetch the post
 	post, err := p.App.Posts.GetPostByID(postID)
 	if err != nil {
-
-		view.RenderErrorPage(w, models.NotFoundLocation("post"))
+		error := fmt.Errorf(ErrorMsgs().NotFound, postID, "GetThisPost", err)
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), error)
 		return
 	}
 	posts = append(posts, post)

@@ -68,55 +68,49 @@ export function changePage(page) {
   selectActiveFeed();
 }
 
-export function fetchData(entity, Id) {
-  // console.log(`%cFetching ${entity} data for ID:`, expect, Id);
+function renderContent(data, entity) {
+  const content = data[`${entity}sHTML`];
+  const target = document.getElementById(`${entity}-page`);
+  if (target && content) {
+    target.innerHTML = content;
 
-  // if (Id === "home") {
-  //   console.log("home");
-  //   history.pushState({}, "", `/`);
-  //   fetch(`/`)
-  //       .then((response) => {
-  //         if (!response.ok) {
-  //           throw new Error(`HTTP error! status: ${response.status}`);
-  //         }
-  //         return response.json();
-  //       })
-  //       .then((data) => {
-  //         const content = data[`${entity}sHTML`];
-  //         const target = document.getElementById(`${entity}-page`);
-  //         if (target && content) {
-  //           target.innerHTML = content;
-  //           document.dispatchEvent(newContentLoaded);
-  //         } else {
-  //           console.warn("Target element or content missing");
-  //         }
-  //       })
-  //       .catch((error) => console.error(`Error fetching ${entity} data:`, error));
-  // } else {
-  //   console.log("other");
+    // Dispatch custom event
+    const newContentLoaded = new Event("newContentLoaded");
+    document.dispatchEvent(newContentLoaded);
+  } else {
+    console.warn("Target element or content missing");
+  }
+}
 
-  const stateObj = { entity: entity, id: Id };
+export async function fetchData(entity, Id) {
+  const stateObj = { entity, id: Id };
   const url = `/cdx/${entity}/${Id}`;
   history.pushState(stateObj, "", url);
-  return fetch(`/${entity}/${Id}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const content = data[`${entity}sHTML`];
-      const target = document.getElementById(`${entity}-page`);
-      if (target && content) {
-        target.innerHTML = content;
-        document.dispatchEvent(newContentLoaded);
-      } else {
-        console.warn("Target element or content missing");
-      }
-    })
-    .catch((error) => showMainNotification(error));
-  // }
+
+  try {
+    const response = await fetch(`/${entity}/${Id}`);
+    const data = await response.json().catch(() => null); // catch bad JSON
+
+    if (!response.ok) {
+      // Wrap and rethrow with data
+      throw {
+        error: new Error(`HTTP error! status: ${response.status}`),
+        data,
+      };
+    }
+
+    renderContent(data, entity);
+  } catch (e) {
+    console.error(e.error || e);
+
+    if (e.data) {
+      // Render the backend-provided error page (e.g. 500 HTML payload)
+      renderContent(e.data, entity);
+    } else {
+      // As a fallback, maybe show a generic message
+      console.warn("No usable data provided for error rendering");
+    }
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {

@@ -17,9 +17,11 @@ export function showInlineNotification(
   originalText,
   messageSuccess,
   success,
+  classToRemove = "invisible-notify",
   timeout = 2500,
 ) {
   // const notification = activePageElement.getElementById(elementID);
+  notification.classList.remove(classToRemove);
   notification.textContent = messageSuccess;
   notification.style.color = "var(--clr-accent--1)";
   if (!success) {
@@ -27,6 +29,7 @@ export function showInlineNotification(
     setTimeout(() => {
       notification.textContent = originalText;
       notification.style.color = "var(--clr-fg-1)";
+      notification.classList.add(classToRemove);
     }, timeout);
   }
 }

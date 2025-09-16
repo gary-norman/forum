@@ -23,7 +23,7 @@
         <h2 {{ if (eq $dot.ThisChannel.Privacy true) }} class="private-channel align-self-start" {{ end }}>
           /{{ $dot.ThisChannel.Name }}
         </h2>
-        {{ template "user-counters" (dict "Members" $dot.ThisChannel.Members "MembersOnline" $dot.ThisChannel.MembersOnline) }}
+        {{ template "user-counters" (dict "Members" $dot.ThisChannel.Members "Online" $dot.ThisChannel.MembersOnline) }}
       </div>
     </div>
     <div class="page-buttons">

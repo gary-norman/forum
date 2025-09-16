@@ -55,3 +55,12 @@ func ToHTMLVar(s string) string {
 
 	return parts[0] + "sHTML"
 }
+
+func NotFoundLocation(location string) NotFound {
+	data := NotFound{
+		Instance: location + "-page",
+		Location: "not-found",
+		Message:  location,
+	}
+	return data
+}

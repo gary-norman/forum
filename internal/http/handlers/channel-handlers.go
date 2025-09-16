@@ -93,14 +93,14 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 	// Parse channelID from the request
 	channelID, err := models.GetIntFromPathValue(r.PathValue("channelId"))
 	if err != nil {
-		http.Error(w, `{"error": "channelId must be an integer"}`, http.StatusBadRequest)
+		view.RenderErrorPage(w, models.NotFoundLocation("channel"))
 		return
 	}
 
 	// Fetch the channel
 	foundChannels, err := c.App.Channels.GetChannelsByID(channelID)
 	if err != nil || len(foundChannels) == 0 {
-		http.Error(w, `{"error": "Channel not found"}`, http.StatusNotFound)
+		view.RenderErrorPage(w, models.NotFoundLocation("channel"))
 		return
 	}
 	thisChannel := foundChannels[0]

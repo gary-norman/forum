@@ -17,7 +17,7 @@ export const newContentLoaded = new CustomEvent("newContentLoaded");
 window.addEventListener("popstate", (event) => {
   if (!event.state || typeof event.state !== "object") {
     // Handle missing or invalid state gracefully
-    displayError("Navigation state is missing or invalid.");
+    showMainNotification("Navigation state is missing or invalid.");
     return;
   }
   const { entity, id } = event.state;
@@ -31,7 +31,7 @@ window.addEventListener("popstate", (event) => {
     try {
       setActivePage(entity);
       changePage(page);
-      fetchData(entity, id);
+      return fetchData(entity, id);
     } catch (err) {
       showMainNotification("Failed to fetch data.");
       // Optionally log error or handle further

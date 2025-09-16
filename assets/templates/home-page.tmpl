@@ -1,21 +1,19 @@
 {{ define "home-page" }}
-  {{ $userID := .UserID }}
-  {{ $dot := .dot }}
-  {{ with $dot.CurrentUser }}
-    {{ $userID = .ID }}
-  {{ end }}
-  {{ $instance := "home-page" }}
-  {{ $userPosts := .UserPosts }}
-  {{ $allPosts := .AllPosts }}
-  {{ $tracer := printf "%s > %s" .Tracer "home-page" }}
-  {{ with $tracer }}
-{{/*    {{ fprint "Trace" . }} */}}
-  {{ end }}
-  <div class="container-content">
-    <div class="content">
-  {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "home-page") }}
-  {{ template "home-page-feed" (dict "dot" $dot "Tracer" $tracer "UserPosts" $userPosts "AllPosts" $allPosts "UserID" $userID "Instance" $instance) }}
-    </div>
-{{/*    {{ template "right-panel" (dict "dot" . "UserID" $userID "Tracer" $tracer) }}*/}}
+{{ $userID := .UserID }}
+{{ $dot := .dot }}
+{{ with $dot.CurrentUser }}
+  {{ $userID = .ID }}
+{{ end }}
+{{ $instance := "home-page" }}
+{{ $userPosts := .UserPosts }}
+{{ $allPosts := .AllPosts }}
+{{ $tracer := printf "%s > %s" .Tracer "home-page" }}
+{{ with $tracer }}
+{{ end }}
+<div class="container-content">
+  <div class="content">
+    {{ template "filters-row" (dict "dot" $dot "Tracer" $tracer "UserID" $userID "calledBy" "home-page") }}
+    {{ template "home-page-feed" (dict "dot" $dot "Tracer" $tracer "UserPosts" $userPosts "AllPosts" $allPosts "UserID" $userID "Instance" $instance) }}
   </div>
+</div>
 {{ end }}

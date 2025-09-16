@@ -6,5 +6,5 @@
     <div class="content scrollable scroll-down scroll-down--nobar" aria-labelledby="post-title">
        {{ template "this-post" (dict "dot" . "CurrentUser" .CurrentUser "UserID" .UserID "ThisPost" .ThisPost "Tracer" $tracer "Instance" $instance) }}
     </div>
-  </div>
-{{ end }}
+  {{ end }}
+{{end}}

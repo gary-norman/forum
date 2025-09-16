@@ -27,8 +27,8 @@ export function listenToLikeDislike() {
     const commentID = postCard.getAttribute("data-comment-id");
     const channelID = postCard.getAttribute("data-channel-id");
 
-    likeButton.addEventListener("click", () => {
-      handleReaction({
+    if (!likeButton._handler) {
+      likeButton._handler = reactionHandlerFactory({
         type: "like",
         likeButton,
         dislikeButton,
@@ -39,10 +39,11 @@ export function listenToLikeDislike() {
         channelID,
         currentUserID,
       });
-    });
+      likeButton.addEventListener("click", likeButton._handler);
+    }
 
-    dislikeButton.addEventListener("click", () => {
-      handleReaction({
+    if (!dislikeButton._handler) {
+      dislikeButton._handler = reactionHandlerFactory({
         type: "dislike",
         likeButton,
         dislikeButton,
@@ -53,8 +54,37 @@ export function listenToLikeDislike() {
         channelID,
         currentUserID,
       });
-    });
+      dislikeButton.addEventListener("click", dislikeButton._handler);
+    }
   });
+}
+
+function reactionHandlerFactory(
+  type,
+  likeButton,
+  dislikeButton,
+  likeCountElement,
+  dislikeCountElement,
+  postID,
+  commentID,
+  channelID,
+  notifier,
+  currentUserID,
+) {
+  return function (e) {
+    console.log("REATTACHED:", e.currentTarget);
+    handleReaction(
+      type,
+      likeButton,
+      dislikeButton,
+      likeCountElement,
+      dislikeCountElement,
+      postID,
+      commentID,
+      channelID,
+      currentUserID,
+    );
+  };
 }
 
 function handleReaction({

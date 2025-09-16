@@ -29,6 +29,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 	var userPosts []models.Post
 	userLoggedIn := true
+	userID := models.ZeroUUIDField()
 	// SECTION --- posts and comments ---
 	// postDAO := dao.NewDAO[*models.Post](h.App.DB)
 	// ctx := context.Background()
@@ -129,6 +130,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	channelMap := make(map[int64]bool)
 
 	if userLoggedIn {
+		userID = currentUser.ID
 		userPosts = h.Post.GetUserPosts(currentUser, allPosts)
 		// attach following/follower numbers to currently logged-in user
 		currentUser.Followers, currentUser.Following, err = h.App.Loyalty.CountUsers(currentUser.ID)
@@ -173,8 +175,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	// SECTION -- template ---
 	data := models.TemplateData{
 		// ---------- users ----------
-		// FIXME Logged out user ID doesn't equal to 0 - it gets generated anyway
-		UserID:      models.NewUUIDField(), // Default value of 0 for logged out users
+		UserID:      userID,
 		AllUsers:    allUsers,
 		RandomUser:  randomUser,
 		CurrentUser: currentUser,
@@ -190,6 +191,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		Instance:   "home-page",
 		ImagePaths: h.App.Paths,
 	}
+	log.Printf(ErrorMsgs().KeyValuePair, "GetHome > data.UserID", data.UserID)
 	// models.JsonError(TemplateData)
 	tpl, err := view.GetTemplate()
 	if err != nil {

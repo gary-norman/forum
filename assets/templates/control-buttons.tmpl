@@ -2,6 +2,10 @@
 {{- /*gotype: github.com/gary-norman/forum/internal/models.TemplateData*/ -}}
 {{ $dot := .dot }}
 {{ $userID := .userID }}
+{{ $nouser := false }}
+{{ if eq (printf "%s" .userID) "00000000-0000-0000-0000-000000000000" }}
+  {{ $nouser = true }}
+{{ end }}
 {{ $calledBy := .calledBy }}
 {{ $thisPost := .ThisPost }}
 {{ $tracer := printf "%s > %s" .Tracer "control-buttons" }}
@@ -28,27 +32,27 @@
       {{ if eq $calledBy "post-card"}}
         {{ $post := .Post }}
         {{$status := reactionStatus $userID $post.ID 0}}
-        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{ else }}{{if $status.Liked}}active{{ else }} {{end}} {{ end }}">
+        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $nouser true}}nouser{{ else }}{{if $status.Liked}}active{{ else }} {{end}} {{ end }}">
           <span class="btn-likes">{{$post.Likes}}</span>
         </button>
-        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{ else }}{{if $status.Disliked}}active{{ else }} {{end}} {{ end }}" >
+        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $nouser true}}nouser{{ else }}{{if $status.Disliked}}active{{ else }} {{end}} {{ end }}" >
           <span class="btn-dislikes">{{$post.Dislikes}}</span>
         </button>
         {{ if eq $thisPost "true" }}
 {{/* the detailed post */}}
-          <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}" data-action="comment-post" data-post-id="{{$post.ID}}">
+          <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $nouser true}}nouser{{end}}" data-action="comment-post" data-post-id="{{$post.ID}}">
             <span class="btn-reply">reply</span>
           </button>
         {{ else }}
 {{/* posts on any list */}}
-          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $userID nil}}nouser{{end}}" data-dest="post" data-action="navigate--comment-post" data-post-id="{{$post.ID}}">
+          <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $nouser true}}nouser{{end}}" data-dest="post" data-action="{{ if ne $nouser true}}navigate--{{ end }}comment-post" data-post-id="{{$post.ID}}">
             <span class="btn-reply">{{$post.CommentsCount}}</span>
           </button>
         {{ end }}
         <button id="share-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" popovertarget="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
           <span class="btn-share">share</span>
         </button>
-        {{ if ne $userID nil}}
+        {{ if ne $nouser true}}
             {{ if ne $userID $post.AuthorID}}
                 <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
                     <span class="btn-report">report</span>
@@ -73,7 +77,7 @@
           <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{if $status.Disliked}}active{{end}}">
             <span class="btn-dislikes" data-dislike-ID="user-{{$comment.ID}}">{{$comment.Dislikes}}</span>
           </button>
-          {{ if ne $userID nil}}
+          {{ if ne $nouser true}}
             {{ if ne $calledBy "reply_level1"}}
               <button id="reply-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
                 <span class="btn-reply">reply</span>
@@ -83,7 +87,7 @@
           <button id="share-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" popovertarget="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
             <span class="btn-share">share</span>
           </button>
-          {{ if ne $userID nil}}
+          {{ if ne $nouser true}}
 {{/* INFO If logged in user is the owner of the post/comment, show Edit*/}}
             {{ if eq $userID $comment.AuthorID}}
               <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
@@ -101,7 +105,7 @@
       {{ end }} {{/* end of eq $calledBy "comment-card" */}}
     {{ end }}{{/* end to buttons NOT present in right-panel */}}
     {{ if eq $calledBy "right-panel"}}
-      {{ if ne $userID nil }}
+      {{ if ne $nouser true }}
 {{/* TODO when user is an administrator, button prepared; needs admin check*/}}
         {{if eq $instance "user-page"}}
           {{/*        <button class="btn-md btn-secondary btn-icotext btn-filled btn-action" >*/}}
@@ -115,7 +119,7 @@
             <span class="btn-report">report</span>
           </button>
         {{ end }} {{/* end of if "user-page" or "channel-page" */}}
-      {{ end }} {{/* end of if ne $userID nil */}}
+      {{ end }} {{/* end of if ne $nouser true */}}
     {{ end }} {{/* end of eq $calledBy "right-panel" */}}
   </div> {{/* end of div button-row-wrap */}}
 {{ end}}

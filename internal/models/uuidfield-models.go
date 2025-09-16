@@ -21,6 +21,11 @@ func NewUUIDField() UUIDField {
 	return UUIDField{UUID: uuid.New()}
 }
 
+// ZeroUUIDField returns a UUIDField with a nil UUID
+func ZeroUUIDField() UUIDField {
+	return UUIDField{UUID: uuid.Nil}
+}
+
 // String implements fmt.Stringer
 func (u UUIDField) String() string {
 	return u.UUID.String()

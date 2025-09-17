@@ -31,7 +31,7 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	userID, err := models.UUIDFieldFromString(idStr)
 	if err != nil {
 		error := fmt.Errorf(ErrorMsgs().NotFound, r.PathValue("userId"), "GetThisUser", err)
-		view.RenderErrorPage(w, models.NotFoundLocation("user"), error)
+		view.RenderErrorPage(w, models.NotFoundLocation("user"), 400, error)
 		return
 	}
 
@@ -50,8 +50,8 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	// Fetch the thisUser
 	thisUser, err := u.App.Users.GetUserByID(userID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "error fetching thisUser", err)
-		// http.Error(w, `{"error": "thisUser not found"}`, http.StatusNotFound)
+		error := fmt.Errorf(ErrorMsgs().NotFound, userID, "GetThisUser", err)
+		view.RenderErrorPage(w, models.NotFoundLocation("user"), 400, error)
 	}
 
 	// Fetch thisUser loyalty

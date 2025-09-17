@@ -101,8 +101,6 @@ export async function fetchData(entity, Id) {
 
     renderContent(data, entity);
   } catch (e) {
-    console.error(e.error || e);
-
     if (e.data) {
       // Render the backend-provided error page (e.g. 500 HTML payload)
       renderContent(e.data, entity);

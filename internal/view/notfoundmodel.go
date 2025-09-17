@@ -28,8 +28,9 @@ func RenderErrorPage[T ErrorPageData](w http.ResponseWriter, data T, status int,
 	}
 
 	// Prepare JSON payload
-	response := map[string]string{
-		htmlKey: renderedPage.String(),
+	response := map[string]any{
+		"status": status,
+		htmlKey:  renderedPage.String(),
 	}
 
 	// Set status code (defaults to 500 if misused)

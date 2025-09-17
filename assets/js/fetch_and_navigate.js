@@ -85,8 +85,13 @@ function renderContent(data, entity) {
         .join(" ");
     }
 
-    // Dispatch custom event
-    const newContentLoaded = new Event("newContentLoaded");
+    // Dispatch custom event with details
+    const newContentLoaded = new CustomEvent("newContentLoaded", {
+      detail: {
+        entity,
+        status: data.status || 200,
+      },
+    });
     document.dispatchEvent(newContentLoaded);
   } else {
     console.warn("Target element or content missing");

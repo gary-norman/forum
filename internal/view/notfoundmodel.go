@@ -14,30 +14,38 @@ type ErrorPageData interface {
 	GetInstance() string
 }
 
-func RenderErrorPage[T NotFound](w http.ResponseWriter, data T, error error) {
+func RenderErrorPage[T ErrorPageData](w http.ResponseWriter, data T, status int, cause error) {
 	var renderedPage bytes.Buffer
-	instance := data.GetInstance()
-	HTMLstr := models.ToHTMLVar(instance)
+	instance := data.GetInstance()        // e.g. "user" or "post"
+	htmlKey := models.ToHTMLVar(instance) // e.g. "userHTML"
 
-	err := Template.ExecuteTemplate(&renderedPage, instance, data)
-	if err != nil {
+	// Try rendering template
+	if err := Template.ExecuteTemplate(&renderedPage, instance, data); err != nil {
 		errorStr := fmt.Sprintf("Error rendering %v: %v", instance, err)
 		log.Println(errorStr)
 		http.Error(w, errorStr, http.StatusInternalServerError)
 		return
 	}
 
-	// Send the pre-rendered HTML as JSON
+	// Prepare JSON payload
 	response := map[string]string{
-		HTMLstr: renderedPage.String(),
+		htmlKey: renderedPage.String(),
 	}
 
-	w.WriteHeader(http.StatusInternalServerError)
-	// Write the response as JSON
+	// Set status code (defaults to 500 if misused)
+	if status < 400 {
+		status = http.StatusInternalServerError
+	}
+	w.WriteHeader(status)
+
+	// Write JSON to response
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		errorStr := fmt.Sprintf("Error encoding JSON for %v: %v", instance, err)
 		http.Error(w, errorStr, http.StatusInternalServerError)
+		return
 	}
 
-	log.Println(error)
+	if cause != nil {
+		log.Printf("Rendering error page for %v (status %d): %v\n", instance, status, cause)
+	}
 }

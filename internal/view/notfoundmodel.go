@@ -10,7 +10,7 @@ import (
 	"github.com/gary-norman/forum/internal/models"
 )
 
-type NotFound interface {
+type ErrorPageData interface {
 	GetInstance() string
 }
 

@@ -1,9 +1,9 @@
 package models
 
-type NotFound struct {
+type ErrorPageData struct {
 	Instance string
 	Location string
 	Message  string
 }
 
-func (n NotFound) GetInstance() string { return n.Instance }
+func (e ErrorPageData) GetInstance() string { return e.Instance }

@@ -74,6 +74,17 @@ function renderContent(data, entity) {
   if (target && content) {
     target.innerHTML = content;
 
+    // Add error class if status is present
+    if (data.status && data.status >= 400) {
+      target.classList.add(`error-${data.status}`);
+    } else {
+      // Clean up previous error classes if re-rendering normal content
+      target.className = target.className
+        .split(" ")
+        .filter((cls) => !cls.startsWith("error-"))
+        .join(" ");
+    }
+
     // Dispatch custom event
     const newContentLoaded = new Event("newContentLoaded");
     document.dispatchEvent(newContentLoaded);
@@ -89,24 +100,25 @@ export async function fetchData(entity, Id) {
 
   try {
     const response = await fetch(`/${entity}/${Id}`);
-    const data = await response.json().catch(() => null); // catch bad JSON
+    const data = await response.json();
 
-    if (!response.ok) {
-      // Wrap and rethrow with data
-      throw {
-        error: new Error(`HTTP error! status: ${response.status}`),
-        data,
-      };
+    // Always render what backend sent
+    renderContent(data, entity);
+
+    // If backend included a non-OK status, treat it as error
+    if (!response.ok || (data.status && data.status >= 400)) {
+      throw { error: new Error(`Backend error ${data.status || response.status}`), data };
     }
 
-    renderContent(data, entity);
   } catch (e) {
     if (e.data) {
-      // Render the backend-provided error page (e.g. 500 HTML payload)
+      // Render the backend-provided error page
       renderContent(e.data, entity);
     } else {
-      // As a fallback, maybe show a generic message
-      console.warn("No usable data provided for error rendering");
+      // Fallback if no data available
+      const target = document.getElementById(`${entity}-page`);
+      if (target) {
+        target.innerHTML = `<div class="error">Something went wrong</div>`;
     }
   }
 }

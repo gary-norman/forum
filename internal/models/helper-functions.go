@@ -92,6 +92,11 @@ type Number interface {
 	int64 | string
 }
 
+func EncodeError(item, location string, err error) error {
+	error := fmt.Errorf(ErrorMsgs().Fetch, item, location, err)
+	return error
+}
+
 func FetchError(item, location string, err error) error {
 	error := fmt.Errorf(ErrorMsgs().Fetch, item, location, err)
 	return error

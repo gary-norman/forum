@@ -309,6 +309,137 @@ a:active,
   z-index: var(--z-index-header);
 }
 
+/* --- Codex branding --- */
+
+.branding {
+  /*display: flex;*/
+  /*flex-grow: 1;*/
+  /*& p {*/
+  /*    letter-spacing: .4em;*/
+  /*    text-shadow: var(--shadow-text);*/
+  /*}*/
+  /*& p:nth-child(odd) {*/
+  /*    color: var(--clr-accent--2);*/
+  /*}*/
+  /*& p:nth-child(even) {*/
+  /*    color: var(--clr-accent--1);*/
+  /*}*/
+  background: url("/assets/icons/codex-logo-green.svg") no-repeat;
+  width: 10.4rem;
+  height: 3.5rem;
+}
+
+.searchbar {
+  height: 3rem;
+  width: calc(100vw / 4);
+  padding: 1rem;
+  border-radius: 5rem;
+}
+
+.wrapper-search {
+  display: flex;
+  /* flex-grow: 2; */
+  /* justify-content: center; */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 48.4rem;
+
+  & #search {
+  }
+
+  & #search-results-page {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    max-width: 48.4rem;
+    gap: 1.2rem;
+    top: 6rem;
+    padding: 0 0 0.8rem 0;
+    max-height: 52rem;
+    overflow: auto;
+    background: var(--clr-bg-2);
+    border: 1px solid var(--clr-bg-4);
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow:
+      rgb(0 0 0 / 23%) 0 3px 6px,
+      rgb(0 0 0 / 35%) 0 3px 6px;
+    z-index: var(--z-index-modal);
+    width: 100%;
+
+    /*& > div:first-child > :nth-of-type(div) > {*/
+    /*  margin-top: 12rem;*/
+    /*}*/
+
+    /*& > div:last-child {*/
+    /*  margin-top: 0;*/
+    /*}*/
+
+    & .solid {
+      /*color: var(--clr-fg-4);*/
+      width: calc(100% - 2.4rem);
+    }
+
+    & > *:not(hr),
+    & #result-channels,
+    & #result-users,
+    & #result-posts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      width: 100%;
+
+      & .result-cards {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 0 0.8rem;
+
+        & .result-card {
+          position: relative;
+          display: flex;
+          flex-direction: row;
+          gap: 0.8rem;
+          padding: 1.2rem 1.2rem;
+          border-radius: 0.4rem;
+
+          & .profile-pic,
+          .profile-pic--empty {
+            border: 1px solid var(--clr-bg-4);
+          }
+
+          &:hover {
+            background: var(--clr-bg-1);
+
+            & .profile-pic,
+            .profile-pic--empty {
+              border: 1px solid var(--clr-bg-5);
+            }
+          }
+
+          &.result-post {
+            flex-direction: column;
+            gap: 0.4rem;
+
+            & p,
+            small {
+              max-width: 90ch;
+              max-height: 8ch;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 2; /* Specify the number of lines */
+              -webkit-box-orient: vertical;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 /* ---- grid containers ---- */
 .cont-grid-auto15rem {
   display: grid;
@@ -795,6 +926,14 @@ input[type="date"] {
   }
 }
 
+textarea.inactive-input,
+input[type="text"].inactive-input {
+  pointer-events: none;
+  color: var(--clr-fg-4);
+  resize: none;
+  height: fit-content;
+}
+
 input[type="file"] {
   padding: 0;
   margin-block-end: 0.8rem;
@@ -1189,20 +1328,6 @@ input#register_user:user-invalid {
 /*    transform: translateX(-50%) translateY(-150%);*/
 /*  }*/
 /*}*/
-textarea.inactive-input,
-input[type="text"].inactive-input {
-  pointer-events: none;
-  color: var(--clr-fg-4);
-  resize: none;
-  height: fit-content;
-}
-
-.searchbar {
-  height: 3rem;
-  width: calc(100vw / 4);
-  padding: 1rem;
-  border-radius: 5rem;
-}
 
 /*select {*/
 /*    background: url("/assets/images/down-arrow.svg") no-repeat center right 0.75rem;*/
@@ -1583,26 +1708,6 @@ input[type="text"].inactive-input {
   color: var(--clr-bg-2);
   background: var(--clr-accent--1);
   border: 1px dashed var(--clr-accent--2);
-}
-
-/* --- Codex branding --- */
-
-.branding {
-  /*display: flex;*/
-  /*flex-grow: 1;*/
-  /*& p {*/
-  /*    letter-spacing: .4em;*/
-  /*    text-shadow: var(--shadow-text);*/
-  /*}*/
-  /*& p:nth-child(odd) {*/
-  /*    color: var(--clr-accent--2);*/
-  /*}*/
-  /*& p:nth-child(even) {*/
-  /*    color: var(--clr-accent--1);*/
-  /*}*/
-  background: url("/assets/icons/codex-logo-green.svg") no-repeat;
-  width: 10.4rem;
-  height: 3.5rem;
 }
 
 /* --- Sidebar.--- */
@@ -2278,110 +2383,6 @@ main {
     rgba(0, 0, 0, 0.16) 0 3px 6px,
     rgba(0, 0, 0, 0.23) 0 3px 6px;
   /* z-index: 100; a positive z-index breaks the before */
-}
-
-.wrapper-search {
-  display: flex;
-  /* flex-grow: 2; */
-  /* justify-content: center; */
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: 48.4rem;
-
-  & #search {
-  }
-
-  & #search-results-page {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    max-width: 48.4rem;
-    gap: 1.2rem;
-    top: 6rem;
-    padding: 0 0 0.8rem 0;
-    max-height: 52rem;
-    overflow: auto;
-    background: var(--clr-bg-2);
-    border: 1px solid var(--clr-bg-4);
-    justify-content: flex-start;
-    align-items: center;
-    box-shadow:
-      rgb(0 0 0 / 23%) 0 3px 6px,
-      rgb(0 0 0 / 35%) 0 3px 6px;
-    z-index: var(--z-index-modal);
-    width: 100%;
-
-    /*& > div:first-child > :nth-of-type(div) > {*/
-    /*  margin-top: 12rem;*/
-    /*}*/
-
-    /*& > div:last-child {*/
-    /*  margin-top: 0;*/
-    /*}*/
-
-    & .solid {
-      /*color: var(--clr-fg-4);*/
-      width: calc(100% - 2.4rem);
-    }
-
-    & > *:not(hr),
-    & #result-channels,
-    & #result-users,
-    & #result-posts {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      width: 100%;
-
-      & .result-cards {
-        display: flex;
-        position: relative;
-        flex-direction: column;
-        gap: 0.2rem;
-        padding: 0 0.8rem;
-
-        & .result-card {
-          position: relative;
-          display: flex;
-          flex-direction: row;
-          gap: 0.8rem;
-          padding: 1.2rem 1.2rem;
-          border-radius: 0.4rem;
-
-          & .profile-pic,
-          .profile-pic--empty {
-            border: 1px solid var(--clr-bg-4);
-          }
-
-          &:hover {
-            background: var(--clr-bg-1);
-
-            & .profile-pic,
-            .profile-pic--empty {
-              border: 1px solid var(--clr-bg-5);
-            }
-          }
-
-          &.result-post {
-            flex-direction: column;
-            gap: 0.4rem;
-
-            & p,
-            small {
-              max-width: 90ch;
-              max-height: 8ch;
-              text-overflow: ellipsis;
-              overflow: hidden;
-              display: -webkit-box;
-              -webkit-line-clamp: 2; /* Specify the number of lines */
-              -webkit-box-orient: vertical;
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 .container-card-down {

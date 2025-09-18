@@ -35,5 +35,6 @@ func RenderPageData[T PageModel](w http.ResponseWriter, data T) {
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		errorStr := fmt.Sprintf("Error encoding JSON for %v: %v", instance, err)
 		http.Error(w, errorStr, http.StatusInternalServerError)
+		RenderErrorPage(w, models.NotFoundLocation("page"), 500, models.EncodeError("response", "RenderPageData", err))
 	}
 }

@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+func ErrorMsgs() *Errors {
+	return CreateErrorMessages()
+}
+
 // TimeUpdatable is an interface for types that can update their TimeSince field.
 type TimeUpdatable interface {
 	UpdateTimeSince()
@@ -71,4 +75,38 @@ func NotFoundLocation(location string) ErrorPageData {
 		Message:  "We were unable to find that " + location,
 	}
 	return data
+}
+
+// NotProcess returns an ErrorPageData struct for an "unable to process" error page.
+func NotProcess(request string) ErrorPageData {
+	data := ErrorPageData{
+		Instance: "user-page",
+		Location: "not-found",
+		Message:  "We were unable to process your " + request + " request",
+	}
+	return data
+}
+
+type Number interface {
+	int64 | string
+}
+
+func FetchError(item, location string, err error) error {
+	error := fmt.Errorf(ErrorMsgs().Fetch, item, location, err)
+	return error
+}
+
+func NotFoundError[T Number](item T, location string, err error) error {
+	error := fmt.Errorf(ErrorMsgs().NotFound, item, location, err)
+	return error
+}
+
+func ParseError(item, location string, err error) error {
+	error := fmt.Errorf(ErrorMsgs().Parse, item, location, err)
+	return error
+}
+
+func QueryError(item, location string, err error) error {
+	error := fmt.Errorf(ErrorMsgs().Fetch, item, location, err)
+	return error
 }

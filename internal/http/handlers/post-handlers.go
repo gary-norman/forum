@@ -85,29 +85,27 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	// Parse post ID from URL
 	postID, err := models.GetIntFromPathValue(r.PathValue("postId"))
 	if err != nil {
-		error := fmt.Errorf(ErrorMsgs().NotFound, r.PathValue("postId"), "GetThisPost", err)
-		view.RenderErrorPage(w, models.NotFoundLocation("post"), 400, error)
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), 400, models.NotFoundError(r.PathValue("postId"), "GetThisPost", err))
 		return
 	}
 
 	// Fetch the post
 	post, err := p.App.Posts.GetPostByID(postID)
 	if err != nil {
-		error := fmt.Errorf(ErrorMsgs().NotFound, postID, "GetThisPost", err)
-		view.RenderErrorPage(w, models.NotFoundLocation("post"), 400, error)
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), 400, models.NotFoundError(postID, "GetThisPost", err))
 		return
 	}
 	posts = append(posts, post)
 	foundPosts, err := p.Comment.GetPostsComments(posts)
 	if err != nil {
-		http.Error(w, `{"error": "error fetching post comments"}`, http.StatusInternalServerError)
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.FetchError("post comments", "GetThsiPost", err))
 	}
 	foundPosts = p.Reaction.GetPostsLikesAndDislikes(foundPosts)
 	thisPost = foundPosts[0]
 
 	thisPost.ChannelID, thisPost.ChannelName, err = p.Channel.GetChannelInfoFromPostID(thisPost.ID)
 	if err != nil {
-		http.Error(w, `{"error": "error fetching channel info"}`, http.StatusInternalServerError)
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.FetchError("channel info", "GetThsiPost", err))
 	}
 
 	models.UpdateTimeSince(&thisPost)
@@ -115,24 +113,24 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	// Fetch the channel
 	channel, err := p.App.Channels.GetChannelByID(thisPost.ChannelID)
 	if err != nil {
-		log.Printf(ErrorMsgs().Query, "GetThisPost > GetChannelByID", err)
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.QueryError("channels", "GetThsiPost", err))
 	}
 
 	// Fetch the author
 	author, err := p.App.Users.GetUserByUsername(thisPost.Author, "GetThisPost")
 	if err != nil {
-		log.Printf(ErrorMsgs().Query, "GetThisPost > GetUserByUsername", err)
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.QueryError("users", "GetThsiPost", err))
 	}
 
 	if userLoggedIn {
 		currentUser.Followers, currentUser.Following, err = p.App.Loyalty.CountUsers(currentUser.ID)
 		if err != nil {
-			http.Error(w, `{"error": "error fetching user loyalty"}`, http.StatusInternalServerError)
+			view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.FetchError("user loyalty", "GetThsiPost", err))
 		}
 		// Fetch if the user is a member of the channel
 		isMember, isMemberErr = p.App.Channels.IsUserMemberOfChannel(currentUser.ID, channel.ID)
 		if isMemberErr != nil {
-			log.Printf(ErrorMsgs().Query, "GetThisPost > IsUserMemberOfChannel", err)
+			view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.QueryError("user membership", "GetThsiPost", err))
 		}
 		// Fetch if the user is the owner of the channel
 		isOwner = currentUser.ID == channel.OwnerID

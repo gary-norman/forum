@@ -7,7 +7,7 @@ import (
 	"github.com/gary-norman/forum/internal/models"
 )
 
-func TestReactionModel_Upsert(t *testing.T) {
+func TestReactionModelUpsert(t *testing.T) {
 	type fields struct {
 		DB *sql.DB
 	}

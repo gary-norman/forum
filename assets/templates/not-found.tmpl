@@ -2,11 +2,16 @@
 
     <div class="container-content">
         <div class="content-error">
-            <h1>Oops! 🤔</h1>
-            <p>This {{.Message}} does not exist!</p>
-            <button  class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff" onclick="window.location.href = '/';">
+            <h1>Oops!</h1>
+            <h3 class="error-extra-info">We were unable to find that {{.Message}}!</h3>
+            <div class="flex-align-c">
+            <button  class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff btn-error-retry" onclick="window.location.reload();">
+                <span class="btn-home">retry</span>
+            </button>
+            <button  class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff btn-error-home" onclick="window.location.href = '/';">
                 <span class="btn-home">go home!</span>
             </button>
+            </div>
         </div>
     </div>
 

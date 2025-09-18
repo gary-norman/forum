@@ -52,7 +52,7 @@ func (m *ChannelModel) OwnedOrJoinedByCurrentUser(ID models.UUIDField) ([]models
 		}
 		// FIXME: This is a temporary fix to set the channel as joined:we need to come up with a more robust solution
 		c.Joined = true
-		// TODO (realtime) get this data freom websockets
+		// TODO (realtime) get this data from websockets
 		rnd := RandomInt(1800)
 		c.MembersOnline = rnd
 		channels = append(channels, *c)
@@ -102,7 +102,7 @@ func (m *ChannelModel) GetChannelsByID(id int64) ([]models.Channel, error) {
 		if err != nil {
 			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
-		// TODO (realtime) get this data freom websockets
+		// TODO (realtime) get this data from websockets
 		rnd := RandomInt(1800)
 		c.MembersOnline = rnd
 		channels = append(channels, *c)
@@ -137,7 +137,7 @@ func (m *ChannelModel) GetChannelByID(id int64) (*models.Channel, error) {
 		if err != nil {
 			return nil, err
 		}
-		// TODO (realtime) get this data freom websockets
+		// TODO (realtime) get this data from websockets
 		rnd := RandomInt(1800)
 		c.MembersOnline = rnd
 		channels = append(channels, *c)

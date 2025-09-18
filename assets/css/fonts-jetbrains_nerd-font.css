@@ -1,0 +1,960 @@
+/* @font-face { */
+/*   font-family: "JetBrainsMonoNerdFont"; */
+/*   src: */
+/*     local("JetBrainsMonoNerdFont-Regular"), */
+/*     url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-Regular.ttf") */
+/*       format("truetype"); */
+/*   font-stretch: normal; */
+/*   font-style: normal; */
+/*   font-weight: 400; */
+/* } */
+/* @font-face { */
+/*   font-family: "JetBrainsMonoNerdFont"; */
+/*   src: */
+/*     local("JetBrainsMonoNerdFont-Italic"), */
+/*     url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-Italic.ttf") */
+/*       format("truetype"); */
+/*   font-stretch: normal; */
+/*   font-style: italic; */
+/*   font-weight: 400; */
+/* } */
+/* @font-face { */
+/*   font-family: "JetBrainsMonoNLNerdFont"; */
+/*   src: */
+/*     local("JetBrainsMonoNLNerdFont-Regular"), */
+/*     url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-Regular.ttf") */
+/*       format("truetype"); */
+/*   font-stretch: normal; */
+/*   font-style: normal; */
+/*   font-weight: 400; */
+/* } */
+/* @font-face { */
+/*   font-family: "JetBrainsMonoNLNerdFont"; */
+/*   src: */
+/*     local("JetBrainsMonoNLNerdFont-Italic"), */
+/*     url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-Italic.ttf") */
+/*       format("truetype"); */
+/*   font-stretch: normal; */
+/*   font-style: italic; */
+/*   font-weight: 400; */
+/* } */
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont";
+  src:
+    local("JetBrainsMonoNLNerdFont-Bold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-Bold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+/* @font-face { */
+/*   font-family: "JetBrainsMonoNLNerdFont"; */
+/*   src: */
+/*     local("JetBrainsMonoNLNerdFont-BoldItalic"), */
+/*     url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-BoldItalic.ttf") */
+/*       format("truetype"); */
+/*   font-stretch: normal; */
+/*   font-style: italic; */
+/*   font-weight: 700; */
+/* } */
+/* @font-face { */
+/*   font-family: "JetBrainsMonoNerdFont"; */
+/*   src: */
+/*     local("JetBrainsMonoNerdFont-BoldItalic"), */
+/*     url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-BoldItalic.ttf") */
+/*       format("truetype"); */
+/*   font-stretch: normal; */
+/*   font-style: italic; */
+/*   font-weight: 700; */
+/* } */
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-ExtraBold";
+  src:
+    local("JetBrainsMonoNLNerdFont-ExtraBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-ExtraBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-ExtraBold";
+  src:
+    local("JetBrainsMonoNLNerdFont-ExtraBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-ExtraBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-ExtraLight";
+  src:
+    local("JetBrainsMonoNLNerdFont-ExtraLight"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-ExtraLight.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-ExtraLight";
+  src:
+    local("JetBrainsMonoNLNerdFont-ExtraLightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-ExtraLightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-Light";
+  src:
+    local("JetBrainsMonoNLNerdFont-Light"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-Light.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-Light";
+  src:
+    local("JetBrainsMonoNLNerdFont-LightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-LightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-Medium";
+  src:
+    local("JetBrainsMonoNLNerdFont-Medium"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-Medium.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-Medium";
+  src:
+    local("JetBrainsMonoNLNerdFont-MediumItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-MediumItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-SemiBold";
+  src:
+    local("JetBrainsMonoNLNerdFont-SemiBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-SemiBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-SemiBold";
+  src:
+    local("JetBrainsMonoNLNerdFont-SemiBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-SemiBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-Thin";
+  src:
+    local("JetBrainsMonoNLNerdFont-Thin"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-Thin.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 100;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFont-Thin";
+  src:
+    local("JetBrainsMonoNLNerdFont-ThinItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFont-ThinItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 100;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-Bold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-Bold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-BoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-BoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-ExtraBold";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-ExtraBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-ExtraBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-ExtraBold";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-ExtraBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-ExtraBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-ExtraLight";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-ExtraLight"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-ExtraLight.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-ExtraLight";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-ExtraLightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-ExtraLightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-Italic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-Italic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-Light";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-Light"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-Light.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-Light";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-LightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-LightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-Medium";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-Medium"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-Medium.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-Medium";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-MediumItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-MediumItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-Regular"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-Regular.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-SemiBold";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-SemiBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-SemiBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-SemiBold";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-SemiBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-SemiBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-Thin";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-Thin"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-Thin.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 100;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontMono-Thin";
+  src:
+    local("JetBrainsMonoNLNerdFontMono-ThinItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontMono-ThinItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 100;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-Bold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-Bold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-BoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-BoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-ExtraBold";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-ExtraBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-ExtraBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-ExtraBold";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-ExtraBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-ExtraBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-ExtraLight";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-ExtraLight"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-ExtraLight.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-ExtraLight";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-ExtraLightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-ExtraLightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-Italic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-Italic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-Light";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-Light"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-Light.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-Light";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-LightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-LightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-Medium";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-Medium"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-Medium.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-Medium";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-MediumItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-MediumItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-Regular"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-Regular.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-SemiBold";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-SemiBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-SemiBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-SemiBold";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-SemiBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-SemiBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-Thin";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-Thin"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-Thin.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 100;
+}
+@font-face {
+  font-family: "JetBrainsMonoNLNerdFontPropo-Thin";
+  src:
+    local("JetBrainsMonoNLNerdFontPropo-ThinItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNLNerdFontPropo-ThinItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 100;
+}
+@font-face {
+  font-family: "JetBrainsMono-NF";
+  src:
+    local("JetBrainsMonoNerdFont-Bold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-Bold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-ExtraBold";
+  src:
+    local("JetBrainsMonoNerdFont-ExtraBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-ExtraBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-ExtraBold";
+  src:
+    local("JetBrainsMonoNerdFont-ExtraBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-ExtraBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-ExtraLight";
+  src:
+    local("JetBrainsMonoNerdFont-ExtraLight"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-ExtraLight.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-ExtraLight";
+  src:
+    local("JetBrainsMonoNerdFont-ExtraLightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-ExtraLightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-Light";
+  src:
+    local("JetBrainsMonoNerdFont-Light"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-Light.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-Light";
+  src:
+    local("JetBrainsMonoNerdFont-LightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-LightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-Medium";
+  src:
+    local("JetBrainsMonoNerdFont-Medium"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-Medium.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-Medium";
+  src:
+    local("JetBrainsMonoNerdFont-MediumItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-MediumItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-SemiBold";
+  src:
+    local("JetBrainsMonoNerdFont-SemiBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-SemiBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-SemiBold";
+  src:
+    local("JetBrainsMonoNerdFont-SemiBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-SemiBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-Thin";
+  src:
+    local("JetBrainsMonoNerdFont-Thin"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-Thin.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 100;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFont-Thin";
+  src:
+    local("JetBrainsMonoNerdFont-ThinItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFont-ThinItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 100;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono";
+  src:
+    local("JetBrainsMonoNerdFontMono-Bold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-Bold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono";
+  src:
+    local("JetBrainsMonoNerdFontMono-BoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-BoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-ExtraBold";
+  src:
+    local("JetBrainsMonoNerdFontMono-ExtraBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-ExtraBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-ExtraBold";
+  src:
+    local("JetBrainsMonoNerdFontMono-ExtraBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-ExtraBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-ExtraLight";
+  src:
+    local("JetBrainsMonoNerdFontMono-ExtraLight"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-ExtraLight.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-ExtraLight";
+  src:
+    local("JetBrainsMonoNerdFontMono-ExtraLightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-ExtraLightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono";
+  src:
+    local("JetBrainsMonoNerdFontMono-Italic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-Italic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-Light";
+  src:
+    local("JetBrainsMonoNerdFontMono-Light"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-Light.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-Light";
+  src:
+    local("JetBrainsMonoNerdFontMono-LightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-LightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-Medium";
+  src:
+    local("JetBrainsMonoNerdFontMono-Medium"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-Medium.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-Medium";
+  src:
+    local("JetBrainsMonoNerdFontMono-MediumItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-MediumItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono";
+  src:
+    local("JetBrainsMonoNerdFontMono-Regular"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-Regular.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-SemiBold";
+  src:
+    local("JetBrainsMonoNerdFontMono-SemiBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-SemiBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-SemiBold";
+  src:
+    local("JetBrainsMonoNerdFontMono-SemiBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-SemiBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-Thin";
+  src:
+    local("JetBrainsMonoNerdFontMono-Thin"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-Thin.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 100;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontMono-Thin";
+  src:
+    local("JetBrainsMonoNerdFontMono-ThinItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontMono-ThinItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 100;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo";
+  src:
+    local("JetBrainsMonoNerdFontPropo-Bold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-Bold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo";
+  src:
+    local("JetBrainsMonoNerdFontPropo-BoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-BoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-ExtraBold";
+  src:
+    local("JetBrainsMonoNerdFontPropo-ExtraBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-ExtraBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-ExtraBold";
+  src:
+    local("JetBrainsMonoNerdFontPropo-ExtraBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-ExtraBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-ExtraLight";
+  src:
+    local("JetBrainsMonoNerdFontPropo-ExtraLight"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-ExtraLight.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-ExtraLight";
+  src:
+    local("JetBrainsMonoNerdFontPropo-ExtraLightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-ExtraLightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo";
+  src:
+    local("JetBrainsMonoNerdFontPropo-Italic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-Italic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-Light";
+  src:
+    local("JetBrainsMonoNerdFontPropo-Light"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-Light.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-Light";
+  src:
+    local("JetBrainsMonoNerdFontPropo-LightItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-LightItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-Medium";
+  src:
+    local("JetBrainsMonoNerdFontPropo-Medium"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-Medium.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-Medium";
+  src:
+    local("JetBrainsMonoNerdFontPropo-MediumItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-MediumItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo";
+  src:
+    local("JetBrainsMonoNerdFontPropo-Regular"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-Regular.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-SemiBold";
+  src:
+    local("JetBrainsMonoNerdFontPropo-SemiBold"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-SemiBold.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-SemiBold";
+  src:
+    local("JetBrainsMonoNerdFontPropo-SemiBoldItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-SemiBoldItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-Thin";
+  src:
+    local("JetBrainsMonoNerdFontPropo-Thin"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-Thin.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 100;
+}
+@font-face {
+  font-family: "JetBrainsMonoNerdFontPropo-Thin";
+  src:
+    local("JetBrainsMonoNerdFontPropo-ThinItalic"),
+    url("/assets/fonts/JetBrainsMonoNLNerdFont/JetBrainsMonoNerdFontPropo-ThinItalic.ttf")
+      format("truetype");
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 100;
+}

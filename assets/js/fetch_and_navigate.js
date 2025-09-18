@@ -112,9 +112,11 @@ export async function fetchData(entity, Id) {
 
     // If backend included a non-OK status, treat it as error
     if (!response.ok || (data.status && data.status >= 400)) {
-      throw { error: new Error(`Backend error ${data.status || response.status}`), data };
+      throw {
+        error: new Error(`Backend error ${data.status || response.status}`),
+        data,
+      };
     }
-
   } catch (e) {
     if (e.data) {
       // Render the backend-provided error page
@@ -124,6 +126,7 @@ export async function fetchData(entity, Id) {
       const target = document.getElementById(`${entity}-page`);
       if (target) {
         target.innerHTML = `<div class="error">Something went wrong</div>`;
+      }
     }
   }
 }

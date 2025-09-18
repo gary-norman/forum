@@ -19,10 +19,6 @@ func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
 }
 
-func Colors() *models.Colors {
-	return models.CreateColors()
-}
-
 func IsValidPassword(password string) bool {
 	// At least 8 characters
 	if len(password) < 8 {

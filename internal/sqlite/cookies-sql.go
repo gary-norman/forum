@@ -8,12 +8,15 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gary-norman/forum/internal/colors"
 	"github.com/gary-norman/forum/internal/models"
 )
 
 type CookieModel struct {
 	DB *sql.DB
 }
+
+var Colors = colors.UseFlavor("Mocha")
 
 func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) error {
 	sessionToken := models.GenerateToken(32)
@@ -47,7 +50,6 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 }
 
 func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user *models.User) bool {
-	Colors := models.CreateColors()
 	var success bool
 
 	stmt := "SELECT CookiesExpire FROM Users WHERE Username = ?"
@@ -105,14 +107,13 @@ func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user 
 }
 
 func (m *CookieModel) UpdateCookies(user *models.User, sessionToken, csrfToken string) error {
-	Colors := models.CreateColors()
 	expires := time.Now().Add(24 * time.Hour)
 	if m == nil || m.DB == nil {
 		fmt.Printf(ErrorMsgs().UserModel, "UpdateCookies", user.Username)
 		return errors.New("UserModel or DB is nil")
 	}
 	var stmt string
-	fmt.Printf(Colors.Blue+"Updating DB Cookies for: "+Colors.White+"%v\n"+Colors.Reset, user.Username)
+	fmt.Printf(Colors.Blue+"Updating DB Cookies for: "+Colors.Text+"%v\n"+Colors.Reset, user.Username)
 	stmt = "UPDATE Users SET SessionToken = ?, CsrfToken = ?, CookiesExpire = ? WHERE Username = ?"
 	result, err := m.DB.Exec(stmt, sessionToken, csrfToken, expires, user.Username)
 	if err != nil {
@@ -131,7 +132,6 @@ func (m *CookieModel) UpdateCookies(user *models.User, sessionToken, csrfToken s
 }
 
 func (m *CookieModel) DeleteCookies(w http.ResponseWriter, user *models.User) error {
-	Colors := models.CreateColors()
 	expires := time.Now().Add(time.Hour - 1000)
 	stmt := "UPDATE Users SET SessionToken = '', CsrfToken = '' WHERE Username = ?"
 	result, err := m.DB.Exec(stmt, user.Username)
@@ -145,7 +145,7 @@ func (m *CookieModel) DeleteCookies(w http.ResponseWriter, user *models.User) er
 		dbUpdated = "Success!"
 		dbUpdatedColor = Colors.Green
 	}
-	fmt.Printf(Colors.Blue+"Database update: "+dbUpdatedColor+"%v\n", dbUpdated)
+	log.Printf(Colors.Blue+"Database update: "+dbUpdatedColor+"%v\n", dbUpdated)
 	// Set Session, Username, and CSRF Token cookies
 	http.SetCookie(w, &http.Cookie{
 		Name:     "session_token",

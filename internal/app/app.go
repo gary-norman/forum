@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/gary-norman/forum/internal/colors"
 	"github.com/gary-norman/forum/internal/db"
 	"github.com/gary-norman/forum/internal/models"
 	"github.com/gary-norman/forum/internal/sqlite"
@@ -27,12 +28,10 @@ var (
 	imagePath  string = "/db/userdata/images/"
 )
 
+var Colors = colors.UseFlavor("Mocha")
+
 func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
-}
-
-func Colors() *models.Colors {
-	return models.CreateColors()
 }
 
 type App struct {
@@ -90,26 +89,27 @@ func InitializeApp() (*App, func(), error) {
 	// Verify connection
 	if err = initDB.Ping(); err != nil {
 		initDB.Close() // Close DB if ping fails
+		log.Printf(Colors.Red+"Error pinging DB: %v\n"+Colors.Reset, err)
 		return nil, nil, err
 	}
 
 	// Get version
 	var dbVersion string
 	if err = initDB.QueryRow("select sqlite_version()").Scan(&dbVersion); err != nil {
-		log.Printf(Colors().Red+"Error fetching SQLite version: %v\n"+Colors().Reset, err)
+		log.Printf(Colors.Red+"Error fetching SQLite version: %v\n"+Colors.Reset, err)
 	}
-	fmt.Printf(ErrorMsgs().DBSuccess, dbType, dbVersion)
+	log.Printf(ErrorMsgs().DBSuccess, dbType, dbVersion)
 
 	// App instance with DB reference
 	appInstance := NewApp(initDB)
 
 	// Cleanup function to close DB connection
 	cleanup := func() {
-		log.Println("Closing database connection...")
+		fmt.Println("Closing database connection...")
 		if err := initDB.Close(); err != nil {
-			log.Println(Colors().Red+"Error closing DB: %v"+Colors().Reset, err)
+			log.Println(Colors.Red+"Error closing DB: %v"+Colors.Reset, err)
 		} else {
-			fmt.Println(Colors().Green + "Database closed successfully." + Colors().Reset)
+			log.Println(Colors.Green + "Database closed successfully." + Colors.Reset)
 		}
 	}
 

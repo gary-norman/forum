@@ -8,9 +8,13 @@ import (
 	"regexp"
 
 	"github.com/gary-norman/forum/internal/app"
+	"github.com/gary-norman/forum/internal/colors"
 	"github.com/gary-norman/forum/internal/models"
 	"github.com/gary-norman/forum/internal/service"
+	"github.com/gary-norman/forum/internal/view"
 )
+
+var Colors = colors.UseFlavor("Mocha")
 
 type AuthHandler struct {
 	App     *app.App
@@ -141,7 +145,6 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
-	Colors := models.CreateColors()
 	// Parse JSON from the request body
 	var credentials struct {
 		Username string `json:"username"`
@@ -149,14 +152,13 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&credentials)
 	if err != nil {
-		log.Printf("Failed to parse request body: %v", err)
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		view.RenderErrorPage(w, models.NotProcess("login"), 500, models.ParseError("request body", "Login", err))
 		return
 	}
 
 	login := credentials.Username
 	password := credentials.Password
-	fmt.Printf(Colors.Orange+"Attempting login for "+Colors.White+"%v\n"+Colors.Reset, login)
+	fmt.Printf(Colors.Peach+"Attempting login for "+Colors.Text+"%v\n"+Colors.Reset, login)
 	fmt.Println(ErrorMsgs().Divider)
 
 	user, getUserErr := h.App.Users.GetUserFromLogin(login, "login")
@@ -220,7 +222,6 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
-	Colors := models.CreateColors()
 	// Retrieve the cookie
 	cookie, cookiErr := r.Cookie("username")
 	if cookiErr != nil {
@@ -232,7 +233,7 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs().KeyValuePair, "aborting logout:", "no user is logged in")
 		return
 	}
-	fmt.Printf(Colors.Orange+"Attempting logout for "+Colors.White+"%v\n"+Colors.Reset, username)
+	fmt.Printf(Colors.Peach+"Attempting logout for "+Colors.Text+"%v\n"+Colors.Reset, username)
 	fmt.Println(ErrorMsgs().Divider)
 	var user *models.User
 	user, getUserErr := h.App.Users.GetUserByUsername(username, "logout")

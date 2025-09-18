@@ -21,7 +21,7 @@ type ChannelHandler struct {
 }
 
 func (c *ChannelHandler) GetChannelPage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(Colors().Orange + "GetThisChannel" + Colors().Reset)
+	fmt.Println(Colors.Peach + "GetThisChannel" + Colors.Reset)
 	w.Header().Set("Content-Type", "application/json")
 	userLoggedIn := true
 	currentUser, ok := mw.GetUserFromContext(r.Context())
@@ -82,7 +82,7 @@ func (c *ChannelHandler) GetChannelPage(w http.ResponseWriter, r *http.Request) 
 
 func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Println(Colors().Orange + "GetThisChannel" + Colors().Reset)
+	fmt.Println(Colors.Peach + "GetThisChannel" + Colors.Reset)
 	userLoggedIn := true
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
@@ -334,7 +334,7 @@ func (c *ChannelHandler) StoreMembership(w http.ResponseWriter, r *http.Request)
 
 // JoinedByCurrentUser checks if the currently logged-in user is a member of the current channel
 func (c *ChannelHandler) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
-	fmt.Println(Colors().Orange + "Checking if this user is a member of this channel" + Colors().Reset)
+	fmt.Println(Colors.Peach + "Checking if this user is a member of this channel" + Colors.Reset)
 	fmt.Println(ErrorMsgs().Divider)
 	var channels []models.Channel
 	for _, membership := range memberships {
@@ -346,9 +346,9 @@ func (c *ChannelHandler) JoinedByCurrentUser(memberships []models.Membership) ([
 	}
 	// TODO add logic that checks if the user is an owner of this channel
 	if len(channels) > 0 {
-		fmt.Println(Colors().Green + "Current user is a member of this channel" + Colors().Reset)
+		fmt.Println(Colors.Teal + "Current user is a member of this channel" + Colors.Reset)
 	} else {
-		fmt.Println(Colors().Red + "Current user is not a member of this channel" + Colors().Reset)
+		fmt.Println(Colors.Red + "Current user is not a member of this channel" + Colors.Reset)
 	}
 	return channels, nil
 }

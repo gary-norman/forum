@@ -16,7 +16,6 @@ type SessionHandler struct {
 }
 
 func (s *SessionHandler) IsAuthenticated(r *http.Request, username string) error {
-	Colors := models.CreateColors()
 	var user *models.User
 	user, getUserErr := s.App.Users.GetUserByUsername(username, "isAuthenticated")
 	if getUserErr != nil {

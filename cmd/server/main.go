@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/gary-norman/forum/internal/app"
+	"github.com/gary-norman/forum/internal/colors"
 	"github.com/gary-norman/forum/internal/http/routes"
 	"github.com/gary-norman/forum/internal/models"
 	"github.com/gary-norman/forum/internal/view"
@@ -24,9 +25,7 @@ func ErrorMsgs() *models.Errors {
 	return models.CreateErrorMessages()
 }
 
-func Colors() *models.Colors {
-	return models.CreateColors()
-}
+var Colors = colors.UseFlavor("Mocha")
 
 func main() {
 	// pprof server for profiling at http://localhost:6060/debug/pprof/
@@ -73,7 +72,7 @@ func main() {
 			fmt.Printf(ErrorMsgs().ConnInit, srv.Addr, "srv.ListenAndServe")
 			log.Fatalf("HTTP server error: %v", err)
 		}
-		log.Println(Colors().Green + "Stopped serving new connections." + Colors().Reset)
+		log.Println(Colors.Teal + "Stopped serving new connections." + Colors.Reset)
 	}()
 
 	// Handle shutdown signals (Ctrl+C, system shutdown)
@@ -89,5 +88,5 @@ func main() {
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Fatalf(ErrorMsgs().Shutdown, err)
 	}
-	log.Println(Colors().Green + "Graceful shutdown complete." + Colors().Reset)
+	log.Println(Colors.Teal + "Graceful shutdown complete." + Colors.Reset)
 }

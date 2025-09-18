@@ -40,9 +40,20 @@
   }
 }
 
+@media (max-width: 75rem) {
+  .content-error {
+    margin-inline: auto;
+  }
+}
+
+@media (min-width: 75.1rem) {
+  .content-error {
+    margin-inline: max(1.6rem, min(6dvw, 16dvw)) auto;
+  }
+}
+
 .content-error {
   align-self: center;
-  margin-inline: max(1.6rem, min(6dvw, 16dvw)) auto;
   & * {
     margin-inline: auto;
   }

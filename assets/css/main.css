@@ -1607,11 +1607,29 @@ input[type="text"].inactive-input {
 
 /* --- Sidebar.--- */
 
+@media (max-width: 75rem) {
+  .sidebar {
+    display: none;
+  }
+}
+
+@media (min-width: 75.1rem) {
+  .sidebar {
+    display: flex;
+    max-width: 32rem;
+    min-width: 32rem;
+  }
+}
+
+@media (min-width: 75.1rem) and (max-width: 100rem) {
+  .sidebar {
+    max-width: 28rem;
+    min-width: 28rem;
+  }
+}
+
 .sidebar {
-  display: flex;
   flex-direction: column;
-  max-width: 32rem;
-  min-width: 32rem;
   height: calc(100dvh - 6rem);
   padding: 2.4rem 0;
   gap: 1.2rem;

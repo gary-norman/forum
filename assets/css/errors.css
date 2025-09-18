@@ -1,0 +1,75 @@
+[class^="error-"] {
+  margin: auto;
+}
+
+.error-400 {
+  & div > div > .error-extra-info {
+    position: relative;
+    &::after {
+      content: "Please check the URL and try again.";
+      font-family: "SpaceGrotesk-Regular";
+      position: absolute;
+      font-size: 1.6rem;
+      width: max-content;
+      height: fit-content;
+      top: 2.8rem;
+      left: 0;
+    }
+  }
+  & .btn-error-retry {
+    display: none;
+  }
+}
+
+.error-500 {
+  & div > div > .error-extra-info {
+    position: relative;
+    &::after {
+      content: "The server returned an error. Please try again or go home.";
+      font-family: "SpaceGrotesk-Regular";
+      position: absolute;
+      font-size: 1.6rem;
+      width: max-content;
+      height: fit-content;
+      top: 2.8rem;
+      left: 0;
+    }
+  }
+  & .btn-error-retry {
+    display: block;
+  }
+}
+
+.content-error {
+  align-self: center;
+  margin-inline: auto;
+  & * {
+    margin-inline: auto;
+  }
+  & button {
+    margin-block: 3.6rem 0;
+  }
+  & h1 {
+    /* font-family: "JetBrainsMono-NF"; */
+    position: relative;
+    &::after {
+      content: "";
+      /* content: ""; */
+      /* content: ""; */
+      color: var(--clr-golang--blue);
+      font-family: "JetBrainsMonoNerdFontPropo";
+      position: absolute;
+      left: calc(1.6rem * 10);
+    }
+  }
+  & h3 {
+    position: relative;
+    &::before {
+      content: " ";
+      color: var(--clr--warn);
+      font-family: "JetBrainsMonoNerdFontPropo";
+      position: absolute;
+      left: calc(-1.6rem * 2);
+    }
+  }
+}

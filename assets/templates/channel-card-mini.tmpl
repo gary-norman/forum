@@ -16,7 +16,7 @@
       {{ if (ne $channel.Avatar "noimage") }}
         <span class="card-pic profile-pic" data-image-channel="{{ $dot.ImagePaths.Channel }}{{ $channel.Avatar }}"></span>
       {{ else }}
-        <span class="card-pic profile-pic--empty" data-name-channel="{{ $channel.Name }}"></span>
+        <span class="card-pic profile-pic--empty" data-name-channel-sidebar="{{ $channel.Name }}"></span>
       {{ end }}
       <div>
         <div>/{{ $channel.Name }}</div>

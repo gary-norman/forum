@@ -68,7 +68,7 @@ func NotFoundLocation(location string) ErrorPageData {
 	data := ErrorPageData{
 		Instance: location + "-page",
 		Location: "not-found",
-		Message:  location,
+		Message:  "We were unable to find that " + location,
 	}
 	return data
 }

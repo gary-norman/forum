@@ -68,6 +68,7 @@ func ToHTMLVar(s string) string {
 	return parts[0] + "sHTML"
 }
 
+// NotFoundLocation returns an ErrorPageData struct for a not-found error page.
 func NotFoundLocation(location string) ErrorPageData {
 	data := ErrorPageData{
 		Instance: location + "-page",

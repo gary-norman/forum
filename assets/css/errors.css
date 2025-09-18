@@ -42,7 +42,7 @@
 
 .content-error {
   align-self: center;
-  margin-inline: auto;
+  margin-inline: max(1.6rem, min(6dvw, 16dvw)) auto;
   & * {
     margin-inline: auto;
   }

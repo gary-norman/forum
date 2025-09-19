@@ -35,9 +35,7 @@ COPY --from=builder /app/LICENSE /app/LICENSE
 RUN mkdir -p /var/lib/db-codex && sqlite3 /var/lib/db-codex/forum_database.db < /app/schema.sql
 
 # Create the userdata directory structure
-RUN mkdir -p /app/db/userdata/images/channel-images
-RUN mkdir /app/db/userdata/images/user-images
-RUN mkdir /app/db/userdata/images/post-images
+RUN mkdir -p /app/db/userdata/images/{channel-images,user-images,post-images}
 # Copy donkey user image
 COPY --from=builder /app/default-images/donkey.png /app/db/userdata/images/user-images/donkey.png
 # Copy codex channel image

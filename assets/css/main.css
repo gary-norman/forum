@@ -1,6 +1,12 @@
 /* -- custom properties -- */
 /* ----------------------- */
 :root {
+  /* allow animations between intrinsic sizes */
+  transition-behavior: allow-discrete;
+
+  /* allow animations on items that animate discretley (eg display: none) */
+  interpolate-size: allow-keywords;
+
   /* paragraphs */
   --p-max-width: 78ch;
   /* fonts */
@@ -37,10 +43,6 @@
   --border-radius-input: 0.8rem;
   --border-radius-button: 5rem;
   /* --- transitions --- */
-  transition-behavior: allow-discrete;
-  /* allow animations on items that animate discretley (eg display: none) */
-  interpolate-size: allow-keywords;
-  /* allow animations between intrinsic sizes */
   --transition-dur-hover: 200ms;
   --transition-dur-appear: 400ms;
   --transition-dur-feeds: 500ms;

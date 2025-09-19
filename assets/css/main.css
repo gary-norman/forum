@@ -211,11 +211,11 @@ p,
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
+  cursor: var(--cursor-text);
 }
 
 p {
   font-weight: normal;
-  cursor: var(--cursor-text);
 }
 
 .p-bold {

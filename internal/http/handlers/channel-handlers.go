@@ -332,6 +332,7 @@ func (c *ChannelHandler) StoreMembership(w http.ResponseWriter, r *http.Request)
 	}
 }
 
+// TODO this function is a mess
 // JoinedByCurrentUser checks if the currently logged-in user is a member of the current channel
 func (c *ChannelHandler) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
 	fmt.Println(Colors.Peach + "Checking if this user is a member of this channel" + Colors.Reset)

@@ -9,11 +9,13 @@
 
   /* paragraphs */
   --p-max-width: 78ch;
+
   /* fonts */
   --font-sz-title: clamp(1.8rem, 2rem + 0.65vw, 2.2rem);
   --font-sz-popover-title: clamp(1rem, 1rem + 0.5vw, 1.5rem);
   --font-sz-main: clamp(1rem, 1.2rem + -0vw, 1.6rem);
   --font-sz-cards: clamp(0.8rem, 1rem + 0.65vw, 1.2rem);
+
   /* box shadows */
   --shadow-box: 0 0.25 1rem rgb(0 0 0 / 0.5);
   --shadow-main: 0 5px 25px rgba(0 0 0 / 0.4);
@@ -42,27 +44,33 @@
   /* --- borders --- */
   --border-radius-input: 0.8rem;
   --border-radius-button: 5rem;
+
   /* --- transitions --- */
   --transition-dur-hover: 200ms;
   --transition-dur-appear: 400ms;
   --transition-dur-feeds: 500ms;
   --transition-dur-hover-darklight: 500ms;
   --transition-type-hover: ease-in-out;
+
   /* --- filters --- */
   --filter-invert-on_off: invert(0);
   --filter-invert-off_on: invert(1);
   --filter-invert-always_on: invert(1);
   --filter-invert-always_off: invert(0);
+
   /* --- switches --- */
   --switch-darkLight: url("/assets/icons/switch-on.svg");
+
   /* --- icons --- */
   --svg-upload: url("/assets/icons/upload_24.svg");
+
   /* --- z-index --- */
   --z-index-notification-main: 10100;
   --z-index-modal: 10000;
   --z-index-drop-zone: 600;
   --z-index-right-panel-content: 500;
   --z-index-above: 500;
+
   /* above-posts, above-activity */
   --z-index-content: 500;
   --z-index-user-label: 500;
@@ -77,6 +85,7 @@
   --z-index-share-container: 0;
   --z-index-darklight-fx: -100;
   --z-index-form-container: -200;
+
   /* --- blurs ---*/
   --blur-modal: blur(0.4rem);
 

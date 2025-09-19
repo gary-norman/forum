@@ -26,9 +26,9 @@ CREATE TABLE IF NOT EXISTS Channels (
     Banner TEXT,
     Description TEXT NOT NULL,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Privacy INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
-    IsMuted INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
-    IsFlagged INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    Privacy INTEGER NOT NULL CHECK (Privacy IN (0, 1)),
+    IsMuted INTEGER NOT NULL CHECK (IsMuted IN (0, 1)),
+    IsFlagged INTEGER NOT NULL CHECK (IsFlagged IN (0, 1)),
     FOREIGN KEY (OwnerID) REFERENCES Users(ID) ON DELETE CASCADE
 );
 
@@ -57,8 +57,8 @@ CREATE TABLE IF NOT EXISTS Comments (
     CommentedPostID INTEGER,
     CommentedCommentID INTEGER,
     IsCommentable INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
-    IsFlagged INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
-    IsReply INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    IsFlagged INTEGER NOT NULL CHECK (IsFlagged IN (0, 1)),
+    IsReply INTEGER NOT NULL CHECK (IsReply IN (0, 1)),
     Author TEXT NOT NULL,
     AuthorID BLOB NOT NULL,
     AuthorAvatar TEXT,
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS Flags (
     FlagType TEXT NOT NULL,
     Content TEXT,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Approved INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    Approved INTEGER NOT NULL CHECK (Approved IN (0, 1)),
     AuthorID BLOB NOT NULL,
     ChannelID INTEGER NOT NULL,
     FlaggedUserID BLOB,
@@ -147,8 +147,8 @@ CREATE TABLE IF NOT EXISTS Notifications (
     ID INTEGER PRIMARY KEY,
     Notification TEXT,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Read INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
-    Archived INTEGER NOT NULL CHECK (IsCommentable IN (0, 1))
+    Read INTEGER NOT NULL CHECK (Read IN (0, 1)),
+    Archived INTEGER NOT NULL CHECK (Archived IN (0, 1))
 );
 
 CREATE TABLE IF NOT EXISTS NotificationsUsers (
@@ -194,7 +194,7 @@ CREATE TABLE IF NOT EXISTS Posts (
     Author TEXT NOT NULL ,
     AuthorID BLOB NOT NULL,
     AuthorAvatar TEXT,
-    IsFlagged INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    IsFlagged INTEGER NOT NULL CHECK (IsFlagged IN (0, 1)),
     FOREIGN KEY (Author) REFERENCES Users(Username) ON DELETE CASCADE,
     FOREIGN KEY (AuthorID) REFERENCES Users(ID) ON DELETE CASCADE,
     FOREIGN KEY (AuthorAvatar) REFERENCES Users(Avatar)
@@ -202,8 +202,8 @@ CREATE TABLE IF NOT EXISTS Posts (
 
 CREATE TABLE IF NOT EXISTS Reactions (
     ID INTEGER PRIMARY KEY,
-    Liked INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
-    Disliked INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    Liked INTEGER NOT NULL CHECK (Liked IN (0, 1)),
+    Disliked INTEGER NOT NULL CHECK (Disliked IN (0, 1)),
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     AuthorID BLOB NOT NULL,
     ReactedPostID INTEGER,
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS Rules (
     ID INTEGER PRIMARY KEY,
     Rule TEXT,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Predefined INTEGER NOT NULL CHECK (IsCommentable IN (0, 1))
+    Predefined INTEGER NOT NULL CHECK (Predefined IN (0, 1))
 );
 
 CREATE TABLE IF NOT EXISTS Users (
@@ -234,7 +234,7 @@ CREATE TABLE IF NOT EXISTS Users (
     Description TEXT,
     Usertype TEXT NOT NULL,
     Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    IsFlagged INTEGER NOT NULL CHECK (IsCommentable IN (0, 1)),
+    IsFlagged INTEGER NOT NULL CHECK (IsFlagged IN (0, 1)),
     SessionToken TEXT,
     CsrfToken TEXT,
     HashedPassword TEXT NOT NULL,

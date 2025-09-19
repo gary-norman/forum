@@ -17,30 +17,45 @@
   --font-sz-cards: clamp(0.8rem, 1rem + 0.65vw, 1.2rem);
 
   /* box shadows */
-  --shadow-box: 0 0.25 1rem rgb(0 0 0 / 0.5);
-  --shadow-main: 0 5px 25px rgba(0 0 0 / 0.4);
-  --shadow-filter: 0 4px 24px rgba(0 0 0 / 0.4);
-  /*TODO ---------- convert all px to rem ---------- */
+  /* INFO this shadow is unused */
+  --shadow-box: 0 0.25rem 1rem rgb(0 0 0 / 0.5);
+  /* INFO this shadow is unused */
+  --shadow-main: 0 0.5rem 2.5rem rgba(0 0 0 / 0.4);
+  --shadow-filter: 0 0.4rem 2.4rem rgba(0 0 0 / 0.4);
+  /* INFO this shadow is unused */
   --shadow-card:
-    1px 0.6px 4.1px rgba(0 0 0 / 0.018), 2.4px 1.5px 10px rgba(0 0 0 / 0.027),
-    4.3px 2.7px 19px rgba(0 0 0 / 0.034),
-    7.4px 4.6px 33.3px rgba(0 0 0 / 0.041), 14px 8.7px 59px rgba(0 0 0 / 0.05),
-    37px 23px 126px rgba(0 0 0 / 0.07);
-  --shadow-text: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    0.1rem 0.06rem 0.41rem rgba(0 0 0 / 0.018),
+    0.24rem 0.15rem 1rem rgba(0 0 0 / 0.027),
+    0.43rem 0.27rem 1.9rem rgba(0 0 0 / 0.034),
+    0.74rem 0.46rem 3.33rem rgba(0 0 0 / 0.041),
+    1.4rem 0.87rem 5.9rem rgba(0 0 0 / 0.05),
+    3.7rem 2.3rem 12.6rem rgba(0 0 0 / 0.07);
+  --shadow-text: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.2);
+  /* INFO this shadow is unused */
   --shadow-icon:
-    inset 0 1px 1px rgba(0 0 0 / 0.2), inset 0 3px 5px rgba(0 0 0 / 0.1),
-    inset 0 -1px 1px rgba(225 225 225 / 0.3);
+    inset 0 0.1rem 0.1rem rgba(0 0 0 / 0.2),
+    inset 0 0.3rem 0.5rem rgba(0 0 0 / 0.1),
+    inset 0 -0.1rem 0.1rem rgba(225 225 225 / 0.3);
+  /* INFO this shadow is unused */
   --shadow-toggle:
-    inset 0 5px 15px rgba(0 0 0 / 0.4), inset 0 -1px 1px rgba(255 255 255 / 0.4);
+    inset 0 0.5rem 1.5rem rgba(0 0 0 / 0.4),
+    inset 0 -0.1rem 0.1rem rgba(255 255 255 / 0.4);
+  /* INFO this shadow is unused */
   --shadow-button:
-    1px 1px 1px rgba(74, 74, 74, 0.3), -1px -1px 1px 0 rgba(255 2552 255 / 0.18);
-  --shadow-button-hover: 4px 4px 5px -1px rgba(0, 0, 0, 0.45);
+    0.1rem 0.1rem 0.1rem rgba(74, 74, 74, 0.3),
+    -0.1rem -0.1rem 0.1rem 0 rgba(255 2552 255 / 0.18);
+  /* INFO this shadow is unused */
+  --shadow-button-hover: 0.4rem 0.4rem 0.5rem -0.1rem rgba(0, 0, 0, 0.45);
+  /* INFO this shadow is unused */
   --shadow-button-pressed:
-    inset 0 3px 5px -1px rgba(0 0 0 / 0.3),
-    inset 0 -1px 2px -1px rgba(200 200 200 / 0.6);
+    inset 0 0.3rem 0.5rem -0.1rem rgba(0 0 0 / 0.3),
+    inset 0 -0.1rem 0.2rem -0.1rem rgba(200 200 200 / 0.6);
+  /* INFO this shadow is unused */
   --shadow-button-pressed-2:
-    inset 0 1px 2px rgba(0 0 0 / 0.7), inset 0 3px 5px rgba(0 0 0 / 0.3),
-    inset 0 -1px 2px rgba(225 225 225 / 0.5);
+    inset 0 0.1rem 0.2rem rgba(0 0 0 / 0.7),
+    inset 0 0.3rem 0.5rem rgba(0 0 0 / 0.3),
+    inset 0 -0.1rem 0.2rem rgba(225 225 225 / 0.5);
+
   /* --- borders --- */
   --border-radius-input: 0.8rem;
   --border-radius-button: 5rem;

@@ -65,7 +65,7 @@ func main() {
 	// Log server listening messages
 	address := "http://localhost" + addr
 	fmt.Printf(ErrorMsgs().KeyValuePair, "Starting server on port", port)
-	fmt.Printf(ErrorMsgs().ConnSuccess, address)
+	log.Printf(ErrorMsgs().ConnSuccess, address)
 
 	go func() {
 		if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {

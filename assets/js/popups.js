@@ -29,11 +29,11 @@ cancelChannelRules.popoverTargetAction = "hide";
 
 document.addEventListener("DOMContentLoaded", () => {
   toggleModals();
+  // popoverJumpToDefaultInput();
 });
 
-export function togglePopovers() {
+export function togglePopoverUserInteracted() {
   const popovers = document.querySelectorAll("[popover]:has(.user-label)");
-
   popovers.forEach((popover) => {
     popover.addEventListener("click", () => {
       if (popover.matches(":popover-open")) {
@@ -45,6 +45,31 @@ export function togglePopovers() {
     });
   });
 }
+
+// export function popoverJumpToDefaultInput() {
+//   const popovers = document.querySelectorAll("[popover]:has(.default-input)");
+//   // Use WeakSet to track popovers with listeners
+//   if (!popoverJumpToDefaultInput._initialized) {
+//     popoverJumpToDefaultInput._initialized = new WeakSet();
+//   }
+//   const initialized = popoverJumpToDefaultInput._initialized;
+//
+//   let i = 1;
+//
+//   popovers.forEach((popover) => {
+//     console.log("%cpopover", expect, i, popover);
+//     i++;
+//     if (!initialized.has(popover)) {
+//       popover.addEventListener("toggle", (e) => {
+//         if (e.newState === "open") {
+//           const defaultInput = popover.querySelector(".defaultInput");
+//           if (defaultInput) defaultInput.focus();
+//         }
+//       });
+//       initialized.add(popover);
+//     }
+//   });
+// }
 
 export function toggleModals() {
   const loginModal = document.querySelector("#container-form-login");
@@ -91,4 +116,3 @@ export function toggleModals() {
     }
   }
 }
-

@@ -7,7 +7,12 @@ import { saveColourScheme } from "./colour_scheme.js";
 import { activePage, setActivePage } from "./main.js";
 import { getRandomInt } from "./helper_functions.js";
 import { listenToRules } from "./channel_rules.js";
-import { closePostForm, toggleModals, togglePopovers } from "./popups.js";
+import {
+  closePostForm,
+  toggleModals,
+  togglePopoverUserInteracted,
+  // popoverJumpToDefaultInput,
+} from "./popups.js";
 import { agreeToJoin, showJoinPopoverRules } from "./join_channel.js";
 import {
   displayCalendars,
@@ -32,7 +37,8 @@ export function UpdateUI() {
   saveColourScheme();
   updateProfileImages();
   // resetInputStyle();
-  togglePopovers();
+  togglePopoverUserInteracted();
+  // popoverJumpToDefaultInput();
   agreeToJoin();
   showJoinPopoverRules();
   // getCalendarVars();

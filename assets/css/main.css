@@ -1079,8 +1079,8 @@ input[type="checkbox"] {
 /* FLOATED state: when focused OR when input has content */
 .form-field:focus-within label,
 .form-field input:not(:placeholder-shown) ~ label,
-.form-field textarea:not(:placeholder-shown) ~ label,
-.form-field input:valid ~ label {
+.form-field textarea:not(:placeholder-shown) ~ label {
+  /* .form-field input:valid ~ label { */
   /* helpful fallback for types that validate (only if using required) */
   transform: translateY(var(--label-float-translate))
     scale(var(--label-float-scale));

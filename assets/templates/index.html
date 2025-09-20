@@ -125,25 +125,26 @@
             </div>
           <div id="form-login">
             <form id="login-form" class="logreg-form">
-              <div class="input-wrapper">
+              <div class="input-wrapper form-field">
                 <input
                   type="text"
                   class="input-3d"
                   id="loginFormUser"
                   autocomplete="username"
                   name="username"
-                  placeholder="username/email"
+                  placeholder=" "
+                  autofocus
                 />
-                <label for="loginFormUser" class="user-label">username</label>
+                <label for="loginFormUser" class="user-label">username/email</label>
               </div>
-              <div class="input-wrapper">
+              <div class="input-wrapper form-field">
                 <input
                   type="password"
                   class="input-3d"
                   id="loginFormPassword"
                   name="password"
                   autocomplete="current-password"
-                  placeholder="password"
+                  placeholder=" "
                 />
                 <label for="loginFormPassword" class="user-label">password</label>
               </div>
@@ -218,14 +219,14 @@
   {{/*            <div>register for codex</div>*/}}
   {{/*          </div>*/}}
   {{/* ---------- username ---------- */}}
-            <div class="input-wrapper">
+            <div class="input-wrapper form-field">
               <input
                 type="text"
                 id="register_user"
                 class="input-3d"
                 name="register_user"
                 placeholder="username"
-                autocomplete="username"
+                autocomplete=" "
                 pattern="\w{5,16}"
                 required
               />
@@ -234,29 +235,29 @@
               <span class="validation-tooltip"></span>
             </div>
   {{/* ---------- email ---------- */}}
-            <div class="input-wrapper">
+            <div class="input-wrapper form-field">
               <input
                 type="email"
                 id="register_email"
                 class="input-3d"
                 name="register_email"
-                placeholder="email address"
+                placeholder=" "
                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                 required
               />
-              <label for="register_email" class="user-label">email</label>
+              <label for="register_email" class="user-label">email address</label>
               <span class="validation-icon"></span>
               <span class="validation-tooltip"></span>
             </div>
   {{/* ---------- password ---------- */}}
-            <div class="input-wrapper">
+            <div class="input-wrapper form-field">
               <input
                 type="password"
                 id="register_password"
                 class="input-3d"
                 name="register_password"
                 autocomplete="new-password"
-                placeholder="password"
+                placeholder=" "
   {{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
                 required
               />
@@ -270,14 +271,14 @@
               </ul>
             </div>
   {{/* ---------- repeat password ---------- */}}
-            <div class="input-wrapper">
+            <div class="input-wrapper form-field">
               <input
                 type="password"
                 id="register_password-rpt"
                 class="input-3d"
                 name="register_password-rpt"
                 autocomplete="new-password"
-                placeholder="repeat password"
+                placeholder=" "
   {{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
                 required
               />
@@ -299,15 +300,15 @@
             <div id="form-forgot" class="display-off">
               <form id="resetForm" class="logreg-form">
                 <p class="form-title">enter your username or email address to reset your password</p>
-                <div class="input-wrapper">
+                <div class="input-wrapper form-field">
                   <input
                     type="text"
                     class="input-3d"
                     id="forgot_pass"
                     name="forgot_pass"
-                    placeholder="username/email"
+                    placeholder=" "
                   />
-                  <label for="forgot_pass" class="user-label">email/username</label>
+                  <label for="forgot_pass" class="user-label">username/email</label>
                 </div>
                 <button class="btn-md btn-primary btn-action" type="submit">
                   <span>reset</span>

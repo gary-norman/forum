@@ -7,6 +7,20 @@
   /* allow animations on items that animate discretley (eg display: none) */
   interpolate-size: allow-keywords;
 
+  /* fancy input */
+  --input-font: 1.6rem;
+  --input-padding--block: 0.4rem;
+  --input-padding--inline: 1rem;
+  --input-padding: var(--input-padding--block) var(--input-padding--inline);
+  --label-line-height: 1rem;
+  --label-padding--block: 0.1rem;
+  --label-padding--inline: 0.6rem;
+  --label-padding: var(--label-padding--block) var(--label-padding--inline);
+  --input-padding--block-halved: calc(var(--input-padding--block) / 2);
+  --label-float-translate: -1.6rem; /* vertical move when floating */
+  --label-float-scale: 0.72; /* shrink when floating */
+  --transition-speed: 180ms;
+
   /* paragraphs */
   --p-max-width: 78ch;
 
@@ -564,6 +578,7 @@ a:active,
 
 .wrapper-dropdown {
   display: none;
+  margin-block: -1rem 1.6rem;
 }
 
 .dropdown-toggle {

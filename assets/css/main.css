@@ -926,6 +926,10 @@ a:active,
   /*  left 300ms ease-in-out;*/
 }
 
+textarea {
+  field-sizing: content;
+}
+
 legend,
 fieldset,
 select,

@@ -37,6 +37,7 @@ export function UpdateUI() {
   saveColourScheme();
   updateProfileImages();
   // resetInputStyle();
+  toggleUserInteracted("add");
   togglePopoverUserInteracted();
   // popoverJumpToDefaultInput();
   agreeToJoin();

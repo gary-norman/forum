@@ -586,6 +586,7 @@ a:active,
   padding: 0.4rem 0.8rem;
   border-radius: var(--border-radius-input);
   color: var(--clr-fg-1);
+  margin-block-end: 1.2rem;
   &:hover {
     border: 1px solid var(--clr-accent--2);
   }
@@ -658,7 +659,7 @@ a:active,
   font-size: clamp(1.2rem, 2.4rem + -0.3dvw, 2.4rem);
   /*position: absolute;*/
   padding: 0 2rem;
-  min-height: 40rem;
+  min-height: 46rem;
   border-radius: 1.2rem;
   /*box-shadow: inset 0 .4rem 2rem .2rem rgba(0 0 0 / 0.4),*/
   /*0 -.4rem 1.8rem rgba(0 0 0 / 0.4);*/

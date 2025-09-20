@@ -944,7 +944,7 @@ input[type="text"],
 input[type="password"],
 input[type="email"],
 input[type="date"] {
-  position: relative;
+  /* position: relative; */
   margin-block: 0.4rem 0;
   border: 1px solid var(--clr-bg-4);
   font-size: 1.6rem;
@@ -1027,23 +1027,127 @@ input[type="checkbox"] {
   }
 }
 
-/* TODO use @starting-style to achieve this */
-.user-interacted > * {
-  &:focus-visible ~ label {
-    /* flex-basis: auto; */
-    /* position: absolute; */
-    /*background: var(--clr-accent--2);*/
-    /*left: 1rem;*/
-    /*font-size: 1rem;*/
-    /*top: 0;*/
-    animation: form-label 300ms ease-in-out forwards;
-  }
-
-  /*TODO prevent this happening on form popop */
-  &:not(focus-visible) ~ label {
-    animation: form-label-back 300ms ease-in-out forwards;
-  }
+.form-field {
+  position: relative;
+  width: 100%;
+  margin-block: 0.4rem 0;
 }
+
+.form-field input,
+.form-field textarea {
+  margin: 0.2rem 0 1.5rem 0; /* keep your vertical spacing */
+  border: 1px solid var(--clr-bg-4);
+  font-size: var(--input-font);
+  border-radius: var(--border-radius-input);
+  padding: var(--input-padding);
+  width: 100%;
+  color: var(--clr-fg-2);
+  background: transparent;
+  box-sizing: border-box; /* safe layout */
+  /* remove `position: relative` from the input itself */
+}
+
+/* label initial state (overlaps input) */
+.form-field label {
+  position: absolute;
+  left: 1rem; /* lines up with input padding */
+  top: calc(
+    var(--label-line-height) - var(--label-padding--block) -
+      var(--input-padding--block-halved)
+  );
+  font-size: var(--input-font);
+  line-height: 1;
+  padding: var(
+    --label-padding
+  ); /* small background padding so label text doesn't cut */
+  background: transparent;
+  transform-origin: left top;
+  transform: translateY(0) scale(1);
+  transition:
+    transform var(--transition-speed) ease,
+    background var(--transition-speed) ease,
+    color var(--transition-speed) ease;
+  pointer-events: none;
+  z-index: 2;
+  color: var(--clr-fg-4);
+}
+
+/* FLOATED state: when focused OR when input has content */
+.form-field:focus-within label,
+.form-field input:not(:placeholder-shown) ~ label,
+.form-field textarea:not(:placeholder-shown) ~ label,
+.form-field input:valid ~ label {
+  /* helpful fallback for types that validate (only if using required) */
+  transform: translateY(var(--label-float-translate))
+    scale(var(--label-float-scale));
+  background: var(--clr-accent--2);
+  color: var(--clr-fg-1);
+  border-radius: 1rem;
+}
+
+form-field:focus-within input {
+  border-color: var(--clr-accent--2);
+}
+
+/* .form-field label { */
+/*   position: absolute; */
+/*   left: 1rem; */
+/*   top: 0.7rem; */
+/*   font-size: 1rem; */
+/*   background: var(--clr-fg-2); */
+/*   pointer-events: none; */
+/* } */
+/**/
+/* /* forward animation: on focus */
+*/
+/* .form-field:focus-within label { */
+/*   animation: form-label 300ms ease-in-out forwards; */
+/* } */
+/**/
+/* /* backward animation: only if empty and losing focus */ */
+/* .form-field:not(:focus-within) input:placeholder-shown ~ label, */
+/* .form-field:not(:focus-within) textarea:placeholder-shown ~ label { */
+/*   animation: form-label-back 300ms ease-in-out forwards; */
+/* } */
+/**/
+/* /* stay floated if input has value */ */
+/* .form-field input:not(:placeholder-shown) ~ label, */
+/* .form-field textarea:not(:placeholder-shown) ~ label { */
+/*   left: 1rem; */
+/*   top: 0; */
+/*   font-size: 1rem; */
+/*   background: var(--clr-accent--2); */
+/* } */
+
+/* /* TODO use @starting-style to achieve this */
+*/
+/* /* .user-interacted > * { */ */
+/* textarea, */
+/* input[type="text"], */
+/* input[type="password"], */
+/* input[type="email"] { */
+/*   &:focus-visible ~ label { */
+/*     /* flex-basis: auto; */ */
+/*     /* position: absolute; */ */
+/*     /*background: var(--clr-accent--2);*/ */
+/*     /*left: 1rem;*/ */
+/*     /*font-size: 1rem;*/ */
+/*     /*top: 0;*/ */
+/*     animation: form-label 300ms ease-in-out forwards; */
+/*     @starting-style { */
+/*       font-size: 0; */
+/*       background: var(--clr-fg-2); */
+/*       top: 0.7rem; */
+/*       left: 15rem; */
+/*     } */
+/*   } */
+
+/*   /*TODO prevent this happening on form popop */
+*/
+/*   &:not(focus-visible) ~ label { */
+/*     animation: form-label-back 300ms ease-in-out forwards; */
+/*   } */
+/* } */
 
 @keyframes form-label {
   0% {

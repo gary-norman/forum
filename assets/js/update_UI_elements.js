@@ -10,7 +10,7 @@ import { listenToRules } from "./channel_rules.js";
 import {
   closePostForm,
   toggleModals,
-  togglePopoverUserInteracted,
+  // togglePopoverUserInteracted,
   // popoverJumpToDefaultInput,
 } from "./popups.js";
 import { agreeToJoin, showJoinPopoverRules } from "./join_channel.js";
@@ -37,8 +37,8 @@ export function UpdateUI() {
   saveColourScheme();
   updateProfileImages();
   // resetInputStyle();
-  toggleUserInteracted("add");
-  togglePopoverUserInteracted();
+  // toggleUserInteracted("add");
+  // togglePopoverUserInteracted();
   // popoverJumpToDefaultInput();
   agreeToJoin();
   showJoinPopoverRules();
@@ -60,47 +60,44 @@ export function updateProfileImages() {
   }
 }
 
-export function resetInputStyle() {
-  const modals = document.querySelectorAll(".modal");
-
-  // revert to original state if modals are closed
-  modals.forEach((modal) => {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === "style") {
-          const currentDisplay = getComputedStyle(modal).display;
-          if (currentDisplay === "none") {
-            console.log("Modal closed:", modal);
-            toggleUserInteracted("remove");
-          }
-        }
-      });
-    });
-
-    observer.observe(modal, { attributes: true, attributeFilter: ["style"] });
-  });
-}
+// export function resetInputStyle() {
+//   const modals = document.querySelectorAll(".modal");
+//   // revert to original state if modals are closed
+//   modals.forEach((modal) => {
+//     const observer = new MutationObserver((mutations) => {
+//       mutations.forEach((mutation) => {
+//         if (mutation.attributeName === "style") {
+//           const currentDisplay = getComputedStyle(modal).display;
+//           if (currentDisplay === "none") {
+//             console.log("Modal closed:", modal);
+//             // toggleUserInteracted("remove");
+//           }
+//         }
+//       });
+//     });
+//     observer.observe(modal, { attributes: true, attributeFilter: ["style"] });
+//   });
+// }
 
 // toggleUserInteracted toggles user-interacted class on input fields to prevent label animation before they are selected
-export function toggleUserInteracted(action) {
-  //input fields with fancy animations
-  const styledInputs = document.querySelectorAll(
-    'textarea, input[type="text"], input[type="password"], input[type="email"]',
-  );
-
-  styledInputs.forEach((input) => {
-    if (action === "add") {
-      input.addEventListener("focus", function () {
-        this.closest(".input-wrapper").classList.add("user-interacted");
-      });
-    }
-    if (action === "remove") {
-      document.querySelectorAll(".input-wrapper").forEach((element) => {
-        element.classList.remove("user-interacted");
-      });
-    }
-  });
-}
+// export function toggleUserInteracted(action) {
+//   //input fields with fancy animations
+//   const styledInputs = document.querySelectorAll(
+//     'textarea, input[type="text"], input[type="password"], input[type="email"]',
+//   );
+//   styledInputs.forEach((input) => {
+//     if (action === "add") {
+//       input.addEventListener("focus", function () {
+//         this.closest(".input-wrapper").classList.add("user-interacted");
+//       });
+//     }
+//     if (action === "remove") {
+//       document.querySelectorAll(".input-wrapper").forEach((element) => {
+//         element.classList.remove("user-interacted");
+//       });
+//     }
+//   });
+// }
 
 function getUserProfileImageFromAttribute() {
   const userProfileImage = document.querySelectorAll(".profile-pic");
@@ -197,7 +194,7 @@ export function listenToPageSetup() {
   //     feed.classList.add("feeds-wrapper-loaded");
   // });
 
-  toggleUserInteracted("add");
+  // toggleUserInteracted("add");
   if (activePage === "user-page") {
     actButtonContainer = document.querySelector("#activity-bar");
     actButtonsAll = actButtonContainer.querySelectorAll("button");

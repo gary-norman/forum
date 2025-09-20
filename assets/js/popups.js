@@ -1,5 +1,5 @@
 // modals
-import { resetInputStyle, toggleUserInteracted } from "./update_UI_elements.js";
+// import { resetInputStyle, toggleUserInteracted } from "./update_UI_elements.js";
 import { activePageElement } from "./main.js";
 
 const angry =
@@ -32,19 +32,20 @@ document.addEventListener("DOMContentLoaded", () => {
   // popoverJumpToDefaultInput();
 });
 
-export function togglePopoverUserInteracted() {
-  const popovers = document.querySelectorAll("[popover]:has(.user-label)");
-  popovers.forEach((popover) => {
-    popover.addEventListener("click", () => {
-      if (popover.matches(":popover-open")) {
-        // console.log("Open popover: ", popover);
-        popover.addEventListener("toggle", () => {
-          toggleUserInteracted("remove");
-        });
-      }
-    });
-  });
-}
+// export function togglePopoverUserInteracted() {
+//   const popovers = document.querySelectorAll("[popover]:has(.user-label)");
+//   popovers.forEach((popover) => {
+//     // Ensure the listener is only added once
+//     if (!popover._toggleListenerAdded) {
+//       popover.addEventListener("toggle", () => {
+//         if (popover.matches(":popover-open")) {
+//           toggleUserInteracted("remove");
+//         }
+//       });
+//       popover._toggleListenerAdded = true;
+//     }
+//   });
+// }
 
 // export function popoverJumpToDefaultInput() {
 //   const popovers = document.querySelectorAll("[popover]:has(.default-input)");

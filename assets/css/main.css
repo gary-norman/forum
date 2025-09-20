@@ -1369,6 +1369,10 @@ input#register_user:user-invalid {
 }
 
 /*--- post popover and buttons --- */
+.header-right {
+  anchor-name: --header-right;
+}
+
 .btn-post {
   anchor-name: --post-button;
 }
@@ -1410,6 +1414,11 @@ input#register_user:user-invalid {
   transition:
     display var(--transition-dur-feeds),
     opacity var(--transition-dur-feeds);
+  top: 5rem;
+  right: 15rem;
+  position-anchor: --header-right;
+  top: calc(anchor(bottom) + 1rem);
+  right: anchor(right);
 
   &:popover-open {
     display: flex;
@@ -1444,37 +1453,37 @@ input#register_user:user-invalid {
   }
 }
 
-#form-post {
-  top: 5rem;
-  right: 15rem;
-  position-anchor: --post-button;
-  top: anchor(bottom);
-  right: anchor(right);
-}
-
-#form-channel {
-  top: 15rem;
-  right: 5rem;
-  position-anchor: --channel-button;
-  bottom: anchor(bottom);
-  left: anchor(right);
-}
-
-#form-join-channel {
-  top: 15rem;
-  right: 5rem;
-  position-anchor: --join-channel-button;
-  bottom: anchor(bottom);
-  right: anchor(left);
-}
-
-#form-edit-channel-rules {
-  top: 15rem;
-  right: 5rem;
-  position-anchor: --edit-channel-rules-button;
-  bottom: anchor(top);
-  right: anchor(left);
-}
+/* #form-post { */
+/*   top: 5rem; */
+/*   right: 15rem; */
+/*   position-anchor: --header-right; */
+/*   top: anchor(bottom); */
+/*   right: anchor(right); */
+/* } */
+/**/
+/* #form-channel { */
+/*   top: 15rem; */
+/*   right: 5rem; */
+/*   position-anchor: --channel-button; */
+/*   bottom: anchor(bottom); */
+/*   left: anchor(right); */
+/* } */
+/**/
+/* #form-join-channel { */
+/*   top: 15rem; */
+/*   right: 5rem; */
+/*   position-anchor: --join-channel-button; */
+/*   bottom: anchor(bottom); */
+/*   right: anchor(left); */
+/* } */
+/**/
+/* #form-edit-channel-rules { */
+/*   top: 15rem; */
+/*   right: 5rem; */
+/*   position-anchor: --edit-channel-rules-button; */
+/*   bottom: anchor(top); */
+/*   right: anchor(left); */
+/* } */
 
 #rules-wrapper {
   & span {

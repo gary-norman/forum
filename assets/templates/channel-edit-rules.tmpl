@@ -13,7 +13,7 @@
     <div class="right-panel-bio flex-space-between ">
     {{ if (eq $dot.ThisChannel.OwnerID $userID) }}
       <label class="padded" for="rules-content">Edit channel rules</label>
-      <button popovertarget="form-edit-channel-rules" id="right-panel-channel--edit-channel-rules" class="btn-sm btn-icoonly">
+      <button popovertarget="form-edit-channel-rules" id="right-panel-channel--edit-channel-rules" class="btn-sm btn-icoonly" autofocus>
         <span class="btn-edit" role="contentinfo" aria-label="Edit channel rules"></span>
       </button>
     {{ else }}

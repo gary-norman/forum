@@ -1,9 +1,15 @@
-// registration form
 import {
   showMainNotification,
   showInlineNotification,
 } from "./notifications.js";
+import {
+  applyCustomTheme,
+  showThemesClickable,
+  pickTheme,
+  themeList,
+} from "./consoleThemes.js";
 
+// registration form
 const regForm = document.querySelector("#form-register");
 const regPass = document.querySelector("#register_password");
 const liValidNum = document.querySelector("#li-valid-num");

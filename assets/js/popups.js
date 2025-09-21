@@ -1,13 +1,13 @@
 // modals
 // import { resetInputStyle, toggleUserInteracted } from "./update_UI_elements.js";
 import { activePageElement } from "./main.js";
+import {
+  applyCustomTheme,
+  showThemesClickable,
+  pickTheme,
+  themeList,
+} from "./consoleThemes.js";
 
-const angry =
-  "background-color: #000000; color: #ff0000; font-weight: bold; border: 2px solid #ff0000; padding: 5px; border-radius: 5px;";
-const expect =
-  "background-color: #000000; color: #00ff00; font-weight: bold; border: 1px solid #00ff00; padding: 5px; border-radius: 5px;";
-const warn =
-  "background-color: #000000; color: #e3c144; font-weight: bold; border: 1px solid #e3c144; padding: 5px; border-radius: 5px;";
 export function closePostForm() {
   console.info("closePostForm");
   const formPost = document.querySelector("#form-post");
@@ -105,11 +105,11 @@ export function toggleModals() {
   }
 
   function handleClickOutsideModals(e) {
-    console.log("%ce.target", warn, e.target);
+    console.custom.warn("e.target", e.target);
 
     // if the target is not the modal itself, which is of class modal-content
     if (e.target === loginModal || e.target === closeLoginModal) {
-      console.log("%cclicked outside modals", expect);
+      console.custom.info("clicked outside modals");
 
       loginModal.style.display = "none";
       resetInputStyle();

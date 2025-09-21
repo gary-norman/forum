@@ -3,11 +3,21 @@ import { UpdateUI } from "./update_UI_elements.js";
 import { fireCalendarListeners } from "./calendar.js";
 import { selectActiveFeed, goHome } from "./navigation.js";
 import { showMainNotification } from "./notifications.js";
+import {
+  applyCustomTheme,
+  showThemesClickable,
+  pickTheme,
+  themeList,
+} from "./consoleThemes.js";
 
-const angry =
-  "background-color: #000000; color: #ea4f92; font-weight: bold; border: 2px solid #ea4f92; padding: .2rem; border-radius: .8rem;";
-const expect =
-  "background-color: rgb(108 207 93); color: #000000; font-weight: bold; padding: .1rem; border-radius: 1rem;";
+// Show all themes in console
+showThemesClickable();
+
+// Pick theme #3 (example)
+pickTheme(3);
+
+// Apply a specific theme manually
+// applyCustomTheme("catppuccin", "mocha");
 
 export let activePage, activePageElement;
 
@@ -22,9 +32,9 @@ window.addEventListener("popstate", (event) => {
   }
   const { entity, id } = event.state;
   const page = entity + "Page";
-  console.info("%cPopped state:", expect, event.state);
-  console.info("%centity:", expect, entity);
-  console.info("%cid:", expect, id);
+  console.custom.info("Popped state:", event.state);
+  console.custom.info("entity:", entity);
+  console.custom.info("id:", id);
   if (entity === "home") {
     goHome();
   } else if (entity && id) {

@@ -1,22 +1,26 @@
 // INFO was a DOMContentLoaded function
-import {activePageElement} from "./main.js";
-
-const angry =
-    "background-color: #000000; color: #ff0000; font-weight: bold; border: 2px solid #ff0000; padding: 5px; border-radius: 5px;";
-const expect =
-    "background-color: #000000; color: #00ff00; font-weight: bold; border: 1px solid #00ff00; padding: 5px; border-radius: 5px;";
-const warn =
-    "background-color: #000000; color: #e3c144; font-weight: bold; border: 1px solid #e3c144; padding: 5px; border-radius: 5px;";
-
+import { activePageElement } from "./main.js";
+import {
+  applyCustomTheme,
+  showThemesClickable,
+  pickTheme,
+  themeList,
+} from "./consoleThemes.js";
 
 document.addEventListener("newContentLoaded", () => {
-  if (activePageElement.id === "channel-page" || activePageElement.id === "user-page") {
+  if (
+    activePageElement.id === "channel-page" ||
+    activePageElement.id === "user-page"
+  ) {
     listenToEditDetails();
   }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (activePageElement.id === "channel-page" || activePageElement.id === "user-page") {
+  if (
+    activePageElement.id === "channel-page" ||
+    activePageElement.id === "user-page"
+  ) {
     listenToEditDetails();
   }
 });
@@ -28,10 +32,11 @@ function listenToEditDetails() {
   const nameLabel = activePageElement.querySelector('[id$="name-label"]');
   const bioInput = activePageElement.querySelector('[id$="bio-input"]');
   const bioContent = activePageElement.querySelector('[id$="bio-content"]');
-  const dragDropImage = activePageElement.querySelector("#drop-zone--user-image");
+  const dragDropImage = activePageElement.querySelector(
+    "#drop-zone--user-image",
+  );
   const inputs = [bioInput, nameInput];
   const adjustHeight = (element) => {
-
     element.style.height = "auto"; // Reset height to recalculate
     element.style.height = element.scrollHeight + "px"; // Set height to fit content
   };
@@ -81,9 +86,9 @@ function listenToEditDetails() {
   //   });
   // });
   function removeEditingState() {
-    console.log("%cnameContent:", expect, nameContent)
-    console.log("%cnameInput:", expect, nameInput)
-    console.log("%cnameLabel:", expect, nameLabel)
+    console.custom.info("nameContent:", nameContent);
+    console.custom.info("nameInput:", nameInput);
+    console.custom.info("nameLabel:", nameLabel);
 
     nameContent.classList.remove("editing");
     nameInput.classList.remove("editing");
@@ -99,8 +104,6 @@ function listenToEditDetails() {
     const editButton = block.querySelector('[id*="edit-"]');
     const submitButton = block.querySelector('[id*="submit-"]');
     const cancelButton = block.querySelector('[id*="cancel-"]');
-
-
 
     editButton.addEventListener("click", function (e) {
       block.classList.add("editing");
@@ -157,7 +160,7 @@ function listenToEditDetails() {
       block.classList.remove("editing");
 
       switch (true) {
-        case  submitButton.id.endsWith("submit-name"):
+        case submitButton.id.endsWith("submit-name"):
           // nameContent.classList.remove("editing");
           // nameInput.classList.remove("editing");
           removeEditingState();
@@ -177,5 +180,3 @@ function listenToEditDetails() {
     });
   });
 }
-
-

@@ -19,6 +19,12 @@ import {
   getCalendarVars,
   processDateRange,
 } from "./calendar.js";
+import {
+  applyCustomTheme,
+  showThemesClickable,
+  pickTheme,
+  themeList,
+} from "./consoleThemes.js";
 
 // activity buttons
 let actButtonContainer, actButtonsAll;

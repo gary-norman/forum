@@ -8,6 +8,13 @@ import { changePage, navigateToPage } from "./fetch_and_navigate.js";
 import { toggleReplyForm } from "./comments.js";
 import { pageData } from "./share.js";
 import { showInlineNotification } from "./notifications.js";
+import {
+  applyCustomTheme,
+  showThemesClickable,
+  pickTheme,
+  themeList,
+} from "./consoleThemes.js";
+
 // sidebar butons
 const goHomeBtns = document.querySelectorAll(".btn-go-home");
 export let scrollWindow;
@@ -131,17 +138,15 @@ function navigateToEntity(e) {
 }
 
 export function selectActiveFeed() {
-  const angry =
-    "background-color: #000000; color: #ea4f92; font-weight: bold; border: 2px solid #ea4f92; padding: .2rem; border-radius: .8rem;";
   switch (activePage) {
     case "home-page":
-      console.log("%cON HOME PAGE BITCH", angry);
+      console.custom.angryinfo("ON HOME PAGE");
       scrollWindow = document.querySelector(`#home-feed`);
       document.dispatchEvent(newContentLoaded);
       // console.log("scrollWindow:", scrollWindow)
       break;
     case "user-page":
-      console.log("%cON USER PAGE BITCH", angry);
+      console.custom.angryinfo("ON USER PAGE");
       const userFeeds = Array.from(
         activePageElement.querySelectorAll('[id$="-feed"]'),
         // activePageElement.querySelector('[id="user-activity-feeds"]').querySelectorAll('[id$="-feed"]'),
@@ -154,18 +159,18 @@ export function selectActiveFeed() {
       // console.log(scrollWindow)
       break;
     case "channel-page":
-      console.log("%cON CHANNEL PAGE BITCH", angry);
+      console.custom.angryinfo("ON CHANNEL PAGE");
 
       scrollWindow = document.querySelector(`#channel-feed`);
       // console.log(scrollWindow)
       break;
     case "post-page":
-      console.log("%cON POST PAGE BITCH", angry);
+      console.custom.angryinfo("ON POST PAGE");
 
       // console.log(scrollWindow)
       break;
     default:
-      console.log("%cNO ACTIVE FEED BITCH... switching to home-page", angry);
+      console.custom.angryinfo("NO ACTIVE FEED... switching to home-page");
       setActivePage("home");
       scrollWindow = document.querySelector(`#home-feed`);
       break;

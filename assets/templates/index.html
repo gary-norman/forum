@@ -331,8 +331,12 @@
       {{ template "post-popover" . }}
 {{/*SECTION    ---------- create channel popover ---------- */}}
       <div popover id="form-channel">
+    <div class="modal-header">
+      <div id="modal-header-post">create a channel</div>
+    </div>
+  <div id="channel-popover-title" class="popover-title">
+  </div>
         <form class="wrapper-form" enctype="multipart/form-data" action="/channels/create" method="POST">
-          <h3 class="form-title">create a channel</h3>
           <div class="input-wrapper form-field">
             <input type="text" id="channel-name" name="name" autocomplete="channel" placeholder=" " autofocus>
             <label for="channel-name" class="user-label">channel name</label>

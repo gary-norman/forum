@@ -98,7 +98,7 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	posts = append(posts, post)
 	foundPosts, err := p.Comment.GetPostsComments(posts)
 	if err != nil {
-		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.FetchError("post comments", "GetThsiPost", err))
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.FetchError("post comments", "GetThisPost", err))
 	}
 	foundPosts = p.Reaction.GetPostsLikesAndDislikes(foundPosts)
 	thisPost = foundPosts[0]
@@ -113,24 +113,24 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	// Fetch the channel
 	channel, err := p.App.Channels.GetChannelByID(thisPost.ChannelID)
 	if err != nil {
-		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.QueryError("channels", "GetThsiPost", err))
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.QueryError("channels", "GetThisPost", err))
 	}
 
 	// Fetch the author
 	author, err := p.App.Users.GetUserByUsername(thisPost.Author, "GetThisPost")
 	if err != nil {
-		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.QueryError("users", "GetThsiPost", err))
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.QueryError("users", "GetThisPost", err))
 	}
 
 	if userLoggedIn {
 		currentUser.Followers, currentUser.Following, err = p.App.Loyalty.CountUsers(currentUser.ID)
 		if err != nil {
-			view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.FetchError("user loyalty", "GetThsiPost", err))
+			view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.FetchError("user loyalty", "GetThisPost", err))
 		}
 		// Fetch if the user is a member of the channel
 		isMember, isMemberErr = p.App.Channels.IsUserMemberOfChannel(currentUser.ID, channel.ID)
 		if isMemberErr != nil {
-			view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.QueryError("user membership", "GetThsiPost", err))
+			view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.QueryError("user membership", "GetThisPost", err))
 		}
 		// Fetch if the user is the owner of the channel
 		isOwner = currentUser.ID == channel.OwnerID

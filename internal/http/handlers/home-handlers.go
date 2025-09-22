@@ -26,6 +26,9 @@ type HomeHandler struct {
 var TemplateData models.TemplateData
 
 func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
+	if r.PathValue("invalidString") != "" {
+		view.RenderErrorPage(w, models.NotFoundLocation("home"), 400, models.NotFoundError(r.PathValue("invalidString"), "GetHome", fmt.Errorf("the user entered %v after /", r.PathValue("invalidString"))))
+	}
 	start := time.Now()
 	var userPosts []models.Post
 	userLoggedIn := true

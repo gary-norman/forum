@@ -75,6 +75,8 @@ export function applyCustomTheme(theme, flavor = null) {
   printPalette(theme, flavor);
 }
 
+window.applyCustomTheme = applyCustomTheme;
+
 // Print palette blocks for LOG/WARN/ERROR/INFO
 export function printPalette(theme, flavor = null) {
   let palette;
@@ -122,9 +124,12 @@ export function pickTheme(index) {
   );
 }
 
+// Attach to window for console use
+window.pickTheme = pickTheme;
+
 // Show all themes with clickable-looking blocks
 export function showThemesClickable() {
-  console.log("%cAvailable Themes:", "font-weight:bold; font-size:14px;");
+  console.log("%cAvailable Themes", "font-weight:bold; font-size:14px;");
   themeList.forEach((t) => {
     const label =
       t.theme === "catppuccin" ? `Catppuccin - ${t.flavor}` : t.theme;
@@ -138,3 +143,5 @@ export function showThemesClickable() {
     "font-style:italic; color:#aaa;",
   );
 }
+
+window.showThemesClickable = showThemesClickable;

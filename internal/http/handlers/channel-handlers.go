@@ -289,6 +289,7 @@ func (c *ChannelHandler) StoreChannel(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, insertErr.Error(), 500)
 		return
 	}
+	// TODO fix this redirect
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 

@@ -20,7 +20,8 @@ const regPassRpt = document.querySelector("#register_password-rpt");
 const validList = regForm.querySelector("ul");
 
 // login/register forms
-const notifier = document.querySelector("#login-title");
+const notifierLogin = document.querySelector("#login-title");
+const notifierRegister = document.querySelector("#register-title");
 const formLogin = document.querySelector("#form-login");
 const formRegister = document.querySelector("#form-register");
 const formForgot = document.querySelector("#form-forgot");
@@ -125,7 +126,9 @@ btnsRegister.forEach((button) =>
   button.addEventListener("click", (e) => toggleLoginRegistration(e.target.id)),
 );
 btnsForgot.addEventListener("click", forgot);
+//
 // TODO get these working
+
 // validate password
 regPass.addEventListener("input", validatePass);
 // check passwords match
@@ -198,7 +201,7 @@ if (loginForm) {
 
     if (!username || !password) {
       showInlineNotification(
-        notifier,
+        notifierLogin,
         "",
         "Username and password required.",
         false,
@@ -230,7 +233,7 @@ if (loginForm) {
 
       if (!response.ok || errorMessages.has(data.message)) {
         showInlineNotification(
-          notifier,
+          notifierLogin,
           "",
           data.message || "Login failed.",
           false,
@@ -239,7 +242,7 @@ if (loginForm) {
         return;
       }
 
-      showInlineNotification(notifier, "", data.message, true, "dummy");
+      showInlineNotification(notifierLogin, "", data.message, true, "dummy");
       setTimeout(() => {
         window.location.href = "/";
       }, 2000);

@@ -24,7 +24,7 @@ func NewRouter(app *app.App) http.Handler {
 	mux.HandleFunc("POST /login", r.Auth.Login)
 	mux.HandleFunc("POST /logout", r.Auth.Logout)
 	mux.HandleFunc("POST /protected", r.Auth.Protected)
-	mux.Handle("/", mw.WithUser(http.HandlerFunc(r.Home.GetHome), r.App))
+	mux.Handle("/{invalidString}", mw.WithUser(http.HandlerFunc(r.Home.GetHome), r.App))
 	// mux.HandleFunc("GET /posts/create", r.Post.CreatePost)
 	mux.Handle("GET /search", mw.WithUser(http.HandlerFunc(r.Search.Search), r.App))
 	mux.Handle("GET /post/{postId}", mw.WithUser(http.HandlerFunc(r.Post.GetThisPost), r.App))

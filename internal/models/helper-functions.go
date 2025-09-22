@@ -89,7 +89,7 @@ func NotProcess(request string) ErrorPageData {
 }
 
 type Number interface {
-	int64 | string
+	int64 | string | UUIDField
 }
 
 func EncodeError(item, location string, err error) error {

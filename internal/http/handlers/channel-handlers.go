@@ -239,7 +239,7 @@ func (c *ChannelHandler) GetChannelInfoFromPostID(postID int64) (int64, string, 
 	channelID := channelIDs[0]
 	channelName, err := c.App.Channels.GetChannelNameFromID(channelID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "GetChannelInfoFromPostId > GetChannelNameFromPost", err)
+		log.Printf(ErrorMsgs().NotFound, "GetChannelInfoFromPostId", "GetChannelNameFromPost", err)
 		return 0, "", err
 	}
 	return channelID, channelName, nil

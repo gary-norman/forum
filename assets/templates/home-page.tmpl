@@ -1,4 +1,7 @@
 {{ define "home-page" }}
+{{ if eq .Location "not-found"}}
+  {{ template "not-found" (dict "Message" .Message) }}
+{{ else }}
 {{ $userID := .UserID }}
 {{ $dot := .dot }}
 {{ with $dot.CurrentUser }}
@@ -16,4 +19,5 @@
     {{ template "home-page-feed" (dict "dot" $dot "Tracer" $tracer "UserPosts" $userPosts "AllPosts" $allPosts "UserID" $userID "Instance" $instance) }}
   </div>
 </div>
+{{ end }}
 {{ end }}

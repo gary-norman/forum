@@ -1,5 +1,7 @@
 [class^="error-"] {
   margin: auto;
+  font-family: "SpaceGrotesk-Regular";
+  font-size: 1.6rem;
 }
 
 .error-400 {
@@ -12,7 +14,7 @@
       font-size: 1.6rem;
       width: max-content;
       height: fit-content;
-      top: 2.8rem;
+      top: 3.2rem;
       left: 0;
     }
   }
@@ -31,7 +33,7 @@
       font-size: 1.6rem;
       width: max-content;
       height: fit-content;
-      top: 2.8rem;
+      top: 3.2rem;
       left: 0;
     }
   }

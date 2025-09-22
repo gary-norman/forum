@@ -149,43 +149,57 @@ regPass.addEventListener("focusout", () => {
 
 // --- register ---
 if (registerForm) {
-  registerForm.addEventListener("submit", function (event) {
+  registerForm.addEventListener("submit", async function (event) {
     event.preventDefault(); // Prevent the default form submission
     const form = event.target;
     const formData = new FormData(form); // Collect form data
-    fetch("/register", {
-      method: "POST",
-      // headers: {
-      //   "Content-Type": "application/json",
-      // },
-      body: formData,
-      // body: JSON.stringify({
-      //   register_user: document.getElementById("register_user").value,
-      //   register_email: document.getElementById("register_email").value,
-      //   register_password: document.getElementById("register_password").value,
-      // }),
-      cache: "no-store",
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json(); // Parse JSON response
-        } else {
-          throw new Error("Registration failed.");
-        }
-      })
-      .then((data) => {
-        if (data.message === "registration failed!") {
-          showInlineNotification(notifier, "", data.message, false, "dummy");
-        } else {
-          showInlineNotification(notifier, "", data.message, true, "dummy");
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 2000);
-        }
-      })
-      .catch((error) => {
-        console.error("Registration failed:", error);
+
+    if (!formdata.register_user) {
+      showInlineNotification(
+        notifierRegister,
+        "",
+        "please choose a username (5-16 characters)",
+        false,
+        "dummy",
+      );
+      return;
+    }
+
+    try {
+      const response = await fetch("/register", {
+        method: "POST",
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
+        body: formData,
+        // body: JSON.stringify({
+        //   register_user: document.getElementById("register_user").value,
+        //   register_email: document.getElementById("register_email").value,
+        //   register_password: document.getElementById("register_password").value,
+        // }),
+        cache: "no-store",
       });
+
+      const data = await response.json();
+
+      if (!response.ok || data.message === "registration failed!") {
+        showInlineNotification(
+          notifierRegister,
+          "",
+          data.message,
+          false,
+          "dummy",
+        );
+        return;
+      }
+      showInlineNotification(notifierRegister, "", data.message, true, "dummy");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+    } catch (error) {
+      console.custom.error("Registration failed:", error);
+      showMainNotification("An error occured during registration.");
+    }
   });
 }
 

@@ -30,8 +30,7 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	// Convert User ID string to FieldUUID
 	userID, err := models.UUIDFieldFromString(idStr)
 	if err != nil {
-		error := fmt.Errorf(ErrorMsgs().NotFound, r.PathValue("userId"), "GetThisUser", err)
-		view.RenderErrorPage(w, models.NotFoundLocation("user"), 400, error)
+		view.RenderErrorPage(w, models.NotFoundLocation("user"), 400, models.NotFoundError(r.PathValue("userId"), "GetThisUser", err))
 		return
 	}
 
@@ -50,8 +49,7 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	// Fetch the thisUser
 	thisUser, err := u.App.Users.GetUserByID(userID)
 	if err != nil {
-		error := fmt.Errorf(ErrorMsgs().NotFound, userID, "GetThisUser", err)
-		view.RenderErrorPage(w, models.NotFoundLocation("user"), 400, error)
+		view.RenderErrorPage(w, models.NotFoundLocation("user"), 400, models.NotFoundError(userID, "GetThisUser", err))
 	}
 
 	// Fetch thisUser loyalty
@@ -59,16 +57,14 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 
 		thisUser.Followers, thisUser.Following, err = u.App.Loyalty.CountUsers(thisUser.ID)
 		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "error fetching thisUser loyalty", err)
-			// http.Error(w, `{"error": "error fetching thisUser loyalty"}`, http.StatusInternalServerError)
+			view.RenderErrorPage(w, models.NotFoundLocation("user"), 500, models.FetchError("thisUser loyalty", "GetThisUser", err))
 		}
 	}
 
 	// Fetch thisUser userPosts
 	userPosts, err := u.App.Posts.GetPostsByUserID(thisUser.ID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "error fetching thisUser userPosts", err)
-		// http.Error(w, `{"error": "error fetching thisUser userPosts"}`, http.StatusInternalServerError)
+		view.RenderErrorPage(w, models.NotFoundLocation("user"), 500, models.FetchError("thisUser userPosts", "GetThisUser", err))
 	}
 
 	// Fetch Reactions for posts
@@ -77,14 +73,14 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	// Retrieve last reaction time for userPosts
 	userPosts, err = u.Reaction.getLastReactionTimeForPosts(userPosts)
 	if err != nil {
-		http.Error(w, `{"error": "error fetching last reaction time for posts info"}`, http.StatusInternalServerError)
+		view.RenderErrorPage(w, models.NotFoundLocation("user"), 500, models.FetchError("last reaction time for posts info", "GetThisUser", err))
 	}
 
 	// Fetch channel name for userPosts
 	for p := range userPosts {
 		userPosts[p].ChannelID, userPosts[p].ChannelName, err = u.Channel.GetChannelInfoFromPostID(userPosts[p].ID)
 		if err != nil {
-			http.Error(w, `{"error": "error fetching channel info"}`, http.StatusInternalServerError)
+			view.RenderErrorPage(w, models.NotFoundLocation("user"), 500, models.FetchError("channel info", "GetThisUser", err))
 		}
 
 		models.UpdateTimeSince(&userPosts[p])

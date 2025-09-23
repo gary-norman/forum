@@ -37,12 +37,12 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	userLoggedIn := true
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
-		log.Printf(ErrorMsgs().NotFound, "currentUser", "getThisUser", "_")
+		log.Printf(ErrorMsgs.NotFound, "currentUser", "getThisUser", "_")
 		userLoggedIn = false
 	}
 
 	// if err != nil {
-	// 	log.Printf(ErrorMsgs().KeyValuePair, "error parsing thisUser ID", err)
+	// 	log.Printf(ErrorMsgs.KeyValuePair, "error parsing thisUser ID", err)
 	// 	// http.Error(w, `{"error": "invalid thisUser ID"}`, http.StatusBadRequest)
 	// }
 
@@ -89,7 +89,7 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	// Fetch thisUser post comments
 	userPosts, err = u.Comment.GetPostsComments(userPosts)
 	if err != nil {
-		log.Printf(ErrorMsgs().NotFound, "userPosts comments", "getHome", err)
+		log.Printf(ErrorMsgs.NotFound, "userPosts comments", "getHome", err)
 	}
 
 	models.UpdateTimeSince(&thisUser)
@@ -97,7 +97,7 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	// SECTION --- channels --
 	allChannels, err := u.App.Channels.All()
 	if err != nil {
-		log.Printf(ErrorMsgs().Query, "channels.All", err)
+		log.Printf(ErrorMsgs.Query, "channels.All", err)
 	}
 	for c := range allChannels {
 		models.UpdateTimeSince(&allChannels[c])
@@ -120,25 +120,25 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	if userLoggedIn {
 		currentUser.Followers, currentUser.Following, err = u.App.Loyalty.CountUsers(currentUser.ID)
 		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
+			log.Printf(ErrorMsgs.KeyValuePair, "getHome > currentUser loyalty", err)
 		}
 
 		// get owned and joined channels of current thisUser
 		memberships, memberErr := u.App.Memberships.UserMemberships(currentUser.ID)
 		if memberErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+			log.Printf(ErrorMsgs.KeyValuePair, "getHome > UserMemberships", memberErr)
 		}
 		ownedChannels, err = u.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID)
 		if memberErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+			log.Printf(ErrorMsgs.KeyValuePair, "getHome > UserMemberships", memberErr)
 		}
 
 		if err != nil {
-			log.Printf(ErrorMsgs().Query, "GetHome > thisUser owned channels", err)
+			log.Printf(ErrorMsgs.Query, "GetHome > thisUser owned channels", err)
 		}
 		joinedChannels, err = u.Channel.JoinedByCurrentUser(memberships)
 		if err != nil {
-			log.Printf(ErrorMsgs().Query, "thisUser joined channels", err)
+			log.Printf(ErrorMsgs.Query, "thisUser joined channels", err)
 		}
 
 		// ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
@@ -184,14 +184,14 @@ func (u *UserHandler) GetLoggedInUser(r *http.Request) (*models.User, error) {
 	// Get the username from the request cookie
 	userCookie, getCookieErr := r.Cookie("username")
 	if getCookieErr != nil {
-		log.Printf(ErrorMsgs().Cookies, "get", getCookieErr)
+		log.Printf(ErrorMsgs.Cookies, "get", getCookieErr)
 		return nil, getCookieErr
 	}
 	var username string
 	if userCookie != nil {
 		username = userCookie.Value
 	}
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Username", username)
+	fmt.Printf(ErrorMsgs.KeyValuePair, "Username", username)
 	if username == "" {
 		return nil, errors.New("no user is logged in")
 	}
@@ -205,14 +205,14 @@ func (u *UserHandler) GetLoggedInUser(r *http.Request) (*models.User, error) {
 func (u *UserHandler) EditUserDetails(w http.ResponseWriter, r *http.Request) {
 	user, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
-		log.Printf(ErrorMsgs().KeyValuePair, "user not found in context", "editUserDetails")
+		log.Printf(ErrorMsgs.KeyValuePair, "user not found in context", "editUserDetails")
 		return
 	}
 
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
 		http.Error(w, err.Error(), 400)
-		log.Printf(ErrorMsgs().Parse, "editUserDetails", err)
+		log.Printf(ErrorMsgs.Parse, "editUserDetails", err)
 		return
 	}
 	currentAvatar := user.Avatar
@@ -233,10 +233,10 @@ func (u *UserHandler) EditUserDetails(w http.ResponseWriter, r *http.Request) {
 	}
 	editErr := u.App.Users.Edit(user)
 	if editErr != nil {
-		log.Printf(ErrorMsgs().Edit, user.Username, "EditUserDetails", editErr)
+		log.Printf(ErrorMsgs.Edit, user.Username, "EditUserDetails", editErr)
 	}
 	if err := u.App.Cookies.CreateCookies(w, user); err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "error creating cookies", err)
+		log.Printf(ErrorMsgs.KeyValuePair, "error creating cookies", err)
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
 }

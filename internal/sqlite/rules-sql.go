@@ -63,11 +63,11 @@ func (m *RuleModel) All() ([]models.Rule, error) {
 	stmt := "SELECT * FROM Rules ORDER BY ID DESC"
 	rows, queryErr := m.DB.Query(stmt)
 	if queryErr != nil {
-		return nil, fmt.Errorf(ErrorMsgs().Query, "Rules", queryErr)
+		return nil, fmt.Errorf(ErrorMsgs.Query, "Rules", queryErr)
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, "rows", "All")
+			log.Printf(ErrorMsgs.Close, "rows", "All")
 		}
 	}()
 
@@ -82,7 +82,7 @@ func (m *RuleModel) All() ([]models.Rule, error) {
 	}
 
 	if queryErr = rows.Err(); queryErr != nil {
-		return nil, fmt.Errorf(ErrorMsgs().Query, "Rules", queryErr)
+		return nil, fmt.Errorf(ErrorMsgs.Query, "Rules", queryErr)
 	}
 
 	return Rules, nil
@@ -93,11 +93,11 @@ func (m *RuleModel) AllForChannel(channelID int64) ([]models.Rule, error) {
 	refStmt := "SELECT RuleID FROM ChannelsRules WHERE ChannelID = ?"
 	crRows, queryErr := m.DB.Query(refStmt, channelID)
 	if queryErr != nil {
-		return nil, fmt.Errorf(ErrorMsgs().Query, "AllForChannel", queryErr)
+		return nil, fmt.Errorf(ErrorMsgs.Query, "AllForChannel", queryErr)
 	}
 	defer func() {
 		if closeErr := crRows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, "rows", "All")
+			log.Printf(ErrorMsgs.Close, "rows", "All")
 		}
 	}()
 	var IDs []int
@@ -118,7 +118,7 @@ func (m *RuleModel) AllForChannel(channelID int64) ([]models.Rule, error) {
 	defer func(stmt *sql.Stmt) {
 		closErr := stmt.Close()
 		if closErr != nil {
-			log.Printf(ErrorMsgs().Close, "stmt", "insert", closErr)
+			log.Printf(ErrorMsgs.Close, "stmt", "insert", closErr)
 		}
 	}(ruleStmt)
 

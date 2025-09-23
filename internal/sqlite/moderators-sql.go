@@ -21,11 +21,11 @@ func (m *ModModel) All() ([]models.Mod, error) {
 	stmt := "SELECT * FROM Mods ORDER BY ID DESC"
 	rows, queryErr := m.DB.Query(stmt)
 	if queryErr != nil {
-		return nil, fmt.Errorf(ErrorMsgs().Query, "Mods", queryErr)
+		return nil, fmt.Errorf(ErrorMsgs.Query, "Mods", queryErr)
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, "rows", "All")
+			log.Printf(ErrorMsgs.Close, "rows", "All")
 		}
 	}()
 
@@ -50,11 +50,11 @@ func (m *ModModel) GetModdedChannelsForUser(models.UUIDField) ([]models.Mod, err
 	stmt := "SELECT * From Channels WHERE ID IN (SELECT ChannelID FROM Mods WHERE UserID = ?)"
 	rows, queryErr := m.DB.Query(stmt)
 	if queryErr != nil {
-		return nil, fmt.Errorf(ErrorMsgs().Query, "Mods", queryErr)
+		return nil, fmt.Errorf(ErrorMsgs.Query, "Mods", queryErr)
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, "rows", "All")
+			log.Printf(ErrorMsgs.Close, "rows", "All")
 		}
 	}()
 
@@ -78,7 +78,7 @@ func (m *ModModel) GetModdedChannelID(ID models.UUIDField) ([]int64, error) {
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "ModSearch", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "ModSearch", closeErr)
 		}
 	}()
 
@@ -102,7 +102,7 @@ func (m *ModModel) GetModerator(ID int64) ([]models.UUIDField, error) {
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "ModSearch", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "ModSearch", closeErr)
 		}
 	}()
 
@@ -126,7 +126,7 @@ func parseModeratorRow(row *sql.Row) (*models.Mod, error) {
 		&mod.ChannelID,
 		&mod.Created,
 	); err != nil {
-		log.Printf(ErrorMsgs().Query, "GetUserFromId", err)
+		log.Printf(ErrorMsgs.Query, "GetUserFromId", err)
 		return nil, err
 	}
 	models.UpdateTimeSince(&mod)
@@ -142,7 +142,7 @@ func parseModeratorRows(rows *sql.Rows) (*models.Mod, error) {
 		&mod.ChannelID,
 		&mod.Created,
 	); err != nil {
-		log.Printf(ErrorMsgs().Query, "GetUserFromId", err)
+		log.Printf(ErrorMsgs.Query, "GetUserFromId", err)
 		return nil, err
 	}
 	models.UpdateTimeSince(&mod)

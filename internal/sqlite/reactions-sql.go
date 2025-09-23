@@ -198,7 +198,7 @@ func (m *ReactionModel) All() ([]models.Reaction, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "All", closeErr)
 		}
 	}()
 

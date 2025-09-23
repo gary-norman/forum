@@ -38,17 +38,17 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	// ctx := context.Background()
 	// daoAllPosts, err := postDAO.All(ctx)
 	// if err != nil {
-	// 	log.Printf(ErrorMsgs().KeyValuePair, "Error fetching daoAllosts", err)
+	// 	log.Printf(ErrorMsgs.KeyValuePair, "Error fetching daoAllposts", err)
 	// } else {
 	// 	for _, post := range daoAllPosts {
-	// 		fmt.Printf(ErrorMsgs().KeyValuePair, "daoAllPosts", post.Title)
+	// 		fmt.Printf(ErrorMsgs.KeyValuePair, "daoAllPosts", post.Title)
 	// 	}
 	// }
 
 	// SECTION --- user ---
 	allUsers, allUsersErr := h.App.Users.All()
 	if allUsersErr != nil {
-		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
+		log.Printf(ErrorMsgs.Query, "RenderIndex> users > All", allUsersErr)
 	}
 	for u := range allUsers {
 		models.UpdateTimeSince(&allUsers[u])
@@ -58,7 +58,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	for u := range allUsers {
 		allUsers[u].Followers, allUsers[u].Following, allUsersErr = h.App.Loyalty.CountUsers(allUsers[u].ID)
 		if allUsersErr != nil {
-			log.Printf(ErrorMsgs().Query, "getHome> users > All > loyalty", allUsersErr)
+			log.Printf(ErrorMsgs.Query, "RenderIndex> users > All > loyalty", allUsersErr)
 		}
 	}
 
@@ -72,13 +72,13 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	// attach following/follower numbers to the random user
 	randomUser.Followers, randomUser.Following, currentUserErr = h.App.Loyalty.CountUsers(randomUser.ID)
 	if currentUserErr != nil {
-		log.Printf(ErrorMsgs().Query, "getHome> users > All", allUsersErr)
+		log.Printf(ErrorMsgs.Query, "RenderIndex> users > All", allUsersErr)
 	}
 
 	// SECTION --- posts and comments ---
 	allPosts, err := h.App.Posts.All()
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error fetching all posts", err)
+		log.Printf(ErrorMsgs.KeyValuePair, "Error fetching all posts", err)
 	}
 	// Retrieve total likes and dislikes for each post
 	allPosts = h.Reaction.GetPostsLikesAndDislikes(allPosts)
@@ -86,7 +86,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	// Retrieve last reaction time for posts
 	allPosts, err = h.Reaction.getLastReactionTimeForPosts(allPosts)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error getting last reaction time for allPosts", err)
+		log.Printf(ErrorMsgs.KeyValuePair, "Error getting last reaction time for allPosts", err)
 	}
 
 	for p := range allPosts {
@@ -94,26 +94,26 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	}
 	allPosts, err = h.Comment.GetPostsComments(allPosts)
 	if err != nil {
-		log.Printf(ErrorMsgs().NotFound, "allPosts comments", "getHome", err)
+		log.Printf(ErrorMsgs.NotFound, "allPosts comments", "RenderIndex", err)
 	}
 
 	for p := range allPosts {
 		channelIDs, err := h.App.Channels.GetChannelIDFromPost(allPosts[p].ID)
 		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > channelID", err)
+			log.Printf(ErrorMsgs.KeyValuePair, "RenderIndex > channelID", err)
 		}
 		if len(allPosts) > 0 && len(channelIDs) > 0 {
 			allPosts[p].ChannelID = channelIDs[0]
 		} else {
 			fetchErr := fmt.Sprintf("post ID: %v does not belong to any channel", allPosts[p].ID)
-			fmt.Printf(ErrorMsgs().KeyValuePair, "error fetching posts", fetchErr)
+			fmt.Printf(ErrorMsgs.KeyValuePair, "error fetching posts", fetchErr)
 		}
 	}
 
 	// SECTION --- channels --
 	allChannels, err := h.App.Channels.All()
 	if err != nil {
-		log.Printf(ErrorMsgs().Query, "channels.All", err)
+		log.Printf(ErrorMsgs.Query, "channels.All", err)
 	}
 	for c := range allChannels {
 		models.UpdateTimeSince(&allChannels[c])
@@ -138,20 +138,20 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		// attach following/follower numbers to currently logged-in user
 		currentUser.Followers, currentUser.Following, err = h.App.Loyalty.CountUsers(currentUser.ID)
 		if err != nil {
-			fmt.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
+			fmt.Printf(ErrorMsgs.KeyValuePair, "RenderIndex > currentUser loyalty", err)
 		}
 		// get owned and joined channels of current user
 		memberships, memberErr := h.App.Memberships.UserMemberships(currentUser.ID)
 		if memberErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+			log.Printf(ErrorMsgs.KeyValuePair, "RenderIndex > UserMemberships", memberErr)
 		}
 		ownedChannels, err = h.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID)
 		if err != nil {
-			log.Printf(ErrorMsgs().Query, "GetHome > user owned channels", err)
+			log.Printf(ErrorMsgs.Query, "RenderIndex > user owned channels", err)
 		}
 		joinedChannels, err = h.Channel.JoinedByCurrentUser(memberships)
 		if err != nil {
-			log.Printf(ErrorMsgs().Query, "user joined channels", err)
+			log.Printf(ErrorMsgs.Query, "user joined channels", err)
 		}
 
 		// ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
@@ -194,11 +194,11 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		Instance:   "home-page",
 		ImagePaths: h.App.Paths,
 	}
-	log.Printf(ErrorMsgs().KeyValuePair, "GetHome > data.UserID", data.UserID)
+	log.Printf(ErrorMsgs.KeyValuePair, "RenderIndex > data.UserID", data.UserID)
 	// models.JsonError(TemplateData)
 	tpl, err := view.GetTemplate()
 	if err != nil {
-		log.Printf(ErrorMsgs().Parse, "templates", "getHome", err)
+		log.Printf(ErrorMsgs.Parse, "templates", "RenderIndex", err)
 		return
 	}
 
@@ -211,7 +211,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 
 	execErr := t.Execute(w, data)
 	if execErr != nil {
-		log.Printf(ErrorMsgs().Execute, execErr)
+		log.Printf(ErrorMsgs.Execute, execErr)
 		return
 	}
 	log.Printf(ErrorMsgs().KeyValuePair, "GetHome Render time:", time.Since(start))

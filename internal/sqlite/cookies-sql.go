@@ -8,15 +8,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gary-norman/forum/internal/colors"
 	"github.com/gary-norman/forum/internal/models"
 )
 
 type CookieModel struct {
 	DB *sql.DB
 }
-
-var Colors = colors.UseFlavor("Mocha")
 
 func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) error {
 	sessionToken := models.GenerateToken(32)
@@ -43,7 +40,7 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 	})
 
 	if err := m.UpdateCookies(user, sessionToken, csrfToken); err != nil {
-		log.Printf(ErrorMsgs().Cookies, fmt.Sprintf("update user: %v", user.ID), err)
+		log.Printf(ErrorMsgs.Cookies, fmt.Sprintf("update user: %v", user.ID), err)
 		return err
 	}
 	return nil
@@ -55,21 +52,21 @@ func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user 
 	stmt := "SELECT CookiesExpire FROM Users WHERE Username = ?"
 	rows, err := m.DB.Query(stmt, user.Username)
 	if err != nil {
-		log.Printf(ErrorMsgs().Cookies, "query", err)
+		log.Printf(ErrorMsgs.Cookies, "query", err)
 	}
 	defer rows.Close()
 
 	var expire time.Time
 	for rows.Next() {
 		if err := rows.Scan(&expire); err != nil {
-			log.Printf(ErrorMsgs().Cookies, "scan", err)
+			log.Printf(ErrorMsgs.Cookies, "scan", err)
 		}
 	}
 
 	// Get the Session Token from the request cookie
 	st, err := r.Cookie("session_token")
 	if err != nil {
-		log.Printf(ErrorMsgs().Cookies, "query", err)
+		log.Printf(ErrorMsgs.Cookies, "query", err)
 		return false
 	}
 	csrf, _ := r.Cookie("csrf_token")
@@ -94,13 +91,13 @@ func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user 
 		csrfColor = Colors.Green
 		csrfMatchString = "Success!"
 	}
-	log.Printf(ErrorMsgs().KeyValuePair, "Cookie SessionToken", st.Value)
-	log.Printf(ErrorMsgs().KeyValuePair, "User SessionToken", user.SessionToken)
+	log.Printf(ErrorMsgs.KeyValuePair, "Cookie SessionToken", st.Value)
+	log.Printf(ErrorMsgs.KeyValuePair, "User SessionToken", user.SessionToken)
 	log.Printf(Colors.Blue+"Session token verficiation: "+stColor+"%v\n"+Colors.Reset, stMatchString)
-	fmt.Println(ErrorMsgs().Divider)
-	log.Printf(ErrorMsgs().KeyValuePair, "Cookie csrfToken", csrf.Value)
-	log.Printf(ErrorMsgs().KeyValuePair, "Header csrfToken", csrfToken)
-	log.Printf(ErrorMsgs().KeyValuePair, "User csrfToken", user.CSRFToken)
+	fmt.Println(ErrorMsgs.Divider)
+	log.Printf(ErrorMsgs.KeyValuePair, "Cookie csrfToken", csrf.Value)
+	log.Printf(ErrorMsgs.KeyValuePair, "Header csrfToken", csrfToken)
+	log.Printf(ErrorMsgs.KeyValuePair, "User csrfToken", user.CSRFToken)
 	log.Printf(Colors.Blue+"CSRF token verficiation: "+csrfColor+"%v\n"+Colors.Reset, csrfMatchString)
 
 	return success
@@ -109,7 +106,7 @@ func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user 
 func (m *CookieModel) UpdateCookies(user *models.User, sessionToken, csrfToken string) error {
 	expires := time.Now().Add(24 * time.Hour)
 	if m == nil || m.DB == nil {
-		fmt.Printf(ErrorMsgs().UserModel, "UpdateCookies", user.Username)
+		fmt.Printf(ErrorMsgs.UserModel, "UpdateCookies", user.Username)
 		return errors.New("UserModel or DB is nil")
 	}
 	var stmt string

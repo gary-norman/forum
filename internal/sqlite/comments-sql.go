@@ -209,12 +209,12 @@ func (m *CommentModel) GetCommentByPostID(id int64) ([]models.Comment, error) {
 	stmt := "SELECT * FROM Comments WHERE CommentedPostID = ? ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt, id)
 	if err != nil {
-		log.Printf(ErrorMsgs().Query, stmt, err)
+		log.Printf(ErrorMsgs.Query, stmt, err)
 		return nil, err
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "GetCommentByPostID", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "GetCommentByPostID", closeErr)
 		}
 	}()
 	var comments []models.Comment
@@ -236,7 +236,7 @@ func (m *CommentModel) GetCommentByPostID(id int64) ([]models.Comment, error) {
 			&c.ChannelID,
 		)
 		if scanErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
+			log.Printf(ErrorMsgs.KeyValuePair, "Error", "scan")
 			return nil, scanErr
 		}
 		comments = append(comments, c)
@@ -252,12 +252,12 @@ func (m *CommentModel) GetCommentByCommentID(id int64) ([]models.Comment, error)
 	stmt := "SELECT * FROM Comments WHERE CommentedCommentID = ? ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt, id)
 	if err != nil {
-		log.Printf(ErrorMsgs().Query, stmt, err)
+		log.Printf(ErrorMsgs.Query, stmt, err)
 		return nil, err
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "GetCommentByCommentID", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "GetCommentByCommentID", closeErr)
 		}
 	}()
 	var comments []models.Comment
@@ -279,7 +279,7 @@ func (m *CommentModel) GetCommentByCommentID(id int64) ([]models.Comment, error)
 			&c.IsCommentable,
 		)
 		if scanErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
+			log.Printf(ErrorMsgs.KeyValuePair, "Error", "scan")
 			return nil, scanErr
 		}
 		comments = append(comments, c)
@@ -302,14 +302,14 @@ func (m *CommentModel) All() ([]models.Comment, error) {
 
 	rows, selectErr := m.DB.Query(stmt)
 	if selectErr != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error:", "select")
-		log.Printf(ErrorMsgs().Query, stmt, selectErr)
+		log.Printf(ErrorMsgs.KeyValuePair, "Error:", "select")
+		log.Printf(ErrorMsgs.Query, stmt, selectErr)
 		return nil, selectErr
 	}
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "All", closeErr)
 		}
 	}()
 
@@ -331,8 +331,8 @@ func (m *CommentModel) All() ([]models.Comment, error) {
 			&p.IsFlagged,
 			&p.IsCommentable)
 		if scanErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "Error:", "scan")
-			log.Printf(ErrorMsgs().Query, stmt, scanErr)
+			log.Printf(ErrorMsgs.KeyValuePair, "Error:", "scan")
+			log.Printf(ErrorMsgs.Query, stmt, scanErr)
 			return nil, scanErr
 		}
 		Comments = append(Comments, p)

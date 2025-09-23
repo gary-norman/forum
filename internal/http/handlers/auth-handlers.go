@@ -14,7 +14,10 @@ import (
 	"github.com/gary-norman/forum/internal/view"
 )
 
-var Colors = colors.UseFlavor("Mocha")
+var (
+	Colors, _ = colors.UseFlavor("Mocha")
+	ErrorMsgs = models.CreateErrorMessages()
+)
 
 type AuthHandler struct {
 	App     *app.App
@@ -33,7 +36,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 			"message": "username must be between 5 and 16 characters",
 		})
 		if err != nil {
-			log.Printf(ErrorMsgs().Encode, "register: username", err)
+			log.Printf(ErrorMsgs.Encode, "register: username", err)
 			return
 		}
 		return
@@ -46,7 +49,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 				"and at least 8 or more characters",
 		})
 		if err != nil {
-			log.Printf(ErrorMsgs().Encode, "register: password", err)
+			log.Printf(ErrorMsgs.Encode, "register: password", err)
 			return
 		}
 		return
@@ -58,7 +61,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 			"message": "please enter a valid email address",
 		})
 		if err != nil {
-			log.Printf(ErrorMsgs().Encode, "register: validEmail", err)
+			log.Printf(ErrorMsgs.Encode, "register: validEmail", err)
 			return
 		}
 		return
@@ -72,7 +75,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 			"body":    emailErr,
 		})
 		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "register: emailExists", encErr)
+			log.Printf(ErrorMsgs.Encode, "register: emailExists", encErr)
 			return
 		}
 		return
@@ -86,7 +89,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 			"body":    usernameErr,
 		})
 		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "register: userExists", encErr)
+			log.Printf(ErrorMsgs.Encode, "register: userExists", encErr)
 			return
 		}
 		return
@@ -94,7 +97,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 	user, err := service.NewUser(username, email, password)
 	if err != nil {
-		fmt.Printf(ErrorMsgs().KeyValuePair, fmt.Sprintf("Error creating user: %v", username), err)
+		fmt.Printf(ErrorMsgs.KeyValuePair, fmt.Sprintf("Error creating user: %v", username), err)
 	}
 
 	if err := h.App.Users.Insert(
@@ -116,7 +119,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 			"message": "registration failed!",
 		})
 		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "register: insertErr", encErr)
+			log.Printf(ErrorMsgs.Encode, "register: insertErr", encErr)
 			return
 		}
 	}
@@ -137,7 +140,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		"body":    FormFields{Fields: formFields},
 	})
 	if encErr != nil {
-		log.Printf(ErrorMsgs().Encode, "register: send success", encErr)
+		log.Printf(ErrorMsgs.Encode, "register: send success", encErr)
 		return
 	}
 
@@ -159,20 +162,20 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	login := credentials.Username
 	password := credentials.Password
 	fmt.Printf(Colors.Peach+"Attempting login for "+Colors.Text+"%v\n"+Colors.Reset, login)
-	fmt.Println(ErrorMsgs().Divider)
+	fmt.Println(ErrorMsgs.Divider)
 
 	user, getUserErr := h.App.Users.GetUserFromLogin(login, "login")
 	if getUserErr != nil {
 		// Respond with an unsuccessful login message
 		w.Header().Set("Content-Type", "application/json")
-		log.Printf(ErrorMsgs().NotFound, login, "login > GetUserFromLogin", getUserErr)
+		log.Printf(ErrorMsgs.NotFound, login, "login > GetUserFromLogin", getUserErr)
 		w.WriteHeader(http.StatusOK)
 		encErr := json.NewEncoder(w).Encode(map[string]any{
 			"code":    http.StatusUnauthorized,
 			"message": "user not found",
 		})
 		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
+			log.Printf(ErrorMsgs.Encode, "login: CreateCookies", encErr)
 			return
 		}
 		return
@@ -187,10 +190,10 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 			encErr := json.NewEncoder(w).Encode(map[string]any{
 				"code":    http.StatusInternalServerError,
 				"message": "failed to create cookies",
-				"body":    fmt.Errorf(ErrorMsgs().Cookies, "create", createCookiErr),
+				"body":    fmt.Errorf(ErrorMsgs.Cookies, "create", createCookiErr),
 			})
 			if encErr != nil {
-				log.Printf(ErrorMsgs().Encode, "login: CreateCookies", encErr)
+				log.Printf(ErrorMsgs.Encode, "login: CreateCookies", encErr)
 				return
 			}
 			return
@@ -203,7 +206,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 			"message": fmt.Sprintf("Welcome, %s! Login successful.", user.Username),
 		})
 		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "login: success", encErr)
+			log.Printf(ErrorMsgs.Encode, "login: success", encErr)
 			return
 		}
 	} else {
@@ -215,7 +218,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 			"message": "incorrect password",
 		})
 		if encErr != nil {
-			log.Printf(ErrorMsgs().Encode, "login: fail", encErr)
+			log.Printf(ErrorMsgs.Encode, "login: fail", encErr)
 			return
 		}
 	}
@@ -230,11 +233,11 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	}
 	username := cookie.Value
 	if username == "" {
-		log.Printf(ErrorMsgs().KeyValuePair, "aborting logout:", "no user is logged in")
+		log.Printf(ErrorMsgs.KeyValuePair, "aborting logout:", "no user is logged in")
 		return
 	}
 	fmt.Printf(Colors.Peach+"Attempting logout for "+Colors.Text+"%v\n"+Colors.Reset, username)
-	fmt.Println(ErrorMsgs().Divider)
+	fmt.Println(ErrorMsgs.Divider)
 	var user *models.User
 	user, getUserErr := h.App.Users.GetUserByUsername(username, "logout")
 	if getUserErr != nil {
@@ -244,7 +247,7 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	// Delete the Session Token and CSRF Token cookies
 	delCookiErr := h.App.Cookies.DeleteCookies(w, user)
 	if delCookiErr != nil {
-		log.Printf(ErrorMsgs().Cookies, "delete", delCookiErr)
+		log.Printf(ErrorMsgs.Cookies, "delete", delCookiErr)
 	}
 	// send user confirmation
 	log.Printf(Colors.Green+"%v logged out successfully!", user.Username)
@@ -253,7 +256,7 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 		"message": "Logged out successfully!",
 	})
 	if encErr != nil {
-		log.Printf(ErrorMsgs().Encode, "logout: success", encErr)
+		log.Printf(ErrorMsgs.Encode, "logout: success", encErr)
 		return
 	}
 }
@@ -273,7 +276,7 @@ func (h *AuthHandler) Protected(w http.ResponseWriter, r *http.Request) {
 	}
 	fprintf, err := fmt.Fprintf(w, "CSRF Valildation successful! Welcome, %s", user.Username)
 	if err != nil {
-		log.Print(ErrorMsgs().Protected, user.Username, err)
+		log.Print(ErrorMsgs.Protected, user.Username, err)
 		return
 	}
 	log.Println(fprintf)

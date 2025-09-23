@@ -27,7 +27,7 @@ func (c *ChannelHandler) GetChannelPage(w http.ResponseWriter, r *http.Request) 
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 
 	if !ok {
-		log.Printf(ErrorMsgs().NotFound, "current user", "getThisChannel", "_")
+		log.Printf(ErrorMsgs.NotFound, "current user", "getThisChannel", "_")
 		userLoggedIn = false
 	}
 
@@ -51,17 +51,17 @@ func (c *ChannelHandler) GetChannelPage(w http.ResponseWriter, r *http.Request) 
 		// get owned and joined channels of current user
 		memberships, memberErr := c.App.Memberships.UserMemberships(currentUser.ID)
 		if memberErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+			log.Printf(ErrorMsgs.KeyValuePair, "getHome > UserMemberships", memberErr)
 			http.Error(w, `{"error": "Error getting user memberships"}`, http.StatusInternalServerError)
 		}
 		ownedChannels, err = c.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID)
 		if err != nil {
-			log.Printf(ErrorMsgs().Query, "GetThisChannel > user owned channels", err)
+			log.Printf(ErrorMsgs.Query, "GetThisChannel > user owned channels", err)
 			http.Error(w, `{"error": "Error getting user owned channels"}`, http.StatusInternalServerError)
 		}
 		joinedChannels, err = c.JoinedByCurrentUser(memberships)
 		if err != nil {
-			log.Printf(ErrorMsgs().Query, "user joined channels", err)
+			log.Printf(ErrorMsgs.Query, "user joined channels", err)
 			http.Error(w, `{"error": "Error getting user joined channels"}`, http.StatusInternalServerError)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
@@ -86,14 +86,14 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 	userLoggedIn := true
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
-		log.Printf(ErrorMsgs().NotFound, "current user", "getThisChannel", "_")
+		log.Printf(ErrorMsgs.NotFound, "current user", "getThisChannel", "_")
 		userLoggedIn = false
 	}
 
 	// Parse channelID from the request
 	channelID, err := models.GetIntFromPathValue(r.PathValue("channelId"))
 	if err != nil {
-		error := fmt.Errorf(ErrorMsgs().NotFound, r.PathValue("channelId"), "GetThisChannel", err)
+		error := fmt.Errorf(ErrorMsgs.NotFound, r.PathValue("channelId"), "GetThisChannel", err)
 		view.RenderErrorPage(w, models.NotFoundLocation("channel"), 400, error)
 		return
 	}
@@ -101,12 +101,12 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 	// Fetch the channel
 	foundChannels, err := c.App.Channels.GetChannelsByID(channelID)
 	if err != nil || len(foundChannels) == 0 {
-		error := fmt.Errorf(ErrorMsgs().NotFound, channelID, "GetThisChannel", err)
+		error := fmt.Errorf(ErrorMsgs.NotFound, channelID, "GetThisChannel", err)
 		view.RenderErrorPage(w, models.NotFoundLocation("channel"), 400, error)
 		return
 	}
 	thisChannel := foundChannels[0]
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Fetching channel", thisChannel.Name)
+	fmt.Printf(ErrorMsgs.KeyValuePair, "Fetching channel", thisChannel.Name)
 	models.UpdateTimeSince(&thisChannel)
 
 	// Fetch the channel owner
@@ -182,23 +182,23 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 		// attach following/follower numbers to currently logged-in user
 		currentUser.Followers, currentUser.Following, err = c.App.Loyalty.CountUsers(currentUser.ID)
 		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > currentUser loyalty", err)
+			log.Printf(ErrorMsgs.KeyValuePair, "getHome > currentUser loyalty", err)
 			http.Error(w, `{"error": "Error getting user loyalty"}`, http.StatusInternalServerError)
 		}
 		// get owned and joined channels of current user
 		memberships, memberErr := c.App.Memberships.UserMemberships(currentUser.ID)
 		if memberErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "getHome > UserMemberships", memberErr)
+			log.Printf(ErrorMsgs.KeyValuePair, "getHome > UserMemberships", memberErr)
 			http.Error(w, `{"error": "Error getting user memberships"}`, http.StatusInternalServerError)
 		}
 		ownedChannels, err = c.App.Channels.OwnedOrJoinedByCurrentUser(currentUser.ID)
 		if err != nil {
-			log.Printf(ErrorMsgs().Query, "GetThisChannel > user owned channels", err)
+			log.Printf(ErrorMsgs.Query, "GetThisChannel > user owned channels", err)
 			http.Error(w, `{"error": "Error getting user owned channels"}`, http.StatusInternalServerError)
 		}
 		joinedChannels, err = c.JoinedByCurrentUser(memberships)
 		if err != nil {
-			log.Printf(ErrorMsgs().Query, "user joined channels", err)
+			log.Printf(ErrorMsgs.Query, "user joined channels", err)
 			http.Error(w, `{"error": "Error getting user joined channels"}`, http.StatusInternalServerError)
 		}
 		ownedAndJoinedChannels = append(ownedChannels, joinedChannels...)
@@ -233,13 +233,13 @@ func (c *ChannelHandler) GetThisChannel(w http.ResponseWriter, r *http.Request) 
 func (c *ChannelHandler) GetChannelInfoFromPostID(postID int64) (int64, string, error) {
 	channelIDs, err := c.App.Channels.GetChannelIDFromPost(postID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "GetChannelInfoFromPostId > GetChannelIdFromPost", err)
+		log.Printf(ErrorMsgs.KeyValuePair, "GetChannelInfoFromPostId > GetChannelIdFromPost", err)
 		return 0, "", err
 	}
 	channelID := channelIDs[0]
 	channelName, err := c.App.Channels.GetChannelNameFromID(channelID)
 	if err != nil {
-		log.Printf(ErrorMsgs().NotFound, "GetChannelInfoFromPostId", "GetChannelNameFromPost", err)
+		log.Printf(ErrorMsgs.NotFound, "GetChannelInfoFromPostId", "GetChannelNameFromPost", err)
 		return 0, "", err
 	}
 	return channelID, channelName, nil
@@ -254,7 +254,7 @@ func (c *ChannelHandler) StoreChannel(w http.ResponseWriter, r *http.Request) {
 	parseErr := r.ParseMultipartForm(10 << 20)
 	if parseErr != nil {
 		http.Error(w, parseErr.Error(), 400)
-		log.Printf(ErrorMsgs().Parse, "storeChannel", parseErr)
+		log.Printf(ErrorMsgs.Parse, "storeChannel", parseErr)
 		return
 	}
 
@@ -285,7 +285,7 @@ func (c *ChannelHandler) StoreChannel(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if insertErr != nil {
-		log.Printf(ErrorMsgs().Post, insertErr)
+		log.Printf(ErrorMsgs.Post, insertErr)
 		http.Error(w, insertErr.Error(), 500)
 		return
 	}
@@ -301,24 +301,24 @@ func (c *ChannelHandler) StoreMembership(w http.ResponseWriter, r *http.Request)
 	}
 	if parseErr := r.ParseForm(); parseErr != nil {
 		http.Error(w, parseErr.Error(), 400)
-		log.Printf(ErrorMsgs().Parse, "storeMembership", parseErr)
+		log.Printf(ErrorMsgs.Parse, "storeMembership", parseErr)
 		return
 	}
 	fmt.Printf("user: %v", user.Username)
 	// get channelID
 	joinedChannelID, convErr := strconv.ParseInt(r.PostForm.Get("channelId"), 10, 64)
 	if convErr != nil {
-		log.Printf(ErrorMsgs().Convert, r.PostForm.Get("channelId"), "StoreMembership > GetChannelID", convErr)
+		log.Printf(ErrorMsgs.Convert, r.PostForm.Get("channelId"), "StoreMembership > GetChannelID", convErr)
 	}
 	if err := c.App.Memberships.Insert(user.ID, joinedChannelID); err != nil {
-		log.Printf(ErrorMsgs().Post, err)
+		log.Printf(ErrorMsgs.Post, err)
 		http.Error(w, err.Error(), 500)
 		return
 	}
 
 	channelName, err := c.App.Channels.GetNameOfChannel(joinedChannelID)
 	if err != nil {
-		log.Printf(ErrorMsgs().Query, "channel", err)
+		log.Printf(ErrorMsgs.Query, "channel", err)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -328,21 +328,22 @@ func (c *ChannelHandler) StoreMembership(w http.ResponseWriter, r *http.Request)
 		"message": fmt.Sprintf("Welcome to %v!", channelName),
 	})
 	if encErr != nil {
-		log.Printf(ErrorMsgs().Encode, "storeMembership: Accepted", encErr)
+		log.Printf(ErrorMsgs.Encode, "storeMembership: Accepted", encErr)
 		return
 	}
 }
 
 // TODO this function is a mess
+
 // JoinedByCurrentUser checks if the currently logged-in user is a member of the current channel
 func (c *ChannelHandler) JoinedByCurrentUser(memberships []models.Membership) ([]models.Channel, error) {
 	fmt.Println(Colors.Peach + "Checking if this user is a member of this channel" + Colors.Reset)
-	fmt.Println(ErrorMsgs().Divider)
+	fmt.Println(ErrorMsgs.Divider)
 	var channels []models.Channel
 	for _, membership := range memberships {
 		channel, err := c.App.Channels.GetChannelsByID(membership.ChannelID)
 		if err != nil {
-			return nil, fmt.Errorf(ErrorMsgs().KeyValuePair, "Error calling JoinedByCurrentUser > OwnedOrJoinedByCurrentUser", err)
+			return nil, fmt.Errorf(ErrorMsgs.KeyValuePair, "Error calling JoinedByCurrentUser > OwnedOrJoinedByCurrentUser", err)
 		}
 		channels = append(channels, channel[0])
 	}
@@ -358,13 +359,13 @@ func (c *ChannelHandler) JoinedByCurrentUser(memberships []models.Membership) ([
 func (c *ChannelHandler) CreateAndInsertRule(w http.ResponseWriter, r *http.Request) {
 	channelID, err := strconv.ParseInt(r.PathValue("channelId"), 10, 64)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > convert channelId to int", err)
+		log.Printf(ErrorMsgs.KeyValuePair, "CreateAndInsertRule > convert channelId to int", err)
 	}
 
 	// Get the "rules" input value
 	rulesJSON := r.FormValue("rules")
 	if rulesJSON == "" { // TODO send this message to the user
-		log.Printf(ErrorMsgs().KeyValuePair, "message to user", "you have not added or removed any rules")
+		log.Printf(ErrorMsgs.KeyValuePair, "message to user", "you have not added or removed any rules")
 	}
 
 	// Decode JSON into a slice of Rule structs
@@ -378,21 +379,21 @@ func (c *ChannelHandler) CreateAndInsertRule(w http.ResponseWriter, r *http.Requ
 		id, found := strings.CutPrefix(rule.ID, "existing-channel-rule-")
 		idInt, err := strconv.ParseInt(id, 10, 64)
 		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > id => idInt", err)
+			log.Printf(ErrorMsgs.KeyValuePair, "CreateAndInsertRule > id => idInt", err)
 		}
 		if found {
 			err := c.App.Rules.DeleteRule(channelID, idInt)
 			if err != nil {
-				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > DeleteRule", err)
+				log.Printf(ErrorMsgs.KeyValuePair, "CreateAndInsertRule > DeleteRule", err)
 			}
 		} else {
 			ruleID, err := c.App.Rules.CreateRule(rule.Rule)
 			if err != nil {
-				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > CreateRule", err)
+				log.Printf(ErrorMsgs.KeyValuePair, "CreateAndInsertRule > CreateRule", err)
 			}
 			err = c.App.Rules.InsertRule(channelID, ruleID)
 			if err != nil {
-				log.Printf(ErrorMsgs().KeyValuePair, "CreateAndInsertRule > InsertRule", err)
+				log.Printf(ErrorMsgs.KeyValuePair, "CreateAndInsertRule > InsertRule", err)
 			}
 		}
 	}

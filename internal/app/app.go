@@ -28,11 +28,10 @@ var (
 	imagePath  string = "/db/userdata/images/"
 )
 
-var Colors = colors.UseFlavor("Mocha")
-
-func ErrorMsgs() *models.Errors {
-	return models.CreateErrorMessages()
-}
+var (
+	Colors, _ = colors.UseFlavor("Mocha")
+	ErrorMsgs = models.CreateErrorMessages()
+)
 
 type App struct {
 	DB          *sql.DB // Store DB reference for cleanup
@@ -98,7 +97,7 @@ func InitializeApp() (*App, func(), error) {
 	if err = initDB.QueryRow("select sqlite_version()").Scan(&dbVersion); err != nil {
 		log.Printf(Colors.Red+"Error fetching SQLite version: %v\n"+Colors.Reset, err)
 	}
-	log.Printf(ErrorMsgs().DBSuccess, dbType, dbVersion)
+	log.Printf(ErrorMsgs.DBSuccess, dbType, dbVersion)
 
 	// App instance with DB reference
 	appInstance := NewApp(initDB)

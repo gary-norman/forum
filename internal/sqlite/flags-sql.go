@@ -2,8 +2,9 @@ package sqlite
 
 import (
 	"database/sql"
-	"github.com/gary-norman/forum/internal/models"
 	"log"
+
+	"github.com/gary-norman/forum/internal/models"
 )
 
 type FlagModel struct {
@@ -25,7 +26,7 @@ func (m *FlagModel) All() ([]models.Flag, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "All", closeErr)
 		}
 	}()
 

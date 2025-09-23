@@ -189,7 +189,7 @@ func (m *LoyaltyModel) All() ([]models.Loyalty, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "All", closeErr)
 		}
 	}()
 

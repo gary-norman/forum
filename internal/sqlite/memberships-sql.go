@@ -18,7 +18,7 @@ func (m *MembershipModel) Insert(userID models.UUIDField, channelID int64) error
 }
 
 func (m *MembershipModel) UserMemberships(userID models.UUIDField) ([]models.Membership, error) {
-	// fmt.Printf(ErrorMsgs().KeyValuePair, "Checking memberships for UserID", userID)
+	// fmt.Printf(ErrorMsgs.KeyValuePair, "Checking memberships for UserID", userID)
 	stmt := "SELECT ID, UserID, ChannelID, Created FROM Memberships WHERE UserID = ?"
 	rows, queryErr := m.DB.Query(stmt, userID)
 	if queryErr != nil {
@@ -26,7 +26,7 @@ func (m *MembershipModel) UserMemberships(userID models.UUIDField) ([]models.Mem
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "UserMemberships", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "UserMemberships", closeErr)
 		}
 	}()
 	var memberships []models.Membership
@@ -41,7 +41,7 @@ func (m *MembershipModel) UserMemberships(userID models.UUIDField) ([]models.Mem
 	if rowsErr := rows.Err(); rowsErr != nil {
 		return nil, rowsErr
 	}
-	// fmt.Printf(ErrorMsgs().KeyValuePair, "Channels joined by current user", len(memberships))
+	// fmt.Printf(ErrorMsgs.KeyValuePair, "Channels joined by current user", len(memberships))
 	return memberships, nil
 }
 
@@ -54,7 +54,7 @@ func (m *MembershipModel) All() ([]models.Membership, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "All", closeErr)
 		}
 	}()
 

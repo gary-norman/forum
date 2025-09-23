@@ -21,11 +21,10 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func ErrorMsgs() *models.Errors {
-	return models.CreateErrorMessages()
-}
-
-var Colors = colors.UseFlavor("Mocha")
+var (
+	Colors, _ = colors.UseFlavor("Mocha")
+	ErrorMsgs = models.CreateErrorMessages()
+)
 
 func main() {
 	// pprof server for profiling at http://localhost:6060/debug/pprof/
@@ -64,12 +63,12 @@ func main() {
 	}
 	// Log server listening messages
 	address := "http://localhost" + addr
-	fmt.Printf(ErrorMsgs().KeyValuePair, "Starting server on port", port)
-	log.Printf(ErrorMsgs().ConnSuccess, address)
+	fmt.Printf(ErrorMsgs.KeyValuePair, "Starting server on port", port)
+	log.Printf(ErrorMsgs.ConnSuccess, address)
 
 	go func() {
 		if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-			fmt.Printf(ErrorMsgs().ConnInit, srv.Addr, "srv.ListenAndServe")
+			fmt.Printf(ErrorMsgs.ConnInit, srv.Addr, "srv.ListenAndServe")
 			log.Fatalf("HTTP server error: %v", err)
 		}
 		log.Println(Colors.Teal + "Stopped serving new connections." + Colors.Reset)
@@ -86,7 +85,7 @@ func main() {
 	// shut down the server
 	log.Println("Shutting down gracefully...")
 	if err := srv.Shutdown(shutdownCtx); err != nil {
-		log.Fatalf(ErrorMsgs().Shutdown, err)
+		log.Fatalf(ErrorMsgs.Shutdown, err)
 	}
 	log.Println(Colors.Teal + "Graceful shutdown complete." + Colors.Reset)
 }

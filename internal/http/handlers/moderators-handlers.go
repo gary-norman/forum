@@ -38,17 +38,17 @@ func writeJSONResponse(w http.ResponseWriter, statusCode int, message string) {
 func (m *ModHandler) RequestModeration(w http.ResponseWriter, r *http.Request, channelID int64) {
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
-		log.Printf(ErrorMsgs().NotFound, "currentUser", "requestModeration", "_")
+		log.Printf(ErrorMsgs.NotFound, "currentUser", "requestModeration", "_")
 		return
 	}
 	channelOwner, err := m.App.Channels.GetNameOfChannelOwner(channelID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "error fetching channel owner", err)
+		log.Printf(ErrorMsgs.KeyValuePair, "error fetching channel owner", err)
 	}
 
 	channel, err := m.App.Channels.GetChannelByID(channelID)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "error fetching channel", err)
+		log.Printf(ErrorMsgs.KeyValuePair, "error fetching channel", err)
 		http.Error(w, `{"error": "channel not found"}`, http.StatusNotFound)
 		return
 	}
@@ -61,10 +61,10 @@ func (m *ModHandler) RequestModeration(w http.ResponseWriter, r *http.Request, c
 	case false:
 		// call the  AddModeration function
 		if m.App.Mods.AddModeration(currentUser.ID, channelID) != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "error adding moderation", err)
+			log.Printf(ErrorMsgs.KeyValuePair, "error adding moderation", err)
 		}
 		writeJSONResponse(w, http.StatusOK, fmt.Sprintf("Welcome to %s!", channel.Name))
 	default:
-		log.Printf(ErrorMsgs().KeyValuePair, "error determining channel privacy", "switch caught neither true or false")
+		log.Printf(ErrorMsgs.KeyValuePair, "error determining channel privacy", "switch caught neither true or false")
 	}
 }

@@ -197,7 +197,7 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "All", closeErr)
 		}
 	}()
 
@@ -212,7 +212,7 @@ func (m *ChannelModel) All() ([]models.Channel, error) {
 		c.MembersOnline = rnd
 		channels = append(channels, *c)
 	}
-	// fmt.Printf(ErrorMsgs().KeyValuePair, "Total channels", len(Channels))
+	// fmt.Printf(ErrorMsgs.KeyValuePair, "Total channels", len(Channels))
 	return channels, nil
 }
 
@@ -236,7 +236,7 @@ func (m *ChannelModel) AddPostToChannel(channelID, postID int64) error {
 	stmt := "INSERT INTO PostChannels (ChannelID, PostID, Created) VALUES (?, ?, DateTime('now'))"
 	_, err := m.DB.Exec(stmt, channelID, postID)
 	if err != nil {
-		log.Printf(ErrorMsgs().Insert, "PostChannels", "ChannelID", channelID, "PostID", postID, err)
+		log.Printf(ErrorMsgs.Insert, "PostChannels", "ChannelID", channelID, "PostID", postID, err)
 		return err
 	}
 	return nil

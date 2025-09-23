@@ -21,7 +21,7 @@ func (h *ReactionHandler) GetPostsLikesAndDislikes(posts []models.Post) []models
 		// fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
 		if err != nil {
 			postStr := fmt.Sprintf("PostID: %v", post.ID)
-			log.Printf(ErrorMsgs().Generic, "Error counting reactions", postStr, "GetPostsLikesAndDislikes", err)
+			log.Printf(ErrorMsgs.Generic, "Error counting reactions", postStr, "GetPostsLikesAndDislikes", err)
 			likes, dislikes = 0, 0 // Default values if there is an error
 		}
 		models.React(&posts[p], likes, dislikes)
@@ -39,7 +39,7 @@ func (h *ReactionHandler) getLastReactionTimeForPosts(posts []models.Post) ([]mo
 
 		lastReactionTime, err := h.App.Reactions.GetLastReaction(p.ID, 0)
 		if err != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "Error getting last reaction time", err)
+			log.Printf(ErrorMsgs.KeyValuePair, "Error getting last reaction time", err)
 		}
 		if lastReactionTime.Created.IsZero() {
 			// fmt.Printf("No reaction time found for PostID: %v\n", p.ID)
@@ -60,7 +60,7 @@ func (h *ReactionHandler) GetCommentsLikesAndDislikes(comments []models.Comment)
 		// fmt.Printf("PostID: %v, Likes: %v, Dislikes: %v\n", posts[i].ID, likes, dislikes)
 		if err != nil {
 			postStr := fmt.Sprintf("CommentID: %v", comment.ID)
-			log.Printf(ErrorMsgs().Generic, "Error counting reactions", postStr, "GetPostsLikesAndDislikes", err)
+			log.Printf(ErrorMsgs.Generic, "Error counting reactions", postStr, "GetPostsLikesAndDislikes", err)
 			likes, dislikes = 0, 0 // Default values if there is an error
 		}
 		models.React(&comments[c], likes, dislikes)
@@ -117,10 +117,10 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 	}
 
 	updatedPair := fmt.Sprintf("%s: %v", updatedStr, updatedID)
-	log.Printf(ErrorMsgs().KeyValuePair, "Updating like for", updatedPair)
+	log.Printf(ErrorMsgs.KeyValuePair, "Updating like for", updatedPair)
 
 	if err := h.App.Reactions.Upsert(reactionData.Liked, reactionData.Disliked, reactionData.AuthorID, reactionData.PostID, reactionData.CommentID); err != nil {
-		log.Printf(ErrorMsgs().Update, updatedPair, "storeReaction > h.App.reactions.Upsert", err)
+		log.Printf(ErrorMsgs.Update, updatedPair, "storeReaction > h.App.reactions.Upsert", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -131,14 +131,14 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 	// w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(map[string]string{"message": "Reaction added to database"})
 	if err != nil {
-		log.Printf(ErrorMsgs().Post, err)
+		log.Printf(ErrorMsgs.Post, err)
 		http.Error(w, err.Error(), 500)
 		return
 	}
 
 	// updatedReactions, err := h.App.Reactions.All()
 	// if err != nil {
-	// 	log.Printf(ErrorMsgs().Read, updatedReactions, "storeReaction > h.App.reactions.All", err)
+	// 	log.Printf(ErrorMsgs.Read, updatedReactions, "storeReaction > h.App.reactions.All", err)
 	// 	return
 	// }
 	//
@@ -153,6 +153,6 @@ func (h *ReactionHandler) StoreReaction(w http.ResponseWriter, r *http.Request) 
 	// 	reaction.ReactedCommentID = nil
 	// 	reaction.ReactedPostID = nil
 	// 	models.JsonPost(reaction)
-	// 	fmt.Println(ErrorMsgs().Divider)
+	// 	fmt.Println(ErrorMsgs.Divider)
 	// }
 }

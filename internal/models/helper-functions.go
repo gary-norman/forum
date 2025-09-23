@@ -7,9 +7,7 @@ import (
 	"time"
 )
 
-func ErrorMsgs() *Errors {
-	return CreateErrorMessages()
-}
+var ErrorMsgs = CreateErrorMessages()
 
 // TimeUpdatable is an interface for types that can update their TimeSince field.
 type TimeUpdatable interface {
@@ -93,26 +91,26 @@ type Number interface {
 }
 
 func EncodeError(item, location string, err error) error {
-	error := fmt.Errorf(ErrorMsgs().Fetch, item, location, err)
+	error := fmt.Errorf(ErrorMsgs.Fetch, item, location, err)
 	return error
 }
 
 func FetchError(item, location string, err error) error {
-	error := fmt.Errorf(ErrorMsgs().Fetch, item, location, err)
+	error := fmt.Errorf(ErrorMsgs.Fetch, item, location, err)
 	return error
 }
 
 func NotFoundError[T Number](item T, location string, err error) error {
-	error := fmt.Errorf(ErrorMsgs().NotFound, item, location, err)
+	error := fmt.Errorf(ErrorMsgs.NotFound, item, location, err)
 	return error
 }
 
 func ParseError(item, location string, err error) error {
-	error := fmt.Errorf(ErrorMsgs().Parse, item, location, err)
+	error := fmt.Errorf(ErrorMsgs.Parse, item, location, err)
 	return error
 }
 
 func QueryError(item, location string, err error) error {
-	error := fmt.Errorf(ErrorMsgs().Fetch, item, location, err)
+	error := fmt.Errorf(ErrorMsgs.Fetch, item, location, err)
 	return error
 }

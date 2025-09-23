@@ -27,17 +27,17 @@ func (p *PostHandler) GetUserPosts(user *models.User, allPosts []models.Post) []
 
 	memberships, memberErr := p.App.Memberships.UserMemberships(user.ID)
 	if memberErr != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "GetUserPosts > UserMemberships", memberErr)
+		log.Printf(ErrorMsgs.KeyValuePair, "GetUserPosts > UserMemberships", memberErr)
 		return allPosts
 	}
 	ownedChannels, ownedErr := p.App.Channels.OwnedOrJoinedByCurrentUser(user.ID)
 	if ownedErr != nil {
-		log.Printf(ErrorMsgs().Query, "GetUserPosts > user owned channels", ownedErr)
+		log.Printf(ErrorMsgs.Query, "GetUserPosts > user owned channels", ownedErr)
 		return allPosts
 	}
 	joinedChannels, joinedErr := p.Channel.JoinedByCurrentUser(memberships)
 	if joinedErr != nil {
-		log.Printf(ErrorMsgs().Query, "user joined channels", joinedErr)
+		log.Printf(ErrorMsgs.Query, "user joined channels", joinedErr)
 		return allPosts
 	}
 
@@ -78,7 +78,7 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	userLoggedIn := true
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
-		fmt.Printf(ErrorMsgs().NotFound, "currentUser", "getThisPost", "_")
+		fmt.Printf(ErrorMsgs.NotFound, "currentUser", "getThisPost", "_")
 		userLoggedIn = false
 	}
 
@@ -160,7 +160,7 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 	parseErr := r.ParseMultipartForm(10 << 20)
 	if parseErr != nil {
 		http.Error(w, parseErr.Error(), 400)
-		log.Printf(ErrorMsgs().Parse, "storePost", parseErr)
+		log.Printf(ErrorMsgs.Parse, "storePost", parseErr)
 		return
 	}
 	channels := r.MultipartForm.Value["channel_list"] // Retrieve the slice of checked channel IDs
@@ -174,13 +174,13 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 	//}
 	//var channelData models.ChannelData
 	//if err := json.Unmarshal([]byte(selectionJSON), &channelData); err != nil {
-	//	log.Printf(ErrorMsgs().Unmarshal, selectionJSON, err)
+	//	log.Printf(ErrorMsgs.Unmarshal, selectionJSON, err)
 	//	http.Error(w, "Invalid selection format", http.StatusBadRequest)
 	//	return
 	//}
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "channelName", channelData.ChannelName)
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "channelID", channelData.ChannelID)
-	//fmt.Printf(ErrorMsgs().KeyValuePair, "commentable", r.PostForm.Get("commentable"))
+	//fmt.Printf(ErrorMsgs.KeyValuePair, "channelName", channelData.ChannelName)
+	//fmt.Printf(ErrorMsgs.KeyValuePair, "channelID", channelData.ChannelID)
+	//fmt.Printf(ErrorMsgs.KeyValuePair, "commentable", r.PostForm.Get("commentable"))
 
 	createPostData := models.Post{
 		Title:         r.PostForm.Get("title"),
@@ -213,7 +213,7 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if insertErr != nil {
-		log.Printf(ErrorMsgs().Post, insertErr)
+		log.Printf(ErrorMsgs.Post, insertErr)
 		http.Error(w, insertErr.Error(), 500)
 		return
 	}
@@ -221,15 +221,15 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 	for c := range channels {
 		channelID, convErr := strconv.ParseInt(channels[c], 10, 64)
 		if convErr != nil {
-			log.Printf(ErrorMsgs().Convert, channels[c], "StorePost > GetChannelID", convErr)
+			log.Printf(ErrorMsgs.Convert, channels[c], "StorePost > GetChannelID", convErr)
 			log.Printf("Unable to convert %v to integer\n", channels[c])
 			continue
 		}
 		postToChannelErr := p.App.Channels.AddPostToChannel(channelID, postID)
 		if postToChannelErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "channelID", channelID)
-			log.Printf(ErrorMsgs().KeyValuePair, "postID", postID)
-			log.Printf(ErrorMsgs().KeyValuePair, "postToChannelErr", postToChannelErr)
+			log.Printf(ErrorMsgs.KeyValuePair, "channelID", channelID)
+			log.Printf(ErrorMsgs.KeyValuePair, "postID", postID)
+			log.Printf(ErrorMsgs.KeyValuePair, "postToChannelErr", postToChannelErr)
 			http.Error(w, postToChannelErr.Error(), 500)
 			return
 		}

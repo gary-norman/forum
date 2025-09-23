@@ -24,7 +24,7 @@ func (m *PostModel) Insert(title, content, images, author, authorAvatar string, 
 	if err != nil {
 		return 0, err
 	}
-	// fmt.Printf(ErrorMsgs().KeyValuePair, "Inserting a new post with ID: ", id)
+	// fmt.Printf(ErrorMsgs.KeyValuePair, "Inserting a new post with ID: ", id)
 
 	return int64(id), nil
 }
@@ -33,14 +33,14 @@ func (m *PostModel) All() ([]models.Post, error) {
 	stmt := "SELECT * FROM Posts ORDER BY Created DESC"
 	rows, selectErr := m.DB.Query(stmt)
 	if selectErr != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error:", "select")
-		log.Printf(ErrorMsgs().Query, stmt, selectErr)
+		log.Printf(ErrorMsgs.KeyValuePair, "Error:", "select")
+		log.Printf(ErrorMsgs.Query, stmt, selectErr)
 		return nil, selectErr
 	}
 
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "All", closeErr)
 		}
 	}()
 
@@ -59,16 +59,16 @@ func (m *PostModel) All() ([]models.Post, error) {
 			&p.AuthorAvatar,
 			&p.IsFlagged)
 		if scanErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
-			log.Printf(ErrorMsgs().Query, stmt, scanErr)
+			log.Printf(ErrorMsgs.KeyValuePair, "Error", "scan")
+			log.Printf(ErrorMsgs.Query, stmt, scanErr)
 			return nil, scanErr
 		}
 		Posts = append(Posts, p)
 	}
 
 	if rowsErr := rows.Err(); rowsErr != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error", "rows")
-		log.Printf(ErrorMsgs().Query, stmt, rowsErr)
+		log.Printf(ErrorMsgs.KeyValuePair, "Error", "rows")
+		log.Printf(ErrorMsgs.Query, stmt, rowsErr)
 		return nil, rowsErr
 	}
 
@@ -79,13 +79,13 @@ func (m *PostModel) GetPostsByUserID(user models.UUIDField) ([]models.Post, erro
 	stmt := "SELECT * FROM posts WHERE AuthorID = ? ORDER BY ID DESC"
 	rows, err := m.DB.Query(stmt, user)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error", "select")
-		log.Printf(ErrorMsgs().Query, stmt, err)
+		log.Printf(ErrorMsgs.KeyValuePair, "Error", "select")
+		log.Printf(ErrorMsgs.Query, stmt, err)
 		return nil, err
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "All", closeErr)
 		}
 	}()
 
@@ -104,8 +104,8 @@ func (m *PostModel) GetPostsByUserID(user models.UUIDField) ([]models.Post, erro
 			&p.AuthorAvatar,
 			&p.IsFlagged)
 		if scanErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
-			log.Printf(ErrorMsgs().Query, stmt, scanErr)
+			log.Printf(ErrorMsgs.KeyValuePair, "Error", "scan")
+			log.Printf(ErrorMsgs.Query, stmt, scanErr)
 			return nil, scanErr
 		}
 		Posts = append(Posts, p)
@@ -117,13 +117,13 @@ func (m *PostModel) GetPostsByChannel(channel int64) ([]models.Post, error) {
 	stmt := "SELECT * FROM Posts WHERE ID IN (SELECT PostID FROM PostChannels WHERE ChannelID = ?) ORDER BY Created DESC"
 	rows, err := m.DB.Query(stmt, channel)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error", "select")
-		log.Printf(ErrorMsgs().Query, stmt, err)
+		log.Printf(ErrorMsgs.KeyValuePair, "Error", "select")
+		log.Printf(ErrorMsgs.Query, stmt, err)
 		return nil, err
 	}
 	defer func() {
 		if closeErr := rows.Close(); closeErr != nil {
-			log.Printf(ErrorMsgs().Close, rows, "All", closeErr)
+			log.Printf(ErrorMsgs.Close, rows, "All", closeErr)
 		}
 	}()
 
@@ -142,16 +142,16 @@ func (m *PostModel) GetPostsByChannel(channel int64) ([]models.Post, error) {
 			&p.AuthorAvatar,
 			&p.IsFlagged)
 		if scanErr != nil {
-			log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
-			log.Printf(ErrorMsgs().Query, stmt, scanErr)
+			log.Printf(ErrorMsgs.KeyValuePair, "Error", "scan")
+			log.Printf(ErrorMsgs.Query, stmt, scanErr)
 			return nil, scanErr
 		}
 		Posts = append(Posts, p)
 	}
 
 	// if rowsErr := rows.Err(); rowsErr != nil {
-	// 	log.Printf(ErrorMsgs().KeyValuePair, "Error:", "rows")
-	// 	log.Printf(ErrorMsgs().Query, stmt, rowsErr)
+	// 	log.Printf(ErrorMsgs.KeyValuePair, "Error:", "rows")
+	// 	log.Printf(ErrorMsgs.Query, stmt, rowsErr)
 	// 	return nil, rowsErr
 	// }
 
@@ -174,8 +174,8 @@ func (m *PostModel) GetPostByID(id int64) (models.Post, error) {
 		&p.AuthorAvatar,
 		&p.IsFlagged)
 	if err != nil {
-		log.Printf(ErrorMsgs().KeyValuePair, "Error", "scan")
-		log.Printf(ErrorMsgs().Query, stmt, err)
+		log.Printf(ErrorMsgs.KeyValuePair, "Error", "scan")
+		log.Printf(ErrorMsgs.Query, stmt, err)
 		return p, err
 	}
 

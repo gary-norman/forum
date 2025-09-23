@@ -34,7 +34,7 @@ func (h *CommentHandler) StoreComment(w http.ResponseWriter, r *http.Request) {
 	parseErr := r.ParseMultipartForm(10 << 20)
 	if parseErr != nil {
 		http.Error(w, parseErr.Error(), 400)
-		log.Printf(ErrorMsgs().Parse, "storeComment", parseErr)
+		log.Printf(ErrorMsgs.Parse, "storeComment", parseErr)
 		return
 	}
 
@@ -48,7 +48,7 @@ func (h *CommentHandler) StoreComment(w http.ResponseWriter, r *http.Request) {
 
 	var channelData models.ChannelData
 	if err := json.Unmarshal([]byte(selectionJSON), &channelData); err != nil {
-		log.Printf(ErrorMsgs().Unmarshal, selectionJSON, err)
+		log.Printf(ErrorMsgs.Unmarshal, selectionJSON, err)
 		http.Error(w, "Invalid selection format", http.StatusBadRequest)
 		return
 	}
@@ -106,7 +106,7 @@ func (h *CommentHandler) StoreComment(w http.ResponseWriter, r *http.Request) {
 	insertErr := h.App.Comments.Upsert(commentData)
 
 	if insertErr != nil {
-		log.Printf(ErrorMsgs().Comment, insertErr)
+		log.Printf(ErrorMsgs.Comment, insertErr)
 		http.Error(w, insertErr.Error(), 500)
 		return
 	}

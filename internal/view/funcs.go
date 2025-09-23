@@ -9,16 +9,18 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gary-norman/forum/internal/colors"
 	"github.com/gary-norman/forum/internal/models"
 )
 
-func ErrorMsgs() *models.Errors {
-	return models.CreateErrorMessages()
-}
+var (
+	Colors, _ = colors.UseFlavor("Mocha")
+	ErrorMsgs = models.CreateErrorMessages()
+)
 
 // fprint takes a string and an interface and prints them to the console
 func fprint(s string, v any) string {
-	fmt.Printf(ErrorMsgs().KeyValuePair, s, v)
+	fmt.Printf(ErrorMsgs.KeyValuePair, s, v)
 	return ""
 }
 
@@ -58,7 +60,7 @@ func compareAsInts(a, b any) bool {
 
 func printType(name, calledBy string, elem any) string {
 	str := fmt.Sprintf("Type of %v with value of %v called by %v", name, elem, calledBy)
-	fmt.Printf(ErrorMsgs().KeyValuePair, str, reflect.TypeOf(elem))
+	fmt.Printf(ErrorMsgs.KeyValuePair, str, reflect.TypeOf(elem))
 	return ""
 }
 

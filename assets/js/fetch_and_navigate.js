@@ -134,7 +134,7 @@ export async function fetchData(entity, Id) {
 export async function fetchHome() {
   const entity = "home";
   const stateObj = { entity: entity };
-  const url = "/home";
+  const url = "/";
   history.pushState(stateObj, "", url);
 
   try {

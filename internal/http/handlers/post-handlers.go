@@ -78,7 +78,7 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 	userLoggedIn := true
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
-		fmt.Printf(ErrorMsgs.NotFound, "currentUser", "getThisPost", "_")
+		fmt.Println(ErrorMsgs.NotFound, "currentUser", "getThisPost", "_")
 		userLoggedIn = false
 	}
 

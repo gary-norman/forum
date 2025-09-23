@@ -790,7 +790,7 @@ button,
 }
 
 /* options slider in popovers/modals */
-div:has(.allow-comments) {
+div:has(> .allow-comments) {
   margin-block: 0.8rem;
 }
 

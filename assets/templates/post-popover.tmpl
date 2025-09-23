@@ -7,14 +7,14 @@
     <div id="post-popover-title" class="popover-title">
     </div>
       {{ if (len $dot.OwnedAndJoinedChannels) }}
-      <form class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
+      <form id="form-create-post" class="wrapper-form" enctype="multipart/form-data" action="/posts/create" method="POST">
   <div class="dropdown-toggle" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
 select channel(s)
   </div>
         <div class="wrapper-dropdown">
             {{ range $dot.OwnedAndJoinedChannels}}
             <div class="flex-align-l post-channel-dropdown">
-              <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="channel_list" value="{{ .ID }}">
+              <input class="checkbox-visible" type="checkbox" id="post-checkbox-channel-{{ .ID }}" name="post_channel_list" value="{{ .ID }}">
               <label for="post-checkbox-channel-{{ .ID }}">{{ .Name }}</label>
             </div>
             {{ end }}
@@ -43,7 +43,7 @@ select channel(s)
           <label for="allow-comments-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Allow comments</label>
         </div>
         <div class="cont-flex-row flex-center">
-          <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
+          <button id="btn-create-post" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
             <span>create post</span>
           </button>
           <button id="cancel-post" type="button" class="button btn-md btn-secondary btn-action btn-filled">cancel</button>

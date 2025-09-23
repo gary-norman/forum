@@ -26,17 +26,30 @@ type HomeHandler struct {
 var TemplateData models.TemplateData
 
 func (h *HomeHandler) RenderIndex(w http.ResponseWriter, r *http.Request) {
+	var ErrorPage bool
+
 	start := time.Now()
-	// fmt.Println(r.PathValue("invalidString"))
-	// stringCheck := []string{" ", "favicon.ico"}
-	// if r.PathValue("invalidString") != "" {
-	// 	for _, valid := range stringCheck {
-	// 		if r.PathValue("invalidString") != valid {
-	// 			view.RenderErrorPage(w, models.NotFoundLocation("home"), 400, models.NotFoundError(r.PathValue("invalidString"), "RenderIndex", fmt.Errorf("the user entered %v after /", r.PathValue("invalidString"))))
-	// 			return
-	// 		}
-	// 	}
-	// }
+	fmt.Println(r.PathValue("invalidString"))
+	stringCheck := []string{" ", "favicon.ico"}
+	if r.PathValue("invalidString") != "" {
+		valid := false
+		for _, v := range stringCheck {
+			fmt.Println("checking against valid string:", v)
+			if r.PathValue("invalidString") == v {
+				valid = true
+				break
+			}
+		}
+		if !valid {
+			fmt.Printf("illegal string '%v' detected\n", r.PathValue("invalidString"))
+			ErrorPage = true
+			// ErrorPage = models.ErrorPage{
+			// 	Data:   models.NotFoundLocation("home"),
+			// 	Status: 400,
+			// 	Error:  models.NotFoundError(r.PathValue("invalidString"), "RenderIndex", fmt.Errorf("the user entered %v after /", r.PathValue("invalidString"))),
+			// }
+		}
+	}
 
 	userLoggedIn := true
 	userID := models.ZeroUUIDField()
@@ -193,6 +206,7 @@ func (h *HomeHandler) RenderIndex(w http.ResponseWriter, r *http.Request) {
 		// ---------- misc ----------
 		Instance:   "home-page",
 		ImagePaths: h.App.Paths,
+		ErrorPage:  ErrorPage,
 	}
 	log.Printf(ErrorMsgs.KeyValuePair, "RenderIndex > data.UserID", data.UserID)
 	// models.JsonError(TemplateData)

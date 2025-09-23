@@ -480,8 +480,14 @@
         </aside>
         <main>
           {{/* SECTION ---------- home page ---------- */}}
-          <div id="home-page" class="active-feed">
-          </div>
+          {{ if eq .ErrorPage true}}
+            <div id="home-page" class="feeds-wrapper active-feed error-400">
+              {{ template "not-found" (dict "Message" "We were unable to find that page" ) }}
+            </div>
+          {{ else }}
+            <div id="home-page" class="active-feed">
+            </div>
+          {{ end }}
           {{/* SECTION ---------- post page ---------- */}}
           <div id="post-page" class="feeds-wrapper">
           </div>

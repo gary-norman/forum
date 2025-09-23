@@ -1,4 +1,14 @@
 import { navigateToPage } from "./fetch_and_navigate.js";
+import {
+  showMainNotification,
+  showInlineNotification,
+} from "./notifications.js";
+import {
+  applyCustomTheme,
+  showThemesClickable,
+  pickTheme,
+  themeList,
+} from "./consoleThemes.js";
 
 // const linkPosts = document.querySelectorAll('[id^="link-post-"]');
 // const linkPostPosts = document.querySelectorAll('[id^="link-post-post"]');

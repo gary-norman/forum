@@ -2,7 +2,7 @@ import { listenToReplies, toggleReplyForm } from "./comments.js";
 import { listenToShare } from "./share.js";
 import { selectActiveFeed } from "./navigation.js";
 import { listenToLikeDislike, listenToNoUser } from "./reactions.js";
-import { listenToDropdowns } from "./post.js";
+import { listenToDropdowns, listenToPostLinks } from "./post.js";
 import { saveColourScheme } from "./colour_scheme.js";
 import { activePage, setActivePage } from "./main.js";
 import { getRandomInt } from "./helper_functions.js";
@@ -48,6 +48,7 @@ export function UpdateUI() {
   // popoverJumpToDefaultInput();
   agreeToJoin();
   showJoinPopoverRules();
+  listenToPostLinks();
   // getCalendarVars();
   // displayCalendars();
   // processDateRange();

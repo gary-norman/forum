@@ -33,7 +33,7 @@ type TemplateData struct {
 	// Images    []Image
 	// Reactions []Reaction
 	// ThisPost  Post
-	// ThisUser  User
+	ThisUser User
 	ImagePaths
 	// ErrorPage ErrorPage
 	ErrorPage bool

@@ -131,7 +131,33 @@ export async function fetchData(entity, Id) {
   }
 }
 
+export async function fetchHome() {
+  const entity = "home";
+  const stateObj = { entity: entity };
+  const url = "/home";
+  history.pushState(stateObj, "", url);
+
+  try {
+    const response = await fetch(`/home`);
+    const data = await response.json();
+    renderContent(data, entity);
+  } catch (e) {
+    if (e.data) {
+      console.table(e.data);
+      // Render the backend-provided error page
+      renderContent(e.data, entity);
+    } else {
+      // Fallback if no data available
+      const target = document.getElementById(`home-page`);
+      if (target) {
+        target.innerHTML = `<div class="error">Something went wrong</div>`;
+      }
+    }
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+  debugger;
   const path = window.location.pathname;
   const [, dest, id] = path.match(/\/cdx\/(\w+)\/([^/]+)/) || [];
   const page = dest + "Page";
@@ -140,7 +166,8 @@ document.addEventListener("DOMContentLoaded", function () {
     case undefined:
       console.info(`%cUnknown dest: ${dest}, navigating to home`, warn);
       setActivePage("home");
-      break;
+      return fetchHome();
+    // return;
     default:
       console.info("%cNavigating to /cdx/%o/%o", expect, dest, id);
       setActivePage(dest);

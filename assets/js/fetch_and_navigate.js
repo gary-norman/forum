@@ -37,6 +37,7 @@ export function navigateToPage(dest, entity) {
 
 export function changePage(page) {
   // console.log("%cpage: ", expect, page);
+  debugger;
   let pageId;
   if (typeof page != "string") {
     pageId = page.id;
@@ -143,7 +144,6 @@ export async function fetchHome() {
     renderContent(data, entity);
   } catch (e) {
     if (e.data) {
-      console.table(e.data);
       // Render the backend-provided error page
       renderContent(e.data, entity);
     } else {
@@ -157,7 +157,6 @@ export async function fetchHome() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  debugger;
   const path = window.location.pathname;
   const [, dest, id] = path.match(/\/cdx\/(\w+)\/([^/]+)/) || [];
   const page = dest + "Page";
@@ -166,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
     case undefined:
       console.info(`%cUnknown dest: ${dest}, navigating to home`, warn);
       setActivePage("home");
+      changePage("homePage");
       return fetchHome();
     // return;
     default:

@@ -131,7 +131,7 @@ func JSONPost(messageStruct any) {
 	}
 }
 
-var Colors = colors.UseFlavor("Mocha")
+var Colors, colorsErr = colors.UseFlavor("Mocha")
 
 // Helper to generate standard error messages
 func errMsg(action, subject, caller, err string) string {
@@ -153,6 +153,9 @@ func kvMsg(key, value string) string {
 // CreateErrorMessages initializes and returns an Errors struct with formatted messages
 // set any field to "" to avoid it
 func CreateErrorMessages() *Errors {
+	if colorsErr != nil {
+		fmt.Println(fmt.Errorf("error loading colors: %v", colorsErr))
+	}
 	return &Errors{
 		Close:        errMsg("Unable to close", "%v", "%v", "%v"),
 		ConnConn:     errMsg("Unable to connect to", "%v", "%v(%v)", ""),

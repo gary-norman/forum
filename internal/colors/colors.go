@@ -6,8 +6,14 @@ import "fmt"
 // Convert hex color to ANSI 24-bit escape
 func ansi(hex string) string {
 	var r, g, b uint8
-	fmt.Sscanf(hex, "#%02x%02x%02x", &r, &g, &b)
-	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
+	if len(hex) == 7 && hex[0] == '#' {
+		_, err := fmt.Sscanf(hex, "#%02x%02x%02x", &r, &g, &b)
+		if err == nil {
+			return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
+		}
+	}
+	// Fallback: return reset sequence if input is invalid
+	return "\033[39m"
 }
 
 type ColorSet struct {
@@ -78,12 +84,17 @@ var palettes = map[string]*ColorSet{
 
 var Colors *ColorSet
 
-// UseFlavor sets the global Colors variable to a flavor
-func UseFlavor(flavor string) *ColorSet {
+// UseFlavor sets the global Colors variable to a flavor.
+// Returns the ColorSet and an error if the flavor is not found.
+func UseFlavor(flavor string) (*ColorSet, error) {
 	if c, ok := palettes[flavor]; ok {
 		Colors = c
-	} else {
-		Colors = palettes["Mocha"]
+		return Colors, nil
 	}
-	return Colors
+	if c, ok := palettes["Mocha"]; ok {
+		Colors = c
+		return Colors, nil
+	}
+	Colors = nil
+	return nil, fmt.Errorf("flavor '%s' and fallback 'Mocha' not found", flavor)
 }

@@ -17,11 +17,11 @@
     <link rel="stylesheet" href="/assets/css/this-post.css" />
     <link rel="stylesheet" href="/assets/css/main_effects.css">
     <link rel="stylesheet" href="/assets/css/buttons.css" />
-    <link rel="stylesheet" href="/assets/css/main_effects.css">
-    <link rel="stylesheet" href="/assets/css/filters.css">
-    <link rel="stylesheet" href="/assets/css/scrollbars.css">
-    <link rel="stylesheet" href="/assets/css/errors.css">
-    <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/main_effects.css" />
+    <link rel="stylesheet" href="/assets/css/filters.css" />
+    <link rel="stylesheet" href="/assets/css/scrollbars.css" />
+    <link rel="stylesheet" href="/assets/css/errors.css" />
+    <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script type="module" src="/assets/js/main.js" defer></script>
     <script type="module" src="/assets/js/calendar.js" defer></script>
@@ -135,7 +135,7 @@
                   placeholder=" "
                   autofocus
                 />
-                <label for="loginFormUser"/>username/email</label>
+                <label for="loginFormUser">username/email</label>
               </div>
               <div class="input-wrapper form-field">
                 <input
@@ -146,7 +146,7 @@
                   autocomplete="current-password"
                   placeholder=" "
                 />
-                <label for="loginFormPassword"/>password</label>
+                <label for="loginFormPassword">password</label>
               </div>
               <div class="remember-forgot">
                 <div class="cont-flex-row flex-center" style="column-gap: 0.4rem">
@@ -231,7 +231,7 @@
                 pattern="\w{5,16}"
                 autofocus
               />
-              <label for="register_user"/>username</label>
+              <label for="register_user">username</label>
               <span class="validation-icon"></span>
               <span class="validation-tooltip"></span>
             </div>
@@ -245,7 +245,7 @@
                 placeholder=" "
                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
               />
-              <label for="register_email"/>email address</label>
+              <label for="register_email">email address</label>
               <span class="validation-icon"></span>
               <span class="validation-tooltip"></span>
             </div>
@@ -260,7 +260,7 @@
                 placeholder=" "
   {{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
               />
-              <label for="register_password"/>password</label>
+              <label for="register_password">password</label>
               <span class="validation-icon"></span>
               <ul class="validation-list ul-forwards">
                 <li id="li-valid-num">1 number</li>
@@ -280,7 +280,7 @@
                 placeholder=" "
   {{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
               />
-              <label for="register_password-rpt"/>repeat password</label>
+              <label for="register_password-rpt">repeat password</label>
               <span class="validation-icon"></span>
               <span class="validation-tooltip"></span>
               </div>
@@ -306,7 +306,7 @@
                     name="forgot_pass"
                     placeholder=" "
                   />
-                  <label for="forgot_pass"/>username/email</label>
+                  <label for="forgot_pass">username/email</label>
                 </div>
                 <button class="btn-md btn-primary btn-action" type="submit">
                   <span>reset</span>
@@ -339,12 +339,12 @@
         <form class="wrapper-form" enctype="multipart/form-data" action="/channels/create" method="POST">
           <div class="input-wrapper form-field">
             <input type="text" id="channel-name" name="name" autocomplete="channel" placeholder=" " autofocus>
-            <label for="channel-name"/>channel name</label>
+            <label for="channel-name">channel name</label>
           </div>
   {{/*FIXME ---------- fix resize issue ---------- */}}
           <div class="input-wrapper form-field">
             <textarea id="channel-desc" name="description" placeholder=" "></textarea>
-            <label for="channel-desc"/>description</label>
+            <label for="channel-desc">description</label>
           </div>
           <p>upload an avatar (optional)</p>
           <div id="drop-zone--channel">

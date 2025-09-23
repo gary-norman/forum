@@ -4,7 +4,7 @@ import {
   activePage,
   activePageElement,
 } from "./main.js";
-import { changePage, navigateToPage } from "./fetch_and_navigate.js";
+import { changePage, navigateToPage, fetchHome } from "./fetch_and_navigate.js";
 import { toggleReplyForm } from "./comments.js";
 import { pageData } from "./share.js";
 import { showInlineNotification } from "./notifications.js";
@@ -38,7 +38,7 @@ export function goHome() {
 
 goHomeBtns.forEach((button) =>
   button.addEventListener("click", () => {
-    goHome();
+    fetchHome();
   }),
 );
 

@@ -1,4 +1,4 @@
-import { fetchData, changePage } from "./fetch_and_navigate.js";
+import { fetchData, changePage, fetchHome } from "./fetch_and_navigate.js";
 import { UpdateUI } from "./update_UI_elements.js";
 import { fireCalendarListeners } from "./calendar.js";
 import { selectActiveFeed, goHome } from "./navigation.js";
@@ -36,7 +36,7 @@ window.addEventListener("popstate", (event) => {
   console.custom.info("entity:", entity);
   console.custom.info("id:", id);
   if (entity === "home") {
-    goHome();
+    fetchHome();
   } else if (entity && id) {
     try {
       setActivePage(entity);

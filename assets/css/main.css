@@ -1865,13 +1865,13 @@ input#register_user:user-invalid {
 
 /* --- Sidebar.--- */
 
-@media (max-width: 75rem) {
+@media (max-width: 45rem) {
   .sidebar {
     display: none;
   }
 }
 
-@media (min-width: 75.1rem) {
+@media (min-width: 45.1rem) {
   .sidebar {
     display: flex;
     max-width: 32rem;
@@ -1879,7 +1879,7 @@ input#register_user:user-invalid {
   }
 }
 
-@media (min-width: 75.1rem) and (max-width: 100rem) {
+@media (min-width: 45.1rem) and (max-width: 100rem) {
   .sidebar {
     max-width: 28rem;
     min-width: 28rem;

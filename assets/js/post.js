@@ -30,13 +30,14 @@ import {
 //   });
 
 export function listenToPostLinks() {
-  debugger;
-  createPostForm = document.querySelector("#form-create-post");
+  const notifierPost = document.querySelector("#post-popover-title");
+  const createPostForm = document.querySelector("#form-create-post");
   if (createPostForm) {
-    btnSelectChannels = createPostForm.querySelector(".dropdown-toggle");
-    inputTitle = createPostForm.querySelector('input[name="title"]');
-    inputContent = createPostForm.querySelector('textarea[name="content"]');
-    notifierPost = createPostForm.querySelector("post-popover-title");
+    const btnSelectChannels = createPostForm.querySelector(".dropdown-toggle");
+    const inputTitle = createPostForm.querySelector('input[name="title"]');
+    const inputContent = createPostForm.querySelector(
+      'textarea[name="content"]',
+    );
     createPostForm.addEventListener("submit", async function (e) {
       e.preventDefault();
       const form = e.target;

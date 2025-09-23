@@ -6,6 +6,7 @@ import { navigateToPage } from "./fetch_and_navigate.js";
 // const linkPostChannels = document.querySelectorAll('[id^="link-post-channel"]');
 //
 // // INFO was a DOMContentLoaded function
+
 // export function listenToNavigationLinks() {
 //   linkPosts.forEach((link) => {
 //     link.addEventListener("click", (e) => {
@@ -18,8 +19,89 @@ import { navigateToPage } from "./fetch_and_navigate.js";
 //     });
 //   });
 
-// post channel selection dropdown
+export function listenToPostLinks() {
+  debugger;
+  createPostForm = document.querySelector("#form-create-post");
+  if (createPostForm) {
+    btnSelectChannels = createPostForm.querySelector(".dropdown-toggle");
+    inputTitle = createPostForm.querySelector('input[name="title"]');
+    inputContent = createPostForm.querySelector('textarea[name="content"]');
+    notifierPost = createPostForm.querySelector("post-popover-title");
+    createPostForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form); // Collect form data
 
+      if (!formData.form_channel_list) {
+        showInlineNotification(
+          notifierPost,
+          "",
+          "select at least one channel",
+          false,
+          "dummy",
+        );
+        btnSelectChannels.classList.add("active");
+        return;
+      }
+      if (!formData.title) {
+        showInlineNotification(
+          notifierPost,
+          "",
+          "enter a title",
+          false,
+          "dummy",
+        );
+        inputTitle.focus();
+        return;
+      }
+      if (!formData.content) {
+        showInlineNotification(
+          notifierPost,
+          "",
+          "enter some content",
+          false,
+          "dummy",
+        );
+        inputContent.focus();
+        return;
+      }
+
+      try {
+        const response = await fetch("/posts/create", {
+          method: "POST",
+          body: formData,
+          cache: "no-store",
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || data.message === "post creation failed!") {
+          showInlineNotification(
+            notifierPost,
+            "",
+            data.message,
+            false,
+            "dummy",
+          );
+          return;
+        }
+        showInlineNotification(notifierPost, "", data.message, true, "dummy");
+        setTimeout(
+          function () {
+            popoverTargetElement = this;
+            popoverTargetAction = "hide";
+          }.bind(this),
+          2000,
+        );
+      } catch (error) {
+        console.custom.error("Error during post creation:", error);
+        showMainNotification("An error occurred during post creation.");
+      }
+    });
+  }
+}
+
+// post channel selection dropdown
 document.addEventListener("DOMContentLoaded", () => {
   listenToDropdowns();
 });

@@ -1,3 +1,4 @@
+// Package service contains business logic for user management in the forum application.
 package service
 
 import (

@@ -42,12 +42,13 @@ export function listenToPostLinks() {
       e.preventDefault();
       const form = e.target;
       const formData = new FormData(form); // Collect form data
+      const channels = formData.getAll("post_channel_list"); // get an array of selected channels
 
-      if (!formData.form_channel_list) {
+      if (channels.length < 2) {
         showInlineNotification(
           notifierPost,
           "",
-          "select at least one channel",
+          "select at least 2 channels",
           false,
           "dummy",
         );

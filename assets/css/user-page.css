@@ -139,7 +139,7 @@
       width: calc-size(fit-content, size + 4.8rem);
       color: var(--clr-fg-1);
       text-transform: capitalize;
-      word-spacing: -2rem;
+      word-spacing: -1.7rem;
       text-overflow: ellipsis;
       font-style: normal;
       font-weight: 700;

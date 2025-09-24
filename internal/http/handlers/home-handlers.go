@@ -43,6 +43,7 @@ func (h *HomeHandler) RenderIndex(w http.ResponseWriter, r *http.Request) {
 		if !valid {
 			fmt.Printf("illegal string '%v' detected\n", r.PathValue("invalidString"))
 			ErrorPage = true
+			w.WriteHeader(400)
 			// ErrorPage = models.ErrorPage{
 			// 	Data:   models.NotFoundLocation("home"),
 			// 	Status: 400,

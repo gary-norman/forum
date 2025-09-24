@@ -16,7 +16,7 @@ import {
 } from "./consoleThemes.js";
 
 // sidebar butons
-const goHomeBtns = document.querySelectorAll(".btn-go-home");
+let goHomeBtns;
 export let scrollWindow;
 
 document.addEventListener("newContentLoaded", () => {
@@ -25,6 +25,13 @@ document.addEventListener("newContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   listenToChannelLinks();
+  goHomeBtns = document.querySelectorAll(".btn-go-home");
+  console.log("goHomeBtns:", goHomeBtns)
+  goHomeBtns.forEach((button) =>
+      button.addEventListener("click", () => {
+        window.location.href = '/';
+      }),
+  );
 });
 
 // --- go home ---
@@ -36,11 +43,7 @@ export function goHome() {
   // navigateToPage("home", e.target)
 }
 
-goHomeBtns.forEach((button) =>
-  button.addEventListener("click", () => {
-    return fetchHome();
-  }),
-);
+
 
 // INFO was inside a DOMContentLoaded function
 function listenToChannelLinks() {

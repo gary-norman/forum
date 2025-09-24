@@ -214,106 +214,115 @@ function filterContent() {
           }
 
           reorderVisiblePosts();
-      }
-  }
+        }
 
-  allPageCards.forEach((card) => {
-    const cardChannel = card.dataset.channelId;
-    // TODO commenting out type as not needed for base audit
-    // const cardType = card.dataset.dest;
-    const cardCommentsCount = Number(
-      card.querySelector(".btn-reply").textContent,
-    );
-    const cardLikesCount = Number(card.querySelector(".btn-likes").textContent);
-    const cardDislikesCount = Number(
-      card.querySelector(".btn-dislikes").textContent,
-    );
-    const cardCreatedDate = new Date(card.dataset.createdAt);
+        allPageCards.forEach((card) => {
+          const cardChannel = card.dataset.channelId;
+          // TODO commenting out type as not needed for base audit
+          // const cardType = card.dataset.dest;
 
-    let visible = true;
+          const cardsCommentsButton = card.querySelector(".btn-reply");
+          let cardCommentsCount;
 
-    // Filter by channel
-    if (
-      activeFilters.channels.length > 0 &&
-      !activeFilters.channels.includes(cardChannel)
-    ) {
-      visible = false;
+          if (cardsCommentsButton) {
+            cardCommentsCount = Number(
+                cardsCommentsButton.textContent,
+            );
+          }
+
+          const cardLikesCount = Number(card.querySelector(".btn-likes").textContent);
+          const cardDislikesCount = Number(
+              card.querySelector(".btn-dislikes").textContent,
+          );
+          const cardCreatedDate = new Date(card.dataset.createdAt);
+
+          let visible = true;
+
+          // Filter by channel
+          if (
+              activeFilters.channels.length > 0 &&
+              !activeFilters.channels.includes(cardChannel)
+          ) {
+            visible = false;
+          }
+
+          // TODO commenting out type as not needed for base audit
+          // // Filter by type
+          // if (activeFilters.types.length > 0 && !activeFilters.types.includes(cardType)) {
+          //     visible = false;
+          // }
+
+          // Filter by comments
+          if (activeFilters.comments !== null) {
+            let commentMatch = false;
+
+            if (
+                activeFilters.comments.includes("has-comments") &&
+                cardCommentsCount > 0
+            ) {
+              commentMatch = true;
+            }
+
+            if (
+                activeFilters.comments.includes("no-comments") &&
+                cardCommentsCount <= 0
+            ) {
+              commentMatch = true;
+            }
+
+            if (commentMatch === false) {
+              visible = false;
+            }
+          }
+
+          // Filter by reaction
+          if (activeFilters.reactions.length > 0) {
+            let reactionMatch = false;
+
+            if (activeFilters.reactions.includes("liked") && cardLikesCount > 0) {
+              reactionMatch = true;
+            }
+
+            if (
+                activeFilters.reactions.includes("disliked") &&
+                cardDislikesCount > 0
+            ) {
+              reactionMatch = true;
+            }
+
+            if (
+                activeFilters.reactions.includes("no-reaction") &&
+                cardLikesCount === 0 &&
+                cardDislikesCount === 0
+            ) {
+              reactionMatch = true;
+            }
+
+            if (reactionMatch === false) {
+              visible = false;
+            }
+          }
+
+          // Filter by date range
+          if (activeFilters.startDate !== null && activeFilters.endDate !== null) {
+            //set the time as the end of the day, because it was counting the date at 1:00:00
+            // and wouldn't include dates within the day
+            activeFilters.endDate.setHours(23, 59, 59, 999);
+
+            if (cardCreatedDate <= activeFilters.startDate) {
+              visible = false;
+            }
+            if (cardCreatedDate >= activeFilters.endDate) {
+              visible = false;
+            }
+          }
+
+          // Show or hide card, by hiding the container holding it
+          card.parentElement.classList.toggle("hide", !visible);
+        });
     }
 
-    // TODO commenting out type as not needed for base audit
-    // // Filter by type
-    // if (activeFilters.types.length > 0 && !activeFilters.types.includes(cardType)) {
-    //     visible = false;
-    // }
 
-    // Filter by comments
-    if (activeFilters.comments !== null) {
-      let commentMatch = false;
-
-      if (
-        activeFilters.comments.includes("has-comments") &&
-        cardCommentsCount > 0
-      ) {
-        commentMatch = true;
-      }
-
-      if (
-        activeFilters.comments.includes("no-comments") &&
-        cardCommentsCount <= 0
-      ) {
-        commentMatch = true;
-      }
-
-      if (commentMatch === false) {
-        visible = false;
-      }
-    }
-
-    // Filter by reaction
-    if (activeFilters.reactions.length > 0) {
-      let reactionMatch = false;
-
-      if (activeFilters.reactions.includes("liked") && cardLikesCount > 0) {
-        reactionMatch = true;
-      }
-
-      if (
-        activeFilters.reactions.includes("disliked") &&
-        cardDislikesCount > 0
-      ) {
-        reactionMatch = true;
-      }
-
-      if (
-        activeFilters.reactions.includes("no-reaction") &&
-        cardLikesCount === 0 &&
-        cardDislikesCount === 0
-      ) {
-        reactionMatch = true;
-      }
-
-      if (reactionMatch === false) {
-        visible = false;
-      }
-    }
-
-    // Filter by date range
-    if (activeFilters.startDate !== null && activeFilters.endDate !== null) {
-      //set the time as the end of the day, because it was counting the date at 1:00:00
-      // and wouldn't include dates within the day
-      activeFilters.endDate.setHours(23, 59, 59, 999);
-
-      if (cardCreatedDate <= activeFilters.startDate) {
-        visible = false;
-      }
-      if (cardCreatedDate >= activeFilters.endDate) {
-        visible = false;
-      }
-    }
-
-    // Show or hide card, by hiding the container holding it
-    card.parentElement.classList.toggle("hide", !visible);
-  });
 }
 
 function reorderVisiblePosts() {

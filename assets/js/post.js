@@ -44,12 +44,12 @@ if (createPostForm) {
     const content = formData.get("content")?.trim();
 
     // Validate channels
-    if (channels.length < 2) {
+    if (channels.length < 1) {
       e.preventDefault();
       showInlineNotification(
         notifierPost,
         "",
-        "select at least 2 channels",
+        "select a channel",
         false,
         "dummy",
       );
@@ -88,6 +88,7 @@ if (createPostForm) {
 document.addEventListener("DOMContentLoaded", () => {
   listenToDropdowns();
 });
+
 // INFO was a DOMContentLoaded function
 export function listenToDropdowns() {
   const dropdownToggle = document.querySelector(".dropdown-toggle");

@@ -166,15 +166,15 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	channels := r.MultipartForm.Value["post_channel_list"]
-	if len(channels) < 2 {
-		http.Error(w, "at least two channels required", http.StatusBadRequest)
+	if len(channels) < 1 {
+		log.Println(fmt.Errorf("at least one channel required"))
 		return
 	}
 
 	title := strings.TrimSpace(r.FormValue("title"))
 	content := strings.TrimSpace(r.FormValue("content"))
 	if title == "" || content == "" {
-		http.Error(w, "title and content are required", http.StatusBadRequest)
+		log.Println(fmt.Errorf("title and content are required"))
 		return
 	}
 
@@ -203,6 +203,7 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		log.Printf(ErrorMsgs.Post, err)
+		//TODO: internal server errors should be handled better and redirect to NotFound page
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="/assets/css/filters.css" />
     <link rel="stylesheet" href="/assets/css/scrollbars.css" />
     <link rel="stylesheet" href="/assets/css/errors.css" />
+    <link rel="stylesheet" href="/assets/css/loader.css" />
     <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script type="module" src="/assets/js/main.js" defer></script>
@@ -54,6 +55,10 @@
 {{ else }}
   {{ $user := .CurrentUser }}
 {{ end }}
+
+{{/*SECTION --------- loader ---------*/}}
+    {{ template "loader" . }}
+
 {{/*SECTION --------- main notification ---------*/}}
     <div id="notification-main">
       <div id="notification-main-content"></div>

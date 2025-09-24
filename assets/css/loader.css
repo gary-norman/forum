@@ -1,0 +1,116 @@
+/* Modal backdrop */
+#loader-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.5s ease;
+}
+
+/* Modal box */
+#loader-modal {
+  position: relative;
+  background: var(--clr-bg-1);
+  padding-block: 5rem 6rem;
+  padding-inline: 5rem 10rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 0.4rem 1.5rem rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Spinner */
+.spinner {
+  width: 5rem;
+  height: 5rem;
+  margin-inline: 5rem 0;
+  border: 0.6rem solid var(--clr-bg-4);
+  border-top: 0.6rem solid var(--clr-accent--2);
+  border-right: 0.6rem solid var(--clr-bg-4);
+  /* border-bottom: 0.6rem solid var(--clr-bg-4); */
+  /* border-left: 0.6rem solid var(--clr-bg-4); */
+  border-radius: 50%;
+  animation:
+    spin 1s linear infinite,
+    fill 4s linear infinite;
+}
+
+/* Text */
+.loader-text {
+  position: absolute;
+  right: 54%;
+  transform: translateY(-50%);
+  top: 75%;
+  margin-top: 1rem;
+  font-size: 1.6rem;
+  color: var(--clr-fg-1);
+  font-family: "SpaceGrotesk-Regular", sans-serif;
+  text-align: center;
+  &::after {
+    position: absolute;
+    top: -0.8rem;
+    content: url(/assets/icons/codex-logo-green.svg);
+    animation: fade 2s linear infinite;
+  }
+}
+
+@keyframes fade {
+  0%,
+  100% {
+    filter: grayscale(1) opacity(0);
+  }
+  50% {
+    filter: grayscale(0) opacity(1);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* @keyframes fill { */
+/*   0%, */
+/*   100% { */
+/*     border-top-color: var(--clr-bg-4); */
+/*     border-right-color: var(--clr-bg-4); */
+/*     border-bottom-color: var(--clr-bg-4); */
+/*     border-left-color: var(--clr-bg-4); */
+/*   } */
+/*   20% { */
+/*     border-top-color: var(--clr-accent--2); */
+/*     border-right-color: var(--clr-bg-4); */
+/*     border-bottom-color: var(--clr-bg-4); */
+/*     border-left-color: var(--clr-bg-4); */
+/*   } */
+/*   40% { */
+/*     border-top-color: var(--clr-accent--2); */
+/*     border-right-color: var(--clr-accent--2); */
+/*     border-bottom-color: var(--clr-bg-4); */
+/*     border-left-color: var(--clr-bg-4); */
+/*   } */
+/*   60% { */
+/*     border-top-color: var(--clr-accent--2); */
+/*     border-right-color: var(--clr-accent--2); */
+/*     border-bottom-color: var(--clr-accent--2); */
+/*     border-left-color: var(--clr-bg-4); */
+/*   } */
+/*   80% { */
+/*     border-top-color: var(--clr-accent--2); */
+/*     border-right-color: var(--clr-accent--2); */
+/*     border-bottom-color: var(--clr-accent--2); */
+/*     border-left-color: var(--clr-accent--2); */
+/*   } */
+/* } */
+
+/* Hidden state */
+#loader-backdrop.hidden {
+  opacity: 0;
+  pointer-events: none;
+}

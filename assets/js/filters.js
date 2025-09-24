@@ -328,96 +328,102 @@ function reorderVisiblePosts() {
 
 function toggleFilters() {
   let filterContainer = activePageElement.querySelector(".filters-row");
-  filterButtons = filterContainer.querySelectorAll("button.btn-action");
   let startDateInteracted = false;
+  if (filterButtons){
+    filterButtons = filterContainer.querySelectorAll("button.btn-action");
 
-  filterButtons.forEach((button) => {
-    const id = button.getAttribute("popovertarget");
-    const popover = activePageElement.querySelector(`#${id}`);
-    const clearButton = popover.querySelector(".clear-choices ");
+    filterButtons.forEach((button) => {
+      const id = button.getAttribute("popovertarget");
+      const popover = activePageElement.querySelector(`#${id}`);
+      const clearButton = popover.querySelector(".clear-choices ");
 
-    button.addEventListener("click", (e) => {
-      const noneSelected = checkSelectedInputs(popover);
+      button.addEventListener("click", (e) => {
+        const noneSelected = checkSelectedInputs(popover);
 
-      if (!popover.matches(":popover-open") && button.contains(e.target)) {
-        toggleFilterButtonState(button, noneSelected, "button");
-      }
-    });
-
-    if (popover && popover.matches("[popover].wrapper-filter-dropdown")) {
-      popover.querySelectorAll(".dropdown-option").forEach(function (option) {
-        // store handler on the element itself to reuse later
-        if (!option._handler) {
-          option._handler = optionHandlerFactory(popover, button);
-          option.addEventListener("click", option._handler);
+        if (!popover.matches(":popover-open") && button.contains(e.target)) {
+          toggleFilterButtonState(button, noneSelected, "button");
         }
       });
-    }
 
-    if (popover && popover.matches("[popover].card.date")) {
-      const startInput = popover.querySelector(
-        'input[id^="creation-year-start"]',
-      );
-      const endInput = popover.querySelector('input[id^="creation-year-end"]');
-
-      popover.querySelectorAll("input").forEach(function (input) {
-        input.addEventListener("input", (e) => {
-          if (startInput.value !== "" && startDateInteracted === false) {
-            endInput.value = formattedDate;
-          }
-          const noneSelected = checkSelectedInputs(popover);
-
-          filterContent();
-
-          toggleFilterButtonState(button, noneSelected, "inside");
-
-          if (noneSelected) {
-            toggleClearButton(popover, "hide");
-          } else {
-            toggleClearButton(popover, "show");
-          }
-        });
-
-        input.addEventListener("blur", () => {
-          startDateInteracted = true;
-        });
-      });
-    }
-
-    if (clearButton) {
-      clearButton.addEventListener("click", () => {
-        let noneSelected;
+      if (popover && popover.matches("[popover].wrapper-filter-dropdown")) {
         popover.querySelectorAll(".dropdown-option").forEach(function (option) {
-          const checkbox = option.querySelector("input[type='checkbox']");
-          const radio = option.querySelector("input[type='radio']");
-          let input;
-          if (radio) {
-            input = radio;
-          } else if (checkbox) {
-            input = checkbox;
+          // store handler on the element itself to reuse later
+          if (!option._handler) {
+            option._handler = optionHandlerFactory(popover, button);
+            option.addEventListener("click", option._handler);
           }
-          input.checked = false;
-
-          noneSelected = checkSelectedInputs(popover);
         });
+      }
 
-        if (popover && popover.matches("[popover].card.date")) {
-          popover.querySelectorAll("input").forEach(function (input) {
-            input.value = "";
+      if (popover && popover.matches("[popover].card.date")) {
+        const startInput = popover.querySelector(
+            'input[id^="creation-year-start"]',
+        );
+        const endInput = popover.querySelector('input[id^="creation-year-end"]');
+
+        popover.querySelectorAll("input").forEach(function (input) {
+          input.addEventListener("input", (e) => {
+            if (startInput.value !== "" && startDateInteracted === false) {
+              endInput.value = formattedDate;
+            }
+            const noneSelected = checkSelectedInputs(popover);
+
+            filterContent();
+
+            toggleFilterButtonState(button, noneSelected, "inside");
+
+            if (noneSelected) {
+              toggleClearButton(popover, "hide");
+            } else {
+              toggleClearButton(popover, "show");
+            }
+          });
+
+          input.addEventListener("blur", () => {
+            startDateInteracted = true;
+          });
+        });
+      }
+
+      if (clearButton) {
+        clearButton.addEventListener("click", () => {
+          let noneSelected;
+          popover.querySelectorAll(".dropdown-option").forEach(function (option) {
+            const checkbox = option.querySelector("input[type='checkbox']");
+            const radio = option.querySelector("input[type='radio']");
+            let input;
+            if (radio) {
+              input = radio;
+            } else if (checkbox) {
+              input = checkbox;
+            }
+            input.checked = false;
 
             noneSelected = checkSelectedInputs(popover);
-
-            startDateInteracted = false;
           });
-        }
 
-        toggleClearButton(popover, "hide");
-        toggleFilterButtonState(button, noneSelected, "inside");
-        filterContent();
-        clearRadios(popover, button);
-      });
-    }
-  });
+          if (popover && popover.matches("[popover].card.date")) {
+            popover.querySelectorAll("input").forEach(function (input) {
+              input.value = "";
+
+              noneSelected = checkSelectedInputs(popover);
+
+              startDateInteracted = false;
+            });
+          }
+
+          toggleClearButton(popover, "hide");
+          toggleFilterButtonState(button, noneSelected, "inside");
+          filterContent();
+          clearRadios(popover, button);
+        });
+      }
+    });
+  }
+
+
+
+
 }
 
 function optionHandlerFactory(popover, button) {
@@ -477,10 +483,11 @@ function listenToClicksForPopovers() {
   const popovers = activePageElement.querySelectorAll(
     "[popover].filter-popover",
   );
-  let filterContainer = activePageElement.querySelector(".filters-row");
-  filterButtons = filterContainer.querySelectorAll("button.btn-action");
+  let filterContainer;
 
-  if (popovers) {
+  if (popovers.length > 0) {
+    filterContainer = activePageElement.querySelector(".filters-row");
+    filterButtons = filterContainer.querySelectorAll("button.btn-action");
     filterButtons.forEach((button) => {
       button.addEventListener("click", (e) => {
         document.addEventListener("click", handleClicksOutsidePopovers, true);

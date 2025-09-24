@@ -313,6 +313,7 @@ a:active,
 .user-page-pic,
 .profile-pic--empty,
 .channel-pic {
+  filter: drop-shadow(0.05rem 0.05rem 0.07rem var(--gradient-4));
   font-family: SpaceMonoFixed, system-ui;
   font-size: inherit;
   position: relative;

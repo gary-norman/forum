@@ -153,8 +153,9 @@ if (registerForm) {
     event.preventDefault(); // Prevent the default form submission
     const form = event.target;
     const formData = new FormData(form); // Collect form data
+    const registerUser = formData.get("register_user");
 
-    if (!formdata.register_user) {
+    if (!registerUser) {
       showInlineNotification(
         notifierRegister,
         "",
@@ -181,6 +182,7 @@ if (registerForm) {
       });
 
       const data = await response.json();
+      console.custom.info("data:", data)
 
       if (!response.ok || data.message === "registration failed!") {
         showInlineNotification(

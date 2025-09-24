@@ -40,14 +40,18 @@
         </button>
         {{ if eq $thisPost "true" }}
 {{/* the detailed post */}}
+{{ if eq $post.IsCommentable true}}
           <button id="reply-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $nouser true}}nouser{{end}}" data-action="comment-post" data-post-id="{{$post.ID}}">
             <span class="btn-reply">reply</span>
           </button>
+          {{ end }}
         {{ else }}
 {{/* posts on any list */}}
+{{ if eq $post.IsCommentable true}}
           <button class="btn-md btn-secondary btn-icotext btn-filled btn-action {{ if eq $nouser true}}nouser{{end}}" data-dest="post" data-action="{{ if ne $nouser true}}navigate--{{ end }}comment-post" data-post-id="{{$post.ID}}">
             <span class="btn-reply">{{$post.CommentsCount}}</span>
           </button>
+          {{ end }}
         {{ end }}
         <button id="share-button-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" popovertarget="share-container-channel-{{$post.ChannelID}}-post-{{$post.ID}}-{{$instance}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
           <span class="btn-share">share</span>

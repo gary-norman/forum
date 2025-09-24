@@ -18,9 +18,9 @@
   <button class="btn-md btn-secondary btn-icotext btn-filled btn-action{{if $status.Disliked}} active{{end}}{{ if eq $user nil}} inactive{{ end }}" >
     <span class="btn-dislikes" data-dislike-ID="user-{{$comment.ID}}">{{$comment.Dislikes}}</span>
   </button>
-{{/* <button id="reply-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
+{{/* {{ if eq $post.IsCommentable true }} <button id="reply-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action" >
     <span class="btn-reply">reply</span>
-</button> */}}
+</button> {{ end }} */}}
   <button id="share-button-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}" popovertarget="share-container-channel-{{$comment.ChannelID}}-comment-{{$comment.ID}}" class="btn-md btn-secondary btn-icotext btn-filled btn-action">
     <span class="btn-share">share</span>
   </button>

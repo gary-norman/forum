@@ -1,4 +1,3 @@
-import { listenToReplies, toggleReplyForm } from "./comments.js";
 import { listenToShare } from "./share.js";
 import { selectActiveFeed } from "./navigation.js";
 import { listenToLikeDislike, listenToNoUser } from "./reactions.js";
@@ -35,7 +34,6 @@ let activityFeeds, activityFeedsContentAll;
 export function UpdateUI() {
   closePostForm();
   listenToRules();
-  listenToReplies();
   listenToShare();
   listenToLikeDislike();
   listenToNoUser();

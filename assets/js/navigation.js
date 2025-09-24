@@ -38,7 +38,7 @@ export function goHome() {
 
 goHomeBtns.forEach((button) =>
   button.addEventListener("click", () => {
-    fetchHome();
+    return fetchHome();
   }),
 );
 

@@ -109,101 +109,112 @@ function sortAscending(func) {
 
 function filterContent() {
   const filtersRow = activePageElement.querySelector(".filters-row");
-  const channelCheckboxes = filtersRow
-    .querySelector(`[id$="dropdown-channel"]`)
-    .querySelectorAll('input[type="checkbox"]:checked');
-  const reactionCheckboxes = filtersRow
-    .querySelector(`[id$="dropdown-reaction"]`)
-    .querySelectorAll('input[type="checkbox"]:checked');
-  // TODO commenting out type as not needed for base audit
-  // const typeCheckboxes = filtersRow.querySelector(`[id$="dropdown-type"]`).querySelectorAll('input[type="checkbox"]:checked');
-  const commentRadios = filtersRow
-    .querySelector(`[id$="dropdown-comments"]`)
-    .querySelectorAll('input[type="radio"]:checked');
-  const sortRadios = filtersRow
-    .querySelector(`[id$="dropdown-sort"]`)
-    .querySelectorAll('input[type="radio"]:checked');
-  const startDateInput = filtersRow.querySelector(
-    `[id$="dropdown-date"] input[name="creation-year-start"]`,
-  );
-  const endDateInput = filtersRow.querySelector(
-    `[id$="dropdown-date"] input[name="creation-year-end"]`,
-  );
+  let channelCheckboxes, reactionCheckboxes, commentRadios, sortRadios, startDateInput, endDateInput, activeFilters;
 
-  // Build active filters
-  const activeFilters = {
-    channels: Array.from(channelCheckboxes).map((cb) => cb.value),
-    reactions: Array.from(reactionCheckboxes).map((rb) => rb.value),
-    // TODO commenting out type as not needed for base audit
-    // types: Array.from(typeCheckboxes).map(cb => cb.value.slice(5)), //slice to remove "type-" before type of card from the template
-    comments: commentRadios.length > 0 ? commentRadios[0].value : null,
-    sort: sortRadios.length > 0 ? sortRadios[0].value : null,
-    startDate: startDateInput?.value ? new Date(startDateInput.value) : null,
-    endDate: endDateInput?.value ? new Date(endDateInput.value) : null,
-  };
+      if (filtersRow) {
+        channelCheckboxes = filtersRow
+            .querySelector(`[id$="dropdown-channel"]`)
+            .querySelectorAll('input[type="checkbox"]:checked');
 
-  // Sort
-  // Default sort
-  if (activeFilters.sort === null) {
-    allPageCards = sortAscending(compareDates);
-    reorderVisiblePosts();
-  } else {
-    // sort by date
-    //sort newest first
-    if (activeFilters.sort.includes("most-new")) {
-      allPageCards = sortAscending(compareDates);
-    }
+        reactionCheckboxes = filtersRow
+            .querySelector(`[id$="dropdown-reaction"]`)
+            .querySelectorAll('input[type="checkbox"]:checked');
 
-    //sort oldest first
-    if (activeFilters.sort.includes("most-old")) {
-      allPageCards = sortDescending(compareDates);
-    }
+        //typeCheckboxes = filtersRow
+        // .querySelector(`[id$="dropdown-type"]`)
+        // .querySelectorAll('input[type="checkbox"]:checked');
 
-    //sort by recent activity
-    //sort newest first
-    if (activeFilters.sort.includes("most-new-activity")) {
-      allPageCards = sortAscending(compareActivity);
-    }
+        commentRadios = filtersRow
+            .querySelector(`[id$="dropdown-comments"]`)
+            .querySelectorAll('input[type="radio"]:checked');
 
-    //sort oldest first
-    if (activeFilters.sort.includes("most-old-activity")) {
-      allPageCards = sortDescending(compareActivity);
-    }
+        sortRadios = filtersRow
+            .querySelector(`[id$="dropdown-sort"]`)
+            .querySelectorAll('input[type="radio"]:checked');
 
-    //sort by likes
-    //sort most first
-    if (activeFilters.sort.includes("most-likes")) {
-      allPageCards = sortDescending(compareNumberValues("likes"));
-    }
+        startDateInput = filtersRow.querySelector(
+            `[id$="dropdown-date"] input[name="creation-year-start"]`,
+        );
 
-    //sort least first
-    if (activeFilters.sort.includes("least-likes")) {
-      allPageCards = sortAscending(compareNumberValues("likes"));
-    }
+        endDateInput = filtersRow.querySelector(
+            `[id$="dropdown-date"] input[name="creation-year-end"]`,
+        );
 
-    //sort by dislikes
-    //sort most first
-    if (activeFilters.sort.includes("most-dislikes")) {
-      allPageCards = sortDescending(compareNumberValues("dislikes"));
-    }
+        // Build active filters
+        activeFilters = {
+          channels: Array.from(channelCheckboxes).map((cb) => cb.value),
+          reactions: Array.from(reactionCheckboxes).map((rb) => rb.value),
+          // TODO commenting out type as not needed for base audit
+          // types: Array.from(typeCheckboxes).map(cb => cb.value.slice(5)), //slice to remove "type-" before type of card from the template
+          comments: commentRadios.length > 0 ? commentRadios[0].value : null,
+          sort: sortRadios.length > 0 ? sortRadios[0].value : null,
+          startDate: startDateInput?.value ? new Date(startDateInput.value) : null,
+          endDate: endDateInput?.value ? new Date(endDateInput.value) : null,
+        };
 
-    //sort least first
-    if (activeFilters.sort.includes("least-dislikes")) {
-      allPageCards = sortAscending(compareNumberValues("dislikes"));
-    }
+        // Sort
+        // Default sort
+        if (activeFilters.sort === null) {
+          allPageCards = sortAscending(compareDates);
+          reorderVisiblePosts();
+        } else {
+          // sort by date
+          //sort newest first
+          if (activeFilters.sort.includes("most-new")) {
+            allPageCards = sortAscending(compareDates);
+          }
 
-    //sort by comments
-    //sort most first
-    if (activeFilters.sort.includes("most-comments")) {
-      allPageCards = sortDescending(compareNumberValues("comments"));
-    }
+          //sort oldest first
+          if (activeFilters.sort.includes("most-old")) {
+            allPageCards = sortDescending(compareDates);
+          }
 
-    //sort least first
-    if (activeFilters.sort.includes("least-comments")) {
-      allPageCards = sortAscending(compareNumberValues("comments"));
-    }
+          //sort by recent activity
+          //sort newest first
+          if (activeFilters.sort.includes("most-new-activity")) {
+            allPageCards = sortAscending(compareActivity);
+          }
 
-    reorderVisiblePosts();
+          //sort oldest first
+          if (activeFilters.sort.includes("most-old-activity")) {
+            allPageCards = sortDescending(compareActivity);
+          }
+
+          //sort by likes
+          //sort most first
+          if (activeFilters.sort.includes("most-likes")) {
+            allPageCards = sortDescending(compareNumberValues("likes"));
+          }
+
+          //sort least first
+          if (activeFilters.sort.includes("least-likes")) {
+            allPageCards = sortAscending(compareNumberValues("likes"));
+          }
+
+          //sort by dislikes
+          //sort most first
+          if (activeFilters.sort.includes("most-dislikes")) {
+            allPageCards = sortDescending(compareNumberValues("dislikes"));
+          }
+
+          //sort least first
+          if (activeFilters.sort.includes("least-dislikes")) {
+            allPageCards = sortAscending(compareNumberValues("dislikes"));
+          }
+
+          //sort by comments
+          //sort most first
+          if (activeFilters.sort.includes("most-comments")) {
+            allPageCards = sortDescending(compareNumberValues("comments"));
+          }
+
+          //sort least first
+          if (activeFilters.sort.includes("least-comments")) {
+            allPageCards = sortAscending(compareNumberValues("comments"));
+          }
+
+          reorderVisiblePosts();
+      }
   }
 
   allPageCards.forEach((card) => {

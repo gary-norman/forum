@@ -1,5 +1,8 @@
 // INFO was a DOMContentLoaded function
 import { activePage } from "./main.js";
+import {showInlineNotification} from "./notifications.js";
+
+let replyForm, notifierReply;
 
 export function toggleReplyForm(target) {
   const postCard = target.closest(".card");

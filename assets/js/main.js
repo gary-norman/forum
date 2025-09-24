@@ -36,7 +36,7 @@ window.addEventListener("popstate", (event) => {
   console.custom.info("entity:", entity);
   console.custom.info("id:", id);
   if (entity === "home") {
-    fetchHome();
+    return fetchHome();
   } else if (entity && id) {
     try {
       setActivePage(entity);

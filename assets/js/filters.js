@@ -387,6 +387,36 @@ function filterContent() {
         reactionMatch = true;
       }
 
+      if (
+        activeFilters.reactions.includes("no-reaction") &&
+        cardLikesCount === 0 &&
+        cardDislikesCount === 0
+      ) {
+        reactionMatch = true;
+      }
+
+      if (reactionMatch === false) {
+        visible = false;
+      }
+    }
+
+    // Filter by date range
+    if (activeFilters.startDate !== null && activeFilters.endDate !== null) {
+      //set the time as the end of the day, because it was counting the date at 1:00:00
+      // and wouldn't include dates within the day
+      activeFilters.endDate.setHours(23, 59, 59, 999);
+
+      if (cardCreatedDate <= activeFilters.startDate) {
+        visible = false;
+      }
+      if (cardCreatedDate >= activeFilters.endDate) {
+        visible = false;
+      }
+    }
+
+    // Show or hide card, by hiding the container holding it
+    card.parentElement.classList.toggle("hide", !visible);
+  });
 }
 
 function reorderVisiblePosts() {

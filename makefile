@@ -2,12 +2,50 @@
 TEAL=\033[38;2;148;226;213m
 PEACH=\033[38;2;250;179;135m
 GREEN=\033[38;2;166;227;161m
+RED=\033[38;2;243;139;168m
 NC=\033[0m  # No Color
+
+1="build"
+2="run"
+3="configure"
+4="reset-config"
+5="build-image"
+6="run-container"
 
 NOWMS = go run tools/nowms.go
 
 # Load saved values if .env exists
 -include .env
+
+menu:
+	@bash -c '\
+		trap "echo; printf \"$(PEACH)Exiting menu...$(NC)\n\"; exit 0" INT; \
+		while true; do \
+			clear; \
+			printf "$(TEAL)make commands for <codex>\n"; \
+			printf "$(PEACH)---------------------------------------------$(NC)\n"; \
+			if [ -f .env ]; then \
+				printf "$(TEAL)> loaded configuration from .env$(NC)\n"; \
+			else \
+				printf "$(PEACH)⚠ no .env file found — run make configure$(NC)\n"; \
+			fi; \
+			printf "$(TEAL)---------------------------------------------$(NC)\n"; \
+			options=("build\n" "run" "configure" "reset-config" "build-image" "run-container" "exit"); \
+			PS3="$(PEACH)Enter command number (1-$${#options[@]}): $(NC)"; \
+			select opt in "$${options[@]}"; do \
+				if [ "$$opt" = "exit" ]; then \
+					printf "$(PEACH)Exiting menu...$(NC)\n"; \
+					exit 0; \
+				elif [ -n "$$opt" ]; then \
+					$(MAKE) $$opt; \
+					printf "$(TEAL)---------------------------------------------$(NC)\n"; \
+					read -p "$(PEACH)Press Enter to return to menu...$(NC)" dummy; \
+					break; \
+				else \
+					printf "$(RED)⚠ invalid choice — please enter a number between 1 and $${#options[@]}$(NC)\n"; \
+				fi; \
+			done; \
+		done'
 
 build:
 	@echo "$(TEAL)> building web server application...$(NC)"
@@ -33,6 +71,8 @@ run:
 
 configure:
 	@bash -c '\
+		printf "$(TEAL)> configuring Docker build and run options...$(NC)\n"; \
+		printf "$(TEAL)---------------------------------------------$(NC)\n"; \
 		read -p "Enter image name (leave blank for samuishark/codex-v1.0): " IMAGE; \
 		IMAGE=$${IMAGE:-samuishark/codex-v1.0}; \
 		read -p "Enter container name (leave blank for codex): " CONTAINER; \

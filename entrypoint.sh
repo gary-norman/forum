@@ -28,15 +28,15 @@ EOF
 
 # Insert the channel into the Channels table
 sqlite3 "$DB_PATH" <<EOF
-INSERT INTO Channels (Name, Avatar, Description, Created, Privacy, Banner, OwnerID, IsMuted, IsFlagged)
+INSERT INTO Channels (OwnerID, Name, Description, Created, Avatar, Banner, Privacy, IsFlagged, IsMuted)
 VALUES (
+    x'$UserID',
     'WelcomeToCodex',
-    'codex.png',
     "Welcome to Codex! This channel will guide you through the forum, and give you updates, insights, and generally keep you up to date with everything that's going on.",
     DateTime('now'),
-    0,
+    'codex.png',
     '',
-    x'$UserID',
+    0,
     0,
     0
 );
@@ -44,16 +44,16 @@ EOF
 
 # Insert the post into the posts table
 sqlite3 "$DB_PATH" <<EOF
-INSERT INTO Posts (Title, Content, Images, Created, IsCommentable, Author, AuthorID, AuthorAvatar, IsFlagged)
+INSERT INTO Posts (Title, Content, Images, Created, Author, AuthorAvatar, AuthorID, IsCommentable, IsFlagged)
 VALUES (
   'Welcome to Codex!',
   "We are so glad you could join us! Since you're here, you probably already know this, but just in case, this is a place for us all to share everything we know about coding - our hopes, fears, plans, anxieties... Everything that makes up this world in which we find ourselves. Hopefully, Codex will make it less daunting, and a world we enjoy living in. So, welcome! We're so glad you're here.",
   'noimage',
   DateTime('now'),
-  0,
   'TheCodexDonkey',
-  x'$UserID',
   'donkey.png',
+  x'$UserID',
+  0,
   0
 );
 EOF

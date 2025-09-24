@@ -37,7 +37,7 @@ export function navigateToPage(dest, entity) {
 
 export function changePage(page) {
   // console.log("%cpage: ", expect, page);
-  debugger;
+  // debugger;
   let pageId;
   if (typeof page != "string") {
     pageId = page.id;

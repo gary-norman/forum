@@ -15,36 +15,28 @@ export function toggleReplyForm(target) {
   listenToReplyForm();
 }
 
-
 function listenToReplyForm() {
-
-    replyForm = document.querySelector(".form-reply");
-    console.log("replyForm:", replyForm)
-
-    const replyContent = document.querySelector('textarea[name="content"]');
-    console.log("replyContent:", replyContent)
-
+  replyForm = document.querySelector(".form-reply");
+  const replyContent = document.querySelector('textarea[name="content"]');
   const formCard = replyForm.closest('.card');
+  notifierReply = formCard.querySelector(".popover-title");
 
-    notifierReply = formCard.querySelector(".popover-title");
-    console.log("notifierReply:", notifierReply)
+  replyForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form); // Collect form data
+    const content = formData.get("content")?.trim();
 
-    replyForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const form = e.target;
-      const formData = new FormData(form); // Collect form data
-      const content = formData.get("content")?.trim();
+    if (!content || content.trim().length <1) {
+      showInlineNotification(
+          notifierReply,
+          "",
+          "enter some content",
+          false,
+          "invisible-notify",
+      );
+      replyContent.focus();
 
-      if (!content || content.trim().length <1) {
-        showInlineNotification(
-            notifierReply,
-            "",
-            "enter some content",
-            false,
-            "invisible-notify",
-        );
-        replyContent.focus();
-
-      }
-    });
+    }
+  });
 }

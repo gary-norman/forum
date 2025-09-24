@@ -154,12 +154,48 @@ if (registerForm) {
     const form = event.target;
     const formData = new FormData(form); // Collect form data
     const registerUser = formData.get("register_user");
+    const registerEmail = formData.get("register_email");
+    const registerPassword = formData.get("register_password");
+    const registerPasswordRpt = formData.get("register_password-rpt");
 
     if (!registerUser) {
       showInlineNotification(
         notifierRegister,
         "",
         "please choose a username (5-16 characters)",
+        false,
+        "dummy",
+      );
+      return;
+    }
+
+    if (!registerEmail) {
+      showInlineNotification(
+        notifierRegister,
+        "",
+        "please enter a valid email address",
+        false,
+        "dummy",
+      );
+      return;
+    }
+
+    if (!registerPassword) {
+      showInlineNotification(
+        notifierRegister,
+        "",
+        "please choose a password (min. 8 characters, 1 uppercase, 1 lowercase, 1 number)",
+        false,
+        "dummy",
+      );
+      return;
+    }
+
+    if (!registerPasswordRpt) {
+      showInlineNotification(
+        notifierRegister,
+        "",
+        "please repeat the password",
         false,
         "dummy",
       );
@@ -182,7 +218,7 @@ if (registerForm) {
       });
 
       const data = await response.json();
-      console.custom.info("data:", data)
+      console.custom.info("data:", data);
 
       if (!response.ok || data.message === "registration failed!") {
         showInlineNotification(

@@ -48,13 +48,7 @@ export function changePage(page) {
   pages.forEach((element) => {
     if (element.id === pageId) {
       element.classList.add("active-feed");
-    } else if (pageId !== "home-page" && element.id === "home-page") {
-      element.classList.remove("active-feed");
     } else {
-      // console.log("%cpage: ",warn, page);
-      // TODO need to modify home-page template to populate by injection
-      // TODO when injected, the content can be cleared
-
       // clear the content of the page previously active
       element.innerHTML = "";
 
@@ -141,13 +135,21 @@ export async function fetchHome() {
     const response = await fetch(`/home`);
     const data = await response.json();
     renderContent(data, entity);
+
+    // If backend included a non-OK status, treat it as error
+    if (!response.ok || (data.status && data.status >= 400)) {
+      throw {
+        error: new Error(`Backend error ${data.status || response.status}`),
+        data,
+      };
+    }
   } catch (e) {
     if (e.data) {
       // Render the backend-provided error page
       renderContent(e.data, entity);
     } else {
       // Fallback if no data available
-      const target = document.getElementById(`home-page`);
+      const target = document.getElementById(`${entity}-page`);
       if (target) {
         target.innerHTML = `<div class="error">Something went wrong</div>`;
       }
@@ -176,7 +178,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const homeDiv = document.getElementById("home-page");
 
   try {
-    if (!dest) {
+    if (!id) {
       if (homeDiv && homeDiv.children.length > 0) {
         // 400 page already injected by server, do nothing
         return;

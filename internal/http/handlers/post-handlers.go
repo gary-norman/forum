@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gary-norman/forum/internal/app"
 	mw "github.com/gary-norman/forum/internal/http/middleware"
@@ -105,7 +106,7 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 
 	thisPost.ChannelID, thisPost.ChannelName, err = p.Channel.GetChannelInfoFromPostID(thisPost.ID)
 	if err != nil {
-		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.FetchError("channel info", "GetThsiPost", err))
+		view.RenderErrorPage(w, models.NotFoundLocation("post"), 500, models.FetchError("channel info", "GetThisPost", err))
 	}
 
 	models.UpdateTimeSince(&thisPost)
@@ -154,54 +155,43 @@ func (p *PostHandler) GetThisPost(w http.ResponseWriter, r *http.Request) {
 func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 	user, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
-	parseErr := r.ParseMultipartForm(10 << 20)
-	if parseErr != nil {
-		http.Error(w, parseErr.Error(), 400)
-		log.Printf(ErrorMsgs.Parse, "storePost", parseErr)
-		return
-	}
-	channels := r.MultipartForm.Value["channel_list"] // Retrieve the slice of checked channel IDs
-	// get channel name
 
-	// SECTION getting channel data (for reverting to single channel post
-	//selectionJSON := r.PostForm.Get("channel")
-	//if selectionJSON == "" {
-	//	http.Error(w, "No selection provided", http.StatusBadRequest)
-	//	return
-	//}
-	//var channelData models.ChannelData
-	//if err := json.Unmarshal([]byte(selectionJSON), &channelData); err != nil {
-	//	log.Printf(ErrorMsgs.Unmarshal, selectionJSON, err)
-	//	http.Error(w, "Invalid selection format", http.StatusBadRequest)
-	//	return
-	//}
-	//fmt.Printf(ErrorMsgs.KeyValuePair, "channelName", channelData.ChannelName)
-	//fmt.Printf(ErrorMsgs.KeyValuePair, "channelID", channelData.ChannelID)
-	//fmt.Printf(ErrorMsgs.KeyValuePair, "commentable", r.PostForm.Get("commentable"))
+	if err := r.ParseMultipartForm(10 << 20); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		log.Printf(ErrorMsgs.Parse, "storePost", err)
+		return
+	}
+
+	channels := r.MultipartForm.Value["post_channel_list"]
+	if len(channels) < 2 {
+		http.Error(w, "at least two channels required", http.StatusBadRequest)
+		return
+	}
+
+	title := strings.TrimSpace(r.FormValue("title"))
+	content := strings.TrimSpace(r.FormValue("content"))
+	if title == "" || content == "" {
+		http.Error(w, "title and content are required", http.StatusBadRequest)
+		return
+	}
 
 	createPostData := models.Post{
-		Title:         r.PostForm.Get("title"),
-		Content:       r.PostForm.Get("content"),
-		Images:        "",
+		Title:         title,
+		Content:       content,
 		Author:        user.Username,
 		AuthorID:      user.ID,
 		AuthorAvatar:  user.Avatar,
-		IsCommentable: false,
-		IsFlagged:     false,
+		IsCommentable: r.FormValue("commentable") == "on",
 	}
 
-	if r.PostForm.Get("commentable") == "on" {
-		createPostData.IsCommentable = true
+	if img := GetFileName(r, "file-drop", "storePost", "post"); img != "" {
+		createPostData.Images = img
 	}
 
-	createPostData.Images = GetFileName(r, "file-drop", "storePost", "post")
-	/*createPostData.ChannelName = channelData.ChannelName
-	createPostData.ChannelID, _ = strconv.Atoi(channelData.ChannelID)*/
-
-	postID, insertErr := p.App.Posts.Insert(
+	postID, err := p.App.Posts.Insert(
 		createPostData.Title,
 		createPostData.Content,
 		createPostData.Images,
@@ -211,29 +201,42 @@ func (p *PostHandler) StorePost(w http.ResponseWriter, r *http.Request) {
 		createPostData.IsCommentable,
 		createPostData.IsFlagged,
 	)
-
-	if insertErr != nil {
-		log.Printf(ErrorMsgs.Post, insertErr)
-		http.Error(w, insertErr.Error(), 500)
+	if err != nil {
+		log.Printf(ErrorMsgs.Post, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	for c := range channels {
-		channelID, convErr := strconv.ParseInt(channels[c], 10, 64)
+	for _, c := range channels {
+		channelID, convErr := strconv.ParseInt(c, 10, 64)
 		if convErr != nil {
-			log.Printf(ErrorMsgs.Convert, channels[c], "StorePost > GetChannelID", convErr)
-			log.Printf("Unable to convert %v to integer\n", channels[c])
-			continue
+			http.Error(w, "invalid channel id", http.StatusBadRequest)
+			return
 		}
-		postToChannelErr := p.App.Channels.AddPostToChannel(channelID, postID)
-		if postToChannelErr != nil {
-			log.Printf(ErrorMsgs.KeyValuePair, "channelID", channelID)
-			log.Printf(ErrorMsgs.KeyValuePair, "postID", postID)
-			log.Printf(ErrorMsgs.KeyValuePair, "postToChannelErr", postToChannelErr)
-			http.Error(w, postToChannelErr.Error(), 500)
+		if err := p.App.Channels.AddPostToChannel(channelID, postID); err != nil {
+			log.Printf("failed adding post %d to channel %d: %v", postID, channelID, err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
+	// ✅ Redirect only — no JSON write
 	postURL := fmt.Sprintf("/cdx/post/%d", postID)
-	http.Redirect(w, r, postURL, http.StatusFound)
+	http.Redirect(w, r, postURL, http.StatusSeeOther)
 }
+
+// SECTION getting channel data (for reverting to single channel post)
+
+//selectionJSON := r.PostForm.Get("channel")
+//if selectionJSON == "" {
+//	http.Error(w, "No selection provided", http.StatusBadRequest)
+//	return
+//}
+//var channelData models.ChannelData
+//if err := json.Unmarshal([]byte(selectionJSON), &channelData); err != nil {
+//	log.Printf(ErrorMsgs.Unmarshal, selectionJSON, err)
+//	http.Error(w, "Invalid selection format", http.StatusBadRequest)
+//	return
+//}
+//fmt.Printf(ErrorMsgs.KeyValuePair, "channelName", channelData.ChannelName)
+//fmt.Printf(ErrorMsgs.KeyValuePair, "channelID", channelData.ChannelID)
+//fmt.Printf(ErrorMsgs.KeyValuePair, "commentable", r.PostForm.Get("commentable"))

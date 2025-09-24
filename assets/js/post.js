@@ -31,19 +31,21 @@ import {
 
 const notifierPost = document.querySelector("#post-popover-title");
 const createPostForm = document.querySelector("#form-create-post");
+
 if (createPostForm) {
   const btnSelectChannels = createPostForm.querySelector(".dropdown-toggle");
   const inputTitle = createPostForm.querySelector('input[name="title"]');
   const inputContent = createPostForm.querySelector('textarea[name="content"]');
-  createPostForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form); // Collect form data
-    const channels = formData.getAll("post_channel_list"); // get an array of selected channels
+
+  createPostForm.addEventListener("submit", function (e) {
+    const formData = new FormData(createPostForm);
+    const channels = formData.getAll("post_channel_list");
     const title = formData.get("title")?.trim();
     const content = formData.get("content")?.trim();
 
+    // Validate channels
     if (channels.length < 2) {
+      e.preventDefault();
       showInlineNotification(
         notifierPost,
         "",
@@ -54,12 +56,18 @@ if (createPostForm) {
       btnSelectChannels.classList.add("active");
       return;
     }
+
+    // Validate title
     if (!title) {
+      e.preventDefault();
       showInlineNotification(notifierPost, "", "enter a title", false, "dummy");
       inputTitle.focus();
       return;
     }
+
+    // Validate content
     if (!content) {
+      e.preventDefault();
       showInlineNotification(
         notifierPost,
         "",
@@ -71,31 +79,8 @@ if (createPostForm) {
       return;
     }
 
-    try {
-      const response = await fetch("/posts/create", {
-        method: "POST",
-        body: formData,
-        cache: "no-store",
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || data.message === "post creation failed!") {
-        showInlineNotification(notifierPost, "", data.message, false, "dummy");
-        return;
-      }
-      showInlineNotification(notifierPost, "", data.message, true, "dummy");
-      setTimeout(
-        function () {
-          popoverTargetElement = this;
-          popoverTargetAction = "hide";
-        }.bind(this),
-        2000,
-      );
-    } catch (error) {
-      console.custom.error("Error during post creation:", error);
-      showMainNotification("An error occurred during post creation.");
-    }
+    // ✅ If we reach here, validation passed
+    // Allow the form to submit normally → server handles it → browser redirects
   });
 }
 

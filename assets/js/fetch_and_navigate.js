@@ -37,7 +37,6 @@ export function navigateToPage(dest, entity) {
 
 export function changePage(page) {
   // console.log("%cpage: ", expect, page);
-  // debugger;
   let pageId;
   if (typeof page != "string") {
     pageId = page.id;
@@ -156,22 +155,46 @@ export async function fetchHome() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+function showLoader() {
+  const backdrop = document.getElementById("loader-backdrop");
+  backdrop?.classList.remove("hidden");
+}
+
+function hideLoader() {
+  const backdrop = document.getElementById("loader-backdrop");
+  if (!backdrop) return;
+
+  backdrop.classList.add("hidden");
+  setTimeout(() => backdrop.remove(), 500); // fade-out duration
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+  showLoader(); // start the spinner
+
   const path = window.location.pathname;
   const [, dest, id] = path.match(/\/cdx\/(\w+)\/([^/]+)/) || [];
-  const page = dest + "Page";
-  console.info("%cPath: %o Dest: %o ID: %o", expect, path, dest, id);
-  switch (dest) {
-    case undefined:
-      console.info(`%cUnknown dest: ${dest}, navigating to home`, warn);
-      setActivePage("home");
-      changePage("homePage");
-      return fetchHome();
-    // return;
-    default:
-      console.info("%cNavigating to /cdx/%o/%o", expect, dest, id);
+  const homeDiv = document.getElementById("home-page");
+
+  try {
+    if (!dest) {
+      if (homeDiv && homeDiv.children.length > 0) {
+        // 400 page already injected by server, do nothing
+        return;
+      } else {
+        setActivePage("home");
+        changePage("homePage");
+        await fetchHome();
+      }
+    } else {
+      const page = dest + "Page";
       setActivePage(dest);
       changePage(page);
-      return fetchData(dest, id);
+      await fetchData(dest, id);
+    }
+  } catch (e) {
+    console.error("Page load failed:", e);
+  } finally {
+    // Hide loader **after content is rendered**
+    requestAnimationFrame(() => hideLoader());
   }
 });

@@ -36,7 +36,14 @@ window.addEventListener("popstate", (event) => {
   console.custom.info("entity:", entity);
   console.custom.info("id:", id);
   if (entity === "home") {
-    return fetchHome();
+    try {
+      setActivePage(entity);
+      changePage(page);
+      return fetchHome();
+    } catch (err) {
+      showMainNotification("Failed to fetch data.");
+      // Optionally log error or handle further
+    }
   } else if (entity && id) {
     try {
       setActivePage(entity);

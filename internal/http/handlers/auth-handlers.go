@@ -140,7 +140,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		"body":    FormFields{Fields: formFields},
 	})
 	if encErr != nil {
-		log.Printf(ErrorMsgs.Encode, "register: send success", encErr)
+		log.Println(fmt.Errorf(ErrorMsgs.Encode, "register: success", encErr))
 		return
 	}
 
@@ -218,7 +218,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 			"message": "incorrect password",
 		})
 		if encErr != nil {
-			log.Printf(ErrorMsgs.Encode, "login: fail", encErr)
+			log.Println(fmt.Errorf(ErrorMsgs.Encode, "login: fail", encErr))
 			return
 		}
 	}

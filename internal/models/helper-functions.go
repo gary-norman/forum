@@ -91,7 +91,7 @@ type Number interface {
 }
 
 func EncodeError(item, location string, err error) error {
-	error := fmt.Errorf(ErrorMsgs.Fetch, item, location, err)
+	error := fmt.Errorf(ErrorMsgs.Encode, item+": "+location, err)
 	return error
 }
 

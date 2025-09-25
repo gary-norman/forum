@@ -1,55 +1,42 @@
-# Use multi-stage build to reduce final image size
-FROM golang:latest AS builder
+# ----------------------
+# Stage 1: Build the app
+# ----------------------
+FROM golang:1.21 AS builder
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Install dependencies
-RUN  apt-get update && apt-get install -y sqlite3 python3 libsqlite3-dev rsync && rm -rf /var/lib/apt/lists/*
+# Install build deps (SQLite headers only)
+RUN apt-get update && apt-get install -y \
+  libsqlite3-dev \
+  && rm -rf /var/lib/apt/lists/*
 
-# Copy all files except hidden directories and bin
-COPY . /tmp/app
-RUN rsync -a --exclude='audit' --exclude='diagrams' --exclude='Dockerfile' --exclude='identifier.sqlite' --exclude='docker-compose.yml' --exclude='.*' --exclude='bin' /tmp/app/ /app && rm -rf /tmp/app
+COPY . /app
 
-# Build the application
-RUN make build
+# Build codex binary (stripped for smaller size)
+RUN CGO_ENABLED=1 go build -ldflags="-s -w" -o /app/codex ./cmd/server
 
-# Use a smaller base image for the final stage
-FROM debian:sid-20250317-slim
+# ----------------------
+# Stage 2: Runtime (distroless)
+# ----------------------
+FROM gcr.io/distroless/base-debian12:nonroot
 
-# Install only necessary runtime dependencies
-RUN apt-get update && apt-get install -y sqlite3 python3 libsqlite3-0 && rm -rf /var/lib/apt/lists/*
-
-# Set the working directory
 WORKDIR /app
 
-# Copy the built application from the builder stage
-COPY --from=builder /app/bin/codex /app/bin/codex
-COPY --from=builder /app/schema.sql /app/schema.sql
+# Copy binary & required assets
+COPY --from=builder /app/codex /app/codex
+COPY --from=builder /app/migrations/001_schema.sql /app/migrations/001_schema.sql
 COPY --from=builder /app/assets /app/assets
 COPY --from=builder /app/robots.txt /app/robots.txt
 COPY --from=builder /app/README.md /app/README.md
 COPY --from=builder /app/LICENSE /app/LICENSE
+COPY --from=builder /app/default-images /app/default-images
 
-# Create the database directory and initialize the database
-RUN mkdir -p /var/lib/db-codex && sqlite3 /var/lib/db-codex/forum_database.db < /app/schema.sql
-
-# Create the userdata directory structure
-RUN mkdir -p /app/db/userdata/images/{channel-images,user-images,post-images}
-# Copy donkey user image
-COPY --from=builder /app/default-images/donkey.png /app/db/userdata/images/user-images/donkey.png
-# Copy codex channel image
-COPY --from=builder /app/default-images/codex.png /app/db/userdata/images/channel-images/codex.png
-
-# Create a base user with a single post
-# Copy the entrypoint script
+# Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+
+USER nonroot:nonroot
 
 EXPOSE 8888
 
-# Use the script as the container entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
-
-# Run the application
-CMD ["/app/bin/codex"]
+CMD ["/app/codex"]

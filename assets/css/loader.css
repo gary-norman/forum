@@ -55,7 +55,7 @@
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  border: 5px solid var(--clr-fg-5);
+  border: 5px solid var(--clr-accent--1);
   animation: prixClipFix 2s linear infinite;
 }
 .loader::after {
@@ -108,7 +108,7 @@
     position: absolute;
     top: -0.8rem;
     content: url(/assets/icons/codex-logo-green.svg);
-    animation: fade 2s linear infinite;
+    animation: fade 4s linear infinite;
   }
 }
 

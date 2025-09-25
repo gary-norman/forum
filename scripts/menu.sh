@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-## --color-hl-green: rgb(108 207 93);
-##
-
 # Color variables
 TEAL="\033[38;2;148;226;213m"
 PEACH="\033[38;2;250;179;135m"

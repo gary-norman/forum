@@ -15,7 +15,7 @@ NOWMS = go run tools/nowms.go
 -include .env
 
 menu:
-	@./menu.sh
+	@./scripts/menu.sh
 
 build: ## build the web server application
 	@echo "$(CODEX_PINK)> building web server application...$(NC)"
@@ -41,29 +41,10 @@ run: ## run the web server application
 		printf "$(CODEX_PINK)---------------------------------------------$(NC)\n"; \
 
 configure: ## configure Docker build and run options
-	@bash -c '\
-		printf "$(CODEX_PINK)---------------------------------------------$(NC)\n"; \
-		printf "$(CODEX_GREEN)> configuring Docker build and run options...$(NC)\n"; \
-		printf "$(CODEX_PINK)---------------------------------------------$(NC)\n"; \
-		printf "Enter image name $(CODEX_GREEN)(leave blank for $(CODEX_PINK)samuishark/codex-v1.0)$(NC): "; \
-		read IMAGE; \
-		IMAGE=$${IMAGE:-samuishark/codex-v1.0}; \
-		printf "Enter container name $(CODEX_GREEN)(leave blank for $(CODEX_PINK)codex)$(NC): "; \
-		read CONTAINER; \
-		CONTAINER=$${CONTAINER:-codex}; \
-		printf "Enter local port number $(CODEX_GREEN)(leave blank for $(CODEX_PINK)8888)$(NC): "; \
-		read PORT; \
-		PORT=$${PORT:-8888}; \
-		echo "IMAGE=$$IMAGE" > .env; \
-		echo "CONTAINER=$$CONTAINER" >> .env; \
-		echo "PORT=$$PORT" >> .env; \
-		printf "$(GREEN)✓ configuration saved to $(CODEX_PINK).env$(NC)\n" \
-		printf "$(CODEX_PINK)---------------------------------------------$(NC)\n"; \
-	'
+	@./scripts/configure.sh
 
-reset-config: ## reset Docker configuration by deleting .env
-	@rm -f .env
-	@printf "$(CODEX_GREEN)⚠ configuration reset$(NC) — run $(CODEX_PINK)'make configure'$(NC) to set new values\n"
+reset-config: ## reset Docker configuration by deleting .env and repopulating with dev/prod for db
+	@./scripts/reset-config.sh
 
 build-image: ## build the Docker image
 	@bash -c '\
@@ -74,7 +55,7 @@ build-image: ## build the Docker image
 		DIFF=$$((STOP - START)); \
 		SEC=$$((DIFF / 1000)); \
 		MS=$$((DIFF % 1000)); \
-		printf "$(GREEN)✓ build complete!$(NC) in $(CODEX_PINK)%s.%03d$(NC)s\n" "$$SEC" "$$MS" \
+		printf "$(GREEN)✓${CODEX_GREEN} build complete!$(NC) in $(CODEX_PINK)%s.%03d$(NC)s\n" "$$SEC" "$$MS" \
 	'
 
 run-container: ## run the Docker container
@@ -86,5 +67,5 @@ run-container: ## run the Docker container
 		DIFF=$$((STOP - START)); \
 		SEC=$$((DIFF / 1000)); \
 		MS=$$((DIFF % 1000)); \
-		printf "$(GREEN)✓ task complete!$(NC)in $(CODEX_PINK)%s.%03d$(NC)s\n" "$$SEC" "$$MS" \
+		printf "$(GREEN)✓${CODEX_GREEN} task complete!$(NC)in $(CODEX_PINK)%s.%03d$(NC)s\n" "$$SEC" "$$MS" \
 	'

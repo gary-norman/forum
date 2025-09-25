@@ -18,34 +18,7 @@ NOWMS = go run tools/nowms.go
 -include .env
 
 menu:
-	@bash -c '\
-		trap "echo; printf \"$(PEACH)Exiting menu...$(NC)\n\"; exit 0" INT; \
-		while true; do \
-			clear; \
-			printf "$(TEAL)make commands for <codex>\n"; \
-			printf "$(PEACH)---------------------------------------------$(NC)\n"; \
-			if [ -f .env ]; then \
-				printf "$(TEAL)> loaded configuration from .env$(NC)\n"; \
-			else \
-				printf "$(PEACH)⚠ no .env file found — run make configure$(NC)\n"; \
-			fi; \
-			printf "$(TEAL)---------------------------------------------$(NC)\n"; \
-			options=("build\n" "run" "configure" "reset-config" "build-image" "run-container" "exit"); \
-			PS3="$(PEACH)Enter command number (1-$${#options[@]}): $(NC)"; \
-			select opt in "$${options[@]}"; do \
-				if [ "$$opt" = "exit" ]; then \
-					printf "$(PEACH)Exiting menu...$(NC)\n"; \
-					exit 0; \
-				elif [ -n "$$opt" ]; then \
-					$(MAKE) $$opt; \
-					printf "$(TEAL)---------------------------------------------$(NC)\n"; \
-					read -p "$(PEACH)Press Enter to return to menu...$(NC)" dummy; \
-					break; \
-				else \
-					printf "$(RED)⚠ invalid choice — please enter a number between 1 and $${#options[@]}$(NC)\n"; \
-				fi; \
-			done; \
-		done'
+	@./menu.sh
 
 build:
 	@echo "$(TEAL)> building web server application...$(NC)"

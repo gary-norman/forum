@@ -18,7 +18,7 @@ func ansi(hex string) string {
 
 type ColorSet struct {
 	// Accent colors
-	Rosewater, Flamingo, Pink, Mauve, Red, Maroon, Peach, Yellow, Green, Teal, Sky, Sapphire, Blue, Lavender string
+	Rosewater, Flamingo, Pink, Mauve, Red, Maroon, Peach, Yellow, Green, Teal, Sky, Sapphire, Blue, Lavender, CodexPink, CodexGreen string
 
 	// Neutrals
 	Text, Subtext1, Subtext0, Overlay2, Overlay1, Overlay0 string
@@ -33,7 +33,7 @@ var palettes = map[string]*ColorSet{
 		Rosewater: ansi("#dc8a78"), Flamingo: ansi("#dd7878"), Pink: ansi("#ea76cb"), Mauve: ansi("#8839ef"),
 		Red: ansi("#d20f39"), Maroon: ansi("#e64553"), Peach: ansi("#fe640b"), Yellow: ansi("#df8e1d"),
 		Green: ansi("#40a02b"), Teal: ansi("#179299"), Sky: ansi("#04a5e5"), Sapphire: ansi("#209fb5"),
-		Blue: ansi("#1e66f5"), Lavender: ansi("#7287fd"),
+		Blue: ansi("#1e66f5"), Lavender: ansi("#7287fd"), CodexPink: ansi("#ea4f92"), CodexGreen: ansi("#6CCF5D"),
 
 		Text: ansi("#4c4f69"), Subtext1: ansi("#5c5f77"), Subtext0: ansi("#6c6f85"),
 		Overlay2: ansi("#7c7f93"), Overlay1: ansi("#8c8fa1"), Overlay0: ansi("#9ca0b0"),
@@ -46,7 +46,7 @@ var palettes = map[string]*ColorSet{
 		Rosewater: ansi("#f2d5cf"), Flamingo: ansi("#eebebe"), Pink: ansi("#f4b8e4"), Mauve: ansi("#ca9ee6"),
 		Red: ansi("#e78284"), Maroon: ansi("#ea999c"), Peach: ansi("#ef9f76"), Yellow: ansi("#e5c890"),
 		Green: ansi("#a6d189"), Teal: ansi("#81c8be"), Sky: ansi("#99d1db"), Sapphire: ansi("#85c1dc"),
-		Blue: ansi("#8caaee"), Lavender: ansi("#babbf1"),
+		Blue: ansi("#8caaee"), Lavender: ansi("#babbf1"), CodexPink: ansi("#ea4f92"), CodexGreen: ansi("#6CCF5D"),
 
 		Text: ansi("#c6d0f5"), Subtext1: ansi("#b5bfe2"), Subtext0: ansi("#a5adce"),
 		Overlay2: ansi("#949cbb"), Overlay1: ansi("#838ba7"), Overlay0: ansi("#737994"),
@@ -59,7 +59,7 @@ var palettes = map[string]*ColorSet{
 		Rosewater: ansi("#f4dbd6"), Flamingo: ansi("#f0c6c6"), Pink: ansi("#f5bde6"), Mauve: ansi("#c6a0f6"),
 		Red: ansi("#ed8796"), Maroon: ansi("#ee99a0"), Peach: ansi("#f5a97f"), Yellow: ansi("#eed49f"),
 		Green: ansi("#a6da95"), Teal: ansi("#8bd5ca"), Sky: ansi("#91d7e3"), Sapphire: ansi("#7dc4e4"),
-		Blue: ansi("#8aadf4"), Lavender: ansi("#b7bdf8"),
+		Blue: ansi("#8aadf4"), Lavender: ansi("#b7bdf8"), CodexPink: ansi("#ea4f92"), CodexGreen: ansi("#6CCF5D"),
 
 		Text: ansi("#cad3f5"), Subtext1: ansi("#b8c0e0"), Subtext0: ansi("#a5adcb"),
 		Overlay2: ansi("#939ab7"), Overlay1: ansi("#8087a2"), Overlay0: ansi("#6e738d"),
@@ -72,7 +72,7 @@ var palettes = map[string]*ColorSet{
 		Rosewater: ansi("#f5e0dc"), Flamingo: ansi("#f2cdcd"), Pink: ansi("#f5c2e7"), Mauve: ansi("#cba6f7"),
 		Red: ansi("#f38ba8"), Maroon: ansi("#eba0ac"), Peach: ansi("#fab387"), Yellow: ansi("#f9e2af"),
 		Green: ansi("#a6e3a1"), Teal: ansi("#94e2d5"), Sky: ansi("#89dceb"), Sapphire: ansi("#74c7ec"),
-		Blue: ansi("#89b4fa"), Lavender: ansi("#b4befe"),
+		Blue: ansi("#89b4fa"), Lavender: ansi("#b4befe"), CodexPink: ansi("#ea4f92"), CodexGreen: ansi("#6CCF5D"),
 
 		Text: ansi("#cdd6f4"), Subtext1: ansi("#bac2de"), Subtext0: ansi("#a6adc8"),
 		Overlay2: ansi("#9399b2"), Overlay1: ansi("#7f849c"), Overlay0: ansi("#6c7086"),

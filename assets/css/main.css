@@ -648,37 +648,35 @@ a:active,
 }
 
 .modal-content {
-  container-type: size;
   position: relative;
   background-color: var(--clr-bg-2);
-  margin: 15% auto;
-  /* 15% from the top and centered */
-  border: 1px solid var(--clr-bg-4);
+  margin: 7dvh auto;
+  box-shadow: var(--shadow-box);
   width: max(40dvw, 25.2rem);
-  /* Could be more or less, depending on screen size */
-  /*font-family: SpaceGrotesk-Regular, system-ui;*/
   font-size: clamp(1.2rem, 2.4rem + -0.3dvw, 2.4rem);
-  /*position: absolute;*/
-  padding: 0 2rem;
-  min-height: 46rem;
+  height: auto;
   border-radius: 1.2rem;
-  /*box-shadow: inset 0 .4rem 2rem .2rem rgba(0 0 0 / 0.4),*/
-  /*0 -.4rem 1.8rem rgba(0 0 0 / 0.4);*/
-  /* background: var(--clr-bg-4); */
   & form {
-    margin: auto;
+    width: max(60%, 30rem);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     row-gap: 1.2rem;
+    padding-block-end: 2rem;
   }
-
   & > span:nth-of-type(1) {
     position: absolute;
     top: 0.2rem;
     right: 1.4rem;
   }
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem 3rem 2rem;
 }
 
 .modal-header {
@@ -793,9 +791,9 @@ a:active,
 
 .remember-forgot {
   display: flex;
-  width: min(80%, 25rem);
+  gap: 0.8rem;
+  width: min(100%, 15rem);
   font-size: 1.2rem;
-  padding-block: 0.9rem 1.2rem;
   justify-content: space-between;
   @container (max-width: 33.35rem) {
     flex-direction: column;
@@ -807,9 +805,8 @@ a:active,
 
 .forgot {
   display: flex;
-  place-content: center;
   justify-content: center;
-  /* line-height: 1rem; */
+  align-items: center;
   color: var(--clr-light--3);
   padding: 0 0.4rem 0 0;
 }
@@ -887,8 +884,8 @@ a:active,
 }
 
 .social-icons .icon svg {
-  height: 1.2rem;
-  width: 1.2rem;
+  height: 2.4rem;
+  aspect-ratio: 1/1;
   fill: var(--clr-fg-1);
 }
 
@@ -905,8 +902,6 @@ a:active,
   & small {
   }
 }
-
-/* prevent special form element styling  */
 
 .user-label {
   font-size: 0;
@@ -927,6 +922,7 @@ a:active,
   /*  left 300ms ease-in-out;*/
 }
 
+/* prevent special form element styling  */
 textarea {
   field-sizing: content;
 }
@@ -1040,7 +1036,6 @@ input[type="checkbox"] {
 
 .form-field input,
 .form-field textarea {
-  margin: 0.2rem 0 1.5rem 0; /* keep your vertical spacing */
   border: 1px solid var(--clr-bg-4);
   font-size: var(--input-font);
   border-radius: var(--border-radius-input);
@@ -1048,8 +1043,6 @@ input[type="checkbox"] {
   width: 100%;
   color: var(--clr-fg-2);
   background: transparent;
-  box-sizing: border-box; /* safe layout */
-  /* remove `position: relative` from the input itself */
 }
 
 /* label initial state (overlaps input) */
@@ -1222,7 +1215,6 @@ form-field:focus-within input {
 .popover-title {
   font-size: var(--font-sz-popover-title);
   margin-inline: auto;
-  padding-block: 0.8rem;
   height: 2rem;
   text-align: center;
 }
@@ -1255,19 +1247,14 @@ form-field:focus-within input {
   }
 }
 
-#form-login,
 #form-edit-user {
+  margin-block-start: 2rem;
+  height: auto;
   &input {
     margin: 0.8rem auto;
   }
-  margin-block-start: 2rem;
-  height: auto;
 }
 
-.logreg-form {
-  /* margin-block: auto; */
-  padding-block: 0 1.6rem;
-}
 #resetForm {
   & .form-title {
     font-size: clamp(1.2rem, 1.2rem + 0.4vw, 1.6rem);

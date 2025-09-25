@@ -128,8 +128,8 @@
           <span class="close">&times;</span>
             <div id="login-title" class="popover-title">
             </div>
-          <div id="form-login">
-            <form id="login-form" class="logreg-form">
+          <div id="form-login" class="modal-body">
+            <form id="login-form">
               <div class="input-wrapper form-field">
                 <input
                   type="text"
@@ -153,16 +153,16 @@
                 />
                 <label for="loginFormPassword">password</label>
               </div>
-              <div class="remember-forgot">
-                <div class="cont-flex-row flex-center" style="column-gap: 0.4rem">
-                  <div class="allow-comments">
+              <div class="cont-flex-column">
+                <div class="remember-forgot">
+                  <div class="allow-comments cursor-pointer">
                     <input type="checkbox" id="login-remember-checkbox" name="privacy"/>
                     <span class="allow-comments-fx"></span>
                   </div>
-                  <label for="login-remember-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">remember me</label>
+                  <label for="login-remember-checkbox">keep me logged in</label>
                 </div>
                 <div class="forgot">
-                  <span id="btn_forgot">forgot password?</span>
+                  <button id="btn_forgot" class="reg-log link">forgot password?</button>
                 </div>
               </div>
 
@@ -190,11 +190,11 @@
               <button aria-label="Log in with X" class="icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 32 32"
+                  viewBox="0 0 1200 1227"
                   class="w-5 h-5 fill-current"
                 >
                   <path
-                    d="M31.937 6.093c-1.177 0.516-2.437 0.871-3.765 1.032 1.355-0.813 2.391-2.099 2.885-3.631-1.271 0.74-2.677 1.276-4.172 1.579-1.192-1.276-2.896-2.079-4.787-2.079-3.625 0-6.563 2.937-6.563 6.557 0 0.521 0.063 1.021 0.172 1.495-5.453-0.255-10.287-2.875-13.52-6.833-0.568 0.964-0.891 2.084-0.891 3.303 0 2.281 1.161 4.281 2.916 5.457-1.073-0.031-2.083-0.328-2.968-0.817v0.079c0 3.181 2.26 5.833 5.26 6.437-0.547 0.145-1.131 0.229-1.724 0.229-0.421 0-0.823-0.041-1.224-0.115 0.844 2.604 3.26 4.5 6.14 4.557-2.239 1.755-5.077 2.801-8.135 2.801-0.521 0-1.041-0.025-1.563-0.088 2.917 1.86 6.36 2.948 10.079 2.948 12.067 0 18.661-9.995 18.661-18.651 0-0.276 0-0.557-0.021-0.839 1.287-0.917 2.401-2.079 3.281-3.396z"
+                    d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
                   ></path>
                 </svg>
               </button>
@@ -213,14 +213,14 @@
             <div class="reg-log">
               <small class="signup">don't have an account?</small>
               <button id="btn_register-1"
-  {{/*              class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
+  {{/*              class="button btn-filled btn-filled-orange btn-secondary btn-pill link"*/}}
               >register</button>
             </div>
           </div>
-          <div id="form-register" class="display-off">
+          <div id="form-register" class="display-off modal-body">
           <div id="register-title" class="popover-title"></div>
   {{/*SECTION    ---------- register form ----------*/}}
-          <form id="register-form" class="logreg-form" action="/register" method="POST">
+          <form id="register-form" action="/register" method="POST">
   {{/*          <div class="modal-header">*/}}
   {{/*            <div>register for codex</div>*/}}
   {{/*          </div>*/}}
@@ -296,12 +296,12 @@
             <div class="reg-log">
               <small class="signup">already registered?</small>
               <button id="btn_login-1"
-  {{/*                    class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
+  {{/*                    class="button btn-filled btn-filled-orange btn-secondary btn-pill link"*/}}
               >sign in</button>
             </div>
             </div>
-            <div id="form-forgot" class="display-off">
-              <form id="resetForm" class="logreg-form">
+            <div id="form-forgot" class="display-off modal-body">
+              <form id="resetForm">
                 <p class="form-title">enter your username or email address to reset your password</p>
                 <div class="input-wrapper form-field">
                   <input
@@ -321,10 +321,10 @@
                   <div class="flex-align-c">
                     <button type="button"
                             id="btn_login-2"
-                            {{/*                  class="button btn-filled btn-filled-orange btn-secondary btn-pill"*/}}
+                            {{/*                  class="button btn-filled btn-filled-orange btn-secondary btn-pill link"*/}}
                     >sign in</button>
                     <button type="button" id="btn_register-2"
-                            {{/*                        class="button btn-filled btn-filled-white_orange btn-secondary btn-pill"*/}}
+                            {{/*                        class="button btn-filled btn-filled-white_orange btn-secondary btn-pill link"*/}}
                     >register</button>
                   </div>
                 </div>

@@ -18,7 +18,7 @@ func setupTestDB(t *testing.T) *sql.DB {
 	}
 
 	// Read the schema.sql file into memory
-	schema, err := os.ReadFile("/schema.sql")
+	schema, err := os.ReadFile("/migrations/001_schema.sql")
 	if err != nil {
 		t.Fatalf("failed to read schema.sql: %v", err)
 	}

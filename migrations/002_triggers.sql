@@ -1,0 +1,164 @@
+BEGIN TRANSACTION;
+
+-- Users
+CREATE TRIGGER IF NOT EXISTS users_update_trigger
+BEFORE UPDATE ON Users
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Channels
+CREATE TRIGGER IF NOT EXISTS channels_update_trigger
+BEFORE UPDATE ON Channels
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Posts
+CREATE TRIGGER IF NOT EXISTS posts_update_trigger
+BEFORE UPDATE ON Posts
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Comments
+CREATE TRIGGER IF NOT EXISTS comments_update_trigger
+BEFORE UPDATE ON Comments
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Bookmarks
+CREATE TRIGGER IF NOT EXISTS bookmarks_update_trigger
+BEFORE UPDATE ON Bookmarks
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Flags
+CREATE TRIGGER IF NOT EXISTS flags_update_trigger
+BEFORE UPDATE ON Flags
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Followers
+CREATE TRIGGER IF NOT EXISTS followers_update_trigger
+BEFORE UPDATE ON Followers
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Following
+CREATE TRIGGER IF NOT EXISTS following_update_trigger
+BEFORE UPDATE ON Following
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Images
+CREATE TRIGGER IF NOT EXISTS images_update_trigger
+BEFORE UPDATE ON Images
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Memberships
+CREATE TRIGGER IF NOT EXISTS memberships_update_trigger
+BEFORE UPDATE ON Memberships
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Mods
+CREATE TRIGGER IF NOT EXISTS mods_update_trigger
+BEFORE UPDATE ON Mods
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- MutedChannels
+CREATE TRIGGER IF NOT EXISTS mutedchannels_update_trigger
+BEFORE UPDATE ON MutedChannels
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Notifications
+CREATE TRIGGER IF NOT EXISTS notifications_update_trigger
+BEFORE UPDATE ON Notifications
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- NotificationsUsers
+CREATE TRIGGER IF NOT EXISTS notificationsusers_update_trigger
+BEFORE UPDATE ON NotificationsUsers
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- PostChannels
+CREATE TRIGGER IF NOT EXISTS postchannels_update_trigger
+BEFORE UPDATE ON PostChannels
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- PostImages
+CREATE TRIGGER IF NOT EXISTS postimages_update_trigger
+BEFORE UPDATE ON PostImages
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- PostReplies
+CREATE TRIGGER IF NOT EXISTS postreplies_update_trigger
+BEFORE UPDATE ON PostReplies
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Reactions
+CREATE TRIGGER IF NOT EXISTS reactions_update_trigger
+BEFORE UPDATE ON Reactions
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- Rules
+CREATE TRIGGER IF NOT EXISTS rules_update_trigger
+BEFORE UPDATE ON Rules
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+-- ChannelsRules
+CREATE TRIGGER IF NOT EXISTS channelsrules_update_trigger
+BEFORE UPDATE ON ChannelsRules
+FOR EACH ROW
+BEGIN
+    SET NEW.Updated = CURRENT_TIMESTAMP;
+END;
+
+COMMIT;
+

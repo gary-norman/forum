@@ -27,46 +27,66 @@ var (
 )
 
 func main() {
-	// pprof server for profiling at http://localhost:6060/debug/pprof/
-	go func() {
-		log.Println(http.ListenAndServe("localhost:6060", nil))
-	}()
-
-	// Initialize the app
+	// Initialize app first so it’s available to everything
 	appInstance, cleanup, err := app.InitializeApp()
 	if err != nil {
 		log.Fatalf("Failed to initialize app: %v", err)
 	}
-	defer cleanup() // Ensure DB closes on normal exit
+	defer cleanup()
 
-	// instantiate temphelper with the initialized app and initialise the templates
-	th := view.TempHelper{
-		App: appInstance,
+	migrations := []string{
+		"./migrations/001_schema.sql",
+		"./migrations/002_triggers.sql",
+		"./migrations/003_indexes.sql",
 	}
+
+	// CLI commands: migrate + seed
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "migrate":
+			if err := runMigrations(appInstance.DB, migrations); err != nil {
+				log.Fatalf("Migration failed: %v", err)
+			}
+			return
+		case "seed":
+			if err := runSeed(appInstance.DB); err != nil {
+				log.Fatalf("Seeding failed: %v", err)
+			}
+			return
+		}
+	}
+
+	// Otherwise, start the web server
+	startServer(appInstance)
+}
+
+func startServer(appInstance *app.App) {
+	// pprof server for profiling
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
+
+	// Init template helper
+	th := view.TempHelper{App: appInstance}
 	th.Init()
 
-	// Create the RouteHandler with a pointer to the app
-	// rh := h.NewRouteHandler(appInstance)
-	// mux := rh.Routes()
-
+	// Router
 	router := routes.NewRouter(appInstance)
-
-	// TODO figure this out
-	// Count users and create new admin account if none exist
-	// userCount, err := app.App.Users.CountUsers(db)
 
 	port := 8888
 	portStr := fmt.Sprintf(Colors.CodexPink+"%d"+Colors.Reset, port)
 	addr := fmt.Sprintf(":%d", port)
+
 	srv := &http.Server{
 		Addr:    addr,
 		Handler: router,
 	}
-	// Log server listening messages
+
 	address := "port: " + Colors.CodexPink + portStr + Colors.Reset
 	fmt.Printf(ErrorMsgs.KeyValuePair, "Starting server on port", port)
 	log.Printf(ErrorMsgs.ConnSuccess, address)
 
+	// Run server
 	go func() {
 		if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
 			fmt.Printf(ErrorMsgs.ConnInit, srv.Addr, "srv.ListenAndServe")
@@ -75,15 +95,14 @@ func main() {
 		log.Println(Colors.Teal + "Stopped serving new connections." + Colors.Reset)
 	}()
 
-	// Handle shutdown signals (Ctrl+C, system shutdown)
+	// Graceful shutdown
 	shutdownSignal := make(chan os.Signal, 1)
 	signal.Notify(shutdownSignal, os.Interrupt, syscall.SIGTERM)
 	<-shutdownSignal
 
-	// create cancellation signal and timeout
 	shutdownCtx, shutdownRelease := context.WithTimeout(context.Background(), 10*time.Second)
 	defer shutdownRelease()
-	// shut down the server
+
 	log.Println("Shutting down gracefully...")
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Fatalf(ErrorMsgs.Shutdown, err)

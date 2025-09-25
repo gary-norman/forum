@@ -2,9 +2,12 @@
 package app
 
 import (
+	"bufio"
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
+	"strings"
 
 	"github.com/gary-norman/forum/internal/colors"
 	"github.com/gary-norman/forum/internal/db"
@@ -12,26 +15,73 @@ import (
 	"github.com/gary-norman/forum/internal/sqlite"
 )
 
-var (
-	dbType   string = "SQLite"
-	dbDriver string = "sqlite3"
-	// old development db
-	dbDevOld string = "db/dev_forum_database.db"
-	// new development db
-	dbDev string = "/var/lib/db-codex/dev_forum_database.db"
-	// production db
-	dbProd string = "/var/lib/db-codex/forum_database.db"
-	// Uncomment the required dbPath line based on the environment
-	dbPath string = dbDev // Development database
-	// dbPath     string = dbProd // Production database
-	schemaPath string = "schema.sql"
-	imagePath  string = "/db/userdata/images/"
-)
+type Config struct {
+	DBType     string
+	DBDriver   string
+	DBEnv      string
+	DBPath     string
+	SchemaPath string
+	ImagePath  string
+}
 
 var (
 	Colors, _ = colors.UseFlavor("Mocha")
 	ErrorMsgs = models.CreateErrorMessages()
 )
+
+// LoadEnv reads .env and sets os.Environ()
+func loadEnv(filename string) error {
+	file, err := os.Open(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+
+		// Skip empty lines or comments
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		// Split KEY=VALUE
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) != 2 {
+			continue
+		}
+
+		key := strings.TrimSpace(parts[0])
+		val := strings.TrimSpace(parts[1])
+		os.Setenv(key, val)
+	}
+
+	return scanner.Err()
+}
+
+// InitConfig loads .env and builds the Config
+func initConfig() *Config {
+	if err := loadEnv("./.env"); err != nil {
+		log.Fatalf("❌ failed to load .env: %v", err)
+	}
+
+	cfg := &Config{
+		DBType:     "SQLite",
+		DBDriver:   "sqlite3",
+		DBEnv:      os.Getenv("DB_ENV"),
+		DBPath:     os.Getenv("DB_PATH"),
+		SchemaPath: "./migrations/001_schema.sql",
+		ImagePath:  "/db/userdata/images/",
+	}
+
+	if cfg.DBEnv == "" || cfg.DBPath == "" {
+		log.Fatal(Colors.Red + "❌ DB_ENV or DB_PATH missing" + Colors.Reset + "— run" + Colors.CodexPink + "`make configure`" + Colors.Reset + "first")
+	}
+
+	fmt.Printf(Colors.CodexGreen+"✓ "+Colors.Reset+"using "+Colors.CodexPink+"%s"+Colors.Reset+" database: "+Colors.CodexGreen+"%s\n", cfg.DBEnv, cfg.DBPath)
+	return cfg
+}
 
 type App struct {
 	DB          *sql.DB // Store DB reference for cleanup
@@ -52,7 +102,7 @@ type App struct {
 	Paths       models.ImagePaths
 }
 
-func NewApp(db *sql.DB) *App {
+func NewApp(db *sql.DB, imagePath string) *App {
 	return &App{
 		DB:          db,
 		Users:       &sqlite.UserModel{DB: db},
@@ -79,8 +129,9 @@ func NewApp(db *sql.DB) *App {
 }
 
 func InitializeApp() (*App, func(), error) {
+	cfg := initConfig()
 	// Initialize DB
-	initDB, err := db.InitDB(dbPath, schemaPath)
+	initDB, err := db.InitDB(cfg.DBPath, cfg.SchemaPath)
 	if err != nil {
 		log.Fatalf("Failed to initialize DB: %v", err)
 	}
@@ -97,10 +148,10 @@ func InitializeApp() (*App, func(), error) {
 	if err = initDB.QueryRow("select sqlite_version()").Scan(&dbVersion); err != nil {
 		log.Printf(Colors.Red+"Error fetching SQLite version: %v\n"+Colors.Reset, err)
 	}
-	log.Printf(ErrorMsgs.DBSuccess, dbType, dbVersion)
+	log.Printf(ErrorMsgs.DBSuccess, cfg.DBType, dbVersion)
 
 	// App instance with DB reference
-	appInstance := NewApp(initDB)
+	appInstance := NewApp(initDB, cfg.ImagePath)
 
 	// Cleanup function to close DB connection
 	cleanup := func() {

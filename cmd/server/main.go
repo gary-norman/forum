@@ -56,13 +56,14 @@ func main() {
 	// userCount, err := app.App.Users.CountUsers(db)
 
 	port := 8888
+	portStr := fmt.Sprintf(Colors.CodexPink+"%d"+Colors.Reset, port)
 	addr := fmt.Sprintf(":%d", port)
 	srv := &http.Server{
 		Addr:    addr,
 		Handler: router,
 	}
 	// Log server listening messages
-	address := "http://localhost" + addr
+	address := "port: " + Colors.CodexPink + portStr + Colors.Reset
 	fmt.Printf(ErrorMsgs.KeyValuePair, "Starting server on port", port)
 	log.Printf(ErrorMsgs.ConnSuccess, address)
 

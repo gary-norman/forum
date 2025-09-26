@@ -1,4 +1,4 @@
-#!/busybox/sh
+#!/bin/sh
 set -e
 
 DB_FILE=/var/lib/db-codex/forum_database.db

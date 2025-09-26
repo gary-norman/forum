@@ -184,7 +184,8 @@ func (m *ChannelModel) GetNameOfChannelOwner(channelID int64) (string, error) {
 
 func (m *ChannelModel) All() ([]models.Channel, error) {
 	stmt := `
-	SELECT c.*, 
+-- 	SELECT c.*, 
+SELECT c.ID, c.OwnerID, c.Name, c.Avatar, c.Banner, c.Description, c.Created, c.Updated, c.Privacy, c.IsMuted,  c.IsFlagged, 
   COUNT(m.UserID) AS MemberCount
 	FROM Channels c
 	LEFT JOIN Memberships m ON c.ID = m.ChannelID
@@ -308,6 +309,7 @@ func parseChannelRow(row *sql.Row) (*models.Channel, error) {
 		&banner,
 		&channel.Description,
 		&channel.Created,
+		&channel.Updated,
 		&channel.Privacy,
 		&channel.IsMuted,
 		&channel.IsFlagged,
@@ -334,6 +336,7 @@ func parseChannelRows(rows *sql.Rows) (*models.Channel, error) {
 		&banner,
 		&channel.Description,
 		&channel.Created,
+		&channel.Updated,
 		&channel.Privacy,
 		&channel.IsMuted,
 		&channel.IsFlagged,

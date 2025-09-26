@@ -8,6 +8,7 @@ type Notification struct {
 	ID           int64     `db:"id"`
 	Notification string    `db:"notification"`
 	Created      time.Time `db:"created"`
+	Updated      time.Time `db:"updated"`
 	Read         bool      `db:"read"`
 	Archived     bool      `db:"archived"`
 }

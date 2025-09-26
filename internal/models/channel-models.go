@@ -12,6 +12,7 @@ type Channel struct {
 	Banner           string    `db:"banner,omitempty"`
 	Description      string    `db:"description"`
 	Created          time.Time `db:"created"`
+	Updated          time.Time `db:"updated"`
 	TimeSince        string
 	Rules            []Rule
 	UnsubmittedRules []string
@@ -80,6 +81,7 @@ type Membership struct {
 	UserID    UUIDField `db:"userId"`
 	ChannelID int64     `db:"channelId"`
 	Created   time.Time `db:"created"`
+	Updated   time.Time `db:"updated"`
 }
 
 func (m Membership) TableName() string { return "memberships" }

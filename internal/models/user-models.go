@@ -16,6 +16,7 @@ type User struct {
 	Description   string    `db:"description,omitempty"`
 	Usertype      string    `db:"usertype"`
 	Created       time.Time `db:"created"`
+	Updated       time.Time `db:"updated"`
 	TimeSince     string
 	IsFlagged     bool      `db:"isFlagged,omitempty"`
 	Followers     int       `db:"followers"`

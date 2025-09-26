@@ -9,6 +9,7 @@ type Comment struct {
 	ID                 int64     `db:"id"`
 	Content            string    `db:"content"`
 	Created            time.Time `db:"created"`
+	Updated            time.Time `db:"updated"`
 	TimeSince          string
 	Author             string        `db:"author"`
 	AuthorID           UUIDField     `db:"author_id"`

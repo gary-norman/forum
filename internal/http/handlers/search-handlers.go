@@ -20,7 +20,7 @@ func (s *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 	// SECTION --- channels --
 	allChannels, err := s.App.Channels.All()
 	if err != nil {
-		log.Printf(ErrorMsgs.Query, "channels.All", err)
+		log.Printf(ErrorMsgs.Query, "channels.All-search", err)
 	}
 
 	// SECTION --- posts ---

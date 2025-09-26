@@ -10,6 +10,7 @@ type Post struct {
 	Content       string    `db:"content"`
 	Images        string    `db:"images,omitempty"`
 	Created       time.Time `db:"created"`
+	Updated       time.Time `db:"updated"`
 	TimeSince     string
 	IsCommentable bool       `db:"commentable"`
 	Author        string     `db:"author"`

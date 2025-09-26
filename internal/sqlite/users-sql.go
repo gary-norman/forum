@@ -157,7 +157,7 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 		log.Printf(ErrorMsgs.UserModel, "GetUserByUsername", username)
 	}
 	// Query to fetch user data by username
-	stmt, prepErr := m.DB.Prepare("SELECT ID, Username, EmailAddress, Avatar, Banner, Description, Usertype, Created, IsFlagged, SessionToken, CSRFToken, HashedPassword FROM Users WHERE Username = ? LIMIT 1")
+	stmt, prepErr := m.DB.Prepare("SELECT ID, Username, EmailAddress, Avatar, Banner, Description, Usertype, Created, Updated, IsFlagged, SessionToken, CSRFToken, HashedPassword FROM Users WHERE Username = ? LIMIT 1")
 	if prepErr != nil {
 		log.Printf(ErrorMsgs.Query, username, prepErr)
 	}
@@ -178,6 +178,7 @@ func (m *UserModel) GetUserByUsername(username, calledBy string) (*models.User, 
 		&user.Description,
 		&user.Usertype,
 		&user.Created,
+		&user.Updated,
 		&user.IsFlagged,
 		&user.SessionToken,
 		&user.CSRFToken,
@@ -227,7 +228,7 @@ func (m *UserModel) GetUserByEmail(email, calledBy string) (*models.User, error)
 }
 
 func (m *UserModel) GetUserByID(ID models.UUIDField) (models.User, error) {
-	stmt := "SELECT ID, Username, EmailAddress, Avatar, Banner, Description, Usertype, Created, IsFlagged, SessionToken, CSRFToken, HashedPassword FROM Users WHERE ID = ?"
+	stmt := "SELECT ID, Username, EmailAddress, Avatar, Banner, Description, Usertype, Created, Updated, IsFlagged, SessionToken, CSRFToken, HashedPassword FROM Users WHERE ID = ?"
 	row := m.DB.QueryRow(stmt, ID)
 	u := models.User{}
 	err := row.Scan(
@@ -239,6 +240,7 @@ func (m *UserModel) GetUserByID(ID models.UUIDField) (models.User, error) {
 		&u.Description,
 		&u.Usertype,
 		&u.Created,
+		&u.Updated,
 		&u.IsFlagged,
 		&u.SessionToken,
 		&u.CSRFToken,
@@ -265,6 +267,7 @@ func isValidUserColumn(column string) bool {
 		"Description":    true,
 		"UserType":       true,
 		"Created":        true,
+		"Updated":        true,
 		"IsFlagged":      true,
 	}
 	return validColumns[column]
@@ -312,6 +315,7 @@ func (m *UserModel) GetSingleUserValue(ID models.UUIDField, searchColumn, output
 		"description":    user.Description,
 		"usertype":       user.Usertype,
 		"created":        user.Created,
+		"updated":        user.Updated,
 		"isFlagged":      user.IsFlagged,
 	}
 
@@ -327,7 +331,7 @@ func (m *UserModel) GetSingleUserValue(ID models.UUIDField, searchColumn, output
 }
 
 func (m *UserModel) All() ([]models.User, error) {
-	stmt := "SELECT ID, Username, EmailAddress, Avatar, Banner, Description, Usertype, Created, IsFlagged, SessionToken, CSRFToken, HashedPassword FROM Users ORDER BY ID DESC"
+	stmt := "SELECT ID, Username, EmailAddress, Avatar, Banner, Description, Usertype, Created, Updated, IsFlagged, SessionToken, CSRFToken, HashedPassword FROM Users ORDER BY ID DESC"
 	rows, queryErr := m.DB.Query(stmt)
 	if queryErr != nil {
 		return nil, fmt.Errorf(ErrorMsgs.Query, "Users", queryErr)
@@ -361,6 +365,7 @@ func parseUserRows(rows *sql.Rows) (*models.User, error) {
 		&user.Description,
 		&user.Usertype,
 		&user.Created,
+		&user.Updated,
 		&user.IsFlagged,
 		&user.SessionToken,
 		&user.CSRFToken,
@@ -385,6 +390,7 @@ func parseUserRow(row *sql.Row) (*models.User, error) {
 		&user.Description,
 		&user.Usertype,
 		&user.Created,
+		&user.Updated,
 		&user.IsFlagged,
 		&user.SessionToken,
 		&user.CSRFToken,

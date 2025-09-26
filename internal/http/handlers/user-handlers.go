@@ -97,7 +97,7 @@ func (u *UserHandler) GetThisUser(w http.ResponseWriter, r *http.Request) {
 	// SECTION --- channels --
 	allChannels, err := u.App.Channels.All()
 	if err != nil {
-		log.Printf(ErrorMsgs.Query, "channels.All", err)
+		log.Printf(ErrorMsgs.Query, "channels.All-user", err)
 	}
 	for c := range allChannels {
 		models.UpdateTimeSince(&allChannels[c])

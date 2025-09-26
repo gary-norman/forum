@@ -134,7 +134,7 @@ func (h *HomeHandler) RenderIndex(w http.ResponseWriter, r *http.Request) {
 	// SECTION --- channels --
 	allChannels, err := h.App.Channels.All()
 	if err != nil {
-		log.Printf(ErrorMsgs.Query, "channels.All", err)
+		log.Printf(ErrorMsgs.Query, "channels.All-index", err)
 	}
 	for c := range allChannels {
 		models.UpdateTimeSince(&allChannels[c])
@@ -190,6 +190,8 @@ func (h *HomeHandler) RenderIndex(w http.ResponseWriter, r *http.Request) {
 				ownedAndJoinedChannels = append(ownedAndJoinedChannels, channel)
 			}
 		}
+	} else {
+		ownedAndJoinedChannels = allChannels
 	}
 
 	// SECTION -- template ---
@@ -307,7 +309,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 	// SECTION --- channels --
 	allChannels, err := h.App.Channels.All()
 	if err != nil {
-		log.Printf(ErrorMsgs.Query, "channels.All", err)
+		log.Printf(ErrorMsgs.Query, "channels.All-home", err)
 	}
 	for c := range allChannels {
 		models.UpdateTimeSince(&allChannels[c])
@@ -367,6 +369,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		userPosts = allPosts
+		ownedAndJoinedChannels = allChannels
 	}
 
 	// SECTION -- template ---

@@ -7,6 +7,7 @@ import (
 type Image struct {
 	ID       int64     `db:"id"`
 	Created  time.Time `db:"created"`
+	Updated  time.Time `db:"updated"`
 	AuthorID int64     `db:"authorId"`
 	PostID   int64     `db:"postId"`
 }

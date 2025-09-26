@@ -76,7 +76,6 @@ if (createPostForm) {
         "dummy",
       );
       inputContent.focus();
-      return;
     }
 
     // ✅ If we reach here, validation passed

@@ -36,7 +36,8 @@ function listenToReplyForm() {
           "invisible-notify",
       );
       replyContent.focus();
-
+    } else {
+      replyForm.submit();
     }
   });
 }

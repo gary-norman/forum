@@ -8,6 +8,7 @@ type Rule struct {
 	ID         int64     `db:"id"`
 	Rule       string    `db:"rule"`
 	Created    time.Time `db:"created"`
+	Updated    time.Time `db:"updated"`
 	Predefined bool      `db:"predefined"`
 }
 

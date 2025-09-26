@@ -7,6 +7,7 @@ type Reaction struct {
 	Liked            bool      `db:"liked"`
 	Disliked         bool      `db:"disliked"`
 	Created          time.Time `db:"created"`
+	Updated          time.Time `db:"updated"`
 	AuthorID         UUIDField `db:"authorId"`
 	PostID           int64
 	CommentID        int64

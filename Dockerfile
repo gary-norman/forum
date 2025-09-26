@@ -7,12 +7,13 @@ FROM golang:latest AS builder
 WORKDIR /app
 
 # Install dependencies
-RUN  apt-get update && apt-get install -y sqlite3 libsqlite3-dev rsync && rm -rf /var/lib/apt/lists/*
+RUN  apt-get update && apt-get install -y sqlite3 libsqlite3-dev dos2unix rsync && rm -rf /var/lib/apt/lists/*
 
 # Copy all files except hidden directories and bin
 COPY . /app
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
 COPY .env /app/.env
+RUN dos2unix /entrypoint.sh
 
 # Build the application
 RUN make build
@@ -21,7 +22,8 @@ RUN make build
 FROM debian:sid-20250317-slim
 
 # Install only necessary runtime dependencies
-RUN apt-get update && apt-get install -y sqlite3 libsqlite3-0 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y sqlite3 libsqlite3-0  && rm -rf /var/lib/apt/lists/*
+
 
 # Set the working directory
 WORKDIR /app
@@ -47,6 +49,7 @@ COPY --from=builder /app/default-images/codex.png /app/db/userdata/images/channe
 # Create a base user with a single post
 # Copy the entrypoint script
 COPY --from=builder /entrypoint.sh /entrypoint.sh
+
 
 COPY --from=builder /app/.env /app/.env
 

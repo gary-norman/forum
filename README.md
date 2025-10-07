@@ -241,12 +241,11 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 - [x] Channel-based organization
 - [x] Image upload support
 - [x] Search functionality
-- [x] Content moderation (flags, moderators)
-- [x] Bookmark system
 - [x] Docker deployment
 - [x] Interactive build menu
 
 ### In Progress 🚧
+- [ ] Content moderation (flags, moderators)
 - [ ] Error handling improvements (400/500 pages)
 - [ ] Enhanced UI/UX refinements
 - [ ] Performance optimizations
@@ -254,6 +253,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 ### Planned 📋
 
 #### Advanced Features
+- [ ] Bookmark system
 - [ ] Real-time notifications
 - [ ] Advanced filtering options
 - [ ] User reputation system

@@ -14,6 +14,35 @@ CODEX_HIGHLIGHT_PINK="\033[38;2;20;20;20;48;2;234;79;146m"
 
 ENTER_KEY="[ ⏎ Enter ]"
 
+# Get current time in milliseconds
+get_time_ms() {
+  if command -v python3 &> /dev/null; then
+    python3 -c 'import time; print(int(time.time() * 1000))'
+  elif command -v node &> /dev/null; then
+    node -e 'console.log(Date.now())'
+  else
+    # Fallback to seconds
+    date +%s
+  fi
+}
+
+# Format duration from milliseconds
+format_duration() {
+  local duration_ms=$1
+  local hours=$((duration_ms / 3600000))
+  local minutes=$(( (duration_ms % 3600000) / 60000 ))
+  local seconds=$(( (duration_ms % 60000) / 1000 ))
+  local ms=$((duration_ms % 1000))
+
+  if [ $hours -gt 0 ]; then
+    printf "%dh %dm %d.%03ds" "$hours" "$minutes" "$seconds" "$ms"
+  elif [ $minutes -gt 0 ]; then
+    printf "%dm %d.%03ds" "$minutes" "$seconds" "$ms"
+  else
+    printf "%d.%03ds" "$seconds" "$ms"
+  fi
+}
+
 # Read arrow keys
 read_arrow() {
   IFS= read -rsn1 key 2>/dev/null >&2
@@ -28,52 +57,24 @@ read_arrow() {
   fi
 }
 
-while true; do
-  clear
+# Show menu function
+show_menu() {
+  local title="$1"
+  shift
+  local -n menu_options=$1
+  shift
+  local -n menu_descs=$1
 
-  # Gather Makefile targets
-  entries=()
-  while IFS= read -r line; do
-    target="${line%%|*}"
-    desc="${line#*|}"
-    entries+=("$target|$desc")
-  done < <(
-    grep -E "^[a-zA-Z0-9_-]+:.*##" [Mm]akefile 2>/dev/null |
-      grep -vE "^_|^menu" |
-      sed -E "s/^([a-zA-Z0-9_-]+):.*##[[:space:]]*(.*)/\1|\2/" |
-      sort
-  )
-
-  # Fallback for targets without descriptions
-  if [ ${#entries[@]} -eq 0 ]; then
-    while IFS= read -r line; do
-      entries+=("$line|No description")
-    done < <(
-      grep -E "^[a-zA-Z0-9_-]+:([^=]|$)" Makefile |
-        cut -d: -f1 |
-        grep -vE "^_|^menu" |
-        sort
-    )
-  fi
-
-  # Separate options and descriptions
-  options=("exit")
-  descs=("quit this menu")
-  for entry in "${entries[@]}"; do
-    options+=("${entry%%|*}")
-    descs+=("${entry#*|}")
-  done
-
-  selected=1
-  max_index=$((${#options[@]} - 1))
+  local selected=1
+  local max_index=$((${#menu_options[@]} - 1))
 
   while true; do
     clear
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
-    printf "${CODEX_GREEN}make commands for <codex>${NC}\n"
+    printf "${CODEX_GREEN}%s${NC}\n" "$title"
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
 
-    for i in "${!options[@]}"; do
+    for i in "${!menu_options[@]}"; do
       if [ "$i" -eq 0 ]; then
         num=0
       else
@@ -81,9 +82,9 @@ while true; do
       fi
 
       if [ "$i" -eq "$selected" ]; then
-        printf "${CODEX_HIGHLIGHT_GREEN}%2d) %-15s - %s${NC}\n" "$num" "${options[$i]}" "${descs[$i]}"
+        printf "${CODEX_HIGHLIGHT_GREEN}%2d) %-20s - %s${NC}\n" "$num" "${menu_options[$i]}" "${menu_descs[$i]}"
       else
-        printf "${CODEX_PINK}%2d)${CODEX_GREEN} %-15s${NC} - %s\n" "$num" "${options[$i]}" "${descs[$i]}"
+        printf "${CODEX_PINK}%2d)${CODEX_GREEN} %-20s${NC} - %s\n" "$num" "${menu_options[$i]}" "${menu_descs[$i]}"
       fi
     done
 
@@ -94,22 +95,23 @@ while true; do
 
     case "$key" in
     up)
-      selected=$(((selected - 1 + ${#options[@]}) % ${#options[@]}))
+      selected=$(((selected - 1 + ${#menu_options[@]}) % ${#menu_options[@]}))
       ;;
     down)
-      selected=$(((selected + 1) % ${#options[@]}))
+      selected=$(((selected + 1) % ${#menu_options[@]}))
       ;;
     '')
-      break
+      echo "${menu_options[$selected]}"
+      return 0
       ;;
     q | Q)
-      printf "\n${TEAL}Exiting menu...${NC}\n"
-      exit 0
+      echo "exit"
+      return 0
       ;;
     [0-9])
       if [ "$key" -ge 0 ] && [ "$key" -le "$max_index" ]; then
-        selected=$key
-        break
+        echo "${menu_options[$key]}"
+        return 0
       else
         printf "\n${RED}⚠ invalid number (must be 0-%d)${NC}\n" "$max_index"
         sleep 1.5
@@ -119,18 +121,121 @@ while true; do
       ;;
     esac
   done
+}
 
-  # Run selected target
-  if [ "$selected" -eq 0 ]; then
-    printf "\n${TEAL}Exiting menu...${NC}\n"
-    exit 0
-  fi
+# Docker submenu
+docker_menu() {
+  local docker_options=("back" "configure" "reset-config" "build-image" "run-container")
+  local docker_descs=("return to main menu" "configure Docker options" "reset configuration" "build Docker image" "run Docker container")
 
-  TARGET="${options[$selected]}"
-  clear
-  printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n" "$TARGET"
-  make "$TARGET"
+  while true; do
+    choice=$(show_menu "Docker Commands" docker_options docker_descs)
 
-  printf "\nPress ${CODEX_HIGHLIGHT_PINK}${ENTER_KEY}${NC} to return to menu..."
-  read -r dummy
+    case "$choice" in
+      back|exit)
+        return
+        ;;
+      *)
+        clear
+        printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$choice"
+
+        START=$(get_time_ms)
+        make "$choice"
+        EXIT_CODE=$?
+        END=$(get_time_ms)
+        DURATION=$((END - START))
+
+        printf "\n${CODEX_PINK}---------------------------------------------${NC}\n"
+        if [ $EXIT_CODE -eq 0 ]; then
+          printf "${GREEN}✓ Task completed${NC} in ${CODEX_PINK}%s${NC}\n" "$(format_duration $DURATION)"
+        else
+          printf "${RED}✗ Task failed${NC} (exit code: %d) after ${CODEX_PINK}%s${NC}\n" "$EXIT_CODE" "$(format_duration $DURATION)"
+        fi
+        printf "${CODEX_PINK}---------------------------------------------${NC}\n"
+
+        printf "\nPress ${CODEX_HIGHLIGHT_PINK}${ENTER_KEY}${NC} to return to menu..."
+        read -r dummy
+        ;;
+    esac
+  done
+}
+
+# Scripts submenu
+scripts_menu() {
+  local scripts_options=("back" "install-scripts" "verify-scripts" "backup-scripts")
+  local scripts_descs=("return to main menu" "install/update scripts" "verify checksums" "backup scripts")
+
+  while true; do
+    choice=$(show_menu "Script Management" scripts_options scripts_descs)
+
+    case "$choice" in
+      back|exit)
+        return
+        ;;
+      *)
+        clear
+        printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$choice"
+
+        START=$(get_time_ms)
+        make "$choice"
+        EXIT_CODE=$?
+        END=$(get_time_ms)
+        DURATION=$((END - START))
+
+        printf "\n${CODEX_PINK}---------------------------------------------${NC}\n"
+        if [ $EXIT_CODE -eq 0 ]; then
+          printf "${GREEN}✓ Task completed${NC} in ${CODEX_PINK}%s${NC}\n" "$(format_duration $DURATION)"
+        else
+          printf "${RED}✗ Task failed${NC} (exit code: %d) after ${CODEX_PINK}%s${NC}\n" "$EXIT_CODE" "$(format_duration $DURATION)"
+        fi
+        printf "${CODEX_PINK}---------------------------------------------${NC}\n"
+
+        printf "\nPress ${CODEX_HIGHLIGHT_PINK}${ENTER_KEY}${NC} to return to menu..."
+        read -r dummy
+        ;;
+    esac
+  done
+}
+
+# Main menu loop
+while true; do
+  # Build main menu
+  main_options=("exit" "build" "run" "🐳 Docker" "📜 Scripts")
+  main_descs=("quit this menu" "build the application" "run the application" "Docker management" "script management")
+
+  choice=$(show_menu "make commands for <codex>" main_options main_descs)
+
+  case "$choice" in
+    exit)
+      printf "\n${TEAL}Exiting menu...${NC}\n"
+      exit 0
+      ;;
+    "🐳 Docker")
+      docker_menu
+      ;;
+    "📜 Scripts")
+      scripts_menu
+      ;;
+    *)
+      clear
+      printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$choice"
+
+      START=$(get_time_ms)
+      make "$choice"
+      EXIT_CODE=$?
+      END=$(get_time_ms)
+      DURATION=$((END - START))
+
+      printf "\n${CODEX_PINK}---------------------------------------------${NC}\n"
+      if [ $EXIT_CODE -eq 0 ]; then
+        printf "${GREEN}✓ Task completed${NC} in ${CODEX_PINK}%s${NC}\n" "$(format_duration $DURATION)"
+      else
+        printf "${RED}✗ Task failed${NC} (exit code: %d) after ${CODEX_PINK}%s${NC}\n" "$EXIT_CODE" "$(format_duration $DURATION)"
+      fi
+      printf "${CODEX_PINK}---------------------------------------------${NC}\n"
+
+      printf "\nPress ${CODEX_HIGHLIGHT_PINK}${ENTER_KEY}${NC} to return to menu..."
+      read -r dummy
+      ;;
+  esac
 done

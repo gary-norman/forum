@@ -79,11 +79,13 @@ show_menu() {
   echo "DEBUG: Entering menu loop" >&2
 
   while true; do
-    echo "DEBUG: Top of loop, about to clear" >&2
+    echo "DEBUG: Top of loop, about to clear" >> /tmp/menu_debug.log
     clear
+    echo "DEBUG: After clear" >> /tmp/menu_debug.log
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
     printf "${CODEX_GREEN}%s${NC}\n" "$title"
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
+    echo "DEBUG: After header" >> /tmp/menu_debug.log
 
     for i in "${!options[@]}"; do
       if [ "$i" -eq 0 ]; then
@@ -99,10 +101,13 @@ show_menu() {
       fi
     done
 
+    echo "DEBUG: After printing options" >> /tmp/menu_debug.log
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
     printf "Use ↑/↓ to navigate, Enter to select, or type number (0-%d): " "$max_index"
 
+    echo "DEBUG: About to call read_arrow" >> /tmp/menu_debug.log
     key=$(read_arrow)
+    echo "DEBUG: read_arrow returned: '$key'" >> /tmp/menu_debug.log
 
     case "$key" in
     up)

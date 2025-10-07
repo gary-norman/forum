@@ -98,10 +98,15 @@ show_menu() {
         num=$i
       fi
 
+      # Use echo -e to interpret escape sequences in option text
       if [ "$i" -eq "$selected" ]; then
-        printf "${CODEX_HIGHLIGHT_GREEN}%2d) %-38s - %s${NC}\n" "$num" "${options[$i]}" "${descs[$i]}"
+        printf "${CODEX_HIGHLIGHT_GREEN}%2d) " "$num"
+        echo -en "${options[$i]}"
+        printf " - %s${NC}\n" "${descs[$i]}"
       else
-        printf "${CODEX_PINK}%2d)${CODEX_GREEN} %-38s${NC} - %s\n" "$num" "${options[$i]}" "${descs[$i]}"
+        printf "${CODEX_PINK}%2d)${CODEX_GREEN} " "$num"
+        echo -en "${options[$i]}"
+        printf "${NC} - %s\n" "${descs[$i]}"
       fi
     done
 

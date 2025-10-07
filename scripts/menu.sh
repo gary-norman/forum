@@ -218,10 +218,10 @@ while true; do
       ;;
     *)
       clear
-      printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$choice"
+      printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$MENU_CHOICE"
 
       START=$(get_time_ms)
-      make "$choice"
+      make "$MENU_CHOICE"
       EXIT_CODE=$?
       END=$(get_time_ms)
       DURATION=$((END - START))

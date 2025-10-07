@@ -28,7 +28,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/gary.norman/forum">
-    <img src="assets/icons/codex-logo-green.svg" alt="Logo" width=350" height="200">
+    <img src="assets/icons/codex-logo-green-trimmed.svg" alt="Logo" width="350">
   </a>
   <p align="center">
     A forum for finding all the help you need with code.

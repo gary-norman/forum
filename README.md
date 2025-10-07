@@ -233,13 +233,52 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 
 <!-- ROADMAP -->
+## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+### Completed ✓
+- [x] Core forum functionality (posts, comments, reactions)
+- [x] User authentication and authorization
+- [x] Channel-based organization
+- [x] Image upload support
+- [x] Search functionality
+- [x] Content moderation (flags, moderators)
+- [x] Bookmark system
+- [x] Docker deployment
+- [x] Interactive build menu
 
-See the [open issues](https://github.com/gary.norman/forum/issues) for a full list of proposed features (and known issues).
+### In Progress 🚧
+- [ ] Error handling improvements (400/500 pages)
+- [ ] Enhanced UI/UX refinements
+- [ ] Performance optimizations
+
+### Planned 📋
+
+#### Advanced Features
+- [ ] Real-time notifications
+- [ ] Advanced filtering options
+- [ ] User reputation system
+- [ ] Markdown support for posts
+
+#### Security Enhancements
+- [ ] Rate limiting
+- [ ] Enhanced session management
+- [ ] Two-factor authentication
+- [ ] Content sanitization improvements
+
+#### Moderation Tools
+- [ ] Admin dashboard
+- [ ] Automated content filtering
+- [ ] User reporting system enhancements
+- [ ] Moderator activity logs
+
+#### Authentication
+- [ ] OAuth integration (GitHub, Google)
+- [ ] Email verification
+- [ ] Password recovery
+
+See the [open issues](https://github.com/gary-norman/forum/issues) for a full list of proposed features (and known issues).
+
+View progress by [milestone](https://github.com/gary-norman/forum/milestones).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

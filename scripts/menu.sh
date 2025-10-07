@@ -34,29 +34,45 @@ while true; do
   # Gather Makefile targets
   entries=()
 
-  # Debug: show what grep finds
-  printf "${YELLOW}DEBUG: Searching for targets...${NC}\n" >&2
-  grep -E "^[a-zA-Z0-9_-]+:.*##" Makefile 2>&1 | head -3 >&2
-  printf "${YELLOW}---${NC}\n" >&2
-  sleep 2
+  # Debug: write to file
+  {
+    echo "=== DEBUG LOG ==="
+    echo "Current directory: $(pwd)"
+    echo "Makefile exists: $([ -f Makefile ] && echo 'yes' || echo 'no')"
+    echo "makefile exists: $([ -f makefile ] && echo 'yes' || echo 'no')"
+    echo ""
+    echo "First 5 lines with ##:"
+    grep -E ":.*##" [Mm]akefile 2>&1 | head -5
+    echo ""
+    echo "After first grep:"
+    grep -E "^[a-zA-Z0-9_-]+:.*##" [Mm]akefile 2>&1 | head -5
+    echo ""
+    echo "After filtering menu:"
+    grep -E "^[a-zA-Z0-9_-]+:.*##" [Mm]akefile | grep -vE "^_|^menu" | head -5
+    echo ""
+    echo "After sed:"
+    grep -E "^[a-zA-Z0-9_-]+:.*##" [Mm]akefile | grep -vE "^_|^menu" | sed -E "s/^([a-zA-Z0-9_-]+):.*##[[:space:]]*(.*)/\1|\2/" | head -5
+  } > /tmp/menu_debug.log 2>&1
 
   while IFS= read -r line; do
     target="${line%%|*}"
     desc="${line#*|}"
     entries+=("$target|$desc")
   done < <(
-    grep -E "^[a-zA-Z0-9_-]+:.*##" Makefile |
+    grep -E "^[a-zA-Z0-9_-]+:.*##" [Mm]akefile 2>/dev/null |
       grep -vE "^_|^menu" |
       sed -E "s/^([a-zA-Z0-9_-]+):.*##[[:space:]]*(.*)/\1|\2/" |
       sort
   )
 
-  # Debug: show what we found
-  printf "${YELLOW}DEBUG: Found ${#entries[@]} entries${NC}\n" >&2
-  for e in "${entries[@]}"; do
-    printf "${YELLOW}  Entry: '%s'${NC}\n" "$e" >&2
-  done
-  sleep 2
+  # Debug: append results to file
+  {
+    echo ""
+    echo "Found ${#entries[@]} entries:"
+    for e in "${entries[@]}"; do
+      echo "  - $e"
+    done
+  } >> /tmp/menu_debug.log 2>&1
 
   # Fallback for targets without descriptions
   if [ ${#entries[@]} -eq 0 ]; then

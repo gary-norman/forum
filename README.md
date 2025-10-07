@@ -76,13 +76,47 @@
 
 [![Codex screenshot][product-screenshot]](https://example.com)
 
-### This project consists of a web forum that allows :
-<ul>
-<li>communication between users</li>
-<li>associating categories to posts</li>
-<li>liking and disliking posts and comments</li>
-<li>filtering posts</li>
-</ul>
+## About The Project
+
+**Codex** is a feature-rich web forum application built with Go that provides a modern, community-driven platform for discussions and knowledge sharing. Designed with developers in mind, Codex offers a comprehensive set of features for creating, organizing, and moderating online communities.
+
+### Key Features
+
+#### User Management
+- **Authentication & Authorization** - Secure user registration and login with session-based authentication
+- **User Profiles** - Customizable profiles with avatars and user information
+- **Role-Based Access** - Moderator and admin roles with granular permissions
+
+#### Content & Communication
+- **Posts & Comments** - Create threaded discussions with rich content
+- **Channels** - Organize discussions into topic-based channels
+- **Channel Membership** - Join/leave channels to customize your feed
+- **Reactions** - Like and dislike posts and comments to surface quality content
+- **Bookmarks** - Save posts for later reference
+
+#### Moderation & Community Management
+- **Content Flags** - Report inappropriate content for moderator review
+- **Channel Moderation** - Assign moderators to manage specific channels
+- **Channel Rules** - Set and enforce community guidelines per channel
+- **Mute Channels** - Hide channels you're not interested in
+- **Content Filtering** - Filter posts by channel, reactions, and user-created content
+
+#### Media & Customization
+- **Image Uploads** - Attach images to posts, channels, and user profiles
+- **Custom Theming** - Catppuccin Mocha color palette for a polished UI
+- **Responsive Design** - Works seamlessly across desktop and mobile devices
+
+#### Engagement & Rewards
+- **Loyalty System** - Track user engagement and participation
+- **Search Functionality** - Find posts, channels, and users quickly
+
+### Built With
+
+* **Backend:** Go 1.22+
+* **Database:** SQLite3
+* **Templating:** Go HTML templates
+* **Containerization:** Docker
+* **Build System:** Make
 <!-- Do a search and replace with your text editor for the following: `gary.norman`, `forum`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description` -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

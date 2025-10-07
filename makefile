@@ -40,6 +40,9 @@ run: ## run the web server application
 		echo "$(GREEN)✓ server stopped$(NC) Uptime: $(CODEX_PINK)$${HR}h:$${MIN}m:$${SEC}.$${MS}s"
 		printf "$(CODEX_PINK)---------------------------------------------$(NC)\n"; \
 
+build-run: ## build and run the web server application
+	@$(MAKE) --no-print-directory build && $(MAKE) --no-print-directory run
+
 configure: ## configure Docker build and run options
 	@./scripts/configure.sh
 

@@ -1,19 +1,5 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a id="readme-top"></a>
-
-<style>
-  a { color: #6CCF5D; }
-  a:hover { opacity: 0.8; }
-  ul { list-style-type: none; }
-  ul li:before {
-    content: "▶";
-    color: #EA4F92;
-    font-weight: bold;
-    display: inline-block;
-    width: 1em;
-    margin-left: -1em;
-  }
-</style>
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
 *** that would make this better, please fork the repo and create a pull request

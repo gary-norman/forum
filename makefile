@@ -7,7 +7,7 @@ CODEX_GREEN=\033[38;2;108;207;93m
 NC=\033[0m# No Color
 HIGHLIGHT=\033[1;30;48;2;166;227;161m# bold black text on green background
 CODEX_HIGHLIGHT_GREEN=\033[1;30;48;2;108;207;93m# bold black text on codex green background
-CODEX_HIGHLIGHT_PINK	=\033[1;30;48;2;108;207;93m# bold black text on codex green background
+CODEX_HIGHLIGHT_PINK=\033[1;30;48;2;108;207;93m# bold black text on codex green background
 
 NOWMS = go run tools/nowms.go
 

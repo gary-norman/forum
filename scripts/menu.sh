@@ -63,14 +63,23 @@ show_menu() {
   local options_var="$2"
   local descs_var="$3"
 
+  echo "DEBUG: Inside show_menu" >&2
+  echo "DEBUG: options_var=$options_var, descs_var=$descs_var" >&2
+
   # Use eval to access array indirectly (compatible with bash 3.2)
   eval "local options=(\"\${${options_var}[@]}\")"
   eval "local descs=(\"\${${descs_var}[@]}\")"
 
+  echo "DEBUG: After eval, options count: ${#options[@]}" >&2
+  echo "DEBUG: Options: ${options[@]}" >&2
+
   local selected=1
   local max_index=$((${#options[@]} - 1))
 
+  echo "DEBUG: Entering menu loop" >&2
+
   while true; do
+    echo "DEBUG: Top of loop, about to clear" >&2
     clear
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
     printf "${CODEX_GREEN}%s${NC}\n" "$title"

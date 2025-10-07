@@ -43,17 +43,15 @@ format_duration() {
   fi
 }
 
-# Read arrow keys
+# Read arrow keys - sets global variable $KEY
 read_arrow() {
-  IFS= read -rsn1 key </dev/tty
-  if [[ $key == $'\x1b' ]]; then
-    read -rsn2 key </dev/tty
-    case $key in
-    '[A') echo "up" ;;
-    '[B') echo "down" ;;
+  IFS= read -rsn1 KEY
+  if [[ $KEY == $'\x1b' ]]; then
+    read -rsn2 KEY
+    case $KEY in
+    '[A') KEY="up" ;;
+    '[B') KEY="down" ;;
     esac
-  else
-    echo "$key"
   fi
 }
 
@@ -93,9 +91,9 @@ show_menu() {
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
     printf "Use ↑/↓ to navigate, Enter to select, or type number (0-%d): " "$max_index"
 
-    key=$(read_arrow)
+    read_arrow
 
-    case "$key" in
+    case "$KEY" in
     up)
       selected=$(((selected - 1 + ${#options[@]}) % ${#options[@]}))
       ;;
@@ -103,16 +101,16 @@ show_menu() {
       selected=$(((selected + 1) % ${#options[@]}))
       ;;
     '')
-      echo "${options[$selected]}"
+      MENU_CHOICE="${options[$selected]}"
       return 0
       ;;
     q | Q)
-      echo "exit"
+      MENU_CHOICE="exit"
       return 0
       ;;
     [0-9])
-      if [ "$key" -ge 0 ] && [ "$key" -le "$max_index" ]; then
-        echo "${options[$key]}"
+      if [ "$KEY" -ge 0 ] && [ "$KEY" -le "$max_index" ]; then
+        MENU_CHOICE="${options[$KEY]}"
         return 0
       else
         printf "\n${RED}⚠ invalid number (must be 0-%d)${NC}\n" "$max_index"
@@ -131,18 +129,18 @@ docker_menu() {
   local docker_descs=("return to main menu" "configure Docker options" "reset configuration" "build Docker image" "run Docker container")
 
   while true; do
-    choice=$(show_menu "Docker Commands" docker_options docker_descs)
+    show_menu "Docker Commands" docker_options docker_descs
 
-    case "$choice" in
+    case "$MENU_CHOICE" in
       back|exit)
         return
         ;;
       *)
         clear
-        printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$choice"
+        printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$MENU_CHOICE"
 
         START=$(get_time_ms)
-        make "$choice"
+        make "$MENU_CHOICE"
         EXIT_CODE=$?
         END=$(get_time_ms)
         DURATION=$((END - START))
@@ -168,18 +166,18 @@ scripts_menu() {
   local scripts_descs=("return to main menu" "install/update scripts" "verify checksums" "backup scripts")
 
   while true; do
-    choice=$(show_menu "Script Management" scripts_options scripts_descs)
+    show_menu "Script Management" scripts_options scripts_descs
 
-    case "$choice" in
+    case "$MENU_CHOICE" in
       back|exit)
         return
         ;;
       *)
         clear
-        printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$choice"
+        printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$MENU_CHOICE"
 
         START=$(get_time_ms)
-        make "$choice"
+        make "$MENU_CHOICE"
         EXIT_CODE=$?
         END=$(get_time_ms)
         DURATION=$((END - START))
@@ -205,9 +203,9 @@ while true; do
   main_options=("exit" "build" "run" "🐳 Docker" "📜 Scripts")
   main_descs=("quit this menu" "build the application" "run the application" "Docker management" "script management")
 
-  choice=$(show_menu "make commands for <codex>" main_options main_descs)
+  show_menu "make commands for <codex>" main_options main_descs
 
-  case "$choice" in
+  case "$MENU_CHOICE" in
     exit)
       printf "\n${TEAL}Exiting menu...${NC}\n"
       exit 0

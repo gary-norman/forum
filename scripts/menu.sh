@@ -224,8 +224,8 @@ while true; do
   # Build main menu with proper color interpolation
   DOCKER_LABEL="${DOCKER_ICON} Docker"
   SCRIPTS_LABEL="${SCRIPTS_ICON} Scripts"
-  main_options=("exit" "build" "run" "$DOCKER_LABEL" "$SCRIPTS_LABEL")
-  main_descs=("quit this menu" "build the application" "run the application" "Docker management" "script management")
+  main_options=("exit" "build" "run" "build-run" "$DOCKER_LABEL" "$SCRIPTS_LABEL")
+  main_descs=("quit this menu" "build the application" "run the application" "build and run the application" "Docker management" "script management")
 
   show_menu "make commands for <codex>" main_options main_descs
 

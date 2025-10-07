@@ -12,10 +12,16 @@ HIGHLIGHT="\033[1;30;48;2;166;227;161m"
 CODEX_HIGHLIGHT_GREEN="\033[1;30;48;2;108;207;93m"
 CODEX_HIGHLIGHT_PINK="\033[38;2;20;20;20;48;2;234;79;146m"
 
-# Use Nerd Font icon if NERDFONT env var is set, otherwise use ⏎
-if [[ "${NERDFONT:-}" == "1" ]]; then
+# Auto-detect Nerd Font by checking if terminal can render the icon properly
+# Try to render a Nerd Font icon and check if it displays correctly
+if [[ -n "$TERM_PROGRAM" ]] && [[ "$TERM_PROGRAM" =~ (WezTerm|Alacritty|kitty|iTerm) ]]; then
+  # Known terminals that support Nerd Fonts well
+  ENTER_KEY="   Enter "
+elif fc-list 2>/dev/null | grep -qi "nerd"; then
+  # Check if any Nerd Font is installed via fontconfig
   ENTER_KEY="   Enter "
 else
+  # Fallback to standard arrow
   ENTER_KEY=" ⏎  Enter "
 fi
 

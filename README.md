@@ -33,14 +33,14 @@
   <p align="center">
     A forum for finding all the help you need with code.
     <br />
-    <a href="https://github.com/gary.norman/forum"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/gary-norman/forum/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/gary.norman/forum">View Demo</a>
+    <a href="https://codex.loreworld.live">View Demo</a>
     ·
-    <a href="https://github.com/gary.norman/forum/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/gary-norman/forum/issues/new?labels=type%3A+bug">Report Bug</a>
     ·
-    <a href="https://github.com/gary.norman/forum/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/gary-norman/forum/issues/new?labels=type%3A+feature">Request Feature</a>
   </p>
 </div>
 

@@ -205,7 +205,13 @@ while true; do
   main_options=("exit" "build" "run" "🐳 Docker" "📜 Scripts")
   main_descs=("quit this menu" "build the application" "run the application" "Docker management" "script management")
 
+  # Debug
+  echo "DEBUG: About to call show_menu" >&2
+  echo "DEBUG: Options: ${main_options[@]}" >&2
+
   choice=$(show_menu "make commands for <codex>" main_options main_descs)
+
+  echo "DEBUG: Choice returned: $choice" >&2
 
   case "$choice" in
     exit)

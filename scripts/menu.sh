@@ -99,9 +99,9 @@ show_menu() {
       fi
 
       if [ "$i" -eq "$selected" ]; then
-        printf "${CODEX_HIGHLIGHT_GREEN}%2d) %-20s - %s${NC}\n" "$num" "${options[$i]}" "${descs[$i]}"
+        printf "${CODEX_HIGHLIGHT_GREEN}%2d) %-38s - %s${NC}\n" "$num" "${options[$i]}" "${descs[$i]}"
       else
-        printf "${CODEX_PINK}%2d)${CODEX_GREEN} %-20s${NC} - %s\n" "$num" "${options[$i]}" "${descs[$i]}"
+        printf "${CODEX_PINK}%2d)${CODEX_GREEN} %-38s${NC} - %s\n" "$num" "${options[$i]}" "${descs[$i]}"
       fi
     done
 
@@ -216,8 +216,10 @@ scripts_menu() {
 
 # Main menu loop
 while true; do
-  # Build main menu
-  main_options=("exit" "build" "run" "${DOCKER_ICON} Docker" "${SCRIPTS_ICON} Scripts")
+  # Build main menu with proper color interpolation
+  DOCKER_LABEL="${DOCKER_ICON} Docker"
+  SCRIPTS_LABEL="${SCRIPTS_ICON} Scripts"
+  main_options=("exit" "build" "run" "$DOCKER_LABEL" "$SCRIPTS_LABEL")
   main_descs=("quit this menu" "build the application" "run the application" "Docker management" "script management")
 
   show_menu "make commands for <codex>" main_options main_descs
@@ -227,10 +229,10 @@ while true; do
       printf "\n${TEAL}Exiting menu...${NC}\n"
       exit 0
       ;;
-    "${DOCKER_ICON} Docker")
+    "$DOCKER_LABEL")
       docker_menu
       ;;
-    "${SCRIPTS_ICON} Scripts")
+    "$SCRIPTS_LABEL")
       scripts_menu
       ;;
     *)

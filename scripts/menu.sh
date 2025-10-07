@@ -38,7 +38,7 @@ while true; do
     desc="${line#*|}"
     entries+=("$target|$desc")
   done < <(
-    grep -E "^[a-zA-Z0-9_-]+:.*?##" Makefile |
+    grep -E "^[a-zA-Z0-9_-]+:.*##" Makefile |
       grep -vE "^_|^menu" |
       sed -E "s/^([a-zA-Z0-9_-]+):.*##[[:space:]]*(.*)/\1|\2/" |
       sort

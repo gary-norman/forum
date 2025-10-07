@@ -140,7 +140,7 @@ docker_menu() {
         printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$MENU_CHOICE"
 
         START=$(get_time_ms)
-        make "$MENU_CHOICE"
+        make --no-print-directory "$MENU_CHOICE"
         EXIT_CODE=$?
         END=$(get_time_ms)
         DURATION=$((END - START))
@@ -177,7 +177,7 @@ scripts_menu() {
         printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$MENU_CHOICE"
 
         START=$(get_time_ms)
-        make "$MENU_CHOICE"
+        make --no-print-directory "$MENU_CHOICE"
         EXIT_CODE=$?
         END=$(get_time_ms)
         DURATION=$((END - START))
@@ -221,7 +221,7 @@ while true; do
       printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n\n" "$MENU_CHOICE"
 
       START=$(get_time_ms)
-      make "$MENU_CHOICE"
+      make --no-print-directory "$MENU_CHOICE"
       EXIT_CODE=$?
       END=$(get_time_ms)
       DURATION=$((END - START))

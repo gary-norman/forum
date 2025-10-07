@@ -14,13 +14,19 @@ CODEX_HIGHLIGHT_PINK="\033[38;2;20;20;20;48;2;234;79;146m"
 
 # Auto-detect Nerd Font by checking if terminal can render the icon properly
 if [[ -n "$TERM_PROGRAM" ]] && [[ "$TERM_PROGRAM" =~ (WezTerm|Alacritty|kitty|iTerm) ]]; then
-  # Known terminals that support Nerd Fonts well - use nf-md-keyboard_return
+  # Known terminals that support Nerd Fonts well
+  UP_ARROW=""
+  DOWN_ARROW="󰯂"
   ENTER_KEY=" 󱞦 Enter "
 elif fc-list 2>/dev/null | grep -qi "nerd"; then
   # Check if any Nerd Font is installed via fontconfig
+  UP_ARROW=""
+  DOWN_ARROW="󰯂"
   ENTER_KEY=" 󱞦 Enter "
 else
-  # Fallback to standard arrow
+  # Fallback to standard arrows
+  UP_ARROW="↑"
+  DOWN_ARROW="↓"
   ENTER_KEY=" ⏎ Enter "
 fi
 
@@ -99,7 +105,7 @@ show_menu() {
     done
 
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
-    printf "Use ↑/↓ to navigate, Enter to select, or type number (0-%d): " "$max_index"
+    printf "Use ${UP_ARROW}/${DOWN_ARROW} to navigate, Enter to select, or type number (0-%d): " "$max_index"
 
     read_arrow
 

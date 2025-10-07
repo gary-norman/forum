@@ -285,7 +285,7 @@ a:active,
 .link {
   text-decoration: none;
   cursor: var(--cursor-pointer);
-  color: var(--clr-accent--green);
+  /*color: inherit;*/
 }
 
 .link:hover {
@@ -293,7 +293,7 @@ a:active,
 }
 
 .link-under {
-  color: var(--clr-accent--green);
+  color: var(--clr-accent--1--1);
   text-decoration: underline;
 
   &:hover {

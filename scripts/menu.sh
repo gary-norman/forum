@@ -60,13 +60,15 @@ read_arrow() {
 # Show menu function
 show_menu() {
   local title="$1"
-  shift
-  local -n menu_options=$1
-  shift
-  local -n menu_descs=$1
+  local options_var="$2"
+  local descs_var="$3"
+
+  # Use eval to access array indirectly (compatible with bash 3.2)
+  eval "local options=(\"\${${options_var}[@]}\")"
+  eval "local descs=(\"\${${descs_var}[@]}\")"
 
   local selected=1
-  local max_index=$((${#menu_options[@]} - 1))
+  local max_index=$((${#options[@]} - 1))
 
   while true; do
     clear
@@ -74,7 +76,7 @@ show_menu() {
     printf "${CODEX_GREEN}%s${NC}\n" "$title"
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
 
-    for i in "${!menu_options[@]}"; do
+    for i in "${!options[@]}"; do
       if [ "$i" -eq 0 ]; then
         num=0
       else
@@ -82,9 +84,9 @@ show_menu() {
       fi
 
       if [ "$i" -eq "$selected" ]; then
-        printf "${CODEX_HIGHLIGHT_GREEN}%2d) %-20s - %s${NC}\n" "$num" "${menu_options[$i]}" "${menu_descs[$i]}"
+        printf "${CODEX_HIGHLIGHT_GREEN}%2d) %-20s - %s${NC}\n" "$num" "${options[$i]}" "${descs[$i]}"
       else
-        printf "${CODEX_PINK}%2d)${CODEX_GREEN} %-20s${NC} - %s\n" "$num" "${menu_options[$i]}" "${menu_descs[$i]}"
+        printf "${CODEX_PINK}%2d)${CODEX_GREEN} %-20s${NC} - %s\n" "$num" "${options[$i]}" "${descs[$i]}"
       fi
     done
 
@@ -95,13 +97,13 @@ show_menu() {
 
     case "$key" in
     up)
-      selected=$(((selected - 1 + ${#menu_options[@]}) % ${#menu_options[@]}))
+      selected=$(((selected - 1 + ${#options[@]}) % ${#options[@]}))
       ;;
     down)
-      selected=$(((selected + 1) % ${#menu_options[@]}))
+      selected=$(((selected + 1) % ${#options[@]}))
       ;;
     '')
-      echo "${menu_options[$selected]}"
+      echo "${options[$selected]}"
       return 0
       ;;
     q | Q)
@@ -110,7 +112,7 @@ show_menu() {
       ;;
     [0-9])
       if [ "$key" -ge 0 ] && [ "$key" -le "$max_index" ]; then
-        echo "${menu_options[$key]}"
+        echo "${options[$key]}"
         return 0
       else
         printf "\n${RED}⚠ invalid number (must be 0-%d)${NC}\n" "$max_index"

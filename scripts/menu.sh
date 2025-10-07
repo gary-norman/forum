@@ -15,18 +15,18 @@ CODEX_HIGHLIGHT_PINK="\033[38;2;20;20;20;48;2;234;79;146m"
 # Auto-detect Nerd Font by checking if terminal can render the icon properly
 if [[ -n "$TERM_PROGRAM" ]] && [[ "$TERM_PROGRAM" =~ (WezTerm|Alacritty|kitty|iTerm) ]]; then
   # Known terminals that support Nerd Fonts well
-  UP_ARROW=""
-  DOWN_ARROW="󰯂"
+  DOCKER_ICON=""
+  SCRIPTS_ICON="󰯂"
   ENTER_KEY=" 󱞦 Enter "
 elif fc-list 2>/dev/null | grep -qi "nerd"; then
   # Check if any Nerd Font is installed via fontconfig
-  UP_ARROW=""
-  DOWN_ARROW="󰯂"
+  DOCKER_ICON=""
+  SCRIPTS_ICON="󰯂"
   ENTER_KEY=" 󱞦 Enter "
 else
-  # Fallback to standard arrows
-  UP_ARROW="↑"
-  DOWN_ARROW="↓"
+  # Fallback to emoji
+  DOCKER_ICON="🐳"
+  SCRIPTS_ICON="📜"
   ENTER_KEY=" ⏎ Enter "
 fi
 
@@ -105,7 +105,7 @@ show_menu() {
     done
 
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
-    printf "Use ${UP_ARROW}/${DOWN_ARROW} to navigate, Enter to select, or type number (0-%d): " "$max_index"
+    printf "Use ↑/↓ to navigate, Enter to select, or type number (0-%d): " "$max_index"
 
     read_arrow
 
@@ -216,7 +216,7 @@ scripts_menu() {
 # Main menu loop
 while true; do
   # Build main menu
-  main_options=("exit" "build" "run" "🐳 Docker" "📜 Scripts")
+  main_options=("exit" "build" "run" "${DOCKER_ICON} Docker" "${SCRIPTS_ICON} Scripts")
   main_descs=("quit this menu" "build the application" "run the application" "Docker management" "script management")
 
   show_menu "make commands for <codex>" main_options main_descs
@@ -226,10 +226,10 @@ while true; do
       printf "\n${TEAL}Exiting menu...${NC}\n"
       exit 0
       ;;
-    "🐳 Docker")
+    "${DOCKER_ICON} Docker")
       docker_menu
       ;;
-    "📜 Scripts")
+    "${SCRIPTS_ICON} Scripts")
       scripts_menu
       ;;
     *)

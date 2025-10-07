@@ -13,13 +13,12 @@ CODEX_HIGHLIGHT_GREEN="\033[1;30;48;2;108;207;93m"
 CODEX_HIGHLIGHT_PINK="\033[38;2;20;20;20;48;2;234;79;146m"
 
 # Auto-detect Nerd Font by checking if terminal can render the icon properly
-# Try to render a Nerd Font icon and check if it displays correctly
 if [[ -n "$TERM_PROGRAM" ]] && [[ "$TERM_PROGRAM" =~ (WezTerm|Alacritty|kitty|iTerm) ]]; then
-  # Known terminals that support Nerd Fonts well
-  ENTER_KEY="   Enter "
+  # Known terminals that support Nerd Fonts well - use nf-md-keyboard_return
+  ENTER_KEY=" 󱞦  Enter "
 elif fc-list 2>/dev/null | grep -qi "nerd"; then
   # Check if any Nerd Font is installed via fontconfig
-  ENTER_KEY="   Enter "
+  ENTER_KEY=" 󱞦  Enter "
 else
   # Fallback to standard arrow
   ENTER_KEY=" ⏎  Enter "

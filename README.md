@@ -101,9 +101,8 @@
 - **Mute Channels** - Hide channels you're not interested in
 - **Content Filtering** - Filter posts by channel, reactions, and user-created content
 
-#### Media & Customization
+#### Media & Design
 - **Image Uploads** - Attach images to posts, channels, and user profiles
-- **Custom Theming** - Catppuccin Mocha color palette for a polished UI
 - **Responsive Design** - Works seamlessly across desktop and mobile devices
 
 #### Engagement & Rewards

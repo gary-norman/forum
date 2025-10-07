@@ -45,9 +45,9 @@ format_duration() {
 
 # Read arrow keys
 read_arrow() {
-  IFS= read -rsn1 key 2>/dev/null >&2
+  IFS= read -rsn1 key </dev/tty
   if [[ $key == $'\x1b' ]]; then
-    read -rsn2 key
+    read -rsn2 key </dev/tty
     case $key in
     '[A') echo "up" ;;
     '[B') echo "down" ;;
@@ -63,29 +63,18 @@ show_menu() {
   local options_var="$2"
   local descs_var="$3"
 
-  echo "DEBUG: Inside show_menu" >&2
-  echo "DEBUG: options_var=$options_var, descs_var=$descs_var" >&2
-
   # Use eval to access array indirectly (compatible with bash 3.2)
   eval "local options=(\"\${${options_var}[@]}\")"
   eval "local descs=(\"\${${descs_var}[@]}\")"
 
-  echo "DEBUG: After eval, options count: ${#options[@]}" >&2
-  echo "DEBUG: Options: ${options[@]}" >&2
-
   local selected=1
   local max_index=$((${#options[@]} - 1))
 
-  echo "DEBUG: Entering menu loop" >&2
-
   while true; do
-    echo "DEBUG: Top of loop, about to clear" >> /tmp/menu_debug.log
     clear
-    echo "DEBUG: After clear" >> /tmp/menu_debug.log
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
     printf "${CODEX_GREEN}%s${NC}\n" "$title"
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
-    echo "DEBUG: After header" >> /tmp/menu_debug.log
 
     for i in "${!options[@]}"; do
       if [ "$i" -eq 0 ]; then
@@ -101,13 +90,10 @@ show_menu() {
       fi
     done
 
-    echo "DEBUG: After printing options" >> /tmp/menu_debug.log
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
     printf "Use ↑/↓ to navigate, Enter to select, or type number (0-%d): " "$max_index"
 
-    echo "DEBUG: About to call read_arrow" >> /tmp/menu_debug.log
     key=$(read_arrow)
-    echo "DEBUG: read_arrow returned: '$key'" >> /tmp/menu_debug.log
 
     case "$key" in
     up)
@@ -219,13 +205,7 @@ while true; do
   main_options=("exit" "build" "run" "🐳 Docker" "📜 Scripts")
   main_descs=("quit this menu" "build the application" "run the application" "Docker management" "script management")
 
-  # Debug
-  echo "DEBUG: About to call show_menu" >&2
-  echo "DEBUG: Options: ${main_options[@]}" >&2
-
   choice=$(show_menu "make commands for <codex>" main_options main_descs)
-
-  echo "DEBUG: Choice returned: $choice" >&2
 
   case "$choice" in
     exit)

@@ -45,9 +45,9 @@ format_duration() {
 
 # Read arrow keys - sets global variable $KEY
 read_arrow() {
-  IFS= read -rsn1 KEY
+  IFS= read -rsn1 KEY < /dev/tty
   if [[ $KEY == $'\x1b' ]]; then
-    read -rsn2 KEY
+    read -rsn2 KEY < /dev/tty
     case $KEY in
     '[A') KEY="up" ;;
     '[B') KEY="down" ;;

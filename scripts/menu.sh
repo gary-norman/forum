@@ -14,24 +14,17 @@ CODEX_HIGHLIGHT_PINK="\033[38;2;20;20;20;48;2;234;79;146m"
 
 ENTER_KEY="[ ⏎ Enter ]"
 
-# Read arrow keys with better Linux compatibility
+# Read arrow keys
 read_arrow() {
-  # Read one character
-  IFS= read -rsn1 key
-
-  # Check if it's an escape sequence
+  IFS= read -rsn1 key 2>/dev/null >&2
   if [[ $key == $'\x1b' ]]; then
-    # Read the next two characters for arrow keys
-    IFS= read -rsn2 -t 0.1 key
+    read -rsn2 key
     case $key in
     '[A') echo "up" ;;
     '[B') echo "down" ;;
-    *) echo "" ;; # Unknown escape sequence
     esac
-  elif [[ $key == "" ]]; then
-    echo "" # Enter key
   else
-    echo "$key" # Regular character
+    echo "$key"
   fi
 }
 
@@ -106,7 +99,7 @@ while true; do
     down)
       selected=$(((selected + 1) % ${#options[@]}))
       ;;
-    '') # Enter key
+    '')
       break
       ;;
     q | Q)
@@ -123,7 +116,6 @@ while true; do
       fi
       ;;
     *)
-      # Ignore other keys
       ;;
     esac
   done

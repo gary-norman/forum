@@ -43,7 +43,7 @@ run: ## run the web server application
 configure: ## configure Docker build and run options
 	@./scripts/configure.sh
 
-reset-config: ## reset Docker configuration by deleting .env and repopulating with dev/prod for db
+reset-config: ## reset Docker configuration and choose db (dev/prod)
 	@./scripts/reset-config.sh
 
 build-image: ## build the Docker image
@@ -69,3 +69,23 @@ run-container: ## run the Docker container
 		MS=$$((DIFF % 1000)); \
 		printf "$(GREEN)✓${CODEX_GREEN} task complete!$(NC)in $(CODEX_PINK)%s.%03d$(NC)s\n" "$$SEC" "$$MS" \
 	'
+
+install-scripts: ## install/update all scripts with correct permissions
+	@echo "$(CODEX_PINK)> installing scripts...$(NC)"
+	@chmod +x scripts/*.sh
+	@echo "$(GREEN)✓ scripts are executable$(NC)"
+	@echo "$(CODEX_GREEN)Scripts installed:$(NC)"
+	@ls -lh scripts/*.sh | awk '{printf "  $(CODEX_PINK)%s$(NC) - %s\n", $$9, $$5}'
+
+verify-scripts: ## verify script checksums to detect changes
+	@echo "$(CODEX_PINK)> verifying scripts...$(NC)"
+	@cd scripts && sha256sum *.sh > /tmp/script-checksums.txt
+	@echo "$(GREEN)✓ checksums saved to /tmp/script-checksums.txt$(NC)"
+	@cat /tmp/script-checksums.txt
+
+backup-scripts: ## backup current scripts before updating
+	@echo "$(CODEX_PINK)> backing up scripts...$(NC)"
+	@mkdir -p scripts/backups
+	@TIMESTAMP=$$(date +%Y%m%d_%H%M%S); \
+		tar -czf scripts/backups/scripts_$$TIMESTAMP.tar.gz scripts/*.sh; \
+		echo "$(GREEN)✓ backup created: $(CODEX_PINK)scripts/backups/scripts_$$TIMESTAMP.tar.gz$(NC)"

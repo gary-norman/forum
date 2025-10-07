@@ -5,6 +5,7 @@ PEACH="\033[38;2;250;179;135m"
 GREEN="\033[38;2;166;227;161m"
 RED="\033[38;2;243;139;168m"
 YELLOW="\033[38;2;249;226;175m"
+BLUE="\033[38;2;137;180;250m"
 CODEX_PINK="\033[38;2;234;79;146m"
 CODEX_GREEN="\033[38;2;108;207;93m"
 NC="\033[0m"
@@ -15,13 +16,13 @@ CODEX_HIGHLIGHT_PINK="\033[38;2;20;20;20;48;2;234;79;146m"
 # Auto-detect Nerd Font by checking if terminal can render the icon properly
 if [[ -n "$TERM_PROGRAM" ]] && [[ "$TERM_PROGRAM" =~ (WezTerm|Alacritty|kitty|iTerm) ]]; then
   # Known terminals that support Nerd Fonts well
-  DOCKER_ICON="󰡨"
-  SCRIPTS_ICON="󰯂"
+  DOCKER_ICON="${BLUE}󰡨${CODEX_GREEN}"
+  SCRIPTS_ICON="${NC}󰯂${CODEX_GREEN}"
   ENTER_KEY=" 󱞦 Enter "
 elif fc-list 2>/dev/null | grep -qi "nerd"; then
   # Check if any Nerd Font is installed via fontconfig
-  DOCKER_ICON="󰡨"
-  SCRIPTS_ICON="󰯂"
+  DOCKER_ICON="${BLUE}󰡨${CODEX_GREEN}"
+  SCRIPTS_ICON="${NC}󰯂${CODEX_GREEN}"
   ENTER_KEY=" 󱞦 Enter "
 else
   # Fallback to emoji

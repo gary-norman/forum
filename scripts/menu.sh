@@ -12,7 +12,7 @@ HIGHLIGHT="\033[1;30;48;2;166;227;161m"
 CODEX_HIGHLIGHT_GREEN="\033[1;30;48;2;108;207;93m"
 CODEX_HIGHLIGHT_PINK="\033[38;2;20;20;20;48;2;234;79;146m"
 
-ENTER_KEY="[ ⏎ Enter ]"
+ENTER_KEY=" ⏎  Enter "
 
 # Get current time in milliseconds
 get_time_ms() {

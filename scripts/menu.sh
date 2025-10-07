@@ -12,13 +12,11 @@ HIGHLIGHT="\033[1;30;48;2;166;227;161m"
 CODEX_HIGHLIGHT_GREEN="\033[1;30;48;2;108;207;93m"
 CODEX_HIGHLIGHT_PINK="\033[38;2;20;20;20;48;2;234;79;146m"
 
-# Check if Nerd Font is available (test for common nerd font icon)
-if printf '\uf053' | grep -q 'f053' 2>/dev/null; then
-  # Nerd Font not available, use return arrow
-  ENTER_KEY=" ⏎  Enter "
-else
-  # Nerd Font available, use Enter icon (nf-fa-level_down)
+# Use Nerd Font icon if NERDFONT env var is set, otherwise use ⏎
+if [[ "${NERDFONT:-}" == "1" ]]; then
   ENTER_KEY="   Enter "
+else
+  ENTER_KEY=" ⏎  Enter "
 fi
 
 # Get current time in milliseconds

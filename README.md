@@ -111,35 +111,79 @@
 
 
 <!-- GETTING STARTED -->
+## Getting Started
 
-To get a local copy up and running follow these simple example steps.
+### Prerequisites
 
+* Go 1.22 or higher
+* SQLite3
 
-<!-- This is an example of how to list things you need to use the software and how to install them. -->
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+### Installation
 
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/gary.norman/forum.git
+   git clone https://github.com/gary-norman/forum.git
+   cd forum
    ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-5. Change git remote url to avoid accidental pushes to base project
-   ```sh
-   git remote set-url origin gary.norman/forum
-   git remote -v # confirm the changes
-   ```
+
+### Usage
+
+#### Option 1: Using Make (Recommended)
+
+The project includes an interactive menu system for easy command execution:
+
+```sh
+make menu
+```
+
+This will display an interactive menu with the following options:
+- **build** - Build the web server application
+- **run** - Run the web server application
+- **build-run** - Build and run the application in sequence
+- **Docker** - Docker management submenu (configure, build image, run container)
+- **Scripts** - Script management submenu (install, verify, backup scripts)
+
+You can navigate using arrow keys or type the option number.
+
+#### Option 2: Using Make Directly
+
+```sh
+# Build the application
+make build
+
+# Run the application
+make run
+
+# Build and run
+make build-run
+
+# Docker commands
+make configure        # Configure Docker options
+make build-image      # Build Docker image
+make run-container    # Run Docker container
+
+# Script management
+make install-scripts  # Install/update scripts
+make verify-scripts   # Verify script checksums
+make backup-scripts   # Backup scripts
+```
+
+#### Option 3: Direct Terminal Commands
+
+If you prefer not to use Make:
+
+```sh
+# Build the application
+go build -o bin/codex github.com/gary-norman/forum/cmd/server
+
+# Run the application
+./bin/codex
+
+# Build and run
+go build -o bin/codex github.com/gary-norman/forum/cmd/server && ./bin/codex
+```
+
+The server will start on `http://localhost:8888` by default.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -33,6 +33,13 @@ while true; do
 
   # Gather Makefile targets
   entries=()
+
+  # Debug: show what grep finds
+  printf "${YELLOW}DEBUG: Searching for targets...${NC}\n" >&2
+  grep -E "^[a-zA-Z0-9_-]+:.*##" Makefile 2>&1 | head -3 >&2
+  printf "${YELLOW}---${NC}\n" >&2
+  sleep 2
+
   while IFS= read -r line; do
     target="${line%%|*}"
     desc="${line#*|}"
@@ -43,6 +50,13 @@ while true; do
       sed -E "s/^([a-zA-Z0-9_-]+):.*##[[:space:]]*(.*)/\1|\2/" |
       sort
   )
+
+  # Debug: show what we found
+  printf "${YELLOW}DEBUG: Found ${#entries[@]} entries${NC}\n" >&2
+  for e in "${entries[@]}"; do
+    printf "${YELLOW}  Entry: '%s'${NC}\n" "$e" >&2
+  done
+  sleep 2
 
   # Fallback for targets without descriptions
   if [ ${#entries[@]} -eq 0 ]; then

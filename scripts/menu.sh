@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Color variables
 TEAL="\033[38;2;148;226;213m"
 PEACH="\033[38;2;250;179;135m"
@@ -8,32 +7,38 @@ RED="\033[38;2;243;139;168m"
 YELLOW="\033[38;2;249;226;175m"
 CODEX_PINK="\033[38;2;234;79;146m"
 CODEX_GREEN="\033[38;2;108;207;93m"
-NC="\033[0m"                                               # No Color
-HIGHLIGHT="\033[1;30;48;2;166;227;161m"                    # bold black text on green background
-CODEX_HIGHLIGHT_GREEN="\033[1;30;48;2;108;207;93m"         # bold black text on codex green background
-CODEX_HIGHLIGHT_PINK="\033[38;2;20;20;20;48;2;234;79;146m" # bold black text on codex pink background
+NC="\033[0m"
+HIGHLIGHT="\033[1;30;48;2;166;227;161m"
+CODEX_HIGHLIGHT_GREEN="\033[1;30;48;2;108;207;93m"
+CODEX_HIGHLIGHT_PINK="\033[38;2;20;20;20;48;2;234;79;146m"
 
-# Special characters
 ENTER_KEY="[ ⏎ Enter ]"
 
-# read arrow keys
+# Read arrow keys with better Linux compatibility
 read_arrow() {
-  IFS= read -rsn1 key 2>/dev/null >&2
+  # Read one character
+  IFS= read -rsn1 key
+
+  # Check if it's an escape sequence
   if [[ $key == $'\x1b' ]]; then
-    read -rsn2 key
+    # Read the next two characters for arrow keys
+    IFS= read -rsn2 -t 0.1 key
     case $key in
     '[A') echo "up" ;;
     '[B') echo "down" ;;
+    *) echo "" ;; # Unknown escape sequence
     esac
+  elif [[ $key == "" ]]; then
+    echo "" # Enter key
   else
-    echo "$key"
+    echo "$key" # Regular character
   fi
 }
 
 while true; do
   clear
 
-  # gather Makefile targets
+  # Gather Makefile targets
   entries=()
   while IFS= read -r line; do
     target="${line%%|*}"
@@ -46,7 +51,7 @@ while true; do
       sort
   )
 
-  # fallback for targets without descriptions
+  # Fallback for targets without descriptions
   if [ ${#entries[@]} -eq 0 ]; then
     while IFS= read -r line; do
       entries+=("$line|No description")
@@ -58,7 +63,7 @@ while true; do
     )
   fi
 
-  # separate options and descriptions
+  # Separate options and descriptions
   options=("exit")
   descs=("quit this menu")
   for entry in "${entries[@]}"; do
@@ -66,7 +71,7 @@ while true; do
     descs+=("${entry#*|}")
   done
 
-  selected=1 # highlight first Makefile target initially
+  selected=1
   max_index=$((${#options[@]} - 1))
 
   while true; do
@@ -76,7 +81,6 @@ while true; do
     printf "${CODEX_PINK}---------------------------------------------${NC}\n"
 
     for i in "${!options[@]}"; do
-      # display numbers: 0 for exit, 1..n for targets
       if [ "$i" -eq 0 ]; then
         num=0
       else
@@ -102,28 +106,31 @@ while true; do
     down)
       selected=$(((selected + 1) % ${#options[@]}))
       ;;
-    '') # Enter
+    '') # Enter key
       break
+      ;;
+    q | Q)
+      printf "\n${TEAL}Exiting menu...${NC}\n"
+      exit 0
       ;;
     [0-9])
       if [ "$key" -ge 0 ] && [ "$key" -le "$max_index" ]; then
         selected=$key
         break
       else
-        printf "${RED}⚠ invalid number${NC}\n"
-        sleep 1
+        printf "\n${RED}⚠ invalid number (must be 0-%d)${NC}\n" "$max_index"
+        sleep 1.5
       fi
       ;;
-    q)
-      printf "${TEAL}Exiting menu...${NC}\n"
-      exit 0
+    *)
+      # Ignore other keys
       ;;
     esac
   done
 
-  # run selected target
+  # Run selected target
   if [ "$selected" -eq 0 ]; then
-    printf "${TEAL}Exiting menu...${NC}\n"
+    printf "\n${TEAL}Exiting menu...${NC}\n"
     exit 0
   fi
 
@@ -131,6 +138,7 @@ while true; do
   clear
   printf "${TEAL}Running target: ${CODEX_PINK}%s${NC}\n" "$TARGET"
   make "$TARGET"
-  printf "Press ${CODEX_HIGHLIGHT_PINK}${ENTER_KEY}${NC} to return to menu..."
-  read dummy
+
+  printf "\nPress ${CODEX_HIGHLIGHT_PINK}${ENTER_KEY}${NC} to return to menu..."
+  read -r dummy
 done

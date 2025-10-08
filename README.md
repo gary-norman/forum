@@ -75,7 +75,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-[![Codex screenshot][product-screenshot]](https://example.com)
+[![Codex screenshot][product-screenshot]](https://codex.loreworld.live)
 
 ## About The Project
 
@@ -329,9 +329,11 @@ Kamil Ornal - [@kamil](https://twitter.com/twitter_handle_kamil) - email@kamil.c
 
 <!-- ACKNOWLEDGMENTS -->
 
+<!-- 
 * []()
 * []()
 * []()
+-->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -351,7 +353,7 @@ Kamil Ornal - [@kamil](https://twitter.com/twitter_handle_kamil) - email@kamil.c
 [license-url]: https://github.com/gary-norman/forum/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/gary-norman/
-[product-screenshot]: /assets/images/screenshot.png
+[product-screenshot]: /assets/images/screenshot-3d.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB

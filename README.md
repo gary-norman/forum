@@ -1,4 +1,5 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+
 <a id="readme-top"></a>
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
@@ -299,16 +300,16 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-<a href="https://github.com/gary.norman/forum/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=gary.norman/forum" alt="contrib.rocks image" />
+<a href="https://github.com/github.com/gary-norman/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=github.com/gary-norman" />
 </a>
 
+Made with [contrib.rocks](https://contrib.rocks).
 
 
 <!-- LICENSE -->
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -316,11 +317,11 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 
-Gary Norman - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Gary Norman - [@gary](https://twitter.com/twitter_handle_gary) - email@gary.com
 
-Kamil Ornal - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Kamil Ornal - [@kamil](https://twitter.com/twitter_handle_kamil) - email@kamil.com
 
-Project Link: [https://github.com/gary.norman/forum](https://github.com/gary.norman/forum)
+<!-- Project Link: [https://github.com/gary.norman/forum](https://github.com/gary.norman/forum) -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -347,7 +348,7 @@ Project Link: [https://github.com/gary.norman/forum](https://github.com/gary.nor
 [issues-shield]: https://img.shields.io/github/issues/gary-norman/forum.svg?style=for-the-badge
 [issues-url]: https://github.com/gary-norman/forum/issues
 [license-shield]: https://img.shields.io/github/license/gary-norman/forum.svg?style=for-the-badge
-[license-url]: https://github.com/gary-norman/forum/blob/master/LICENSE.txt
+[license-url]: https://github.com/gary-norman/forum/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/gary-norman/
 [product-screenshot]: /assets/images/screenshot.png

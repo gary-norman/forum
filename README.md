@@ -348,7 +348,7 @@ Kamil Ornal - [@kamil](https://twitter.com/twitter_handle_kamil) - email@kamil.c
 [issues-shield]: https://img.shields.io/github/issues/gary-norman/forum.svg?style=for-the-badge
 [issues-url]: https://github.com/gary-norman/forum/issues
 [license-shield]: https://img.shields.io/github/license/gary-norman/forum.svg?style=for-the-badge
-[license-url]: https://github.com/gary-norman/forum/blob/master/LICENSE
+[license-url]: https://github.com/gary-norman/forum/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/gary-norman/
 [product-screenshot]: /assets/images/screenshot.png

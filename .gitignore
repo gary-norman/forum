@@ -30,3 +30,6 @@ app.log
 pkg
 .env
 scripts/backups
+# Blender files
+*.blend1
+*.blend

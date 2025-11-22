@@ -1110,20 +1110,20 @@ form-field:focus-within input {
 /* } */
 /**/
 /* /* forward animation: on focus */
-*/
+
 /* .form-field:focus-within label { */
 /*   animation: form-label 300ms ease-in-out forwards; */
 /* } */
 /**/
 /* /* backward animation: only if empty and losing focus */
-*/
+
 /* .form-field:not(:focus-within) input:placeholder-shown ~ label, */
 /* .form-field:not(:focus-within) textarea:placeholder-shown ~ label { */
 /*   animation: form-label-back 300ms ease-in-out forwards; */
 /* } */
 /**/
 /* /* stay floated if input has value */
-*/
+
 /* .form-field input:not(:placeholder-shown) ~ label, */
 /* .form-field textarea:not(:placeholder-shown) ~ label { */
 /*   left: 1rem; */
@@ -1133,26 +1133,26 @@ form-field:focus-within input {
 /* } */
 
 /* /* TODO use @starting-style to achieve this */
-*/
+
 /* /* .user-interacted > * { */
-*/
+
 /* textarea, */
 /* input[type="text"], */
 /* input[type="password"], */
 /* input[type="email"] { */
 /*   &:focus-visible ~ label { */
 /*     /* flex-basis: auto; */
-*/
+
 /*     /* position: absolute; */
-*/
+
 /*     /*background: var(--clr-accent--2);*/
-*/
+
 /*     /*left: 1rem;*/
-*/
+
 /*     /*font-size: 1rem;*/
-*/
+
 /*     /*top: 0;*/
-*/
+
 /*     animation: form-label 300ms ease-in-out forwards; */
 /*     @starting-style { */
 /*       font-size: 0; */
@@ -1163,7 +1163,7 @@ form-field:focus-within input {
 /*   } */
 
 /*   /*TODO prevent this happening on form popop */
-*/
+
 /*   &:not(focus-visible) ~ label { */
 /*     animation: form-label-back 300ms ease-in-out forwards; */
 /*   } */
@@ -1631,7 +1631,7 @@ input#register_user:user-invalid {
   }
 }
 
-// TODO does this need a var(--cursor-default)?
+/* TODO does this need a var(--cursor-default)?*/
 [id^="edit-channel-rules-title-rules-"] {
   font-size: 1.6rem;
   cursor: default;
@@ -1868,6 +1868,7 @@ input#register_user:user-invalid {
 /*#drop-zone input {*/
 /*  cursor: pointer;*/
 /*}*/
+
 .dragText,
 [id^="browse"] {
   /* padding: 0.5rem 0; */

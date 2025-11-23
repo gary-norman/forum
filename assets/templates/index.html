@@ -1,270 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="A multi-user forum for discussing coding tips, finding answers to problems, and finding encouragement, support, and collaboration"/>
-    <link rel="stylesheet" href="/assets/css/css-reset_kevin-powell.css" />
-    <link rel="stylesheet" href="/assets/css/fonts.css" />
-    <link rel="stylesheet" href="/assets/css/fonts-devicons.css" />
-    <link rel="stylesheet" href="/assets/css/fonts-jetbrains_nerd-font.css" />
-    <link rel="stylesheet" href="/assets/css/colors.css" />
-    <link rel="stylesheet" href="/assets/css/colors-oklch.css" />
-    <link rel="stylesheet" href="/assets/css/main.css" />
-    <link rel="stylesheet" href="/assets/css/text_effects.css" />
-    <link rel="stylesheet" href="/assets/css/user-page.css" />
-    <link rel="stylesheet" href="/assets/css/channel-page.css" />
-    <link rel="stylesheet" href="/assets/css/this-post.css" />
-    <link rel="stylesheet" href="/assets/css/main_effects.css">
-    <link rel="stylesheet" href="/assets/css/buttons.css" />
-    <link rel="stylesheet" href="/assets/css/main_effects.css" />
-    <link rel="stylesheet" href="/assets/css/filters.css" />
-    <link rel="stylesheet" href="/assets/css/scrollbars.css" />
-    <link rel="stylesheet" href="/assets/css/errors.css" />
-    <link rel="stylesheet" href="/assets/css/loader.css" />
-    <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico" />
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script type="module" src="/assets/js/main.js" defer></script>
-    <script type="module" src="/assets/js/calendar.js" defer></script>
-    <script type="module" src="/assets/js/filters.js" defer></script>
-    <script type="module" src="/assets/js/reactions.js" defer></script>
-    <script type="module" src="/assets/js/share.js" defer></script>
-    <script type="module" src="/assets/js/comments.js" defer></script>
-    <script type="module" src="/assets/js/edit_user.js" defer></script>
-    <script type="module" src="/assets/js/post.js" defer></script>
-    <script type="module" src="/assets/js/search.js" defer></script>
-    <script type="module" src="/assets/js/fetch_and_navigate.js" defer></script>
-    <script type="module" src="/assets/js/colour_scheme.js" defer></script>
-    <script type="module" src="/assets/js/authentication.js" defer></script>
-    <script type="module" src="/assets/js/channel_rules.js" defer></script>
-    <script type="module" src="/assets/js/file_uploader.js" defer></script>
-    <script type="module" src="/assets/js/helper_functions.js" defer></script>
-    <script type="module" src="/assets/js/join_channel.js" defer></script>
-    <script type="module" src="/assets/js/navigation.js" defer></script>
-    <script type="module" src="/assets/js/notifications.js" defer></script>
-    <script type="module" src="/assets/js/popups.js" defer></script>
-    <script type="module" src="/assets/js/update_UI_elements.js" defer></script>
-    <title>&lt; codex &gt;</title>
-    <title>{{- /*gotype: github.com/gary-norman/forum/internal/models.TemplateData*/ -}}</title>
-  </head>
-  <body>
-{{/*SECTION --------- variables ---------*/}}
-{{ $tracer := "index" }}
-{{ if eq .CurrentUser nil }}
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="A multi-user forum for discussing coding tips, finding answers to problems, and finding encouragement, support, and collaboration" />
+  <link rel="stylesheet" href="/assets/css/css-reset_kevin-powell.css" />
+  <link rel="stylesheet" href="/assets/css/fonts.css" />
+  <link rel="stylesheet" href="/assets/css/fonts-devicons.css" />
+  <link rel="stylesheet" href="/assets/css/fonts-jetbrains_nerd-font.css" />
+  <link rel="stylesheet" href="/assets/css/colors.css" />
+  <link rel="stylesheet" href="/assets/css/colors-oklch.css" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/text_effects.css" />
+  <link rel="stylesheet" href="/assets/css/user-page.css" />
+  <link rel="stylesheet" href="/assets/css/channel-page.css" />
+  <link rel="stylesheet" href="/assets/css/this-post.css" />
+  <link rel="stylesheet" href="/assets/css/main_effects.css">
+  <link rel="stylesheet" href="/assets/css/buttons.css" />
+  <link rel="stylesheet" href="/assets/css/main_effects.css" />
+  <link rel="stylesheet" href="/assets/css/filters.css" />
+  <link rel="stylesheet" href="/assets/css/scrollbars.css" />
+  <link rel="stylesheet" href="/assets/css/errors.css" />
+  <link rel="stylesheet" href="/assets/css/loader.css" />
+  <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script type="module" src="/assets/js/main.js" defer></script>
+  <script type="module" src="/assets/js/calendar.js" defer></script>
+  <script type="module" src="/assets/js/filters.js" defer></script>
+  <script type="module" src="/assets/js/reactions.js" defer></script>
+  <script type="module" src="/assets/js/share.js" defer></script>
+  <script type="module" src="/assets/js/comments.js" defer></script>
+  <script type="module" src="/assets/js/edit_user.js" defer></script>
+  <script type="module" src="/assets/js/post.js" defer></script>
+  <script type="module" src="/assets/js/search.js" defer></script>
+  <script type="module" src="/assets/js/fetch_and_navigate.js" defer></script>
+  <script type="module" src="/assets/js/colour_scheme.js" defer></script>
+  <script type="module" src="/assets/js/authentication.js" defer></script>
+  <script type="module" src="/assets/js/channel_rules.js" defer></script>
+  <script type="module" src="/assets/js/file_uploader.js" defer></script>
+  <script type="module" src="/assets/js/helper_functions.js" defer></script>
+  <script type="module" src="/assets/js/join_channel.js" defer></script>
+  <script type="module" src="/assets/js/navigation.js" defer></script>
+  <script type="module" src="/assets/js/notifications.js" defer></script>
+  <script type="module" src="/assets/js/popups.js" defer></script>
+  <script type="module" src="/assets/js/update_UI_elements.js" defer></script>
+  <title>&lt; codex &gt;</title>
+  <title>{{- /*gotype: github.com/gary-norman/forum/internal/models.TemplateData*/ -}}</title>
+</head>
+
+<body>
+  {{/*SECTION --------- variables ---------*/}}
+  {{ $tracer := "index" }}
+  {{ if eq .CurrentUser nil }}
   {{ $user := .RandomUser }}
-{{ else }}
+  {{ else }}
   {{ $user := .CurrentUser }}
-{{ end }}
+  {{ end }}
 
-{{/*SECTION --------- loader ---------*/}}
-    {{ template "loader" . }}
+  {{/*SECTION --------- loader ---------*/}}
+  {{ template "loader" . }}
 
-{{/*SECTION --------- main notification ---------*/}}
-    <div id="notification-main">
-      <div id="notification-main-content"></div>
-    </div>
-    <main class="wrapper-main">
-      {{/*SECTION ---------- header -----------*/}}
-      <header class="header">
-        <div class="branding btn-go-home"></div>
-          <search class="wrapper-search input-wrapper">
-{{/*            <form>*/}}
-              <input data-search
-                type="text"
-                class="searchbar"
-                id="search"
-                name="search"
-                placeholder="Search"
-              />
+  {{/*SECTION --------- main notification ---------*/}}
+  <div id="notification-main">
+    <div id="notification-main-content"></div>
+  </div>
+  <div class="wrapper-main">
+    {{/*SECTION ---------- header -----------*/}}
+    <header class="header-main">
+      <div class="branding btn-go-home"></div>
+      <search class="wrapper-search input-wrapper">
+        {{/* <form>*/}}
+          <input data-search type="text" class="searchbar" id="search" name="search" placeholder="Search" />
 
-            {{/*SECTION ---------- search results box ---------- */}}
-            <div id="search-results-page" class="card scrollable scroll-down hide">
-              {{ template "search-box"}}
-            </div>
-{{/*            </form>*/}}
-          </search>
-        <template data-result-channel-cards-template>
-          <div class="result-card link" data-dest="channel" data-channel-id="">
-            <span data-result-channel-avatar data-image-channel="" class="card-pic profile-pic" ></span>
-            <p data-result-channel-name></p>
+          {{/*SECTION ---------- search results box ---------- */}}
+          <div id="search-results-page" class="card scrollable scroll-down hide">
+            {{ template "search-box"}}
           </div>
-        </template>
-
-        <template data-result-user-cards-template>
-          <div class="result-card link" data-dest="user" data-post-id="">
-            <span data-result-user-avatar data-image-user="" class="card-pic profile-pic" ></span>
-            <p data-result-user-name></p>
-          </div>
-        </template>
-
-        <template data-result-post-cards-template>
-          <div class="result-card link result-post" data-dest="post" data-post-id="">
-            <p data-result-post-title class="p-bold"></p>
-            <small data-result-post-content ></small>
-          </div>
-        </template>
-        <div class="header-right flex-align-r">
-        {{ if ne .CurrentUser nil }}
-          <button popovertarget="form-post" class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
-            <span class="btn-posts">post</span>
-          </button>
-          <button class="btn-md btn-secondary btn-icotext btn-filled btn-filled-fancy btn-action-secondary btn-invert-onoff_offoff">
-            <span
-              class="btn-notifications"
-              role="contentinfo"
-              aria-description="Notifications, with a bell icon"
-              >notifications</span
-            >
-          </button>
-        {{ end }}
+          {{/*
+        </form>*/}}
+      </search>
+      <template data-result-channel-cards-template>
+        <div class="result-card link" data-dest="channel" data-channel-id="">
+          <span data-result-channel-avatar data-image-channel="" class="card-pic profile-pic"></span>
+          <p data-result-channel-name></p>
         </div>
-      </header>
-{{/*SECTION    ---------- login modal ----------*/}}
-      <div aria-modal="true" id="container-form-login" class="modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <div id="modal-header-logreg">sign in to codex</div>
-          </div>
-          <span class="close">&times;</span>
-            <div id="login-title" class="popover-title">
-            </div>
-          <div id="form-login" class="modal-body">
-            <form id="login-form">
-              <div class="input-wrapper form-field">
-                <input
-                  type="text"
-                  class="input-3d"
-                  id="loginFormUser"
-                  autocomplete="username"
-                  name="username"
-                  placeholder=" "
-                  autofocus
-                />
-                <label for="loginFormUser">username/email</label>
-              </div>
-              <div class="input-wrapper form-field">
-                <input
-                  type="password"
-                  class="input-3d"
-                  id="loginFormPassword"
-                  name="password"
-                  autocomplete="current-password"
-                  placeholder=" "
-                />
-                <label for="loginFormPassword">password</label>
-              </div>
-              <div class="cont-flex-column">
-                <div class="remember-forgot">
-                  <div class="allow-comments cursor-pointer">
-                    <input type="checkbox" id="login-remember-checkbox" name="privacy"/>
-                    <span class="allow-comments-fx"></span>
-                  </div>
-                  <label for="login-remember-checkbox">keep me logged in</label>
-                </div>
-                <div class="forgot">
-                  <button id="btn_forgot" class="reg-log link">forgot password?</button>
-                </div>
-              </div>
+      </template>
 
-              <button type="submit" id="login" class="btn-md btn-primary btn-action">
-                <span>sign in</span>
-              </button>
-            </form>
-            <div class="social-message">
-              <div class="line"></div>
-              <p class="message">sign in with social accounts</p>
-              <div class="line"></div>
-            </div>
-            <div class="social-icons">
-              <button aria-label="Log in with Google" class="icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 32 32"
-                  class="w-5 h-5 fill-current"
-                >
-                  <path
-                    d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"
-                  ></path>
-                </svg>
-              </button>
-              <button aria-label="Log in with X" class="icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 1200 1227"
-                  class="w-5 h-5 fill-current"
-                >
-                  <path
-                    d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
-                  ></path>
-                </svg>
-              </button>
-              <button aria-label="Log in with GitHub" class="icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 32 32"
-                  class="w-5 h-5 fill-current"
-                >
-                  <path
-                    d="M16 0.396c-8.839 0-16 7.167-16 16 0 7.073 4.584 13.068 10.937 15.183 0.803 0.151 1.093-0.344 1.093-0.772 0-0.38-0.009-1.385-0.015-2.719-4.453 0.964-5.391-2.151-5.391-2.151-0.729-1.844-1.781-2.339-1.781-2.339-1.448-0.989 0.115-0.968 0.115-0.968 1.604 0.109 2.448 1.645 2.448 1.645 1.427 2.448 3.744 1.74 4.661 1.328 0.14-1.031 0.557-1.74 1.011-2.135-3.552-0.401-7.287-1.776-7.287-7.907 0-1.751 0.62-3.177 1.645-4.297-0.177-0.401-0.719-2.031 0.141-4.235 0 0 1.339-0.427 4.4 1.641 1.281-0.355 2.641-0.532 4-0.541 1.36 0.009 2.719 0.187 4 0.541 3.043-2.068 4.381-1.641 4.381-1.641 0.859 2.204 0.317 3.833 0.161 4.235 1.015 1.12 1.635 2.547 1.635 4.297 0 6.145-3.74 7.5-7.296 7.891 0.556 0.479 1.077 1.464 1.077 2.959 0 2.14-0.020 3.864-0.020 4.385 0 0.416 0.28 0.916 1.104 0.755 6.4-2.093 10.979-8.093 10.979-15.156 0-8.833-7.161-16-16-16z"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-            <div class="reg-log">
-              <small class="signup">don't have an account?</small>
-              <button id="btn_register-1"
-  {{/*              class="button btn-filled btn-filled-orange btn-secondary btn-pill link"*/}}
-              >register</button>
-            </div>
-          </div>
-          <div id="form-register" class="display-off modal-body">
-          <div id="register-title" class="popover-title"></div>
-  {{/*SECTION    ---------- register form ----------*/}}
-          <form id="register-form" action="/register" method="POST">
-  {{/*          <div class="modal-header">*/}}
-  {{/*            <div>register for codex</div>*/}}
-  {{/*          </div>*/}}
-  {{/* ---------- username ---------- */}}
+      <template data-result-user-cards-template>
+        <div class="result-card link" data-dest="user" data-post-id="">
+          <span data-result-user-avatar data-image-user="" class="card-pic profile-pic"></span>
+          <p data-result-user-name></p>
+        </div>
+      </template>
+
+      <template data-result-post-cards-template>
+        <div class="result-card link result-post" data-dest="post" data-post-id="">
+          <p data-result-post-title class="p-bold"></p>
+          <small data-result-post-content></small>
+        </div>
+      </template>
+      <div class="header-right flex-align-r">
+        {{ if ne .CurrentUser nil }}
+        <button popovertarget="form-post"
+          class="btn-post btn-md btn-primary btn-icotext btn-action-primary btn-invert-onoff_onoff">
+          <span class="btn-posts">post</span>
+        </button>
+        <button
+          class="btn-md btn-secondary btn-icotext btn-filled btn-filled-fancy btn-action-secondary btn-invert-onoff_offoff">
+          <span class="btn-notifications" role="contentinfo"
+            aria-description="Notifications, with a bell icon">notifications</span>
+        </button>
+        {{ end }}
+      </div>
+    </header>
+
+    {{/*SECTION ---------- login modal ----------*/}}
+    <div aria-modal="true" id="container-form-login" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div id="modal-header-logreg">sign in to codex</div>
+        </div>
+        <span class="close">&times;</span>
+        <div id="login-title" class="popover-title">
+        </div>
+        <div id="form-login" class="modal-body">
+          <form id="login-form">
             <div class="input-wrapper form-field">
-              <input
-                type="text"
-                id="register_user"
-                class="input-3d"
-                name="register_user"
-                placeholder="username"
-                autocomplete=" "
-                pattern="\w{5,16}"
-                autofocus
-              />
+              <input type="text" class="input-3d" id="loginFormUser" autocomplete="username" name="username"
+                placeholder=" " autofocus />
+              <label for="loginFormUser">username/email</label>
+            </div>
+            <div class="input-wrapper form-field">
+              <input type="password" class="input-3d" id="loginFormPassword" name="password"
+                autocomplete="current-password" placeholder=" " />
+              <label for="loginFormPassword">password</label>
+            </div>
+            <div class="cont-flex-column">
+              <div class="remember-forgot">
+                <div class="allow-comments cursor-pointer">
+                  <input type="checkbox" id="login-remember-checkbox" name="privacy" />
+                  <span class="allow-comments-fx"></span>
+                </div>
+                <label for="login-remember-checkbox">keep me logged in</label>
+              </div>
+              <div class="forgot">
+                <button id="btn_forgot" class="reg-log link">forgot password?</button>
+              </div>
+            </div>
+            <button type="submit" id="login" class="btn-md btn-primary btn-action">
+              <span>sign in</span>
+            </button>
+          </form>
+          <div class="social-message">
+            <div class="line"></div>
+            <p class="message">sign in with social accounts</p>
+            <div class="line"></div>
+          </div>
+          <div class="social-icons">
+            <button aria-label="Log in with Google" class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-5 h-5 fill-current">
+                <path
+                  d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z">
+                </path>
+              </svg>
+            </button>
+            <button aria-label="Log in with X" class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" class="w-5 h-5 fill-current">
+                <path
+                  d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z">
+                </path>
+              </svg>
+            </button>
+            <button aria-label="Log in with GitHub" class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-5 h-5 fill-current">
+                <path
+                  d="M16 0.396c-8.839 0-16 7.167-16 16 0 7.073 4.584 13.068 10.937 15.183 0.803 0.151 1.093-0.344 1.093-0.772 0-0.38-0.009-1.385-0.015-2.719-4.453 0.964-5.391-2.151-5.391-2.151-0.729-1.844-1.781-2.339-1.781-2.339-1.448-0.989 0.115-0.968 0.115-0.968 1.604 0.109 2.448 1.645 2.448 1.645 1.427 2.448 3.744 1.74 4.661 1.328 0.14-1.031 0.557-1.74 1.011-2.135-3.552-0.401-7.287-1.776-7.287-7.907 0-1.751 0.62-3.177 1.645-4.297-0.177-0.401-0.719-2.031 0.141-4.235 0 0 1.339-0.427 4.4 1.641 1.281-0.355 2.641-0.532 4-0.541 1.36 0.009 2.719 0.187 4 0.541 3.043-2.068 4.381-1.641 4.381-1.641 0.859 2.204 0.317 3.833 0.161 4.235 1.015 1.12 1.635 2.547 1.635 4.297 0 6.145-3.74 7.5-7.296 7.891 0.556 0.479 1.077 1.464 1.077 2.959 0 2.14-0.020 3.864-0.020 4.385 0 0.416 0.28 0.916 1.104 0.755 6.4-2.093 10.979-8.093 10.979-15.156 0-8.833-7.161-16-16-16z">
+                </path>
+              </svg>
+            </button>
+          </div>
+          <div class="reg-log">
+            <small class="signup">don't have an account?</small>
+            <button id="btn_register-1" {{/* class="button btn-filled btn-filled-orange btn-secondary btn-pill link"
+              */}}>register</button>
+          </div>
+        </div>
+        <div id="form-register" class="display-off modal-body">
+          <div id="register-title" class="popover-title"></div>
+          {{/*SECTION ---------- register form ----------*/}}
+          <form id="register-form" action="/register" method="POST">
+            {{/* <div class="modal-header">*/}}
+              {{/* <div>register for codex</div>*/}}
+              {{/* </div>*/}}
+            {{/* ---------- username ---------- */}}
+            <div class="input-wrapper form-field">
+              <input type="text" id="register_user" class="input-3d" name="register_user" placeholder="username"
+                autocomplete=" " pattern="\w{5,16}" autofocus />
               <label for="register_user">username</label>
               <span class="validation-icon"></span>
               <span class="validation-tooltip"></span>
             </div>
-  {{/* ---------- email ---------- */}}
+            {{/* ---------- email ---------- */}}
             <div class="input-wrapper form-field">
-              <input
-                type="email"
-                id="register_email"
-                class="input-3d"
-                name="register_email"
-                placeholder=" "
-                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-              />
+              <input type="email" id="register_email" class="input-3d" name="register_email" placeholder=" "
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" />
               <label for="register_email">email address</label>
               <span class="validation-icon"></span>
               <span class="validation-tooltip"></span>
             </div>
-  {{/* ---------- password ---------- */}}
+            {{/* ---------- password ---------- */}}
             <div class="input-wrapper form-field">
-              <input
-                type="password"
-                id="register_password"
-                class="input-3d"
-                name="register_password"
-                autocomplete="new-password"
-                placeholder=" "
-  {{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
-              />
+              <input type="password" id="register_password" class="input-3d" name="register_password"
+                autocomplete="new-password" placeholder=" " {{/* pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" */}} />
               <label for="register_password">password</label>
               <span class="validation-icon"></span>
               <ul class="validation-list ul-forwards">
@@ -274,236 +223,224 @@
                 <li id="li-valid-8">8 or more characters</li>
               </ul>
             </div>
-  {{/* ---------- repeat password ---------- */}}
+            {{/* ---------- repeat password ---------- */}}
             <div class="input-wrapper form-field">
-              <input
-                type="password"
-                id="register_password-rpt"
-                class="input-3d"
-                name="register_password-rpt"
-                autocomplete="new-password"
-                placeholder=" "
-  {{/*              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"*/}}
-              />
+              <input type="password" id="register_password-rpt" class="input-3d" name="register_password-rpt"
+                autocomplete="new-password" placeholder=" " {{/* pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" */}} />
               <label for="register_password-rpt">repeat password</label>
               <span class="validation-icon"></span>
               <span class="validation-tooltip"></span>
-              </div>
-              <button id="register" class="btn-md btn-primary btn-action btn-register-submit" type="submit">
-                <span>register</span>
-              </button>
-            </form>
-            <div class="reg-log">
-              <small class="signup">already registered?</small>
-              <button id="btn_login-1"
-  {{/*                    class="button btn-filled btn-filled-orange btn-secondary btn-pill link"*/}}
-              >sign in</button>
             </div>
-            </div>
-            <div id="form-forgot" class="display-off modal-body">
-              <form id="resetForm">
-                <p class="form-title">enter your username or email address to reset your password</p>
-                <div class="input-wrapper form-field">
-                  <input
-                    type="text"
-                    class="input-3d"
-                    id="forgot_pass"
-                    name="forgot_pass"
-                    placeholder=" "
-                  />
-                  <label for="forgot_pass">username/email</label>
-                </div>
-                <button class="btn-md btn-primary btn-action" type="submit">
-                  <span>reset</span>
-                </button>
-                <div class="cont-flex-column">
-                  <small class="signup">not what you're looking for?</small>
-                  <div class="flex-align-c">
-                    <button type="button"
-                            id="btn_login-2"
-                            {{/*                  class="button btn-filled btn-filled-orange btn-secondary btn-pill link"*/}}
-                    >sign in</button>
-                    <button type="button" id="btn_register-2"
-                            {{/*                        class="button btn-filled btn-filled-white_orange btn-secondary btn-pill link"*/}}
-                    >register</button>
-                  </div>
-                </div>
-              </form>
-            </div>
+            <button id="register" class="btn-md btn-primary btn-action btn-register-submit" type="submit">
+              <span>register</span>
+            </button>
+          </form>
+          <div class="reg-log">
+            <small class="signup">already registered?</small>
+            <button id="btn_login-1" {{/* class="button btn-filled btn-filled-orange btn-secondary btn-pill link"
+              */}}>sign in</button>
           </div>
         </div>
-{{/*SECTION     ---------- post form ---------- */}}
-      {{ template "post-popover" . }}
-{{/*SECTION    ---------- create channel popover ---------- */}}
-      <div popover id="form-channel">
-    <div class="modal-header">
-      <div id="modal-header-post">create a channel</div>
+        <div id="form-forgot" class="display-off modal-body">
+          <form id="resetForm">
+            <p class="form-title">enter your username or email address to reset your password</p>
+            <div class="input-wrapper form-field">
+              <input type="text" class="input-3d" id="forgot_pass" name="forgot_pass" placeholder=" " />
+              <label for="forgot_pass">username/email</label>
+            </div>
+            <button class="btn-md btn-primary btn-action" type="submit">
+              <span>reset</span>
+            </button>
+            <div class="cont-flex-column">
+              <small class="signup">not what you're looking for?</small>
+              <div class="flex-align-c">
+                <button type="button" id="btn_login-2" {{/*
+                  class="button btn-filled btn-filled-orange btn-secondary btn-pill link" */}}>sign in</button>
+                <button type="button" id="btn_register-2" {{/*
+                  class="button btn-filled btn-filled-white_orange btn-secondary btn-pill link" */}}>register</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  <div id="channel-popover-title" class="popover-title">
-  </div>
-        <form class="wrapper-form" enctype="multipart/form-data" action="/channels/create" method="POST">
-          <div class="input-wrapper form-field">
-            <input type="text" id="channel-name" name="name" autocomplete="channel" placeholder=" " autofocus>
-            <label for="channel-name">channel name</label>
+
+    {{/*SECTION ---------- post form ---------- */}}
+    {{ template "post-popover" . }}
+
+    {{/*SECTION ---------- create channel popover ---------- */}}
+    <div popover id="form-channel">
+      <div class="modal-header">
+        <div id="modal-header-post">create a channel</div>
+      </div>
+      <div id="channel-popover-title" class="popover-title">
+      </div>
+      <form class="wrapper-form" enctype="multipart/form-data" action="/channels/create" method="POST">
+        <div class="input-wrapper form-field">
+          <input type="text" id="channel-name" name="name" autocomplete="channel" placeholder=" " autofocus>
+          <label for="channel-name">channel name</label>
+        </div>
+        {{/*FIXME ---------- fix resize issue ---------- */}}
+        <div class="input-wrapper form-field">
+          <textarea id="channel-desc" name="description" placeholder=" "></textarea>
+          <label for="channel-desc">description</label>
+        </div>
+        <p>upload an avatar (optional)</p>
+        <div id="drop-zone--channel">
+          <div id="uploaded-file--channel"></div>
+          <div class="drag-drop-text-wrapper">
+            <span class="dragText">drag and drop your file, or</span>
+            {{/* <span class="button">browse</span> */}}
+            <input type="file" id="browse--channel" name="file-drop" />
           </div>
-  {{/*FIXME ---------- fix resize issue ---------- */}}
-          <div class="input-wrapper form-field">
-            <textarea id="channel-desc" name="description" placeholder=" "></textarea>
-            <label for="channel-desc">description</label>
+        </div>
+        <div class="cont-flex-row flex-center">
+          <label class="allow-comments">
+            <input type="checkbox" id="channel-privacy-checkbox" name="privacy" />
+            <span class="allow-comments-fx"></span>
+            {{/* <span class="darklight-border"></span>*/}}
+          </label>
+          <label for="channel-privacy-checkbox"
+            style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Private</label>
+        </div>
+        {{/*FIXME ---------- fix these buttons ---------- */}}
+        <div class="cont-flex-row flex-center">
+          <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
+            <span>create</span>
+          </button>
+          <button id="cancel-channel" type="button"
+            class="button btn-md btn-secondary btn-action btn-filled">cancel</button>
+        </div>
+      </form>
+    </div>
+
+    {{/*SECTION ---------- edit channel rules popover ---------- */}}
+    <div popover id="form-edit-channel-rules">
+      <form id="popover-form-edit-channel-rules" action="/channels/add-rules/{{.ThisChannel.ID}}" class="wrapper-form"
+        method="POST">
+        <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .ThisChannel.Name }}</h5>
+        <span id="edit-channel-rules-title-rules-existing">current rules</span>
+        <div id="rules-wrapper-existing" class="cont-flex-column">
+          {{ range .ThisChannelRules }}
+          <span id="existing-channel-rule-{{ .ID }}">{{ .Rule}}</span>
+          {{ end }}
+        </div>
+        <div id="wrapper-edit-channel-rules-added">
+          <span id="edit-channel-rules-title-rules-added">rules to be added</span>
+          <ol id="rules-wrapper-added" class="cont-flex-column"></ol>
+        </div>
+        <div id="wrapper-edit-channel-rules-removed">
+          <span id="edit-channel-rules-title-rules-removed">rules to be removed</span>
+          <ol id="rules-wrapper-removed" class="cont-flex-column"></ol>
+        </div>
+        <div class="flex-space-between">
+          <input type="text" id="create-unsubmitted-rule" name="create-rule" placeholder="create new rule" />
+          <button type="button" id="add-unsubmitted-rule" class="btn-channel btn-sm btn-icoonly">
+            <span class="btn-add" role="contentinfo" aria-description="Add Rule"></span>
+          </button>
+          <label for="create-unsubmitted-rule"></label>
+        </div>
+        <input type="hidden" name="rules" id="rules-hidden-input" />
+        <div class="cont-flex-row flex-center">
+          <button id="edit-channel-rules-btn" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
+            <span>submit</span>
+          </button>
+          <button id="cancel-channel-rules" type="button"
+            class="button btn-md btn-secondary btn-action btn-filled">cancel</button>
+        </div>
+      </form>
+    </div>
+
+    {{/*SECTION ---------- sidebar ---------- */}}
+    <aside class="sidebar">
+      {{ if ne .CurrentUser nil }}{{ $user := .CurrentUser }}
+      <div class="sidebarProfile link" data-user-id="{{$user.ID}}" data-dest="user">
+        {{ if (startsWith $user.Avatar "noimage") }}
+        <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username }}"></div>
+        {{ else }}
+        <div class="sidebar-pic profile-pic" data-image-user="{{ $.ImagePaths.User }}{{ $user.Avatar }}"></div>
+        {{ end }}
+        <div>
+          <h3 data-current-user-ID="{{$user.ID}}">{{ $user.Username }}</h3>
+          <div>
+            <button class="btn-lg btn-icotext btn-follows btn-invert-never">
+              <span class="btn-following">{{$user.Following}}</span>
+            </button>
+            <button class="btn-lg btn-icotext btn-follows btn-invert-never">
+              <span class="btn-followers">{{$user.Followers}}</span>
+            </button>
           </div>
-          <p>upload an avatar (optional)</p>
-          <div id="drop-zone--channel">
-            <div id="uploaded-file--channel"></div>
-            <div class="drag-drop-text-wrapper">
-              <span class="dragText">drag and drop your file, or</span>
-  {{/*              <span class="button">browse</span> */}}
-              <input type="file" id="browse--channel" name="file-drop" />
-            </div>
-          </div>
-          <div class="cont-flex-row flex-center">
-            <label class="allow-comments">
-              <input type="checkbox" id="channel-privacy-checkbox" name="privacy"/>
-              <span class="allow-comments-fx"></span>
-  {{/*              <span class="darklight-border"></span>*/}}
+        </div>
+      </div>
+      {{ end }}
+      <div class="sidebar-scroll scroll-down">
+        {{ if ne .CurrentUser nil }}
+        <hr class="solid" />
+        {{ end }}
+        <div class="sidebar-block sidebar-dashboard">
+          <small class="padded">Dashboard</small>
+          <div data-dest="home" class="sidebar-option home btn-go-home">Home</div>
+          <div class="sidebar-option flex-space-between darkMode" id="sidebar-option-darkmode">
+            <div>Colour Scheme</div>
+            <label for="darkmode-checkbox" class="darklight">
+              <input type="checkbox" id="darkmode-checkbox" />
+              <span class="darklight-fx"></span>
+              {{/* <span class="darklight-border"></span> */}}
             </label>
-            <label for="channel-privacy-checkbox" style="cursor: url('/assets/cursors/pointer.svg'), pointer;">Private</label>
           </div>
-  {{/*FIXME ---------- fix these buttons ---------- */}}
-          <div class="cont-flex-row flex-center">
-            <button class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
-              <span>create</span>
-            </button>
-          <button id="cancel-channel" type="button" class="button btn-md btn-secondary btn-action btn-filled">cancel</button>
-          </div>
-        </form>
-      </div>
-{{/*SECTION ---------- edit channel rules popover ---------- */}}
-      <div popover id="form-edit-channel-rules">
-        <form id="popover-form-edit-channel-rules" action="/channels/add-rules/{{.ThisChannel.ID}}" class="wrapper-form" method="POST">
-          <h5 id="edit-channel-rules-title" class="form-title">edit rules for /{{ .ThisChannel.Name }}</h5>
-          <span id="edit-channel-rules-title-rules-existing">current rules</span>
-          <div id="rules-wrapper-existing" class="cont-flex-column">
-            {{ range .ThisChannelRules }}
-              <span id="existing-channel-rule-{{ .ID }}">{{ .Rule}}</span>
-            {{ end }}
-          </div>
-          <div id="wrapper-edit-channel-rules-added">
-            <span id="edit-channel-rules-title-rules-added">rules to be added</span>
-            <ol id="rules-wrapper-added" class="cont-flex-column"></ol>
-          </div>
-          <div id="wrapper-edit-channel-rules-removed">
-            <span id="edit-channel-rules-title-rules-removed">rules to be removed</span>
-            <ol id="rules-wrapper-removed" class="cont-flex-column"></ol>
-          </div>
-          <div class="flex-space-between">
-            <input type="text" id="create-unsubmitted-rule" name="create-rule" placeholder="create new rule" />
-            <button type="button" id="add-unsubmitted-rule" class="btn-channel btn-sm btn-icoonly">
-              <span class="btn-add" role="contentinfo" aria-description="Add Rule"></span>
-            </button>
-            <label for="create-unsubmitted-rule"></label>
-          </div>
-          <input type="hidden" name="rules" id="rules-hidden-input" />
-          <div class="cont-flex-row flex-center">
-            <button id="edit-channel-rules-btn" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff">
-              <span>submit</span>
-            </button>
-          <button id="cancel-channel-rules" type="button" class="button btn-md btn-secondary btn-action btn-filled">cancel</button>
-          </div>
-        </form>
-      </div>
-      <div class="main-content">
-  {{/*SECTION     ---------- sidebar ---------- */}}
-        <aside class="sidebar">
-          {{ if ne .CurrentUser nil }}{{ $user := .CurrentUser }}
-          <div class="sidebarProfile link"
-               data-user-id="{{$user.ID}}"
-               data-dest="user"          >
-            {{ if (startsWith $user.Avatar "noimage") }}
-              <div class="sidebar-pic profile-pic--empty" data-name-user-sidebar="{{ $user.Username }}"></div>
-            {{ else }}
-              <div class="sidebar-pic profile-pic" data-image-user="{{ $.ImagePaths.User }}{{ $user.Avatar }}"></div>
-            {{ end }}
-            <div>
-              <h3 data-current-user-ID="{{$user.ID}}">{{ $user.Username }}</h3>
-              <div>
-                <button class="btn-lg btn-icotext btn-follows btn-invert-never">
-                  <span class="btn-following">{{$user.Following}}</span>
-                </button>
-                <button class="btn-lg btn-icotext btn-follows btn-invert-never">
-                  <span class="btn-followers">{{$user.Followers}}</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          {{ end }}
-          <div class="sidebar-scroll scroll-down">
-            {{ if ne .CurrentUser nil }}
-            <hr class="solid" />
-            {{ end }}
-            <div class="sidebar-block sidebar-dashboard">
-              <small class="padded">Dashboard</small>
-              <div data-dest="home" class="sidebar-option home btn-go-home">Home</div>
-              <div
-                class="sidebar-option flex-space-between darkMode"
-                id="sidebar-option-darkmode"
-              >
-              <div>Colour Scheme</div>
-              <label for="darkmode-checkbox" class="darklight">
-                <input type="checkbox" id="darkmode-checkbox" />
-                <span class="darklight-fx"></span>
-  {{/*                <span class="darklight-border"></span> */}}
-              </label>
-              </div>
-              <div class="sidebar-option settings" id="sidebar-options">Settings</div>
-            {{ if ne .CurrentUser nil }}
-              <form action="/logout" method="POST">
-                <div id="logout" class="sidebar-option logout">Log Out</div>
-              </form>
-              {{ else }}
-              <div id="btn-open-login-modal" class="sidebar-option login">Log In</div>
-              {{ end }}
-              <div id="btn-open-login-modal-fallback" class="sidebar-option login" style="display: none">Log In fallback</div>
-            </div>
-            <hr class="solid" />
-  {{/*SECTION ---------- sidebar channels ---------- */}}
-            {{ if ne .CurrentUser nil }}
-            <div class="sidebar-block sidebar-channels">
-              <div class="flex-space-between" style="margin-bottom: -0.8rem;">
-                <small class="padded">Your Channels</small>
-                <button popovertarget="form-channel" class="btn-channel btn-sm btn-icoonly">
-                  <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
-                </button>
-              </div>
-              <div id="sidebar-channel-block">
-                {{ range .OwnedAndJoinedChannels }}
-                  {{template "channel-card-mini" (dict "dot" $ "Tracer" $tracer "Instance" "sidebar" "Channel" . )}}
-                {{ end }} <!-- end range of channels here-->
-              </div>
-            </div>
-            {{end}} <!-- "nouser" check -->
-          </div>
-        </aside>
-        <main>
-          {{/* SECTION ---------- home page ---------- */}}
-          {{ if eq .ErrorPage true}}
-            <div id="home-page" class="feeds-wrapper active-feed error-400">
-              {{ template "not-found" (dict "Message" "We were unable to find that page" ) }}
-            </div>
+          <div class="sidebar-option settings" id="sidebar-options">Settings</div>
+          {{ if ne .CurrentUser nil }}
+          <form action="/logout" method="POST">
+            <div id="logout" class="sidebar-option logout">Log Out</div>
+          </form>
           {{ else }}
-            <div id="home-page" class="active-feed">
-            </div>
+          <div id="btn-open-login-modal" class="sidebar-option login">Log In</div>
           {{ end }}
-          {{/* SECTION ---------- post page ---------- */}}
-          <div id="post-page" class="feeds-wrapper">
+          <div id="btn-open-login-modal-fallback" class="sidebar-option login" style="display: none">Log In fallback
           </div>
-          {{/* SECTION ---------- user page ---------- */}}
-          <div id="user-page" class="feeds-wrapper">
+        </div>
+        <hr class="solid" />
+        {{/*SECTION ---------- sidebar channels ---------- */}}
+        {{ if ne .CurrentUser nil }}
+        <div class="sidebar-block sidebar-channels">
+          <div class="flex-space-between" style="margin-bottom: -0.8rem;">
+            <small class="padded">Your Channels</small>
+            <button popovertarget="form-channel" class="btn-channel btn-sm btn-icoonly">
+              <span class="btn-add" role="contentinfo" aria-description="Add Channel"></span>
+            </button>
           </div>
-          {{/* SECTION -------- channel page --------- */}}
-          <div id="channel-page" class="feeds-wrapper">
+          <div id="sidebar-channel-block">
+            {{ range .OwnedAndJoinedChannels }}
+            {{template "channel-card-mini" (dict "dot" $ "Tracer" $tracer "Instance" "sidebar" "Channel" . )}}
+            {{ end }} <!-- end range of channels here-->
           </div>
-        </main>
+        </div>
+        {{end}} <!-- "nouser" check -->
+      </div>
+    </aside>
+
+    <main class="main-content">
+      {{/* SECTION ---------- home page ---------- */}}
+      {{ if eq .ErrorPage true}}
+      <div id="home-page" class="feeds-wrapper active-feed error-400">
+        {{ template "not-found" (dict "Message" "We were unable to find that page" ) }}
+      </div>
+      {{ else }}
+      <div id="home-page" class="active-feed">
+      </div>
+      {{ end }}
+      {{/* SECTION ---------- post page ---------- */}}
+      <div id="post-page" class="feeds-wrapper">
+      </div>
+      {{/* SECTION ---------- user page ---------- */}}
+      <div id="user-page" class="feeds-wrapper">
+      </div>
+      {{/* SECTION -------- channel page --------- */}}
+      <div id="channel-page" class="feeds-wrapper">
       </div>
     </main>
-  </body>
+
+  </div>
+</body>
+
 </html>

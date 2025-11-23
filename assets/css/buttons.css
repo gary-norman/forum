@@ -8,40 +8,47 @@
   --cursor-info: url("/assets/cursors/info.svg"), help;
   --cursor-notallowed: url("/assets/cursors/not-allowed.svg"), not-allowed;
 }
+
 /* SECTION -------- cursors --------*/
-body {
-}
 .cursor-text {
   cursor: url("/assets/cursors/text.svg"), text;
 }
+
 .cursor-minus {
   cursor: url("/assets/cursors/minus.svg"), auto;
 }
+
 .cursor-plus {
   cursor: url("/assets/cursors/plus.svg"), cell;
 }
+
 .cursor-pointer {
   cursor: url("/assets/cursors/pointer.svg"), pointer;
 }
+
 .cursor-info {
   cursor: url("/assets/cursors/info.svg"), help;
 }
+
 /* SECTION -------- buttons --------*/
 button,
 .button {
   cursor: var(--cursor-pointer);
+
   & span,
   & img {
     /*z-index: calc(var(--z-index-button) + 10);*/
     pointer-events: none;
   }
 }
+
 .btn-pill {
   display: flex;
   border-radius: var(--btn-radius);
   height: fit-content;
   padding: 0.6rem;
 }
+
 .btn-sm {
   display: flex;
   border-radius: var(--btn-radius);
@@ -49,7 +56,8 @@ button,
   font-size: 1.2rem;
   height: 3.2rem;
   gap: 0.4rem;
-  &.btn-icoonly > span {
+
+  &.btn-icoonly>span {
     height: 1.6rem;
     width: 1.6rem;
     background-size: 1.6rem;
@@ -57,11 +65,13 @@ button,
     text-align: center;
     justify-content: center;
   }
-  &.btn-icotext > span {
-    padding: 0 0 0 2rem;
+
+  &.btn-icotext>span {
+    padding-inline-start: 2rem;
   }
-  &.btn-icotext.ico-right > span {
-    padding: 0 2rem 0 0;
+
+  &.btn-icotext.ico-right>span {
+    padding-inline-end: 2rem;
   }
 }
 
@@ -73,7 +83,15 @@ button,
   height: 3.6rem;
   gap: 0.8rem;
 
-  &.btn-icoonly > span {
+  @media (max-width: 39rem) {
+    padding: 0.4rem 0.8rem;
+    font-size: 1rem;
+    height: 3.2rem;
+    gap: 0.4rem;
+  }
+
+
+  &.btn-icoonly>span {
     height: 2.4rem;
     width: 2.4rem;
     background-size: 2.4rem;
@@ -81,11 +99,13 @@ button,
     text-align: center;
     justify-content: center;
   }
-  &.btn-icotext > span {
-    padding: 0 0 0 2rem;
+
+  &.btn-icotext>span {
+    padding-inline-start: 2rem;
   }
-  &.btn-icotext.ico-right > span {
-    padding: 0 2rem 0 0;
+
+  &.btn-icotext.ico-right>span {
+    padding-inline-end: 2rem;
   }
 }
 
@@ -96,7 +116,8 @@ button,
   font-size: 1.6rem;
   gap: 1.2rem;
   height: 4rem;
-  &.btn-icoonly > span {
+
+  &.btn-icoonly>span {
     height: 3.2rem;
     width: 3.2rem;
     background-size: 3.2rem;
@@ -104,10 +125,12 @@ button,
     text-align: center;
     justify-content: center;
   }
-  &.btn-icotext > span {
+
+  &.btn-icotext>span {
     padding: 0 0 0 2.4rem;
   }
-  &.btn-icotext.ico-right > span {
+
+  &.btn-icotext.ico-right>span {
     padding: 0 2.4rem 0 0;
   }
 }
@@ -118,6 +141,7 @@ button,
   border: 0.15rem solid transparent;
   color: var(--clr-light--1);
   transition: all var(--transition-dur-hover);
+
   & span {
     color: var(--clr-dark--1);
     /*&::before {*/
@@ -127,6 +151,7 @@ button,
     /*}*/
     transition: all var(--transition-dur-hover) ease-in-out;
   }
+
   &:hover {
     & span {
       /*filter: invert(0);*/
@@ -136,9 +161,11 @@ button,
     }
   }
 }
+
 .btn-register-submit {
   margin: 0.8rem 0 0 0;
 }
+
 .btn-follows {
   & span {
     &::before {
@@ -158,9 +185,11 @@ button,
     text-align: center;
     align-self: center;
   }
+
   &:hover {
     background-color: var(--clr-bg-1);
   }
+
   &:active {
     background-color: var(--clr-bg-3);
   }
@@ -172,10 +201,12 @@ button,
   align-items: center;
   justify-content: center;
   width: max-content;
+
   & span {
     align-content: center;
     text-align: right;
     width: fit-content;
+
     /*z-index: calc(var(--z-index-button) + 1);*/
     &::before {
       filter: var(--filter-invert-on_off);
@@ -188,9 +219,11 @@ button,
       height: 100%;
     }
   }
+
   &.ico-right {
     & span {
       text-align: left;
+
       &::before {
         background-position: right !important;
         left: -1.2rem !important;
@@ -198,6 +231,7 @@ button,
     }
   }
 }
+
 /* --- button icon span classes --- */
 /*TODO embed SVGs*/
 /*url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' style='pointer-events:none;display:block;width:100%25;height:100%25;fill:%23757575'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61.0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E") no-repeat 4px center/20px 20px;*/
@@ -206,16 +240,19 @@ button,
     background: url("/assets/icons/following_24.svg") no-repeat center;
   }
 }
+
 .btn-followers {
   &::before {
     background: url("/assets/icons/followers_24.svg") no-repeat center;
   }
 }
+
 .btn-follow {
   &::before {
     background: url("/assets/icons/arrow-right-white_24.svg") no-repeat center;
   }
 }
+
 .btn-posts {
   &::before {
     background: url("/assets/icons/post_16.svg") no-repeat center;
@@ -233,64 +270,76 @@ button,
     background: url("/assets/icons/notification_16.svg") no-repeat center;
   }
 }
+
 .btn-filters {
   &::before {
     left: 2rem;
     background: url("/assets/icons/arrow-down_16.svg") no-repeat center;
   }
 }
+
 .btn-active-filter {
   &::before {
     left: 2rem;
     background: url("/assets/icons/success_16.svg") no-repeat center;
   }
 }
+
 .btn-sort {
   &::before {
     background: url("/assets/icons/sort_16.svg") no-repeat center;
   }
 }
+
 .btn-likes {
   &::before {
     background: url("/assets/icons/likes_16.svg") no-repeat center;
   }
 }
+
 .btn-dislikes {
   &::before {
     background: url("/assets/icons/dislikes_16.svg") no-repeat center;
   }
 }
+
 .btn-share {
   &::before {
     background: url("/assets/icons/share_16.svg") no-repeat center;
   }
 }
+
 .btn-heart-full {
   &::before {
     background: url("/assets/icons/heart-full_24.svg") no-repeat center;
   }
 }
+
 .btn-heart-empty {
   &::before {
     background: url("/assets/icons/heart-empty_24.svg") no-repeat center;
   }
 }
+
 .btn-clock {
   &::before {
     background: url("/assets/icons/clock_16.svg") no-repeat center;
   }
 }
+
 .btn-reply {
   &::before {
     background: url("/assets/icons/reply_16.svg") no-repeat center;
   }
 }
-.btn-md > .btn-edit {
+
+.btn-md>.btn-edit {
   &::before {
     background: url("/assets/icons/edit_16.svg") no-repeat center;
   }
 }
-.btn-sm > .btn-edit {
+
+.btn-sm>.btn-edit {
   transition: all var(--transition-dur-hover) ease-in-out;
   background: url("/assets/icons/edit_16.svg") no-repeat center;
   width: 1.6rem;
@@ -301,36 +350,43 @@ button,
     background: url("/assets/icons/reply_comment_16.svg") no-repeat center;
   }
 }
+
 .btn-report {
   &::before {
     background: url("/assets/icons/report_16.svg") no-repeat center;
   }
 }
+
 .btn-comment {
   &::before {
     background: url("/assets/icons/comment_16.svg") no-repeat center;
   }
 }
+
 .btn-mute {
   &::before {
     background: url("/assets/icons/mute_16.svg") no-repeat center;
   }
 }
+
 .btn-ban {
   &::before {
     background: url("/assets/icons/ban_16.svg") no-repeat center;
   }
 }
+
 .btn-submit {
   &::before {
     background: url("/assets/icons/send_16.svg") no-repeat center;
   }
 }
+
 .btn-channel-users {
   &::before {
     background: url("/assets/icons/users_16.svg") no-repeat center;
   }
 }
+
 /* FIXME span css conflicts with .btn-icotext & span &::before */
 .btn-channel-green-dot {
   &::before {
@@ -347,14 +403,17 @@ button,
 .btn-activity {
   border: 0.15rem solid transparent;
   transition: border var(--transition-dur-hover);
+
   &:hover {
     border: 0.15rem solid var(--clr-secondary--border-hover);
   }
 }
+
 .btn-active {
   border: 0.15rem solid var(--clr-secondary--active);
   pointer-events: none;
 }
+
 .btn-icoonly {
   display: flex;
   align-items: center;
@@ -362,9 +421,11 @@ button,
   width: fit-content;
   min-width: 3.6rem;
   padding: 1.2rem 0.4rem;
+
   & img {
     filter: var(--filter-invert-on_off);
   }
+
   &:has(.btn-settings),
   &:has(.btn-save-active),
   &:has(.btn-save-empty),
@@ -373,6 +434,7 @@ button,
   &:has(.btn-success) {
     padding: 0;
   }
+
   &:has(.btn-warning),
   &:has(.btn-success) {
     cursor: default;
@@ -393,6 +455,7 @@ button,
   transition: all var(--transition-dur-hover) ease-in-out;
   background: url("/assets/icons/add_circle_16.svg") no-repeat center;
 }
+
 .btn-minus {
   transition: all var(--transition-dur-hover) ease-in-out;
   background: url("/assets/icons/minus_circle_16.svg") no-repeat center;
@@ -418,18 +481,22 @@ button,
   transition: all var(--transition-dur-hover) ease-in-out;
   background: url("/assets/icons/warning_16.svg") no-repeat center;
 }
+
 .btn-save {
-  &:hover > span {
+  &:hover>span {
     background: url("/assets/icons/heart-full_24.svg") no-repeat center;
     background-size: 1.6rem;
   }
 }
+
 .btn-save-empty {
   background: url("/assets/icons/heart-empty_24.svg") no-repeat center;
 }
+
 .btn-save-active {
   background: url("/assets/icons/heart-full_24.svg") no-repeat center;
 }
+
 .btn-settings {
   background: url("/assets/icons/settings_24.svg") no-repeat center;
   justify-self: flex-end;
@@ -442,6 +509,7 @@ button,
   /* transition: border 300ms cubic-bezier(1, 0.02, 1, -0.27); */
   border: 0.15rem solid var(--clr-bg-4);
 }
+
 .btn-filled {
   &:hover {
     /* background: var(--clr-secondary--hover); */
@@ -452,27 +520,29 @@ button,
     color: var(--clr-fg-1);
   }
 }
+
 .btn-filled-fancy {
   &:hover {
     animation: btn-fill var(--transition-dur-hover) 1 forwards;
   }
 }
+
 .btn-filled-firebrick {
   background: firebrick;
   border: 0.15rem solid lab(from firebrick calc(l - 20) calc(a - 0) calc(b - 0));
 }
+
 .btn-filled-orange {
   background: var(--clr-accent-orange);
-  border: 0.15rem solid
-    lab(from var(--clr-accent-orange) calc(l - 20) calc(a - 0) calc(b - 0));
+  border: 0.15rem solid lab(from var(--clr-accent-orange) calc(l - 20) calc(a - 0) calc(b - 0));
 }
+
 .btn-filled-white_orange {
   background: var(--clr-fg-1);
   border: 0.15rem solid var(--clr-accent-orange);
-  color: lab(
-    from var(--clr-accent-orange) calc(l - 20) calc(a - 0) calc(b - 0)
-  );
+  color: lab(from var(--clr-accent-orange) calc(l - 20) calc(a - 0) calc(b - 0));
 }
+
 .btn-action {
   position: relative;
 
@@ -481,13 +551,16 @@ button,
   }
 
   &.inactive {
+
     /* pointer-events: none; */
     &:hover {
       border: 0.15rem solid var(--clr-bg-4);
     }
   }
+
   &.active {
     border: 0.15rem solid var(--color-secondary-active);
+
     &.selected {
       border: 0.15rem solid var(--color-hl-green);
     }
@@ -495,6 +568,7 @@ button,
 
   &.selected {
     border: 0.15rem solid var(--color-hl-green);
+
     &:hover {
       border: 0.15rem solid var(--color-secondary-hover);
     }
@@ -502,6 +576,7 @@ button,
 
   &.nouser {
     cursor: var(--cursor-notallowed);
+
     &:hover {
       border: 0.15rem solid var(--clr-bg-4);
     }
@@ -554,6 +629,7 @@ button,
   & span {
     z-index: calc(var(--z-index-btn-action) + 20);
   }
+
   &:hover::before {
     content: "";
     position: absolute;
@@ -572,6 +648,7 @@ button,
     mask-composite: exclude;
     z-index: calc(var(--z-index-btn-action) + 10);
   }
+
   &:hover::after {
     content: "";
     position: absolute;
@@ -584,53 +661,53 @@ button,
     height: var(--beam-linear-h);
     /* border: 1px solid rgba(1 1 1 / 0.2); */
     border-radius: var(--btn-radius);
-    animation: linear-fill-button var(--transition-dur-hover) ease-in 0.1s 1
-      forwards;
+    animation: linear-fill-button var(--transition-dur-hover) ease-in 0.1s 1 forwards;
     z-index: calc(var(--z-index-btn-action) - 10);
   }
 }
+
 .btn-action-primary {
   --background-fill: var(--clr-accent--1);
 
   &:hover::before {
     padding: 0.2rem;
-    background: conic-gradient(
-      from var(--grad-from),
-      transparent var(--beam-1-end),
-      var(--clr-accent--2) var(--beam-1-end),
-      var(--clr-accent--2) var(--beam-1-start),
-      transparent var(--beam-1-start),
-      transparent var(--beam-2-end),
-      var(--clr-accent--2) var(--beam-2-end),
-      var(--clr-accent--2) var(--beam-2-start),
-      transparent var(--beam-2-start)
-    );
+    background: conic-gradient(from var(--grad-from),
+        transparent var(--beam-1-end),
+        var(--clr-accent--2) var(--beam-1-end),
+        var(--clr-accent--2) var(--beam-1-start),
+        transparent var(--beam-1-start),
+        transparent var(--beam-2-end),
+        var(--clr-accent--2) var(--beam-2-end),
+        var(--clr-accent--2) var(--beam-2-start),
+        transparent var(--beam-2-start));
   }
+
   &:hover::after {
     background: var(--clr-accent--2);
   }
 }
+
 .btn-action-secondary {
   --background-fill: var(--clr-fg-2);
 
   &:hover::before {
     padding: 0.2rem;
-    background: conic-gradient(
-      from var(--grad-from),
-      transparent var(--beam-1-end),
-      var(--clr-secondary--hover) var(--beam-1-end),
-      var(--clr-secondary--hover) var(--beam-1-start),
-      transparent var(--beam-1-start),
-      transparent var(--beam-2-end),
-      var(--clr-secondary--hover) var(--beam-2-end),
-      var(--clr-secondary--hover) var(--beam-2-start),
-      transparent var(--beam-2-start)
-    );
+    background: conic-gradient(from var(--grad-from),
+        transparent var(--beam-1-end),
+        var(--clr-secondary--hover) var(--beam-1-end),
+        var(--clr-secondary--hover) var(--beam-1-start),
+        transparent var(--beam-1-start),
+        transparent var(--beam-2-end),
+        var(--clr-secondary--hover) var(--beam-2-end),
+        var(--clr-secondary--hover) var(--beam-2-start),
+        transparent var(--beam-2-start));
   }
+
   &:hover::after {
     /* background: var(--clr-secondary--hover); */
   }
 }
+
 /* INFO the invert buttons determine whether the color of the background image is inverted in normal/hover and dark/light.
     The syntax is btn-invert-light_dark.
     Always-on & always-off speak for themselves.
@@ -641,31 +718,37 @@ button,
   & img {
     filter: var(--filter-invert-always_off);
   }
+
   & span {
     &::before {
       filter: var(--filter-invert-always_off);
     }
   }
 }
+
 .btn-invert-always {
   & img {
     filter: var(--filter-invert-always_on);
   }
+
   & span {
     &::before {
       filter: var(--filter-invert-always_on);
     }
   }
 }
+
 .btn-invert-off_on {
   & img {
     filter: var(--filter-invert-off_on);
   }
+
   & span {
     &::before {
       filter: var(--filter-invert-off_on);
     }
   }
+
   &:hover span,
   &:hover img {
     &::before {
@@ -673,15 +756,18 @@ button,
     }
   }
 }
+
 .btn-invert-on_off {
   & img {
     filter: var(--filter-invert-on_off);
   }
+
   & span {
     &::before {
       filter: var(--filter-invert-on_off);
     }
   }
+
   &:hover span,
   &:hover img {
     &::before {
@@ -689,80 +775,98 @@ button,
     }
   }
 }
+
 .btn-invert-onoff_offoff {
   & img {
     filter: var(--filter-invert-on_off);
   }
+
   & span {
     &::before {
       filter: var(--filter-invert-on_off);
     }
   }
+
   &:hover span,
   &:hover img {
     color: var(--clr-light-1);
+
     &::before {
       filter: var(--filter-invert-always_off);
     }
   }
 }
+
 .btn-invert-onoff_onoff {
   & img {
     filter: var(--filter-invert-always_on);
   }
+
   & span {
     &::before {
       filter: var(--filter-invert-always_on);
     }
   }
+
   &:hover span,
   &:hover img {
     color: var(--clr-light-1);
+
     &::before {
       filter: var(--filter-invert-always_off);
     }
   }
 }
+
 .btn-invert-onon_offoff {
   & img {
     filter: var(--filter-invert-on_off);
   }
+
   & span {
     &::before {
       filter: var(--filter-invert-on_off);
     }
   }
+
   &:hover span,
   &:hover img {
     color: var(--clr-light-1);
+
     &::before {
       filter: var(--filter-invert-on_off);
     }
   }
 }
+
 .btn-invert-offon_offoff {
   & img {
     filter: var(--filter-invert-always_off);
   }
+
   & span {
     &::before {
       filter: var(--filter-invert-always_off);
     }
   }
+
   &:hover span,
   &:hover img {
     color: var(--clr-light-1);
+
     &::before {
       filter: var(--filter-invert-on_off);
     }
   }
 }
+
 .s16 {
   & img {
     height: 1.6rem;
     aspect-ratio: 1 / 1;
   }
 }
+
 .s24 {
   & img {
     height: 2.4rem;
@@ -805,6 +909,7 @@ div:has(> .allow-comments) {
   left: 0;
   z-index: var(--z-index-darklight-border);
 }
+
 .darklight-fx,
 .allow-comments-fx {
   &::before {
@@ -820,6 +925,7 @@ div:has(> .allow-comments) {
     transition: left ease-in-out var(--transition-dur-hover-darklight);
   }
 }
+
 .darklight-fx {
   &::after {
     content: url("/assets/icons/darklight.svg");
@@ -833,29 +939,33 @@ div:has(> .allow-comments) {
     z-index: var(--z-index-darklight-fx);
   }
 }
-input:checked + .darklight-fx:before {
+
+input:checked+.darklight-fx:before {
   left: 3.8rem;
 }
-input:checked + .darklight-fx:after {
+
+input:checked+.darklight-fx:after {
   transform: rotate(90deg);
   left: calc(50% - 3.8rem);
-  animation: light-to-dark ease-in-out var(--transition-dur-hover-darklight) 1
-    forwards;
+  animation: light-to-dark ease-in-out var(--transition-dur-hover-darklight) 1 forwards;
 }
-input:not(:checked) + .darklight-fx:after {
+
+input:not(:checked)+.darklight-fx:after {
   transform: rotate(0deg);
   left: calc(50% - 7.3rem);
-  animation: dark-to-light ease-in-out var(--transition-dur-hover-darklight) 1
-    forwards;
+  animation: dark-to-light ease-in-out var(--transition-dur-hover-darklight) 1 forwards;
 }
+
 /* -- allow comments toggle --- */
 .allow-comments {
   width: 3.5rem;
   height: 1.8rem;
 }
-.allow-comments:has(input:checked) + label {
+
+.allow-comments:has(input:checked)+label {
   color: var(--clr-accent--1);
 }
+
 .allow-comments-fx {
   &::before {
     top: 0.1rem;
@@ -867,7 +977,8 @@ input:not(:checked) + .darklight-fx:after {
     transition: all var(--transition-dur-hover) var(--transition-type-hover);
   }
 }
-input:checked + .allow-comments-fx {
+
+input:checked+.allow-comments-fx {
   &::before {
     filter: grayscale(0);
     left: 1.8rem;
@@ -883,28 +994,28 @@ input:checked + .allow-comments-fx {
   border-radius: 50%;
 
   &.facebook {
-    background: url("/assets/images/Facebook_logo.svg") lightgray 50% / cover
-      no-repeat;
+    background: url("/assets/images/Facebook_logo.svg") lightgray 50% / cover no-repeat;
   }
+
   &.twitter {
-    background: url("/assets/images/twitter_x_logo.svg") lightgray 50% / cover
-      no-repeat;
+    background: url("/assets/images/twitter_x_logo.svg") lightgray 50% / cover no-repeat;
   }
+
   &.linkedin {
-    background: url("/assets/images/LinkedIn_logo.svg") lightgray 50% / cover
-      no-repeat;
+    background: url("/assets/images/LinkedIn_logo.svg") lightgray 50% / cover no-repeat;
   }
+
   &.reddit {
-    background: url("/assets/images/reddit_logo.svg") lightgray 50% / cover
-      no-repeat;
+    background: url("/assets/images/reddit_logo.svg") lightgray 50% / cover no-repeat;
   }
+
   &.whatsapp {
     border-radius: 0;
     background: url("/assets/images/WhatsApp_logo.svg") no-repeat;
   }
+
   &.telegram {
-    background: url("/assets/images/Telegram_logo.svg") lightgray 50% / cover
-      no-repeat;
+    background: url("/assets/images/Telegram_logo.svg") lightgray 50% / cover no-repeat;
   }
 }
 
@@ -914,62 +1025,77 @@ input:checked + .allow-comments-fx {
   inherits: false;
   initial-value: 0deg;
 }
+
 @property --beam-1-end {
   syntax: "<angle>";
   inherits: false;
   initial-value: 0deg;
 }
+
 @property --beam-2-start {
   syntax: "<angle>";
   inherits: false;
   initial-value: 0deg;
 }
+
 @property --beam-2-end {
   syntax: "<angle>";
   inherits: false;
   initial-value: 0deg;
 }
+
 @property --beam-linear-h {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 0%;
 }
+
 @property --beam-linear-w {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 0%;
 }
+
 /*--- keyframes ---*/
 @keyframes fade-out-in {
+
   0%,
   100% {
     opacity: 1;
   }
+
   30%,
   70% {
     opacity: 0;
   }
 }
+
 @keyframes light-to-dark {
+
   0%,
   100% {
     opacity: 1;
   }
+
   40%,
   60% {
     opacity: 0;
   }
 }
+
 @keyframes dark-to-light {
+
   0%,
   100% {
     opacity: 1;
   }
+
   40%,
   60% {
     opacity: 0;
   }
 }
+
 @keyframes orbit-btn {
   0% {
     /*--grad-from: 90deg;*/
@@ -978,6 +1104,7 @@ input:checked + .allow-comments-fx {
     --beam-2-end: 270deg;
     --beam-2-start: 270deg;
   }
+
   65%,
   100% {
     --beam-1-end: 0deg;
@@ -985,30 +1112,36 @@ input:checked + .allow-comments-fx {
     --beam-2-end: 180deg;
     --beam-2-start: 360deg;
   }
+
   90%,
   100% {
     /*filter: blur(2px);*/
   }
 }
+
 @keyframes linear-fill-button {
   5% {
     --beam-linear-h: 2%;
     --beam-linear-w: 2%;
   }
+
   20% {
     --beam-linear-h: 2%;
     --beam-linear-w: 2%;
   }
+
   80%,
   100% {
     --beam-linear-h: 100%;
     --beam-linear-w: 100%;
   }
 }
+
 @keyframes btn-fill {
   90% {
     background: var(--clr-bg-3);
   }
+
   100% {
     background: var(--clr-secondary--hover);
   }

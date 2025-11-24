@@ -1649,7 +1649,7 @@ hr.solid {
   box-shadow:
     rgb(0 0 0 / 16%) 0 3px 6px,
     rgb(0 0 0 / 23%) 0 3px 6px;
-  max-width: 22dvw;
+  width: max(32dvw, 30rem);
   max-height: 90dvh;
   opacity: 0;
   overflow: hidden;

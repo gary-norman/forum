@@ -1648,7 +1648,7 @@ hr.solid {
   border: 1px solid var(--clr-bg-3);
   border-radius: 1rem;
   box-shadow: var(--shadow-popover);
-  width: max(32dvw, 30rem);
+  width: max(20dvw, 30rem);
   max-height: 90dvh;
   opacity: 0;
   overflow: hidden;

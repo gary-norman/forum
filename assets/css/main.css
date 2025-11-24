@@ -33,6 +33,9 @@
   --font-sz-cards: clamp(0.8rem, 1rem + 0.65vw, 1.2rem);
 
   /* box shadows */
+  --shadow-popover:
+    rgb(0 0 0 / 45%) -5px 2px 12px 0px,
+    rgb(0 0 0 / 45%) 0 3px 6px 2px;
   /* INFO this shadow is unused */
   --shadow-box: 0 0.25rem 1rem rgb(0 0 0 / 0.5);
   /* INFO this shadow is unused */
@@ -712,9 +715,7 @@ form-field:focus-within input {
     border: 1px solid var(--clr-bg-4);
     justify-content: flex-start;
     align-items: center;
-    box-shadow:
-      rgb(0 0 0 / 23%) 0 3px 6px,
-      rgb(0 0 0 / 35%) 0 3px 6px;
+    box-shadow: var(--shadow-popover);
     z-index: var(--z-index-modal);
     width: 100%;
 
@@ -1646,9 +1647,7 @@ hr.solid {
   margin-block-start: 0.8rem;
   border: 1px solid var(--clr-bg-3);
   border-radius: 1rem;
-  box-shadow:
-    rgb(0 0 0 / 16%) 0 3px 6px,
-    rgb(0 0 0 / 23%) 0 3px 6px;
+  box-shadow: var(--shadow-popover);
   width: max(32dvw, 30rem);
   max-height: 90dvh;
   opacity: 0;
@@ -1861,9 +1860,7 @@ hr.solid {
   background: var(--clr-bg-2);
   border-radius: 1rem;
   border: 1px solid var(--clr-bg-3);
-  box-shadow:
-    rgb(0 0 0 / 16%) 0 3px 6px,
-    rgb(0 0 0 / 23%) 0 3px 6px;
+  box-shadow: var(--shadow-popover);
 }
 
 [id^="share-button-"] {}
@@ -2623,8 +2620,7 @@ main {
   padding: 1.2rem;
   margin-bottom: 1.2rem;
   /* box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20); */
-  box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px,
-  rgba(0, 0, 0, 0.23) 0 3px 6px;
+  box-shadow: var(--shadow-card);
   /* z-index: 100; a positive z-index breaks the before */
 }
 

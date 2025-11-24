@@ -71,6 +71,7 @@ button,
   }
 
   &.btn-icotext.ico-right>span {
+    padding-inline-start: 0.2rem;
     padding-inline-end: 2rem;
   }
 }
@@ -88,6 +89,10 @@ button,
     font-size: 1rem;
     height: 3.2rem;
     gap: 0.4rem;
+
+    span:before {
+      left: 0.8rem !important;
+    }
   }
 
 
@@ -105,7 +110,26 @@ button,
   }
 
   &.btn-icotext.ico-right>span {
+    padding-inline-start: 0.2rem;
     padding-inline-end: 2rem;
+  }
+}
+
+.header-main>.header-right>button {
+  height: 4.2rem;
+
+  @media (max-width: 39rem) {
+    aspect-ratio: 1 / 1;
+
+    span:before {
+      /* background-size: 24px; */
+      left: 1.2rem !important;
+    }
+
+    &:has(.btn-notifications) {
+      border: none;
+      background: transparent;
+    }
   }
 }
 
@@ -127,11 +151,12 @@ button,
   }
 
   &.btn-icotext>span {
-    padding: 0 0 0 2.4rem;
+    padding-inline-start: 2.4rem;
   }
 
   &.btn-icotext.ico-right>span {
-    padding: 0 2.4rem 0 0;
+    padding-inline-start: 0.2rem;
+    padding-inline-end: 2.4rem;
   }
 }
 

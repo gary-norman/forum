@@ -1525,7 +1525,7 @@ input#register_user:user-invalid {
     grid-template-columns: 28rem 1fr;
   }
 
-  grid-template-rows: 5.2rem 1fr;
+  grid-template-rows: 8rem 1fr;
   grid-template-areas: 'header header'
   'sidebar main';
 
@@ -1543,6 +1543,7 @@ input#register_user:user-invalid {
   width: 100%;
   column-gap: clamp(1rem, 2dvw, 2rem);
   display: inline-grid;
+  align-items: center;
 
   @media (max-width: 39rem) {
     grid-template-columns: 3.5rem 2fr 1fr;

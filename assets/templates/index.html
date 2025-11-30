@@ -69,7 +69,7 @@
   <div class="wrapper-main">
     {{/*SECTION ---------- header -----------*/}}
     <header class="header-main">
-      <div class="branding btn-go-home"></div>
+      <div class="branding btn-go-home link"></div>
       <search class="wrapper-search input-wrapper">
         {{/* <form>*/}}
           <input data-search type="text" class="searchbar" id="search" name="search" placeholder="Search" />
@@ -196,40 +196,48 @@
               {{/* </div>*/}}
             {{/* ---------- username ---------- */}}
             <div class="input-wrapper form-field">
-              <input type="text" id="register_user" class="input-3d" name="register_user" placeholder="username"
-                autocomplete=" " pattern="\w{5,16}" autofocus />
+              <input type="text" id="register_user" class="input-3d" name="register_user" placeholder=" "
+                autocomplete="username" pattern="\w{5,16}" minlength="5" maxlength="16" />
               <label for="register_user">username</label>
               <span class="validation-icon"></span>
               <span class="validation-tooltip"></span>
             </div>
             {{/* ---------- email ---------- */}}
             <div class="input-wrapper form-field">
-              <input type="email" id="register_email" class="input-3d" name="register_email" placeholder=" "
-                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" />
+              <input type="email" id="register_email" class="input-3d" name="register_email" autocomplete="email"
+                placeholder=" " />
               <label for="register_email">email address</label>
               <span class="validation-icon"></span>
               <span class="validation-tooltip"></span>
             </div>
             {{/* ---------- password ---------- */}}
-            <div class="input-wrapper form-field">
-              <input type="password" id="register_password" class="input-3d" name="register_password"
-                autocomplete="new-password" placeholder=" " {{/* pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" */}} />
-              <label for="register_password">password</label>
-              <span class="validation-icon"></span>
-              <ul class="validation-list ul-forwards">
-                <li id="li-valid-num">1 number</li>
-                <li id="li-valid-upper">1 uppercase letter</li>
-                <li id="li-valid-lower">1 lowercase letter</li>
-                <li id="li-valid-8">8 or more characters</li>
-              </ul>
+            <div class="password-wrapper">
+              <div id="password_toggle" class="password-toggle"></div>
+              <div class="input-wrapper form-field password-field">
+                <input type="password" id="register_password" class="input-3d" name="register_password"
+                  autocomplete="new-password" placeholder=" " pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}"
+                  minlength="8" />
+                <label for="register_password">password</label>
+                <span class="validation-icon"></span>
+                <span class="validation-tooltip"></span>
+                <ul class="validation-list ul-forwards">
+                  <li id="li-valid-num"><span>1 number</span></li>
+                  <li id="li-valid-upper"><span>1 uppercase letter</span></li>
+                  <li id="li-valid-lower"><span>1 lowercase letter</span></li>
+                  <li id="li-valid-8"><span>8 or more characters</span></li>
+                </ul>
+              </div>
             </div>
             {{/* ---------- repeat password ---------- */}}
-            <div class="input-wrapper form-field">
-              <input type="password" id="register_password-rpt" class="input-3d" name="register_password-rpt"
-                autocomplete="new-password" placeholder=" " {{/* pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" */}} />
-              <label for="register_password-rpt">repeat password</label>
-              <span class="validation-icon"></span>
-              <span class="validation-tooltip"></span>
+            <div class="password-wrapper">
+              <div id="password_toggle-rpt" class="password-toggle"></div>
+              <div class="input-wrapper form-field password-confirm-field">
+                <input type="password" id="register_password-rpt" class="input-3d" name="register_password-rpt"
+                  autocomplete="new-password" placeholder=" " {{/* pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" */}} />
+                <label for="register_password-rpt">repeat password</label>
+                <span class="validation-icon"></span>
+                <span class="validation-tooltip"></span>
+              </div>
             </div>
             <button id="register" class="btn-md btn-primary btn-action btn-register-submit" type="submit">
               <span>register</span>

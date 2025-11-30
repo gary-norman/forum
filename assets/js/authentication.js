@@ -339,3 +339,44 @@ if (logoutFormButton) {
       });
   });
 }
+
+const passwordInput = document.getElementById("register_password");
+const togglePasswordButton = document.getElementById("password_toggle");
+const passwordInputRpt = document.getElementById("register_password-rpt");
+const togglePasswordButtonRpt = document.getElementById("password_toggle-rpt");
+
+// Map buttons to their corresponding inputs for cleaner lookups
+const buttonInputMap = new Map([
+  [togglePasswordButton, passwordInput],
+  [togglePasswordButtonRpt, passwordInputRpt],
+]);
+
+let visibilityTimeouts = new WeakMap(); // Track timeouts per button
+
+[togglePasswordButton, togglePasswordButtonRpt].forEach((button) => {
+  button.addEventListener("click", () => {
+    const input = buttonInputMap.get(button);
+    const isVisible = input.type === "text";
+    const newType = isVisible ? "password" : "text";
+
+    input.type = newType;
+    button.setAttribute("aria-pressed", !isVisible);
+    button.setAttribute(
+      "aria-label",
+      isVisible ? "Show password" : "Hide password",
+    );
+
+    // Clear existing timeout for this button
+    clearTimeout(visibilityTimeouts.get(button));
+
+    if (!isVisible) {
+      const timeout = setTimeout(() => {
+        input.type = "password";
+        button.setAttribute("aria-pressed", "false");
+        button.setAttribute("aria-label", "Show password");
+      }, 5000);
+
+      visibilityTimeouts.set(button, timeout);
+    }
+  });
+});

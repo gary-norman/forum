@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   fill="none"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="eye-closed-grey.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="25.701297"
+     inkscape:cx="14.668521"
+     inkscape:cy="14.551795"
+     inkscape:window-width="1672"
+     inkscape:window-height="981"
+     inkscape:window-x="4"
+     inkscape:window-y="36"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" />
+  <path
+     id="path1"
+     style="stroke:#999999;stroke-width:0.922448"
+     d="M 21.229606,11.338275 A 9.2368641,6.7710286 0 0 1 11.992742,18.109303 9.2368641,6.7710286 0 0 1 2.7558776,11.338275 9.2368641,6.7710286 0 0 1 11.992742,4.5672456 9.2368641,6.7710286 0 0 1 21.229606,11.338275 Z"
+     inkscape:label="eye" />
+  <path
+     style="display:inline;fill:none;stroke:#999999;stroke-width:0.986397;stroke-linecap:round"
+     d="m 11.873907,19.408562 -0.05251,2.075755"
+     id="path2"
+     inkscape:label="lash"
+     inkscape:tile-cx="11.847652"
+     inkscape:tile-cy="20.44644"
+     inkscape:tile-w="1.038907"
+     inkscape:tile-h="3.062152"
+     inkscape:tile-x0="11.328198"
+     inkscape:tile-y0="18.915363" />
+  <g
+     id="g88"
+     style="display:inline">
+    <use
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#path2"
+       xlink:href="#path2"
+       transform="rotate(-11.2,12.61027,6.7487566)"
+       id="use84"
+       style="display:inline" />
+    <use
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#path2"
+       xlink:href="#path2"
+       transform="rotate(-22.4,12.715962,6.8848344)"
+       id="use85" />
+    <use
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#path2"
+       xlink:href="#path2"
+       transform="rotate(-33.6,12.624208,7.2335899)"
+       id="use86" />
+    <use
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#path2"
+       xlink:href="#path2"
+       transform="rotate(-44.8,12.685331,7.4834567)"
+       id="use87" />
+  </g>
+  <g
+     id="g93"
+     transform="matrix(-0.97721483,0,0,1.0046178,23.760574,-0.20058143)"
+     style="display:inline">
+    <use
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#path2"
+       xlink:href="#path2"
+       transform="rotate(-11.2,12.61027,6.7487566)"
+       id="use89"
+       style="display:inline" />
+    <use
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#path2"
+       xlink:href="#path2"
+       transform="rotate(-22.4,12.715962,6.8848344)"
+       id="use90" />
+    <use
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#path2"
+       xlink:href="#path2"
+       transform="rotate(-33.6,12.624208,7.2335899)"
+       id="use91" />
+    <use
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#path2"
+       xlink:href="#path2"
+       transform="rotate(-44.8,12.685331,7.4834567)"
+       id="use92" />
+  </g>
+  <ellipse
+     style="display:none;fill:none;stroke:#999999;stroke-width:0.926325;stroke-linecap:round"
+     id="path93"
+     cx="-12.051335"
+     cy="11.392541"
+     transform="matrix(0.97721483,0,0,1.0046178,23.760574,-0.20058143)"
+     rx="3.94631"
+     ry="4.0331821" />
+  <ellipse
+     style="display:none;fill:none;stroke:#999999;stroke-width:1.00926;stroke-linecap:round"
+     id="path94"
+     cx="-12.071243"
+     cy="11.218258"
+     transform="matrix(0.97721483,0,0,1.0046178,23.760574,-0.20058143)"
+     rx="0.45788112"
+     ry="0.52285093" />
+</svg>

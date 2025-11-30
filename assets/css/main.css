@@ -1264,13 +1264,36 @@ form-field:focus-within input {
 }
 
 .input-wrapper {
+  position: relative;
   width: 100%;
 
   &:has(.input-3d) {
     width: min(80%, 25rem);
-  }
 
-  position: relative;
+    &:nth-of-type(1) {
+      z-index: 100;
+    }
+
+    &:nth-of-type(2) {
+      z-index: 200;
+    }
+
+    &:nth-of-type(3) {
+      z-index: 300;
+    }
+
+    &:nth-of-type(4) {
+      z-index: 400;
+    }
+
+    &:has(input:focus-visible) {
+      z-index: 500;
+
+      & input {
+        background: var(--clr-bg-2);
+      }
+    }
+  }
 
   &.container-reply,
   &.edit-wrapper {
@@ -1292,6 +1315,44 @@ form-field:focus-within input {
       min-height: 5rem;
       max-height: 30rem;
     }
+  }
+}
+
+.password-wrapper {
+  display: flex;
+  width: min(80%, 25rem);
+  justify-content: flex-end;
+  align-items: flex-end;
+
+  & .input-wrapper {
+    width: 100% !important;
+  }
+
+  & .password-toggle {
+    height: 3.2rem;
+    width: 3.2rem;
+    background: url("/assets/icons/eye-closed-grey-16.svg") no-repeat center;
+    cursor: var(--cursor-pointer);
+
+    &:hover,
+    &:has(~.input-wrapper>input[type*="text"]) {
+      background: url("/assets/icons/eye-open-grey-16.svg") no-repeat center;
+      filter: brightness(2);
+      transition: filter 0.2s ease;
+    }
+  }
+}
+
+.password-wrapper:has(.password-field):has(input:focus-visible):has(~ .password-wrapper .password-confirm-field .pass-nomatch) ul {
+  margin-block-end: 2.4rem;
+}
+
+.password-wrapper:has(input[type*="text"]) {
+  z-index: 500;
+  background: var(--clr-bg-2);
+
+  & .validation-tooltip {
+    display: none;
   }
 }
 
@@ -1326,32 +1387,21 @@ form-field:focus-within input {
     content: "";
     position: absolute;
     right: 0.4rem;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 1.05rem;
     height: 1.6rem;
     width: 1.6rem;
     background: url("/assets/icons/form-grey.svg");
   }
 
   & .pass-nomatch,
-  input#register_user:user-invalid {
+  input#register_user:user-invalid,
+  input#register_email:user-invalid,
+  input#register_password:user-invalid {
     &~.validation-tooltip {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-
-      /*color: var(--color-inv-input);*/
-      &::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--clr-bg-1);
-        width: 1.2rem;
-        aspect-ratio: 1;
-        clip-path: polygon(0 0, 100% 0, 50% 100%);
-      }
+      z-index: 100;
 
       &::before {
         display: block;
@@ -1364,25 +1414,38 @@ form-field:focus-within input {
 
         width: max-content;
         position: absolute;
-        bottom: 1.2rem;
+        bottom: 1.3rem;
         left: 50%;
         transform: translateX(-50%);
-        padding: 0.8rem;
-        /* text-align    : justify; */
+        padding: 0.4rem 1.2rem;
         background: var(--clr-bg-1);
         font-family: SpaceGrotesk-Regular,
         system-ui;
         font-size: clamp(0.8rem, 1.4rem + -0.3dvw, 1.2rem);
         border-radius: var(--border-radius-input);
-        /* border        : 1px solid var(
-        --clr-bg-5); */
+        border : 2px solid var(--clr--error);
         z-index: 1;
+        box-shadow: var(--shadow-box);
         transition: opacity var(--transition-dur-hover) ease-in-out;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -1.9rem;
+        --clr--shadow: rgb(0 0 0 / 0.5);
+        left: 50%;
+        transform: translateX(-50%);
+        background: conic-gradient(from -20.5deg, var(--clr--shadow) 0deg, var(--clr--error) 0.8deg, var(--clr--error) 0deg, var(--clr--error) 41deg, var(--clr--shadow) 41.5deg);
+        width: 1.3rem;
+        aspect-ratio: 1 / 2.5;
+        clip-path: polygon(0 0, 100% 0, 50% 56%);
+        z-index: 1;
       }
     }
   }
 
-  & input:valid,
+  & input:user-valid,
   /* TODO get code under working */
   /*& input:not(:placeholder-shown):valid,*/
   .pass-match {
@@ -1397,9 +1460,35 @@ form-field:focus-within input {
   & input:user-invalid,
   /* TODO get code under working */
   /*& input:not(:placeholder-shown):invalid,*/
-  .pass-nomatch {
-    color: var(--clr--error);
-    border-color: var(--clr--error);
+  & .pass-nomatch {
+    color: var(--clr--error) !important;
+    border-color: var(--clr--error) !important;
+
+    &~.validation-icon::before {
+      background: url("/assets/icons/form-error.svg") no-repeat;
+    }
+
+    &:not(:placeholder-shown)~label {
+      background: var(--clr--error);
+    }
+  }
+}
+
+@supports not selector(:user-valid) {
+  input:valid:not(:focus):not(:placeholder-shown) {
+    color: var(--clr-accent--1);
+    border-color: var(--clr-accent--1);
+
+    &~.validation-icon::before {
+      background: url("/assets/icons/form-success.svg") no-repeat;
+    }
+  }
+}
+
+@supports not selector(:user-invalid) {
+  input:invalid:not(:focus):not(:placeholder-shown) {
+    color: var(--clr--error) !important;
+    border-color: var(--clr--error) !important;
 
     &~.validation-icon::before {
       background: url("/assets/icons/form-error.svg") no-repeat;
@@ -1411,6 +1500,7 @@ form-field:focus-within input {
   }
 }
 
+
 .pass-nomatch {
   &~.validation-tooltip::before {
     content: "passwords do not match";
@@ -1419,9 +1509,49 @@ form-field:focus-within input {
 
 input#register_user:user-invalid {
   &~.validation-tooltip::before {
-    content: "username must have 5 or more characters";
+    content: "username must have 5 - 16 characters";
   }
 }
+
+input#register_email:user-invalid {
+  &~.validation-tooltip::before {
+    content: "please enter a valid email address";
+  }
+}
+
+input#register_password:user-invalid {
+  &~.validation-tooltip::before {
+    content: "please enter a valid password";
+  }
+}
+
+#register_password:focus-visible {
+  &~.validation-list {
+    height: fit-content;
+    margin-block-start: 1rem;
+
+    @starting-style {
+      height: 0;
+    }
+
+    & li {
+      opacity: 1;
+      position: relative;
+
+      &>span {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+  }
+}
+
+.password-field:has(input:focus-visible):has(~ .password-confirm-field .pass-nomatch) ul {
+  margin-block-end: 2.2rem;
+  transition: margin-block-end var(--transition-dur-appear) ease-in-out;
+}
+
 
 .validation-list {
   pointer-events: none;
@@ -1445,6 +1575,10 @@ input#register_user:user-invalid {
   & li {
     opacity: 0;
     line-height: 1.6rem;
+
+    &::marker {
+      text-align: center !important;
+    }
   }
 
   & li:nth-of-type(1) {
@@ -1484,21 +1618,6 @@ input#register_user:user-invalid {
   --delay-2: 0.2s;
   --delay-3: 0.1s;
   --delay-4: 0;
-}
-
-#register_password:focus-visible {
-  &~.validation-list {
-    height: fit-content;
-
-    @starting-style {
-      height: 0;
-    }
-
-    /*transform: translateX(-50%) translateY(-150%);*/
-    & li {
-      opacity: 1;
-    }
-  }
 }
 
 /*input[type="password"]:user-invalid {*/

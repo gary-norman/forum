@@ -1,0 +1,97 @@
+/* text elements and classes */
+h1,
+h2,
+h3,
+h4 {
+  font-family: SpaceMono, system-ui;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+h1 {
+  font-size: 5rem;
+}
+
+h2 {
+  font-size: 3.2rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.6rem;
+}
+
+p,
+.p-bold {
+  font-family: SpaceGrotesk-Regular, system-ui;
+  font-size: 1.6rem;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  cursor: var(--cursor-text);
+}
+
+p {
+  font-weight: normal;
+}
+
+.p-bold {
+  font-weight: 600;
+}
+
+small,
+.small-bold {
+  font-size: 1.2rem;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+
+  &.sticky {
+    position: sticky;
+    top: 0;
+    background: var(--clr-bg-2);
+    padding: 1.2rem 2rem;
+    z-index: var(--z-index-above);
+  }
+}
+
+small {
+  font-family: SpaceGrotesk-Regular, system-ui;
+  font-weight: normal;
+}
+
+.small-bold {
+  font-family: SpaceGrotesk-Medium, system-ui;
+  font-weight: 500;
+}
+
+a,
+a:visited,
+a:link,
+a:active,
+.link {
+  text-decoration: none;
+  cursor: var(--cursor-pointer);
+  /*color: inherit;*/
+}
+
+.link:hover {
+  color: var(--clr-accent--1--1);
+}
+
+.link-under {
+  color: var(--clr-accent--1--1);
+  text-decoration: underline;
+
+  &:hover {
+    color: var(--clr-accent--2--2);
+  }
+}

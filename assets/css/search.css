@@ -1,0 +1,129 @@
+/* ================================================================
+   SEARCH
+   Search bar and search results page styling
+   ================================================================ */
+
+.wrapper-search {
+  /* max-width: 48.4rem; */
+  place-self: center;
+
+  &:after {
+    content: '';
+    background: url(/assets/icons/magnifier.svg) no-repeat;
+    position: absolute;
+    right: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 16px;
+    width: 16px;
+  }
+
+  &:has(input:focus-visible) {
+    &:after {
+      display: none;
+    }
+  }
+
+  & #search {
+    padding-inline: min(5%, 1rem);
+  }
+
+  & #search-results-page {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    max-width: 48.4rem;
+    gap: 1.2rem;
+    top: 6rem;
+    padding: 0 0 0.8rem 0;
+    max-height: 52rem;
+    overflow: auto;
+    background: var(--clr-bg-2);
+    border: 1px solid var(--clr-bg-4);
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: var(--shadow-popover);
+    z-index: var(--z-index-modal);
+    width: 100%;
+
+    /*& > div:first-child > :nth-of-type(div) > {*/
+    /*  margin-top: 12rem;*/
+    /*}*/
+
+    /*& > div:last-child {*/
+    /*  margin-top: 0;*/
+    /*}*/
+
+    & .solid {
+      /*color: var(--clr-fg-4);*/
+      width: calc(100% - 2.4rem);
+    }
+
+    &>*:not(hr),
+    & #result-channels,
+    & #result-users,
+    & #result-posts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      width: 100%;
+
+      & .result-cards {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 0 0.8rem;
+
+        & .result-card {
+          position: relative;
+          display: flex;
+          flex-direction: row;
+          gap: 0.8rem;
+          padding: 1.2rem 1.2rem;
+          border-radius: 0.4rem;
+
+          & .profile-pic,
+          .profile-pic--empty {
+            border: 1px solid var(--clr-bg-4);
+          }
+
+          &:hover {
+            background: var(--clr-bg-1);
+
+            & .profile-pic,
+            .profile-pic--empty {
+              border: 1px solid var(--clr-bg-5);
+            }
+          }
+
+          &.result-post {
+            flex-direction: column;
+            gap: 0.4rem;
+
+            & p,
+            small {
+              max-width: 90ch;
+              max-height: 8ch;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              display: -webkit-box;
+              /* Specify the number of lines */
+              -webkit-line-clamp: 2;
+              line-clamp: 2;
+              -webkit-box-orient: vertical;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.searchbar {
+  height: 4.2rem !important;
+  /* width: calc(100vw / 4); */
+  /* padding: 1rem; */
+  border-radius: 5rem !important;
+
+}

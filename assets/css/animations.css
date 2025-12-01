@@ -1,0 +1,113 @@
+/* ================================================================
+   ANIMATIONS
+   Keyframe animations and animation utilities
+   ================================================================ */
+
+@keyframes form-label {
+  0% {
+    font-size: 0;
+    background: var(--clr-fg-2);
+    top: 0.7rem;
+    left: 15rem;
+  }
+
+  20% {
+    font-size: 1rem;
+    background: var(--clr-accent--2);
+    top: 0;
+  }
+
+  100% {
+    background: var(--clr-accent--2);
+    left: 1rem;
+    font-size: 1rem;
+    top: 0;
+  }
+}
+
+@keyframes form-label-back {
+  100% {
+    font-size: 0;
+    background: var(--clr-fg-2);
+    top: 0.7rem;
+    left: 15rem;
+  }
+
+  80% {
+    font-size: 1rem;
+    background: var(--clr-accent--2);
+    top: 0;
+  }
+
+  0% {
+    background: var(--clr-accent--2);
+    left: 1rem;
+    font-size: 1rem;
+    top: 0;
+  }
+}
+
+@keyframes glow-breathe {
+
+  0%,
+  25%,
+  100% {
+    --color-ratio: 0%;
+  }
+
+  35%,
+  75% {
+    --color-ratio: 100%;
+  }
+}
+
+/* ---- animations ---- */
+@keyframes border-fade {
+  100% {
+    /*border: .15rem solid transparent;*/
+    background: var(--clr-accent--2);
+  }
+}
+
+@keyframes text-refresh {
+
+  20%,
+  80% {
+    transform: rotate3d(-1, 0, 0, 90deg);
+  }
+
+  60% {
+    filter: invert(1) brightness(1.2);
+    color: var(--clr-light-1);
+  }
+}
+
+@keyframes fill-fade {
+  80% {
+    filter: opacity(100%);
+  }
+
+  100% {
+    filter: opacity(0%);
+  }
+}
+
+@keyframes image-invert {
+  45% {
+    filter: invert(0);
+  }
+
+  50% {
+    filter: invert(1);
+  }
+}
+
+@keyframes text-invert {
+  45% {
+    color: var(--clr-dark--1);
+  }
+
+  50% {
+    color: var(--clr-light--1);
+  }
+}

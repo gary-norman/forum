@@ -1,0 +1,111 @@
+/* ================================================================
+   LAYOUT
+   Main page layout structure, header, and main content areas
+   ================================================================ */
+
+.wrapper-main {
+  display: grid;
+
+  @media (min-width: 100.1rem) {
+    grid-template-columns: 32rem 1fr;
+  }
+
+  @media (min-width: 39.1rem) and (max-width: 100rem) {
+    grid-template-columns: 28rem 1fr;
+  }
+
+  grid-template-rows: 8rem 1fr;
+  grid-template-areas: 'header header'
+  'sidebar main';
+
+  @media (max-width: 39rem) {
+    grid-template-areas:
+      'header'
+      'main';
+  }
+
+  height: 100dvh;
+}
+
+.header-main {
+  grid-area: header;
+  width: 100%;
+  column-gap: clamp(1rem, 2dvw, 2rem);
+  display: inline-grid;
+  align-items: center;
+
+  @media (max-width: 39rem) {
+    grid-template-columns: 3.5rem 2fr 1fr;
+
+    button {
+      width: 4.2rem;
+
+      & span {
+        font-size: 0;
+      }
+    }
+  }
+
+  @media (min-width: 39.1rem) {
+    grid-template-columns: 1fr 2fr 1fr;
+  }
+
+  padding: 0.8rem 1.5rem;
+  background: var(--clr-bg-2);
+  border-bottom: 1px solid var(--clr-bg-3);
+  z-index: var(--z-index-header);
+}
+
+/* --- Sidebar.--- */
+
+.sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 6rem);
+  padding: 2.4rem 0;
+  gap: 1.2rem;
+  background: var(--clr-bg-2);
+  font-family: SpaceGrotesk-Regular, system-ui;
+  border-right: 1px solid var(--clr-bg-3);
+}
+
+@media (max-width: 39rem) {
+  .sidebar {
+    display: none;
+  }
+}
+
+/* sidebar separators */
+
+hr.solid {
+  /*width         : calc(100% - 2.4rem);*/
+  align-self: center;
+  border: none;
+  background-color: var(--clr-bg-5);
+  /* hardcoded as works for both */
+  height: 0.2rem;
+  border-radius: 0.3rem;
+}
+
+.main-content {
+  grid-area: main;
+}
+
+/* ------- gradient background ------- */
+
+.gradient {
+  min-height: 100svh;
+  background: var(--grad-main-rad);
+}
+
+main {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  /*flex-grow: 1;*/
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  height: 100dvh;
+}

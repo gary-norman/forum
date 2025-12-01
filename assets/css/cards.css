@@ -1,0 +1,154 @@
+/* ================================================================
+   CARDS
+   Post and comment cards, card content, and card info containers
+   ================================================================ */
+
+.noborder {
+  border: none;
+}
+
+.card {
+  &:not(.calendar, .date) {
+    display: flex;
+  }
+
+  flex-direction: column;
+  gap: 1.2rem;
+  width: fit-content;
+  max-width: 60rem;
+  color: var(--clr-fg-1);
+  background: var(--clr-bg-2);
+  border: 1px solid var(--clr-bg-3);
+  border-radius: var(--border-radius-input);
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+  /* box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20); */
+  box-shadow: var(--shadow-card);
+  /* z-index: 100; a positive z-index breaks the before */
+}
+
+.container-card-down {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+  padding: 1.2rem 0 2.4rem 0;
+  margin-top: -1.2rem;
+  max-width: 80rem;
+}
+
+.container-card-across {
+  display: flex;
+  flex-direction: row;
+  gap: 1.2rem;
+}
+
+.container-post-info,
+.container-comment-info {
+  display: flex;
+  align-items: center;
+  column-gap: 1.2rem;
+
+  /* post inner container */
+
+  & div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+
+    /* post below-author container */
+
+    & div {
+      display: flex;
+      flex-direction: unset;
+      gap: 0.3rem;
+
+      & small:first-of-type {
+        position: relative;
+        padding: 0 0 0 1.6rem;
+
+        &::before {
+          position: absolute;
+          top: -0.3rem;
+          left: 0;
+          content: url("/assets/icons/reply_arrow_16.svg");
+          filter: var(--filter-invert-on_off);
+        }
+      }
+    }
+  }
+
+  & .like-button {
+    width: 2.4rem;
+    aspect-ratio: 1 / 1;
+    margin-inline-start: auto;
+    background: url("/assets/icons/heart-empty_24.svg") no-repeat center;
+
+    &:hover {
+      background: url("/assets/icons/heart-full_24.svg") no-repeat center;
+    }
+  }
+}
+
+.card-pic {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 24px;
+  /*background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;*/
+}
+
+.cardTitle {
+  font-size: 2ch;
+}
+
+.cardAuthor {
+  font-size: 1.3ch;
+}
+
+.cardChannel {
+  font-size: 1.3ch;
+}
+
+.cardDate {
+  font-size: 0.8ch;
+}
+
+.cardContent,
+.cardContent--full {
+  --line-clamp: 3;
+  --line-height: 1.5em;
+  font-family: SpaceGrotesk-Variable, system-ui;
+  font-size: 1.2rem;
+  width: min(70ch, 90%);
+  line-height: var(--line-height);
+  hyphens: auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-line;
+}
+
+.cardContent {
+  display: -webkit-box;
+  /* Required for the ellipsis */
+  -webkit-box-orient: vertical;
+  /* Specify vertical orientation */
+  overflow: clip;
+  /* Hide the overflowing text */
+  text-overflow: ellipsis;
+  /* Add the ellipsis */
+  -webkit-line-clamp: var(--line-clamp);
+  line-clamp: var(--line-clamp);
+  /* Limit to 3 visible lines */
+  /* Adjust the line height */
+  max-height: calc(var(--line-height) * var(--line-clamp));
+  /* Set max height to match 3 lines */
+}
+
+.cardContent--full {}
+
+.title {
+  font-size: 3ch;
+  margin: 0.5ch;
+  text-align: center;
+}

@@ -1,0 +1,62 @@
+/* SECTION --- functional classes --- */
+#switch-dl {
+  background: var(--switch-darkLight);
+  height: 3rem;
+  width: 5.5rem;
+}
+
+.invisible,
+.invisible-notify {
+  visibility: hidden;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.invisible-notify {
+  margin-block: -0.6rem !important;
+}
+
+.hidden {
+  display: none;
+}
+
+.display-on {
+  display: revert;
+}
+
+.display-off {
+  display: none !important;
+}
+
+.invert-off {
+  filter: invert(0);
+}
+
+.info-box {
+  color: var(--clr-accent--1);
+  font-size: 0.8rem;
+  border: 0.1rem solid var(--clr-accent--1);
+  border-radius: 0.2rem;
+  padding: 0 0.4rem;
+  background: transparent;
+}
+
+/*svg {
+  stroke: var(--clr-fg-1);
+  fill: var(--clr-fg-1);
+}*/
+
+html {
+  font-family: system-ui;
+  font-size: 62.5%;
+}
+
+body {
+  width: 100%;
+  background: var(--clr-bg-1);
+  color: var(--clr-fg-1);
+  font-family: SpaceGrotesk-Regular, system-ui;
+  font-size: 2rem;
+  overflow: hidden;
+}

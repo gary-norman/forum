@@ -1,0 +1,123 @@
+/* ================================================================
+   UTILITIES
+   Flexbox utilities, alignment, margins, and scrollbar styling
+   ================================================================ */
+
+.flex-center,
+.flex-space-between,
+.flex-space-around,
+.flex-start,
+.flex-end {
+  display: flex;
+  align-items: center;
+}
+
+.flex-center {
+  justify-content: center !important;
+  column-gap: 1.2rem;
+}
+
+.flex-space-between {
+  justify-content: space-between !important;
+
+  & label {
+    font-family: SpaceGrotesk-Regular, system-ui;
+    font-size: 1.2rem;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+
+    &.padded {
+      align-content: center;
+      height: 3.2rem;
+    }
+  }
+}
+
+.padded {
+  padding: 0 1.2rem;
+}
+
+.padded-left {
+  padding: 0 0 0 1.2rem;
+}
+
+.flex-space-around {
+  justify-content: space-around !important;
+}
+
+.flex-start {
+  justify-content: flex-start !important;
+}
+
+.flex-end {
+  justify-content: flex-end !important;
+}
+
+.align-self-start {
+  align-self: flex-start;
+}
+
+.align-self-end {
+  align-self: flex-end;
+}
+
+.align-self-center {
+  align-self: center;
+}
+
+.margin-auto-0 {
+  margin-inline: auto 0;
+}
+
+.margin-0-auto {
+  margin-inline: 0 auto;
+}
+
+.scroll-down {
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &.sidebar-scroll {
+    height: auto;
+    min-height: calc(100dvh - 10.2rem - 6rem);
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    margin: 0.4rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    background: var(--clr-bg-1);
+    border-radius: 2.4rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--clr-bg-3);
+    border-radius: 2.4rem;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--clr-bg-4);
+  }
+}
+
+.scroll-down--nobar {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+
+  /* Internet Explorer 10+ */
+  &::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+  }
+}

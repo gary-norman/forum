@@ -1,0 +1,109 @@
+/* ================================================================
+   RIGHT PANEL
+   Right sidebar panel for channel/user info and settings
+   ================================================================ */
+
+.right-panel {
+  /* display: none; */
+  position: relative;
+  /* Height of right panel equal to the screen size - 9.6rem padding (4.8rem top and bottom) */
+  height: calc(100dvh - 9.6rem);
+
+  & .right-panel-content {
+    /* position: sticky; */
+    width: 28rem;
+    height: auto;
+    max-height: calc(100dvh - 20rem - 9.6rem - 2.4rem);
+    background: var(--clr-bg-2);
+    border: 1px solid var(--clr-bg-3);
+    border-radius: var(--border-radius-input);
+    z-index: var(--z-index-right-panel-content);
+    display: flex;
+    padding: 0.8rem 1.2rem;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1.2rem;
+    align-self: stretch;
+
+    & form {
+      width: 100%;
+      display: flex;
+      flex-flow: column;
+      gap: 1.2rem;
+    }
+
+    &>div {
+      width: 100%;
+
+      &>.sidebar-block {
+        padding: 0.4rem 0;
+      }
+    }
+
+    & .right-panel-container-name {
+      & .right-panel-name {
+        /* height: 3.2rem; */
+        align-items: center;
+        overflow: clip;
+        text-transform: capitalize;
+        word-spacing: -1rem;
+        color: var(--clr-fg-1);
+        text-overflow: ellipsis;
+      }
+    }
+
+    & .right-panel-container-bio,
+    & #right-panel-container-rules {
+      & label {
+        font-family: SpaceGrotesk-Regular, system-ui;
+        font-size: 1.2rem;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+      }
+    }
+
+    & .right-panel-container-pic {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+
+      & .right-panel-pic {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+        border-radius: 60px;
+        /*background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;*/
+      }
+    }
+  }
+}
+
+.edit-settings {
+  display: flex;
+  gap: 0;
+
+  & button:has(.btn-success),
+  & button:has(.btn-cancel) {
+    display: none;
+  }
+
+  & button:has(.btn-edit) {
+    display: flex;
+  }
+
+  &.editing {
+
+    & button:has(.btn-success),
+    & button:has(.btn-cancel) {
+      display: flex;
+    }
+
+    & button:has(.btn-edit) {
+      display: none;
+    }
+  }
+}

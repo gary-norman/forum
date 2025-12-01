@@ -1,0 +1,82 @@
+/* SECTION ---- images ---- */
+.post-image {
+  /* TODO add a container query to size this correctly */
+  max-width: 100%;
+  border: 1px solid var(--clr-bg-3);
+  border-radius: var(--border-radius-input);
+}
+
+.profile-pic,
+.user-page-pic,
+.profile-pic--empty,
+.channel-pic {
+  filter: drop-shadow(0.05rem 0.05rem 0.07rem var(--gradient-4));
+  font-family: SpaceMonoFixed, system-ui;
+  font-size: inherit;
+  position: relative;
+}
+
+.profile-pic--empty {
+  &::before {
+    content: attr(data-initial);
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+/*.profile-pic--empty {*/
+/*  font-size: 2rem;*/
+/*}*/
+/*.profile-pic--empty-sidebar {*/
+/*  font-size: 5rem;*/
+/*}*/
+
+/* --- Codex branding --- */
+
+.branding {
+  /*display: flex;*/
+  /*flex-grow: 1;*/
+  /*& p {*/
+  /*    letter-spacing: .4em;*/
+  /*    text-shadow: var(--shadow-text);*/
+  /*}*/
+  /*& p:nth-child(odd) {*/
+  /*    color: var(--clr-accent--2);*/
+  /*}*/
+  /*& p:nth-child(even) {*/
+  /*    color: var(--clr-accent--1);*/
+  /*}*/
+  background: url("/assets/icons/codex-logo-green.svg") no-repeat;
+
+  @media (max-width: 39rem) {
+    background: url("/assets/icons/codex-logo-green-sm.svg") no-repeat;
+    background-size: contain;
+  }
+
+  width: 10.4rem;
+  height: 3.5rem;
+}
+
+.card-pic {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 24px;
+  /*background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;*/
+}
+
+.sidebar-pic {
+  width: 6rem;
+  height: 6rem;
+  flex-shrink: 0;
+  border-radius: 6rem;
+  align-self: center;
+
+  &.user-page-pic {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 8rem;
+  }
+}

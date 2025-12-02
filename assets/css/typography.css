@@ -84,14 +84,14 @@ a:active,
 }
 
 .link:hover {
-  color: var(--clr-accent--1--1);
+  color: var(--clr-accent--1-light-1);
 }
 
 .link-under {
-  color: var(--clr-accent--1--1);
+  color: var(--clr-accent--1-light-1);
   text-decoration: underline;
 
   &:hover {
-    color: var(--clr-accent--2--2);
+    color: var(--clr-accent--2-light-2);
   }
 }

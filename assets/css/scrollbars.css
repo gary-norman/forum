@@ -21,7 +21,7 @@
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--clr-accent--2--1);
+  background: var(--clr-accent--2-light-1);
 }
 ::-webkit-scrollbar-thumb:window-inactive {
   background: var(--clr-bg-5);

@@ -206,8 +206,8 @@
   /* size of the dashes */
   --t: 25px;
   /* size of the dashes */
-  --c1: var(--clr-accent--2--2);
-  --c2: var(--clr-accent--2-1);
+  --c1: var(--clr-accent--2-light-2);
+  --c2: var(--clr-accent--2-dark-1);
   position: relative;
   background: var(--clr-accent--2-faded);
   /* border: 1px dashed var(--clr-accent--pink); */

@@ -584,18 +584,18 @@ button,
   }
 
   &.active {
-    border: 0.15rem solid var(--color-secondary-active);
+    border: 0.15rem solid var(--clr-secondary--active);
 
     &.selected {
-      border: 0.15rem solid var(--color-hl-green);
+      border: 0.15rem solid var(--clr-accent--green);
     }
   }
 
   &.selected {
-    border: 0.15rem solid var(--color-hl-green);
+    border: 0.15rem solid var(--clr-accent--green);
 
     &:hover {
-      border: 0.15rem solid var(--color-secondary-hover);
+      border: 0.15rem solid var(--clr-secondary--hover);
     }
   }
 

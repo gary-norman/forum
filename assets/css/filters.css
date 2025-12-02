@@ -56,7 +56,7 @@
 
     & .clear-choices {
         /*position: absolute;*/
-        background: var(--color-bg-1);
+        background: var(--clr-bg-1);
         z-index: 1;
         height: 3.2rem;
         border-radius: 0.4rem 0.4rem 0 0;
@@ -100,10 +100,10 @@
 
             &:has(input[type="radio"]) {
                 &.selected {
-                    background-color: var(--color-bg-4);
+                    background-color: var(--clr-bg-4);
 
                     &:hover {
-                        background-color: var(--color-bg-3);
+                        background-color: var(--clr-bg-3);
                     }
                 }
             }
@@ -114,7 +114,7 @@
             border-radius: 0.4rem;
 
             &:hover {
-                background: var(--color-bg-1);
+                background: var(--clr-bg-1);
             }
 
             & label {
@@ -164,7 +164,7 @@
 
         & label {
             font-size: 1.2rem;
-            color: var(--color-hl-green);
+            color: var(--clr-accent--green);
         }
     }
 

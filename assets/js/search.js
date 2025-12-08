@@ -1,27 +1,24 @@
 import { updateProfileImages } from "./update_UI_elements.js";
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
-
   const searchInput = document.querySelector("[data-search]");
   const userCardContainer = document.querySelector(
-      "[data-result-user-cards-container]",
+    "[data-result-user-cards-container]",
   );
   const channelCardContainer = document.querySelector(
-      "[data-result-channel-cards-container]",
+    "[data-result-channel-cards-container]",
   );
   const postCardContainer = document.querySelector(
-      "[data-result-post-cards-container]",
+    "[data-result-post-cards-container]",
   );
   const userCardTemplate = document.querySelector(
-      "[data-result-user-cards-template]",
+    "[data-result-user-cards-template]",
   );
   const channelCardTemplate = document.querySelector(
-      "[data-result-channel-cards-template]",
+    "[data-result-channel-cards-template]",
   );
   const postCardTemplate = document.querySelector(
-      "[data-result-post-cards-template]",
+    "[data-result-post-cards-template]",
   );
   const userResultsContainer = document.getElementById("results-users");
   const channelResultsContainer = document.getElementById("results-channels");
@@ -38,7 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let posts = [];
 
   function handleClickOutsideSearchContainer(e) {
-    if (!searchInput.contains(e.target) && !resultsContainer.contains(e.target)){
+    if (
+      !searchInput.contains(e.target) &&
+      !resultsContainer.contains(e.target)
+    ) {
       resultsContainer.classList.add("hide");
     }
   }
@@ -47,195 +47,185 @@ document.addEventListener("DOMContentLoaded", () => {
       resultsContainer.classList.remove("hide");
       document.addEventListener("click", handleClickOutsideSearchContainer);
     }
-  })
+  });
 
   searchInput.addEventListener("blur", (e) => {
-
-      setTimeout(() => {
-        resultsContainer.classList.add("hide");
-        document.removeEventListener("click", handleClickOutsideSearchContainer);
-      }, 100);
-
+    setTimeout(() => {
+      resultsContainer.classList.add("hide");
+      document.removeEventListener("click", handleClickOutsideSearchContainer);
+    }, 100);
   });
-    searchInput.addEventListener("input", (e) => {
-      const value = e.target.value.toLowerCase();
-      let anyUserVisible,
-          anyChannelVisible,
-          anyPostVisible = false;
-      let anyVisible = anyUserVisible || anyChannelVisible || anyPostVisible;
-      isValue = value !== "";
-      isFocus = false;
+  searchInput.addEventListener("input", (e) => {
+    const value = e.target.value.toLowerCase();
+    let anyUserVisible,
+      anyChannelVisible,
+      anyPostVisible = false;
+    let anyVisible = anyUserVisible || anyChannelVisible || anyPostVisible;
+    isValue = value !== "";
+    isFocus = false;
 
-      searchInput.addEventListener("focus", () => {
-        isFocus = true;
-      });
-
-      resultsContainer.classList.toggle("hide", !(isFocus || isValue));
-
-      dividers.forEach((divider) => {
-        divider.classList.toggle("hide", !anyVisible);
-      });
-
-      users.forEach((user) => {
-        const isVisible = user.username.toLowerCase().includes(value);
-        user.element.classList.toggle("hide", !isVisible);
-        if (isVisible) {
-          anyUserVisible = true;
-          anyVisible = anyUserVisible || anyChannelVisible || anyPostVisible;
-        }
-      });
-
-      channels.forEach((channel) => {
-        const isVisible = channel.name.toLowerCase().includes(value);
-        channel.element.classList.toggle("hide", !isVisible);
-        if (isVisible) {
-          anyChannelVisible = true;
-          anyVisible = anyUserVisible || anyChannelVisible || anyPostVisible;
-        }
-      });
-
-      posts.forEach((post) => {
-        const isVisible =
-            post.title.toLowerCase().includes(value) ||
-            post.content.toLowerCase().includes(value);
-        post.element.classList.toggle("hide", !isVisible);
-        if (isVisible) {
-          anyPostVisible = true;
-          anyVisible = anyUserVisible || anyChannelVisible || anyPostVisible;
-        }
-      });
-
-      // Hide the parent container if no users are visible
-      if (userResultsContainer) {
-        userResultsContainer.classList.toggle("hide", !anyUserVisible);
-      }
-
-      // Hide the parent container if no channels are visible
-      if (channelResultsContainer) {
-        channelResultsContainer.classList.toggle("hide", !anyChannelVisible);
-      }
-
-      // Hide the parent container if no posts are visible
-      if (postResultsContainer) {
-        postResultsContainer.classList.toggle("hide", !anyPostVisible);
-      }
-
-      let calcHeight = `${Math.max(7, calculateVisibleChildrenHeight(resultsContainer))}rem`;
-      if (calcHeight >= "8rem") {
-        calcHeight = "7rem";
-      }
-
-      if (!anyVisible) {
-        //Prepare No results paragraph
-        const noResults = document.createElement("p");
-        noResults.textContent = "Search input doesn't match any items!";
-        noResults.classList.add("no-result");
-        noResults.style.padding = "2.4rem 2.4rem";
-        noResults.style.textAlign = "center";
-
-        const noResultsGroup = resultsContainer.querySelectorAll(".no-result");
-
-        if (noResultsGroup.length === 0) {
-          resultsContainer.appendChild(noResults);
-        }
-
-        resultsContainer.style.padding = "0";
-      } else {
-        const noResults = resultsContainer.querySelectorAll(".no-result");
-        if (noResults) {
-          noResults.forEach((paragraph) => {
-            resultsContainer.removeChild(paragraph);
-          });
-        }
-      }
-
-      resultsContainer.style.height = calcHeight;
+    searchInput.addEventListener("focus", () => {
+      isFocus = true;
     });
 
-    fetch("/search")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
+    resultsContainer.classList.toggle("hide", !(isFocus || isValue));
 
-          return response.json();
-        })
-        .then((data) => {
-          users = data.users.map((user) => {
-            const card = userCardTemplate.content.cloneNode(true).children[0];
-            const avatar = card.querySelector("[data-result-user-avatar]");
-            const name = card.querySelector("[data-result-user-name]");
-            const imageAttr = "db/userdata/images/user-images/";
-            const id = user.ID;
+    dividers.forEach((divider) => {
+      divider.classList.toggle("hide", !anyVisible);
+    });
 
-            name.textContent = user.Username;
-            card.setAttribute("data-user-id", id);
-            if (user.Avatar.startsWith(prefix)) {
-              avatar.classList.add("profile-pic--empty");
-              avatar.classList.remove("profile-pic");
-              avatar.setAttribute("data-name-user", user.Name);
-              // console.log("added a placeholder image for channel: ", channel.name);
-            } else {
-              avatar.setAttribute("data-image-user", `${imageAttr + user.Avatar}`);
-            }
+    users.forEach((user) => {
+      const isVisible = user.username.toLowerCase().includes(value);
+      user.element.classList.toggle("hide", !isVisible);
+      if (isVisible) {
+        anyUserVisible = true;
+        anyVisible = anyUserVisible || anyChannelVisible || anyPostVisible;
+      }
+    });
 
-            userCardContainer.append(card);
-            return { username: user.Username, avatar: user.Avatar, element: card };
-          });
+    channels.forEach((channel) => {
+      const isVisible = channel.name.toLowerCase().includes(value);
+      channel.element.classList.toggle("hide", !isVisible);
+      if (isVisible) {
+        anyChannelVisible = true;
+        anyVisible = anyUserVisible || anyChannelVisible || anyPostVisible;
+      }
+    });
 
-          channels = data.channels.map((channel) => {
-            const card = channelCardTemplate.content.cloneNode(true).children[0];
-            const avatar = card.querySelector("[data-result-channel-avatar]");
-            const name = card.querySelector("[data-result-channel-name]");
-            const imageAttr = "db/userdata/images/channel-images/";
-            const id = channel.ID;
+    posts.forEach((post) => {
+      const isVisible =
+        post.title.toLowerCase().includes(value) ||
+        post.content.toLowerCase().includes(value);
+      post.element.classList.toggle("hide", !isVisible);
+      if (isVisible) {
+        anyPostVisible = true;
+        anyVisible = anyUserVisible || anyChannelVisible || anyPostVisible;
+      }
+    });
 
-            name.textContent = "/" + channel.Name;
-            card.setAttribute("data-channel-id", id);
-            if (channel.Avatar.startsWith(prefix)) {
-              avatar.classList.add("profile-pic--empty");
-              avatar.classList.remove("profile-pic");
-              avatar.setAttribute("data-name-channel", channel.Name);
-              // console.log("added a placeholder image for channel: ", channel.name);
-            } else {
-              avatar.setAttribute(
-                  "data-image-channel",
-                  `${imageAttr + channel.Avatar}`,
-              );
-            }
-
-            channelCardContainer.append(card);
-            return { name: channel.Name, avatar: channel.Avatar, element: card };
-          });
-
-          posts = data.posts.map((post) => {
-            const card = postCardTemplate.content.cloneNode(true).children[0];
-            const title = card.querySelector("[data-result-post-title]");
-            const content = card.querySelector("[data-result-post-content]");
-            const id = post.ID;
-
-            title.textContent = post.Title;
-            content.textContent = post.Content;
-            card.setAttribute("data-post-id", id);
-
-            postCardContainer.append(card);
-            return { title: post.Title, content: post.Content, element: card };
-          });
-
-          updateProfileImages();
-        })
-        .catch((error) => console.error(`Error fetching response data:`, error));
-});
-
-
-function containsElement(parentChildren, elementToCheck) {
-  for (let i = 0; i < parentChildren.length; i++) {
-    if (parentChildren[i] === elementToCheck) {
-      return true;
+    // Hide the parent container if no users are visible
+    if (userResultsContainer) {
+      userResultsContainer.classList.toggle("hide", !anyUserVisible);
     }
-  }
-  return false;
-}
+
+    // Hide the parent container if no channels are visible
+    if (channelResultsContainer) {
+      channelResultsContainer.classList.toggle("hide", !anyChannelVisible);
+    }
+
+    // Hide the parent container if no posts are visible
+    if (postResultsContainer) {
+      postResultsContainer.classList.toggle("hide", !anyPostVisible);
+    }
+
+    let calcHeight = `${Math.max(7, calculateVisibleChildrenHeight(resultsContainer))}rem`;
+    if (calcHeight >= "8rem") {
+      calcHeight = "7rem";
+    }
+
+    if (!anyVisible) {
+      //Prepare No results paragraph
+      const noResults = document.createElement("p");
+      noResults.textContent = "Search input doesn't match any items!";
+      noResults.classList.add("no-result");
+      noResults.style.padding = "2.4rem 2.4rem";
+      noResults.style.textAlign = "center";
+
+      const noResultsGroup = resultsContainer.querySelectorAll(".no-result");
+
+      if (noResultsGroup.length === 0) {
+        resultsContainer.appendChild(noResults);
+      }
+
+      resultsContainer.style.padding = "0";
+    } else {
+      const noResults = resultsContainer.querySelectorAll(".no-result");
+      if (noResults) {
+        noResults.forEach((paragraph) => {
+          resultsContainer.removeChild(paragraph);
+        });
+      }
+    }
+
+    resultsContainer.style.height = calcHeight;
+  });
+
+  fetch("/search")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      users = data.users.map((user) => {
+        const card = userCardTemplate.content.cloneNode(true).children[0];
+        const avatar = card.querySelector("[data-result-user-avatar]");
+        const name = card.querySelector("[data-result-user-name]");
+        const imageAttr = "db/userdata/images/user-images/";
+        const id = user.ID;
+
+        name.textContent = user.Username;
+        card.setAttribute("data-user-id", id);
+        if (user.Avatar.startsWith(prefix)) {
+          avatar.classList.add("profile-pic--empty");
+          avatar.classList.remove("profile-pic");
+          avatar.setAttribute("data-name-user", user.Name);
+          // console.log("added a placeholder image for channel: ", channel.name);
+        } else {
+          avatar.setAttribute("data-image-user", `${imageAttr + user.Avatar}`);
+        }
+
+        userCardContainer.append(card);
+        return { username: user.Username, avatar: user.Avatar, element: card };
+      });
+
+      channels = data.channels.map((channel) => {
+        const card = channelCardTemplate.content.cloneNode(true).children[0];
+        const avatar = card.querySelector("[data-result-channel-avatar]");
+        const name = card.querySelector("[data-result-channel-name]");
+        const imageAttr = "db/userdata/images/channel-images/";
+        const id = channel.ID;
+
+        name.textContent = "/" + channel.Name;
+        card.setAttribute("data-channel-id", id);
+        if (channel.Avatar.startsWith(prefix)) {
+          avatar.classList.add("profile-pic--empty");
+          avatar.classList.remove("profile-pic");
+          avatar.setAttribute("data-name-channel", channel.Name);
+          // console.log("added a placeholder image for channel: ", channel.name);
+        } else {
+          avatar.setAttribute(
+            "data-image-channel",
+            `${imageAttr + channel.Avatar}`,
+          );
+        }
+
+        channelCardContainer.append(card);
+        return { name: channel.Name, avatar: channel.Avatar, element: card };
+      });
+
+      if (data.posts) {
+        posts = data.posts.map((post) => {
+          const card = postCardTemplate.content.cloneNode(true).children[0];
+          const title = card.querySelector("[data-result-post-title]");
+          const content = card.querySelector("[data-result-post-content]");
+          const id = post.ID;
+
+          title.textContent = post.Title;
+          content.textContent = post.Content;
+          card.setAttribute("data-post-id", id);
+
+          postCardContainer.append(card);
+          return { title: post.Title, content: post.Content, element: card };
+        });
+      }
+
+      updateProfileImages();
+    })
+    .catch((error) => console.error(`Error fetching response data:`, error));
+});
 
 function calculateVisibleChildrenHeight(resultsContainer) {
   if (!resultsContainer) {

@@ -6,23 +6,36 @@ import (
 )
 
 type RouteHandler struct {
-	App      *app.App
-	Auth     *h.AuthHandler
-	Channel  *h.ChannelHandler
-	Comment  *h.CommentHandler
-	Home     *h.HomeHandler
-	Post     *h.PostHandler
-	Reaction *h.ReactionHandler
-	Search   *h.SearchHandler
-	Session  *h.SessionHandler
-	User     *h.UserHandler
-	Mod      *h.ModHandler
+	App       *app.App
+	Auth      *h.AuthHandler
+	Channel   *h.ChannelHandler
+	Comment   *h.CommentHandler
+	Home      *h.HomeHandler
+	Post      *h.PostHandler
+	Reaction  *h.ReactionHandler
+	Search    *h.SearchHandler
+	Session   *h.SessionHandler
+	User      *h.UserHandler
+	Mod       *h.ModHandler
+	Websocket *h.WebsocketHandler
 }
 
 func NewCommentHandler(app *app.App, reaction *h.ReactionHandler) *h.CommentHandler {
 	return &h.CommentHandler{
 		App:      app,
 		Reaction: reaction,
+	}
+}
+
+func NewWebsocketHandler(app *app.App, user *h.UserHandler, post *h.PostHandler, comment *h.CommentHandler, reaction *h.ReactionHandler, channel *h.ChannelHandler, mod *h.ModHandler) *h.WebsocketHandler {
+	return &h.WebsocketHandler{
+		App:      app,
+		User:     user,
+		Post:     post,
+		Comment:  comment,
+		Reaction: reaction,
+		Channel:  channel,
+		Mod:      mod,
 	}
 }
 
@@ -108,20 +121,22 @@ func NewRouteHandler(app *app.App) *RouteHandler {
 	postHandler := NewPostHandler(app, channelHandler, commentHandler, reactionHandler)
 	homeHandler := NewHomeHandler(app, channelHandler, commentHandler, postHandler, reactionHandler)
 	modHandler := NewModHandler(app, channelHandler, userHandler)
+	websocketHandler := NewWebsocketHandler(app, userHandler, postHandler, commentHandler, reactionHandler, channelHandler, modHandler)
 	searchHandler := NewSearchHandler(app)
 
 	// Step 3: Return fully wired router
 	return &RouteHandler{
-		App:      app,
-		Auth:     authHandler,
-		Channel:  channelHandler,
-		Comment:  commentHandler,
-		Home:     homeHandler,
-		Post:     postHandler,
-		Reaction: reactionHandler,
-		Search:   searchHandler,
-		Session:  sessionHandler,
-		User:     userHandler,
-		Mod:      modHandler,
+		App:       app,
+		Auth:      authHandler,
+		Channel:   channelHandler,
+		Comment:   commentHandler,
+		Home:      homeHandler,
+		Post:      postHandler,
+		Reaction:  reactionHandler,
+		Search:    searchHandler,
+		Session:   sessionHandler,
+		User:      userHandler,
+		Mod:       modHandler,
+		Websocket: websocketHandler,
 	}
 }

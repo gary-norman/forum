@@ -1636,7 +1636,8 @@ hr.solid {
 #form-post,
 #form-channel,
 #form-join-channel,
-#form-edit-channel-rules {
+#form-edit-channel-rules,
+[id^="form-chat"] {
   position: fixed;
   inset: auto;
   margin: 0;
@@ -1657,9 +1658,6 @@ hr.solid {
     opacity var(--transition-dur-feeds);
   top: 5rem;
   right: 15rem;
-  position-anchor: --header-right;
-  top: calc(anchor(bottom) + 1rem);
-  right: anchor(right);
 
   &:popover-open {
     display: flex;
@@ -1692,6 +1690,21 @@ hr.solid {
     width: 100%;
     max-width: 100%;
   }
+}
+
+#form-post,
+#form-channel,
+#form-join-channel,
+#form-edit-channel-rules {
+  position-anchor: --header-right;
+  top: calc(anchor(bottom) + 1rem);
+  right: anchor(right);
+}
+
+[id^="form-chat"] {
+  position: absolute;
+  bottom: 47rem;
+  right: 1rem;
 }
 
 /* #form-post { */

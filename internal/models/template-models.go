@@ -11,8 +11,9 @@ type TemplateData struct {
 	// ---------- users ----------
 	UserID      UUIDField
 	AllUsers    []User
-	RandomUser  User
 	CurrentUser *User
+	ThisUser    User
+	RandomUser  User
 	// ---------- posts ----------
 	Posts     []Post
 	UserPosts []Post
@@ -28,12 +29,13 @@ type TemplateData struct {
 	OwnedChannels          []Channel
 	JoinedChannels         []Channel
 	OwnedAndJoinedChannels []Channel
+	// ---------- chat ----------
+	Chats []Chat
 	// ---------- misc ----------
 	Instance string
 	// Images    []Image
 	// Reactions []Reaction
 	// ThisPost  Post
-	ThisUser User
 	ImagePaths
 	// ErrorPage ErrorPage
 	ErrorPage bool

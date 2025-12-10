@@ -51,6 +51,7 @@ func (s *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 	allUsers, allUsersErr := s.App.Users.All()
 	if allUsersErr != nil {
 		log.Printf(ErrorMsgs.Query, "getHome> users > All", allUsersErr)
+
 	}
 
 	currentUser, ok := mw.GetUserFromContext(r.Context())

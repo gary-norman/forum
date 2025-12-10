@@ -194,6 +194,23 @@ func (h *HomeHandler) RenderIndex(w http.ResponseWriter, r *http.Request) {
 		ownedAndJoinedChannels = allChannels
 	}
 
+	// SECTION -- chats ---
+	var chats []models.Chat
+	if userLoggedIn {
+		chats, err = h.App.Chats.GetChats(currentUser.ID)
+		if err != nil {
+			log.Printf(ErrorMsgs.Query, "RenderIndex > GetUserChats", err)
+		}
+	}
+
+	chats = append(chats, models.Chat{
+		ID:         models.NewUUIDField(),
+		ChatType:   "buddy",
+		Name:       "General",
+		LastActive: time.Now(),
+		Buddy:      models.User{Username: "Chat Buddy"},
+	})
+
 	// SECTION -- template ---
 	data := models.TemplateData{
 		// ---------- users ----------
@@ -206,6 +223,8 @@ func (h *HomeHandler) RenderIndex(w http.ResponseWriter, r *http.Request) {
 		OwnedChannels:          ownedChannels,
 		JoinedChannels:         joinedChannels,
 		OwnedAndJoinedChannels: ownedAndJoinedChannels,
+		// ---------- chats ----------
+		Chats: chats,
 		// ---------- misc ----------
 		Instance:   "home-page",
 		ImagePaths: h.App.Paths,

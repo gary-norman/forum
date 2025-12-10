@@ -1,0 +1,42 @@
+{{ define "chat-popover" }}
+{{ $dot := . }}
+{{ range $dot.Chats }}
+{{ $chat := . }}
+{{ $header := "Testing Chat" }}
+{{ if eq $chat.ChatType "group" }}
+    {{ $header = $chat.Group.Name }}
+{{ end }}
+{{ if eq $chat.ChatType "buddy" }}
+    {{ $header = printf "chat with %s" $chat.Buddy.Username }}
+{{ end }}
+<div popover id="form-chat-{{ $chat.ID }}">
+    <div class="modal-header">
+        <div id="modal-header-chat">{{ $header }}</div>
+    </div>
+    <div id="chat-popover-title" class="popover-title">
+    </div>
+    <div class="wrapper-form">
+        <div class="chat-messages-container" id="chat-messages-container-{{ $chat.ID }}">
+            <p class="send">Hey there! What's up</p>
+            <p class="receive">Checking out this new chat..</p>
+            <p class="send">Check out this bubble!</p>
+            <p class="receive">It's pretty cool…</p>
+            <p class="receive">Not gonna lie!</p>
+            <p class="send">Yeah it's pure CSS &amp; HTML</p>
+            <p class="receive">Wow that's impressive. But what's even more impressive is that this bubble is really high.</p>
+        </div>
+        <form id="form-send-chat-{{ $chat.ID }}" class="form-send-chat" action="/chats/{{ $chat.ID }}/send" method="POST">
+            <div class="input-wrapper form-field">
+                <input type="text" id="chat-input-{{ $chat.ID }}" name="message" placeholder=" " autofocus>
+                <label for="chat-input-{{ $chat.ID }}">Type your message...</label>
+            </div>
+            <div class="cont-flex-row flex-center">
+                <button id="btn-send-chat-{{ $chat.ID }}" class="btn-md btn-primary btn-action-primary btn-invert-onoff_onoff" type="submit">
+                    <span>Send</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{{ end }}
+{{ end }}

@@ -10,10 +10,10 @@ type ErrorPage struct {
 type TemplateData struct {
 	// ---------- users ----------
 	UserID      UUIDField
-	AllUsers    []User
+	AllUsers    []*User
 	CurrentUser *User
 	ThisUser    User
-	RandomUser  User
+	RandomUser  *User
 	// ---------- posts ----------
 	Posts     []Post
 	UserPosts []Post

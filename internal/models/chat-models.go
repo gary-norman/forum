@@ -9,19 +9,19 @@ type Chat struct {
 	Created    time.Time     `json:"created"`
 	LastActive time.Time     `json:"last_active"`
 	Group      Group         `json:"group"`
-	Buddy      User          `json:"buddy"`
+	Buddy      *User         `json:"buddy"`
 	Messages   []ChatMessage `json:"messages"`
 }
 
 type Group struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID   UUIDField `json:"id"`
+	Name string    `json:"name"`
 }
 
 type ChatMessage struct {
 	ID      UUIDField `json:"id"`
 	ChatID  UUIDField `json:"chat_id"`
-	UserID  UUIDField `json:"user_id"`
+	Sender  *User     `json:"sender"`
 	Created time.Time `json:"created"`
 	Content string    `json:"content"`
 }

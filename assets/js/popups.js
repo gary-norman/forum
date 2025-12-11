@@ -29,7 +29,29 @@ cancelChannelRules.popoverTargetAction = "hide";
 
 document.addEventListener("DOMContentLoaded", () => {
   toggleModals();
+  setupChatScrolling();
 });
+
+// Scroll chat to bottom when popover opens
+function setupChatScrolling() {
+  // Get all chat popovers
+  const chatPopovers = document.querySelectorAll('[id^="form-chat-"]');
+
+  chatPopovers.forEach((chatPopover) => {
+    chatPopover.addEventListener('toggle', (event) => {
+      // Check if popover is being opened
+      if (event.newState === 'open') {
+        const chatContainer = chatPopover.querySelector('.chat-messages-container');
+        if (chatContainer) {
+          // Use setTimeout to ensure content is fully rendered
+          setTimeout(() => {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          }, 0);
+        }
+      }
+    });
+  });
+}
 
 export function toggleModals() {
   const loginModal = document.querySelector("#container-form-login");

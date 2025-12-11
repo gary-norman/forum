@@ -160,5 +160,13 @@ BEGIN
     SET NEW.Updated = CURRENT_TIMESTAMP;
 END;
 
+-- Chats: Update LastActive when a new message is inserted
+CREATE TRIGGER IF NOT EXISTS chats_lastactive_trigger
+AFTER INSERT ON Messages
+FOR EACH ROW
+BEGIN
+    UPDATE Chats SET LastActive = CURRENT_TIMESTAMP WHERE ID = NEW.ChatID;
+END;
+
 COMMIT;
 

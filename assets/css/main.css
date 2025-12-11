@@ -1656,8 +1656,6 @@ hr.solid {
   transition:
     display var(--transition-dur-feeds),
     opacity var(--transition-dur-feeds);
-  top: 5rem;
-  right: 15rem;
 
   &:popover-open {
     display: flex;
@@ -1699,11 +1697,13 @@ hr.solid {
   position-anchor: --header-right;
   top: calc(anchor(bottom) + 1rem);
   right: anchor(right);
+  top: 5rem;
+  right: 15rem;
 }
 
 [id^="form-chat"] {
   position: absolute;
-  bottom: 47rem;
+  bottom: 1rem;
   right: 1rem;
 }
 
@@ -1841,6 +1841,9 @@ hr.solid {
     border-radius: 0.8rem;
     padding: var(--b);
     background: repeating-conic-gradient(var(--c1) 0 25%, var(--c2) 0 50%) 0 0 / var(--s) var(--s) round;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
@@ -1865,6 +1868,15 @@ hr.solid {
 .wrapper-form {
   width: 100%;
   align-items: center;
+
+  &:has([id^="form-send-chat"]) {
+    gap: 0.6rem;
+    padding-block: 0.6rem;
+
+    &:has(input:focus-within) {
+      gap: 1.4rem;
+    }
+  }
 }
 
 .share-container {
@@ -2278,6 +2290,14 @@ hr.solid {
   gap: 1.2rem;
   background: var(--clr-bg-1);
   border-radius: var(--border-radius-input);
+
+  &:has(> .chat-control) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: 1rem;
+    padding-inline-start: 2rem;
+  }
 
   & article {
     font-size: 1.2rem;
@@ -2729,7 +2749,6 @@ main {
   height: 24px;
   flex-shrink: 0;
   border-radius: 24px;
-  /*background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;*/
 }
 
 .cardTitle {

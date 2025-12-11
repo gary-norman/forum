@@ -25,7 +25,7 @@ func (c *ChatModel) CreateChat(chatType, name string, groupID, buddyID models.UU
 	return int64(chatID), nil
 }
 
-func (c *ChatModel) CreateMessage(userID models.UUIDField, message string) (int64, error) {
+func (c *ChatModel) CreateChatMessage(userID models.UUIDField, message string) (int64, error) {
 	query := "INSERT INTO Messages (ChatID, UserID, Created, Content) VALUES (?, ?, DateTime('now'), ?)"
 	result, err := c.DB.Exec(query, userID, message)
 	if err != nil {
@@ -59,11 +59,11 @@ func (c *ChatModel) AttachUserToChat(chatID, userID models.UUIDField) error {
 	return nil
 }
 
-func (c *ChatModel) GetUserChats(userID models.UUIDField) ([]models.UUIDField, error) {
+func (c *ChatModel) GetUserChatIDs(userID models.UUIDField) ([]models.UUIDField, error) {
 	query := `SELECT ID FROM ChatUsers WHERE UserID = ?`
 	rows, err := c.DB.Query(query, userID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get user chats: %w", err)
+		return nil, fmt.Errorf("failed to get user chat IDs: %w", err)
 	}
 	defer rows.Close()
 
@@ -97,4 +97,83 @@ func (c *ChatModel) GetChats(chatID models.UUIDField) ([]models.Chat, error) {
 	}
 
 	return chats, nil
+}
+
+func (c *ChatModel) GetChatMessages(chatID models.UUIDField) ([]models.ChatMessage, error) {
+	query := `
+		SELECT
+			m.ID, m.ChatID, m.Created, m.Content,
+			u.ID, u.Username, u.EmailAddress, u.Avatar, u.Banner,
+			u.Description, u.Usertype, u.Created, u.Updated, u.IsFlagged,
+			u.SessionToken, u.CSRFToken, u.HashedPassword
+		FROM Messages m
+		LEFT JOIN Users u ON m.UserID = u.ID
+		WHERE m.ChatID = ?
+		ORDER BY m.Created ASC
+	`
+
+	rows, err := c.DB.Query(query, chatID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query chat messages: %w", err)
+	}
+	defer rows.Close()
+
+	var messages []models.ChatMessage
+	for rows.Next() {
+		var message models.ChatMessage
+		var user models.User
+
+		// Use sql.Null types for potentially NULL user fields
+		var (
+			userID          sql.NullString
+			username        sql.NullString
+			email           sql.NullString
+			avatar          sql.NullString
+			banner          sql.NullString
+			description     sql.NullString
+			usertype        sql.NullString
+			userCreated     sql.NullTime
+			userUpdated     sql.NullTime
+			isFlagged       sql.NullBool
+			sessionToken    sql.NullString
+			csrfToken       sql.NullString
+			hashedPassword  sql.NullString
+		)
+
+		err := rows.Scan(
+			&message.ID, &message.ChatID, &message.Created, &message.Content,
+			&userID, &username, &email, &avatar, &banner,
+			&description, &usertype, &userCreated, &userUpdated, &isFlagged,
+			&sessionToken, &csrfToken, &hashedPassword,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan chat message: %w", err)
+		}
+
+		// Only populate Sender if user exists (LEFT JOIN might return NULLs)
+		if userID.Valid {
+			user.ID = models.UUIDField(userID.String)
+			user.Username = username.String
+			user.Email = email.String
+			user.Avatar = avatar.String
+			user.Banner = banner.String
+			user.Description = description.String
+			user.Usertype = usertype.String
+			user.Created = userCreated.Time
+			user.Updated = userUpdated.Time
+			user.IsFlagged = isFlagged.Bool
+			user.SessionToken = sessionToken.String
+			user.CSRFToken = csrfToken.String
+			user.HashedPassword = hashedPassword.String
+
+			models.UpdateTimeSince(&user)
+			message.Sender = &user
+		} else {
+			message.Sender = nil
+		}
+
+		messages = append(messages, message)
+	}
+
+	return messages, nil
 }

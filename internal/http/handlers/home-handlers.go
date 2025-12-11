@@ -197,7 +197,7 @@ func (h *HomeHandler) RenderIndex(w http.ResponseWriter, r *http.Request) {
 	// SECTION -- chats ---
 	var chats []models.Chat
 	if userLoggedIn {
-		chats, err = h.App.Chats.GetChats(currentUser.ID)
+		chats, err = h.App.Chats.GetUserChats(currentUser.ID)
 		if err != nil {
 			log.Printf(ErrorMsgs.Query, "RenderIndex > GetUserChats", err)
 		}
@@ -217,20 +217,20 @@ func (h *HomeHandler) RenderIndex(w http.ResponseWriter, r *http.Request) {
 		LastActive: time.Now(),
 		Buddy:      fakeUser_1,
 		Messages: []models.ChatMessage{
-			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Hey there! What's up", Created: time.Now().Add(-24*time.Hour - 90*time.Second)},
-			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Checking out this new chat..", Created: time.Now().Add(-24*time.Hour - 75*time.Second)},
-			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Check out this bubble!", Created: time.Now().Add(-24*time.Hour - 60*time.Second)},
-			{ChatID: fakeChatID_1, Sender: currentUser, Content: "It's pretty cool…", Created: time.Now().Add(-24*time.Hour - 45*time.Second)},
-			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Not gonna lie!", Created: time.Now().Add(-24*time.Hour - 30*time.Second)},
-			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Yeah it's pure CSS & HTML", Created: time.Now().Add(-24*time.Hour - 15*time.Second)},
-			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Wow that's impressive. But what's even more impressive is that this bubble is really high.", Created: time.Now().Add(-24 * time.Hour)},
-			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "popover id`\"form-chat-{{ $chat.ID }}\"`", Created: time.Now().Add(-105 * time.Second)},
-			{ChatID: fakeChatID_1, Sender: currentUser, Content: "You mean the popovers are dynamically created?", Created: time.Now().Add(-90 * time.Second)},
-			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Yes! As are the buttons in the sidebar", Created: time.Now().Add(-75 * time.Second)},
-			{ChatID: fakeChatID_1, Sender: currentUser, Content: "So are these chats stored in the database?", Created: time.Now().Add(-60 * time.Second)},
-			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "They sure are. Check out chats-sql.go", Created: time.Now().Add(-45 * time.Second)},
-			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Great! We should have this working pretty soon then!", Created: time.Now().Add(-30 * time.Second)},
-			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "I think so yes!", Created: time.Now().Add(-15 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Hey there! What's up", Created: time.Now().Add(-24*time.Hour - 90*time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Checking out this new chat..", Created: time.Now().Add(-24*time.Hour - 75*time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Check out this bubble!", Created: time.Now().Add(-24*time.Hour - 60*time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "It's pretty cool…", Created: time.Now().Add(-24*time.Hour - 45*time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Not gonna lie!", Created: time.Now().Add(-24*time.Hour - 30*time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Yeah it's pure CSS & HTML", Created: time.Now().Add(-24*time.Hour - 15*time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Wow that's impressive. But what's even more impressive is that this bubble is really high.", Created: time.Now().Add(-24 * time.Hour)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "popover id`\"form-chat-{{ $chat.ID }}\"`", Created: time.Now().Add(-105 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "You mean the popovers are dynamically created?", Created: time.Now().Add(-90 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Yes! As are the buttons in the sidebar", Created: time.Now().Add(-75 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "So are these chats stored in the database?", Created: time.Now().Add(-60 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "They sure are. Check out chats-sql.go", Created: time.Now().Add(-45 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Great! We should have this working pretty soon then!", Created: time.Now().Add(-30 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "I think so yes!", Created: time.Now().Add(-15 * time.Second)},
 		},
 	})
 

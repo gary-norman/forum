@@ -25,9 +25,9 @@ func (c *ChatModel) CreateChat(chatType, name string, groupID, buddyID models.UU
 	return int64(chatID), nil
 }
 
-func (c *ChatModel) CreateChatMessage(userID models.UUIDField, message string) (int64, error) {
+func (c *ChatModel) CreateChatMessage(chatID, userID models.UUIDField, message string) (int64, error) {
 	query := "INSERT INTO Messages (ChatID, UserID, Created, Content) VALUES (?, ?, DateTime('now'), ?)"
-	result, err := c.DB.Exec(query, userID, message)
+	result, err := c.DB.Exec(query, chatID, userID, message)
 	if err != nil {
 		return 0, fmt.Errorf("failed to insert message: %w", err)
 	}
@@ -37,16 +37,6 @@ func (c *ChatModel) CreateChatMessage(userID models.UUIDField, message string) (
 	}
 
 	return int64(messageID), nil
-}
-
-func (c *ChatModel) InsertMessageIntoChats(chatID, messageID models.UUIDField) error {
-	query := "INSERT INTO ChatMessages (ChatID, MessageID) VALUES (?, ?)"
-	_, err := c.DB.Exec(query, chatID, messageID)
-	if err != nil {
-		return fmt.Errorf("failed to insert message into chat: %w", err)
-	}
-
-	return nil
 }
 
 func (c *ChatModel) AttachUserToChat(chatID, userID models.UUIDField) error {
@@ -60,7 +50,7 @@ func (c *ChatModel) AttachUserToChat(chatID, userID models.UUIDField) error {
 }
 
 func (c *ChatModel) GetUserChatIDs(userID models.UUIDField) ([]models.UUIDField, error) {
-	query := `SELECT ID FROM ChatUsers WHERE UserID = ?`
+	query := `SELECT ChatID FROM ChatUsers WHERE UserID = ?`
 	rows, err := c.DB.Query(query, userID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user chat IDs: %w", err)
@@ -79,20 +69,71 @@ func (c *ChatModel) GetUserChatIDs(userID models.UUIDField) ([]models.UUIDField,
 	return chatIDs, nil
 }
 
-func (c *ChatModel) GetChats(chatID models.UUIDField) ([]models.Chat, error) {
-	query := "SELECT ID, Type, Created, LastActive, GroupID, BuddyID FROM Chats WHERE ID = ?"
-	rows, err := c.DB.Query(query, chatID)
+// GetChat retrieves a single chat by its ID
+func (c *ChatModel) GetChat(chatID models.UUIDField) (*models.Chat, error) {
+	query := "SELECT ID, Type, Name, Created, LastActive, GroupID, BuddyID FROM Chats WHERE ID = ?"
+	row := c.DB.QueryRow(query, chatID)
+
+	var chat models.Chat
+	var buddyID, groupID sql.NullString
+
+	err := row.Scan(&chat.ID, &chat.ChatType, &chat.Name, &chat.Created, &chat.LastActive, &groupID, &buddyID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to query chats: %w", err)
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("chat not found: %s", chatID)
+		}
+		return nil, fmt.Errorf("failed to scan chat: %w", err)
+	}
+
+	// TODO: Load Buddy user details if buddyID.Valid
+	// TODO: Load Group details if groupID.Valid
+	// For now, just store the IDs
+	if groupID.Valid {
+		chat.Group.ID = models.UUIDField(groupID.String)
+	}
+	if buddyID.Valid {
+		// Will need to fetch user separately or use JOIN
+		chat.Buddy = &models.User{ID: models.UUIDField(buddyID.String)}
+	}
+
+	return &chat, nil
+}
+
+// GetUserChats retrieves all chats for a specific user
+func (c *ChatModel) GetUserChats(userID models.UUIDField) ([]models.Chat, error) {
+	query := `
+		SELECT c.ID, c.Type, c.Name, c.Created, c.LastActive, c.GroupID, c.BuddyID
+		FROM Chats c
+		INNER JOIN ChatUsers cu ON c.ID = cu.ChatID
+		WHERE cu.UserID = ?
+		ORDER BY c.LastActive DESC
+	`
+
+	rows, err := c.DB.Query(query, userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query user chats: %w", err)
 	}
 	defer rows.Close()
 
 	var chats []models.Chat
 	for rows.Next() {
 		var chat models.Chat
-		if err := rows.Scan(&chat.ID, &chat.ChatType, &chat.Created, &chat.LastActive, &chat.Group.ID, &chat.Buddy.ID); err != nil {
+		var buddyID, groupID sql.NullString
+
+		err := rows.Scan(&chat.ID, &chat.ChatType, &chat.Name, &chat.Created, &chat.LastActive, &groupID, &buddyID)
+		if err != nil {
 			return nil, fmt.Errorf("failed to scan chat: %w", err)
 		}
+
+		// TODO: Load Buddy user details if buddyID.Valid
+		// TODO: Load Group details if groupID.Valid
+		if groupID.Valid {
+			chat.Group.ID = models.UUIDField(groupID.String)
+		}
+		if buddyID.Valid {
+			chat.Buddy = &models.User{ID: models.UUIDField(buddyID.String)}
+		}
+
 		chats = append(chats, chat)
 	}
 

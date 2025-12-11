@@ -2,7 +2,7 @@ BEGIN TRANSACTION;
 
 -- Users
 CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username ON Users(Username);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_users_avatar ON Users(Avatar);
+CREATE INDEX IF NOT EXISTS idx_users_avatar ON Users(Avatar);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email ON Users(EmailAddress);
 CREATE INDEX IF NOT EXISTS idx_users_sessiontoken ON Users(SessionToken);
 CREATE INDEX IF NOT EXISTS idx_users_csrftoken ON Users(CsrfToken);
@@ -83,8 +83,7 @@ CREATE INDEX IF NOT EXISTS idx_messages_userid ON Messages(UserID);
 CREATE INDEX IF NOT EXISTS idx_messages_created ON Messages(Created);
 CREATE INDEX IF NOT EXISTS idx_messages_chatid_created ON Messages(ChatID, Created);
 
--- ChatUsers
-CREATE UNIQUE INDEX IF NOT EXISTS idx_chatusers_unique ON ChatUsers(ChatID, UserID);
+-- ChatUsers (UNIQUE constraint already in table schema, so we only need lookup indexes)
 CREATE INDEX IF NOT EXISTS idx_chatusers_userid ON ChatUsers(UserID);
 CREATE INDEX IF NOT EXISTS idx_chatusers_chatid ON ChatUsers(ChatID);
 

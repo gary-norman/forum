@@ -33,3 +33,4 @@ scripts/backups
 # Blender files
 *.blend1
 *.blend
+*.backup

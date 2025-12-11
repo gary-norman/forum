@@ -72,7 +72,7 @@ func (h *HomeHandler) RenderIndex(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs.Query, "RenderIndex> users > All", allUsersErr)
 	}
 	for u := range allUsers {
-		models.UpdateTimeSince(&allUsers[u])
+		models.UpdateTimeSince(allUsers[u])
 	}
 
 	// attach following/follower numbers to each user
@@ -203,12 +203,73 @@ func (h *HomeHandler) RenderIndex(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	fakeChatID_1 := models.NewUUIDField()
+	fakeChatID_2 := models.NewUUIDField()
+	fakeUser_1 := allUsers[1]
+	fakeUser_2 := allUsers[2]
+	fakeUser_3 := allUsers[3]
+	fakeUser_4 := allUsers[4]
+
 	chats = append(chats, models.Chat{
-		ID:         models.NewUUIDField(),
+		ID:         fakeChatID_1,
 		ChatType:   "buddy",
-		Name:       "General",
+		Name:       "chat logic",
 		LastActive: time.Now(),
-		Buddy:      models.User{Username: "Chat Buddy"},
+		Buddy:      fakeUser_1,
+		Messages: []models.ChatMessage{
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Hey there! What's up", Created: time.Now().Add(-24*time.Hour - 90*time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Checking out this new chat..", Created: time.Now().Add(-24*time.Hour - 75*time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Check out this bubble!", Created: time.Now().Add(-24*time.Hour - 60*time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "It's pretty cool…", Created: time.Now().Add(-24*time.Hour - 45*time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Not gonna lie!", Created: time.Now().Add(-24*time.Hour - 30*time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Yeah it's pure CSS & HTML", Created: time.Now().Add(-24*time.Hour - 15*time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Wow that's impressive. But what's even more impressive is that this bubble is really high.", Created: time.Now().Add(-24 * time.Hour)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "popover id`\"form-chat-{{ $chat.ID }}\"`", Created: time.Now().Add(-105 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "You mean the popovers are dynamically created?", Created: time.Now().Add(-90 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "Yes! As are the buttons in the sidebar", Created: time.Now().Add(-75 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "So are these chats stored in the database?", Created: time.Now().Add(-60 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "They sure are. Check out chats-sql.go", Created: time.Now().Add(-45 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: currentUser, Content: "Great! We should have this working pretty soon then!", Created: time.Now().Add(-30 * time.Second)},
+			{ChatID: fakeChatID_1, Sender: fakeUser_1, Content: "I think so yes!", Created: time.Now().Add(-15 * time.Second)},
+		},
+	})
+
+	chats = append(chats, models.Chat{
+		ID:         fakeChatID_2,
+		ChatType:   "group",
+		Name:       "languages",
+		LastActive: time.Now(),
+		Group:      models.Group{ID: models.NewUUIDField(), Name: "Language Lovers"},
+		Messages: []models.ChatMessage{
+			{ChatID: fakeChatID_2, Sender: fakeUser_1, Content: "JavaScript is obviously the best language. It runs everywhere!", Created: time.Now().Add(-24*time.Hour - 210*time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_2, Content: "Come on, TypeScript is just JavaScript but actually good. Type safety matters!", Created: time.Now().Add(-24*time.Hour - 195*time.Second)},
+			{ChatID: fakeChatID_2, Sender: currentUser, Content: "You both are missing the point. Go is simple, fast, and has amazing concurrency primitives.", Created: time.Now().Add(-24*time.Hour - 180*time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_3, Content: "Rust enters the chat. Memory safety without garbage collection? That's the future.", Created: time.Now().Add(-24*time.Hour - 165*time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_4, Content: "You're all using training wheels. Real programmers write Assembly.", Created: time.Now().Add(-24*time.Hour - 150*time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_1, Content: "Assembly? What is this, 1985? JavaScript has npm with millions of packages!", Created: time.Now().Add(-24*time.Hour - 135*time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_2, Content: "Yeah and half of them are broken or abandoned. At least TypeScript catches errors at compile time.", Created: time.Now().Add(-24*time.Hour - 120*time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_3, Content: "Cargo is way better than npm. And the borrow checker prevents entire classes of bugs.", Created: time.Now().Add(-24*time.Hour - 105*time.Second)},
+			{ChatID: fakeChatID_2, Sender: currentUser, Content: "Go's tooling is unmatched though. go fmt, go test, everything just works out of the box.", Created: time.Now().Add(-24*time.Hour - 90*time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_4, Content: "You know what just works? MOV instructions. No abstractions, just pure speed.", Created: time.Now().Add(-24*time.Hour - 75*time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_1, Content: "Speed doesn't matter if development takes forever. I can prototype in JS in minutes.", Created: time.Now().Add(-24*time.Hour - 60*time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_2, Content: "And then spend weeks debugging runtime errors that TypeScript would have caught.", Created: time.Now().Add(-24*time.Hour - 45*time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_3, Content: "If it compiles in Rust, it usually works. Can't say that about any of your languages.", Created: time.Now().Add(-24*time.Hour - 30*time.Second)},
+			{ChatID: fakeChatID_2, Sender: currentUser, Content: "Rust's learning curve is brutal though. Go is productive from day one.", Created: time.Now().Add(-24*time.Hour - 15*time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_4, Content: "You're all arguing about high-level languages while I'm optimizing cache lines.", Created: time.Now().Add(-24 * time.Hour)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_1, Content: "Okay but seriously, can any of your languages run in a browser natively?", Created: time.Now().Add(-195 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_3, Content: "WebAssembly exists. Rust compiles to it beautifully.", Created: time.Now().Add(-180 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_2, Content: "And TypeScript compiles to JavaScript, so yes, it runs in browsers too.", Created: time.Now().Add(-165 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: currentUser, Content: "Go can compile to WASM too. But honestly, use the right tool for the job.", Created: time.Now().Add(-150 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_4, Content: "The right tool is always Assembly. Fight me.", Created: time.Now().Add(-135 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_1, Content: "Nobody is fighting you, we're just ignoring you 😂", Created: time.Now().Add(-120 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_3, Content: "Can we all agree that at least we're not using PHP?", Created: time.Now().Add(-105 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_2, Content: "Now THAT we can agree on!", Created: time.Now().Add(-90 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: currentUser, Content: "Lol fair point. Though modern PHP isn't terrible...", Created: time.Now().Add(-75 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_1, Content: "Don't defend PHP! You're a Go developer!", Created: time.Now().Add(-60 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_4, Content: "PHP is written in C. C compiles to Assembly. Therefore PHP is Assembly.", Created: time.Now().Add(-45 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_3, Content: "That logic is so broken even Rust's borrow checker couldn't save it.", Created: time.Now().Add(-30 * time.Second)},
+			{ChatID: fakeChatID_2, Sender: fakeUser_2, Content: "I think we can all agree this conversation needs better type definitions.", Created: time.Now().Add(-15 * time.Second)},
+		},
 	})
 
 	// SECTION -- template ---
@@ -266,7 +327,7 @@ func (h *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs.Query, "getHome> users > All", allUsersErr)
 	}
 	for u := range allUsers {
-		models.UpdateTimeSince(&allUsers[u])
+		models.UpdateTimeSince(allUsers[u])
 	}
 
 	// attach following/follower numbers to each user

@@ -1,0 +1,145 @@
+/* -- custom properties -- */
+/* ----------------------- */
+:root {
+  /* allow animations between intrinsic sizes */
+  transition-behavior: allow-discrete;
+
+  /* allow animations on items that animate discretley (eg display: none) */
+  interpolate-size: allow-keywords;
+
+  /* fancy input */
+  --input-font: 1.6rem;
+  --input-padding--block: 0.4rem;
+  --input-padding--inline: 1rem;
+  --input-padding: var(--input-padding--block) var(--input-padding--inline);
+  --label-line-height: 1rem;
+  --label-padding--block: 0.1rem;
+  --label-padding--inline: 0.6rem;
+  --label-padding: var(--label-padding--block) var(--label-padding--inline);
+  --input-padding--block-halved: calc(var(--input-padding--block) / 2);
+  --label-float-translate: -1.6rem;
+  /* vertical move when floating */
+  --label-float-scale: 0.72;
+  /* shrink when floating */
+  --transition-speed: 180ms;
+
+  /* paragraphs */
+  --p-max-width: 78ch;
+
+  /* fonts */
+  --font-sz-title: clamp(1.8rem, 2rem + 0.65vw, 2.2rem);
+  --font-sz-popover-title: clamp(1rem, 1rem + 0.5vw, 1.5rem);
+  --font-sz-main: clamp(1rem, 1.2rem + -0vw, 1.6rem);
+  --font-sz-cards: clamp(0.8rem, 1rem + 0.65vw, 1.2rem);
+
+  /* box shadows */
+  --shadow-popover:
+    rgb(0 0 0 / 45%) -5px 2px 12px 0px,
+    rgb(0 0 0 / 45%) 0 3px 6px 2px;
+  /* INFO this shadow is unused */
+  --shadow-box: 0 0.25rem 1rem rgb(0 0 0 / 0.5);
+  /* INFO this shadow is unused */
+  --shadow-main: 0 0.5rem 2.5rem rgba(0 0 0 / 0.4);
+  --shadow-filter: 0 0.4rem 2.4rem rgba(0 0 0 / 0.4);
+  /* INFO this shadow is unused */
+  --shadow-card: 0px 8px 24px 0px rgba(0, 0, 0, 0.6);
+  --shadow-text: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.2);
+  /* INFO this shadow is unused */
+  --shadow-icon:
+    inset 0 0.1rem 0.1rem rgba(0 0 0 / 0.2),
+    inset 0 0.3rem 0.5rem rgba(0 0 0 / 0.1),
+    inset 0 -0.1rem 0.1rem rgba(225 225 225 / 0.3);
+  /* INFO this shadow is unused */
+  --shadow-toggle:
+    inset 0 0.5rem 1.5rem rgba(0 0 0 / 0.4),
+    inset 0 -0.1rem 0.1rem rgba(255 255 255 / 0.4);
+  /* INFO this shadow is unused */
+  --shadow-button:
+    0.1rem 0.1rem 0.1rem rgba(74, 74, 74, 0.3),
+    -0.1rem -0.1rem 0.1rem 0 rgba(255 2552 255 / 0.18);
+  /* INFO this shadow is unused */
+  --shadow-button-hover: 0.4rem 0.4rem 0.5rem -0.1rem rgba(0, 0, 0, 0.45);
+  /* INFO this shadow is unused */
+  --shadow-button-pressed:
+    inset 0 0.3rem 0.5rem -0.1rem rgba(0 0 0 / 0.3),
+    inset 0 -0.1rem 0.2rem -0.1rem rgba(200 200 200 / 0.6);
+  /* INFO this shadow is unused */
+  --shadow-button-pressed-2:
+    inset 0 0.1rem 0.2rem rgba(0 0 0 / 0.7),
+    inset 0 0.3rem 0.5rem rgba(0 0 0 / 0.3),
+    inset 0 -0.1rem 0.2rem rgba(225 225 225 / 0.5);
+
+  /* --- borders --- */
+  --border-radius-input: 0.8rem;
+  --border-radius-button: 5rem;
+
+  /* --- transitions --- */
+  --transition-dur-hover: 200ms;
+  --transition-dur-appear: 400ms;
+  --transition-dur-feeds: 500ms;
+  --transition-dur-hover-darklight: 500ms;
+  --transition-type-hover: ease-in-out;
+
+  /* --- filters --- */
+  --filter-invert-on_off: invert(0);
+  --filter-invert-off_on: invert(1);
+  --filter-invert-always_on: invert(1);
+  --filter-invert-always_off: invert(0);
+
+  /* --- switches --- */
+  --switch-darkLight: url("/assets/icons/switch-on.svg");
+
+  /* --- icons --- */
+  --svg-upload: url("/assets/icons/upload_24.svg");
+
+  /* --- z-index --- */
+  --z-index-notification-main: 10100;
+  --z-index-modal: 10000;
+  --z-index-drop-zone: 600;
+  --z-index-right-panel-content: 500;
+  --z-index-above: 500;
+
+  /* above-posts, above-activity */
+  --z-index-content: 500;
+  --z-index-user-label: 500;
+  --z-index-darklight-border: 400;
+  --z-index-button: 400;
+  --z-index-page-control: 300;
+  --z-index-header: 200;
+  --z-index-sidebar-channel: 150;
+  --z-index-sidebar-options-list: 100;
+  --z-index-banner: 0;
+  --z-index-btn-action: 0;
+  --z-index-share-container: 0;
+  --z-index-darklight-fx: -100;
+  --z-index-form-container: -200;
+
+  /* --- blurs ---*/
+  --blur-modal: blur(0.4rem);
+
+  @media (prefers-color-scheme: light) {
+    .branding {
+      background: url("/assets/icons/codex-logo-blue.svg") no-repeat;
+
+      @media (max-width: 39rem) {
+        background: url("/assets/icons/codex-logo-blue-sm.svg") no-repeat;
+        background-size: contain;
+      }
+    }
+
+    /*.btn-notifications {*/
+    /*  &::before {*/
+    /*    background: url('/assets/icons/notification-black_16.svg') no-repeat center;*/
+    /*  }*/
+    /*}*/
+    --filter-invert-on_off: invert(1);
+    --filter-invert-off_on: invert(0);
+    --filter-invert-always_on: invert(1);
+    --filter-invert-always_off: invert(0);
+    --switch-darkLight: url("/assets/icons/switch-off.svg");
+
+    /* body { */
+    /*   background: var(--clr-bg-4); */
+    /* } */
+  }
+}

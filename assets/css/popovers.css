@@ -1,0 +1,270 @@
+/* ================================================================
+   POPOVERS
+   Popover forms for posts, channels, and channel rules
+   ================================================================ */
+
+/*--- post popover and buttons --- */
+.header-right {
+  anchor-name: --header-right;
+}
+
+.btn-post {
+  anchor-name: --post-button;
+}
+
+.btn-channel {
+  anchor-name: --channel-button;
+}
+
+.btn-join-channel {
+  anchor-name: --join-channel-button;
+}
+
+#right-panel-container-rules {
+  anchor-name: --edit-channel-rules-button;
+  position: relative;
+}
+
+#form-post,
+#form-channel,
+#form-join-channel,
+#form-edit-channel-rules,
+[id^="form-chat"] {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  /*padding: 2rem;*/
+  font-size: 1.5rem;
+  background: var(--clr-bg-2);
+  color: var(--clr-fg-2);
+  margin-block-start: 0.8rem;
+  border: 1px solid var(--clr-bg-3);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-popover);
+  width: max(20dvw, 30rem);
+  max-height: 90dvh;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    display var(--transition-dur-feeds),
+    opacity var(--transition-dur-feeds);
+
+  &:popover-open {
+    display: flex;
+    opacity: 1;
+    flex-direction: column;
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  & select {
+    margin-inline: auto;
+    width: 90%;
+    padding: 0.4rem 0.4rem 0.4rem 1.2rem;
+    border: 1px solid var(--clr-bg-3);
+    border-radius: var(--btn-radius);
+  }
+
+  & input {
+    /* margin: 0.8rem 0; */
+    /* width: max-content; */
+  }
+
+  & textarea {
+    overflow: visible;
+    padding: 0.4rem;
+    resize: both;
+    font-size: var(--font-sz-cards);
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+#form-post,
+#form-channel,
+#form-join-channel,
+#form-edit-channel-rules {
+  position-anchor: --header-right;
+  top: calc(anchor(bottom) + 1rem);
+  right: anchor(right);
+  top: 5rem;
+  right: 15rem;
+}
+
+[id^="form-chat"] {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+/* #form-post { */
+/*   top: 5rem; */
+/*   right: 15rem; */
+/*   position-anchor: --header-right; */
+/*   top: anchor(bottom); */
+/*   right: anchor(right); */
+/* } */
+/**/
+/* #form-channel { */
+/*   top: 15rem; */
+/*   right: 5rem; */
+/*   position-anchor: --channel-button; */
+/*   bottom: anchor(bottom); */
+/*   left: anchor(right); */
+/* } */
+/**/
+/* #form-join-channel { */
+/*   top: 15rem; */
+/*   right: 5rem; */
+/*   position-anchor: --join-channel-button; */
+/*   bottom: anchor(bottom); */
+/*   right: anchor(left); */
+/* } */
+/**/
+/* #form-edit-channel-rules { */
+/*   top: 15rem; */
+/*   right: 5rem; */
+/*   position-anchor: --edit-channel-rules-button; */
+/*   bottom: anchor(top); */
+/*   right: anchor(left); */
+/* } */
+
+#rules-wrapper {
+  & span {
+    font-size: 1.2rem;
+    color: var(--clr-fg-3);
+  }
+}
+
+/* TODO does this need a var(--cursor-default)?*/
+[id^="edit-channel-rules-title-rules-"] {
+  font-size: 1.6rem;
+  cursor: default;
+}
+
+#edit-channel-rules-title-rules-existing {
+  color: var(--clr-accent--2);
+}
+
+#edit-channel-rules-title-rules-added {
+  color: var(--clr-accent--1);
+}
+
+#edit-channel-rules-title-rules-removed {
+  color: var(--clr--error);
+}
+
+[id^="rules-wrapper"] {
+
+  & span,
+  & li {
+    font-size: 1.2rem;
+  }
+}
+
+#rules-wrapper-existing span {
+  &:hover {
+    color: var(--clr--error);
+    cursor: var(--cursor-minus);
+  }
+}
+
+#rules-wrapper-added span,
+#rules-wrapper-removed span {
+  &:hover {
+    color: var(--clr-accent--1);
+    cursor: var(--cursor-plus);
+  }
+}
+
+#rules-wrapper-removed {
+  &:hover {
+    cursor: cell;
+  }
+}
+
+#wrapper-edit-channel-rules-added:has(#rules-wrapper-added:empty),
+#wrapper-edit-channel-rules-removed:has(#rules-wrapper-removed:empty) {
+  display: none;
+}
+
+.container-join-rules {
+  width: 100%;
+  /* display: none; */
+  overflow: auto;
+  height: fit-content;
+  max-height: 22rem;
+  transition: display var(--transition-dur-appear) ease-in-out;
+}
+
+.text-join-channel,
+.text-join-private {
+  font-size: 1.2rem;
+  width: min(40ch, 85%);
+  margin-block: 0.8rem 0.4rem;
+  margin-inline: auto;
+  padding: 0.4rem 1.2rem;
+}
+
+.text-join-channel {
+  border-block-start: 1px dashed var(--clr-dark--6);
+}
+
+.text-join-private {
+  --b: 2px;
+  /* border thickness */
+  --s: 10px;
+  /* size of the dashes */
+  --t: 25px;
+  /* size of the dashes */
+  --c1: var(--clr-accent--2-light-2);
+  --c2: var(--clr-accent--2-dark-1);
+  position: relative;
+  background: var(--clr-accent--2-faded);
+  /* border: 1px dashed var(--clr-accent--pink); */
+  border-radius: 0.8rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 0.8rem;
+    padding: var(--b);
+    background: repeating-conic-gradient(var(--c1) 0 25%, var(--c2) 0 50%) 0 0 / var(--s) var(--s) round;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+.wrapper-form {
+  width: 100%;
+  align-items: center;
+
+  &:has([id^="form-send-chat"]) {
+    gap: 0.6rem;
+    padding-block: 0.6rem;
+
+    &:has(input:focus-within) {
+      gap: 1.4rem;
+    }
+  }
+}
+
+#sidebar-channel-block,
+.side-panel-block {
+  &:has(> .chat-control) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: 1rem;
+    padding-inline-start: 2rem;
+  }
+}

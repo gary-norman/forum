@@ -42,13 +42,7 @@
   --shadow-main: 0 0.5rem 2.5rem rgba(0 0 0 / 0.4);
   --shadow-filter: 0 0.4rem 2.4rem rgba(0 0 0 / 0.4);
   /* INFO this shadow is unused */
-  --shadow-card:
-    0.1rem 0.06rem 0.41rem rgba(0 0 0 / 0.018),
-    0.24rem 0.15rem 1rem rgba(0 0 0 / 0.027),
-    0.43rem 0.27rem 1.9rem rgba(0 0 0 / 0.034),
-    0.74rem 0.46rem 3.33rem rgba(0 0 0 / 0.041),
-    1.4rem 0.87rem 5.9rem rgba(0 0 0 / 0.05),
-    3.7rem 2.3rem 12.6rem rgba(0 0 0 / 0.07);
+  --shadow-card: 0px 8px 24px 0px rgba(0, 0, 0, 0.6);
   --shadow-text: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.2);
   /* INFO this shadow is unused */
   --shadow-icon:

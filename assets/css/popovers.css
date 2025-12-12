@@ -28,7 +28,8 @@
 #form-post,
 #form-channel,
 #form-join-channel,
-#form-edit-channel-rules {
+#form-edit-channel-rules,
+[id^="form-chat"] {
   position: fixed;
   inset: auto;
   margin: 0;
@@ -47,11 +48,6 @@
   transition:
     display var(--transition-dur-feeds),
     opacity var(--transition-dur-feeds);
-  top: 5rem;
-  right: 15rem;
-  position-anchor: --header-right;
-  top: calc(anchor(bottom) + 1rem);
-  right: anchor(right);
 
   &:popover-open {
     display: flex;
@@ -84,6 +80,23 @@
     width: 100%;
     max-width: 100%;
   }
+}
+
+#form-post,
+#form-channel,
+#form-join-channel,
+#form-edit-channel-rules {
+  position-anchor: --header-right;
+  top: calc(anchor(bottom) + 1rem);
+  right: anchor(right);
+  top: 5rem;
+  right: 15rem;
+}
+
+[id^="form-chat"] {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
 }
 
 /* #form-post { */
@@ -220,10 +233,38 @@
     border-radius: 0.8rem;
     padding: var(--b);
     background: repeating-conic-gradient(var(--c1) 0 25%, var(--c2) 0 50%) 0 0 / var(--s) var(--s) round;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
+  }
+}
+
+.wrapper-form {
+  width: 100%;
+  align-items: center;
+
+  &:has([id^="form-send-chat"]) {
+    gap: 0.6rem;
+    padding-block: 0.6rem;
+
+    &:has(input:focus-within) {
+      gap: 1.4rem;
+    }
+  }
+}
+
+#sidebar-channel-block,
+.side-panel-block {
+  &:has(> .chat-control) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: 1rem;
+    padding-inline-start: 2rem;
   }
 }

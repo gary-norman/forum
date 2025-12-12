@@ -11,6 +11,24 @@
   transition: opacity 1s;
 }
 
+.above-posts {
+  /*position   : absolute;*/
+  background: var(--clr-bg-1);
+  background: transparent;
+  width: calc(100vw - 3rem - 1.2rem - 32rem);
+  /*z-index: var(--z-index-above);*/
+}
+
+.above-activity {
+  position: sticky;
+  width: 100%;
+  /*z-index: var(--z-index-above);*/
+}
+
+.post-controls {
+  position: relative;
+}
+
 /*.feeds-wrapper-loaded {*/
 /*  opacity: 1;*/
 /*}*/

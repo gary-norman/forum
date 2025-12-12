@@ -42,6 +42,19 @@ button,
   }
 }
 
+.button-row,
+.button-row-wrap,
+.page-buttons {
+  display: flex;
+  padding: 1.2rem 0;
+  column-gap: 1.2rem;
+  row-gap: 0.8rem;
+}
+
+.button-row-wrap {
+  flex-wrap: wrap;
+}
+
 .btn-pill {
   display: flex;
   border-radius: var(--btn-radius);

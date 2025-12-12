@@ -61,7 +61,7 @@
   flex-direction: row;
   gap: 4.8rem;
   width: 100%;
-  padding: 0 clamp(0.4rem, 3dvw, 4.8rem) 12rem;
+  padding: 0 clamp(0.4rem, 3dvw, 1.8rem) 4rem;
   justify-content: space-between;
   overflow: hidden;
   height: calc(100% - 6rem);

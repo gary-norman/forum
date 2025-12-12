@@ -5,7 +5,12 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/gary-norman/forum/internal/colors"
 	"github.com/gary-norman/forum/internal/models"
+)
+
+var (
+	seedColors, _ = colors.UseFlavor("Mocha")
 )
 
 func runSeed(db *sql.DB) error {
@@ -16,9 +21,11 @@ func runSeed(db *sql.DB) error {
 		return fmt.Errorf("failed to check existing seed data: %w", err)
 	}
 	if count > 0 {
-		fmt.Println("Seed data already exists, skipping...")
+		fmt.Printf("%s⊘ Seed data already exists, skipping...%s\n", seedColors.Yellow, seedColors.Reset)
 		return nil
 	}
+
+	fmt.Printf("%s> Seeding database with initial data...%s\n", seedColors.CodexPink, seedColors.Reset)
 
 	// create variables
 	userID := models.NewUUIDField()
@@ -65,5 +72,6 @@ func runSeed(db *sql.DB) error {
 		return fmt.Errorf("failed to insert %v seed data: %w", "post", err)
 	}
 
+	fmt.Printf("%s✓ Successfully seeded database%s\n", seedColors.CodexGreen, seedColors.Reset)
 	return nil
 }

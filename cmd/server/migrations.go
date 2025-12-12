@@ -7,6 +7,12 @@ import (
 	"path/filepath"
 	"sort"
 	"time"
+
+	"github.com/gary-norman/forum/internal/colors"
+)
+
+var (
+	migrationColors, _ = colors.UseFlavor("Mocha")
 )
 
 // ApplyMigrations applies multiple SQL files in order and records them in Migrations table
@@ -33,11 +39,11 @@ func runMigrations(db *sql.DB, migrationFiles []string) error {
 			return fmt.Errorf("failed to check migration record: %w", err)
 		}
 		if exists > 0 {
-			fmt.Printf("Skipping already applied migration: %s\n", file)
+			fmt.Printf("%s⊘ Skipping already applied migration:%s %s\n", migrationColors.Yellow, migrationColors.Reset, migrationColors.CodexPink+file+migrationColors.Reset)
 			continue
 		}
 
-		fmt.Printf("Applying migration: %s\n", file)
+		fmt.Printf("%s> Applying migration:%s %s\n", migrationColors.CodexPink, migrationColors.Reset, migrationColors.Teal+file+migrationColors.Reset)
 		sqlBytes, err := os.ReadFile(file)
 		if err != nil {
 			return fmt.Errorf("failed to read migration file %s: %w", file, err)
@@ -55,7 +61,7 @@ func runMigrations(db *sql.DB, migrationFiles []string) error {
 			return fmt.Errorf("failed to record migration %s: %w", file, err)
 		}
 
-		fmt.Printf("Successfully applied migration: %s\n", file)
+		fmt.Printf("%s✓ Successfully applied migration:%s %s\n", migrationColors.CodexGreen, migrationColors.Reset, migrationColors.CodexPink+file+migrationColors.Reset)
 	}
 
 	return nil

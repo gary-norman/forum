@@ -2,6 +2,7 @@ package workers
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"image"
 	_ "image/gif"  // Register GIF format
@@ -16,6 +17,7 @@ import (
 
 	"github.com/gary-norman/forum/internal/colors"
 	"github.com/gary-norman/forum/internal/models"
+	"github.com/gary-norman/forum/internal/sqlite"
 )
 
 var (
@@ -32,22 +34,31 @@ type ImageJob struct {
 
 // ImageWorkerPool manages a pool of worker goroutines that process image jobs
 type ImageWorkerPool struct {
-	jobs       chan ImageJob  // Channel for queuing jobs
-	workers    int            // Number of worker goroutines
-	wg         sync.WaitGroup // Wait for workers to finish during shutdown
-	shutdownCh chan struct{}  // Signal to shutdown workers
-	isShutdown atomic.Bool    // Track whether pool has been shut down
+	jobs       chan ImageJob      // Channel for queuing jobs
+	workers    int                // Number of worker goroutines
+	wg         sync.WaitGroup     // Wait for workers to finish during shutdown
+	shutdownCh chan struct{}      // Signal to shutdown workers
+	isShutdown atomic.Bool        // Track whether pool has been shut down
+	imageModel *sqlite.ImageModel // Database model for storing image metadata
 }
 
 // NewImageWorkerPool creates a new worker pool
 // workers: number of concurrent worker goroutines
 // queueSize: maximum number of jobs that can be queued
-func NewImageWorkerPool(workers, queueSize int) *ImageWorkerPool {
-	return &ImageWorkerPool{
+// db: database connection for storing image metadata (can be nil for tests)
+func NewImageWorkerPool(workers, queueSize int, db *sql.DB) *ImageWorkerPool {
+	pool := &ImageWorkerPool{
 		jobs:       make(chan ImageJob, queueSize),
 		workers:    workers,
 		shutdownCh: make(chan struct{}),
 	}
+
+	// Only create imageModel if we have a database connection
+	if db != nil {
+		pool.imageModel = &sqlite.ImageModel{DB: db}
+	}
+
+	return pool
 }
 
 // TODO(human): Exercise 3 Part 1 - Implement Start method
@@ -208,8 +219,50 @@ func (pool *ImageWorkerPool) processJob(job ImageJob, workerID int) {
 	log.Printf(workerColors.Green+"[Worker %d] Completed job %s -> %s"+workerColors.Reset+"\n",
 		workerID, job.ID, processedPath)
 
-	// TODO: Update database with image metadata
-	// Example: db.UpdatePostImage(job.PostID, processedPath)
+	// TODO(human): Exercise 3 Part 4 - Save image metadata to database
+	//
+	// Instructions:
+	// Now that the image is successfully processed and saved to disk, we need to
+	// store the metadata in the database so the application knows the image exists.
+	//
+	// 1. Check if pool.imageModel is nil (it's nil in tests)
+	//    If nil, just return early - no database to update
+	//
+	// 2. Call pool.imageModel.Insert() with three parameters:
+	//    - authorID (models.UUIDField) - job.UserID (no conversion needed!)
+	//    - postID (int64) - job.PostID
+	//    - path (string) - processedPath
+	//
+	// 3. Handle the returned values (imageID, err):
+	//    - On error: log with workerColors.Red and return
+	//    - On success: log with workerColors.Blue showing the imageID
+	//
+	// Example pattern:
+	//   if pool.imageModel == nil {
+	//       return // No database in test environment
+	//   }
+	//
+	//   imageID, err := pool.imageModel.Insert(job.UserID, job.PostID, processedPath)
+	//   if err != nil {
+	//       log.Printf(workerColors.Red+"[Worker %d] Failed to save image metadata: %v"+workerColors.Reset+"\n",
+	//           workerID, err)
+	//       return
+	//   }
+	//   log.Printf(workerColors.Blue+"[Worker %d] Saved image metadata (ID: %d)"+workerColors.Reset+"\n",
+	//       workerID, imageID)
+	if pool.imageModel == nil {
+		return // No database in test environment
+	}
+
+	imageID, err := pool.imageModel.Insert(job.UserID, job.PostID, processedPath)
+	if err != nil {
+		log.Printf(workerColors.Red+"[Worker %d] Failed to save image metadata: %v"+workerColors.Reset+"\n",
+			workerID, err)
+		return
+	}
+
+	log.Printf(workerColors.Blue+"[Worker %d] Saved image metadata (ID: %d)"+workerColors.Reset+"\n",
+		workerID, imageID)
 }
 
 // validateImage checks if the file is a valid image

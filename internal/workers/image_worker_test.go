@@ -10,7 +10,7 @@ import (
 
 // TestNewImageWorkerPool tests pool creation
 func TestNewImageWorkerPool(t *testing.T) {
-	pool := NewImageWorkerPool(3, 10)
+	pool := NewImageWorkerPool(3, 10, nil)
 	if pool == nil {
 		t.Fatal("NewImageWorkerPool returned nil")
 	}
@@ -30,7 +30,7 @@ func TestNewImageWorkerPool(t *testing.T) {
 
 // TestWorkerPoolStartAndShutdown tests starting and stopping the pool
 func TestWorkerPoolStartAndShutdown(t *testing.T) {
-	pool := NewImageWorkerPool(2, 5)
+	pool := NewImageWorkerPool(2, 5, nil)
 
 	// Start the pool
 	pool.Start()
@@ -50,7 +50,7 @@ func TestWorkerPoolStartAndShutdown(t *testing.T) {
 
 // TestSubmitAndProcessJob tests submitting jobs to the pool
 func TestSubmitAndProcessJob(t *testing.T) {
-	pool := NewImageWorkerPool(2, 10)
+	pool := NewImageWorkerPool(2, 10, nil)
 	pool.Start()
 
 	job := ImageJob{
@@ -76,7 +76,7 @@ func TestSubmitAndProcessJob(t *testing.T) {
 
 // TestMultipleJobs tests processing multiple jobs concurrently
 func TestMultipleJobs(t *testing.T) {
-	pool := NewImageWorkerPool(3, 20)
+	pool := NewImageWorkerPool(3, 20, nil)
 	pool.Start()
 
 	// Submit 10 jobs
@@ -113,7 +113,7 @@ func TestMultipleJobs(t *testing.T) {
 
 // TestSubmitAfterShutdown tests that submitting after shutdown fails
 func TestSubmitAfterShutdown(t *testing.T) {
-	pool := NewImageWorkerPool(2, 5)
+	pool := NewImageWorkerPool(2, 5, nil)
 	pool.Start()
 
 	// Shutdown immediately
@@ -138,7 +138,7 @@ func TestSubmitAfterShutdown(t *testing.T) {
 // TestBufferedChannels tests that buffered channels prevent blocking
 func TestBufferedChannels(t *testing.T) {
 	// Create pool with buffer size of 5
-	pool := NewImageWorkerPool(1, 5)
+	pool := NewImageWorkerPool(1, 5, nil)
 
 	// Don't start workers yet - jobs will queue in buffer
 
@@ -187,7 +187,7 @@ func TestBufferedChannels(t *testing.T) {
 // TestConcurrentProcessing verifies parallel execution
 func TestConcurrentProcessing(t *testing.T) {
 	// Create pool with 3 workers
-	pool := NewImageWorkerPool(3, 20)
+	pool := NewImageWorkerPool(3, 20, nil)
 	pool.Start()
 
 	// Submit 6 jobs
@@ -221,7 +221,7 @@ func TestConcurrentProcessing(t *testing.T) {
 
 // TestShutdownTimeout tests shutdown with a timeout
 func TestShutdownTimeout(t *testing.T) {
-	pool := NewImageWorkerPool(2, 10)
+	pool := NewImageWorkerPool(2, 10, nil)
 	pool.Start()
 
 	// Submit some jobs (they'll process quickly since validation fails)
@@ -250,7 +250,7 @@ func TestShutdownTimeout(t *testing.T) {
 
 // TestGetStats tests pool statistics
 func TestGetStats(t *testing.T) {
-	pool := NewImageWorkerPool(3, 10)
+	pool := NewImageWorkerPool(3, 10, nil)
 
 	stats := pool.Stats()
 

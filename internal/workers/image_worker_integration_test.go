@@ -31,8 +31,8 @@ func TestIntegrationRealImage(t *testing.T) {
 	outputDir := "db/userdata/images/post-images"
 	os.MkdirAll(outputDir, 0755)
 
-	// Create and start worker pool
-	pool := NewImageWorkerPool(2, 10)
+	// Create and start worker pool (no database for integration test)
+	pool := NewImageWorkerPool(2, 10, nil)
 	pool.Start()
 
 	// Submit job

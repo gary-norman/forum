@@ -48,9 +48,9 @@ func (m *CookieModel) CreateCookies(w http.ResponseWriter, user *models.User) er
 
 func (m *CookieModel) QueryCookies(w http.ResponseWriter, r *http.Request, user *models.User) bool {
 	var success bool
-
+	ctx := r.Context()
 	stmt := "SELECT CookiesExpire FROM Users WHERE Username = ?"
-	rows, err := m.DB.Query(stmt, user.Username)
+	rows, err := m.DB.QueryContext(ctx, stmt, user.Username)
 	if err != nil {
 		log.Printf(ErrorMsgs.Cookies, "query", err)
 	}

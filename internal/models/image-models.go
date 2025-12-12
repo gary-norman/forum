@@ -8,8 +8,9 @@ type Image struct {
 	ID       int64     `db:"id"`
 	Created  time.Time `db:"created"`
 	Updated  time.Time `db:"updated"`
-	AuthorID int64     `db:"authorId"`
+	AuthorID UUIDField `db:"authorId"` // UUID stored as BLOB in database
 	PostID   int64     `db:"postId"`
+	Path     string    `db:"path"` // File system path to the processed image
 }
 
 func (i Image) TableName() string { return "images" }

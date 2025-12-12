@@ -66,86 +66,78 @@ function listenToChannelLinks() {
   }
 }
 
-// Helper function to show login required notification
-function showLoginRequired(postID) {
-  const notifier = activePageElement?.querySelector(`#post-card-info-${postID}`);
-  if (notifier) {
-    showInlineNotification(
-      notifier,
-      "",
-      "You must be logged in to reply to a post.",
-      false
-    );
-  }
-}
-
 function navigateToEntity(e) {
-  const target = e.target;
+  console.info("navigateToEntity called");
+  let target = e.target;
+  const isButton = target.nodeName.toLowerCase() === "button";
   const commentAction = target.getAttribute("data-action");
   const dest = target.getAttribute("data-dest");
   const postID = target.getAttribute("data-post-id");
 
-  // Early exit if no navigation attributes present
-  // This allows other event listeners to handle the event
-  if (!commentAction && !dest && !target.matches(".link") && !target.closest(".link")) {
+  if (commentAction === "navigate--comment-post" && dest) {
+    const sidebarProfile = document.querySelector(".sidebarProfile");
+    console.info("Navigating to comment post:", dest);
+    navigateToPage(dest, target)
+      .then(() => {
+        pageData["homePage"].innerHTML = "";
+        target = activePageElement.querySelector(`#post-card-${postID}`);
+        if (sidebarProfile) {
+          toggleReplyForm(target);
+        } else {
+          return;
+          const notifier = activePageElement.querySelector(
+            `#post-card-info-${postID}`,
+          );
+          console.info("notifier:", notifier);
+          showInlineNotification(
+            notifier,
+            "",
+            "You must be logged in to reply to a post.",
+            false,
+          );
+        }
+      })
+      .catch((err) => {
+        console.error("Navigation failed:", err);
+      });
     return;
   }
 
-  console.info("navigateToEntity called");
-
-  const sidebarProfile = document.querySelector(".sidebarProfile");
-
-  // Handle different navigation actions
-  switch (commentAction) {
-    case "navigate--comment-post":
-      if (dest) {
-        e.preventDefault();
-        console.info("Navigating to comment post:", dest);
-
-        navigateToPage(dest, target)
-          .then(() => {
-            pageData["homePage"].innerHTML = "";
-            const postCard = activePageElement?.querySelector(`#post-card-${postID}`);
-
-            if (sidebarProfile && postCard) {
-              toggleReplyForm(postCard);
-            } else if (!sidebarProfile) {
-              showLoginRequired(postID);
-            }
-          })
-          .catch((err) => {
-            console.error("Navigation failed:", err);
-          });
-        return;
-      }
-      break;
-
-    case "comment-post":
-      console.info("Toggling reply form for post ID:", postID);
-
-      if (sidebarProfile) {
-        toggleReplyForm(target);
-      } else {
-        showLoginRequired(postID);
-      }
+  if (commentAction === "comment-post") {
+    const sidebarProfile = document.querySelector(".sidebarProfile");
+    console.info("Toggling reply form for post ID:", postID);
+    if (sidebarProfile) {
+      toggleReplyForm(target);
+    } else {
       return;
-  }
-
-  // Handle generic navigation links
-  // Check if target or closest parent has .link class
-  const linkElement = target.matches(".link") ? target : target.closest(".link");
-
-  if (linkElement) {
-    const linkDest = linkElement.getAttribute("data-dest");
-    if (linkDest) {
-      e.preventDefault();
-      navigateToPage(linkDest, linkElement);
-      return;
+      const notifier = activePageElement.querySelector(
+        `#post-card-info-${postID}`,
+      );
+      console.info("notifier:", notifier);
+      showInlineNotification(
+        notifier,
+        "",
+        "You must be logged in to reply to a post.",
+        false,
+      );
     }
+    return;
   }
 
-  // If we reach here, none of the navigation conditions matched
-  // Allow the event to continue propagating for other event listeners
+  // // Handle navigation for elements with data-dest or .link class
+
+  if (dest || !isButton || (isButton && dest)) {
+    const parent = e.target.closest(".link");
+    if (parent) {
+      const newDest = parent.getAttribute("data-dest");
+      navigateToPage(newDest, parent);
+    }
+    return;
+  }
+  if (e.target.matches(".link")) {
+    const newDest = e.target.getAttribute("data-dest");
+    navigateToPage(newDest, e.target);
+  }
 }
 
 export function selectActiveFeed() {

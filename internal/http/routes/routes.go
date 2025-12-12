@@ -3,6 +3,7 @@ package routes
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gary-norman/forum/internal/app"
 	// "github.com/gary-norman/forum/internal/http/handlers"
@@ -40,5 +41,5 @@ func NewRouter(app *app.App) http.Handler {
 	mux.Handle("POST /channels/join", mw.WithUser(http.HandlerFunc(r.Channel.StoreMembership), r.App))
 	mux.Handle("POST /channels/add-rules/{channelId}", mw.WithUser(http.HandlerFunc(r.Channel.CreateAndInsertRule), r.App))
 	mux.Handle("POST /cdx/post/{postId}/store-comment", mw.WithUser(http.HandlerFunc(r.Comment.StoreComment), r.App))
-	return mux
+	return mw.WithTimeout(mux, 10*time.Second)
 }

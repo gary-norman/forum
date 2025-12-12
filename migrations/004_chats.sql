@@ -42,4 +42,28 @@ CREATE TABLE IF NOT EXISTS ChatUsers (
 
 COMMIT;
 
+-- Trigger: Update LastActive when a new message is inserted
+CREATE TRIGGER IF NOT EXISTS chats_lastactive_trigger
+AFTER INSERT ON Messages
+FOR EACH ROW
+BEGIN
+    UPDATE Chats SET LastActive = CURRENT_TIMESTAMP WHERE ID = NEW.ChatID;
+END;
+
+-- Indexes for Chats
+CREATE INDEX IF NOT EXISTS idx_chats_type ON Chats(Type);
+CREATE INDEX IF NOT EXISTS idx_chats_buddyid ON Chats(BuddyID);
+CREATE INDEX IF NOT EXISTS idx_chats_groupid ON Chats(GroupID);
+CREATE INDEX IF NOT EXISTS idx_chats_lastactive ON Chats(LastActive);
+
+-- Indexes for Messages
+CREATE INDEX IF NOT EXISTS idx_messages_chatid ON Messages(ChatID);
+CREATE INDEX IF NOT EXISTS idx_messages_userid ON Messages(UserID);
+CREATE INDEX IF NOT EXISTS idx_messages_created ON Messages(Created);
+CREATE INDEX IF NOT EXISTS idx_messages_chatid_created ON Messages(ChatID, Created);
+
+-- Indexes for ChatUsers
+CREATE INDEX IF NOT EXISTS idx_chatusers_userid ON ChatUsers(UserID);
+CREATE INDEX IF NOT EXISTS idx_chatusers_chatid ON ChatUsers(ChatID);
+
 PRAGMA foreign_keys = ON;

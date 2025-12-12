@@ -34,16 +34,14 @@ func main() {
 	}
 	defer cleanup()
 
-	migrations := []string{
-		"./migrations/001_schema.sql",
-		"./migrations/002_triggers.sql",
-		"./migrations/003_indexes.sql",
-	}
-
 	// CLI commands: migrate + seed
 	if len(os.Args) > 1 {
 		switch os.Args[1] {
 		case "migrate":
+			migrations, err := discoverMigrations("./migrations")
+			if err != nil {
+				log.Fatalf("Failed to discover migrations: %v", err)
+			}
 			if err := runMigrations(appInstance.DB, migrations); err != nil {
 				log.Fatalf("Migration failed: %v", err)
 			}
@@ -53,6 +51,18 @@ func main() {
 				log.Fatalf("Seeding failed: %v", err)
 			}
 			return
+		}
+	}
+
+	// Auto-run migrations in dev mode
+	if os.Getenv("DB_ENV") == "dev" {
+		migrations, err := discoverMigrations("./migrations")
+		if err != nil {
+			log.Printf("Warning: Failed to discover migrations: %v", err)
+		} else {
+			if err := runMigrations(appInstance.DB, migrations); err != nil {
+				log.Printf("Warning: Auto-migration failed: %v", err)
+			}
 		}
 	}
 

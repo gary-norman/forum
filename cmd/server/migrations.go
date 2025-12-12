@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 	"time"
 )
@@ -42,29 +43,35 @@ func runMigrations(db *sql.DB, migrationFiles []string) error {
 			return fmt.Errorf("failed to read migration file %s: %w", file, err)
 		}
 
-		tx, err := db.Begin()
+		// Execute migration SQL (migration files manage their own transactions)
+		_, err = db.Exec(string(sqlBytes))
 		if err != nil {
-			return fmt.Errorf("failed to begin transaction: %w", err)
-		}
-
-		_, err = tx.Exec(string(sqlBytes))
-		if err != nil {
-			tx.Rollback()
 			return fmt.Errorf("failed to execute migration %s: %w", file, err)
 		}
 
-		_, err = tx.Exec("INSERT INTO Migrations (Name, AppliedAt) VALUES (?, ?)", file, time.Now().UTC())
+		// Record migration in separate transaction
+		_, err = db.Exec("INSERT INTO Migrations (Name, AppliedAt) VALUES (?, ?)", file, time.Now().UTC())
 		if err != nil {
-			tx.Rollback()
 			return fmt.Errorf("failed to record migration %s: %w", file, err)
-		}
-
-		if err := tx.Commit(); err != nil {
-			return fmt.Errorf("failed to commit migration %s: %w", file, err)
 		}
 
 		fmt.Printf("Successfully applied migration: %s\n", file)
 	}
 
 	return nil
+}
+
+// discoverMigrations scans the migrations directory and returns all .sql files
+func discoverMigrations(migrationsDir string) ([]string, error) {
+	// Use filepath.Glob to find all .sql files in the migrations directory
+	pattern := filepath.Join(migrationsDir, "*.sql")
+	migrations, err := filepath.Glob(pattern)
+	if err != nil {
+		return nil, fmt.Errorf("failed to discover migration files: %w", err)
+	}
+
+	// Sort alphabetically (files are named with numeric prefixes like 001_, 002_, etc.)
+	sort.Strings(migrations)
+
+	return migrations, nil
 }

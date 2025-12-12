@@ -160,13 +160,5 @@ BEGIN
     UPDATE ChannelsRules SET Updated = CURRENT_TIMESTAMP WHERE ID = NEW.ID;
 END;
 
--- Chats: Update LastActive when a new message is inserted
-CREATE TRIGGER IF NOT EXISTS chats_lastactive_trigger
-AFTER INSERT ON Messages
-FOR EACH ROW
-BEGIN
-    UPDATE Chats SET LastActive = CURRENT_TIMESTAMP WHERE ID = NEW.ChatID;
-END;
-
 COMMIT;
 

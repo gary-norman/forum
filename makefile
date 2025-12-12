@@ -43,6 +43,26 @@ run: ## run the web server application
 build-run: ## build and run the web server application
 	@$(MAKE) --no-print-directory build && $(MAKE) --no-print-directory run
 
+migrate: ## run database migrations
+	@echo "$(CODEX_PINK)> running database migrations...$(NC)"
+	@START=$$($(NOWMS)); \
+		bin/codex migrate; \
+		STOP=$$($(NOWMS)); \
+		DIFF=$$((STOP - START)); \
+		SEC=$$((DIFF / 1000)); \
+		MS=$$((DIFF % 1000)); \
+		echo "$(GREEN)✓ migrations complete!$(NC) in $${SEC}.$${MS}s"
+
+seed: ## seed the database with initial data
+	@echo "$(CODEX_PINK)> seeding database...$(NC)"
+	@START=$$($(NOWMS)); \
+		bin/codex seed; \
+		STOP=$$($(NOWMS)); \
+		DIFF=$$((STOP - START)); \
+		SEC=$$((DIFF / 1000)); \
+		MS=$$((DIFF % 1000)); \
+		echo "$(GREEN)✓ seeding complete!$(NC) in $${SEC}.$${MS}s"
+
 configure: ## configure Docker build and run options
 	@./scripts/configure.sh
 

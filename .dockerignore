@@ -1,8 +1,38 @@
+# Version control
 .git
 .gitignore
-db_dummy-data
-diagnostics
+.github
+
+# Documentation
 LICENSE
 README.md
+CLAUDE.md
+*.md
+
+# Development files
+diagnostics
+db_dummy-data
 identifier.sqlite
 todo-*
+*.log
+
+# Build artifacts
+bin/
+
+# Database files
+*.db
+*.sqlite
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+*_test.go

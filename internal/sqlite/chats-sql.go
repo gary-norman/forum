@@ -89,11 +89,15 @@ func (c *ChatModel) GetChat(chatID models.UUIDField) (*models.Chat, error) {
 	// TODO: Load Group details if groupID.Valid
 	// For now, just store the IDs
 	if groupID.Valid {
-		chat.Group.ID = models.UUIDField(groupID.String)
+		if id, err := models.UUIDFieldFromString(groupID.String); err == nil {
+			chat.Group.ID = id
+		}
 	}
 	if buddyID.Valid {
 		// Will need to fetch user separately or use JOIN
-		chat.Buddy = &models.User{ID: models.UUIDField(buddyID.String)}
+		if id, err := models.UUIDFieldFromString(buddyID.String); err == nil {
+			chat.Buddy = &models.User{ID: id}
+		}
 	}
 
 	return &chat, nil
@@ -128,10 +132,14 @@ func (c *ChatModel) GetUserChats(userID models.UUIDField) ([]models.Chat, error)
 		// TODO: Load Buddy user details if buddyID.Valid
 		// TODO: Load Group details if groupID.Valid
 		if groupID.Valid {
-			chat.Group.ID = models.UUIDField(groupID.String)
+			if id, err := models.UUIDFieldFromString(groupID.String); err == nil {
+				chat.Group.ID = id
+			}
 		}
 		if buddyID.Valid {
-			chat.Buddy = &models.User{ID: models.UUIDField(buddyID.String)}
+			if id, err := models.UUIDFieldFromString(buddyID.String); err == nil {
+				chat.Buddy = &models.User{ID: id}
+			}
 		}
 
 		chats = append(chats, chat)
@@ -193,7 +201,12 @@ func (c *ChatModel) GetChatMessages(chatID models.UUIDField) ([]models.ChatMessa
 
 		// Only populate Sender if user exists (LEFT JOIN might return NULLs)
 		if userID.Valid {
-			user.ID = models.UUIDField(userID.String)
+			id, err := models.UUIDFieldFromString(userID.String)
+			if err != nil {
+				return nil, fmt.Errorf("failed to parse user ID: %w", err)
+			}
+
+			user.ID = id
 			user.Username = username.String
 			user.Email = email.String
 			user.Avatar = avatar.String

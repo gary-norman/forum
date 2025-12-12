@@ -60,9 +60,9 @@ func GetRandomChannel(channelSlice []models.Channel) models.Channel {
 	return channel
 }
 
-func GetRandomUser(userSlice []models.User) models.User {
+func GetRandomUser(userSlice []*models.User) *models.User {
 	if len(userSlice) == 0 {
-		return models.User{}
+		return &models.User{}
 	}
 	rndInt := rand.IntN(len(userSlice))
 	user := userSlice[rndInt]

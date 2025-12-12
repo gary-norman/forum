@@ -99,6 +99,7 @@ type App struct {
 	Muted       *sqlite.MutedChannelModel
 	Cookies     *sqlite.CookieModel
 	Rules       *sqlite.RuleModel
+	Chats       *sqlite.ChatModel
 	Paths       models.ImagePaths
 }
 
@@ -119,6 +120,7 @@ func NewApp(db *sql.DB, imagePath string) *App {
 		Muted:       &sqlite.MutedChannelModel{DB: db},
 		Cookies:     &sqlite.CookieModel{DB: db},
 		Rules:       &sqlite.RuleModel{DB: db},
+		Chats:       &sqlite.ChatModel{DB: db},
 
 		Paths: models.ImagePaths{
 			Channel: imagePath + "channel-images/",

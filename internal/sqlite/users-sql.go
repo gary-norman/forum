@@ -330,7 +330,7 @@ func (m *UserModel) GetSingleUserValue(ID models.UUIDField, searchColumn, output
 	return outputValue, nil
 }
 
-func (m *UserModel) All() ([]models.User, error) {
+func (m *UserModel) All() ([]*models.User, error) {
 	stmt := "SELECT ID, Username, EmailAddress, Avatar, Banner, Description, Usertype, Created, Updated, IsFlagged, SessionToken, CSRFToken, HashedPassword FROM Users ORDER BY ID DESC"
 	rows, queryErr := m.DB.Query(stmt)
 	if queryErr != nil {
@@ -342,13 +342,13 @@ func (m *UserModel) All() ([]models.User, error) {
 		}
 	}()
 
-	users := make([]models.User, 0)
+	users := make([]*models.User, 0)
 	for rows.Next() {
 		p, err := parseUserRows(rows)
 		if err != nil {
 			return nil, fmt.Errorf("error parsing row: %w", err)
 		}
-		users = append(users, *p)
+		users = append(users, p)
 	}
 	return users, nil
 }

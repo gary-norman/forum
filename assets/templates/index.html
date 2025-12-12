@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="/assets/css/fonts.css" />
   <link rel="stylesheet" href="/assets/css/fonts-devicons.css" />
   <link rel="stylesheet" href="/assets/css/fonts-jetbrains_nerd-font.css" />
+  <link rel="stylesheet" href="/assets/css/chat.css" />
+  <link rel="stylesheet" href="/assets/css/colors.css" />
   <link rel="stylesheet" href="/assets/css/colors-oklch.css" />
   <!-- Main CSS broken into logical modules -->
   <link rel="stylesheet" href="/assets/css/variables.css" />
@@ -293,6 +295,9 @@
     {{/*SECTION ---------- post form ---------- */}}
     {{ template "post-popover" . }}
 
+    {{/*SECTION ---------- chat popover ---------- */}}
+    {{ template "chat-popover" . }}
+
     {{/*SECTION ---------- create channel popover ---------- */}}
     <div popover id="form-channel">
       <div class="modal-header">
@@ -425,6 +430,12 @@
           </div>
         </div>
         <hr class="solid" />
+
+        {{/*SECTION ---------- chat controls ---------- */}}
+        {{ if ne .CurrentUser nil }}
+        {{ template "chat-controls" . }}
+        {{ end }}
+
         {{/*SECTION ---------- sidebar channels ---------- */}}
         {{ if ne .CurrentUser nil }}
         <div class="sidebar-block sidebar-channels">

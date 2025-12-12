@@ -6,7 +6,12 @@ import (
 	"net/http"
 
 	"github.com/gary-norman/forum/internal/app"
+	"github.com/gary-norman/forum/internal/colors"
 	"github.com/gary-norman/forum/internal/models"
+)
+
+var (
+	authColors, _ = colors.UseFlavor("Mocha")
 )
 
 // Create a custom key type to avoid conflicts in context
@@ -20,13 +25,13 @@ func WithUser(next http.Handler, app *app.App) http.Handler {
 		var currentUser *models.User
 		cookie, err := r.Cookie("username")
 		if err != nil || cookie.Value == "" {
-			log.Printf("Error getting cookie: %v", err)
+			log.Printf(authColors.Red+"Error getting cookie: %v"+authColors.Reset, err)
 			next.ServeHTTP(w, r)
 			return
 		}
 		user, err := app.Users.GetUserByUsername(cookie.Value, "WithUser")
 		if err != nil {
-			log.Printf("No user found: %v", err)
+			log.Printf(authColors.Red+"No user found: %v"+authColors.Reset, err)
 			next.ServeHTTP(w, r)
 			return
 		}

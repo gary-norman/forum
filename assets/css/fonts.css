@@ -1,3 +1,13 @@
+:root {
+  --font-space_g--light: "SpaceGrotesk-Light", sans-serif;
+  --font-space_g--regular: "SpaceGrotesk-Regular", sans-serif;
+  --font-space_g--medium: "SpaceGrotesk-Medium", sans-serif;
+  --font-space_g--semibold: "SpaceGrotesk-SemiBold", sans-serif;
+  --font-space_g--bold: "SpaceGrotesk-Bold", sans-serif;
+  --font-spaceMono--regular: "SpaceMono", monospace;
+  --font-spaceMono--fixed: "SpaceMonoFixed", monospace;
+}
+
 /**
 * @license
 *
@@ -25,17 +35,18 @@
   font-display: swap;
   font-style: normal;
 }
+
 @font-face {
   font-family: "SpaceGrotesk-Regular";
   src:
     url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.woff2") format("woff2"),
     url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.woff") format("woff"),
-    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.ttf")
-      format("truetype");
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.ttf") format("truetype");
   font-weight: 400;
   font-display: swap;
   font-style: normal;
 }
+
 @font-face {
   font-family: "SpaceGrotesk-Medium";
   src:
@@ -46,18 +57,18 @@
   font-display: swap;
   font-style: normal;
 }
+
 @font-face {
   font-family: "SpaceGrotesk-SemiBold";
   src:
-    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.woff2")
-      format("woff2"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.woff2") format("woff2"),
     url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.woff") format("woff"),
-    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.ttf")
-      format("truetype");
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.ttf") format("truetype");
   font-weight: 600;
   font-display: swap;
   font-style: normal;
 }
+
 @font-face {
   font-family: "SpaceGrotesk-Bold";
   src:
@@ -68,6 +79,7 @@
   font-display: swap;
   font-style: normal;
 }
+
 /**
 * This is a variable font
 * You can control variable axes as shown below:
@@ -79,11 +91,9 @@
 @font-face {
   font-family: "SpaceGrotesk-Variable";
   src:
-    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Variable.woff2")
-      format("woff2"),
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Variable.woff2") format("woff2"),
     url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Variable.woff") format("woff"),
-    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Variable.ttf")
-      format("truetype");
+    url("/assets/fonts/SpaceGrotesk/SpaceGrotesk-Variable.ttf") format("truetype");
   font-weight: 300 700;
   font-display: swap;
   font-style: normal;

@@ -42,13 +42,8 @@
   --shadow-main: 0 0.5rem 2.5rem rgba(0 0 0 / 0.4);
   --shadow-filter: 0 0.4rem 2.4rem rgba(0 0 0 / 0.4);
   /* INFO this shadow is unused */
-  --shadow-card:
-    0.1rem 0.06rem 0.41rem rgba(0 0 0 / 0.018),
-    0.24rem 0.15rem 1rem rgba(0 0 0 / 0.027),
-    0.43rem 0.27rem 1.9rem rgba(0 0 0 / 0.034),
-    0.74rem 0.46rem 3.33rem rgba(0 0 0 / 0.041),
-    1.4rem 0.87rem 5.9rem rgba(0 0 0 / 0.05),
-    3.7rem 2.3rem 12.6rem rgba(0 0 0 / 0.07);
+  --shadow-card: 0px 8px 24px 0px rgba(0, 0, 0, 0.6);
+
   --shadow-text: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.2);
   /* INFO this shadow is unused */
   --shadow-icon:
@@ -859,7 +854,7 @@ form-field:focus-within input {
   flex-direction: row;
   gap: 4.8rem;
   width: 100%;
-  padding: 0 clamp(0.4rem, 3dvw, 4.8rem) 12rem;
+  padding: 0 clamp(0.4rem, 3dvw, 1.8rem) 4rem;
   justify-content: space-between;
   overflow: hidden;
   height: calc(100% - 6rem);
@@ -1755,7 +1750,8 @@ hr.solid {
 #form-post,
 #form-channel,
 #form-join-channel,
-#form-edit-channel-rules {
+#form-edit-channel-rules,
+[id^="form-chat"] {
   position: fixed;
   inset: auto;
   margin: 0;
@@ -1774,11 +1770,6 @@ hr.solid {
   transition:
     display var(--transition-dur-feeds),
     opacity var(--transition-dur-feeds);
-  top: 5rem;
-  right: 15rem;
-  position-anchor: --header-right;
-  top: calc(anchor(bottom) + 1rem);
-  right: anchor(right);
 
   &:popover-open {
     display: flex;
@@ -1811,6 +1802,23 @@ hr.solid {
     width: 100%;
     max-width: 100%;
   }
+}
+
+#form-post,
+#form-channel,
+#form-join-channel,
+#form-edit-channel-rules {
+  position-anchor: --header-right;
+  top: calc(anchor(bottom) + 1rem);
+  right: anchor(right);
+  top: 5rem;
+  right: 15rem;
+}
+
+[id^="form-chat"] {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
 }
 
 /* #form-post { */
@@ -1947,6 +1955,9 @@ hr.solid {
     border-radius: 0.8rem;
     padding: var(--b);
     background: repeating-conic-gradient(var(--c1) 0 25%, var(--c2) 0 50%) 0 0 / var(--s) var(--s) round;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
@@ -1971,6 +1982,15 @@ hr.solid {
 .wrapper-form {
   width: 100%;
   align-items: center;
+
+  &:has([id^="form-send-chat"]) {
+    gap: 0.6rem;
+    padding-block: 0.6rem;
+
+    &:has(input:focus-within) {
+      gap: 1.4rem;
+    }
+  }
 }
 
 .share-container {
@@ -2385,6 +2405,14 @@ hr.solid {
   background: var(--clr-bg-1);
   border-radius: var(--border-radius-input);
 
+  &:has(> .chat-control) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: 1rem;
+    padding-inline-start: 2rem;
+  }
+
   & article {
     font-size: 1.2rem;
     padding: 1.2rem 0;
@@ -2748,7 +2776,7 @@ main {
   flex-direction: column;
   gap: 1.2rem;
   width: 100%;
-  padding: 1.2rem 0 2.4rem 0;
+  padding: 2.2rem;
   margin-top: -1.2rem;
   max-width: 80rem;
 }
@@ -2835,7 +2863,6 @@ main {
   height: 24px;
   flex-shrink: 0;
   border-radius: 24px;
-  /*background: url(/assets/images/profile.png) lightgray 50% / cover no-repeat;*/
 }
 
 .cardTitle {

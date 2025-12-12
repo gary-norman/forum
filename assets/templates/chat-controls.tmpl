@@ -1,0 +1,14 @@
+{{ define "chat-controls" }}
+{{ $dot := . }}
+<div class="sidebar-block ">
+<small class="padded">Chats</small>
+<div class="side-panel-block">
+{{ range $dot.Chats }}
+{{ $chat := . }}
+  <button popovertarget="form-chat-{{ .ID }}" class="chat-control" data-user-online="true">
+    <span class="btn-posts">{{ if eq $chat.ChatType "buddy" }}{{ $chat.Buddy.Username }}{{ else }}{{ $chat.Group.Name }}{{ end }}</span>
+  </button>
+  {{ end }}
+  </div>
+</div>
+{{ end }}

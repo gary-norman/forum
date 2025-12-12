@@ -123,7 +123,7 @@ func (m *CookieModel) UpdateCookies(user *models.User, sessionToken, csrfToken s
 		dbUpdated = "Success!"
 		dbUpdatedColor = Colors.Green
 	}
-	fmt.Printf(Colors.Blue+"Database update: "+dbUpdatedColor+"%v\n", dbUpdated)
+	fmt.Printf(Colors.Blue+"Database update: "+dbUpdatedColor+"%v"+Colors.Reset+"\n", dbUpdated)
 
 	return err
 }
@@ -142,7 +142,7 @@ func (m *CookieModel) DeleteCookies(w http.ResponseWriter, user *models.User) er
 		dbUpdated = "Success!"
 		dbUpdatedColor = Colors.Green
 	}
-	log.Printf(Colors.Blue+"Database update: "+dbUpdatedColor+"%v\n", dbUpdated)
+	log.Printf(Colors.Blue+"Database update: "+dbUpdatedColor+"%v"+Colors.Reset+"\n", dbUpdated)
 	// Set Session, Username, and CSRF Token cookies
 	http.SetCookie(w, &http.Cookie{
 		Name:     "session_token",

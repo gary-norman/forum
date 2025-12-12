@@ -250,7 +250,7 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 		log.Printf(ErrorMsgs.Cookies, "delete", delCookiErr)
 	}
 	// send user confirmation
-	log.Printf(Colors.Green+"%v logged out successfully!", user.Username)
+	log.Printf(Colors.Green+"%v logged out successfully!"+Colors.Reset, user.Username)
 	encErr := json.NewEncoder(w).Encode(map[string]any{
 		"code":    http.StatusOK,
 		"message": "Logged out successfully!",

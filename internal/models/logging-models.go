@@ -67,4 +67,5 @@ const (
 	MetricTypeMemory         = "memory"
 	MetricTypeConcurrentUser = "concurrent_users"
 	MetricTypeHealthCheck    = "health_check"
+	MetricTypeUserActivity   = "user_activity"
 )

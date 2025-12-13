@@ -17,42 +17,15 @@ type SearchHandler struct {
 func (s *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 
-	// SECTION --- channels --
-	allChannels, err := s.App.Channels.All()
+	// Use concurrent search with request context
+	result, err := ConcurrentSearch(r.Context(), s.App)
 	if err != nil {
-		log.Printf(ErrorMsgs.Query, "channels.All-search", err)
+		log.Printf("Search completed with errors: %v", err)
+		// Continue even with partial errors - result may still have data
 	}
 
-	// SECTION --- posts ---
-	// var userLoggedIn bool
-	allPosts, err := s.App.Posts.All()
-	if err != nil {
-		log.Printf(ErrorMsgs.KeyValuePair, "Error fetching all posts", err)
-	}
-
-	for p := range allPosts {
-		channelIDs, err := s.App.Channels.GetChannelIDFromPost(allPosts[p].ID)
-		if err != nil {
-			log.Printf(ErrorMsgs.KeyValuePair, "getHome > channelID", err)
-			return
-		}
-		allPosts[p].ChannelID = channelIDs[0]
-	}
-
-	for p := range allPosts {
-		for _, channel := range allChannels {
-			if channel.ID == allPosts[p].ChannelID {
-				allPosts[p].ChannelName = channel.Name
-			}
-		}
-	}
-
-	// SECTION --- user ---
-	allUsers, allUsersErr := s.App.Users.All()
-	if allUsersErr != nil {
-		log.Printf(ErrorMsgs.Query, "getHome> users > All", allUsersErr)
-
-	}
+	// Enrich posts with channel information
+	enrichedPosts := enrichPostsWithChannels(s.App, result.Posts, result.Channels)
 
 	currentUser, ok := mw.GetUserFromContext(r.Context())
 	if !ok {
@@ -60,9 +33,9 @@ func (s *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 	}
 
 	searchResults := map[string]any{
-		"users":    allUsers,
-		"channels": allChannels,
-		"posts":    allPosts,
+		"users":    result.Users,
+		"channels": result.Channels,
+		"posts":    enrichedPosts,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -72,5 +45,5 @@ func (s *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf(ErrorMsgs.KeyValuePair, "Search data fetched in", time.Since(start))
+	log.Printf("[GET] /search - 200 (%dms)", time.Since(start).Milliseconds())
 }

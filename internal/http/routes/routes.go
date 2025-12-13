@@ -8,9 +8,10 @@ import (
 	"github.com/gary-norman/forum/internal/app"
 	// "github.com/gary-norman/forum/internal/http/handlers"
 	mw "github.com/gary-norman/forum/internal/http/middleware"
+	"github.com/gary-norman/forum/internal/workers"
 )
 
-func NewRouter(app *app.App) http.Handler {
+func NewRouter(app *app.App, loggerPool *workers.LoggerPool) http.Handler {
 	mux := http.NewServeMux()
 	r := NewRouteHandler(app)
 
@@ -41,5 +42,8 @@ func NewRouter(app *app.App) http.Handler {
 	mux.Handle("POST /channels/join", mw.WithUser(http.HandlerFunc(r.Channel.StoreMembership), r.App))
 	mux.Handle("POST /channels/add-rules/{channelId}", mw.WithUser(http.HandlerFunc(r.Channel.CreateAndInsertRule), r.App))
 	mux.Handle("POST /cdx/post/{postId}/store-comment", mw.WithUser(http.HandlerFunc(r.Comment.StoreComment), r.App))
-	return mw.WithTimeout(mux, 10*time.Second)
+
+	// Apply middleware: Logging -> Timeout
+	handler := mw.LoggingEnhanced(loggerPool)(mux)
+	return mw.WithTimeout(handler, 10*time.Second)
 }

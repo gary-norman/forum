@@ -17,6 +17,7 @@ import (
 	"github.com/gary-norman/forum/internal/http/routes"
 	"github.com/gary-norman/forum/internal/models"
 	"github.com/gary-norman/forum/internal/view"
+	"github.com/gary-norman/forum/internal/workers"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -80,8 +81,12 @@ func startServer(appInstance *app.App) {
 	th := view.TempHelper{App: appInstance}
 	th.Init()
 
+	// Create and start logger pool
+	loggerPool := workers.NewLoggerPool(3, 1000, appInstance.DB)
+	loggerPool.Start()
+
 	// Router
-	router := routes.NewRouter(appInstance)
+	router := routes.NewRouter(appInstance, loggerPool)
 
 	port := 8888
 	portStr := fmt.Sprintf(Colors.CodexPink+"%d"+Colors.Reset, port)
@@ -114,8 +119,17 @@ func startServer(appInstance *app.App) {
 	defer shutdownRelease()
 
 	log.Println("Shutting down gracefully...")
+
+	// Shutdown HTTP server
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Fatalf(ErrorMsgs.Shutdown, err)
 	}
+
+	// Shutdown logger pool (drain pending logs)
+	log.Println("Draining log queue...")
+	if err := loggerPool.Shutdown(shutdownCtx); err != nil {
+		log.Printf("Warning: Logger pool shutdown timeout: %v", err)
+	}
+
 	log.Println(Colors.Teal + "Graceful shutdown complete." + Colors.Reset)
 }

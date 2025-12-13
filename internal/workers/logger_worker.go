@@ -3,6 +3,7 @@ package workers
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"sync"
 	"sync/atomic"
@@ -70,64 +71,45 @@ func (pool *LoggerPool) Start() {
 			}
 		}(i)
 	}
-	log.Printf(loggerColors.Blue + "[LoggerPool] Started with %d workers" + loggerColors.Reset + "\n", pool.workers)
+	log.Printf(loggerColors.Blue+"[LoggerPool] Started with %d workers"+loggerColors.Reset+"\n", pool.workers)
 }
-
-// TODO(human): Exercise 4 Part 1 - Implement Submit method
-//
-// Instructions:
-// This is very similar to the ImageWorkerPool.Submit() you implemented!
-//
-// 1. Check if pool is shut down using pool.isShutdown.Load()
-//    - If shut down, return error "logger pool is shut down"
-//
-// 2. Use select with default to submit entry non-blocking:
-//    select {
-//    case pool.logs <- entry:
-//        return nil
-//    default:
-//        // Queue is full - increment dropped counter and return error
-//        pool.droppedLogs.Add(1)
-//        return fmt.Errorf("logger pool queue is full (dropped: %d)", pool.droppedLogs.Load())
-//    }
-//
-// Why non-blocking? Logging should NEVER slow down your application!
-// If the queue is full, it's better to drop the log than block the HTTP handler.
 
 // Submit submits a log entry to the worker pool
 // Returns an error if the queue is full or pool is shut down
 func (pool *LoggerPool) Submit(entry LogEntry) error {
-	// TODO(human): Implement non-blocking submission with shutdown check
-	return nil
-}
+	if pool.isShutdown.Load() {
+		return fmt.Errorf("logger pool is shut down")
+	}
 
-// TODO(human): Exercise 4 Part 2 - Implement Shutdown method
-//
-// Instructions:
-// This is identical to ImageWorkerPool.Shutdown() pattern!
-//
-// 1. Set shutdown flag: pool.isShutdown.Store(true)
-// 2. Close shutdown channel: close(pool.shutdownCh)
-// 3. Create done channel: done := make(chan struct{})
-// 4. Start goroutine:
-//    go func() {
-//        pool.wg.Wait()  // Wait for all workers
-//        close(done)     // Signal completion
-//    }()
-// 5. Select between done and context timeout:
-//    select {
-//    case <-done:
-//        return nil
-//    case <-ctx.Done():
-//        return ctx.Err()
-//    }
+	select {
+	case pool.logs <- entry:
+		return nil
+	default:
+		// Queue is full - increment dropped counter and return error
+		pool.droppedLogs.Add(1)
+		return fmt.Errorf("logger pool queue is full (dropped: %d)", pool.droppedLogs.Load())
+	}
+}
 
 // Shutdown gracefully shuts down the logger pool
 // Waits for all workers to finish writing pending logs
 // Returns error if context times out before workers finish
 func (pool *LoggerPool) Shutdown(ctx context.Context) error {
-	// TODO(human): Implement graceful shutdown with context timeout
-	return nil
+	pool.isShutdown.Store(true)
+	close(pool.shutdownCh)
+
+	done := make(chan struct{})
+	go func() {
+		pool.wg.Wait()
+		close(done)
+	}()
+
+	select {
+	case <-done:
+		return nil
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 }
 
 // writeLog processes a single log entry and writes it to the database
@@ -162,11 +144,11 @@ func (pool *LoggerPool) writeLog(entry LogEntry, workerID int) {
 
 // Stats returns statistics about the logger pool
 type LoggerStats struct {
-	Workers      int
-	QueueLength  int
+	Workers       int
+	QueueLength   int
 	QueueCapacity int
-	QueueUsage   float64 // Percentage of queue used (0.0 to 1.0)
-	DroppedLogs  int64
+	QueueUsage    float64 // Percentage of queue used (0.0 to 1.0)
+	DroppedLogs   int64
 }
 
 func (pool *LoggerPool) Stats() LoggerStats {

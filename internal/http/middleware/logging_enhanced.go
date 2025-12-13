@@ -12,7 +12,7 @@ import (
 // ResponseWriter wrapper to capture status code and bytes written
 type responseWriter struct {
 	http.ResponseWriter
-	statusCode int
+	statusCode   int
 	bytesWritten int64
 }
 
@@ -46,25 +46,13 @@ func LoggingEnhanced(loggerPool *workers.LoggerPool) func(http.Handler) http.Han
 			// Calculate duration
 			duration := time.Since(start).Milliseconds()
 
-			// TODO(human): Exercise 4 Part 3 - Extract user ID from context
-			//
-			// Instructions:
-			// The authenticated user (if any) is stored in the request context
-			// by the WithUser middleware. We need to extract it for logging.
-			//
-			// 1. Get user from context:
-			//    user, ok := r.Context().Value("user").(*models.User)
-			//
-			// 2. Create a UUIDField for the userID:
-			//    var userID models.UUIDField
-			//    if ok && user != nil {
-			//        userID = user.ID
-			//    } else {
-			//        userID = models.ZeroUUIDField()  // Nil UUID for anonymous
-			//    }
-			//
-			// For now, I'll use a zero UUID as placeholder:
-			userID := models.ZeroUUIDField()
+			user, ok := r.Context().Value("user").(*models.User)
+			var userID models.UUIDField
+			if ok && user != nil {
+				userID = user.ID
+			} else {
+				userID = models.ZeroUUIDField() // Nil UUID for anonymous
+			}
 
 			// Build request log entry
 			requestLog := models.RequestLog{

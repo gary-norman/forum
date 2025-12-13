@@ -15,14 +15,14 @@ CREATE TABLE IF NOT EXISTS RequestLogs (
     IPAddress TEXT,                     -- Client IP address
     UserAgent TEXT,                     -- Browser/client info
     Referer TEXT,                       -- Where request came from
-    BytesSent INTEGER DEFAULT 0,        -- Response size in bytes
-
-    -- Indexes for common queries
-    INDEX idx_timestamp ON RequestLogs(Timestamp),
-    INDEX idx_path ON RequestLogs(Path),
-    INDEX idx_status ON RequestLogs(StatusCode),
-    INDEX idx_user ON RequestLogs(UserID)
+    BytesSent INTEGER DEFAULT 0         -- Response size in bytes
 );
+
+-- Indexes for RequestLogs
+CREATE INDEX IF NOT EXISTS idx_requestlogs_timestamp ON RequestLogs(Timestamp);
+CREATE INDEX IF NOT EXISTS idx_requestlogs_path ON RequestLogs(Path);
+CREATE INDEX IF NOT EXISTS idx_requestlogs_status ON RequestLogs(StatusCode);
+CREATE INDEX IF NOT EXISTS idx_requestlogs_user ON RequestLogs(UserID);
 
 -- Error Logs: Track application errors
 CREATE TABLE IF NOT EXISTS ErrorLogs (
@@ -33,11 +33,12 @@ CREATE TABLE IF NOT EXISTS ErrorLogs (
     StackTrace TEXT,                    -- Full stack trace
     RequestPath TEXT,                   -- Path where error occurred
     UserID BLOB,                        -- User who encountered error
-    Context TEXT,                       -- Additional context (JSON)
-
-    INDEX idx_timestamp ON ErrorLogs(Timestamp),
-    INDEX idx_level ON ErrorLogs(Level)
+    Context TEXT                        -- Additional context (JSON)
 );
+
+-- Indexes for ErrorLogs
+CREATE INDEX IF NOT EXISTS idx_errorlogs_timestamp ON ErrorLogs(Timestamp);
+CREATE INDEX IF NOT EXISTS idx_errorlogs_level ON ErrorLogs(Level);
 
 -- System Metrics: Track application health and performance
 CREATE TABLE IF NOT EXISTS SystemMetrics (
@@ -47,11 +48,12 @@ CREATE TABLE IF NOT EXISTS SystemMetrics (
     MetricName TEXT NOT NULL,           -- Specific metric name
     MetricValue REAL NOT NULL,          -- Numeric value (duration, count, bytes, etc.)
     Unit TEXT NOT NULL,                 -- ms, bytes, count, etc.
-    Details TEXT,                       -- Additional JSON details
-
-    INDEX idx_timestamp ON SystemMetrics(Timestamp),
-    INDEX idx_type ON SystemMetrics(MetricType),
-    INDEX idx_name ON SystemMetrics(MetricName)
+    Details TEXT                        -- Additional JSON details
 );
+
+-- Indexes for SystemMetrics
+CREATE INDEX IF NOT EXISTS idx_systemmetrics_timestamp ON SystemMetrics(Timestamp);
+CREATE INDEX IF NOT EXISTS idx_systemmetrics_type ON SystemMetrics(MetricType);
+CREATE INDEX IF NOT EXISTS idx_systemmetrics_name ON SystemMetrics(MetricName);
 
 COMMIT;

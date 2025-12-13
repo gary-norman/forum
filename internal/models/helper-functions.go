@@ -2,6 +2,9 @@ package models
 
 import (
 	"fmt"
+	"io"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -44,6 +47,31 @@ func getTimeSince(created time.Time) string {
 		timeSince = "just now"
 	}
 	return timeSince
+}
+
+// CopyFile copies a file from src to dst. If dst does not exist, it is created.
+func CopyFile(src, dst string) error {
+	in, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer in.Close()
+
+	if err := os.MkdirAll(filepath.Dir(dst), 0755); err != nil {
+		return err
+	}
+
+	out, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	if _, err := io.Copy(out, in); err != nil {
+		return err
+	}
+
+	return out.Sync()
 }
 
 // GetIntFromPathValue parses a string value from the URL path and converts it to int64, returning an error if conversion fails.

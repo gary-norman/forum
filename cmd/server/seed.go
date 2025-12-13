@@ -31,6 +31,23 @@ func runSeed(db *sql.DB) error {
 	userID := models.NewUUIDField()
 	now := time.Now().UTC().Format(time.RFC3339)
 
+	// Copy default images
+	err = models.CopyFile(
+		"default-images/codex.png",
+		"db/userdata/images/channel-images/codex.png",
+	)
+	if err != nil {
+		return err
+	}
+
+	err = models.CopyFile(
+		"default-images/donkey.png",
+		"db/userdata/images/user-images/donkey.png",
+	)
+	if err != nil {
+		return err
+	}
+
 	// Insert user
 	_, err = db.Exec(`
 	INSERT INTO Users (ID, Username, EmailAddress, Avatar, Banner, Description, Usertype, Created, IsFlagged, SessionToken, CsrfToken, HashedPassword)

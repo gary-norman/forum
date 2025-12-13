@@ -117,8 +117,8 @@ func TestMultipleLogs(t *testing.T) {
 	pool.Shutdown(ctx)
 }
 
-// TestSubmitAfterShutdown tests that submitting after shutdown fails
-func TestSubmitAfterShutdown(t *testing.T) {
+// TestLoggerSubmitAfterShutdown tests that submitting after shutdown fails
+func TestLoggerSubmitAfterShutdown(t *testing.T) {
 	pool := NewLoggerPool(2, 10, nil)
 	pool.Start()
 

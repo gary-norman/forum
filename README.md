@@ -53,6 +53,7 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#architecture">Architecture</a></li>
       </ul>
     </li>
     <li>
@@ -104,7 +105,9 @@
 
 #### Media & Design
 - **Image Uploads** - Attach images to posts, channels, and user profiles
+- **Concurrent Image Processing** - Worker pool for background image processing
 - **Responsive Design** - Works seamlessly across desktop and mobile devices
+- **Modular CSS Architecture** - Organized stylesheets for maintainability
 
 #### Engagement & Rewards
 - **Loyalty System** - Track user engagement and participation
@@ -117,6 +120,97 @@
 * **Templating:** Go HTML templates
 * **Containerization:** Docker
 * **Build System:** Make
+
+### Architecture
+
+#### UUID System
+Codex uses a robust UUID implementation for user identification throughout the application:
+
+- **UUIDField Type** - Custom type wrapping `github.com/google/uuid` with database driver interfaces
+- **Automatic Conversion** - Implements `driver.Valuer` and `sql.Scanner` for seamless SQLite integration
+- **BLOB Storage** - UUIDs stored as 16-byte BLOBs in SQLite for efficiency
+- **JSON Marshaling** - Automatic string conversion for API responses
+- **Type Safety** - Compile-time guarantees for user ID operations
+
+**Key Files:**
+- `internal/models/uuidfield-models.go` - UUIDField type definition
+- `internal/dbutils/uuid.go` - Database utilities
+
+#### Concurrent Image Processing
+Production-ready worker pool for background image processing:
+
+- **Worker Pool Pattern** - Configurable number of goroutines with buffered job queue
+- **Graceful Shutdown** - Context-based timeout with proper cleanup
+- **Atomic State Management** - Race-free shutdown tracking using `sync/atomic`
+- **Database Integration** - Stores image metadata after successful processing
+- **Error Handling** - Comprehensive validation and colored logging
+
+**Key Files:**
+- `internal/workers/image_worker.go` - Worker pool implementation
+- `internal/workers/image_worker_test.go` - Unit tests (9 tests)
+- `internal/workers/image_worker_integration_test.go` - Integration tests
+- `internal/workers/image_worker_database_test.go` - Database integration tests
+
+**Features:**
+- Non-blocking job submission with queue-full detection
+- Image validation (JPEG, PNG, GIF)
+- Directory-based organization (post-images, user-images, channel-images)
+- Metadata persistence to database with path tracking
+
+#### Database Patterns
+
+**Generic DAO Layer:**
+- Type-safe CRUD operations using Go generics: `DAO[T models.DBModel]`
+- Automatic struct-to-SQL mapping via reflection
+- Located in `internal/dao/`
+
+**Migration System:**
+- Sequential SQL migrations in `migrations/` directory
+- Automatic tracking of applied migrations
+- Run with: `bin/codex migrate`
+
+**Database Seeding:**
+- Populate initial data for development
+- Run with: `bin/codex seed`
+
+**Recent Migrations:**
+- `005_add_image_path.sql` - Adds Path column to Images table for worker pool integration
+
+#### CSS Architecture
+
+**Modular System:**
+Codex uses a modular CSS architecture for maintainability and performance:
+
+- **Import-Based Structure** - `main.css` imports 27+ specialized modules
+- **Logical Organization** - Separated by concern (typography, layout, buttons, forms, etc.)
+- **OKLCH Color System** - Modern color space with Catppuccin Mocha palette
+- **CSS Variables** - Centralized theming in `variables.css`
+
+**Key Modules:**
+- `colors-oklch.css` - OKLCH color definitions with light/dark mode support
+- `variables.css` - CSS custom properties for spacing, shadows, z-index
+- `layout.css`, `typography.css`, `buttons.css`, `forms.css` - Core UI modules
+- `popovers.css`, `feeds.css`, `cards.css` - Feature-specific styles
+
+**Benefits:**
+- Easy navigation and maintenance
+- Reduced merge conflicts
+- Better caching (specific module updates)
+- Clear separation of concerns
+
+#### Concurrency Patterns
+
+**Context-Aware Operations:**
+- Database queries with context propagation for cancellation
+- Timeout middleware for HTTP handlers
+- Graceful server shutdown with cleanup
+
+**Middleware Stack:**
+- Authentication middleware with session validation
+- Context injection for user data
+- Request timeout protection
+- Logging middleware for request tracking
+
 <!-- Do a search and replace with your text editor for the following: `gary.norman`, `forum`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description` -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -219,6 +313,18 @@ go build -o bin/codex github.com/gary-norman/forum/cmd/server && ./bin/codex
 
 The server will start on `http://localhost:8888` by default.
 
+#### Database Management
+
+```sh
+# Run database migrations
+bin/codex migrate
+
+# Seed the database with initial data
+bin/codex seed
+```
+
+**Note:** The application will automatically run migrations on first startup, but you can run them manually using the commands above.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -241,6 +347,10 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 - [x] User authentication and authorization
 - [x] Channel-based organization
 - [x] Image upload support
+- [x] **Concurrent image processing with worker pool**
+- [x] **UUID-based user identification system**
+- [x] **Modular CSS architecture**
+- [x] **Database migration system**
 - [x] Search functionality
 - [x] Docker deployment
 - [x] Interactive build menu
@@ -249,7 +359,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 - [ ] Content moderation (flags, moderators)
 - [ ] Error handling improvements (400/500 pages)
 - [ ] Enhanced UI/UX refinements
-- [ ] Performance optimizations
+- [ ] Image optimization (resizing, thumbnails)
 
 ### Planned 📋
 

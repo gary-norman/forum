@@ -150,34 +150,22 @@ export function listenToShare() {
 
     if (singleControl) {
       const fb = singleControl.querySelector(".facebook");
-      if (fb) {
-        fb.href = `https://www.facebook.com/share.php?u=${link}`;
-      }
+      fb.href = `https://www.facebook.com/share.php?u=${link}`;
       // TODO check https works
       const twitter = singleControl.querySelector(".twitter");
-      if (twitter) {
-        twitter.href = `https://twitter.com/share?&url=${link}&text=${msg}&hashtags=javascript,programming`;
-      }
+      twitter.href = `https://twitter.com/share?&url=${link}&text=${msg}&hashtags=javascript,programming`;
       // TODO check https works
       const linkedIn = singleControl.querySelector(".linkedin");
-      if (linkedIn) {
-        linkedIn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${link}`;
-      }
+      linkedIn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${link}`;
       // TODO check https works
       const reddit = singleControl.querySelector(".reddit");
-      if (reddit) {
-        reddit.href = `https://www.reddit.com/submit?url=${link}&title=${title}`;
-      }
+      reddit.href = `https://www.reddit.com/submit?url=${link}&title=${title}`;
       // TODO check https works
       const whatsapp = singleControl.querySelector(".whatsapp");
-      if (whatsapp) {
-        whatsapp.href = `https://api.whatsapp.com/send?text=${msg}: ${link}`;
-      }
+      whatsapp.href = `https://api.whatsapp.com/send?text=${msg}: ${link}`;
       // TODO check https works
       const telegram = singleControl.querySelector(".telegram");
-      if (telegram) {
-        telegram.href = `https://telegram.me/share/url?url=${link}&text=${msg}`;
-      }
+      telegram.href = `https://telegram.me/share/url?url=${link}&text=${msg}`;
       // TODO check https works
     }
   });

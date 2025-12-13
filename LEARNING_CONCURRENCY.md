@@ -404,3 +404,212 @@ func TestQueryCancellation(t *testing.T) {
 5. Monitor production metrics (latency, error rates)
 
 Good luck! 🚀
+
+---
+
+## Exercise 4: Async Logging System
+
+### Goal
+Build a production-ready async logging system that stores request metrics, errors, and system health data in a database without slowing down your application.
+
+### What You'll Learn
+- Applying worker pool pattern to a different domain (logging vs images)
+- Non-blocking operations (dropped logs better than slow requests!)
+- Database design for analytics and monitoring
+- Building admin dashboards with queryable metrics
+
+### Architecture
+
+```
+HTTP Request → Middleware → Submit to Queue → Worker Pool → Database
+     ↓              ↓                              ↓
+  Immediate     Capture                      Async Write
+  Response      Metrics                   (Non-blocking!)
+```
+
+**Key Insight**: Logging must NEVER slow down requests! We use async workers to decouple logging from request handling.
+
+### Files Created
+
+**Database:**
+- `migrations/006_logging_system.sql` - Three tables: RequestLogs, ErrorLogs, SystemMetrics
+
+**Models:**
+- `internal/models/logging-models.go` - RequestLog, ErrorLog, SystemMetric structs
+
+**Database Layer:**
+- `internal/sqlite/logging-sql.go` - Insert methods, stats queries, cleanup
+
+**Worker Pool:**
+- `internal/workers/logger_worker.go` - Async logger pool (YOUR TASK!)
+- `internal/workers/logger_worker_test.go` - Test suite
+
+**Middleware:**
+- `internal/http/middleware/logging_enhanced.go` - Enhanced logging middleware
+
+### Your Tasks
+
+#### Part 1: Implement Submit Method
+
+Location: `internal/workers/logger_worker.go:86`
+
+**Pattern** (identical to ImageWorkerPool.Submit):
+```go
+func (pool *LoggerPool) Submit(entry LogEntry) error {
+    // 1. Check shutdown
+    if pool.isShutdown.Load() {
+        return fmt.Errorf("logger pool is shut down")
+    }
+
+    // 2. Non-blocking send
+    select {
+    case pool.logs <- entry:
+        return nil
+    default:
+        // IMPORTANT: Increment dropped counter!
+        pool.droppedLogs.Add(1)
+        return fmt.Errorf("logger pool queue is full (dropped: %d)", pool.droppedLogs.Load())
+    }
+}
+```
+
+**Why dropped logs counter?** Admin dashboard can show "X logs dropped in last hour" - indicates queue too small or DB too slow!
+
+#### Part 2: Implement Shutdown Method
+
+Location: `internal/workers/logger_worker.go:105`
+
+**Pattern** (identical to ImageWorkerPool.Shutdown):
+```go
+func (pool *LoggerPool) Shutdown(ctx context.Context) error {
+    pool.isShutdown.Store(true)
+    close(pool.shutdownCh)
+    
+    done := make(chan struct{})
+    go func() {
+        pool.wg.Wait()
+        close(done)
+    }()
+    
+    select {
+    case <-done:
+        return nil
+    case <-ctx.Done():
+        return ctx.Err()
+    }
+}
+```
+
+#### Part 3: Extract User ID from Context
+
+Location: `internal/http/middleware/logging_enhanced.go:47`
+
+**Pattern:**
+```go
+// Get user from context (set by WithUser middleware)
+user, ok := r.Context().Value("user").(*models.User)
+
+var userID models.UUIDField
+if ok && user != nil {
+    userID = user.ID
+} else {
+    userID = models.ZeroUUIDField()  // Nil UUID for anonymous requests
+}
+```
+
+### Testing
+
+```sh
+# Run logger worker tests
+go test -v ./internal/workers/... -run TestLogger
+
+# Run database migration
+bin/codex migrate
+
+# Expected output:
+# ✓ Successfully applied migration: migrations/006_logging_system.sql
+```
+
+### Integration
+
+Once implemented, you'll need to:
+
+1. **Initialize logger pool in `cmd/server/main.go`:**
+```go
+// Create logger pool
+loggerPool := workers.NewLoggerPool(3, 1000, db)
+loggerPool.Start()
+
+// Graceful shutdown
+defer func() {
+    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    defer cancel()
+    loggerPool.Shutdown(ctx)
+}()
+```
+
+2. **Update middleware in `internal/http/routes/routes.go`:**
+```go
+// Replace old logging middleware
+// mux.Use(middleware.Logging)
+
+// With enhanced logging
+mux.Use(middleware.LoggingEnhanced(loggerPool))
+```
+
+### Admin Dashboard Queries
+
+After implementing, you can build an admin page with queries like:
+
+```go
+// Get request stats for last 24 hours
+stats, _ := loggingModel.GetRequestStats("datetime('now', '-24 hours')")
+fmt.Printf("Total Requests: %d\n", stats.TotalRequests)
+fmt.Printf("Avg Duration: %.2fms\n", stats.AvgDuration)
+fmt.Printf("Error Rate: %.2f%%\n", stats.ErrorRate)
+fmt.Printf("Unique Users: %d\n", stats.UniqueUsers)
+
+// Get slowest endpoints
+SELECT Path, AVG(Duration) as avg_duration
+FROM RequestLogs
+WHERE Timestamp >= datetime('now', '-1 hour')
+GROUP BY Path
+ORDER BY avg_duration DESC
+LIMIT 10;
+
+// Get error patterns
+SELECT COUNT(*) as count, Message
+FROM ErrorLogs
+WHERE Timestamp >= datetime('now', '-1 day')
+GROUP BY Message
+ORDER BY count DESC
+LIMIT 20;
+```
+
+### Key Differences from Image Worker
+
+| Aspect | Image Worker | Logger Worker |
+|--------|--------------|---------------|
+| **Critical Path** | Can wait briefly (user uploads) | Must be instant (every request!) |
+| **Queue Full Strategy** | Return 503 error to user | **Drop log** (don't slow request) |
+| **Failure Handling** | Retry, user sees error | Log to console, continue |
+| **Performance Impact** | Only on uploads | **Every single request** |
+| **Monitoring** | Jobs processed | **Dropped logs counter** |
+
+### Success Criteria
+
+✅ All tests pass  
+✅ Migration applies cleanly  
+✅ Submit() is non-blocking  
+✅ Shutdown() waits for pending logs  
+✅ Dropped logs counter increments when queue full  
+✅ No database writes block HTTP responses  
+
+### Next Steps
+
+After completing this exercise, you can:
+1. Build an admin dashboard (HTML + charts)
+2. Add alerting (email admin if error rate > 5%)
+3. Auto-cleanup old logs (cron job using CleanupOldLogs)
+4. Export metrics to monitoring tools (Prometheus, Grafana)
+
